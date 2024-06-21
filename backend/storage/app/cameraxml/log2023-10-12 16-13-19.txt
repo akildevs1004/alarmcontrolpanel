@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DetectedFaceList>
+<IpAddr>192.168.2.155</IpAddr>
+<MACAddress>30:57:AC:44:6A:27</MACAddress>
+<DeviceID>2206160017</DeviceID>
+<Count>1</Count>
+<Face_0>
+<FaceID>473</FaceID>
+<Position>
+<TopLeftX>212</TopLeftX>
+<TopLeftY>348</TopLeftY>
+<BottomRightX>305</BottomRightX>
+<BottomRightY>471</BottomRightY>
+</Position>
+<Clarity>0.889175</Clarity>
+<Quality>0.889175</Quality>
+<Age>37.000000</Age>
+<StandupEvent>0</StandupEvent>
+<Liveness>NotCheck</Liveness>
+<LivenessScore>0.000000</LivenessScore>
+<Glass>None</Glass>
+<Beard>NoBeard</Beard>
+<Hair>ShortHair</Hair>
+<Hat>None</Hat>
+<Respirator>None</Respirator>
+<Gender>Male</Gender>
+<IsRegistered>0</IsRegistered>
+<WBAttribute>Other List</WBAttribute>
+<Time>2023-10-12T16:11:02Z</Time>
+<SnapshotNum>540</SnapshotNum>
+<FaceSnapFile>face_473_69675.jpg</FaceSnapFile>
+<FullSnapFile>FRM_369675.jpg</FullSnapFile>
+<Snapshot>/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAGwAWsDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09f
