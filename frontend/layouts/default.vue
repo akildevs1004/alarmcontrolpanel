@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="items.length > 0"
       expand-on-hover
       rail
       v-model="drawer"
@@ -94,7 +95,11 @@
               :to="j.to"
               class="submenutitle"
             >
-              <v-list-item-title v-if="can(j.menu)" class="my-2">
+              <v-list-item-title
+                v-if="can(j.menu)"
+                class="my-2"
+                style="text-align: left"
+              >
                 {{ j.title }}
               </v-list-item-title>
             </v-list-item>
@@ -137,7 +142,7 @@
         >
           <v-row align="center" justify="space-around" class="header-menu-row">
             <v-col
-              v-for="(items, index) in company_top_menu"
+              v-for="(items, index) in controlpanel_top_menu"
               :key="index"
               class="header-menu-box"
             >
@@ -158,6 +163,32 @@
                 </b>
               </v-btn>
             </v-col>
+            <!-- <v-col class="header-menu-box">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                    Employees
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(items, index) in company_top_menu"
+                    :key="index"
+                  >
+                    <v-list-item-title
+                      class="text-left"
+                      @click="setSubLeftMenuItems(items.menu, items.to)"
+                      :color="
+                        menuProperties[items.menu] &&
+                        menuProperties[items.menu].selected
+                      "
+                    >
+                      {{ items.title }}</v-list-item-title
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col> -->
           </v-row>
         </template>
       </span>
@@ -185,22 +216,25 @@
           append-icon="mdi-magnify"
           v-model="globalsearch"
         ></v-text-field> -->
-        <v-text-field
-          @keyup.enter="showGlobalsearchPopup"
-          @keydown="showGlobalsearchPopup"
-          @keyup="showGlobalsearchPopup"
-          style="width: 170px; padding-left: 50px"
-          height="26px"
-          class="custom-text-field-height pt-7 global-search-textbox"
-          @click="showGlobalsearchPopup"
-          color="black"
-          outlined
-          dense
-          border-color="black"
-          prepend-inner-icon="mdi-magnify"
-          placeholder="Search"
-          v-model="globalsearch"
-        ></v-text-field>
+        <v-form autocomplete="off">
+          <v-text-field
+            autocomplete="off"
+            @keyup.enter="showGlobalsearchPopup"
+            @keydown="showGlobalsearchPopup"
+            @keyup="showGlobalsearchPopup"
+            style="width: 170px; padding-left: 50px"
+            height="26px"
+            class="custom-text-field-height pt-7 global-search-textbox"
+            @click="showGlobalsearchPopup"
+            color="black"
+            outlined
+            dense
+            border-color="black"
+            prepend-inner-icon="mdi-magnify"
+            placeholder="Search"
+            v-model="globalsearch"
+          ></v-text-field>
+        </v-form>
       </span>
 
       <v-spacer></v-spacer>
@@ -469,7 +503,13 @@
 
     <v-main
       class="main_bg"
-      :style="miniVariant ? 'padding-left: 60px;' : 'padding-left: 140px;'"
+      :style="
+        items.length == 0
+          ? 'padding-left:  0px;'
+          : miniVariant && items.length > 0
+          ? 'padding-left: 60px;'
+          : 'padding-left: 140px;'
+      "
     >
       <v-container style="max-width: 100%">
         <nuxt />
@@ -617,6 +657,8 @@ import company_top_menu from "../menus/company_modules_top.json";
 import employee_top_menu from "../menus/employee_modules_top.json";
 import GlobalSearchForm from "../components/Globalsearch/GlobalSearchForm.vue";
 
+import controlpanel_top_menu from "../menus/alarm_controlpanel_top_menu.json";
+
 export default {
   head() {
     return {
@@ -724,6 +766,7 @@ export default {
       branch_menus,
       guard_menus,
       host_menus,
+      controlpanel_top_menu,
       company_top_menu,
       employee_top_menu,
       pendingLeavesCount: 0,
@@ -780,6 +823,9 @@ export default {
   },
 
   mounted() {
+    this.getBuildingTypes();
+    this.getAddressTypes();
+
     setTimeout(() => {
       this.loadNotificationMenu();
       this.verifyAlarmStatus();
@@ -820,8 +866,11 @@ export default {
         }
         //Color is changed and Now display sub menu - click - load left sub menu items
 
+        // this.items = this.company_menus.filter(
+        //   (item) => item.module === loadSelectedMenu[0].module
+        // );
         this.items = this.company_menus.filter(
-          (item) => item.module === loadSelectedMenu[0].module
+          (item) => item.top_menu_name === loadSelectedMenu[0].module
         );
       }
     }
@@ -863,7 +912,7 @@ export default {
         this.$auth.user.user_type == "company" &&
         this.$auth.user.company.logo
       ) {
-        logosrc = this.$auth.user.company.logo || "/no-image.PNG1111111";
+        logosrc = this.$auth.user.company.logo || "/no-image.PNG";
       } else if (this.$auth.user && this.$auth.user.user_type == "master") {
         logosrc = "/no-image.PNG";
       } else if (this.$auth.user && this.$auth.user.user_type == "employee") {
@@ -880,11 +929,35 @@ export default {
     },
   },
   methods: {
+    async getBuildingTypes() {
+      if (!this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
+        const { data } = await this.$axios.get("building_types", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/BuildingTypes", data);
+      }
+    },
+    async getAddressTypes() {
+      if (!this.$store.state.storeAlarmControlPanel?.AddressTypes) {
+        const { data } = await this.$axios.get("address_types", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/AddressTypes", data);
+      }
+    },
     showGlobalsearchPopup() {
-      this.key = this.key + 1;
-      this.globalSearchPopupWidth = "500px";
-      this.globalSearchPopup = true;
-      //this.$refs.globalSearchTextbox.focus();
+      if (this.$route.name != "alarm-view-customer") {
+        this.key = this.key + 1;
+        this.globalSearchPopupWidth = "500px";
+        this.globalSearchPopup = true;
+        //this.$refs.globalSearchTextbox.focus();
+      }
     },
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
@@ -1071,8 +1144,11 @@ export default {
     },
 
     setMenus() {
+      // this.items = this.company_menus.filter(
+      //   (item) => item.module === this.topMenu_Selected
+      // );
       this.items = this.company_menus.filter(
-        (item) => item.module === this.topMenu_Selected
+        (item) => item.top_menu_name === this.topMenu_Selected
       );
     },
 
@@ -1831,6 +1907,13 @@ button {
   font-size: 16px;
   font-weight: 600;
 }
+
+.customer-tabs a {
+  font-size: 12px !important;
+}
+/* .customer-tabs i {
+  font-size: 12px !important;
+} */
 </style>
 
 <style>

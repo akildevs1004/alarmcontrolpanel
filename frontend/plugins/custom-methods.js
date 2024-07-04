@@ -145,7 +145,17 @@ export default ({ app }, inject) => {
 
       return `${currentMonth} ${currentYear}`;
     },
-
+    format_date_month_name_year: (inputdate) => {
+      // Create a Date object with the date "2023-09-13"  Output Sun, Jan 01, 2023
+      const inputDate = new Date(inputdate);
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      };
+      const formattedDate = inputDate.toLocaleDateString("en-US", options);
+      return formattedDate;
+    },
     can(per, thisobj) {
       let u = thisobj.$auth.user;
 

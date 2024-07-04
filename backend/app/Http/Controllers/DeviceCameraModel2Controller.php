@@ -163,6 +163,82 @@ class DeviceCameraModel2Controller extends Controller
 
         $response = $this->putCURL('/api/devices/profile', $json);
     }
+
+    public function TestLive($device)
+    {
+        $this->sxdmSn = $device->device_id;
+
+        return array(
+            CURLOPT_URL => $this->camera_sdk_url . '/api/auth/login/challenge?username=admin',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'sxdmToken:' . $this->sxdmToken, //get from Device manufacturer
+                'sxdmSn:' . $this->sxdmSn //get from Device serial number
+            )
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->camera_sdk_url . '/api/auth/login/challenge?username=admin',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'sxdmToken:' . $this->sxdmToken, //get from Device manufacturer
+                'sxdmSn:' . $this->sxdmSn //get from Device serial number
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        $response = json_decode($response, true);
+        if (isset($response["session_id"])) {
+            $sessionId = $response["session_id"];
+        } else {
+            $sessionId = '';
+
+            return "Session ID is empty.";
+        }
+        //////$sessionId = $this->getActiveSessionId();
+
+        //return $this->camera_sdk_url . $serviceCall;
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->camera_sdk_url .  '/api/devices/status',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Cookie: sessionID=' . $sessionId,
+                'sxdmToken: ' . $this->sxdmToken, //get from Device manufacturer
+                'sxdmSn:  ' . $this->sxdmSn //get from Device serial number
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return  $response = json_decode($response, true);
+        //return $status = $this->getCURL('/api/devices/status');
+    }
     public function getSettings($device)
     {
         $row = [];

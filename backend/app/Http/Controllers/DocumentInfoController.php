@@ -16,7 +16,7 @@ class DocumentInfoController extends Controller
         foreach ($request->items as $item) {
             $arr[] = [
                 "title" => $item["title"],
-                "attachment" => $this->saveFile($item["file"], $request->employee_id),
+                "attachment" => $this->saveFileLocal($item["file"], $request->employee_id),
                 "employee_id" => $request->employee_id,
                 "company_id" => $request->company_id,
             ];
@@ -43,7 +43,7 @@ class DocumentInfoController extends Controller
         return $DocumentInfo->where('employee_id', $id)->get();
     }
 
-    public function saveFile($file, $id)
+    public function saveFileLocal($file, $id)
     {
         $filename = $file->getClientOriginalName();
         $file->move(public_path('documents/' . $id . "/"), $filename);

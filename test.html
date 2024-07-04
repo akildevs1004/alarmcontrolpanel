@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Plan with Maximum 4 Circles</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .image-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: grab; /* Use grab cursor for better UX */
+    }
+
+    .image {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px; /* Rounded corners for the image */
+    }
+
+    .marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: red;
+        pointer-events: auto; /* Allow pointer events to interact with markers */
+        transform: translate(-50%, -50%);
+        cursor: pointer; /* Use pointer cursor when hovering over markers */
+    }
+
+    .coordinates {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="image-container" id="imageContainer">
+        <img src="house-plan.jpg" alt="House Plan" class="image" style="" id="image">
+    </div>
+    <div class="coordinates" id="coordinatesDisplay">
+        <strong>Markers:</strong>
+        <ul id="markersList">
+        </ul>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get references to elements
+    const imageContainer = document.getElementById('imageContainer');
+    const image = document.getElementById('image');
+    const coordinatesDisplay = document.getElementById('coordinatesDisplay');
+    const markersList = document.getElementById('markersList');
+
+    let nextMarkerId = 1; // Counter for unique marker IDs
+    const maxMarkers = 4; // Maximum number of markers allowed
+
+    // Event listener to add markers on image click
+    imageContainer.addEventListener('click', function(event) {
+        if (markersList.children.length < maxMarkers) {
+            const mouseX = event.clientX - imageContainer.getBoundingClientRect().left;
+            const mouseY = event.clientY - imageContainer.getBoundingClientRect().top;
+
+            addMarker(mouseX, mouseY);
+        } else {
+            alert('You can only add up to 4 markers.');
+        }
+    });
+
+    // Function to add a new marker
+    function addMarker(x, y) {
+        if (markersList.children.length < maxMarkers) {
+            const markerId = `marker${nextMarkerId}`;
+            const marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.id = markerId;
+            marker.style.left = `${x}px`;
+            marker.style.top = `${y}px`;
+
+            markersList.innerHTML += `<li id="${markerId}Coordinates">${markerId}: (${x}, ${y})</li>`;
+
+            imageContainer.appendChild(marker);
+            nextMarkerId++;
+        }
+    }
+
+    // Event listener for dragging markers
+    document.addEventListener('mousedown', function(event) {
+        if (event.target.classList.contains('marker')) {
+            const marker = event.target;
+            let initialX = event.clientX - marker.getBoundingClientRect().left;
+            let initialY = event.clientY - marker.getBoundingClientRect().top;
+
+            // Event listener for mousemove while dragging
+            document.addEventListener('mousemove', moveMarker);
+
+            // Event listener for mouseup to stop dragging
+            document.addEventListener('mouseup', function() {
+                document.removeEventListener('mousemove', moveMarker);
+            });
+
+            // Function to move the marker
+            function moveMarker(event) {
+                let newX = event.clientX - initialX;
+                let newY = event.clientY - initialY;
+
+                // Constrain marker movement within image container
+                if (newX < 0) {
+                    newX = 0;
+                } else if (newX > imageContainer.offsetWidth) {
+                    newX = imageContainer.offsetWidth;
+                }
+
+                if (newY < 0) {
+                    newY = 0;
+                } else if (newY > imageContainer.offsetHeight) {
+                    newY = imageContainer.offsetHeight;
+                }
+
+                marker.style.left = `${newX}px`;
+                marker.style.top = `${newY}px`;
+
+                // Update coordinates in the list
+                const markerId = marker.id;
+                const coordinatesElement = document.querySelector(`#${markerId}Coordinates`);
+                if (coordinatesElement) {
+                    coordinatesElement.textContent = `${markerId}: (${newX}, ${newY})`;
+                }
+            }
+        }
+    });
+
+    // Prevent default dragging behavior on markers
+    document.addEventListener('dragstart', function(event) {
+        event.preventDefault();
+    });
+});
+</script>
+</body>
+</html>

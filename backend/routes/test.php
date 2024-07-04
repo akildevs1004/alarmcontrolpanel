@@ -79,7 +79,17 @@ Route::get("test900device1", function (Request $request) {
 
 Route::get("test900device", function (Request $request) {
 
-    $device = Device::where("device_id", "M014200892110002626")->first();
+
+
+
+    $device = Device::where("device_id", "M014200892110001835")->first();
+    return  $responseData['data'] = (new DeviceCameraModel2Controller($device->camera_sdk_url))->TestLive($device);
+
+
+
+
+
+    $device = Device::where("device_id", "M014200892110001835")->first();
     return  $responseData['data'] = (new DeviceCameraModel2Controller($device->camera_sdk_url))->getSettings($device);
 });
 Route::get("test900device2", function (Request $request) {

@@ -78,7 +78,7 @@ class BranchController extends Controller
         $data = $request->except(['contact_name', 'contact_no', 'contact_position', 'contact_whatsapp', 'user_name', 'email', 'password_confirmation', 'password']);
 
         if (isset($request->logo)) {
-            $data['logo'] = saveFile($request, 'media/company/' . $request->company_id . '/branch/logo', 'logo', $request->name, 'logo');
+            $data['logo'] =  saveFileHelper($request, 'media/company/' . $request->company_id . '/branch/logo', 'logo', $request->name, 'logo');
         }
 
         DB::beginTransaction();
@@ -113,7 +113,29 @@ class BranchController extends Controller
             'status' => true
         ], 200);
     }
+    function saveFileHelper_OLD($request, $destination, $attribute_name = null, $prefix = "", $sufix = "", $imageObj = null, $return_ext = false)
+    {
+        if (isset($imageObj) && !empty($imageObj) && $attribute_name == null) {
+            $temp = $imageObj;
+            $file = $imageObj->getClientOriginalName();
+            $file_ext = $imageObj->getClientOriginalExtension();
+            $fileName = pathinfo($file, PATHINFO_FILENAME);
+            $image = ((!empty($prefix)) ? (str_ireplace(" ", "-", $prefix) . "-") : "") . str_ireplace(" ", "-", $fileName) . ((!empty($sufix)) ? "-" . str_ireplace(" ", "-", $sufix) : "") . "." . $file_ext;
+            $temp->move($destination, $image);
+        } else if (isset($attribute_name) && $request->hasFile($attribute_name) && $attribute_name != null) {
+            $temp = $request->file($attribute_name);
+            $file = $request->$attribute_name->getClientOriginalName();
+            $file_ext = $request->$attribute_name->getClientOriginalExtension();
+            $fileName = pathinfo($file, PATHINFO_FILENAME);
+            $image = ((!empty($prefix)) ? (str_ireplace(" ", "-", $prefix) . "-") : "") . str_ireplace(" ", "-", $fileName) . ((!empty($sufix)) ? "-" . str_ireplace(" ", "-", $sufix) : "") . "." . $file_ext;
+            $temp->move($destination, $image);
+        }
 
+        if ($return_ext) {
+            return ["name" => (isset($image)) ? $image : null, "ext" => (isset($file_ext)) ? $file_ext : null];
+        }
+        return (isset($image)) ? $image : null;
+    }
     public function show($id)
     {
         $record = Branch::with(['user', 'contact'])->where('id', $id)->first();
@@ -159,14 +181,36 @@ class BranchController extends Controller
 
         return $model->orderBy('id', 'desc')->paginate($request->perPage);
     }
+    function saveFileHelper_old($request, $destination, $attribute_name = null, $prefix = "", $sufix = "", $imageObj = null, $return_ext = false)
+    {
+        if (isset($imageObj) && !empty($imageObj) && $attribute_name == null) {
+            $temp = $imageObj;
+            $file = $imageObj->getClientOriginalName();
+            $file_ext = $imageObj->getClientOriginalExtension();
+            $fileName = pathinfo($file, PATHINFO_FILENAME);
+            $image = ((!empty($prefix)) ? (str_ireplace(" ", "-", $prefix) . "-") : "") . str_ireplace(" ", "-", $fileName) . ((!empty($sufix)) ? "-" . str_ireplace(" ", "-", $sufix) : "") . "." . $file_ext;
+            $temp->move($destination, $image);
+        } else if (isset($attribute_name) && $request->hasFile($attribute_name) && $attribute_name != null) {
+            $temp = $request->file($attribute_name);
+            $file = $request->$attribute_name->getClientOriginalName();
+            $file_ext = $request->$attribute_name->getClientOriginalExtension();
+            $fileName = pathinfo($file, PATHINFO_FILENAME);
+            $image = ((!empty($prefix)) ? (str_ireplace(" ", "-", $prefix) . "-") : "") . str_ireplace(" ", "-", $fileName) . ((!empty($sufix)) ? "-" . str_ireplace(" ", "-", $sufix) : "") . "." . $file_ext;
+            $temp->move($destination, $image);
+        }
 
+        if ($return_ext) {
+            return ["name" => (isset($image)) ? $image : null, "ext" => (isset($file_ext)) ? $file_ext : null];
+        }
+        return (isset($image)) ? $image : null;
+    }
     public function update(BranchRequest $request, $id): JsonResponse
     {
         $data = $request->except('company_id');
 
         $record = Branch::find($id);
         if (isset($request->logo)) {
-            $data['logo'] = saveFile($request, 'media/company/' . $record->company_id . '/branch/logo', 'logo', $request->name, 'logo');
+            $data['logo'] =  saveFileHelper($request, 'media/company/' . $record->company_id . '/branch/logo', 'logo', $request->name, 'logo');
         }
         $record->update($data);
         return Response::json([

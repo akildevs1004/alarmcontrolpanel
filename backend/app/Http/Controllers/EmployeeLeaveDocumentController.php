@@ -35,7 +35,7 @@ class EmployeeLeaveDocumentController extends Controller
         foreach ($request->items as $item) {
             $arr[] = [
                 "key" => $item["key"],
-                "value" => $this->saveFile($item["value"], $item["key"], $request->company_id, $request->employee_id, $request->leave_id),
+                "value" => $this->saveFileLocal($item["value"], $item["key"], $request->company_id, $request->employee_id, $request->leave_id),
 
                 "documentable_id" => (string) $request->company_id,
                 "documentable_type" => "\App\Models\EmployeeLeaveDocument",
@@ -58,7 +58,7 @@ class EmployeeLeaveDocumentController extends Controller
         }
     }
 
-    public function saveFile($file, $id, $company_id, $employee_id, $leave_id)
+    public function saveFileLocal($file, $id, $company_id, $employee_id, $leave_id)
     {
         $filename = $company_id . "_" . $employee_id . "_" . $leave_id . "_" . rand(1000, 9000) . '_' . $file->getClientOriginalName();
         $file->move(public_path('leave_documents/'), $filename);

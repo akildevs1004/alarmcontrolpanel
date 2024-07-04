@@ -33,7 +33,7 @@ class DocumentController extends Controller
         foreach ($request->items as $item) {
             $arr[] = [
                 "key" => $item["key"],
-                "value" => $this->saveFile($item["value"], $item["key"]),
+                "value" => $this->saveFileLocal($item["value"], $item["key"]),
                 "documentable_id" => (string) $request->company_id,
                 "documentable_type" => "\App\Models\Company"
             ];
@@ -52,12 +52,12 @@ class DocumentController extends Controller
         }
     }
 
-    public function saveFile($file, $id)
+    public function saveFileLocal($file, $id)
     {
         $filename = $file->getClientOriginalName();
         $file->move(public_path('documents/' . $id . "/"), $filename);
         return $filename;
-    }    
+    }
 
     public function destroy($id)
     {
