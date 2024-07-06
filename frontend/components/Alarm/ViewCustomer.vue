@@ -169,6 +169,7 @@
 
         <v-row style="padding: 0px">
           <v-tabs
+            @change="changeTab()"
             small
             v-model="tab"
             right
@@ -239,12 +240,24 @@
             </v-tab-item>
             <v-tab-item value="tab-3">
               <v-card flat>
-                <v-card-text><AlramPhotos :key="key" /> </v-card-text>
+                <v-card-text
+                  ><AlramPhotos
+                    :key="keyPhotos"
+                    @closeDialog="closeDialog"
+                    :customer_id="_id"
+                  />
+                </v-card-text>
               </v-card>
             </v-tab-item>
             <v-tab-item value="tab-4">
               <v-card flat>
-                <v-card-text> <AlarmDevices :key="key" /> </v-card-text>
+                <v-card-text>
+                  <AlarmDevices
+                    :customer_id="_id"
+                    @closeDialog="closeDialog"
+                    :key="key"
+                  />
+                </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-5">
               <v-row class="pt-5">
@@ -346,7 +359,9 @@ export default {
     AlarmDashboardHumidityChart1,
     AlarmSettings,
   },
+  props: ["_id"],
   data: () => ({
+    keyPhotos: 1,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -363,8 +378,8 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    this._id = 4; //this.$route.params.id;
-    this.getDataFromApi();
+    //this._id = this.$route.params.id;
+    if (this._id) this.getDataFromApi();
 
     // setTimeout(() => {
     //   this.getBuildingTypes();
@@ -372,6 +387,12 @@ export default {
   },
   watch: {},
   methods: {
+    changeTab() {
+      console.log(this.tab);
+      if (this.tab == "tab-3") {
+        this.keyPhotos = this.keyPhotos + 1;
+      }
+    },
     closeDialog() {
       this.key = this.key + 1;
       this.getDataFromApi();
@@ -397,31 +418,41 @@ export default {
       this.$emit("closeCustomerDialog");
     },
 
-    getDataFromApi() {
-      this.payloadOptions = {
-        params: {
-          company_id: this.$auth.user.company_id,
-          customer_id: this._id,
-        },
-      };
+    async getDataFromApi() {
+      if (this._id) {
+        this.payloadOptions = {
+          params: {
+            company_id: this.$auth.user.company_id,
+            customer_id: this._id,
+          },
+        };
 
-      try {
-        this.$axios.get(`customers`, this.payloadOptions).then(({ data }) => {
-          this.data = data.data[0] || null;
-          this.customer = this.data;
-          if (this.data) {
-            this.customer_contacts = this.data.contacts;
-          }
+        try {
+          this.$axios.get(`customers`, this.payloadOptions).then(({ data }) => {
+            this.data = data.data[0] || null;
+            this.customer = this.data;
+            if (this.data) {
+              this.customer_contacts = this.data.contacts;
+            }
 
-          setTimeout(() => {
-            this.getBuildingTypes();
-            this.building_type_name = this.getBuildingTypeById(
-              this.data.building_type_id
-            );
-            this.data.building_type_name = this.building_type_name;
-          }, 3000);
+            setTimeout(() => {
+              this.getBuildingTypes();
+              this.building_type_name = this.getBuildingTypeById(
+                this.data.building_type_id
+              );
+              this.data.building_type_name = this.building_type_name;
+            }, 3000);
+          });
+        } catch (e) {}
+
+        const { data } = await this.$axios.get("address_types", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
         });
-      } catch (e) {}
+
+        this.$store.commit("storeAlarmControlPanel/AddressTypes", data);
+      }
     },
   },
 };

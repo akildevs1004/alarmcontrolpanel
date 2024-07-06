@@ -10,4 +10,12 @@ class CustomerBuildingPictures extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function getPictureAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+        return asset('customers/building/' . $value);
+    }
 }

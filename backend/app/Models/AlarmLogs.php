@@ -15,15 +15,6 @@ class AlarmLogs extends Model
     protected $casts = [
         'created_at' => 'datetime:d-M-y',
     ];
-    protected $fillable = [
-
-
-        'company_id',
-        'device_id',
-        'branch_id',
-        'log_time',
-
-    ];
 
     protected static function boot()
     {

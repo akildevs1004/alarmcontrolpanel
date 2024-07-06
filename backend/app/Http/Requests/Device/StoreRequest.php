@@ -40,14 +40,20 @@ class StoreRequest extends FormRequest
             ],
 
             'name' => ['required', 'min:2', 'max:50'],
-            'short_name' => ['required', 'nullable', 'min:3', 'max:50'],
+            'short_name' => ['nullable', 'nullable', 'min:3', 'max:50'],
             // 'device_id' => ['required', 'min:3', 'max:100', 'unique:devices'],
-            'location' => ['nullable', 'min:2', 'max:300'],
+            'location' => ['required', 'min:2', 'max:300'],
             'company_id' => ['required', 'min:1', 'integer'],
-            'status_id' => ['required', 'min:1', 'integer'],
-            'device_id' => ['required'],
+            // 'status_id' => ['required', 'min:1', 'integer'],
+            'device_id' => ['nullable'],
 
-            'model_number' => ['nullable', 'min:4', 'max:20'],
+            'serial_number' => ['required'],
+            'model_number' => ['required'],
+            'customer_id' => ['nullable'],
+            'threshold_temperature' => ['nullable'],
+
+
+
             'device_type' => ['required'],
 
             'mode' => ['nullable'],
@@ -56,7 +62,8 @@ class StoreRequest extends FormRequest
             'function' => 'required',
             'utc_time_zone' => 'required',
             'branch_id' => 'nullable',
-            //'camera_save_images' => 'required'
+            'alarm_delay_minutes' => 'required',
+            'customer_id' => 'nullable'
 
         ];
     }

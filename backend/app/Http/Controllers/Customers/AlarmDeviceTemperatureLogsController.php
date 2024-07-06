@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customers\CustomerContacts;
+use App\Models\AlarmDeviceTemperatureLogs;
 use Illuminate\Http\Request;
 
-class CustomerContactsController extends Controller
+class AlarmDeviceTemperatureLogsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class CustomerContactsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customers\CustomerContacts  $customerContacts
+     * @param  \App\Models\AlarmDeviceTemperatureLogs  $alarmDeviceTemperatureLogs
      * @return \Illuminate\Http\Response
      */
-    public function show(CustomerContacts $customerContacts)
+    public function show(AlarmDeviceTemperatureLogs $alarmDeviceTemperatureLogs)
     {
         //
     }
@@ -53,10 +53,10 @@ class CustomerContactsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customers\CustomerContacts  $customerContacts
+     * @param  \App\Models\AlarmDeviceTemperatureLogs  $alarmDeviceTemperatureLogs
      * @return \Illuminate\Http\Response
      */
-    public function edit(CustomerContacts $customerContacts)
+    public function edit(AlarmDeviceTemperatureLogs $alarmDeviceTemperatureLogs)
     {
         //
     }
@@ -65,10 +65,10 @@ class CustomerContactsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customers\CustomerContacts  $customerContacts
+     * @param  \App\Models\AlarmDeviceTemperatureLogs  $alarmDeviceTemperatureLogs
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CustomerContacts $customerContacts)
+    public function update(Request $request, AlarmDeviceTemperatureLogs $alarmDeviceTemperatureLogs)
     {
         //
     }
@@ -76,19 +76,11 @@ class CustomerContactsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customers\CustomerContacts  $customerContacts
+     * @param  \App\Models\AlarmDeviceTemperatureLogs  $alarmDeviceTemperatureLogs
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(AlarmDeviceTemperatureLogs $alarmDeviceTemperatureLogs)
     {
-
-        $contact = CustomerContacts::find($id);
-
-        if ($contact->delete()) {
-
-            return $this->response('Contact Details are Deleted', null, true);
-        } else
-            return $this->response('Contact Details are not Deleted', null, false);
         //
     }
 }

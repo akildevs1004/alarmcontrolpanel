@@ -1,26 +1,40 @@
 <?php
 
-use App\Http\Controllers\Alarm\Api\ApiAlarmControlController;
+
+use App\Http\Controllers;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
+use App\Http\Controllers\Alarm\Api\ApiAlarmDeviceTemperatureLogsController;
+use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
+use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Models\Customers\Customers;
 use Illuminate\Support\Facades\Route;
 
-// announcement
-//Route::apiResource('announcement', AnnouncementController::class);
-// Route::get('announcement_list', [AnnouncementController::class, 'annoucement_list']);
-// Route::get('announcement/search/{key}', [AnnouncementController::class, 'search']);
-//Route::get('alarm_device_status', [ApiAlarmControlController::class, 'LogDeviceStatus']);
-//Route::get('announcement/employee/{id}', [AnnouncementController::class, 'getAnnouncement']);
 
+Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
+Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
+
+Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
+Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 
 Route::apiResource('customers', CustomersController::class);
 Route::get('building_types', [CustomersController::class, 'buildingTypes']);
 Route::get('address_types', [CustomersController::class, 'addressTypes']);
+Route::get('device_models', [CustomersController::class, 'deviceModels']);
+Route::get('device_types', [CustomersController::class, 'deviceTypes']);
+
+
 
 Route::post('customers_primary_contact_update', [CustomersController::class, 'updatePrimaryContacts']);
 Route::post('customers_secondary_contact_update', [CustomersController::class, 'updateSecondaryContacts']);
 Route::post('customers_building_contact_update', [CustomersController::class, 'updatebuildingContacts']);
 Route::post('customer-update', [CustomersController::class, 'updateCustomer']);
 Route::post('customers_contact_update', [CustomersController::class, 'updateCustomerContact']);
+
+Route::apiResource('customers_building_picture', CustomerBuildingPicturesController::class);
+
+
+Route::apiResource('customer_contact', CustomerContactsController::class);
+
+Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZones']);

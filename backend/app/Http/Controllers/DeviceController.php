@@ -9,6 +9,7 @@ use App\Mail\SendEmailNotificationForOfflineDevices;
 use App\Models\AlarmLogs;
 use App\Models\AttendanceLog;
 use App\Models\Company;
+use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\DeviceActivesettings;
 use App\Models\DeviceNotification;
@@ -35,6 +36,8 @@ class DeviceController extends Controller
     public function dropdownList()
     {
         $model = Device::query();
+
+
         $model->where('company_id', request('company_id'));
         $model->where("status_id", self::ONLINE_STATUS_ID);
         $model->excludeMobile();
@@ -50,7 +53,7 @@ class DeviceController extends Controller
         $model->excludeMobile();
 
         $cols = $request->cols;
-        $model->with(['status', 'company', 'companyBranch']);
+        $model->with(['status', 'company', 'companyBranch', 'sensorzones']);
         $model->where('company_id', $request->company_id);
         $model->when($request->filled('name'), function ($q) use ($request) {
             $q->where('name', 'ILIKE', "$request->name%");
@@ -275,7 +278,7 @@ class DeviceController extends Controller
 
             $model = Device::query();
             $model->where("company_id", $request->company_id);
-            $model->where("device_id", $request->device_id);
+            $model->where("serial_number", $request->serial_number);
             $model->where("name", $request->name);
 
             if ($model->exists()) {
@@ -287,8 +290,15 @@ class DeviceController extends Controller
             if ($data["model_number"] == "OX-900") {
                 $data["camera_sdk_url"] = env('OX900_SDK_URL');
             }
+            if ($request->filled("device_id")) {
+                $data["serial_number"] = $data["device_id"];
+            } else if ($request->filled("serial_number")) {
+                $data["device_id"] = $data["serial_number"];
+            }
 
-            $data["serial_number"] = $data["device_id"];
+
+            $data["status_id"] = 2;
+
             $data["ip"] = "0.0.0.0";
             $data["port"] = "0000";
             $record = $model->create($data);
@@ -602,7 +612,15 @@ class DeviceController extends Controller
 
 
         try {
-            $record = $Device->update($request->validated());
+            $data = $request->validated();
+            $data["status_id"] = 2;
+
+            if ($request->filled("device_id")) {
+                $data["serial_number"] = $data["device_id"];
+            } else if ($request->filled("serial_number")) {
+                $data["device_id"] = $data["serial_number"];
+            }
+            $record = $Device->update($data);
 
             //update to Device 
             if ($request->model_number == 'OX-900') {
@@ -657,7 +675,11 @@ class DeviceController extends Controller
     public function destroy(Device $device)
     {
         try {
+
+            $device_id = $device->id;
             $record = $device->delete();
+            if ($device_id > 0)
+                DeviceZones::where('device_id', $device_id)->delete();
 
             if ($record) {
                 return $this->response('Device successfully deleted.', $record, true);

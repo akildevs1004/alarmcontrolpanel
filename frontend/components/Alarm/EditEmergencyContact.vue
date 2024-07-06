@@ -11,18 +11,25 @@
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <v-row class="pt-0">
             <v-col md="12" cols="12" sm="12" dense>
-              <v-select
-                @change="loadAddressContent()"
+              <!-- <v-autocomplete
+                v-model="selectedItem"
+                :items="items"
+                label="Select or add an item"
+                @change="addNewItem"
+                :hide-no-data="true"
+              ></v-autocomplete> -->
+
+              <v-combobox
+                @change="loadAddressContent(false)"
                 label="Contact  Type"
                 :items="addressTypes"
                 item-text="name"
-                item-value="name"
                 v-model="payload_primary.address_type"
                 dense
                 outlined
                 hide-details
                 small
-              ></v-select>
+              ></v-combobox>
               <span
                 v-if="errors && errors.address_type"
                 class="text-danger mt-2"
@@ -259,7 +266,7 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer_contacts", "customer", "addressType"],
+  props: ["customer_id", "customer_contacts", "customer", "editId"],
   data: () => ({
     show1: false,
     contactTypes: [],
@@ -299,6 +306,8 @@ export default {
     response: "",
     snackbar: false,
     errors: [],
+    selectedItem: null,
+    items: ["Apple", "Banana", "Orange"],
   }),
   created() {
     this.payload_primary = {};
@@ -310,10 +319,10 @@ export default {
     }
 
     // setTimeout(() => {
-    console.log(this.addressType);
-    if (this.addressType != "") {
-      this.payload_primary.address_type = this.addressType;
-      this.loadAddressContent();
+    //console.log(this.editAddressType);
+    if (this.editId != "") {
+      this.payload_primary.editId = this.editId;
+      this.loadAddressContent(true);
     }
     // }, 1000);
 
@@ -329,12 +338,28 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    loadAddressContent() {
-      let _payload_primary = this.customer_contacts.filter(
-        (el) => el.address_type == this.payload_primary.address_type
-      );
+    addNewItem(value) {
+      console.log(this.items);
+      // Check if the value is already in the items list
+      if (!this.items.includes(value)) {
+        // Add the new value to the items list
+        this.items.push(value);
+      }
+    },
+    loadAddressContent(is_address_type) {
+      // let _payload_primary = this.customer_contacts.filter(
+      //   (el) => el.address_type == this.payload_primary.address_type
+      // );
+      let _payload_primary = [];
+      if (this.editId != "") {
+        _payload_primary = this.customer_contacts.filter(
+          (el) => el.id == this.payload_primary.editId
+        );
+      }
 
       if (_payload_primary[0]) {
+        if (is_address_type)
+          this.payload_primary.address_type = _payload_primary[0].address_type;
         this.payload_primary.first_name = _payload_primary[0].first_name;
         this.payload_primary.last_name = _payload_primary[0].last_name;
         this.payload_primary.address = _payload_primary[0].address;
@@ -348,6 +373,7 @@ export default {
         this.payload_primary.working_hours = _payload_primary[0].working_hours;
         this.payload_primary.distance = _payload_primary[0].distance;
         this.payload_primary.notes = _payload_primary[0].notes;
+        this.payload_primary.editId = _payload_primary[0].id;
       }
     },
     getBranchesList() {
@@ -401,6 +427,7 @@ export default {
         this.$emit("input", file[0]);
       }
     },
+
     submit_primary() {
       let customer = new FormData();
 
@@ -408,12 +435,22 @@ export default {
         if (this.payload_primary[key] != "")
           customer.append(key, this.payload_primary[key]);
       }
+      let address_type = "";
+      if (typeof this.payload_primary["address_type"] === "object") {
+        address_type = this.payload_primary["address_type"].name;
+      } else {
+        address_type = this.payload_primary.address_type;
+      }
+      customer.append("address_type", address_type);
       customer.append("company_id", this.$auth.user.company_id);
       customer.append("customer_id", this.customer_id);
+      // if (this.editAddressType != "") customer.append("editAddressType", true);
 
-      // if (this.primary_upload.name) {
-      //   customer.append("profile_picture", this.primary_upload.name);
-      // }
+      if (this.editId != "") {
+        customer.append("editId", this.editId);
+      }
+
+      console.log(customer);
 
       this.$axios
         .post("/customers_contact_update", customer)

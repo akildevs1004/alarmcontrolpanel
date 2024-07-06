@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="text-center ma-2">
+      <v-snackbar v-model="snackbar" top="top" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
+
     <v-dialog v-model="dialogGoogleMap" width="600px">
       <v-card>
         <v-card-title dense class="popup_background">
@@ -29,7 +35,7 @@
     <v-dialog v-model="dialogEditEmergency" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Update Contacts </span>
+          <span style="color: black">Add Contacts </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -51,7 +57,7 @@
               :customer_contacts="customer_contacts"
               :customer="customer"
               @closeDialog="closeDialog"
-              :addressType="editAddressType"
+              :editId="editId"
             />
           </v-container>
         </v-card-text>
@@ -67,26 +73,27 @@
             dialogEditEmergency = true;
           "
           dense
-          small
+          x-small
         >
-          Edit
+          Add
         </v-btn>
       </v-col>
 
       <v-col
-        v-for="item in customer_contacts"
+        v-for="(item, index) in customer_contacts"
+        :key="index"
         cols="4"
         class="mt-3"
         style="line-height: 35px; border-right: #ddd 0px solid"
       >
         <v-card class="elevation-1 pl-1">
           <v-row>
-            <v-col cols="6"
+            <v-col cols="10"
               ><h3 style="">{{ item.address_type }}</h3></v-col
             >
 
-            <v-col cols="6" class="text-right">
-              <v-icon v-if="item.address_type == 'Police Station'" color="red"
+            <v-col cols="2" class="text-right">
+              <!-- <v-icon v-if="item.address_type == 'Police Station'" color="red"
                 >mdi mdi-car-emergency</v-icon
               >
               <v-icon
@@ -106,13 +113,36 @@
                 v-else-if="item.address_type == 'Community Security'"
                 color="red"
                 >mdi mdi-server-security</v-icon
-              >
-              <v-icon
-                @click="editContactDetails(item.address_type)"
-                size="20"
-                color="black"
-                >mdi mdi-pencil</v-icon
-              >
+              > -->
+
+              <v-menu bottom left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list width="120" dense>
+                  <v-list-item
+                    v-if="can('device_notification_contnet_view')"
+                    @click="editContactDetails(item.id)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-eye </v-icon>
+                      Edit
+                    </v-list-item-title>
+                  </v-list-item>
+
+                  <v-list-item
+                    v-if="can('device_notification_contnet_delete')"
+                    @click="deleteContactDetails(item.id)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="error" small> mdi-delete </v-icon>
+                      Delete
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </v-col>
           </v-row>
           <v-divider></v-divider>
@@ -245,7 +275,7 @@ export default {
     },
     start_date: "",
     end_date: "",
-    editAddressType: "",
+    editId: "",
     customer_payload: {
       branch_id: "",
       building_type_id: "",
@@ -279,6 +309,8 @@ export default {
     e1: 1,
     errors: [],
     previewImage: null,
+    snackbar: false,
+    response: "",
   }),
   created() {
     this.preloader = false;
@@ -288,9 +320,26 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    editContactDetails(editAddressType) {
+
+    deleteContactDetails(id) {
+      if (confirm("Are you sure you wish to delete ?")) {
+        this.$axios
+          .delete(`customer_contact/${id}`)
+
+          .then(({ data }) => {
+            this.color = "background";
+            this.errors = [];
+            this.snackbar = true;
+            this.response = "Contact Details are deleted successfully";
+
+            this.$emit("closeDialog");
+            //this.branch_id = this.$auth.user.branch_id || "";
+          });
+      }
+    },
+    editContactDetails(editId) {
       this.key = this.key + 1;
-      this.editAddressType = editAddressType;
+      this.editId = editId;
       this.dialogEditEmergency = true;
     },
     getBranchesList() {

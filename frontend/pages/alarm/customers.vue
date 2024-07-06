@@ -238,6 +238,7 @@ export default {
     AlarmViewCustomer,
   },
   data: () => ({
+    commonSearch: "",
     perPage: 10,
     cumulativeIndex: 1,
     currentPage: 1,
@@ -468,7 +469,7 @@ export default {
       this.dialogViewCustomer = true;
     },
     viewItem2(item) {
-      this.$router.push("/alarm/view-customer");
+      this.$router.push("/alarm/view-customer/" + item.id);
     },
     // getDate() {
     //   const date = new Date();

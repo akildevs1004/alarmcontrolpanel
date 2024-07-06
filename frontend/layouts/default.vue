@@ -825,6 +825,8 @@ export default {
   mounted() {
     this.getBuildingTypes();
     this.getAddressTypes();
+    this.getDeviceTypes();
+    this.getDeviceModels();
 
     setTimeout(() => {
       this.loadNotificationMenu();
@@ -949,6 +951,28 @@ export default {
         });
 
         this.$store.commit("storeAlarmControlPanel/AddressTypes", data);
+      }
+    },
+    async getDeviceModels() {
+      if (!this.$store.state.storeAlarmControlPanel?.DeviceModels) {
+        const { data } = await this.$axios.get("device_models", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/DeviceModels", data);
+      }
+    },
+    async getDeviceTypes() {
+      if (!this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
+        const { data } = await this.$axios.get("device_types", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/DeviceTypes", data);
       }
     },
     showGlobalsearchPopup() {

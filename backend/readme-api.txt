@@ -1,0 +1,1 @@
+http://127.0.0.1:8000/api/api_temperature_logs?temperature=1&humidity=1&serial_number=M014200892110002626

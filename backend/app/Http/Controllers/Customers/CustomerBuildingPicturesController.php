@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerBuildingPhotos\StoreRequest;
 use App\Models\Customers\CustomerBuildingPictures;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,13 @@ class CustomerBuildingPicturesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $model = CustomerBuildingPictures::where("company_id", $request->company_id)->where("customer_id", $request->customer_id)->orderBy("display_order", "ASC");
+
+
+
+        return $model->paginate($request->perPage ?? 100);;
     }
 
     /**
@@ -34,9 +39,37 @@ class CustomerBuildingPicturesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            if (isset($request->attachment) && $request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $ext = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $ext;
+
+                $request->file('attachment')->move(public_path('/customers/building'), $fileName);
+                $data['picture'] = $fileName;
+            }
+
+            if ($request->filled("editId")) {
+                $record = CustomerBuildingPictures::where("id", $request->editId)->update($data);
+            } else {
+
+                $record = CustomerBuildingPictures::create($data);
+            }
+
+
+
+            if ($record) {
+                return $this->response('Photo is created.', $record, true);
+            } else {
+                return $this->response('Photo can not create ', null, false);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -79,8 +112,17 @@ class CustomerBuildingPicturesController extends Controller
      * @param  \App\Models\Customers\CustomerBuildingPictures  $customerBuildingPictures
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CustomerBuildingPictures $customerBuildingPictures)
+    public function destroy($id)
     {
-        //
+        if ($id > 0) {
+            $contact = CustomerBuildingPictures::find($id);
+
+            if ($contact->delete()) {
+
+                return $this->response('Contact Details are Deleted', null, true);
+            } else
+                return $this->response('Contact Details are not Deleted', null, false);
+            //
+        }
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Deivices;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeviceZones extends Model
+class AlarmDeviceTemperatureLogs extends Model
 {
     use HasFactory;
     protected $guarded = [];

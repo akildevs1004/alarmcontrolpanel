@@ -3,6 +3,8 @@
 export const state = () => ({
   BuildingTypes: null,
   AddressTypes: null,
+  DeviceTypes: null,
+  DeviceModels: null,
 });
 
 export const mutations = {
@@ -17,6 +19,12 @@ export const mutations = {
   },
   AddressTypes(state, data) {
     state.AddressTypes = data;
+  },
+  DeviceTypes(state, data) {
+    state.DeviceTypes = data;
+  },
+  DeviceModels(state, data) {
+    state.DeviceModels = data;
   },
 };
 

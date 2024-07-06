@@ -75,10 +75,10 @@
 
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
-        <v-btn @click="dialogEditContacts = true" color="primary" dense small>
+        <v-btn x-small @click="dialogEditContacts = true" color="primary" dense>
           Edit Contact
         </v-btn>
-        <v-btn @click="dialogEditBuilding = true" color="primary" dense small>
+        <v-btn @click="dialogEditBuilding = true" color="primary" dense x-small>
           Edit Building
         </v-btn>
       </v-col>
@@ -94,8 +94,8 @@
                 border: 1px solid #ddd;
               "
               :src="
-                customer
-                  ? customer.primary_contact.profile_picture
+                customer && customer.primary_contact
+                  ? customer.primary_contact?.profile_picture
                   : '/no-profile-image.jpg'
               "
             ></v-img>
@@ -104,10 +104,10 @@
             <div style="padding-top: 10px; font-weight: ">Primary Contact</div>
             <div style="color: red; font-size: 16px">
               {{
-                customer
-                  ? customer.primary_contact.first_name +
+                customer && customer.primary_contact
+                  ? customer.primary_contact?.first_name +
                     " " +
-                    customer.primary_contact.last_name
+                    customer.primary_contact?.last_name
                   : "---"
               }}
             </div>
@@ -122,7 +122,11 @@
             Phone 1
           </v-col>
           <v-col cols="9" class="bold">
-            {{ customer ? customer.primary_contact.phone1 : "---" }}
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.phone1
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -134,7 +138,11 @@
             Phone 2</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.primary_contact.phone2 : "---" }}
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.phone2
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -146,7 +154,11 @@
             Office</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.primary_contact.office_phone : "---" }}
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.office_phone
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -158,7 +170,11 @@
             Email</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.primary_contact.email : "---" }}</v-col
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.email
+                : "---"
+            }}</v-col
           >
         </v-row>
         <v-divider></v-divider>
@@ -170,7 +186,11 @@
             Whatsapp</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.primary_contact.whatsapp : "---" }}
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.whatsapp
+                : "---"
+            }}
           </v-col>
         </v-row>
 
@@ -203,8 +223,8 @@
                 border: 1px solid #ddd;
               "
               :src="
-                customer
-                  ? customer.secondary_contact.profile_picture
+                customer && customer.secondary_contact
+                  ? customer.secondary_contact?.profile_picture
                   : '/no-profile-image.jpg'
               "
             ></v-img>
@@ -215,10 +235,10 @@
             </div>
             <div style="color: red; font-size: 16px">
               {{
-                customer
-                  ? customer.secondary_contact.first_name +
+                customer && customer.secondary_contact
+                  ? customer.secondary_contact?.first_name +
                     " " +
-                    customer.secondary_contact.last_name
+                    customer.secondary_contact?.last_name
                   : "---"
               }}
             </div>
@@ -233,7 +253,11 @@
             Phone 1
           </v-col>
           <v-col cols="9" class="bold">
-            {{ customer ? customer.secondary_contact.phone1 : "---" }}
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.phone1
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -245,7 +269,11 @@
             Phone 2</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.secondary_contact.phone2 : "---" }}
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.phone2
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -257,7 +285,11 @@
             Office</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.secondary_contact.office_phone : "---" }}
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.office_phone
+                : "---"
+            }}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -269,7 +301,11 @@
             Email</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.secondary_contact.email : "---" }}</v-col
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.email
+                : "---"
+            }}</v-col
           >
         </v-row>
         <v-divider></v-divider>
@@ -281,7 +317,11 @@
             Whatsapp</v-col
           >
           <v-col cols="9" class="bold">
-            {{ customer ? customer.secondary_contact.whatsapp : "---" }}
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.whatsapp
+                : "---"
+            }}
           </v-col>
         </v-row>
 

@@ -28,24 +28,27 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:2', 'max:50'],
-            'short_name' => ['required', 'nullable', 'min:3', 'max:4'],
-            'device_id' => ['required', 'min:3', 'max:100'],
-            'location' => ['nullable', 'min:2', 'max:300'],
+            //'short_name' => ['required', 'nullable', 'min:3', 'max:4'],
+            // 'device_id' => ['required', 'min:3', 'max:100'],
+            'location' => ['required', 'min:2', 'max:300'],
             'company_id' => ['required', 'min:1', 'integer'],
-            'status_id' => ['required', 'min:1', 'integer'],
+            // 'status_id' => ['required', 'min:1', 'integer'],
 
-            'model_number' => ['nullable', 'min:6', 'max:50'],
+            'model_number' => ['required', 'min:6', 'max:50'],
             'device_type' =>  'required',
-
+            'serial_number' => ['required'],
             'mode' => ['nullable'],
 
             'ip' => 'required|ip',
             'port' => 'required',
             'function' => 'required',
             'utc_time_zone' => 'required',
-            'branch_id' => 'required',
+            'branch_id' => 'nullable',
             'serial_number' => 'required',
-            'camera_save_images' => 'required'
+            'alarm_delay_minutes' => 'required',
+            'customer_id' => 'nullable',
+            'threshold_temperature' => ['nullable'],
+
         ];
     }
 }
