@@ -10,13 +10,13 @@
       <v-row>
         <v-col cols="8"
           ><span class="pl-5" style="font-size: 16px"
-            >Today Humidity</span
-          ></v-col
+            >Today Humidity
+          </span></v-col
         >
-        <v-col cols="4" class="pull-right"
-          ><v-icon @click="getDataFromApi(1)" style="float: right"
+        <v-col cols="4" class="pull-right">
+          <!-- <v-icon @click="getDataFromApi(1)" style="float: right"
             >mdi mdi-reload</v-icon
-          >
+          > -->
         </v-col>
       </v-row>
       <v-col lg="12" md="12" style="text-align: center; padding-top: 0px">
@@ -83,10 +83,14 @@ export default {
   },
   watch: {},
   mounted() {
+    let value = this.humidity_latest;
+    if (value == "--") {
+      value = 0;
+    }
     setTimeout(() => {
       this.VueGaugeoptions = {
-        needleValue: this.humidity_latest,
-        centralLabel: this.humidity_latest + "%",
+        needleValue: value,
+        centralLabel: value + "%",
         hasNeedle: true,
         arcDelimiters: [60, 80, 99],
         // arcLabels: [60, 80, 99],

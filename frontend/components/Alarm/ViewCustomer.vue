@@ -18,7 +18,7 @@
             >Building Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
-            <v-icon @click="closeDialog()" color="white" outlined>
+            <v-icon @click="changeTab()" color="white" outlined>
               mdi mdi-refresh
             </v-icon>
             <v-icon
@@ -219,7 +219,7 @@
                 <v-card-text>
                   <AlramCustomerContacts
                     @closeDialog="closeDialog"
-                    :key="key"
+                    :key="keyContacts"
                     :customer_id="_id"
                     :customer_contacts="customer_contacts"
                     :customer="data"
@@ -235,6 +235,7 @@
                     :customer_id="_id"
                     :customer_contacts="customer_contacts"
                     :customer="data"
+                    :key="keyEmergencyy"
                 /></v-card-text>
               </v-card>
             </v-tab-item>
@@ -255,62 +256,20 @@
                   <AlarmDevices
                     :customer_id="_id"
                     @closeDialog="closeDialog"
-                    :key="key"
+                    :key="keyDevices"
                   />
                 </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-5">
-              <v-row class="pt-5">
-                <v-col lg="3" md="3" sm="12" xs="12">
-                  <AlarmDashboardTemparatureChart1
-                    :key="key"
-                    :name="'AlarmDashboardTemparatureChart1'"
-                    :height="'180'"
-                    :temperature_latest="'25'"
-                    :temperature_date_time="'2024-06-09 10:10'"
-                  />
-                </v-col>
-                <v-col lg="3" md="3" sm="12" xs="12">
-                  <AlarmDashboardHumidityChart1
-                    :key="key"
-                    :name="'AlarmDashboardHumidityChart1'"
-                    :height="'180'"
-                    :humidity_latest="'25'"
-                    :humidity_date_time="'2024-06-09 10:10'"
-                  />
-                </v-col>
-
-                <v-col lg="6" md="6" sm="12" xs="12">
-                  <AlarmDashboardTemparatureChart2
-                    :key="key"
-                    :name="'AlarmDashboardTemparatureChart2'"
-                    :height="'130'"
-                    :device_serial_number="'1111111111'"
-                    :from_date="'2024-04-06'"
-                  />
-                </v-col>
-              </v-row>
-              <v-col
-                lg="12"
-                md="12"
-                sm="12"
-                xs="12"
-                class="mt-5"
-                style="padding: 3px"
-              >
-                <AlarmEventsChart
-                  :key="key"
-                  :name="'AlarmEventsChart'"
-                  :height="'300'"
-                  :date_from="'140'"
-                  :date_to="'140'"
-                  :device_serial_number="'1111111111'"
-                  :from_date="'2024-04-06'"
-                />
-              </v-col> </v-tab-item
+              <AlarmAlarmReports
+                :key="keyReports"
+                :customer_id="_id"
+              /> </v-tab-item
             ><v-tab-item value="tab-6">
               <v-card flat>
-                <v-card-text> <AlarmEvents :key="key" /></v-card-text>
+                <v-card-text>
+                  <AlarmEvents :key="keyEvents" :customer_id="_id"
+                /></v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-7">
               <v-card flat>
@@ -348,6 +307,7 @@ import AlarmDashboardHumidityChart1 from "../../components/Alarm/AlarmDashboardH
 import AlarmDashboardTemparatureChart2 from "../../components/Alarm/AlarmDashboardTemparatureChart2.vue";
 import AlarmEvents from "../../components/Alarm/AlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
+import AlarmAlarmReports from "../../components/Alarm/AlarmReports.vue";
 
 export default {
   components: {
@@ -358,10 +318,16 @@ export default {
     AlarmDashboardTemparatureChart1,
     AlarmDashboardHumidityChart1,
     AlarmSettings,
+    AlarmAlarmReports,
   },
   props: ["_id"],
   data: () => ({
+    keyContacts: 1,
+    keyEmergencyy: 1,
     keyPhotos: 1,
+    keyDevices: 1,
+    keyReports: 1,
+    keyEvents: 1,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -388,9 +354,18 @@ export default {
   watch: {},
   methods: {
     changeTab() {
-      console.log(this.tab);
-      if (this.tab == "tab-3") {
+      if (this.tab == "tab-1") {
+        this.keyContacts = this.keyContacts + 1;
+      } else if (this.tab == "tab-2") {
+        this.keyEmergencyy = this.keyEmergencyy + 1;
+      } else if (this.tab == "tab-3") {
         this.keyPhotos = this.keyPhotos + 1;
+      } else if (this.tab == "tab-4") {
+        this.keyDevices = this.keyDevices + 1;
+      } else if (this.tab == "tab-5") {
+        this.keyReports = this.keyReports + 1;
+      } else if (this.tab == "tab-6") {
+        this.keyEvents = this.keyEvents + 1;
       }
     },
     closeDialog() {

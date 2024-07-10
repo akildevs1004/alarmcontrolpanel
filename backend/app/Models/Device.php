@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,10 @@ class Device extends Model
     public function zone()
     {
         return $this->belongsTo(Zone::class);
+    }
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class);
     }
     public function sensorzones()
     {

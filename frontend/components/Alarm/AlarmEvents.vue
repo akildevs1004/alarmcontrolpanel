@@ -35,71 +35,56 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row>
-          <!-- <v-spacer></v-spacer>
-          <v-col cols="6"></v-col>
-          <span cols="6" class="mt-8" style="width: 500px">
-            <span style="width: 50%"
-              ><v-text-field
-                style="width: 200px"
-                height="20"
-                class="employee-schedule-search-box"
-                @input="getDataFromApi()"
-                v-model="commonSearch"
-                label="Search (min 3)"
-                dense
-                outlined
-                type="text"
-                append-icon="mdi-magnify"
-                clearable
-              ></v-text-field
-            ></span>
-            <span style="width: 50%">
-              <CustomFilter
-                style="float: right; padding-top: 5px; z-index: 9999"
-                @filter-attr="filterAttr"
-                :default_date_from="date_from"
-                :default_date_to="date_to"
-                :defaultFilterType="1"
-                :height="'40px'"
-              />
-            </span>
-          </span> -->
-          <!-- <v-col cols="2">
-            <v-text-field outlined small dense label="Search"></v-text-field
-          ></v-col>
-          <v-col cols="3">
-            <CustomFilter
-              style="float: right; padding-top: 5px; z-index: 9999"
-              @filter-attr="filterAttr"
-              :default_date_from="date_from"
-              :default_date_to="date_to"
-              :defaultFilterType="1"
-              :height="'40px'"
-            />
-          </v-col> -->
-        </v-row>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-data-table :headers="headers" :items="items" class="elevation-0">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :server-items-length="totalRowsCount"
+          :loading="loading"
+          :options.sync="options"
+          :footer-props="{
+            itemsPerPageOptions: [10, 50, 100, 500, 1000],
+          }"
+          class="elevation-0"
+        >
+          <template v-slot:item.sno="{ item, index }">
+            {{
+              currentPage
+                ? (currentPage - 1) * perPage +
+                  (cumulativeIndex + items.indexOf(item))
+                : "-"
+            }}
+          </template>
           <template v-slot:item.device="{ item }">
-            <div>{{ item.device }}</div>
-            <div class="secondary-value">{{ item.serial_number }}</div>
+            <div>{{ item.device.name }}</div>
+            <div class="secondary-value">{{ item.device.serial_number }}</div>
           </template>
           <template v-slot:item.sensor="{ item }">
-            <div>{{ item.sensor }}</div>
+            <div>
+              {{ item.alarm_type }}
+            </div>
             <div class="secondary-value">{{ item.type }}</div>
+          </template>
+          <template v-slot:item.location="{ item }">
+            {{ item.device.location }}
           </template>
           <template v-slot:item.zone="{ item }">
             <div>{{ item.zone }}</div>
             <div class="secondary-value">{{ item.area }}</div>
           </template>
-          <template v-slot:item.alarm_type="{ item }">
-            <div>{{ item.alarm_type }}</div>
+          <template v-slot:item.start_date="{ item }">
+            <div>{{ item.alarm_start_datetime }}</div>
+            <div class="secondary-value">{{ item.alarm_end_datetime }}</div>
           </template>
-
+          <template v-slot:item.duration="{ item }">
+            <div>{{ $dateFormat.minutesToHHMM(item.response_minutes) }}</div>
+          </template>
+          <template v-slot:item.category="{ item }">
+            <div>{{ item.alarm_category }}</div>
+          </template>
           <template v-slot:item.alarm="{ item }">
             <div style="color: red" v-if="item.alarm == 'ON'">
               <v-icon color="red">mdi mdi-alarm-light-outline</v-icon>
@@ -109,7 +94,9 @@
             </div>
           </template>
           <template v-slot:item.status="{ item }">
-            <div style="color: red" v-if="item.status == 'open'">Open</div>
+            <div style="color: red" v-if="item.alarm_end_datetime == ''">
+              Open
+            </div>
             <div v-else>Closed</div>
           </template>
           <template v-slot:item.options="{ item }">
@@ -143,146 +130,98 @@
 
 <script>
 export default {
+  props: ["customer_id"],
   data() {
     return {
+      loading: false,
+      commonSearch: "",
+      options: { perPage: 10 },
+      cumulativeIndex: 1,
+      perPage: 10,
+      currentPage: 1,
+      totalRowsCount: 0,
       headers: [
-        { text: "#", value: "sno" },
-        { text: "Device", value: "device" },
-        { text: "Sensor", value: "sensor" },
-        { text: "Location", value: "location" },
+        { text: "#", value: "sno", sortable: false },
+        { text: "Device", value: "device", sortable: false },
+        { text: "Sensor", value: "sensor", sortable: false },
+        { text: "Location", value: "location", sortable: false },
 
-        { text: "Zone", value: "zone" },
-        { text: "Alarm Type", value: "alarm_type" },
-        { text: "Start Date", value: "start_date" },
-        { text: "End Date", value: "end_date" },
-        { text: "Resolved Time", value: "duration" },
-        { text: "Category", value: "category" },
-        { text: "Status", value: "status" },
+        { text: "Zone", value: "zone", sortable: false },
+        // { text: "Alarm Type", value: "alarm_type" , sortable: false },
+        { text: "Start/End Date", value: "start_date", sortable: false },
+        // { text: "End Date", value: "end_date" , sortable: false },
+        { text: "Resolved Time(H:M)", value: "duration", sortable: false },
+        { text: "Category", value: "category", sortable: false },
+        { text: "Status", value: "status", sortable: false },
 
-        { text: "Options", value: "options" },
+        { text: "Options", value: "options", sortable: false },
       ],
-      items: [
-        {
-          sno: "01",
-          device: "Control Panel",
-          sensor: "PIR",
-          alarm_type: "Burglary",
-          location: "Hall",
-          type: "Wired",
-          zone: "Z1",
-          area: "A1",
-          delay: "1",
-          hrs_24: "-",
-          status: "open",
-          alarm: "OFF",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          duration: "2:00",
-          category: "Critical",
-        },
-        {
-          sno: "02",
-          device: "Control Panel",
-          sensor: "Door Contact ",
-          alarm_type: "Burglary",
-          location: "Main Door ",
-          type: "Wired",
-          zone: "Z2",
-          area: "A1",
-          delay: "1",
-          hrs_24: "-",
-          status: "open",
-          alarm: "OFF",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          duration: "2:00",
-          category: "Critical",
-        },
-        {
-          sno: "03",
-          device: "Control Panel",
-          sensor: "Panic button",
-          alarm_type: "Medical",
-          location: "Bed room ",
-          type: "Wired",
-          zone: "Z3",
-          area: "A1",
-          delay: "1",
-          hrs_24: "-",
-          status: "closed",
-          alarm: "OFF",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          category: "Critical",
-          duration: "2:00",
-        },
-        {
-          sno: "04",
-          device: "Arduino1",
-          sensor: "Smoke sensor",
-          alarm_type: "Teperature",
-          location: "Kitchen",
-          type: "Wireless",
-          zone: "Z4",
-          area: "A1",
-          delay: "1",
-          hrs_24: "-",
-          status: "open",
-          alarm: "ON",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          category: "Critical",
-          duration: "2:00",
-        },
-        {
-          sno: "05",
-          device: "Control Panel",
-          sensor: "Beam Sensor",
-          alarm_type: "Burglary",
-          location: "Garden Lift",
-          type: "Wireless",
-          zone: "Z5",
-          area: "A1",
-          delay: "1",
-          hrs_24: "Yes",
-          status: "closed",
-          alarm: "OFF",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          duration: "2:00",
-          category: "Critical",
-        },
-        {
-          sno: "06",
-          device: "ESP32",
-          sensor: "PIR",
-          alarm_type: "Burglary",
-          location: "Hall",
-          type: "Wired",
-          zone: "Z6",
-          area: "A1",
-          delay: "1",
-          hrs_24: "-",
-          status: "closed",
-          alarm: "OFF",
-          serial_number: "111111111",
-          start_date: "2024-06-23 10:15",
-          end_date: "2024-06-23 12:15",
-          duration: "2:00",
-          category: "Critical",
-        },
-      ],
+      items: [],
     };
+  },
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi();
+      },
+      deep: true,
+    },
+  },
+  created() {
+    if (this.customer_id) {
+      let today = new Date();
+      let monthObj = this.$dateFormat.monthStartEnd(today);
+      this.date_from = monthObj.first;
+      this.date_to = monthObj.last;
+      //this.getDataFromApi();
+    }
   },
 
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
+
+      this.getDataFromApi();
+    },
+    getDataFromApi() {
+      if (this.customer_id) {
+        this.loading = true;
+
+        let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+        let sortedBy = sortBy ? sortBy[0] : "";
+        let sortedDesc = sortDesc ? sortDesc[0] : "";
+        this.perPage = itemsPerPage;
+        this.currentPage = page;
+        if (!page > 0) return false;
+        let options = {
+          params: {
+            page: page,
+            sortBy: sortedBy,
+            sortDesc: sortedDesc,
+            perPage: itemsPerPage,
+            pagination: true,
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+            date_from: this.date_from,
+            date_to: this.date_to,
+            common_search: this.commonSearch,
+          },
+        };
+
+        try {
+          this.$axios.get(`get_alarm_events`, options).then(({ data }) => {
+            this.items = data.data;
+
+            this.totalRowsCount = data.total;
+            this.loading = false;
+          });
+        } catch (e) {}
+      }
     },
   },
 };

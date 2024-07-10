@@ -1,25 +1,72 @@
 <template>
   <div style="width: 100%">
-    <CustomFilter
+    <!-- <CustomFilter
       style="float: right; padding-top: 5px; z-index: 9999"
       @filter-attr="filterAttr"
       :default_date_from="date_from"
       :default_date_to="date_to"
       :defaultFilterType="1"
       :height="'40px'"
-    />
+    /> -->
 
     <v-card class="py-2" style="width: 100%">
       <v-row>
-        <v-col cols="8"
+        <v-col cols="5"
           ><span class="pl-5" style="font-size: 16px">
             Temperature Hourly</span
           ></v-col
         >
-        <v-col cols="4" class="pull-right"
-          ><v-icon @click="getDataFromApi(1)" style="float: right"
+        <v-col cols="4">
+          <v-select
+            class="pb-0"
+            hide-details
+            v-model="filterSerialNumber"
+            outlined
+            @change="getDataFromApi()"
+            dense
+            x-small
+            label="Temperature Device"
+            :items="temperatureDeviceslist"
+            item-value="serial_number"
+            item-text="name"
+          ></v-select
+        ></v-col>
+        <v-col cols="3" class="pull-right">
+          <!-- <v-icon @click="getDataFromApi(1)" style="float: right"
             >mdi mdi-reload</v-icon
+          > -->
+
+          <v-menu
+            style="z-index: 9999"
+            v-model="from_menu"
+            :close-on-content-click="false"
+            :nudge-left="145"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
           >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                style="width: 230px; float: right; z-index: 9999; height: 10px"
+                outlined
+                v-model="date_from"
+                v-bind="attrs"
+                v-on="on"
+                dense
+                x-small
+                hide-details
+                class="custom-text-box shadow-none"
+                label="Date Filter"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              no-title
+              scrollable
+              v-model="date_from"
+              @input="from_menu = false"
+              @change="getDataFromApi()"
+            ></v-date-picker>
+          </v-menu>
         </v-col>
       </v-row>
       <v-col lg="12" md="12" style="text-align: center; padding-top: 0px">
@@ -32,11 +79,22 @@
 <script>
 // import VueApexCharts from 'vue-apexcharts'
 export default {
-  props: ["name", "height", "branch_id", "device_serial_number", "from_date"],
+  props: [
+    "name",
+    "height",
+    "branch_id",
+    "device_serial_number",
+    "from_date",
+    "customer_id",
+  ],
   data() {
     return {
+      temperatureDeviceslist: [],
+      filterSerialNumber: "",
+      date_from: "",
+      date_to: "",
       key: 1,
-
+      from_menu: false,
       series: [
         {
           name: "Temparature",
@@ -107,16 +165,17 @@ export default {
     //     this.getDataFromApi();
     //   } catch (e) {}
     // },
-    from_date(val) {
-      this.getDataFromApi();
-    },
+    // from_date(val) {
+    //   this.getDataFromApi();
+    // },
   },
 
   created() {
-    // const today = new Date();
-    // this.from_date = today.toISOString().slice(0, 10);
+    const today = new Date();
+    this.date_from = today.toISOString().slice(0, 10);
 
     console.log("from_date", this.from_date);
+    this.getTemparatureDevices();
   },
   mounted() {
     this.chartOptions.chart.height = this.height;
@@ -124,7 +183,7 @@ export default {
     // setTimeout(() => {
     ////this.getDataFromApi();
     setInterval(() => {
-      if (this.$route.name == "alarm-dashboard") {
+      if (this.$route.name == "alarm-view-customer") {
         this.getDataFromApi();
       }
     }, 1000 * 60 * 15);
@@ -143,150 +202,48 @@ export default {
       ).render();
     } catch (error) {}
     // this.getDataFromApi();
-    setTimeout(() => {
-      this.getDataFromApi();
-    }, 1000 * 10);
+    // setTimeout(() => {
+    //   this.getDataFromApi();
+    // }, 1000 * 10);
 
-    setTimeout(() => {
-      this.getDataFromApi();
-    }, 6000);
+    // setTimeout(() => {
+    //   this.getDataFromApi();
+    // }, 6000);
   },
 
   methods: {
+    getTemparatureDevices() {
+      this.$axios
+        .get("customer_temperature_devices", {
+          params: {
+            company_id: this.$auth.user.company_id,
+            branch_id: this.branch_id > 0 ? this.branch_id : null,
+            customer_id: this.customer_id,
+          },
+        })
+        .then(({ data }) => {
+          this.temperatureDeviceslist = data;
+          if (data.length > 0) {
+            this.filterSerialNumber = data[0].serial_number;
+            this.getDataFromApi();
+          }
+        });
+    },
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
+
+      this.getDataFromApi();
+      //this.filterType = "Monthly";
+    },
     filterDate() {},
     viewLogs() {
       this.$router.push("/attendance_report");
     },
     getDataFromApi() {
-      if (!this.device_serial_number) return;
+      if (this.device_serial_number != this.filterSerialNumber)
+        this.$emit("updateData", this.filterSerialNumber);
 
-      let data = {
-        houry_data: [
-          {
-            date: "2024-06-24",
-            hour: 0,
-            count: 22.25,
-          },
-          {
-            date: "2024-06-24",
-            hour: 1,
-            count: 22.32,
-          },
-          {
-            date: "2024-06-24",
-            hour: 2,
-            count: 22.8,
-          },
-          {
-            date: "2024-06-24",
-            hour: 3,
-            count: 22.97,
-          },
-          {
-            date: "2024-06-24",
-            hour: 4,
-            count: 22.49,
-          },
-          {
-            date: "2024-06-24",
-            hour: 5,
-            count: 21.59,
-          },
-          {
-            date: "2024-06-24",
-            hour: 6,
-            count: 20.68,
-          },
-          {
-            date: "2024-06-24",
-            hour: 7,
-            count: 20.36,
-          },
-          {
-            date: "2024-06-24",
-            hour: 8,
-            count: 22.38,
-          },
-          {
-            date: "2024-06-24",
-            hour: 9,
-            count: 23.05,
-          },
-          {
-            date: "2024-06-24",
-            hour: 10,
-            count: 23.61,
-          },
-          {
-            date: "2024-06-24",
-            hour: 11,
-            count: 23.87,
-          },
-          {
-            date: "2024-06-24",
-            hour: 12,
-            count: 22.93,
-          },
-          {
-            date: "2024-06-24",
-            hour: 13,
-            count: 22.54,
-          },
-          {
-            date: "2024-06-24",
-            hour: 14,
-            count: 22.4,
-          },
-          {
-            date: "2024-06-24",
-            hour: 15,
-            count: 22.38,
-          },
-          {
-            date: "2024-06-24",
-            hour: 16,
-            count: 22.79,
-          },
-          {
-            date: "2024-06-24",
-            hour: 17,
-            count: 22.06,
-          },
-          {
-            date: "2024-06-24",
-            hour: 18,
-            count: 22.1,
-          },
-          {
-            date: "2024-06-24",
-            hour: 19,
-            count: 21.38,
-          },
-          {
-            date: "2024-06-24",
-            hour: 20,
-            count: 21.49,
-          },
-          {
-            date: "2024-06-24",
-            hour: 21,
-            count: 21.36,
-          },
-          {
-            date: "2024-06-24",
-            hour: 22,
-            count: 22.29,
-          },
-          {
-            date: "2024-06-24",
-            hour: 23,
-            count: 23.82,
-          },
-        ],
-      };
-      this.renderChart(data.houry_data);
-
-      return false;
       this.key = 1;
       // const data = await this.$store.dispatch("dashboard/every_hour_count");
       this.$axios
@@ -294,17 +251,18 @@ export default {
           params: {
             company_id: this.$auth.user.company_id,
             branch_id: this.branch_id > 0 ? this.branch_id : null,
-            device_serial_number: this.device_serial_number,
-            from_date: this.from_date,
+            serial_number: this.filterSerialNumber,
+            from_date: this.date_from,
+            customer_id: this.customer_id,
           },
         })
         .then(({ data }) => {
           this.key = this.key + 1;
           this.data = data;
           this.loading = false;
-          this.$store.commit("AlarmDashboard/alarm_temparature_hourly", data);
+          //this.$store.commit("AlarmDashboard/alarm_temparature_hourly", data);
 
-          this.temperature_hourly_data = data.houry_data;
+          this.temperature_hourly_data = data.data;
 
           this.renderChart(this.temperature_hourly_data);
 
@@ -316,6 +274,8 @@ export default {
     renderChart(data) {
       let counter = 0;
 
+      let IsDataAvailable = false;
+
       this.chartOptions.series[0]["data"] = [];
       data.forEach((item, index) => {
         this.chartOptions.series[0]["data"][index] = item.count; //parseInt(item.count);
@@ -324,12 +284,14 @@ export default {
 
         this.chartOptions.labels[index] = item.hour;
         counter++;
+        IsDataAvailable = true;
       });
       try {
-        new ApexCharts(
-          document.querySelector("#" + this.name),
-          this.chartOptions
-        ).render();
+        if (IsDataAvailable)
+          new ApexCharts(
+            document.querySelector("#" + this.name),
+            this.chartOptions
+          ).render();
       } catch (error) {}
     },
   },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Alarm\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Alarm\DeviceSensorLogsController;
 use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AttendanceController;
@@ -44,6 +45,7 @@ use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
 Route::get("test900device1", function (Request $request) {
 
+    // return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
     $curl = curl_init();
 

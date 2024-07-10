@@ -39,6 +39,7 @@ class DeviceController extends Controller
 
 
         $model->where('company_id', request('company_id'));
+
         $model->where("status_id", self::ONLINE_STATUS_ID);
         $model->excludeMobile();
         $model->when(request()->filled('branch_id'), fn ($q) => $q->where('branch_id', request('branch_id')));
@@ -58,6 +59,8 @@ class DeviceController extends Controller
         $model->when($request->filled('name'), function ($q) use ($request) {
             $q->where('name', 'ILIKE', "$request->name%");
         });
+
+        $model->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->customer_id));
         $model->when($request->filled('short_name'), function ($q) use ($request) {
             $q->where('short_name', 'ILIKE', "$request->short_name%");
         });

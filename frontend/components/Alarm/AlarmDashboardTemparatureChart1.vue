@@ -4,13 +4,14 @@
       <v-row>
         <v-col cols="8"
           ><span class="pl-5" style="font-size: 16px"
-            >Today Temperature</span
+            >Today Temperature  </span
           ></v-col
         >
         <v-col cols="4" class="pull-right"
-          ><v-icon @click="getDataFromApi(1)" style="float: right"
-            >mdi mdi-reload</v-icon
           >
+          <!-- <v-icon @click="getDataFromApi(1)" style="float: right"
+            >mdi mdi-reload</v-icon
+          > -->
         </v-col>
       </v-row>
       <v-col lg="12" md="12" style="text-align: center; padding-top: 0px">
@@ -60,6 +61,10 @@ export default {
   props: [
     "name",
     "temperature_latest",
+    "temperature_date_time",
+    "humidity_latest",
+    "humidity_date_time",
+    "device_serial_number",
     "height",
     "branch_id",
     "temperature_date_time",
@@ -67,6 +72,7 @@ export default {
   // components: { VueGauge },
   data() {
     return {
+      key:1,
       filterDeviceId: null,
       devices: [],
       loading: true,
@@ -88,10 +94,14 @@ export default {
   },
   watch: {},
   mounted() {
+    let value = this.temperature_latest;
+    if (value == "--") {
+      value = 0;
+    }
     setTimeout(() => {
       this.VueGaugeoptions = {
-        needleValue: this.temperature_latest,
-        centralLabel: this.temperature_latest + "°C",
+        needleValue: value,
+        centralLabel:value + "°C",
         hasNeedle: true,
         arcDelimiters: [23, 50, 99],
         //arcLabels: [23, 50, 99],
@@ -105,7 +115,9 @@ export default {
       this.loading = false;
     }, 1000);
   },
-  created() {},
+  created() {
+    
+  },
 
   methods: {},
 };

@@ -13,6 +13,7 @@ export default ({ app }, inject) => {
       return formattedDate;
     },
     format2: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       // Create a Date object with the date "2023-09-13"  Output: "23-09-13"
       const date = new Date(inputdate);
 
@@ -23,6 +24,7 @@ export default ({ app }, inject) => {
       return `${year}-${month}-${day}`;
     },
     format3: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
 
       const year = currentDate.getFullYear();
@@ -35,6 +37,7 @@ export default ({ app }, inject) => {
       return `${year}-${month}-${day} ${hours}:${minutes} `;
     },
     format4: (inputdate) => {
+      if (inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
 
       const year = currentDate.getFullYear();
@@ -56,6 +59,7 @@ export default ({ app }, inject) => {
       return `${formattedDate}  ${hours}:${minutes} `;
     },
     format5: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
 
       const year = currentDate.getFullYear();
@@ -77,6 +81,7 @@ export default ({ app }, inject) => {
       return `${hours}:${minutes} ${formattedDate}   `;
     },
     monthStartEnd: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       // Get the current date
       const currentDate = new Date(inputdate);
 
@@ -109,6 +114,7 @@ export default ({ app }, inject) => {
       return { first: formattedFirstDay, last: formattedLastDay };
     },
     time2Hm: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       // Split the time string by ':'
       const timeParts = inputdate.split(":");
 
@@ -146,6 +152,7 @@ export default ({ app }, inject) => {
       return `${currentMonth} ${currentYear}`;
     },
     format_date_month_name_year: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
       // Create a Date object with the date "2023-09-13"  Output Sun, Jan 01, 2023
       const inputDate = new Date(inputdate);
       const options = {
@@ -155,6 +162,47 @@ export default ({ app }, inject) => {
       };
       const formattedDate = inputDate.toLocaleDateString("en-US", options);
       return formattedDate;
+    },
+    minutesToHHMM(minutes) {
+      var hours = Math.floor(minutes / 60);
+      var remainingMinutes = minutes % 60;
+      return (
+        (hours < 10 ? "0" : "") +
+        hours +
+        ":" +
+        (remainingMinutes < 10 ? "0" : "") +
+        remainingMinutes
+      );
+    },
+    format6: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
+      //20:30
+      if (
+        inputdate == "---" ||
+        inputdate == "--" ||
+        inputdate == 0 ||
+        inputdate == ""
+      )
+        return "---";
+      const currentDate = new Date(inputdate);
+
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 to month because it's zero-based.
+      const day = currentDate.getDate().toString().padStart(2, "0");
+      const hours = currentDate.getHours().toString().padStart(2, "0");
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+      const inputDate = new Date(inputdate);
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        weekday: "short",
+      };
+      const formattedDate = inputDate.toLocaleDateString("en-US", options);
+      if (year == 1970 || inputdate == 0) return "---";
+      return `${hours}:${minutes}    `;
     },
     can(per, thisobj) {
       let u = thisobj.$auth.user;

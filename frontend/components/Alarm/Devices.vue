@@ -664,7 +664,7 @@ export default {
       console.error("Error fetching branch list", error);
     }
 
-    this.getDataFromApi();
+    //this.getDataFromApi();
     this.getBranches();
     this.getDeviceStatus();
     if (this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
@@ -1162,6 +1162,8 @@ export default {
       filter_value = ""
     ) {
       this.loading = true;
+
+      this.filters["customer_id"] = this.customer_id;
       const data = await this.$store.dispatch("fetchData", {
         key: "devices",
         options: this.options,

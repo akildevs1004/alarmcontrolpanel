@@ -390,7 +390,6 @@ export default {
 
       this.payload.ip = "0.0.0.0";
       this.payload.port = "0000";
-      console.log("this.customer_id", this.customer_id);
       this.payload.customer_id = this.customer_id;
 
       delete this.payload.status;

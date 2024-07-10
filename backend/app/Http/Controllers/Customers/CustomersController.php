@@ -9,6 +9,7 @@ use App\Http\Requests\Customer\StoreRequest;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
+use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -446,6 +447,23 @@ class CustomersController extends Controller
         ];
         return $data;
     }
+    public function getCustomerTemperatureDevices(Request $request)
+    {
+        $data = Device::with(["sensorzones"])
+            ->where('company_id', $request->company_id)
+            ->where('customer_id', $request->customer_id)
+            ->where(function ($query) {
+                $query->where("device_type", "Temperature")
+                    ->orWhere(function ($query) {
+                        $query->where("device_type", "Control Panel")
+                            ->whereHas('sensorzones', function ($query) {
+                                $query->where('sensor_name', 'Temperature');
+                            });
+                    });
+            })
+            ->get();
+        return $data;
+    }
     public function deviceModels()
     {
         $data = [
@@ -467,6 +485,7 @@ class CustomersController extends Controller
             ["name" => "Temperature", "id" => "Temperature"],
             ["name" => "Water", "id" => "Water"],
             ["name" => "Humidity", "id" => "Humidity"],
+            ["name" => "Fire", "id" => "Fire"],
 
             ["name" => "All(Attendance and Access)", "id" => "all"],
             ["name" => "Attendance", "id" => "Attendance"],
@@ -520,5 +539,15 @@ class CustomersController extends Controller
         });
 
         return $mergedData;
+    }
+
+    public function alarmCategories()
+    {
+        return  $data = [
+            ["name" => "Critical", "id" => 2],
+            ["name" => "Normal", "id" => 1],
+
+
+        ];
     }
 }
