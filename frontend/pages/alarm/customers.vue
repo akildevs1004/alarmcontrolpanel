@@ -6,7 +6,7 @@
       </v-snackbar>
     </div>
     <v-dialog v-model="dialogViewCustomer" width="110%">
-      <AlarmViewCustomer @closeCustomerDialog="closeCustomerDialog" />
+      <AlarmCustomerView @closeCustomerDialog="closeCustomerDialog" />
       <!--<v-card>
        <v-card-title dark class="popup_background_noviolet">
           <span dense> New Customer</span>
@@ -15,7 +15,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title> 
-        <v-card-text>  <AlarmViewCustomer @closeCustomerDialog="closeCustomerDialog" /></v-card-text>
+        <v-card-text>  <AlarmCustomerView @closeCustomerDialog="closeCustomerDialog" /></v-card-text>
       </v-card>
       -->
     </v-dialog>
@@ -230,12 +230,12 @@
 
 <script>
 import AlarmNewCustomer from "../../components/Alarm/NewCustomer.vue";
-import AlarmViewCustomer from "../../components/Alarm/ViewCustomer.vue";
+import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 
 export default {
   components: {
     AlarmNewCustomer,
-    AlarmViewCustomer,
+    AlarmCustomerView,
   },
   data: () => ({
     commonSearch: "",

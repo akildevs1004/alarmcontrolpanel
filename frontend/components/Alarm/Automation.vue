@@ -1,23 +1,57 @@
 <template>
   <div>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
+    <v-dialog v-model="dialogEditAutomation" width="600px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black"
+            >Automation/Notification Manager Info
+          </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogEditAutomation = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <AlarmEditAutomation
+              :key="key"
+              :customer_id="customer_id"
+              @closeDialog="closeDialog"
+              :editId="editId"
+              :editItem="editItemobject"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
-          <v-col cols="7"></v-col>
-          <v-col
-            cols="5"
-            class="text-right"
-            style="min-width: 550px; width: 550px"
-          >
+          <v-col cols="8"></v-col>
+          <v-col cols="4" class="text-right" style="width: 450px">
             <v-row>
-              <v-col cols="5" style=""
+              <v-col cols="4"
                 ><v-text-field
                   style="padding-top: 7px"
+                  width="150px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
                   v-model="commonSearch"
-                  label="Search (min 3)"
+                  label="Search"
                   dense
                   outlined
                   type="text"
@@ -26,7 +60,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="5">
+              <v-col cols="6">
                 <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
@@ -35,9 +69,24 @@
                   :defaultFilterType="1"
                   :height="'40px'"
               /></v-col>
+              <v-col
+                cols="1"
+                style="padding-left: 0px; width: 50px"
+                class="text-left"
+              >
+                <v-btn
+                  small
+                  dense
+                  color="primary"
+                  @click="
+                    key = key + 1;
 
-              <v-col cols="1" style="padding-left: 0px; width: 50px">
-                <v-btn small dense color="primary" class="ma-2"> New </v-btn>
+                    dialogEditAutomation = true;
+                  "
+                  class="ma-2"
+                >
+                  New
+                </v-btn>
               </v-col>
               <v-col cols="1" style="width: 50px">
                 <v-btn icon small dense color="primary" class="ma-2">
@@ -47,81 +96,56 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row>
-          <!-- <v-spacer></v-spacer>
-          <v-col cols="6"></v-col>
-          <span cols="6" class="mt-8" style="width: 500px">
-            <span style="width: 50%"
-              ><v-text-field
-                style="width: 200px"
-                height="20"
-                class="employee-schedule-search-box"
-                @input="getDataFromApi()"
-                v-model="commonSearch"
-                label="Search (min 3)"
-                dense
-                outlined
-                type="text"
-                append-icon="mdi-magnify"
-                clearable
-              ></v-text-field
-            ></span>
-            <span style="width: 50%">
-              <CustomFilter
-                style="float: right; padding-top: 5px; z-index: 9999"
-                @filter-attr="filterAttr"
-                :default_date_from="date_from"
-                :default_date_to="date_to"
-                :defaultFilterType="1"
-                :height="'40px'"
-              />
-            </span>
-          </span> -->
-          <!-- <v-col cols="2">
-            <v-text-field outlined small dense label="Search"></v-text-field
-          ></v-col>
-          <v-col cols="3">
-            <CustomFilter
-              style="float: right; padding-top: 5px; z-index: 9999"
-              @filter-attr="filterAttr"
-              :default_date_from="date_from"
-              :default_date_to="date_to"
-              :defaultFilterType="1"
-              :height="'40px'"
-            />
-          </v-col> -->
-        </v-row>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-data-table :headers="headers" :items="items" class="elevation-0">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :server-items-length="totalRowsCount"
+          :loading="loading"
+          :options.sync="options"
+          :footer-props="{
+            itemsPerPageOptions: [10, 50, 100, 500, 1000],
+          }"
+          class="elevation-0"
+        >
+          <template v-slot:item.sno="{ item, index }">
+            {{
+              currentPage
+                ? (currentPage - 1) * perPage +
+                  (cumulativeIndex + items.indexOf(item))
+                : "-"
+            }}
+          </template>
           <template v-slot:item.device="{ item }">
-            <div>{{ item.device }}</div>
-            <div class="secondary-value">{{ item.serial_number }}</div>
+            <div>{{ item.device.name }}</div>
+            <div class="secondary-value">
+              {{ item.device.serial_number }}
+            </div>
           </template>
           <template v-slot:item.sensor="{ item }">
-            <div>{{ item.sensor }}</div>
-            <div class="secondary-value">{{ item.type }}</div>
+            <div>
+              {{ item.device.device_type }}
+            </div>
+            <div v-if="item.zone_name" class="secondary-value">
+              Sensor/Zone:{{ item.zone_name }}
+            </div>
+          </template>
+          <template v-slot:item.location="{ item }">
+            {{ item.device.location }}
           </template>
           <template v-slot:item.zone="{ item }">
             <div>{{ item.zone }}</div>
             <div class="secondary-value">{{ item.area }}</div>
           </template>
-          <template v-slot:item.alarm_type="{ item }">
-            <div>{{ item.alarm_type }}</div>
-          </template>
-          <template v-slot:item.first_name="{ item }">
-            <div>{{ item.first_name }} {{ item.last_name }}</div>
-          </template>
-          <template v-slot:item.email="{ item }">
-            <div>{{ item.email }}</div>
-          </template>
-          <template v-slot:item.whatsapp_number="{ item }">
-            <div>{{ item.whatsapp_number }}</div>
-          </template>
-          <template v-slot:item.mobile_number="{ item }">
-            <div>{{ item.mobile_number }}</div>
+
+          <template v-slot:item.status="{ item }">
+            <div style="color: red" v-if="item.alarm_end_datetime == ''">
+              Open
+            </div>
+            <div v-else>Closed</div>
           </template>
           <template v-slot:item.options="{ item }">
             <v-menu bottom left>
@@ -131,13 +155,16 @@
                 </v-btn>
               </template>
               <v-list width="120" dense>
-                <v-list-item v-if="can('branch_view')" @click="viewItem(item)">
+                <v-list-item v-if="can('branch_edit')" @click="editItem(item)">
                   <v-list-item-title style="cursor: pointer">
                     <v-icon color="secondary" small> mdi-pencil </v-icon>
                     Edit
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="can('branch_edit')" @click="editItem(item)">
+                <v-list-item
+                  v-if="can('branch_edit')"
+                  @click="deleteItem(item.id)"
+                >
                   <v-list-item-title style="cursor: pointer">
                     <v-icon color="red" small> mdi-delete </v-icon>
                     Delete
@@ -153,122 +180,164 @@
 </template>
 
 <script>
+import AlarmEditAutomation from "../../components/Alarm/EditAutomation.vue";
+
 export default {
+  components: { AlarmEditAutomation },
+  props: ["customer_id"],
   data() {
     return {
+      snackbar: false,
+      response: "",
+      key: 1,
+      editId: "",
+      editItemobject: null,
+      dialogEditAutomation: false,
+      date_from: "",
+      date_to: "",
+
+      loading: false,
+      commonSearch: "",
+      options: { perPage: 10 },
+      cumulativeIndex: 1,
+      perPage: 10,
+      currentPage: 1,
+      totalRowsCount: 0,
       headers: [
-        { text: "#", value: "sno" },
-        { text: "Device", value: "device" },
-        { text: "Sensor", value: "sensor" },
-        { text: "Location", value: "location" },
+        { text: "#", value: "sno", sortable: false },
+        { text: "Device", value: "device", sortable: false },
+        { text: "Sensor", value: "sensor", sortable: false },
+        { text: "Location", value: "location", sortable: false },
 
-        { text: "Zone", value: "zone" },
-        { text: "Alarm Type", value: "alarm_type" },
-        { text: "Name", value: "first_name" },
-        { text: "Email", value: "email" },
-        { text: "Whatsapp", value: "whatsapp_number" },
-        { text: "Mobile", value: "mobile_number" },
+        // { text: "Alarm Type", value: "alarm_type" , sortable: false },
+        { text: "Name", value: "name", sortable: false },
+        // { text: "End Date", value: "end_date" , sortable: false },
+        { text: "Mobile Number", value: "mobile_number", sortable: false },
+        { text: "Email", value: "email", sortable: false },
+        { text: "Ehatsapp Number", value: "whatsapp_number", sortable: false },
 
-        { text: "Options", value: "options" },
+        { text: "Options", value: "options", sortable: false },
       ],
-      items: [
-        {
-          sno: "01",
-          device: "Control Panel",
-          sensor: "PIR",
-          alarm_type: "Burglary",
-          location: "Hall",
-          type: "Wired",
-          zone: "Z1",
-          area: "A1",
-          first_name: "Venu",
-          last_name: "J",
-          email: "venu@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-        {
-          sno: "02",
-          device: "Control Panel",
-          sensor: "Door Contact ",
-          alarm_type: "Burglary",
-          location: "Main Door ",
-          type: "Wired",
-          zone: "Z2",
-          area: "A1",
-          first_name: "Shual ",
-          last_name: "Hameed",
-          email: "Hameed@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-        {
-          sno: "03",
-          device: "Control Panel",
-          sensor: "Panic button",
-          alarm_type: "Medical",
-          location: "Bed room ",
-          type: "Wired",
-          zone: "Z3",
-          area: "A1",
-          first_name: "Shual ",
-          last_name: "Hameed",
-          email: "Hameed@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-        {
-          sno: "04",
-          device: "Arduino1",
-          sensor: "Smoke sensor",
-          alarm_type: "Teperature",
-          location: "Kitchen",
-          type: "Wireless",
-          zone: "Z4",
-          area: "A1",
-          first_name: "Shual ",
-          last_name: "Hameed",
-          email: "Hameed@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-        {
-          sno: "05",
-          device: "Control Panel",
-          sensor: "Beam Sensor",
-          alarm_type: "Burglary",
-          location: "Garden Lift",
-          type: "Wireless",
-          zone: "Z5",
-          area: "A1",
-          first_name: "Shual ",
-          last_name: "Hameed",
-          email: "Hameed@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-        {
-          sno: "06",
-          device: "ESP32",
-          sensor: "PIR",
-          alarm_type: "Burglary",
-          location: "Hall",
-          type: "Wired",
-          zone: "Z6",
-          area: "A1",
-          first_name: "Shual ",
-          last_name: "Hameed",
-          email: "Hameed@gmail.com",
-          whatsapp_number: "97155 222 54785",
-          mobile_number: "97155 222 54785",
-        },
-      ],
+      items: [],
     };
+  },
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi();
+      },
+      deep: true,
+    },
+  },
+  created() {
+    if (this.customer_id) {
+      let today = new Date();
+      let monthObj = this.$dateFormat.monthStartEnd(today);
+      this.date_from = monthObj.first;
+      this.date_to = monthObj.last;
+      //this.getDataFromApi();
+
+      this.getDevicesList();
+    }
   },
 
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    closeDialog() {
+      this.getDataFromApi();
+      this.dialogEditAutomation = false;
+    },
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
+
+      this.getDataFromApi();
+    },
+    editItem(item) {
+      this.key = this.key + 1;
+      this.editItemobject = item;
+      this.dialogEditAutomation = true;
+    },
+    getDevicesList() {
+      this.$axios
+        .get(`device-list`, {
+          params: {
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+          },
+        })
+        .then(({ data }) => {
+          this.devicesList = data;
+        });
+    },
+    // getSensorNameByZone(zone_name) {
+    //   let deviceFilter = this.devicesList.filter(
+    //     (e) => e.sensorzones.zone == zone_name
+    //   );
+
+    //   console.log("deviceFilter", deviceFilter);
+
+    //   // if (deviceFilter[0]?.sensorzones?.length > 0)
+    //   //   this.zonesList = deviceFilter[0].sensorzones;
+    //   // else this.zonesList = [];
+    // },
+    deleteItem(id) {
+      if (confirm("Are you sure want to delete Alarm Notificaton  ?")) {
+        this.loading = true;
+        let options = {
+          params: {
+            company_id: this.$auth.user.company_id,
+            id: id,
+          },
+        };
+
+        try {
+          this.$axios.delete(`delete-automation`, options).then(({ data }) => {
+            this.snackbar = true;
+            this.response = "Notification Deleted Successfully";
+            this.getDataFromApi();
+            this.loading = false;
+          });
+        } catch (e) {}
+      }
+    },
+    getDataFromApi() {
+      if (this.customer_id) {
+        this.loading = true;
+
+        let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+        let sortedBy = sortBy ? sortBy[0] : "";
+        let sortedDesc = sortDesc ? sortDesc[0] : "";
+        this.perPage = itemsPerPage;
+        this.currentPage = page;
+        if (!page > 0) return false;
+        let options = {
+          params: {
+            page: page,
+            sortBy: sortedBy,
+            sortDesc: sortedDesc,
+            perPage: itemsPerPage,
+            pagination: true,
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+            date_from: this.date_from,
+            date_to: this.date_to,
+            common_search: this.commonSearch,
+          },
+        };
+
+        try {
+          this.$axios.get(`automation`, options).then(({ data }) => {
+            this.items = data.data;
+
+            this.totalRowsCount = data.total;
+            this.loading = false;
+          });
+        } catch (e) {}
+      }
     },
   },
 };

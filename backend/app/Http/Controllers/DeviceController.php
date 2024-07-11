@@ -33,18 +33,18 @@ class DeviceController extends Controller
     const ONLINE_STATUS_ID = 1;
     const OFFLINE_STATUS_ID = 2;
 
-    public function dropdownList()
+    public function dropdownList(Request $request)
     {
         $model = Device::query();
 
-
+        $model->with(['status', 'company', 'companyBranch', 'sensorzones']);
         $model->where('company_id', request('company_id'));
-
-        $model->where("status_id", self::ONLINE_STATUS_ID);
+        $model->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->customer_id));
+        //$model->where("status_id", self::ONLINE_STATUS_ID);
         $model->excludeMobile();
         $model->when(request()->filled('branch_id'), fn ($q) => $q->where('branch_id', request('branch_id')));
         $model->orderBy(request('order_by') ?? "name", request('sort_by_desc') ? "desc" : "asc");
-        return $model->get(["id", "name", "location", "device_id", "device_type"]);
+        return $model->get(["id", "name", "location", "device_id", "serial_number", "device_type"]);
     }
 
     public function index(Request $request)
@@ -1151,20 +1151,23 @@ class DeviceController extends Controller
                     // info($count . "companies has been updated");
                 }
             }
-        }
-        try {
 
-            $count = (new DeviceCameraController(''))->updateCameraDeviceLiveStatus($company_id);
-            $online_devices_count = $online_devices_count +  $count;
-        } catch (\Exception $e) {
-        }
-        try {
-            //139.59.69.241:8888
-            $count = (new DeviceCameraModel2Controller(''))->getCameraDeviceLiveStatus($company_id);
+            $company_id = $Device["company_id"];
+            try {
 
-            $online_devices_count = $online_devices_count +  $count;
-        } catch (\Exception $e) {
+                $count = (new DeviceCameraController(''))->updateCameraDeviceLiveStatus($company_id);
+                $online_devices_count = $online_devices_count +  $count;
+            } catch (\Exception $e) {
+            }
+            try {
+                //139.59.69.241:8888
+                $count = (new DeviceCameraModel2Controller(''))->getCameraDeviceLiveStatus($company_id);
+
+                $online_devices_count = $online_devices_count +  $count;
+            } catch (\Exception $e) {
+            }
         }
+
 
         $offline_devices_count = $total_devices_count - $online_devices_count;
 

@@ -69,7 +69,7 @@
           color="primary"
           @click="
             key = key + 1;
-            editAddressType = '';
+
             dialogEditEmergency = true;
           "
           dense

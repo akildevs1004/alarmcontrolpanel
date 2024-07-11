@@ -11,6 +11,7 @@ use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomersController;
+use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Models\Customers\Customers;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,8 @@ Route::get('update_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'upda
 
 
 //alarm logs
+Route::apiResource('alarmevents', CustomerAlarmEventsController::class);
+
 Route::get('alarm_dashboard_get_temparature_latest', [AlarmDeviceTemperatureLogsController::class, 'getDeviceLatestTemperature']);
 
 Route::get('alarm_dashboard_get_hourly_data', [AlarmDeviceTemperatureLogsController::class, 'getDeviceTodayHourlyTemperature']);
@@ -61,3 +64,13 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
+Route::get('get_alarm_events_notes', [CustomerAlarmEventsController::class, 'getAlarmEventsNotes']);
+
+Route::post('customer_add_event_notes', [CustomerAlarmEventsController::class, "createEventNotes"]);
+Route::delete('delete-notes', [CustomerAlarmEventsController::class, "destroyNotes"]);
+Route::delete('delete-event', [CustomerAlarmEventsController::class, "destroyEvent"]);
+Route::post('update-device-alarm-event-status-off', [CustomerAlarmEventsController::class, "stopEvent"]);
+
+
+Route::apiResource('automation', DeviceNotificationsManagersController::class);
+Route::delete('delete-automation', [DeviceNotificationsManagersController::class, "destroy"]);

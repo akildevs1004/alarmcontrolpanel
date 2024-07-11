@@ -197,7 +197,7 @@
             </v-tab>
             <v-tab href="#tab-6">
               <v-icon>mdi mdi-alarm</v-icon>
-              Event Logs
+              Alarms
             </v-tab>
             <v-tab href="#tab-7">
               <v-icon>mdi mdi-message-badge</v-icon>
@@ -273,7 +273,9 @@
               </v-card> </v-tab-item
             ><v-tab-item value="tab-7">
               <v-card flat>
-                <v-card-text> <AlarmAutomation :key="key" /> </v-card-text>
+                <v-card-text>
+                  <AlarmAutomation :key="keyAutomation" :customer_id="_id" />
+                </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-8">
               <v-card flat>
@@ -328,6 +330,7 @@ export default {
     keyDevices: 1,
     keyReports: 1,
     keyEvents: 1,
+    keyAutomation: 1,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -366,6 +369,8 @@ export default {
         this.keyReports = this.keyReports + 1;
       } else if (this.tab == "tab-6") {
         this.keyEvents = this.keyEvents + 1;
+      } else if (this.tab == "tab-7") {
+        this.keyAutomation = this.keyAutomation + 1;
       }
     },
     closeDialog() {

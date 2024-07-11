@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
 use App\Models\Customers\CustomerAlarmEvents;
+use App\Models\Customers\CustomerAlarmNotes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -82,9 +83,111 @@ class CustomerAlarmEventsController extends Controller
      * @param  \App\Models\Customers\CustomerAlarmEvents  $customerAlarmEvents
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CustomerAlarmEvents $customerAlarmEvents)
+    public function destroyEvent(Request $request)
     {
-        //
+        $modelEvent = AlarmEvents::where("id", $request->id);
+
+        foreach ($modelEvent->get() as $event) {
+            $model = CustomerAlarmNotes::where('id', $event->id);
+            try {
+                if (file_exists(public_path('/customers/notes') . '/' . $model->first()->picture_raw))
+                    unlink(public_path('/customers/notes') . '/' . $model->first()->picture_raw);
+            } catch (\Exception $e) {
+            }
+            $model->delete();
+        }
+        $modelEvent->delete();
+
+        return $this->response('Event Deleted successfully', null, true);
+    }
+    public function destroyNotes(Request $request)
+    {
+        $model = CustomerAlarmNotes::where('id', $request->id);
+
+
+        try {
+            if (file_exists(public_path('/customers/notes') . '/' . $model->first()->picture_raw))
+                unlink(public_path('/customers/notes') . '/' . $model->first()->picture_raw);
+        } catch (\Exception $e) {
+        }
+        $model->delete();
+
+        return $this->response('Notes Deleted successfully', null, true);
+    }
+    public function stopEvent(Request $request)
+    {
+        if ($request->event_id > 0) {
+            $data = ["alarm_status" => 0, "alarm_end_manually" => 1, "alarm_end_datetime" => date("Y-m-d H:i:s")];
+            AlarmEvents::where("id", $request->event_id)->update($data);
+            return $this->response('Alarm stopped Successfully', null, true);
+        } else {
+            return $this->response('Alarm Details are not available', null, false);
+        }
+    }
+    public function createEventNotes(Request $request)
+    {
+        $request->validate([
+
+            'company_id' => 'required|integer',
+            'customer_id' => 'required|integer',
+            'alarm_id' => 'required|integer',
+            'title' => 'required',
+            'notes' => 'required',
+
+        ]);
+        // if ((int)$request->customer_id <= 0 || (int)$request->company_id <= 0) {
+        //     return $this->response('Customer Id and Company Ids are not exist', null, false);
+        // }
+        try {
+
+
+            $data = []; // $request->all();
+
+
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $ext = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $ext;
+
+                $request->file('attachment')->move(public_path('/customers/notes'), $fileName);
+                $data['picture'] = $fileName;
+                unset($data['attachment']);
+            }
+
+
+            $data['company_id'] =  $request->company_id;
+            $data['customer_id'] = $request->customer_id;
+            $data['alarm_id'] = $request->alarm_id;
+            $data['title'] = $request->title;
+            $data['notes'] = $request->notes;
+            $data['created_datetime'] = date("Y-m-d H:i:s");
+
+            if ($request->filled("notes_id")) {
+
+                $record = CustomerAlarmNotes::where("id", $request->notes_id)->update($data);
+            } else {
+                $record = CustomerAlarmNotes::create($data);
+            }
+
+
+
+
+
+            if ($record) {
+                return $this->response('  Notes   Created.', $record, true);
+            } else {
+                return $this->response('Notes   Not Created', null, false);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    public function getAlarmEventsNotes(Request $request)
+    {
+        $model = CustomerAlarmNotes::where("company_id", $request->company_id)
+            ->where("alarm_id", $request->alarm_id);
+        $model->orderBy("created_datetime", "asc");
+        return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
     public function getAlarmEvents(Request $request)
     {
@@ -94,7 +197,7 @@ class CustomerAlarmEventsController extends Controller
         //     'company_id' => 'required|integer',
         //     'customer_id' => 'required|integer'
         // ]);
-        $model = AlarmEvents::with(["device.customer"])->where('company_id', $request->company_id)
+        $model = AlarmEvents::with(["device.customer", "notes"])->where('company_id', $request->company_id)
 
             // ->when($request->filled("common_search"), function ($query) use ($request) {
             //     $query->where("customer_id", $request->common_search);
@@ -116,9 +219,6 @@ class CustomerAlarmEventsController extends Controller
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                // $q->orWhereHas('device.sensorzones', fn (Builder $query) => $query->where('sensor_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                // $q->orWhereHas('device.sensorzones', fn (Builder $query) => $query->where('area_code', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                // $q->orWhereHas('device.sensorzones', fn (Builder $query) => $query->where('zone_code', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
             });
         });
 

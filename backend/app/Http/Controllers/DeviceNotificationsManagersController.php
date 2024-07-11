@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\device_notifications_managers;
+use App\Models\DeviceNotificationsManagers;
 use Illuminate\Http\Request;
 
 class DeviceNotificationsManagersController extends Controller
@@ -12,9 +13,13 @@ class DeviceNotificationsManagersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $model = DeviceNotificationsManagers::with(["device.zone"])->where("company_id", $request->company_id)
+            ->where("customer_id", $request->customer_id);
+
+
+        return $model->paginate($request->perPage ?? 10);
     }
 
     /**
@@ -35,7 +40,42 @@ class DeviceNotificationsManagersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate request inputs
+        $data = $request->validate([
+            'serial_number' => 'required',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+
+            'zone_name' => 'nullable',
+            'name' => 'required',
+            'mobile_number' => 'required',
+            'email' => 'required',
+            'whatsapp_number' => 'required',
+
+
+        ]);
+
+
+        try {
+
+
+
+            if ($request->filled("editId")) {
+                $record = DeviceNotificationsManagers::where("id", $request->editId)->update($data);
+                return $this->response('Automation Is  Updated.', $record, true);
+            } else {
+
+                $record = DeviceNotificationsManagers::create($data);
+            }
+
+            if ($record) {
+                return $this->response('Automation Is  created.', $record, true);
+            } else {
+                return $this->response('Automation can not  created ', null, false);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -44,7 +84,7 @@ class DeviceNotificationsManagersController extends Controller
      * @param  \App\Models\device_notifications_managers  $device_notifications_managers
      * @return \Illuminate\Http\Response
      */
-    public function show(device_notifications_managers $device_notifications_managers)
+    public function show(DeviceNotificationsManagersController $device_notifications_managers)
     {
         //
     }
@@ -55,7 +95,7 @@ class DeviceNotificationsManagersController extends Controller
      * @param  \App\Models\device_notifications_managers  $device_notifications_managers
      * @return \Illuminate\Http\Response
      */
-    public function edit(device_notifications_managers $device_notifications_managers)
+    public function edit(DeviceNotificationsManagersController $device_notifications_managers)
     {
         //
     }
@@ -67,7 +107,7 @@ class DeviceNotificationsManagersController extends Controller
      * @param  \App\Models\device_notifications_managers  $device_notifications_managers
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, device_notifications_managers $device_notifications_managers)
+    public function update(Request $request, DeviceNotificationsManagersController $device_notifications_managers)
     {
         //
     }
@@ -78,8 +118,13 @@ class DeviceNotificationsManagersController extends Controller
      * @param  \App\Models\device_notifications_managers  $device_notifications_managers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(device_notifications_managers $device_notifications_managers)
+    public function destroy(Request $request)
     {
-        //
+        $modelEvent = DeviceNotificationsManagers::where("id", $request->id);
+
+        if ($modelEvent)
+            $modelEvent->delete();
+
+        return $this->response('Notification Deleted successfully', null, true);
     }
 }
