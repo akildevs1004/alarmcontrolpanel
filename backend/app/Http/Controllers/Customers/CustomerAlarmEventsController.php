@@ -169,10 +169,6 @@ class CustomerAlarmEventsController extends Controller
                 $record = CustomerAlarmNotes::create($data);
             }
 
-
-
-
-
             if ($record) {
                 return $this->response('  Notes   Created.', $record, true);
             } else {
@@ -223,7 +219,7 @@ class CustomerAlarmEventsController extends Controller
         });
 
         $model->orderBy("alarm_start_datetime", "asc");
-        return $model->orderByDesc('id')->paginate($request->perPage);;
+        return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
     public function getAlarmLogs(Request $request)
     {

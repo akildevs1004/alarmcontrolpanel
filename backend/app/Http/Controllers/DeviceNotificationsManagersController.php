@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\device_notifications_managers;
 use App\Models\DeviceNotificationsManagers;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class DeviceNotificationsManagersController extends Controller
@@ -15,8 +16,28 @@ class DeviceNotificationsManagersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = DeviceNotificationsManagers::with(["device.zone"])->where("company_id", $request->company_id)
+        $model = DeviceNotificationsManagers::with(["device.zone"])
+            ->where("company_id", $request->company_id)
             ->where("customer_id", $request->customer_id);
+
+
+        $model->when($request->filled("common_search"), function ($q) use ($request) {
+
+
+            $q->where(function ($qwhere) use ($request) {
+                $qwhere->where("name", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("email", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("whatsapp_number", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("serial_number", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("zone_name", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("mobile_number", "ILIKE", "%$request->common_search%");
+
+
+
+                $qwhere->orWhereHas("device",  fn (Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
+                $qwhere->orWhereHas("device.sensorzones",  fn (Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
+            });
+        });
 
 
         return $model->paginate($request->perPage ?? 10);

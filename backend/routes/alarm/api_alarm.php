@@ -5,11 +5,13 @@ use App\Http\Controllers;
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
+
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
 use App\Http\Controllers\Customers\CustomerContactsController;
+use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Models\Customers\Customers;
@@ -74,3 +76,6 @@ Route::post('update-device-alarm-event-status-off', [CustomerAlarmEventsControll
 
 Route::apiResource('automation', DeviceNotificationsManagersController::class);
 Route::delete('delete-automation', [DeviceNotificationsManagersController::class, "destroy"]);
+
+Route::apiResource('customer_payments', CustomerPaymentsController::class);
+Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);

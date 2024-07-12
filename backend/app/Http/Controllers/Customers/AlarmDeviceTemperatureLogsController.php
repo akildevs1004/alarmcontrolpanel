@@ -160,15 +160,15 @@ class AlarmDeviceTemperatureLogsController extends Controller
             ->get()
             ->toArray();
 
-        $temperatureDevices_zones = DB::table('device_zones')
+        $temperatureDevices_zones = DB::table('device_sensor_zones')
             ->where('devices.customer_id', $request->customer_id)
             // ->when($request->filled('serial_number'), function ($query) use ($request) {
             //     $query->where('serial_number', $request->serial_number);
             // })
-            ->join('devices', 'device_zones.device_id', '=', 'devices.id')
-            ->where('device_zones.company_id', $request->company_id)
-            ->where('device_zones.sensor_name', 'Temperature')
-            ->select(['devices.serial_number', 'device_zones.location', 'device_zones.zone_code'])
+            ->join('devices', 'device_sensor_zones.device_id', '=', 'devices.id')
+            ->where('device_sensor_zones.company_id', $request->company_id)
+            ->where('device_sensor_zones.sensor_name', 'Temperature')
+            ->select(['devices.serial_number', 'device_sensor_zones.location', 'device_sensor_zones.zone_code'])
             ->get()
             ->toArray();
 
@@ -245,16 +245,16 @@ class AlarmDeviceTemperatureLogsController extends Controller
             ->get()
             ->toArray();
 
-        $temperatureDevices_zones = DB::table('device_zones')
-            ->join('devices', 'device_zones.device_id', '=', 'devices.id')
+        $temperatureDevices_zones = DB::table('device_sensor_zones')
+            ->join('devices', 'device_sensor_zones.device_id', '=', 'devices.id')
             // ->when($request->filled('serial_number'), function ($query) use ($request) {
             //     $query->where('serial_number', $request->serial_number);
             // })
-            ->where('device_zones.company_id', $request->company_id)
+            ->where('device_sensor_zones.company_id', $request->company_id)
             ->where('devices.customer_id', $request->customer_id)
 
-            ->where('device_zones.sensor_name', 'Temperature')
-            ->select(['devices.serial_number', 'device_zones.location', 'device_zones.zone_code'])
+            ->where('device_sensor_zones.sensor_name', 'Temperature')
+            ->select(['devices.serial_number', 'device_sensor_zones.location', 'device_sensor_zones.zone_code'])
             ->get()
             ->toArray();
 

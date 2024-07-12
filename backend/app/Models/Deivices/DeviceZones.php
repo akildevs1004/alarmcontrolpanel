@@ -11,6 +11,8 @@ class DeviceZones extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $table = 'device_sensor_zones';
+
     public function device()
     {
 

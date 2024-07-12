@@ -11,104 +11,105 @@
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <v-row class="pt-0">
             <v-col cols="6" dense>
-              <v-autocomplete
-                @change="loadZonesContent()"
-                label="Device"
-                :items="devicesList"
-                item-text="name"
-                item-value="serial_number"
-                v-model="payload_primary.serial_number"
-                dense
-                outlined
-                hide-details
-                small
-              ></v-autocomplete>
-              <span
-                v-if="errors && errors.serial_number"
-                class="text-danger mt-2"
-                >{{ errors.serial_number[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense v-if="zonesList.length > 0">
-              <v-autocomplete
-                label="Sensor/Zone"
-                :items="zonesList"
-                item-text="sensor_name"
-                item-value="sensor_name"
-                v-model="payload_primary.zone_name"
-                dense
-                outlined
-                hide-details
-                small
-              ></v-autocomplete>
-              <span
-                v-if="errors && errors.zone_name"
-                class="text-danger mt-2"
-                >{{ errors.zone_name[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
               <v-text-field
-                label="Receiver Name"
+                label="Invoice #"
                 dense
                 small
                 outlined
                 type="text"
-                v-model="payload_primary.name"
+                v-model="payload_primary.invoice_number"
                 hide-details
               ></v-text-field>
               <span
-                v-if="primary_errors && primary_errors.name"
+                v-if="primary_errors && primary_errors.invoice_number"
                 class="text-danger mt-2"
-                >{{ primary_errors.name[0] }}</span
+                >{{ primary_errors.invoice_number[0] }}</span
               >
             </v-col>
             <v-col cols="6" dense>
               <v-text-field
-                label="Mobile Number"
+                label="Amount"
                 dense
                 small
                 outlined
-                type="text"
-                v-model="payload_primary.mobile_number"
+                type="number"
+                v-model="payload_primary.amount"
                 hide-details
               ></v-text-field>
               <span
-                v-if="primary_errors && primary_errors.mobile_number"
+                v-if="primary_errors && primary_errors.amount"
                 class="text-danger mt-2"
-                >{{ primary_errors.mobile_number[0] }}</span
+                >{{ primary_errors.amount[0] }}</span
               >
             </v-col>
             <v-col cols="6" dense>
-              <v-text-field
-                label="Email"
-                dense
-                small
-                outlined
-                type="email"
-                v-model="payload_primary.email"
-                hide-details
-              ></v-text-field>
+              <v-menu
+                style="z-index: 9999"
+                v-model="from_menu"
+                :close-on-content-click="false"
+                :nudge-left="145"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    style="z-index: 9999; height: 10px"
+                    outlined
+                    v-model="payload_primary.received_date"
+                    v-bind="attrs"
+                    v-on="on"
+                    dense
+                    x-small
+                    hide-details
+                    class="custom-text-box shadow-none"
+                    label="Received Date"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  no-title
+                  scrollable
+                  v-model="payload_primary.received_date"
+                  @input="from_menu = false"
+                ></v-date-picker>
+              </v-menu>
               <span
-                v-if="primary_errors && primary_errors.email"
+                v-if="primary_errors && primary_errors.received_date"
                 class="text-danger mt-2"
-                >{{ primary_errors.email[0] }}</span
+                >{{ primary_errors.received_date[0] }}</span
               >
             </v-col>
             <v-col cols="6" dense>
-              <v-text-field
-                label="Whatsapp Number"
+              <v-select
+                label="Payment Status"
+                :items="['Pending', 'Received', 'Cancelled']"
+                v-model="payload_primary.status"
                 dense
-                small
                 outlined
-                type="text"
-                v-model="payload_primary.whatsapp_number"
                 hide-details
-              ></v-text-field>
+                small
+              ></v-select>
               <span
-                v-if="primary_errors && primary_errors.whatsapp_number"
+                v-if="primary_errors && primary_errors.status"
                 class="text-danger mt-2"
-                >{{ primary_errors.whatsapp_number[0] }}</span
+                >{{ primary_errors.status[0] }}</span
+              >
+            </v-col>
+
+            <v-col cols="6" dense>
+              <v-select
+                label="Payment Mode"
+                :items="['Cash', 'Online', 'Cheque']"
+                v-model="payload_primary.mode_of_payment"
+                dense
+                outlined
+                hide-details
+                small
+              ></v-select>
+              <span
+                v-if="primary_errors && primary_errors.mode_of_payment"
+                class="text-danger mt-2"
+                >{{ primary_errors.mode_of_payment[0] }}</span
               >
             </v-col>
           </v-row>
@@ -143,6 +144,7 @@
 export default {
   props: ["editItem", "editId", "customer_id"],
   data: () => ({
+    from_menu: false,
     show1: false,
     devicesList: [],
     zonesList: [],
@@ -157,7 +159,7 @@ export default {
 
     start_date: "",
     end_date: "",
-    payload_primary: {},
+    payload_primary: { received_date: "" },
 
     e1: 1,
     primary_errors: [],
@@ -169,9 +171,9 @@ export default {
     items: ["Apple", "Banana", "Orange"],
   }),
   created() {
-    this.payload_primary = {};
+    this.payload_primary = { received_date: "" };
     this.preloader = false;
-    this.getDevicesList();
+
     // this.getBranchesList();
 
     if (this.$store.state.storeAlarmControlPanel?.AddressTypes) {
@@ -179,45 +181,20 @@ export default {
     }
 
     if (this.editItem) {
-      this.payload_primary = {};
+      this.payload_primary = { received_date: "" };
       this.payload_primary.editId = this.editItem.id;
-      this.payload_primary.serial_number = this.editItem.serial_number;
-      this.payload_primary.zone_name = this.editItem.zone_name;
-      this.payload_primary.name = this.editItem.name;
-      this.payload_primary.email = this.editItem.email;
-      this.payload_primary.mobile_number = this.editItem.mobile_number;
-      this.payload_primary.whatsapp_number = this.editItem.whatsapp_number;
+
+      this.payload_primary.invoice_number = this.editItem.invoice_number;
+      this.payload_primary.amount = this.editItem.amount;
+      this.payload_primary.received_date = this.editItem.received_date;
+      this.payload_primary.mode_of_payment = this.editItem.mode_of_payment;
+      this.payload_primary.status = this.editItem.status;
       this.payload_primary.customer_id = this.editItem.customer_id;
-      setTimeout(() => {
-        this.loadZonesContent();
-      }, 1000 * 2);
     }
   },
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
-    },
-    loadZonesContent() {
-      let deviceFilter = this.devicesList.filter(
-        (e) => e.serial_number == this.payload_primary.serial_number
-      );
-
-      if (deviceFilter[0]?.sensorzones?.length > 0)
-        this.zonesList = deviceFilter[0].sensorzones;
-      else this.zonesList = [];
-    },
-
-    getDevicesList() {
-      this.$axios
-        .get(`device-list`, {
-          params: {
-            company_id: this.$auth.user.company_id,
-            customer_id: this.customer_id,
-          },
-        })
-        .then(({ data }) => {
-          this.devicesList = data;
-        });
     },
 
     submit_primary() {
@@ -226,7 +203,7 @@ export default {
 
       if (this.editId) {
         this.$axios
-          .put("/automation/" + this.editId, this.payload_primary)
+          .put("/customer_payments/" + this.editId, this.payload_primary)
           .then(({ data }) => {
             this.loading = false;
             this.$emit("closeDialog");
@@ -241,7 +218,7 @@ export default {
           .catch((e) => console.log(e));
       } else {
         this.$axios
-          .post("/automation", this.payload_primary)
+          .post("/customer_payments", this.payload_primary)
           .then(({ data }) => {
             this.loading = false;
 

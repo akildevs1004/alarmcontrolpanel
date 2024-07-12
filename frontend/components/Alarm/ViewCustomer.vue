@@ -279,7 +279,9 @@
               </v-card> </v-tab-item
             ><v-tab-item value="tab-8">
               <v-card flat>
-                <v-card-text><AlarmPayments :key="key" /></v-card-text>
+                <v-card-text
+                  ><AlarmPayments :key="keyPayments" :customer_id="_id"
+                /></v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-9">
               <v-card flat>
@@ -331,6 +333,7 @@ export default {
     keyReports: 1,
     keyEvents: 1,
     keyAutomation: 1,
+    keyPayments: 1,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -371,6 +374,8 @@ export default {
         this.keyEvents = this.keyEvents + 1;
       } else if (this.tab == "tab-7") {
         this.keyAutomation = this.keyAutomation + 1;
+      } else if (this.tab == "tab-8") {
+        this.keyPayments = this.keyPayments + 1;
       }
     },
     closeDialog() {

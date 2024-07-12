@@ -43,10 +43,20 @@
           <v-col cols="8"></v-col>
           <v-col cols="4" class="text-right" style="width: 450px">
             <v-row>
-              <v-col cols="4"
+              <v-col cols="4">
+                <!-- <CustomFilter
+                  style="float: right; padding-top: 5px; z-index: 9999"
+                  @filter-attr="filterAttr"
+                  :default_date_from="date_from"
+                  :default_date_to="date_to"
+                  :defaultFilterType="1"
+                  :height="'40px'"
+                /> -->
+              </v-col>
+              <v-col cols="6"
                 ><v-text-field
                   style="padding-top: 7px"
-                  width="150px"
+                  width="200px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
@@ -60,15 +70,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="6">
-                <CustomFilter
-                  style="float: right; padding-top: 5px; z-index: 9999"
-                  @filter-attr="filterAttr"
-                  :default_date_from="date_from"
-                  :default_date_to="date_to"
-                  :defaultFilterType="1"
-                  :height="'40px'"
-              /></v-col>
+
               <v-col
                 cols="1"
                 style="padding-left: 0px; width: 50px"
@@ -214,7 +216,7 @@ export default {
         // { text: "End Date", value: "end_date" , sortable: false },
         { text: "Mobile Number", value: "mobile_number", sortable: false },
         { text: "Email", value: "email", sortable: false },
-        { text: "Ehatsapp Number", value: "whatsapp_number", sortable: false },
+        { text: "Whatsapp Number", value: "whatsapp_number", sortable: false },
 
         { text: "Options", value: "options", sortable: false },
       ],
@@ -231,10 +233,10 @@ export default {
   },
   created() {
     if (this.customer_id) {
-      let today = new Date();
-      let monthObj = this.$dateFormat.monthStartEnd(today);
-      this.date_from = monthObj.first;
-      this.date_to = monthObj.last;
+      // let today = new Date();
+      // let monthObj = this.$dateFormat.monthStartEnd(today);
+      // this.date_from = monthObj.first;
+      // this.date_to = monthObj.last;
       //this.getDataFromApi();
 
       this.getDevicesList();
@@ -272,17 +274,7 @@ export default {
           this.devicesList = data;
         });
     },
-    // getSensorNameByZone(zone_name) {
-    //   let deviceFilter = this.devicesList.filter(
-    //     (e) => e.sensorzones.zone == zone_name
-    //   );
 
-    //   console.log("deviceFilter", deviceFilter);
-
-    //   // if (deviceFilter[0]?.sensorzones?.length > 0)
-    //   //   this.zonesList = deviceFilter[0].sensorzones;
-    //   // else this.zonesList = [];
-    // },
     deleteItem(id) {
       if (confirm("Are you sure want to delete Alarm Notificaton  ?")) {
         this.loading = true;
@@ -323,8 +315,8 @@ export default {
             pagination: true,
             company_id: this.$auth.user.company_id,
             customer_id: this.customer_id,
-            date_from: this.date_from,
-            date_to: this.date_to,
+            // date_from: this.date_from,
+            // date_to: this.date_to,
             common_search: this.commonSearch,
           },
         };
