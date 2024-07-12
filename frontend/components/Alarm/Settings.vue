@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-row>
       <v-col cols="6">
         <v-row>
@@ -10,7 +15,11 @@
                           >Current Password
                           <span class="text-danger">*</span></label
                         > -->
-                <v-text-field
+                Email:
+                <span style="font-weight: bold">{{ payload.email }}</span>
+                <!-- <v-text-field
+                  readonly
+                  disabled
                   autocomplete="off"
                   label="Login Email Id"
                   dense
@@ -20,14 +29,14 @@
                   class="input-group--focused"
                   :error="errors.email"
                   :error-messages="errors && errors.email ? errors.email : ''"
-                ></v-text-field>
+                ></v-text-field> -->
               </v-col>
               <v-col md="12" sm="12" cols="12" dense>
                 <!-- <label class="col-form-label"
                           >Password <span class="text-danger">*</span></label
                         > -->
                 <v-text-field
-                  label="Password"
+                  label="Change Password"
                   dense
                   outlined
                   :hide-details="!errors.password"
@@ -49,44 +58,43 @@
           <v-col class="pt-5" style="max-width: 100px">Login </v-col>
 
           <v-col class="pl-0 pt-1" style="max-width: 80px">
-            <!-- {{ item.is_over_time }} -->
-            <v-img
-              class="ele1"
-              v-if="!item.is_over_time"
-              src="/off.png"
-              style="width: 60px"
-              @click="item.is_over_time = !item.is_over_time"
-            >
-            </v-img>
-            <v-img
-              class="ele1"
-              v-if="item.is_over_time"
-              src="/on.png"
-              style="width: 60px"
-              @click="item.is_over_time = !item.is_over_time"
-            >
-            </v-img>
+            <div style="cursor: pointer" v-if="payload.login_status == 0">
+              <v-img
+                class="ele1"
+                src="/off.png"
+                style="width: 60px"
+                @click="payload.login_status = 1"
+              >
+              </v-img>
+            </div>
+            <div style="cursor: pointer" v-if="payload.login_status == 1">
+              <v-img
+                class="ele1"
+                src="/on.png"
+                style="width: 60px"
+                @click="payload.login_status = 0"
+              >
+              </v-img>
+            </div>
           </v-col>
         </v-row>
         <v-row class="pl-5">
           <v-col class="pt-5" style="max-width: 100px">Account </v-col>
           <v-col class="pl-0 pt-1" style="max-width: 80px">
-            <v-img
-              class="ele1"
-              v-if="!item.is_over_time"
-              src="/off.png"
-              style="width: 60px"
-              @click="item.is_over_time = !item.is_over_time"
+            <div
+              style="cursor: pointer"
+              v-if="payload.account_status == 0"
+              @click="payload.account_status = 1"
             >
-            </v-img>
-            <v-img
-              class="ele1"
-              v-if="item.is_over_time"
-              src="/on.png"
-              style="width: 60px"
-              @click="item.is_over_time = !item.is_over_time"
+              <v-img class="ele1" src="/off.png" style="width: 60px"> </v-img>
+            </div>
+            <div
+              style="cursor: pointer"
+              v-if="payload.account_status == 1"
+              @click="payload.account_status = 0"
             >
-            </v-img>
+              <v-img class="ele1" src="/on.png" style="width: 60px"> </v-img>
+            </div>
           </v-col>
         </v-row>
         <!-- <v-row>
@@ -200,8 +208,11 @@
 
 <script>
 export default {
+  props: ["customer"],
   data() {
     return {
+      snackbar: false,
+      response: "",
       item: { is_over_time: true },
       show_password_confirm: false,
       current_password_show: false,
@@ -212,10 +223,11 @@ export default {
         password_confirmation: "",
       },
       payload: {
-        password: "",
-        current_password: "",
-        password_confirmation: "",
         email: "",
+        login_status: 1,
+        account_status: 1,
+        company_id: "",
+        customer_id: "",
       },
 
       e1: 1,
@@ -223,9 +235,40 @@ export default {
     };
   },
 
+  created() {
+    console.log("customer", this.customer);
+    if (this.customer) {
+      this.payload.email = this.customer.email;
+      this.payload.login_status = this.customer.login_status;
+      this.payload.account_status = this.customer.account_status;
+      this.payload.password = "";
+    }
+  },
+
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    update_setting() {
+      this.payload.company_id = this.$auth.user.company_id;
+      this.payload.customer_id = this.customer.id;
+
+      this.$axios
+        .post("/update_customer_settings", this.payload)
+        .then(({ data }) => {
+          this.loading = false;
+
+          this.snackbar = data.status;
+          this.response = data.message;
+
+          this.$emit("closeDialog");
+        })
+        .catch((e) => {
+          if (e.response.data.errors) {
+            this.snackbar = true;
+            this.response = e.response.data.message;
+          }
+        });
     },
   },
 };

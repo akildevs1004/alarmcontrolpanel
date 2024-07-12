@@ -38,7 +38,24 @@
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
-          <v-col cols="8"></v-col>
+          <v-col
+            cols="8"
+            style="
+              font-size: 18px;
+              font-weight: bold;
+              padding-top: 25px;
+              text-align: left;
+            "
+            >Contract/Subscription: From
+            <span style="color: green">
+              {{
+                $dateFormat.format_date_month_name_year(customer?.start_date)
+              }} </span
+            >to
+            <span style="color: red"
+              >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
+            </span></v-col
+          >
           <v-col cols="4" class="text-right" style="width: 450px">
             <v-row>
               <v-col cols="4"
@@ -88,10 +105,10 @@
                 </v-btn>
               </v-col>
               <v-col cols="1" style="width: 50px">
-                <v-btn icon small dense color="primary" class="ma-2">
+                <!-- <v-btn icon small dense color="primary" class="ma-2">
                   <v-icon>mdi mdi-download</v-icon>
-                </v-btn></v-col
-              >
+                </v-btn> -->
+              </v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -156,7 +173,7 @@ import AlarmEditPayments from "../../components/Alarm/EditPayments.vue";
 
 export default {
   components: { AlarmEditPayments },
-  props: ["customer_id"],
+  props: ["customer_id", "customer"],
   data() {
     return {
       snackbar: false,

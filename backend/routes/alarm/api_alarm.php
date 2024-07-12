@@ -32,6 +32,11 @@ Route::post('customer-update', [CustomersController::class, 'updateCustomer']);
 Route::post('customers_contact_update', [CustomersController::class, 'updateCustomerContact']);
 Route::apiResource('customers_building_picture', CustomerBuildingPicturesController::class);
 Route::apiResource('customer_contact', CustomerContactsController::class);
+Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
+
+
+
+
 
 //Devices
 Route::get('building_types', [CustomersController::class, 'buildingTypes']);

@@ -271,6 +271,23 @@ class CustomersController extends Controller
 
         return $this->response('Zone Details Updated Successfully', null, true);
     }
+    public function updateCustomerSettings(Request $request)
+    {
+
+        if ($request->filled("customer_id") && $request->filled("company_id")) {
+
+            $data = [];
+            $data["account_status"] = $request->account_status;
+            $data["login_status"] = $request->login_status;
+            if ($request->filled("password")) {
+                $data["password"] = Hash::make($request->password);
+            }
+
+            Customers::where("company_id", $request->company_id)->where("id", $request->customer_id)->update($data);
+        }
+
+        return $this->response('Customer Setting Updated Successfully', null, true);
+    }
     public function updatePrimaryContacts(Request $request)
     {
         $data1 = $request->all();

@@ -18,7 +18,12 @@
             >Building Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
-            <v-icon @click="changeTab()" color="white" outlined>
+            <v-icon
+              @click="changeTab()"
+              title="Refresh Content"
+              color="white"
+              outlined
+            >
               mdi mdi-refresh
             </v-icon>
             <v-icon
@@ -280,12 +285,21 @@
             ><v-tab-item value="tab-8">
               <v-card flat>
                 <v-card-text
-                  ><AlarmPayments :key="keyPayments" :customer_id="_id"
+                  ><AlarmPayments
+                    :customer="data"
+                    :key="keyPayments"
+                    :customer_id="_id"
                 /></v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-9">
               <v-card flat>
-                <v-card-text> <AlarmSettings :key="key" /></v-card-text>
+                <v-card-text>
+                  <AlarmSettings
+                    @closeDialog="closeDialog"
+                    :key="keySettings"
+                    :customer_id="_id"
+                    :customer="customer"
+                /></v-card-text>
               </v-card>
             </v-tab-item>
           </v-tabs-items>
@@ -334,6 +348,7 @@ export default {
     keyEvents: 1,
     keyAutomation: 1,
     keyPayments: 1,
+    keySettings: 1,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -376,6 +391,8 @@ export default {
         this.keyAutomation = this.keyAutomation + 1;
       } else if (this.tab == "tab-8") {
         this.keyPayments = this.keyPayments + 1;
+      } else if (this.tab == "tab-9") {
+        this.keySettings = this.keySettings + 1;
       }
     },
     closeDialog() {
