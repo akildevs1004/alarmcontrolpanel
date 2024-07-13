@@ -96,7 +96,7 @@
                   color="primary"
                   @click="
                     key = key + 1;
-
+                    editItemobject = null;
                     dialogEditAutomation = true;
                   "
                   class="ma-2"

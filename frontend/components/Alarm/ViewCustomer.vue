@@ -131,6 +131,12 @@
                   <v-col cols="12" style="font-size: 20px">
                     <span style="float: left; width: 60px">
                       <img
+                        v-if="
+                          $dateFormat.verifyDeviceSensorName(
+                            'Burglary',
+                            customer.devices
+                          )
+                        "
                         title="Burglary"
                         style="width: 23px; float: left"
                         src="/device-icons/burglary.png"
@@ -140,6 +146,12 @@
                     <span style="float: left; width: 60px">
                       <img
                         title="Medial"
+                        v-if="
+                          $dateFormat.verifyDeviceSensorName(
+                            'Medical',
+                            customer.devices
+                          )
+                        "
                         style="width: 25px; float: left"
                         src="/device-icons/medical.png"
                       />
@@ -147,12 +159,24 @@
                     <span style="float: left; width: 60px">
                       <img
                         title="Fire"
+                        v-if="
+                          $dateFormat.verifyDeviceSensorName(
+                            'Fire',
+                            customer.devices
+                          )
+                        "
                         style="width: 20px; float: left"
                         src="/device-icons/fire.png"
                       />
                     </span>
                     <span style="float: left; width: 60px">
                       <img
+                        v-if="
+                          $dateFormat.verifyDeviceSensorName(
+                            'Water',
+                            customer.devices
+                          )
+                        "
                         title="Water Leakage"
                         style="width: 25px; float: left"
                         src="/device-icons/water.png"
@@ -160,6 +184,12 @@
                     </span>
                     <span style="float: left; width: 60px">
                       <img
+                        v-if="
+                          $dateFormat.verifyDeviceSensorName(
+                            'Temperature',
+                            customer.devices
+                          )
+                        "
                         title="Temperature"
                         style="width: 17px; float: left"
                         src="/device-icons/temperature.png"
@@ -181,7 +211,10 @@
             class="popup_background_noviolet customer-tabs"
           >
             <v-tabs-slider></v-tabs-slider>
-
+            <v-tab href="#tab-5">
+              <v-icon>mdi mdi-chart-pie</v-icon>
+              Dashboard
+            </v-tab>
             <v-tab href="#tab-1"> <v-icon>mdi-phone</v-icon>Contacts </v-tab>
 
             <v-tab href="#tab-2">
@@ -196,13 +229,10 @@
               <v-icon>mdi mdi-shield-home-outline</v-icon>
               Devices/Sensor
             </v-tab>
-            <v-tab href="#tab-5">
-              <v-icon>mdi mdi-chart-pie</v-icon>
-              Reports
-            </v-tab>
+
             <v-tab href="#tab-6">
               <v-icon>mdi mdi-alarm</v-icon>
-              Alarms
+              Reports
             </v-tab>
             <v-tab href="#tab-7">
               <v-icon>mdi mdi-message-badge</v-icon>
@@ -266,9 +296,10 @@
                 </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-5">
-              <AlarmAlarmReports
+              <CustomerDashboard
                 :key="keyReports"
                 :customer_id="_id"
+                :customer="customer"
               /> </v-tab-item
             ><v-tab-item value="tab-6">
               <v-card flat>
@@ -320,12 +351,12 @@ import AlramCustomerContacts from "../../components/Alarm/CustomerContacts.vue";
 import AlramEmergencyContacts from "../../components/Alarm/EmergencyContacts.vue";
 import AlramPhotos from "../../components/Alarm/Photos.vue";
 import AlarmDevices from "../../components/Alarm/Devices.vue";
-import AlarmDashboardTemparatureChart1 from "../../components/Alarm/AlarmDashboardTemparatureChart1.vue";
-import AlarmDashboardHumidityChart1 from "../../components/Alarm/AlarmDashboardHumidityChart1.vue";
-import AlarmDashboardTemparatureChart2 from "../../components/Alarm/AlarmDashboardTemparatureChart2.vue";
+import AlarmDashboardTemparatureChart1 from "../../components/Alarm/CustomerDashboardTemparatureChart1.vue";
+import AlarmDashboardHumidityChart1 from "../../components/Alarm/CustomerDashboardHumidityChart1.vue";
+import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDashboardTemparatureChart2.vue";
 import AlarmEvents from "../../components/Alarm/AlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
-import AlarmAlarmReports from "../../components/Alarm/AlarmReports.vue";
+import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
 
 export default {
   components: {
@@ -336,10 +367,11 @@ export default {
     AlarmDashboardTemparatureChart1,
     AlarmDashboardHumidityChart1,
     AlarmSettings,
-    AlarmAlarmReports,
+    CustomerDashboard,
   },
   props: ["_id"],
   data: () => ({
+    customerSensors: [],
     keyContacts: 1,
     keyEmergencyy: 1,
     keyPhotos: 1,
@@ -352,7 +384,7 @@ export default {
     key: 1,
     profile_percentage: 60,
     tab: null,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+
     data: null,
     BuildingTypes: null,
     building_type_name: null,
@@ -371,6 +403,8 @@ export default {
     // setTimeout(() => {
     //   this.getBuildingTypes();
     // }, 3000);
+
+    this.getUniqueDevices();
   },
   watch: {},
   methods: {
@@ -410,6 +444,24 @@ export default {
         return "";
       }
     },
+    // verifyDeviceSensorName(sensorName, devices) {
+    //   for (let device of devices) {
+    //     if (device.device_type == sensorName) {
+    //       return true;
+    //     }
+
+    //     if (device.sensorzones) {
+    //       let filter = device.sensorzones.filter(
+    //         (e) => e.sensor_name == sensorName
+    //       );
+    //       if (filter.length > 0) {
+    //         return true;
+    //       }
+    //     }
+    //   }
+
+    //   return false;
+    // },
     getBuildingTypes() {
       // console.log(
       //   " BuildingTypes2222",
@@ -419,7 +471,22 @@ export default {
     closePopup() {
       this.$emit("closeCustomerDialog");
     },
+    getUniqueDevices() {
+      this.payloadOptions = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this._id,
+        },
+      };
 
+      try {
+        this.$axios
+          .get(`customer_device_types`, this.payloadOptions)
+          .then(({ data }) => {
+            this.customerSensors = data;
+          });
+      } catch (e) {}
+    },
     async getDataFromApi() {
       if (this._id) {
         this.payloadOptions = {

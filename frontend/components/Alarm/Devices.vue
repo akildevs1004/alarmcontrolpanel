@@ -303,7 +303,7 @@
           <div class="secondary-value">{{ item.short_name }}</div>
         </template>
         <template v-slot:item.zones="{ item }">
-          {{ item.sensorzones.length }}
+          <div @click="editZones(item)">{{ item.sensorzones.length }}</div>
         </template>
 
         <template v-slot:item.location="{ item }">
@@ -333,6 +333,7 @@
         <template v-slot:item.sensor="{ item }">
           <div v-if="item.device_type">
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Control Panel'"
               style="width: 30px"
               src="/alarm-icons/device_type_access_control.png"
@@ -340,42 +341,49 @@
             </v-img>
 
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Burglary'"
               style="width: 30px"
               src="/alarm-icons/burglary.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Medical'"
               style="width: 30px"
               src="/alarm-icons/medical.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Temperature'"
               style="width: 30px"
               src="/alarm-icons/fire.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Water'"
               style="width: 30px"
               src="/alarm-icons/water.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Humidity'"
               style="width: 30px"
               src="/alarm-icons/humidity.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="item.device_type == 'Attendance'"
               style="width: 30px"
               src="/icons/device_type_attendance.png"
             >
             </v-img>
             <v-img
+              :title="item.device_type"
               v-if="
                 item.device_type == 'all' ||
                 item.device_type == 'Access Control'
@@ -583,7 +591,7 @@ export default {
       { text: "#", value: "sno" },
       { text: "Device", value: "device" },
       { text: "Device Type", value: "device_type" },
-      { text: "Zones", value: "zones", align: "center" },
+      { text: "Zones", value: "zones", align: "left" },
 
       { text: "Location", value: "location" },
 
@@ -677,6 +685,7 @@ export default {
       this.dialogEditDevice = false;
       this.dialogZones = false;
       this.getDataFromApi();
+      this.$emit("closeDialog");
     },
     editZones(item) {
       this.key = this.key + 1;

@@ -15,8 +15,8 @@
   },
   {
     "icon": "mdi-clock-outline",
-    "title": "Alarm",
-    "to": "/shift",
+    "title": "Alarms",
+    "to": "/alarm/allevents",
     "menu": "dashboard1",
     "module": "topmenu"
   },

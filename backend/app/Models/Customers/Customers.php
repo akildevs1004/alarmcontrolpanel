@@ -2,6 +2,7 @@
 
 namespace App\Models\Customers;
 
+use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,10 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
-
+    public function devices()
+    {
+        return $this->hasMany(Device::class, "customer_id", "id");
+    }
     public function contacts()
     {
         return $this->hasMany(CustomerContacts::class, "customer_id", "id")->where("display_order", "!=", 0)->orderBy("display_order", "asc");

@@ -130,7 +130,7 @@
       </span>
       <v-spacer></v-spacer>
 
-      <span style="100%" class="header-menu">
+      <span class="header-menu">
         <template
           v-if="
             getLoginType == 'company' ||
@@ -217,7 +217,7 @@
           v-model="globalsearch"
         ></v-text-field> -->
         <v-form autocomplete="off">
-          <v-text-field
+          <!-- <v-text-field
             autocomplete="off"
             @keyup.enter="showGlobalsearchPopup"
             @keydown="showGlobalsearchPopup"
@@ -233,7 +233,7 @@
             prepend-inner-icon="mdi-magnify"
             placeholder="Search"
             v-model="globalsearch"
-          ></v-text-field>
+          ></v-text-field> -->
         </v-form>
       </span>
 

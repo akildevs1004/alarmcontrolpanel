@@ -150,8 +150,8 @@
                     {{ item.building_name || "" }}
                   </div>
                   <small style="font-size: 12px; color: #6c7184">
-                    {{ item.house_number }}, {{ item.street_number
-                    }}{{ item.area }}{{ item.city }}
+                    {{ item.house_number }}, {{ item.street_number }},
+                    {{ item.area }}, {{ item.city }}
                   </small>
                 </v-col>
               </v-row>
@@ -169,6 +169,76 @@
                 {{ item.landmark }}
               </small>
             </template>
+
+            <template v-slot:item.burglary="{ item }">
+              <div
+                v-if="
+                  $dateFormat.verifyDeviceSensorName('Burglary', item.devices)
+                "
+              >
+                <img
+                  title="Burglary"
+                  style="width: 23px; float: left"
+                  src="/device-icons/burglary.png"
+                />
+              </div>
+              <div v-else>---</div>
+            </template>
+            <template v-slot:item.temperature="{ item }">
+              <div
+                v-if="
+                  $dateFormat.verifyDeviceSensorName(
+                    'Temperature',
+                    item.devices
+                  )
+                "
+              >
+                <img
+                  title="Burglary"
+                  style="width: 23px; float: left"
+                  src="/device-icons/temperature.png"
+                />
+              </div>
+              <div v-else>---</div>
+            </template>
+            <template v-slot:item.medical="{ item }">
+              <div
+                v-if="
+                  $dateFormat.verifyDeviceSensorName('Medical', item.devices)
+                "
+              >
+                <img
+                  title="Burglary"
+                  style="width: 23px; float: left"
+                  src="/device-icons/medical.png"
+                />
+              </div>
+              <div v-else>---</div>
+            </template>
+            <template v-slot:item.fire="{ item }">
+              <div
+                v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)"
+              >
+                <img
+                  title="Burglary"
+                  style="width: 23px; float: left"
+                  src="/device-icons/fire.png"
+                />
+              </div>
+              <div v-else>---</div>
+            </template>
+            <template v-slot:item.water="{ item }">
+              <div
+                v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)"
+              >
+                <img
+                  title="Burglary"
+                  style="width: 23px; float: left"
+                  src="/device-icons/water.png"
+                />
+              </div>
+              <div v-else>---</div>
+            </template>
             <template v-slot:item.area="{ item }">
               {{ item.house_number }}, {{ item.street_number }}{{ item.area
               }}{{ item.city }}
@@ -181,7 +251,7 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
+                  <!-- <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem(item)"
                   >
@@ -189,7 +259,7 @@
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
                     </v-list-item-title>
-                  </v-list-item>
+                  </v-list-item> -->
                   <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
@@ -291,7 +361,7 @@ export default {
       },
       {
         text: "Medical",
-        value: "medial",
+        value: "medical",
       },
       {
         text: "Fire",
@@ -498,7 +568,7 @@ export default {
     // },
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
       url = this.endpoint;
-      console.log(url);
+
       this.newCustomerDialog = false;
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 

@@ -1,6 +1,12 @@
 <template>
   <div max-width="100%">
-    <v-row class="pt-5">
+    <v-row
+      class="pt-5"
+      v-if="
+        customer &&
+        $dateFormat.verifyDeviceSensorName('Temperature', customer.devices)
+      "
+    >
       <v-col lg="3" md="3" sm="12" xs="12">
         <AlarmDashboardTemparatureChart1
           :key="key"
@@ -42,9 +48,9 @@
 </template>
 
 <script>
-import AlarmDashboardTemparatureChart1 from "../../components/Alarm/AlarmDashboardTemparatureChart1.vue";
-import AlarmDashboardHumidityChart1 from "../../components/Alarm/AlarmDashboardHumidityChart1.vue";
-import AlarmDashboardTemparatureChart2 from "../../components/Alarm/AlarmDashboardTemparatureChart2.vue";
+import AlarmDashboardTemparatureChart1 from "../../components/Alarm/CustomerDashboardTemparatureChart1.vue";
+import AlarmDashboardHumidityChart1 from "../../components/Alarm/CustomerDashboardHumidityChart1.vue";
+import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDashboardTemparatureChart2.vue";
 
 export default {
   components: {
@@ -52,7 +58,7 @@ export default {
     AlarmDashboardHumidityChart1,
     AlarmDashboardTemparatureChart2,
   },
-  props: ["customer_id"],
+  props: ["customer_id", "customer"],
   data: () => ({
     key: 1,
     keyTemperature: 1,
@@ -62,7 +68,6 @@ export default {
     humidity_latest: "",
     humidity_date_time: "",
     device_serial_number: "",
-    customer: null,
   }),
   computed: {},
   mounted() {},

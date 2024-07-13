@@ -24,7 +24,7 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Customers::with(["contacts", "primary_contact", "secondary_contact"])->where("company_id", $request->company_id);
+        $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where("company_id", $request->company_id);
 
         $model->when($request->filled("customer_id"), fn ($q) => $q->where("id", $request->customer_id));
 
@@ -270,6 +270,26 @@ class CustomersController extends Controller
         }
 
         return $this->response('Zone Details Updated Successfully', null, true);
+    }
+    public function customerDeviceTypes(Request $request)
+    {
+        // Fetch distinct device types
+        $deviceTypes = Device::where('company_id', $request->company_id)
+            ->where('customer_id', $request->customer_id)
+            ->distinct()
+            ->pluck('device_type');
+
+        // Fetch sensor names
+        $sensorNames = DeviceZones::whereHas('device', function ($query) use ($request) {
+            $query->where('company_id', $request->company_id)
+                ->where('customer_id', $request->customer_id);
+        })->pluck('sensor_name');
+
+        // Merge the two collections and get distinct values
+        $mergedCollection = $deviceTypes->merge($sensorNames)->unique();
+
+        // Convert to array if needed
+        return  $distinctValues = $mergedCollection->toArray();
     }
     public function updateCustomerSettings(Request $request)
     {

@@ -414,6 +414,7 @@ export default {
               if (data.message) {
                 this.deviceResponse = data.message;
                 this.response = data.message;
+                this.$emit("closeDialog");
               } else {
                 this.deviceResponse = "Some fields are missing";
                 this.response = "Some fields are missing";

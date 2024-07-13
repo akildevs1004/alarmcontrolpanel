@@ -210,7 +210,17 @@ class CustomerAlarmEventsController extends Controller
                 $q->orWhere('zone', 'ILIKE', "%$request->common_search%");
                 $q->orWhere('area', 'ILIKE', "%$request->common_search%");
 
+                $q->when(
+                    !$request->filled("customer_id"),
+                    function ($quqery) use ($request) {
+                        $quqery->orWhereHas('device.customer', fn (Builder $query) => $query->where('building_name', 'ILIKE', "$request->common_search%")
+                            ->orWhere('area', 'ILIKE', "$request->common_search%")
+                            ->orWhere('city', 'ILIKE', "$request->common_search%")
 
+                            ->where('company_id', $request->company_id));
+                    }
+
+                );
 
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
