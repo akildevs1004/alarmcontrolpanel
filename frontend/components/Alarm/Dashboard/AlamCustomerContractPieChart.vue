@@ -72,8 +72,8 @@ export default {
           align: "left",
           margin: 0,
         },
-        //colors: ["#033F9B", "#DC7633", "#02B64B", "#ff0000", "#808080", ""],
-        colors: ["#033F9B", "#02B64B", "#f44336"],
+
+        colors: ["#02B64B", "#f44336", "#F4B400"],
 
         series: [],
         chart: {
@@ -131,16 +131,7 @@ export default {
           show: true,
           fontSize: "12px",
           formatter: (seriesName, opts) => {
-            // let Total = "";
-
-            // if (opts.seriesIndex == 0) {
-            //   Total = "<div>Total: " + this.totalCount + "</div><br/>";
-            // }
-            // return ` ${Total}
-            //    ${seriesName} ${opts.w.globals.series[opts.seriesIndex]}
-            // `;
-
-            return `  
+            return `
                ${seriesName} : ${opts.w.globals.series[opts.seriesIndex]}
             `;
           },
@@ -177,7 +168,7 @@ export default {
         },
       };
 
-      this.$axios.get(`/device_armed_stats`, options).then(({ data }) => {
+      this.$axios.get(`/customer_contract_stats`, options).then(({ data }) => {
         this.categories = data;
         this.renderChart1(data);
       });
@@ -187,14 +178,15 @@ export default {
       let counter = 0;
       let total = 1000;
 
-      // this.chartOptions.labels[0] = "Total";
-      // this.chartOptions.series[0] = data.total;
+      this.chartOptions.labels[0] = "Active";
+      this.chartOptions.series[0] =
+        data.total - data.expired - data.expiringin30days ?? 0;
 
-      this.chartOptions.labels[0] = "Armed";
-      this.chartOptions.series[0] = data.armed;
+      this.chartOptions.labels[1] = "Expired";
+      this.chartOptions.series[1] = data.expired ?? 0;
 
-      this.chartOptions.labels[1] = "Disarmed";
-      this.chartOptions.series[1] = data.total - data.armed;
+      this.chartOptions.labels[2] = "Renewal";
+      this.chartOptions.series[2] = data.expiringin30days ?? 0;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 

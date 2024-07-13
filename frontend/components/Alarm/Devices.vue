@@ -403,13 +403,22 @@
           }}
         </template>
         <template v-slot:item.status="{ item }">
-          <div style="color: red" v-if="item.status == 1">
+          <div v-if="item.status == 1">
             <v-img style="width: 30px" src="/icons/device_status_open.png">
             </v-img>
           </div>
           <div v-else>
             <v-img width="30px" src="/icons/device_status_close.png"> </v-img>
           </div>
+        </template>
+        <template v-slot:item.armed="{ item }">
+          <div v-if="item.armed_status == 1">
+            <v-icon title="Armed" color="green">mdi mdi-shield-sun</v-icon>
+          </div>
+          <div v-else-if="item.armed_status == 0">
+            <v-icon title="DisArmed" color="#757575">mdi mdi-shield-sun</v-icon>
+          </div>
+          <div v-else>---</div>
         </template>
         <template v-slot:item.alarm="{ item }">
           <div style="color: red" v-if="item.alarm_status == 1">
@@ -599,7 +608,9 @@ export default {
       { text: "24 Hrs", value: "hrs_24" },
       { text: "Sensor", value: "sensor" },
       { text: "Temperature", value: "threshold_temperature" },
-      { text: "Status", value: "status" },
+      { text: "Online", value: "status" },
+      { text: "Armed", value: "armed", align: "center" },
+
       { text: "Alarm", value: "alarm" },
       { text: "Options", value: "options", align: "center" },
     ],

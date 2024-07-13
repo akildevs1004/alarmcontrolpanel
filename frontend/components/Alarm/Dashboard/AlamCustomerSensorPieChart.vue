@@ -72,15 +72,15 @@ export default {
           align: "left",
           margin: 0,
         },
-        //colors: ["#033F9B", "#DC7633", "#02B64B", "#ff0000", "#808080", ""],
-        colors: ["#033F9B", "#02B64B", "#f44336"],
+
+        colors: ["#02B64B", "#f44336", "#F4B400"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          height: 250,
+          height: 300,
           type: "donut",
         },
         customTotalValue: 0,
@@ -131,16 +131,7 @@ export default {
           show: true,
           fontSize: "12px",
           formatter: (seriesName, opts) => {
-            // let Total = "";
-
-            // if (opts.seriesIndex == 0) {
-            //   Total = "<div>Total: " + this.totalCount + "</div><br/>";
-            // }
-            // return ` ${Total}
-            //    ${seriesName} ${opts.w.globals.series[opts.seriesIndex]}
-            // `;
-
-            return `  
+            return `
                ${seriesName} : ${opts.w.globals.series[opts.seriesIndex]}
             `;
           },
@@ -177,7 +168,7 @@ export default {
         },
       };
 
-      this.$axios.get(`/device_armed_stats`, options).then(({ data }) => {
+      this.$axios.get(`/device_sensors_stats`, options).then(({ data }) => {
         this.categories = data;
         this.renderChart1(data);
       });
@@ -187,14 +178,23 @@ export default {
       let counter = 0;
       let total = 1000;
 
-      // this.chartOptions.labels[0] = "Total";
-      // this.chartOptions.series[0] = data.total;
+      this.chartOptions.labels[0] = "Burglary";
+      this.chartOptions.series[0] = data.Burglary ?? 0;
 
-      this.chartOptions.labels[0] = "Armed";
-      this.chartOptions.series[0] = data.armed;
+      this.chartOptions.labels[1] = "Attendance";
+      this.chartOptions.series[1] = data.Attendance ?? 0;
 
-      this.chartOptions.labels[1] = "Disarmed";
-      this.chartOptions.series[1] = data.total - data.armed;
+      this.chartOptions.labels[2] = "Medical";
+      this.chartOptions.series[2] = data.Medical ?? 0;
+
+      this.chartOptions.labels[3] = "Temperature" ?? 0;
+      this.chartOptions.series[3] = data.Temperature ?? 0;
+
+      this.chartOptions.labels[4] = "Water";
+      this.chartOptions.series[4] = data.Water ?? 0;
+
+      this.chartOptions.labels[5] = "Fire";
+      this.chartOptions.series[5] = data.Fire ?? 0;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 

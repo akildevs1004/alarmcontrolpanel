@@ -1942,6 +1942,10 @@ button {
 /* .customer-tabs i {
   font-size: 12px !important;
 } */
+
+.apexcharts-legend {
+  top: -20px !important;
+}
 </style>
 
 <style>

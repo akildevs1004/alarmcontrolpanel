@@ -5,7 +5,8 @@ use App\Http\Controllers;
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
-
+use App\Http\Controllers\Customers\AlarmDashboard;
+use App\Http\Controllers\Customers\AlarmDashboardController;
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
@@ -46,6 +47,17 @@ Route::get('device_models', [CustomersController::class, 'deviceModels']);
 Route::get('device_types', [CustomersController::class, 'deviceTypes']);
 Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZones']);
 Route::get('customer_temperature_devices', [CustomersController::class, 'getCustomerTemperatureDevices']);
+
+
+//dashboard
+Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
+Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
+Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
+Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
+
+
+
+
 
 
 
