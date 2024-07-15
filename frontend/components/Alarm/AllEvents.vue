@@ -214,20 +214,8 @@
                   <template v-slot:item.category="{ item }">
                     <div>{{ item.alarm_category }}</div>
                   </template>
-                  <!-- <template v-slot:item.alarm="{ item }">
-              <div style="color: red" v-if="item.alarm == 'ON'">
-                <v-icon color="red">mdi mdi-alarm-light-outline</v-icon>
-              </div>
-              <div v-else>
-                <v-icon>mdi mdi-alarm-light-outline</v-icon>
-              </div>
-            </template> -->
-                  <template v-slot:item.status="{ item }">
-                    <!-- <div style="color: red" v-if="item.alarm_end_datetime == ''">
-                Open
-              </div>
-              <div v-else>Closed</div> -->
 
+                  <template v-slot:item.status="{ item }">
                     <div v-if="item.alarm_status == 1">
                       <v-icon
                         class="alarm"
