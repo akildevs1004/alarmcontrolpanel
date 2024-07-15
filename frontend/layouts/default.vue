@@ -826,6 +826,8 @@ export default {
     this.getBuildingTypes();
     this.getAddressTypes();
     this.getDeviceTypes();
+    this.getSensorTypes();
+
     this.getDeviceModels();
 
     setTimeout(() => {
@@ -966,6 +968,17 @@ export default {
         });
 
         this.$store.commit("storeAlarmControlPanel/DeviceModels", data);
+      }
+    },
+    async getSensorTypes() {
+      if (!this.$store.state.storeAlarmControlPanel?.SensorTypes) {
+        const { data } = await this.$axios.get("sensor_types", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/SensorTypes", data);
       }
     },
     async getDeviceTypes() {
@@ -1943,9 +1956,9 @@ button {
   font-size: 12px !important;
 } */
 
-/* .apexcharts-legend {
-  top: -20px !important;
-} */
+#AlamCustomerSensorPieChart .apexcharts-legend {
+  top: 0px !important;
+}
 </style>
 
 <style>

@@ -5,6 +5,8 @@ export const state = () => ({
   AddressTypes: null,
   DeviceTypes: null,
   DeviceModels: null,
+
+  SensorTypes: null,
 });
 
 export const mutations = {
@@ -22,6 +24,9 @@ export const mutations = {
   },
   DeviceTypes(state, data) {
     state.DeviceTypes = data;
+  },
+  SensorTypes(state, data) {
+    state.SensorTypes = data;
   },
   DeviceModels(state, data) {
     state.DeviceModels = data;

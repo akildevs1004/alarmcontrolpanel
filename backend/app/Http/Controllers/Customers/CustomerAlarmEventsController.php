@@ -193,14 +193,21 @@ class CustomerAlarmEventsController extends Controller
         //     'company_id' => 'required|integer',
         //     'customer_id' => 'required|integer'
         // ]);
-        $model = AlarmEvents::with(["device.customer", "notes"])->where('company_id', $request->company_id)
+        $model = AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "notes"
+        ])->where('company_id', $request->company_id)
 
             // ->when($request->filled("common_search"), function ($query) use ($request) {
             //     $query->where("customer_id", $request->common_search);
             // })
             ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id))
             ->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+        $model->when($request->filled('filterSensorname'), function ($q) use ($request) {
 
+            $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
+        });
 
         $model->when($request->filled('common_search'), function ($q) use ($request) {
             $q->where(function ($q) use ($request) {

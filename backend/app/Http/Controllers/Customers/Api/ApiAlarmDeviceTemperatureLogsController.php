@@ -15,6 +15,7 @@ use App\Models\AlarmLogs;
 use Illuminate\Http\Request;
 use App\Models\Community\AttendanceLog;
 use App\Models\Company;
+use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\ReportNotification;
 use App\Models\ReportNotificationLogs;
@@ -216,6 +217,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         Device::where("serial_number", $logs['serial_number'])->update($data);
 
+                        DeviceZones::where("device_id", $device['id'])
+                            ->where("area_code", $logs['zone'])
+                            ->where("zone_code", $logs['area'])
+                            ->update($data);
+
                         $this->SendWhatsappNotification($device['name'] . " - Alarm Stopped ",   $device['name'],  $device, $logs['log_time'], true);
 
                         $message[] = "Notification Sent";
@@ -278,6 +284,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                 Device::where("serial_number", $logs['serial_number'])->update($data);
+
+                DeviceZones::where("device_id", $device['id'])
+                    ->where("area_code", $logs['zone'])
+                    ->where("zone_code", $logs['area'])
+                    ->update($data);
 
                 if ($device['alarm_status'] == 0) {
                     $this->SendWhatsappNotification($device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], true);

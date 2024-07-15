@@ -37,9 +37,6 @@ Route::post('update_customer_settings', [CustomersController::class, 'updateCust
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
 
 
-
-
-
 //Devices
 Route::get('building_types', [CustomersController::class, 'buildingTypes']);
 Route::get('address_types', [CustomersController::class, 'addressTypes']);
@@ -48,19 +45,12 @@ Route::get('device_types', [CustomersController::class, 'deviceTypes']);
 Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZones']);
 Route::get('customer_temperature_devices', [CustomersController::class, 'getCustomerTemperatureDevices']);
 
-
+Route::get('sensor_types', [CustomersController::class, 'getSensorsList']);
 //dashboard
 Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
 Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
 Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
 Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
-
-
-
-
-
-
-
 
 
 //api alarm logs 
@@ -69,11 +59,6 @@ Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::cl
 Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::get('update_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
-
-
-
-
-
 //alarm logs
 Route::apiResource('alarmevents', CustomerAlarmEventsController::class);
 

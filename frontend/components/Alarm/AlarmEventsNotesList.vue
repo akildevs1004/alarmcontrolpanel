@@ -5,10 +5,11 @@
         {{ response }}
       </v-snackbar>
     </div>
+
     <v-dialog v-model="dialogEditCustomerNotes" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes </span>
+          <span style="color: black">Alarm Notes Information </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -67,7 +68,12 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col
+        v-if="showOptions == 'true'"
+        cols="12"
+        class="text-right"
+        style="padding-top: 0px"
+      >
         <v-btn color="primary" @click="addNotes()" dense x-small> Add </v-btn>
       </v-col>
       <v-col>
@@ -117,7 +123,7 @@
           <template v-slot:item.date="{ item, index }">
             {{ $dateFormat.format4(item.created_datetime) }}
           </template>
-          <template v-slot:item.options="{ item }">
+          <template v-slot:item.options="{ item }" v-if="showOptions == 'true'">
             <v-menu bottom left>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn dark-2 icon v-bind="attrs" v-on="on">
@@ -153,7 +159,7 @@
 import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 export default {
   components: { EditAlarmCustomerEventNotes },
-  props: ["alarm_id", "customer_id"],
+  props: ["alarm_id", "customer_id", "showOptions"],
   data() {
     return {
       snackbar: false,

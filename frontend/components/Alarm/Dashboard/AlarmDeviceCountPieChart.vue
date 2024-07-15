@@ -73,7 +73,7 @@ export default {
           margin: 0,
         },
         //colors: ["#033F9B", "#DC7633", "#02B64B", "#ff0000", "#808080", ""],
-        colors: ["#033F9B", "#02B64B", "#f44336"],
+        colors: ["#033F9B", "#D35400"],
 
         series: [],
         chart: {

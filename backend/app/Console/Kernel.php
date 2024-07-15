@@ -161,7 +161,7 @@ class Kernel extends ConsoleKernel
                 }
             }
 
-         
+
             return;
         }
         // $file_name_raw = "test.txt";
@@ -172,7 +172,15 @@ class Kernel extends ConsoleKernel
         //     Storage::append($file_name_raw,  date("d-m-Y H:i:s") . ' - Devices listed');
         // })->everyMinute()->appendOutputTo(storage_path("test.txt"));
         //-------------------------------------------------------------------------------------------------------------------------
-        //Schedule Device Access Control 
+
+
+        //----------Alarm Logs Process 
+
+
+        $schedule
+            ->command('task:sync_alarm_logs_update_start_end_time')
+            ->everyMinute()
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-process-logs.log")); // 
         $schedule->call(function () {
             exec('pm2 reload 3');
             info("Camera Log listener restart");

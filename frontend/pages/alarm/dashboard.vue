@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Total </v-card-title>
           <v-card-text
@@ -9,7 +9,7 @@
           /></v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Status</v-card-title>
           <v-card-text>
@@ -17,7 +17,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Contract</v-card-title>
           <v-card-text>
@@ -25,7 +25,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Sensor Devices</v-card-title>
           <v-card-text class="p-0">
@@ -33,6 +33,10 @@
           </v-card-text>
         </v-card>
       </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12"><AlamAllEvents /></v-col>
     </v-row>
   </div>
 </template>
@@ -43,12 +47,15 @@ import AlamDeviceLiveCountPieChart from "../../components/Alarm/Dashboard/AlamDe
 import AlamCustomerContractPieChart from "../../components/Alarm/Dashboard/AlamCustomerContractPieChart.vue";
 import AlamCustomerSensorPieChart from "../../components/Alarm/Dashboard/AlamCustomerSensorPieChart.vue";
 
+import AlamAllEvents from "../../components/Alarm/AllEvents.vue";
+
 export default {
   components: {
     AlamDeviceCountPieChart,
     AlamDeviceLiveCountPieChart,
     AlamCustomerContractPieChart,
     AlamCustomerSensorPieChart,
+    AlamAllEvents,
   },
   data: () => ({
     profile_percentage: 60,

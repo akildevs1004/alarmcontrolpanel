@@ -304,7 +304,7 @@
             ><v-tab-item value="tab-6">
               <v-card flat>
                 <v-card-text>
-                  <AlarmEvents :key="keyEvents" :customer_id="_id"
+                  <CustomerAlarmEvents :key="keyEvents" :customer_id="_id"
                 /></v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-7">
@@ -354,7 +354,7 @@ import AlarmDevices from "../../components/Alarm/Devices.vue";
 import AlarmDashboardTemparatureChart1 from "../../components/Alarm/CustomerDashboardTemparatureChart1.vue";
 import AlarmDashboardHumidityChart1 from "../../components/Alarm/CustomerDashboardHumidityChart1.vue";
 import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDashboardTemparatureChart2.vue";
-import AlarmEvents from "../../components/Alarm/AlarmEvents.vue";
+import CustomerAlarmEvents from "../../components/Alarm/CustomerAlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
 import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
 
@@ -368,6 +368,7 @@ export default {
     AlarmDashboardHumidityChart1,
     AlarmSettings,
     CustomerDashboard,
+    CustomerAlarmEvents,
   },
   props: ["_id"],
   data: () => ({

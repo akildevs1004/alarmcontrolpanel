@@ -21,6 +21,7 @@ class Device extends Model
     {
         return $this->belongsTo(Customers::class);
     }
+
     public function sensorzones()
     {
         return $this->hasMany(DeviceZones::class,  'device_id', 'id');

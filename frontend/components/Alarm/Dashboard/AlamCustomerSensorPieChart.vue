@@ -6,7 +6,7 @@
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 300px; margin: 0 auto; text-align: left"
+          style="width: 320px; height: 300px; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
     </v-row>
@@ -73,14 +73,14 @@ export default {
           margin: 0,
         },
 
-        colors: ["#02B64B", "#f44336", "#F4B400"],
+        colors: ["#00b0f0", "#843c0c", "#F4B400"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          height: 300,
+          height: 250,
           type: "donut",
         },
         customTotalValue: 0,
@@ -129,6 +129,7 @@ export default {
         legend: {
           align: "left",
           show: true,
+          style: "margin:10px",
           fontSize: "12px",
           formatter: (seriesName, opts) => {
             return `

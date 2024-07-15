@@ -33,7 +33,7 @@
           outlined
           dense
           label="Sensor Type"
-          :items="deviceTypes"
+          :items="SensorTypes"
           item-value="id"
           item-text="name"
         ></v-select>
@@ -145,6 +145,7 @@ export default {
   data() {
     return {
       deviceTypes: [],
+      SensorTypes: [],
       displayEditform: false,
       loading: false,
       device_info: false,
@@ -166,6 +167,9 @@ export default {
     }
     if (this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
       this.deviceTypes = this.$store.state.storeAlarmControlPanel.DeviceTypes;
+    }
+    if (this.$store.state.storeAlarmControlPanel?.SensorTypes) {
+      this.SensorTypes = this.$store.state.storeAlarmControlPanel.SensorTypes;
     }
     //this.addEarning();
     this.getInfo();

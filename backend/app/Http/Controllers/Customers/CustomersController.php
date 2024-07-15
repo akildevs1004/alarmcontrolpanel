@@ -531,6 +531,18 @@ class CustomersController extends Controller
         ];
         return $data;
     }
+
+    public function getSensorsList()
+    {
+        return  [
+
+            "Burglary",
+            "Medical",
+            "Fire",
+            "Water",
+            "Temperature",
+        ];
+    }
     // public function deviceTypes()
     // {
     //     $data = [
