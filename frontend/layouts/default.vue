@@ -1943,9 +1943,9 @@ button {
   font-size: 12px !important;
 } */
 
-.apexcharts-legend {
+/* .apexcharts-legend {
   top: -20px !important;
-}
+} */
 </style>
 
 <style>
