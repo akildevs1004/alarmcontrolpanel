@@ -27,7 +27,6 @@ const data = async ({ $auth, redirect }) => {
   if ($auth.user.role_id == 0 && user_type == "employee") {
     try {
       window.location.href = process.env.EMPLOYEE_APP_URL;
-      return "";
     } catch (e) {
       return redirect("logout");
     }
@@ -37,7 +36,6 @@ const data = async ({ $auth, redirect }) => {
   } else {
     return redirect("/dashboard");
   }
-
 };
 
 export default data;

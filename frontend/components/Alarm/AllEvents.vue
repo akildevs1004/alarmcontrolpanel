@@ -353,6 +353,20 @@ export default {
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
+
+    setTimeout(() => {
+      if (this.sensorItems.length == 0) {
+        this.$axios
+          .get(`sensor_types`, {
+            params: {
+              company_id: this.$auth.user.company_id,
+            },
+          })
+          .then(({ data }) => {
+            this.sensorItems = ["All", ...data];
+          });
+      }
+    }, 5000);
   },
 
   methods: {
@@ -373,15 +387,6 @@ export default {
           ...this.$store.state.storeAlarmControlPanel.SensorTypes,
         ];
       }
-      // this.$axios
-      //   .get(`sensors_types`, {
-      //     params: {
-      //       company_id: this.$auth.user.company_id,
-      //     },
-      //   })
-      //   .then(({ data }) => {
-      //     this.sensorItems = ["All", ...data];
-      //   });
     },
     addNotes(item) {
       this.eventId = item.id;
