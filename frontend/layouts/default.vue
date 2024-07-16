@@ -697,64 +697,23 @@ export default {
       seelctedBranchId: "",
       branch_id: "",
       menuProperties: {
-        dashboard: {
+        alarm_dashboard: {
           elevation: 0,
           selected: "",
         },
-        settings: {
+        alarm_map: {
           elevation: 0,
           selected: "",
         },
-        employees: {
+        alarm_alarms: {
           elevation: 0,
           selected: "",
         },
-        attendance: {
+        alarm_customers: {
           elevation: 0,
           selected: "",
         },
-        payroll: {
-          elevation: 0,
-          selected: "",
-        },
-        access_control: {
-          elevation: 0,
-          selected: "",
-        },
-        visitors: {
-          elevation: 0,
-          selected: "",
-        },
-        reports: {
-          elevation: 0,
-          selected: "",
-        },
-
-        profile_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        attendance_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        requests_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        announcements_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        payslips_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        schedule_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        community: {
+        alarm_reports: {
           elevation: 0,
           selected: "",
         },
@@ -817,7 +776,7 @@ export default {
     this.$store.commit("loginType", this.$auth.user.user_type);
     this.getCompanyDetails();
     this.setMenus();
-    this.setSubLeftMenuItems("dashboard", "/dashboard2", false);
+    this.setSubLeftMenuItems("alarm_dashboard", "/alarm/dashboard", false);
     this.logo_src = require("@/static/logo22.png");
     this.pendingNotificationsCount = 0;
   },
@@ -1168,13 +1127,28 @@ export default {
     goToSettings() {
       this.setSubLeftMenuItems("settings", "/branches");
     },
+
+    //change selected menu color
     setSubLeftMenuItems(menu_name, page, redirect = true) {
+      console.log("menu_name", menu_name);
+      console.log("menuProperties", this.menuProperties);
+
       this.topMenu_Selected = menu_name;
 
       let bgColor = "violet";
       this.setMenus();
 
-      // Check if menu_name exists in menuProperties
+      // Check if menu_name exists in menuProperties// data sesction
+      if (this.menuProperties.hasOwnProperty(menu_name)) {
+        for (const key in this.menuProperties) {
+          this.menuProperties[key].elevation = 0;
+          this.menuProperties[key].selected = "";
+        }
+
+        this.menuProperties[menu_name].elevation = 0;
+        this.menuProperties[menu_name].selected = bgColor;
+      }
+      //alarm menu select color
       if (this.menuProperties.hasOwnProperty(menu_name)) {
         for (const key in this.menuProperties) {
           this.menuProperties[key].elevation = 0;

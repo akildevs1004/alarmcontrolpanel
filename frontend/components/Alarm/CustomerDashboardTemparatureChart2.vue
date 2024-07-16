@@ -173,9 +173,6 @@ export default {
   created() {
     const today = new Date();
     this.date_from = today.toISOString().slice(0, 10);
-
-    console.log("from_date", this.from_date);
-    this.getTemparatureDevices();
   },
   mounted() {
     this.chartOptions.chart.height = this.height;
@@ -188,7 +185,6 @@ export default {
       }
     }, 1000 * 60 * 15);
 
-    console.log("Mounted");
     /// }, 2000);
 
     // this.$store.commit(

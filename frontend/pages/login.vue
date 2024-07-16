@@ -122,7 +122,7 @@
             </div>
             <h3 class="pb-7 pt-15">
               Welcome To
-              <span style="font-size: 20px"> Mytime2Cloud </span>
+              <span style="font-size: 20px"> Alarm Control Panel </span>
             </h3>
           </div>
           <div>
@@ -241,32 +241,26 @@
         class="hide-on-mobile d-none d-lg-flex"
       >
         <div class="about-content">
-          <h3>About Mytime2Cloud</h3>
+          <h3>About Alarm Control Panel</h3>
           <div style="font-weight: 300">
-            MyTime2Cloud is an innovative and comprehensive platform
-            meticulously crafted to redefine how organizations approach
-            workforce management. By combining time attendance management with
-            facial recognition access control, MyTime2Cloud simplifies and
-            provides a streamlined experience for both employees and HR
-            professionals.<br />
-            Customization and Reporting: The platform offers customizable
-            settings to fit the specific needs of different organizations. It
-            generates comprehensive reports and analytics based on attendance
-            data, enabling informed decision-making and efficient resource
-            allocation.
+            An Alarm Control Panel (ACP) is a central component in security
+            systems designed to monitor and control alarms for various
+            emergencies, including burglary, fire, smoke, medical issues, and
+            temperature-related incidents. Here's a brief overview of each
+            component and its function within the system
           </div>
           <h3 class="pt-10">Features</h3>
           <ul style="font-weight: 300">
-            <li>Employees management</li>
+            <li>Alarm Control Panel</li>
 
-            <li>Time Attendance</li>
-            <li>Leave management</li>
-            <li>Payroll management</li>
-            <li>Access Controll</li>
-            <li>Visitor management</li>
-            <li>Face Recognisation Integration</li>
-            <li>Custom Reports</li>
-            <li>Custom Dashboards</li>
+            <li>Burglary Alarm</li>
+            <li>Fire Alarm</li>
+            <li>Smoke Alarm</li>
+            <li>Medical Alarm</li>
+            <li>Temperature Sensor Alarm</li>
+            <li>24/7 Monitoring System</li>
+            <li>Integration and Automation</li>
+
             <li>Email and Whatsapp Notifications</li>
           </ul>
           <v-row class="text-left pt-10">
