@@ -243,30 +243,24 @@
         <div class="about-content">
           <h3>About Alarm Control Panel</h3>
           <div style="font-weight: 300">
-            Alarm Control Panel is an innovative and comprehensive platform
-            meticulously crafted to redefine how organizations approach
-            workforce management. By combining time attendance management with
-            facial recognition access control, Alarm Control Panel simplifies
-            and provides a streamlined experience for both employees and HR
-            professionals.<br />
-            Customization and Reporting: The platform offers customizable
-            settings to fit the specific needs of different organizations. It
-            generates comprehensive reports and analytics based on attendance
-            data, enabling informed decision-making and efficient resource
-            allocation.
+            An Alarm Control Panel (ACP) is a central component in security
+            systems designed to monitor and control alarms for various
+            emergencies, including burglary, fire, smoke, medical issues, and
+            temperature-related incidents. Here's a brief overview of each
+            component and its function within the system
           </div>
           <h3 class="pt-10">Features</h3>
           <ul style="font-weight: 300">
-            <li>Employees management</li>
+            <li>Alarm Control Panel</li>
 
-            <li>Time Attendance</li>
-            <li>Leave management</li>
-            <li>Payroll management</li>
-            <li>Access Controll</li>
-            <li>Visitor management</li>
-            <li>Face Recognisation Integration</li>
-            <li>Custom Reports</li>
-            <li>Custom Dashboards</li>
+            <li>Burglary Alarm</li>
+            <li>Fire Alarm</li>
+            <li>Smoke Alarm</li>
+            <li>Medical Alarm</li>
+            <li>Temperature Sensor Alarm</li>
+            <li>24/7 Monitoring System</li>
+            <li>Integration and Automation</li>
+
             <li>Email and Whatsapp Notifications</li>
           </ul>
           <v-row class="text-left pt-10">
