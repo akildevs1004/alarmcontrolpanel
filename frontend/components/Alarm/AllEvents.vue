@@ -39,7 +39,7 @@
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
-          <v-col cols="8" class="align-left"> </v-col>
+          <v-col cols="8" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
           <v-col cols="4" class="text-right" style="width: 450px">
             <v-row>
               <v-col cols="6"
@@ -333,7 +333,7 @@ export default {
     this.date_to = monthObj.last;
     //this.getDataFromApi();
 
-    if (this.$router.page == "alarm-alarm-events") {
+    if (this.$route.name == "alarm-alarm-events") {
       setInterval(() => {
         this.getDataFromApi();
       }, 1000 * 60);

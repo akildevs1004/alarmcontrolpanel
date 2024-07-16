@@ -357,8 +357,8 @@
             <v-img
               :title="item.device_type"
               v-if="item.device_type == 'Temperature'"
-              style="width: 30px"
-              src="/alarm-icons/fire.png"
+              style="width: 20px; margin-left: 5px"
+              src="/alarm-icons/temperature.png"
             >
             </v-img>
             <v-img
@@ -606,7 +606,7 @@ export default {
 
       { text: "Delay(Min)", value: "delay" },
       { text: "24 Hrs", value: "hrs_24" },
-      { text: "Sensor", value: "sensor" },
+      { text: "Sensor", value: "sensor", align: "center" },
       { text: "Temperature", value: "threshold_temperature" },
       { text: "Online", value: "status" },
       { text: "Armed", value: "armed", align: "center" },

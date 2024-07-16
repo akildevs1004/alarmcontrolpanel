@@ -113,7 +113,7 @@ class AlarmDeviceTemperatureLogsController extends Controller
             'date_from' => 'required|date|before_or_equal:date_to',
             'date_to' => 'required|date|after_or_equal:date_from',
             'company_id' => 'required|integer',
-            'customer_id' => 'required|integer'
+            'customer_id' => 'nullable|integer'
         ]);
 
         if ($request->has("date_from") && $request->has("date_to")) {
@@ -125,8 +125,9 @@ class AlarmDeviceTemperatureLogsController extends Controller
 
         foreach ($dateStrings as $date) {
             $logs = AlarmLogs::where('company_id', $request->company_id)
-                ->where('customer_id', $request->customer_id)
-                ->when($request->filled("serial_number"), fn ($q) => $q->when("serial_number", $request->serial_number))
+
+                ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id))
+                ->when($request->filled("serial_number"), fn ($q) => $q->where("serial_number", $request->serial_number))
                 ->whereBetween('log_time', [$date . ' 00:00:00', $date . ' 23:59:59'])
                 ->where('alarm_status', 1)
                 ->get();
