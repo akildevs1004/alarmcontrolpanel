@@ -127,7 +127,10 @@ export default {
       };
       let { data } = await this.$axios.get(`device-list`, config);
 
-      this.devices = [{ id: ``, name: "Select Device" }, ...data];
+      this.devices = [
+        // { id: ``, name: "Select Device" },
+        ...data,
+      ];
     },
 
     async getExistingPlottings() {

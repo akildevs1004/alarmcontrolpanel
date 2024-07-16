@@ -489,8 +489,8 @@ export default {
     start_date: "",
     end_date: "",
     payload_primary: {
-      attachment: "",
-
+      first_name: "",
+      last_name: "",
       phone1: "",
       phone2: "",
       office_phone: "",
@@ -498,8 +498,8 @@ export default {
       whatsapp: "",
     },
     payload_secondary: {
-      attachment: "",
-
+      first_name: "",
+      last_name: "",
       phone1: "",
       phone2: "",
       office_phone: "",
@@ -530,6 +530,17 @@ export default {
     this.preloader = false;
     // this.getBranchesList();
 
+    if (this.customer && this.customer.primary_contact) {
+      this.payload_primary = this.customer.primary_contact;
+      this.primary_previewImage = this.payload_primary.profile_picture;
+    }
+
+    if (this.customer && this.customer.secondary_contact) {
+      this.payload_primary = this.customer.secondary_contact;
+      this.primary_previewImage = this.payload_secondary.profile_picture;
+    }
+
+    return;
     if (this.customer) {
       this.payload_primary = this.customer.primary_contact;
       this.primary_previewImage = this.payload_primary.profile_picture;

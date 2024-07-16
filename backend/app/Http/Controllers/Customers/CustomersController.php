@@ -210,7 +210,7 @@ class CustomersController extends Controller
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
         $data["customer_id"] = $data1["customer_id"];
-        $data["address_type"] = $data1["address_type"];
+        $data["address_type"] = $data1["address_type"] ?? "building";
         $data["phone1"] = $data1["phone1"];
         $data["phone2"] = $data1["phone2"];
         $data["office_phone"] = $data1["office_phone"];
@@ -228,7 +228,7 @@ class CustomersController extends Controller
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
         $data["customer_id"] = $data1["customer_id"];
-        $data["address_type"] = $data1["address_type"];
+        $data["address_type"] = $data1["address_type"] ?? "secondary";
         $data["phone1"] = $data1["phone1"];
         $data["phone2"] = $data1["phone2"];
         $data["office_phone"] = $data1["office_phone"];
@@ -315,7 +315,7 @@ class CustomersController extends Controller
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
         $data["customer_id"] = $data1["customer_id"];
-        $data["address_type"] = $data1["address_type"];
+        $data["address_type"] = $data1["address_type"] ?? "primary";
         $data["phone1"] = $data1["phone1"];
         $data["phone2"] = $data1["phone2"];
         $data["office_phone"] = $data1["office_phone"];
