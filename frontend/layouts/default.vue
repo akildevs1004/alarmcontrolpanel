@@ -697,23 +697,23 @@ export default {
       seelctedBranchId: "",
       branch_id: "",
       menuProperties: {
-        dashboard: {
+        alarm_dashboard: {
           elevation: 0,
           selected: "",
         },
-        map: {
+        alarm_map: {
           elevation: 0,
           selected: "",
         },
-        alams: {
+        alarm_alarms: {
           elevation: 0,
           selected: "",
         },
-        customers: {
+        alarm_customers: {
           elevation: 0,
           selected: "",
         },
-        reports: {
+        alarm_reports: {
           elevation: 0,
           selected: "",
         },
@@ -776,7 +776,7 @@ export default {
     this.$store.commit("loginType", this.$auth.user.user_type);
     this.getCompanyDetails();
     this.setMenus();
-    this.setSubLeftMenuItems("dashboard", "/dashboard2", false);
+    this.setSubLeftMenuItems("alarm_dashboard", "/alarm/dashboard", false);
     this.logo_src = require("@/static/logo22.png");
     this.pendingNotificationsCount = 0;
   },
@@ -1124,13 +1124,28 @@ export default {
     goToSettings() {
       this.setSubLeftMenuItems("settings", "/branches");
     },
+
+    //change selected menu color
     setSubLeftMenuItems(menu_name, page, redirect = true) {
+      console.log("menu_name", menu_name);
+      console.log("menuProperties", this.menuProperties);
+
       this.topMenu_Selected = menu_name;
 
       let bgColor = "violet";
       this.setMenus();
 
-      // Check if menu_name exists in menuProperties
+      // Check if menu_name exists in menuProperties// data sesction
+      if (this.menuProperties.hasOwnProperty(menu_name)) {
+        for (const key in this.menuProperties) {
+          this.menuProperties[key].elevation = 0;
+          this.menuProperties[key].selected = "";
+        }
+
+        this.menuProperties[menu_name].elevation = 0;
+        this.menuProperties[menu_name].selected = bgColor;
+      }
+      //alarm menu select color
       if (this.menuProperties.hasOwnProperty(menu_name)) {
         for (const key in this.menuProperties) {
           this.menuProperties[key].elevation = 0;

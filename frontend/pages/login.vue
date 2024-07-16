@@ -241,7 +241,7 @@
         class="hide-on-mobile d-none d-lg-flex"
       >
         <div class="about-content">
-          <h3>About Mytime2Cloud</h3>
+          <h3>About Alarm Control Panel</h3>
           <div style="font-weight: 300">
             Alarm Control Panel is an innovative and comprehensive platform
             meticulously crafted to redefine how organizations approach

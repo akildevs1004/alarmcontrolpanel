@@ -3,35 +3,35 @@
     "icon": "mdi-home",
     "title": "Dashboard",
     "to": "/alarm/dashboard",
-    "menu": "dashboard",
+    "menu": "alarm_dashboard",
     "module": "topmenu"
   },
   {
     "icon": "mdi-clipboard-text-clock",
     "title": "Map",
-    "to": "/employees",
-    "menu": "map",
+    "to": "/alarm/map",
+    "menu": "alarm_map",
     "module": "topmenu"
   },
   {
     "icon": "mdi-clock-outline",
     "title": "Alarms",
     "to": "/alarm/allevents",
-    "menu": "alamrs",
+    "menu": "alarm_alamrs",
     "module": "topmenu"
   },
   {
     "icon": "mdi mdi-calendar-account",
     "title": "Customers",
     "to": "/alarm/customers",
-    "menu": "customers",
+    "menu": "alarm_customers",
     "module": "topmenu"
   },
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Reports",
     "to": "/timezone",
-    "menu": "reports",
+    "menu": "alarm_reports",
     "module": "topmenu"
   }
 ]
