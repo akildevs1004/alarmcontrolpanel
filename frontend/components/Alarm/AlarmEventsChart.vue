@@ -134,8 +134,8 @@ export default {
     // },
   },
   mounted() {
-    this.chartOptions2.chart.height = this.height;
-    this.chartOptions2.series = this.series;
+    // this.chartOptions2.chart.height = this.height;
+    // this.chartOptions2.series = this.series;
   },
   async created() {
     let today = new Date();
@@ -192,14 +192,14 @@ export default {
         },
       };
 
-      this.$axios
+      await this.$axios
         .get(`/alarm_logs_data_month_data`, options)
         .then(({ data }) => {
           this.renderChart2(data);
         });
     },
 
-    renderChart2(data) {
+    async renderChart2(data) {
       try {
         this.chartOptions2.chart.height = this.height;
 
@@ -253,10 +253,22 @@ export default {
         });
         this.loading = false;
 
-        new ApexCharts(
+        // await new ApexCharts(
+        //   document.querySelector("#" + this.name),
+        //   this.chartOptions2
+        // ).render();
+
+        // Destroy the existing chart instance if it exists
+        if (this.chart) {
+          this.chart.destroy();
+        }
+
+        // Render the chart
+        this.chart = await new ApexCharts(
           document.querySelector("#" + this.name),
           this.chartOptions2
-        ).render();
+        );
+        this.chart.render();
       } catch (error) {}
     },
   },

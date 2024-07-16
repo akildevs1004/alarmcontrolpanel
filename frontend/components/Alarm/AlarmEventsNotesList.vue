@@ -186,7 +186,7 @@ export default {
         { text: "Title", value: "title", sortable: false },
         { text: "Notes", value: "notes", sortable: false },
         { text: "Date", value: "date", sortable: false },
-        { text: "Options", value: "options", sortable: false },
+        ,
       ],
       items: [],
     };
@@ -206,6 +206,14 @@ export default {
       this.date_from = monthObj.first;
       this.date_to = monthObj.last;
       //this.getDataFromApi();
+
+      if (this.showOptions == "true") {
+        this.headers.push({
+          text: "Options",
+          value: "options",
+          sortable: false,
+        });
+      }
     }
   },
 

@@ -343,11 +343,6 @@
                 item.title
               }}</v-list-item-title>
             </v-list-item-content>
-            <!-- <v-list-item-title
-              style="cursor: pointer"
-              @click="goToPage(item.click)"
-              >{{ item.title }}
-            </v-list-item-title> -->
           </v-list-item>
         </v-list>
       </v-menu>
@@ -776,9 +771,11 @@ export default {
     this.$store.commit("loginType", this.$auth.user.user_type);
     this.getCompanyDetails();
     this.setMenus();
-    this.setSubLeftMenuItems("alarm_dashboard", "/alarm/dashboard", false);
+
     this.logo_src = require("@/static/logo22.png");
     this.pendingNotificationsCount = 0;
+
+    this.setTopmenuHilighter();
   },
 
   mounted() {
@@ -896,6 +893,35 @@ export default {
     },
   },
   methods: {
+    setTopmenuHilighter() {
+      console.log(this.$route.name);
+
+      const routeMap = {
+        "alarm-map": { name: "alarm_map", path: "/alarm/map" },
+        "alarm-allevents": {
+          name: "alarm_allevents",
+          path: "/alarm/allevents",
+        },
+        "alarm-reports": { name: "alarm_reports", path: "/alarm/reports" },
+        "alarm-customers": {
+          name: "alarm_customers",
+          path: "/alarm/customers",
+        },
+        "alarm-view-customer-id": {
+          name: "alarm_customers",
+          path: "/alarm/customers",
+        },
+      };
+
+      const defaultRoute = {
+        name: "alarm_dashboard",
+        path: "/alarm/dashboard",
+      };
+
+      const routeConfig = routeMap[this.$route.name] || defaultRoute;
+
+      this.setSubLeftMenuItems(routeConfig.name, routeConfig.path, false);
+    },
     async getBuildingTypes() {
       if (!this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
         const { data } = await this.$axios.get("building_types", {
@@ -1127,9 +1153,6 @@ export default {
 
     //change selected menu color
     setSubLeftMenuItems(menu_name, page, redirect = true) {
-      console.log("menu_name", menu_name);
-      console.log("menuProperties", this.menuProperties);
-
       this.topMenu_Selected = menu_name;
 
       let bgColor = "violet";

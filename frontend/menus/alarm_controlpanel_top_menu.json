@@ -17,7 +17,7 @@
     "icon": "mdi-clock-outline",
     "title": "Alarms",
     "to": "/alarm/allevents",
-    "menu": "alarm_alamrs",
+    "menu": "alarm_alarms",
     "module": "topmenu"
   },
   {
@@ -30,7 +30,7 @@
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Reports",
-    "to": "/timezone",
+    "to": "/alarm/reports",
     "menu": "alarm_reports",
     "module": "topmenu"
   }
