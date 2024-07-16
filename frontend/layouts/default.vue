@@ -701,60 +701,19 @@ export default {
           elevation: 0,
           selected: "",
         },
-        settings: {
+        map: {
           elevation: 0,
           selected: "",
         },
-        employees: {
+        alams: {
           elevation: 0,
           selected: "",
         },
-        attendance: {
-          elevation: 0,
-          selected: "",
-        },
-        payroll: {
-          elevation: 0,
-          selected: "",
-        },
-        access_control: {
-          elevation: 0,
-          selected: "",
-        },
-        visitors: {
+        customers: {
           elevation: 0,
           selected: "",
         },
         reports: {
-          elevation: 0,
-          selected: "",
-        },
-
-        profile_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        attendance_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        requests_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        announcements_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        payslips_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        schedule_topmenu: {
-          elevation: 0,
-          selected: "",
-        },
-        community: {
           elevation: 0,
           selected: "",
         },
