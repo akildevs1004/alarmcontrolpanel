@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 // Device
 Route::apiResource('device', DeviceController::class);
 Route::get('device-list', [DeviceController::class, 'dropdownList']);
+Route::get('sensor-list', [DeviceController::class, 'sensorList']);
 Route::get('device-mode-list', [DeviceController::class, 'modes']);
 
 

@@ -128,6 +128,15 @@
                       </v-list-item>
 
                       <v-list-item
+                        v-if="can('device_notification_contnet_view')"
+                       
+                      >
+                        <v-list-item-title style="cursor: pointer">
+                          <AlarmSensorPlotting :key="key" :item="item"/>
+                        </v-list-item-title>
+                      </v-list-item>
+
+                      <v-list-item
                         v-if="can('device_notification_contnet_delete')"
                         @click="deletePhoto(item.id)"
                       >
