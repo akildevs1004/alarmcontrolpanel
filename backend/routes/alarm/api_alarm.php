@@ -15,6 +15,7 @@ use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
+use App\Http\Controllers\PlottingController;
 use App\Models\Customers\Customers;
 use Illuminate\Support\Facades\Route;
 
@@ -82,3 +83,7 @@ Route::delete('delete-automation', [DeviceNotificationsManagersController::class
 
 Route::apiResource('customer_payments', CustomerPaymentsController::class);
 Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);
+
+
+Route::get('plotting', [PlottingController::class, "index"]);
+Route::post('plotting', [PlottingController::class, "store"]);

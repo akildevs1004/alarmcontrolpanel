@@ -358,7 +358,7 @@ export default {
       },
       {
         text: "Customer",
-        value: "customer",
+        value: "primary_contact.first_name",
       },
       {
         text: "Burglary",

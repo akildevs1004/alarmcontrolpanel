@@ -462,10 +462,10 @@
                   </div>
                   <div class="bold pa-1">Device Name :{{ device.name }}</div>
                   <div class="bold pa-1">
-                    Branch Name :{{ device.branch.branch_name }}
+                    Branch Name :{{ device?.branch?.branch_name }}
                   </div>
                   <div class="bold pa-1">
-                    Device Location :{{ device.branch.location }}
+                    Device Location :{{ device?.branch?.location }}
                   </div>
                 </v-col>
               </v-row>
@@ -869,24 +869,27 @@ export default {
     },
 
     getLogo() {
-      let logosrc = "/no-image.PNG";
+      const { user } = this.$auth;
 
-      if (
-        this.$auth.user &&
-        this.$auth.user.user_type == "company" &&
-        this.$auth.user.company.logo
-      ) {
-        logosrc = this.$auth.user.company.logo || "/no-image.PNG";
-      } else if (this.$auth.user && this.$auth.user.user_type == "master") {
-        logosrc = "/no-image.PNG";
-      } else if (this.$auth.user && this.$auth.user.user_type == "employee") {
-        logosrc =
-          this.$auth.user.employee.profile_picture || "/no-profile-image.jpg";
-      } else if (this.$auth.user && this.$auth.user.user_type == "branch") {
-        logosrc = this.$auth.user.branch_logo || "/no-profile-image.jpg";
+      if (!user) {
+        return "/no-image.PNG";
       }
 
-      return logosrc;
+      const defaultLogo = "/no-image.PNG";
+      const profilePicture = "/no-profile-image.jpg";
+
+      switch (user.user_type) {
+        case "company":
+          return user.company?.logo || defaultLogo;
+        case "master":
+          return defaultLogo;
+        case "employee":
+          return user.employee?.profile_picture || profilePicture;
+        case "branch":
+          return user.branch_logo || profilePicture;
+        default:
+          return defaultLogo;
+      }
     },
     getLoginType() {
       return this.$auth.user.user_type || "company";
