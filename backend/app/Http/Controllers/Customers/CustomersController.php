@@ -599,4 +599,13 @@ class CustomersController extends Controller
 
         ];
     }
+
+    public function customersForMap(Request $request)
+    {
+        $model = Customers::with(["latest_alarm_event", "alarm_events", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where("company_id", $request->company_id);
+
+        $model->when($request->filled("customer_id"), fn ($q) => $q->where("id", $request->customer_id));
+
+        return $model->orderByDesc('id')->paginate($request->perPage);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Customers;
 
+use App\Models\AlarmEvents;
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,17 @@ class Customers extends Model
     {
         return $this->hasOne(CustomerContacts::class, "customer_id", "id")->where("address_type", "secondary");
     }
+
+    public function alarm_events()
+    {
+        return $this->hasMany(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1)->latest();
+    }
+
+    public function latest_alarm_event()
+    {
+        return $this->hasOne(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1)->latest();
+    }
+
     public function getProfilePictureAttribute($value)
     {
         if (!$value) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlarmEvents;
 use App\Models\Plotting;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,9 +11,34 @@ class PlottingController extends Controller
 {
     public function index()
     {
-        return Plotting::where("customer_building_picture_id", request("customer_building_picture_id"))->first();
-    }
+        $customerBuildingPictureId = request("customer_building_picture_id");
 
+        // Retrieve the model
+        $model = Plotting::where("customer_building_picture_id", $customerBuildingPictureId)->first();
+
+        if (!$model || !isset($model->plottings)) {
+            return $model;
+        }
+        // Decode the plottings JSON field
+        $plottings = $model->plottings;
+
+        // Collect unique sensor IDs to minimize queries
+        $sensorIds = collect($plottings)->pluck('sensor_id')->unique();
+
+        // Fetch alarm events for these sensor IDs
+        $alarmEvents = AlarmEvents::whereIn('zone', $sensorIds)->where("alarm_status", 1)->get()->keyBy('zone');
+
+        // Map plottings to include alarm events
+        $plottings = collect($plottings)->map(function ($plotting) use ($alarmEvents) {
+            $plotting['alarm_event'] = $alarmEvents->get($plotting['sensor_id']);
+            return $plotting;
+        });
+
+        // Encode the plottings back to JSON
+        $model->plottings = $plottings;
+
+        return $model;
+    }
     public function store(Request $request)
     {
         $data = $request->validate([
