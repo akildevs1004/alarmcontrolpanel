@@ -123,9 +123,9 @@
       >
         <img
           class="logo-image"
-          title="My Time Cloud "
+          title="Alarm Control Panel - Xtremeguard"
           :src="logo_src"
-          style="width: 150px"
+          style="width: 150px !important"
         />
       </span>
       <v-spacer></v-spacer>
@@ -772,7 +772,7 @@ export default {
     this.getCompanyDetails();
     this.setMenus();
 
-    this.logo_src = require("@/static/logo22.png");
+    this.logo_src = require("@/static/logo_header.png");
     this.pendingNotificationsCount = 0;
 
     this.setTopmenuHilighter();
