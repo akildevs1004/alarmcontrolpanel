@@ -124,7 +124,7 @@ class CustomerSeeder extends Seeder
         $contact = [];
         $contact["company_id"] = $this->CompanyId;
         $contact["customer_id"] = $this->customer_id;
-        $contact["name"] = $this->faker->word; // should be device_name
+        $contact["name"] = "Test Device";
         $contact["device_id"] = substr($this->faker->uuid, 0, 8); // should be device_id
         $contact["serial_number"] = substr($this->faker->uuid, 0, 8); // should be device_id
         $contact["device_type"] = Arr::random($this->getDeviceTypes());
