@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="text-center ma-2">
-      <v-snackbar v-model="snackbar" top="top" elevation="24">
+      <v-snackbar :timeout="3000" v-model="snackbar" top="top" elevation="24">
         {{ response }}
       </v-snackbar>
     </div>
