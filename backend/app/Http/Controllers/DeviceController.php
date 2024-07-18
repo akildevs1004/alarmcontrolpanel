@@ -49,9 +49,7 @@ class DeviceController extends Controller
 
     public function sensorList()
     {
-        $model = DeviceZones::query();
-        $model->when(count(request('device_ids')) > 0, fn ($q) =>  $q->whereIn('device_id', request('device_ids')));
-        return $model->get(["id", "sensor_name as label", "device_id"]);
+        return DeviceZones::whereIn('device_id', request('device_ids', []))->get(["id", "sensor_name as label", "device_id"]);
     }
 
     public function index(Request $request)

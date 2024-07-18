@@ -270,4 +270,68 @@ export default ({ app }, inject) => {
       );
     },
   });
+
+  inject("utils", {
+    getRelaventBuildingType(id) {
+      let relaventImage = {
+        1: "Commercial",
+        2: "Residencial",
+        3: "Semi Commercial",
+        4: "Inventory",
+      };
+      return relaventImage[id] ?? "Unknwon";
+    },
+    getRelaventMarkers(alarm) {
+      let relaventImage = {
+        Burglary: "/location-icons/burglary_green.png",
+        Medical: "/location-icons/temperature_green.png",
+        Fire: "/location-icons/medical_green.png",
+        Water: "/location-icons/fire_green.png",
+        Temperature: "/location-icons/water_green.png",
+      };
+
+      // Get the image URL based on the alarm key, if exists
+      let selectedImage = relaventImage[alarm];
+
+      // If the alarm type is unknown, randomly select an image from the available options
+      if (!selectedImage) {
+        const imageLinks = Object.values(relaventImage);
+        selectedImage = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+      }
+
+      return selectedImage;
+    },
+    
+    getRelaventImage(alarm) {
+      let relaventImage = {
+        Burglary: "/device-icons/burglary.png",
+        Medical: "/device-icons/temperature.png",
+        Fire: "/device-icons/medical.png",
+        Water: "/device-icons/fire.png",
+        Temperature: "/device-icons/water.png",
+      };
+      // Get the image URL based on the alarm key, if exists
+      let selectedImage = relaventImage[alarm];
+
+      // If the alarm type is unknown, randomly select an image from the available options
+      if (!selectedImage) {
+        const imageLinks = Object.values(relaventImage);
+        selectedImage = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+      }
+
+      return selectedImage;
+
+    },
+    getRelaventCategoryColor(category) {
+      let relaventImage = {
+        Critical: "red",
+        Low: "primary",
+        High: "",
+        Medium: "orange",
+      };
+      return relaventImage[category] ?? "grey";
+    },
+  });
+
+
 };

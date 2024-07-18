@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
     {
 
         // Production
-        // $this->call([MasterSeeder::class]);
+        $this->call([CompanySeeder::class]);
         $this->call([PermissionSeeder::class]);
         $this->call([ModuleSeeder::class]);
         $this->call([ShiftTypeTableSeeder::class]);

@@ -17,6 +17,7 @@ use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\PlottingController;
 use App\Models\Customers\Customers;
+use App\Models\MapKey;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('customers', CustomersController::class);
+Route::get('customers-for-map', [CustomersController::class, "customersForMap"]);
 
 //customer
 
@@ -95,3 +97,9 @@ Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);
 
 Route::get('plotting', [PlottingController::class, "index"]);
 Route::post('plotting', [PlottingController::class, "store"]);
+
+
+
+Route::get('get-map-key', function () {
+    return MapKey::where("isActive", 1)->value("key");
+});

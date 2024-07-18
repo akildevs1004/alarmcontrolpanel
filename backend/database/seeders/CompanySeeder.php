@@ -20,12 +20,14 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
+        
+
         $role = Role::firstOrCreate(['name' => 'company']);
 
         $user = User::create([
-            'name' => "demo company account",
-            'password' => Hash::make("secret"),
-            'email' => "company1@hrms.com",
+            'name' => "admin",
+            'password' => Hash::make("admin"),
+            'email' => "admin",
             'role_id' => $role->id,
             'is_master' => 1,
         ]);

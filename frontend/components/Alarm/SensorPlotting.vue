@@ -35,7 +35,11 @@
                     draggable="true"
                     @dragstart="dragStart($event, index)"
                   >
+                    <v-icon v-if="plotting.alarm_event" class="alarm">
+                      mdi-alarm-light
+                    </v-icon>
                     <v-img
+                      v-else
                       draggable="true"
                       @dragstart="dragStart($event, index)"
                       style="width: 23px"
@@ -123,7 +127,10 @@ export default {
     },
     async getDevices() {
       let config = {
-        params: { company_id: this.$auth.user.company_id },
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.item.customer_id,
+        },
       };
       let { data } = await this.$axios.get(`device-list`, config);
 
