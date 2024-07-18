@@ -11,10 +11,13 @@ use Faker\Factory as Faker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
+use function Termwind\ask;
+
 class CustomerSeeder extends Seeder
 {
     protected $faker;
     protected $customer_id;
+    protected $CompanyId;
 
     /**
      * Run the database seeds.
@@ -30,6 +33,8 @@ class CustomerSeeder extends Seeder
         // }
 
         $this->faker = Faker::create();
+
+        $this->CompanyId = 8;
 
         $CustomerLoopCount = 1;
         $DeviceLoopCount = 1;
@@ -47,7 +52,7 @@ class CustomerSeeder extends Seeder
             $location = $this->getRandomLocationsWithLatLon();
 
             $customer = Customers::create([
-                'company_id' => 1,
+                'company_id' => $this->CompanyId,
                 'start_date' => $this->faker->date,
                 'end_date' => $this->faker->date,
                 'email' => $this->faker->unique()->safeEmail,
@@ -85,7 +90,7 @@ class CustomerSeeder extends Seeder
                         "area_code" =>  substr($this->faker->uuid, 0, 6),
                         "zone_code" => Arr::random([1, 10]),
                         "device_id" => $device->id,
-                        "company_id" => 1,
+                        "company_id" => $this->CompanyId,
                         "delay" =>  0,
                         "hours24" => "Yes",
                     ];
@@ -99,7 +104,7 @@ class CustomerSeeder extends Seeder
     public function getContact($address_type)
     {
         $contact = [];
-        $contact["company_id"] = 1;
+        $contact["company_id"] = $this->CompanyId;
         $contact["customer_id"] = $this->customer_id;
         $contact["email"] = $this->faker->unique()->safeEmail;
         $contact["first_name"] = $this->faker->firstName;
@@ -117,7 +122,7 @@ class CustomerSeeder extends Seeder
     public function getDevice()
     {
         $contact = [];
-        $contact["company_id"] = 1;
+        $contact["company_id"] = $this->CompanyId;
         $contact["customer_id"] = $this->customer_id;
         $contact["name"] = $this->faker->word; // should be device_name
         $contact["device_id"] = substr($this->faker->uuid, 0, 8); // should be device_id
