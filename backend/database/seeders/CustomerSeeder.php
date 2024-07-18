@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\AlarmEvents;
+use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
@@ -10,8 +12,6 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-
-use function Termwind\ask;
 
 class CustomerSeeder extends Seeder
 {
@@ -34,7 +34,7 @@ class CustomerSeeder extends Seeder
 
         $this->faker = Faker::create();
 
-        $this->CompanyId = 8;
+        $this->CompanyId = 1;
 
         $CustomerLoopCount = 1;
         $DeviceLoopCount = 1;
@@ -44,8 +44,10 @@ class CustomerSeeder extends Seeder
 
         // Customers::truncate();
         // CustomerContacts::truncate();
+        // CustomerBuildingPictures::truncate();
         // Device::truncate();
         // DeviceZones::truncate();
+        // AlarmEvents::truncate();
 
         foreach (range(1, $CustomerLoopCount) as $_) {
 
@@ -79,6 +81,14 @@ class CustomerSeeder extends Seeder
                 $this->getContact("secondary"),
             ]);
 
+            CustomerBuildingPictures::create([
+                'company_id' => $this->CompanyId,
+                'customer_id' => $customer->id,
+                'title' => "Test",
+                'display_order' => 0,
+                'picture' => "dummy-floor-plan.png",
+            ]);
+
             foreach (range(1, $DeviceLoopCount) as $key => $value) {
                 $device = Device::create($this->getDevice());
 
@@ -97,6 +107,19 @@ class CustomerSeeder extends Seeder
 
                     DeviceZones::create($deviceZone);
                 }
+
+                $data = [
+                    "company_id" => $this->CompanyId,
+                    "serial_number" => $device->device_id,
+                    "alarm_start_datetime" => date("Y-m-d H:i:s"),
+                    "customer_id" => $customer->id,
+                    "zone" => Arr::random(DeviceZones::pluck("id")->toArray()),
+                    "area" => "test",
+                    "alarm_type" => Arr::random($DeviceZones),
+                    "alarm_status" => 1,
+                ];
+
+                AlarmEvents::create($data);
             }
         }
     }
@@ -139,9 +162,6 @@ class CustomerSeeder extends Seeder
 
         return $contact;
     }
-
-
-
 
     public function getTimezones()
     {

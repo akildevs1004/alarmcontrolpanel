@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Reports\ReportController;
-
+use App\Models\AlarmEvents;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 
@@ -328,5 +328,36 @@ class TestController extends Controller
         //     ->get();
         // ld($data);
         // return Pdf::loadView('pdf.mimo', compact("company", "info", "data"))->stream();
+    }
+
+    public function AlarmEvent(Request $request)
+    {
+        $data = $request->validate([
+            "company_id" => "required|integer",
+            "serial_number" => "required",
+            "alarm_start_datetime" => "nullable",
+            "customer_id" => "required|integer",
+            "sensor_id" => "required|integer",
+            "area" => "nullable",
+            "alarm_type" => "nullable",
+            "alarm_status" => "required|integer",
+        ]);
+
+        $data = [
+            "company_id" => $data["company_id"],
+            "serial_number" => $data["serial_number"],
+            "alarm_start_datetime" => date("Y-m-d H:i:s"),
+            "customer_id" => $data["customer_id"],
+            "zone" => $data["sensor_id"],
+            "area" => "test",
+            "alarm_type" => "---",
+            "alarm_status" => 1,
+        ];
+
+        try {
+            return AlarmEvents::create($data);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

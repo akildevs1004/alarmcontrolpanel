@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-centers">
     <v-dialog v-model="dialog" width="1100">
       <template v-slot:activator="{ on, attrs }">
         <v-icon color="secondary" small v-bind="attrs" v-on="on">

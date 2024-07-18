@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('customers', CustomersController::class);
 Route::get('customers-for-map', [CustomersController::class, "customersForMap"]);
+Route::get('customers-all', [CustomersController::class, "customersAll"]);
 
 //customer
 

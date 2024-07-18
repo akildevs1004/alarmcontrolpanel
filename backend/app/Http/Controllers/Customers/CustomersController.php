@@ -608,4 +608,11 @@ class CustomersController extends Controller
 
         return $model->orderByDesc('id')->paginate($request->perPage);
     }
+
+    public function customersAll()
+    {
+        $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"]);
+
+        return $model->orderByDesc('id')->get();
+    }
 }

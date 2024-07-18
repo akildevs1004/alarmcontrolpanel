@@ -969,3 +969,7 @@ Route::post('/ardino_testing', function (Request $request) {
             'json_content' => $requstJson,
         ]);
 });
+
+
+// Francis
+Route::post("test-alarm-event", [TestController::class, "AlarmEvent"]);

@@ -106,7 +106,7 @@
                         <v-icon>mdi-dots-vertical</v-icon>
                       </v-btn>
                     </template>
-                    <v-list width="120" dense>
+                    <v-list width="150" dense>
                       <v-list-item
                         v-if="can('device_notification_contnet_view')"
                         @click="viewPhoto(item)"
