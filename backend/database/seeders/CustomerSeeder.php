@@ -29,16 +29,16 @@ class CustomerSeeder extends Seeder
 
         $this->faker = Faker::create();
 
-        $CustomerLoopCount = 10;
-        $DeviceLoopCount = 10;
+        $CustomerLoopCount = 1;
+        $DeviceLoopCount = 1;
         $DeviceZones = [
             "Burglary", "Medical", "Temperature", "Water", "Fire"
         ];
 
-        Customers::truncate();
-        CustomerContacts::truncate();
-        Device::truncate();
-        DeviceZones::truncate();
+        // Customers::truncate();
+        // CustomerContacts::truncate();
+        // Device::truncate();
+        // DeviceZones::truncate();
 
         foreach (range(1, $CustomerLoopCount) as $_) {
 
@@ -194,7 +194,10 @@ class CustomerSeeder extends Seeder
 
     public function getDeviceTypes()
     {
-        return ["Control Panel", "Burglary", "Medical", "Temperature", "Water", "Humidity", "Fire"];
+        return [
+            "Control Panel",
+            // "Burglary", "Medical", "Temperature", "Water", "Humidity", "Fire"
+        ];
     }
 
     public function getLocations()
