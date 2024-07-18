@@ -10,7 +10,7 @@
       <v-col lg="3" md="3" sm="12" xs="12">
         <AlarmDashboardTemparatureChart1
           :key="key"
-          :name="'AlarmDashboardTemparatureChart1'"
+          :name="'AlarmDashboardTemparatureChart1Customer1'"
           :height="'130'"
           :temperature_latest="temperature_latest"
           :temperature_date_time="temperature_date_time"
@@ -19,7 +19,7 @@
       <v-col lg="3" md="3" sm="12" xs="12">
         <AlarmDashboardHumidityChart1
           :key="keyTemperature"
-          :name="'AlarmDashboardHumidityChart1'"
+          :name="'AlarmDashboardHumidityChart1Customer1'"
           :height="'130'"
           :humidity_latest="humidity_latest"
           :humidity_date_time="humidity_date_time"
@@ -28,7 +28,7 @@
 
       <v-col lg="6" md="6" sm="12" xs="12">
         <AlarmDashboardTemparatureChart2
-          :name="'AlarmDashboardTemparatureChart2'"
+          :name="'AlarmDashboardTemparatureChart2Customer1'"
           :height="'115'"
           :device_serial_number="device_serial_number"
           :customer_id="customer_id"
@@ -38,7 +38,7 @@
     </v-row>
     <v-col lg="12" md="12" sm="12" xs="12" class="mt-5" style="padding: 3px">
       <AlarmEventsChart
-        :name="'AlarmEventsChart'"
+        :name="'AlarmEventsChartCustomer1'"
         :height="'300'"
         :device_serial_number="device_serial_number"
         :customer_id="customer_id"

@@ -108,7 +108,7 @@
           "
         >
           <div style="min-height: 100px">
-            <div style="width: 100%" class="text-center">
+            <div style="width: 100%; height: 150px" class="text-center">
               <v-img
                 class="text-center"
                 style="
@@ -247,7 +247,7 @@
             systems designed to monitor and control alarms for various
             emergencies, including burglary, fire, smoke, medical issues, and
             temperature-related incidents. Here's a brief overview of each
-            component and its function within the system
+            component and its function within the system.
           </div>
           <h3 class="pt-10">Features</h3>
           <ul style="font-weight: 300">

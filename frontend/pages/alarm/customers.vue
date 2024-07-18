@@ -6,7 +6,11 @@
       </v-snackbar>
     </div>
     <v-dialog v-model="dialogViewCustomer" width="110%">
-      <AlarmCustomerView @closeCustomerDialog="closeCustomerDialog" />
+      <AlarmCustomerView
+        @closeCustomerDialog="closeCustomerDialog"
+        :_id="viewCustomerId"
+        :isPopup="true"
+      />
       <!--<v-card>
        <v-card-title dark class="popup_background_noviolet">
           <span dense> New Customer</span>
@@ -256,15 +260,15 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <!-- <v-list-item
+                  <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-eye </v-icon>
-                      View
+                      Popup
                     </v-list-item-title>
-                  </v-list-item> -->
+                  </v-list-item>
                   <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
@@ -313,6 +317,7 @@ export default {
     AlarmCustomerView,
   },
   data: () => ({
+    viewCustomerId: null,
     commonSearch: "",
     perPage: 10,
     cumulativeIndex: 1,
@@ -541,6 +546,7 @@ export default {
       //   });
     },
     viewItem(item) {
+      this.viewCustomerId = item.id;
       this.dialogViewCustomer = true;
     },
     viewItem2(item) {

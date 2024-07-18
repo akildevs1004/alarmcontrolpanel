@@ -1,12 +1,12 @@
 <template>
-  <div style="padding: 0px; width: 100%; height: auto">
+  <div style="padding: 0px; width: 100%">
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
         <div
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 320px; height: 300px; margin: 0 auto; text-align: left"
+          style="width: 320px; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
     </v-row>
