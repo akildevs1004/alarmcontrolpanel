@@ -36,14 +36,23 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogViewCustomer" width="110%">
+      <AlarmCustomerView
+        @closeCustomerDialog="closeCustomerDialog()"
+        :_id="viewCustomerId"
+        :isPopup="true"
+      />
+    </v-dialog>
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col cols="12" class="text-right" style="padding-top: 0px; z-index: 9">
         <v-row>
-          <v-col cols="8" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
-          <v-col cols="4" class="text-right" style="width: 450px">
+          <v-col cols="4" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
+          <v-col cols="8" class="text-right" style="width: 600px">
             <v-row>
-              <v-col cols="6"
-                ><v-text-field
+              <v-col cols="4"></v-col>
+
+              <v-col cols="3">
+                <v-text-field
                   style="padding-top: 7px"
                   width="150px"
                   height="20"
@@ -59,14 +68,32 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="6">
+              <v-col cols="2"
+                ><v-select
+                  class="employee-schedule-search-box"
+                  style="padding-top: 7px; z-index: 999; width: 150px"
+                  height="20px"
+                  outlined
+                  @change="getDataFromApi()"
+                  v-model="filterAlarmStatus"
+                  dense
+                  :items="[
+                    { id: null, name: 'All Events' },
+                    { id: 1, name: 'Alarm ON' },
+                    { id: 0, name: 'Alarm OFF' },
+                  ]"
+                  item-text="name"
+                  item-value="id"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
                 <CustomFilter
-                  style="float: right; padding-top: 5px; z-index: 9999"
+                  style="float: left; padding-top: 5px; z-index: 999"
                   @filter-attr="filterAttr"
                   :default_date_from="date_from"
                   :default_date_to="date_to"
                   :defaultFilterType="1"
-                  :height="'40px'"
+                  :height="'60px'"
               /></v-col>
             </v-row>
           </v-col>
@@ -74,7 +101,10 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="sensorItems.length == 0" class="text-center">
+      <v-col cols="12" class="text-center"> No Data is available</v-col>
+    </v-row>
+    <v-row v-if="sensorItems.length > 0">
       <v-col cols="12">
         <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
           <v-tab v-for="item in sensorItems" :key="item">
@@ -111,7 +141,7 @@
                     v-slot:item.building="{ item, index }"
                     style="width: 300px"
                   >
-                    <v-row no-gutters>
+                    <v-row no-gutters @click="viewCustomerinfo(item)">
                       <v-col
                         style="
                           padding: 5px;
@@ -244,24 +274,26 @@
         </v-tabs-items>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col> </v-col>
-    </v-row>
   </div>
 </template>
 
 <script>
 // import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
+import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 
 export default {
   components: {
     // EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
+    AlarmCustomerView,
   },
   props: ["showFilters"],
   data() {
     return {
+      dialogViewCustomer: false,
+      viewCustomerId: null,
+      filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -355,11 +387,26 @@ export default {
           });
       }
     }, 5000);
+
+    setInterval(() => {
+      if (
+        this.$route.name == "alarm-dashboard" ||
+        this.$route.name == "alarm-allevents"
+      )
+        this.getDataFromApi();
+    }, 1000 * 60);
   },
 
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    closeCustomerDialog() {
+      this.dialogViewCustomer = false;
+    },
+    viewCustomerinfo(item) {
+      this.viewCustomerId = item.customer_id;
+      this.dialogViewCustomer = true;
     },
     viewNotes(item) {
       this.key = this.key + 1;
@@ -449,6 +496,16 @@ export default {
       }
     },
     getDataFromApi() {
+      // console.log(
+      //   "this.$route.query.alarm_status",
+      //   this.$route.query.alarm_status
+      // );
+      // if (this.$route.query.alarm_status) {
+      //   this.filterAlarmStatus = parseInt(this.$route.query.alarm_status);
+      //   this.date_from = null;
+      //   this.date_to = null;
+      // }
+
       this.loading = true;
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -471,6 +528,7 @@ export default {
           date_to: this.date_to,
           common_search: this.commonSearch,
           tab: this.tab,
+          alarm_status: this.filterAlarmStatus,
           filterSensorname: this.tab > 0 ? this.sensorItems[this.tab] : null,
         },
       };

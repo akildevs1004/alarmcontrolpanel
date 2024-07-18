@@ -39,6 +39,8 @@ Route::apiResource('customers_building_picture', CustomerBuildingPicturesControl
 Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
+Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
+
 
 
 //Devices
@@ -73,6 +75,12 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
+
+Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);
+
+
+
+
 Route::get('get_alarm_events_notes', [CustomerAlarmEventsController::class, 'getAlarmEventsNotes']);
 
 Route::post('customer_add_event_notes', [CustomerAlarmEventsController::class, "createEventNotes"]);

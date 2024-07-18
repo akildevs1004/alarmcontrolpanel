@@ -474,6 +474,7 @@ class CustomersController extends Controller
             throw $th;
         }
     }
+
     public function buildingTypes()
     {
         $data = [
@@ -512,6 +513,14 @@ class CustomersController extends Controller
 
         ];
         return $data;
+    }
+    public function getCustomersList(Request $request)
+    {
+        $model = Customers::where("company_id", $request->company_id);
+
+
+
+        return $model->orderByDesc('building_name')->get();;
     }
     public function deviceTypes()
     {

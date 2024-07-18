@@ -89,7 +89,7 @@ export default {
     // this.date_from = monthObj.first;
     // this.date_to = monthObj.last;
     // //this.getDataFromApi();
-    // if (this.$router.page == "alarm-alarm-events") {
+    // if (this.$route.name == "alarm-alarm-events") {
     //   setInterval(() => {
     //     this.getDataFromApi();
     //   }, 1000 * 60);

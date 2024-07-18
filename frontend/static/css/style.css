@@ -12834,6 +12834,10 @@ body {
     opacity: 0;
   }
 }
+.alarm-popup-header  
+{
+  height: 34px!important;
+}
 
 /* 9. header */
 .header {

@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <div class="text-center ma-2">
+      <v-snackbar :timeout="3000" v-model="snackbar" top="top" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -238,7 +243,74 @@
       </span>
 
       <v-spacer></v-spacer>
-
+      <v-menu
+        style="z-index: 9999 !important"
+        bottom
+        origin="center center"
+        offset-y
+        transition="scale-transition"
+      >
+        <template
+          v-slot:activator="{ on, attrs }"
+          style="z-index: 9999 !important"
+        >
+          <v-btn icon dark v-bind="attrs" v-on="on">
+            <v-badge
+              :color="pendingNotificationsCount > 0 ? 'red' : 'green'"
+              :content="
+                pendingNotificationsCount == ''
+                  ? '0'
+                  : pendingNotificationsCount
+              "
+              style="top: 10px; left: -19px"
+            >
+              <v-icon style="top: -10px; left: 10px" class="violet--text"
+                >mdi mdi-bell-ring</v-icon
+              >
+            </v-badge>
+          </v-btn>
+        </template>
+        <v-list style="z-index: 9999">
+          <v-list-item
+            style="height: 30px; padding-left: 5px"
+            :class="
+              notificationsMenuItems.length > 0 &&
+              index > notificationsMenuItems.length - 1
+                ? 'border-bottom'
+                : ''
+            "
+            @click="showPopupAlarmStatus()"
+            v-for="(item, index) in notificationsMenuItems"
+            :key="index"
+          >
+            <v-list-item-content>
+              <v-list-item-title class="black--text align-left text-left">
+                <v-row>
+                  <v-col cols="2" class="align-right text-right pr-1"
+                    ><img
+                      :src="'/device-icons/' + item.icon"
+                      style="width: 20px; vertical-align: middle"
+                  /></v-col>
+                  <v-col cols="10">
+                    <span style="font-size: 14px">
+                      <span
+                        >{{ item.title }}
+                        <div class="secondary-value">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              item.alarm_start_datetime
+                            )
+                          }}
+                        </div></span
+                      >
+                    </span>
+                  </v-col>
+                </v-row>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-menu
         nudge-bottom="50"
         transition="scale-transition"
@@ -304,48 +376,6 @@
           >mdi-cog</v-icon
         ></v-btn
       > -->
-
-      <v-menu
-        bottom
-        origin="center center"
-        offset-y
-        transition="scale-transition"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon dark v-bind="attrs" v-on="on">
-            <v-badge
-              :color="pendingNotificationsCount > 0 ? 'red' : 'green'"
-              :content="
-                pendingNotificationsCount == ''
-                  ? '0'
-                  : pendingNotificationsCount
-              "
-              style="top: 10px; left: -19px"
-            >
-              <v-icon style="top: -10px; left: 10px" class="violet--text"
-                >mdi mdi-bell-ring</v-icon
-              >
-            </v-badge>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            style="height: 30px"
-            @click="goToPage(item.click)"
-            v-for="(item, index) in notificationsMenuItems"
-            :key="index"
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="black--text">{{
-                item.title
-              }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
 
       <!-- <v-menu
         bottom
@@ -425,30 +455,32 @@
         </v-card>
       </v-dialog>
       <v-dialog
-        v-model="alarmNotificationStatus"
+        v-model="alarmPopupNotificationStatus"
         transition="dialog-top-transition"
-        max-width="800"
+        max-width="1000"
       >
         <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
         </template> -->
         <template v-slot:default="dialog">
-          <v-card>
-            <v-toolbar
-              color="error"
+          <v-card style="z-index: 9999">
+            <v-card-title
+              class="error alarm-popup-header"
+              background-color="error"
               style="
                 text-align: center;
                 padding-left: 35%;
                 color: #fff !important;
               "
-              >Attention :Fire Alarm Notification
+              >Attention : Alarm Notification(s)
               <v-spacer></v-spacer>
-              <v-icon color="white" @click="alarmNotificationStatus = false"
+              <v-icon color="white" @click="wait5MinutesNextNotification()"
                 >mdi-close-circle-outline</v-icon
               >
-            </v-toolbar>
+            </v-card-title>
             <v-card-text>
-              <v-row
+              <AlarmPopupAllAlarmEvents :alarm_icons="alarm_icons" />
+              <!-- <v-row
                 v-for="(device, index) in notificationAlarmDevices"
                 :key="index"
               >
@@ -468,28 +500,28 @@
                     Device Location :{{ device?.branch?.location }}
                   </div>
                 </v-col>
-              </v-row>
+              </v-row> 
 
-              <div></div>
-              <div>
-                <div style="color: green">
+              <div></div>-->
+              <!-- <div>
+                 <div style="color: green">
                   <strong>Note: </strong>All Branch Level Doors are Opened
                 </div>
-                <br />
+                <br />  
                 Check Devices list and Turn off Alarm to Close this popup.
 
                 <v-btn
                   color="error"
                   @click="
                     goToPage('/device');
-                    alarmNotificationStatus = false;
+                    alarmPopupNotificationStatus = false;
                   "
                   >View Devices</v-btn
                 >
-              </div>
+              </div> -->
             </v-card-text>
             <!-- <v-card-actions class="justify-end">
-              <v-btn text @click="alarmNotificationStatus = false">Close</v-btn>
+              <v-btn text @click="alarmPopupNotificationStatus = false">Close</v-btn>
             </v-card-actions> -->
           </v-card>
         </template>
@@ -654,6 +686,8 @@ import GlobalSearchForm from "../components/Globalsearch/GlobalSearchForm.vue";
 
 import controlpanel_top_menu from "../menus/alarm_controlpanel_top_menu.json";
 
+import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
+
 export default {
   head() {
     return {
@@ -667,26 +701,25 @@ export default {
   },
   components: {
     GlobalSearchForm,
+    AlarmPopupAllAlarmEvents,
   },
   data() {
     return {
+      snackbar: false,
+      response: "",
+      alarm_icons: {
+        Temperature: "temperature.png",
+        Burglary: "burglary.png",
+        Medical: "medical.png",
+        Water: "water.png",
+        Fire: "fire.png",
+      },
+
+      wait5Minutes: false,
       globalSearchPopupWidth: "500px",
       globalsearch: "",
       globalSearchPopup: false,
-      notificationsMenuItems: [
-        {
-          title: "Leaves Pending (0)",
-          click: "/leaves",
-          icon: "mdi-calendar-account",
-          key: "leaves",
-        },
-        {
-          title: "Visitors Pending (0)",
-          click: "/visitor/requests",
-          icon: "mdi-transit-transfer",
-          key: "visitors",
-        },
-      ],
+      notificationsMenuItems: [],
       notificationAlarmDevices: {},
       selectedBranchName: "All Branches",
       seelctedBranchId: "",
@@ -761,11 +794,16 @@ export default {
       viewing_page_name: "",
 
       inactivityTimeout: null,
-      alarmNotificationStatus: false,
+      alarmPopupNotificationStatus: false,
       key: 1,
     };
   },
   created() {
+    // this.alarm_icons["Temperature"] = "temperature.png";
+    // this.alarm_icons["Burglary"] = "burglary.png";
+    // this.alarm_icons["Medical"] = "medical.png";
+    // this.alarm_icons["Water"] = "water.png";
+    // this.alarm_icons["Fire"] = "fire.png";
     this.updateTopmenu();
 
     this.$store.commit("loginType", this.$auth.user.user_type);
@@ -787,21 +825,23 @@ export default {
     this.getDeviceModels();
 
     setTimeout(() => {
-      this.loadNotificationMenu();
-      this.verifyAlarmStatus();
+      this.loadHeaderNotificationMenu();
+      this.verifyPopupAlarmStatus();
     }, 1000 * 10);
 
     setInterval(() => {
-      if (this.$router.page != "login") {
-        this.resetTimer();
-        this.verifyAlarmStatus();
+      if (this.wait5Minutes == false) {
+        if (this.$route.name != "login") {
+          this.resetTimer();
+          this.verifyPopupAlarmStatus();
+        }
       }
     }, 1000 * 60 * 1);
     setInterval(() => {
-      if (this.$router.page != "login") {
-        this.loadNotificationMenu();
+      if (this.$route.name != "login") {
+        this.loadHeaderNotificationMenu();
       }
-    }, 1000 * 60 * 2);
+    }, 1000 * 60 * 1);
     //this.company_menus = [];
 
     let menu_name = this.$route.name;
@@ -896,9 +936,18 @@ export default {
     },
   },
   methods: {
-    setTopmenuHilighter() {
-      console.log(this.$route.name);
+    wait5MinutesNextNotification() {
+      this.snackbar = true;
+      this.response = "New Alarm will be Display after 5 minutes";
+      // alert("New Alarm will be Display after 5 minutes");
+      this.wait5Minutes = true;
+      setTimeout(() => {
+        this.wait5Minutes = false;
+      }, 1000 * 60 * 5);
 
+      this.alarmPopupNotificationStatus = false;
+    },
+    setTopmenuHilighter() {
       const routeMap = {
         "alarm-map": { name: "alarm_map", path: "/alarm/map" },
         "alarm-allevents": {
@@ -1067,56 +1116,48 @@ export default {
       //location.href = process.env.APP_URL + "/dashboard2";
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
-    loadNotificationMenu() {
+    loadHeaderNotificationMenu() {
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;
       }
+
       let options = {
         params: {
-          company_id: company_id,
+          company_id: this.$auth.user.company_id,
+          alarm_status: this.filterAlarmStatus,
         },
       };
-      //this.pendingNotificationsCount = 0;
-      let pendingcount = 0;
-      this.$axios.get(`get-notifications-count`, options).then(({ data }) => {
-        this.notificationsMenuItems = [
-          {
-            title: "Leaves Pending (0)",
-            click: "/leaves",
-            icon: "mdi-calendar-account",
-            key: "leaves",
-          },
-          {
-            title: "Visitors Pending (0)",
-            click: "/visitor/requests",
-            icon: "mdi-transit-transfer",
-            key: "visitors",
-          },
-        ];
-        pendingcount = 0;
 
-        if (data.employee_leaves_pending_count) {
-          pendingcount += data.employee_leaves_pending_count;
-          let leaves = this.notificationsMenuItems.find(
-            (e) => e.key == "leaves"
-          );
-          leaves.title =
-            "Leaves Pending (" + data.employee_leaves_pending_count + ")";
-        }
-        if (data.visitor_request_pending_count) {
-          pendingcount += data.visitor_request_pending_count;
-          let leaves = this.notificationsMenuItems.find(
-            (e) => e.key == "visitors"
-          );
-          leaves.title =
-            "Visitors Pending (" + data.visitor_request_pending_count + ")";
-        }
+      this.$axios
+        .get(`get_alarm_notification_display`, options)
+        .then(({ data }) => {
+          this.notificationsMenuItems = [];
+          data.forEach((element) => {
+            let notificaiton = {
+              title: element.device?.customer?.building_name
+                ? element.device.customer.building_name +
+                  " - " +
+                  element.alarm_type
+                : "---",
+              date_from: element.alarm_start_datetime,
+              click: "/alarm/allevents",
+              icon: this.alarm_icons[element.alarm_type] ?? "---",
+              key: "leaves",
+            };
 
-        this.pendingNotificationsCount = pendingcount;
-      });
+            this.notificationsMenuItems.push(notificaiton);
+          });
+
+          this.pendingNotificationsCount = data.length;
+        });
     },
-    verifyAlarmStatus() {
+
+    showPopupAlarmStatus() {
+      this.wait5Minutes = false;
+      this.verifyPopupAlarmStatus();
+    },
+    verifyPopupAlarmStatus() {
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;
@@ -1126,17 +1167,17 @@ export default {
           company_id: company_id,
         },
       };
-      //this.pendingNotificationsCount = 0;
-      let pendingcount = 0;
-      this.$axios.get(`get_notifications_alarm`, options).then(({ data }) => {
-        if (data.length > 0) {
-          this.notificationAlarmDevices = data;
+      this.$axios
+        .get(`get_alarm_notification_display`, options)
+        .then(({ data }) => {
+          if (data.length > 0) {
+            this.notificationAlarmDevices = data;
 
-          this.alarmNotificationStatus = true;
-        } else {
-          this.alarmNotificationStatus = false;
-        }
-      });
+            this.alarmPopupNotificationStatus = true;
+          } else {
+            this.alarmPopupNotificationStatus = false;
+          }
+        });
     },
 
     getBranchName() {
@@ -1384,6 +1425,9 @@ header i {
 .view-profile-table-lineheight {
   line-height: 40px;
   width: 100%;
+}
+.border-bottom {
+  border-bottom: 1px solid #ddd;
 }
 .view-profile-table-lineheight tr {
   border-bottom: 1px solid #ddd;
@@ -1912,6 +1956,15 @@ button {
 }
 .employee-schedule-search-box .v-input__icon {
   height: 17px !important;
+}
+.reports-events-autocomplete .v-input__slot {
+  min-height: 33px !important;
+}
+.reports-events-autocomplete .v-label {
+  line-height: 15px !important;
+}
+.reports-events-autocomplete .v-input__icon {
+  height: 20px !important;
 }
 .table-payslip td {
   text-align: left;

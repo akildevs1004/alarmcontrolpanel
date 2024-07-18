@@ -26,11 +26,7 @@
             >
               mdi mdi-refresh
             </v-icon>
-            <v-icon
-              v-if="$route.name == 'alarm-customers'"
-              @click="closePopup()"
-              outlined
-            >
+            <v-icon color="white" v-if="isPopup" @click="closePopup()" outlined>
               mdi mdi-close-circle
             </v-icon>
           </v-col>
@@ -370,7 +366,7 @@ export default {
     CustomerDashboard,
     CustomerAlarmEvents,
   },
-  props: ["_id"],
+  props: ["_id", "isPopup"],
   data: () => ({
     customerSensors: [],
     keyContacts: 1,
@@ -398,8 +394,14 @@ export default {
   computed: {},
   mounted() {},
   created() {
+    // if (this.customer_id) {
+    //   this._id = this.customer_id;
+    // }
     //this._id = this.$route.params.id;
     if (this._id) this.getDataFromApi();
+    // setTimeout(() => {
+    //   if (this._id) this.getDataFromApi();
+    // }, 1000 * 2);
 
     // setTimeout(() => {
     //   this.getBuildingTypes();

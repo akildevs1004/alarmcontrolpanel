@@ -1,15 +1,20 @@
 <template>
   <div>
-    <AlarmViewCustomer v-if="_id" :_id="_id" />
+    <AlarmCustomerView
+      :isPopup="false"
+      ViewCustomer.vue
+      v-if="_id"
+      :_id="_id"
+    />
   </div>
 </template>
 
 <script>
-import AlarmViewCustomer from "../../../components/Alarm/ViewCustomer.vue";
+import AlarmCustomerView from "../../../components/Alarm/ViewCustomer.vue";
 
 export default {
   components: {
-    AlarmViewCustomer,
+    AlarmCustomerView,
   },
   data: () => ({
     profile_percentage: 60,

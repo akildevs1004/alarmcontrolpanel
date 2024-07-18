@@ -35,7 +35,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-        $devicesList = Device::get();
+        $devicesList = Device::where("serial_number", "1206280294")->get();
 
         // (new AlarmLogsController)->updateCompanyIds();
 
@@ -45,7 +45,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
         $log[] =   $this->updateAlarmEndDatetime2($devicesList);
 
-        return $log;
+        return  json_encode($log);
     }
     public function updateDuration1($devicesList)
     {
@@ -54,11 +54,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         foreach ($devicesList as $key => $device) {
 
-            $message[] = $this->stopOldAlarms($device);
+            //////////////$message[] = $this->stopOldAlarms($device);
             $data = AlarmLogs::where("serial_number", $device['serial_number'])
                 ->where("time_duration_seconds", null)
                 ->where("company_id", '>', 0)
-                ->where("log_time", '<=',  date("Y-m-d H:i:s", strtotime("-5 seconds")))
+                //->where("log_time", '<=',  date("Y-m-d H:i:s", strtotime("-5 seconds")))
                 ->orderBy("log_time", "DESC")
                 ->get();
 
@@ -115,20 +115,23 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
             $alarmData =  AlarmEvents::where("serial_number", $device['serial_number'])
                 ->where("alarm_end_datetime", null)
-                ->orderBy("alarm_start_datetime", "ASC")
+                ->orderBy("alarm_start_datetime", "DESC")
                 ->first();
             if (isset($alarmData["id"])) {
 
 
-                $currentDateTime = date("Y-m-d H:i:s");
-
+                $currentDateTime = date("Y-m-d H:i:s");;
                 $alarm_start_datetime = $alarmData['alarm_start_datetime'];
                 //if new Log is available
                 $logsNewAlarmInitiated = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
-                    ->where("time_duration_seconds", "!=", null)
-                    ->where("time_duration_seconds", '>', 30)
-                    ->where("log_time", '>',  $alarmData['alarm_start_datetime'])
+                    ->where("alarm_status", 0)
+                    ->where("verified", false)
+                    ->where("zone", $alarmData['zone'])
+                    ->where("area", $alarmData['area'])
+                    /////->where("time_duration_seconds", "!=", null)
+                    //->where("time_duration_seconds", '>', 30)
+                    ->where("log_time", '>=',  $alarmData['alarm_start_datetime'])
                     // ->where("log_time", '<=', date("Y-m-d H:i:s", strtotime("-30 seconds")))  //wait for 1 minute to close the Alram 
                     ->orderBy("log_time", "DESC")
 
@@ -143,8 +146,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                     $logs = AlarmLogs::where("serial_number", $device['serial_number'])
                         ->where("company_id", '>', 0)
-                        ->where("time_duration_seconds", "!=", null)
-                        ->where("log_time", '<',  $dateNewLogTime)
+                        ->where("alarm_status", 0)
+                        ->where("zone", $alarmData['zone'])
+                        ->where("area", $alarmData['area'])
+                        //->where("time_duration_seconds", "!=", null)
+                        ->where("log_time", '<=',  $dateNewLogTime)
+                        ->where("log_time", '>=',  $alarmData['alarm_start_datetime'])
                         ->orderBy("log_time", "DESC")
                         ->first();
 
@@ -155,9 +162,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 } else {
                     $logs = AlarmLogs::where("serial_number", $device['serial_number'])
                         ->where("company_id", '>', 0)
-                        ->where("time_duration_seconds", "!=", null)
-                        ->where("time_duration_seconds", '<', 30)
-                        ->where("log_time", '>',  $alarmData['alarm_start_datetime'])
+                        ->where("alarm_status", 0)
+                        ->where("zone", $alarmData['zone'])
+                        ->where("area", $alarmData['area'])
+                        ///->where("time_duration_seconds", "!=", null)
+                        //////// ->where("time_duration_seconds", '<', 30)
+                        ->where("log_time", '>=',  $alarmData['alarm_start_datetime'])
                         ->orderBy("log_time", "DESC")
                         ->first();
                     if (isset($logs['log_time'])) {
@@ -168,9 +178,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         //   return [$datetime1, $datetime2];
                         $interval = $datetime1->diff($datetime2);
                         $secondsDifference = $interval->s + ($interval->i * 60) + ($interval->h * 3600) + ($interval->days * 86400);
-                        if ($secondsDifference <= 20) {
-                            $logs = null;
-                        }
+                        // if ($secondsDifference <= 20) {
+                        //     $logs = null;
+                        // }
                     }
                 }
 
@@ -188,7 +198,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     //   return [$datetime1, $datetime2];
                     $interval = $datetime1->diff($datetime2);
                     $secondsDifference = $interval->s + ($interval->i * 60) + ($interval->h * 3600) + ($interval->days * 86400);
-                    //if ($secondsDifference > 70 || $currentDateTime == $alarm_start_datetime)
+                    if ($secondsDifference >= 0)  //close event only afer 60 seconds 
                     { //as per cron job have to wait 1 minute
 
                         $datetime1 = new DateTime($logs['log_time']);
@@ -199,17 +209,20 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes part of the interval
 
 
+
                         AlarmEvents::where("id",  $alarmData["id"])
                             ->update([
                                 "alarm_end_datetime" => $logs['log_time'],
-                                "response_minutes" => $minutesDifference
+                                "response_minutes" => $minutesDifference,
+                                "alarm_status" => 0
                             ]);
 
-                        AlarmLogs::where("serial_number", $logs['serial_number'])
-                            ->where("company_id", '>', 0)
-                            ->where("time_duration_seconds", "!=", null)
-                            ->where("log_time", '<=', $logs['log_time'])
-                            ->where("verified", false)->update(["verified" => true]);
+                        // AlarmLogs::where("serial_number", $logs['serial_number'])
+                        //     ->where("company_id", '>', 0)
+                        //     ->where("time_duration_seconds", "!=", null)
+                        //     ->where("log_time", '<=', $logs['log_time'])
+                        //     ->where("verified", false)->update(["verified" => true]);
+                        AlarmLogs::where("id", $logs['id'])->update(["verified" => true]);
                         $data = [
                             "alarm_status" => 0,
                             "alarm_end_datetime" => $logs['log_time'],
@@ -218,8 +231,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         Device::where("serial_number", $logs['serial_number'])->update($data);
 
                         DeviceZones::where("device_id", $device['id'])
-                            ->where("area_code", $logs['zone'])
-                            ->where("zone_code", $logs['area'])
+                            ->where("zone_code", $logs['zone'])
+                            ->where("area_code", $logs['area'])
                             ->update($data);
 
                         $this->SendWhatsappNotification($device['name'] . " - Alarm Stopped ",   $device['name'],  $device, $logs['log_time'], true);
@@ -230,7 +243,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             } else {
                 $message[] = "No Log found to close alarm  ";
             }
-        }
+
+            // sleep(2);
+        } //events
 
         return $message;
     }
@@ -245,14 +260,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
             $logs = AlarmLogs::where("serial_number", $device['serial_number'])
                 ->where("company_id", '>', 0)
+                ->where("alarm_status", 1)
                 ->where("verified", false)
-                ->where("time_duration_seconds", "!=", null)
-                ->where(function ($query) use ($key) {
-                    $query->where("time_duration_seconds",  null);
 
-                    $query->Orwhere("time_duration_seconds", '>=', 30);
-                })
-
+                //////////->where("time_duration_seconds", ">=", 60)
                 ->orderBy("log_time", "ASC")
                 ->first();
 
@@ -342,7 +353,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         }
                         Device::where("serial_number", $device['serial_number'])->update(["alarm_status" => 0, "alarm_end_datetime" => $datetimeC]);
 
-                        $this->SendWhatsappNotification($device['name'] . " - Alarm Stopped ",   $device['name'],  $device, $datetimeC, true);
+                        // $this->SendWhatsappNotification($device['name'] . " - Alarm Stopped ",   $device['name'],  $device, $datetimeC, true);
                     }
                 }
             }
@@ -402,6 +413,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     "log_time" => $log_time->format('Y-m-d H:i:s')
                 ];
                 AlarmLogs::where("id", $insertedRecord["id"])->update($data);
+
+                try {
+                    $this->updateAlarmResponseTime();
+                } catch (\Exception $e) {
+                }
                 return $this->response('Alarm Logs are created', null, true);
             }
         } else {
@@ -570,6 +586,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
     public function SendWhatsappNotification($issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [])
     {
+
+        return false;
         $company_id = $model1->company_id;
         $branch_id = $model1->branch_id;
 
@@ -633,7 +651,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                            $branch_name = $value->branch->branch_name;
+                            $branch_name = $value->branch->branch_name ?? '---';
 
                             $body_content1 = "📊 *{$issue} Notification <br/>";
 
@@ -652,7 +670,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                             $body_content1 .= "Date:  $date<br/>";
                             $body_content1 .= "Room Name: {$room_name}<br/>";
-                            $body_content1 .= "Branch: {$branch_name}<br/><br/><br/><br/>";
+                            // $body_content1 .= "Branch: {$branch_name}<br/><br/><br/><br/>";
                             $body_content1 .= "*Xtreme Guard*<br/>";
 
                             $data = [
@@ -705,7 +723,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         if ($manager->whatsapp_number != '') {
 
-                            $branch_name = $manager->branch->branch_name;
+                            $branch_name = $manager->branch->branch_name ?? '---';
 
                             $body_content1 = "📊 *{$issue}* Notification  📊\n\n";
 
@@ -723,7 +741,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             $body_content1 .= "Date:  $date\n";
                             $body_content1 .= "Room Name:  {$room_name}\n";
 
-                            $body_content1 .= "Branch:  {$branch_name}\n";
+                            // $body_content1 .= "Branch:  {$branch_name}\n";
                             $body_content1 .= "*Xtreme Guard*\n";
 
 

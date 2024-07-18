@@ -185,6 +185,19 @@ class CustomerAlarmEventsController extends Controller
         $model->orderBy("created_datetime", "asc");
         return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
+    public function getAlarmNotificationsList(Request $request)
+    {
+        $model = AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "notes"
+        ])->where('company_id', $request->company_id)->where('alarm_status', 1);
+
+
+
+        $model->orderBy("alarm_start_datetime", "asc");
+        return $model->get();;
+    }
     public function getAlarmEvents(Request $request)
     {
         // return  $request->validate([
@@ -202,8 +215,13 @@ class CustomerAlarmEventsController extends Controller
             // ->when($request->filled("common_search"), function ($query) use ($request) {
             //     $query->where("customer_id", $request->common_search);
             // })
-            ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id))
-            ->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+            ->when($request->filled("alarm_status"), fn ($q) => $q->where("alarm_status", $request->alarm_status))
+            ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id));
+        if ($request->filled("date_from")) {
+            $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+        }
+
+
         $model->when($request->filled('filterSensorname'), function ($q) use ($request) {
 
             $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");

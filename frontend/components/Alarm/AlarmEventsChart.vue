@@ -1,11 +1,26 @@
 <template>
   <div style="width: 100%; height: 100%">
     <v-row>
-      <v-col cols="6">
-        <h4>{{ display_title }}</h4></v-col
-      >
+      <v-col cols="8">
+        <h4>{{ display_title }}</h4>
+      </v-col>
 
-      <v-col cols="6" class="text-right"
+      <v-col cols="2" class="align-right">
+        <v-autocomplete
+          style="padding-top: 6px"
+          @change="getDataFromApi()"
+          class="reports-events-autocomplete"
+          v-model="customer_id"
+          :items="customersList"
+          dense
+          placeholder="Select Building"
+          outlined
+          item-value="id"
+          item-text="building_name"
+        >
+        </v-autocomplete>
+      </v-col>
+      <v-col cols="2" class="text-right"
         ><CustomFilter
           id="test"
           style="float: right; padding-top: 5px"
@@ -40,6 +55,7 @@ export default {
   data() {
     return {
       filterDeviceId: null,
+      customersList: [],
       devices: [],
       loading: false,
       display_title: "Alarm Events",
@@ -144,10 +160,24 @@ export default {
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
     await this.getDataFromApi();
-    this.getDeviceList();
+    this.getCustomersList();
   },
 
   methods: {
+    getCustomersList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/customers_list`, options).then(({ data }) => {
+        this.customersList = [
+          { id: "", building_name: "All Customers" },
+          ...data,
+        ];
+        //this.customer_id = "";
+      });
+    },
     getDeviceList() {
       let options = {
         params: {
