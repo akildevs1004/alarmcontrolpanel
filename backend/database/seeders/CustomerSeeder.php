@@ -23,9 +23,11 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
-        if (env("APP_ENV") == "production") {
-            return;
-        }
+        // php artisan db:seed --class=CustomerSeeder
+
+        // if (env("APP_ENV") == "production") {
+        //     return;
+        // }
 
         $this->faker = Faker::create();
 
