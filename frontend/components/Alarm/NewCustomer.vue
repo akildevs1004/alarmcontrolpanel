@@ -212,7 +212,7 @@
             }}</span>
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
-            <v-btn small dense @click="">Select From Google Map</v-btn>
+            <LocationFinderDialogBox />
           </v-col>
         </v-row>
         <v-row v-if="!customer_id">
@@ -421,6 +421,20 @@ export default {
       this.customer_payload.start_date = this.customer.start_date;
       this.customer_payload.end_date = this.customer.end_date;
     }
+  },
+  watch: {
+    "$store.state.location": {
+      handler(newLocation) {
+        this.customer_payload.latitude = newLocation.lat;
+        this.customer_payload.longitude = newLocation.lng;
+      },
+      deep: true, // Watch for changes in nested properties
+    },
+  },
+  computed: {
+    locationData() {
+      return this.$store.state.location;
+    },
   },
   methods: {
     can(per) {

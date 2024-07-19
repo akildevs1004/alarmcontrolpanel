@@ -29,10 +29,16 @@ export const state = () => ({
   login_token: "",
   email: "",
   password: "",
+
+  location: null,
+
 });
 
 // contains your mutations
 export const mutations = {
+  setLocation(state, location) {
+    state.location = location;
+  },
   RESET_STATE(state) {
     // Object.keys(state).forEach((key) => {
     //   state[key] = null;
@@ -163,6 +169,11 @@ export const mutations = {
 };
 
 export const actions = {
+
+  updateData({ commit }, location) {
+    commit('setLocation', location);
+  },
+
   resetState({ commit }) {
     commit("RESET_STATE");
   },
