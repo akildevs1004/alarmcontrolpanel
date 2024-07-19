@@ -1,8 +1,8 @@
 <template>
   <div style="width: 100%; height: 100%">
     <v-row>
-      <v-col cols="8">
-        <h4>{{ display_title }}</h4>
+      <v-col cols="7">
+        <h4 class="pl-4">{{ display_title }}</h4>
       </v-col>
 
       <v-col cols="2" class="align-right">
@@ -31,17 +31,37 @@
           :height="'40px'"
         />
       </v-col>
+      <v-col cols="1"> </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="9">
+        <div
+          :id="name"
+          style="width: 100%; height: 300px"
+          :key="display_title"
+        ></div>
+      </v-col>
+      <v-col cols="3">
+        <div style="height: 200px">
+          <AlamCustomerResponsePieChart
+            :name="'AlamCustomerResponsePieChart'"
+            :date_from="date_from"
+            :date_to="date_to"
+            :customer_id="customer_id"
+            :key="key"
+          />
+        </div>
+        <div>Fastest Reseponse on:</div>
+        <div>Slowest Reseponse on:</div>
 
-    <div
-      :id="name"
-      style="width: 100%; height: 300px"
-      :key="display_title"
-    ></div>
+        <div>Average Reseponse on:</div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
+import AlamCustomerResponsePieChart from "../../components/Alarm/Dashboard/AlamCustomerResponsePieChart.vue";
 // import VueApexCharts from 'vue-apexcharts'
 export default {
   props: [
@@ -52,8 +72,10 @@ export default {
     "from_date",
     "customer_id",
   ],
+  components: { AlamCustomerResponsePieChart },
   data() {
     return {
+      key: 1,
       filterDeviceId: null,
       customersList: [],
       devices: [],
@@ -300,6 +322,10 @@ export default {
         );
         this.chart.render();
       } catch (error) {}
+
+      setTimeout(() => {
+        this.key += 1;
+      }, 1000);
     },
   },
 };
