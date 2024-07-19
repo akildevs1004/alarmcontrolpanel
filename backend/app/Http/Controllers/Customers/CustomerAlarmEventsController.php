@@ -216,6 +216,22 @@ class CustomerAlarmEventsController extends Controller
             //     $query->where("customer_id", $request->common_search);
             // })
             ->when($request->filled("alarm_status"), fn ($q) => $q->where("alarm_status", $request->alarm_status))
+            ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
+                if ((int) $request->filterResponseInMinutes == 0)
+                    $query->where("response_minutes", '>', 10);
+                else 
+                if ((int) $request->filterResponseInMinutes == 1)
+                    $query->where("response_minutes", '<=', 1);
+                else
+                if ((int) $request->filterResponseInMinutes == 5)
+
+                    $query->where("response_minutes", '>=', 1)->where("response_minutes", '<=', 5);
+
+                else
+                    if ((int) $request->filterResponseInMinutes == 10)
+
+                    $query->where("response_minutes", '>=', 5)->where("response_minutes", '<=', 10);
+            })
             ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id));
         if ($request->filled("date_from")) {
             $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);

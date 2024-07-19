@@ -49,11 +49,9 @@
           <v-col cols="4" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
           <v-col cols="8" class="text-right" style="width: 600px">
             <v-row>
-              <v-col cols="4"></v-col>
-
-              <v-col cols="3">
+              <v-col cols="4">
                 <v-text-field
-                  style="padding-top: 7px"
+                  style="padding-top: 7px; width: 150px; float: right"
                   width="150px"
                   height="20"
                   class="employee-schedule-search-box"
@@ -68,6 +66,26 @@
                   hide-details
                 ></v-text-field
               ></v-col>
+              <v-col cols="3"
+                ><v-select
+                  class="employee-schedule-search-box"
+                  style="padding-top: 7px; z-index: 999; width: 200px"
+                  height="20px"
+                  outlined
+                  @change="getDataFromApi()"
+                  v-model="filterResponseInMinutes"
+                  dense
+                  :items="[
+                    { id: null, name: 'All Responses' },
+                    { id: 1, name: 'Resolved <1 min' },
+                    { id: 5, name: 'Resolved 1 to 5 min' },
+                    { id: 10, name: 'Resolved 5 to 10 min' },
+                    { id: 0, name: 'Resolved > 10 min' },
+                  ]"
+                  item-text="name"
+                  item-value="id"
+                ></v-select>
+              </v-col>
               <v-col cols="2"
                 ><v-select
                   class="employee-schedule-search-box"
@@ -291,6 +309,7 @@ export default {
   props: ["showFilters"],
   data() {
     return {
+      filterResponseInMinutes: null,
       dialogViewCustomer: false,
       viewCustomerId: null,
       filterAlarmStatus: null,
@@ -530,6 +549,7 @@ export default {
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
           filterSensorname: this.tab > 0 ? this.sensorItems[this.tab] : null,
+          filterResponseInMinutes: this.filterResponseInMinutes,
         },
       };
 
