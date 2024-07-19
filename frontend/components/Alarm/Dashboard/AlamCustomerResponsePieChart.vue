@@ -66,7 +66,7 @@ export default {
           toolbar: {
             show: false,
           },
-          height: "300px",
+          height: "200px",
           type: "donut",
         },
         customTotalValue: 0,
