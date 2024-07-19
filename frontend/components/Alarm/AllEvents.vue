@@ -158,7 +158,7 @@
                             max-width: 50px;
                           "
                           :src="
-                            item.device.customer.profile_picture
+                            item.device?.customer.profile_picture
                               ? item.device.customer.profile_picture
                               : '/no-business_profile.png'
                           "
@@ -167,13 +167,13 @@
                       </v-col>
                       <v-col style="padding: 10px">
                         <div style="font-size: 13px">
-                          {{ item.device.customer.building_name || "" }}
+                          {{ item.device?.customer.building_name || "" }}
                         </div>
                         <small style="font-size: 12px; color: #6c7184">
-                          {{ item.device.customer.house_number }},
-                          {{ item.device.customer.street_number }},
-                          {{ item.device.customer.area }},
-                          {{ item.device.customer.city }}
+                          {{ item.device?.customer.house_number }},
+                          {{ item.device?.customer.street_number }},
+                          {{ item.device?.customer.area }},
+                          {{ item.device?.customer.city }}
                         </small>
                       </v-col>
                     </v-row>
@@ -181,24 +181,24 @@
                   <template v-slot:item.customer="{ item }">
                     <div>
                       {{
-                        item.device.customer?.primary_contact?.first_name ??
+                        item.device?.customer?.primary_contact?.first_name ??
                         "---"
                       }}
                       {{
-                        item.device.customer?.primary_contact?.last_name ??
+                        item.device?.customer?.primary_contact?.last_name ??
                         "---"
                       }}
                     </div>
                     <div class="secondary-value">
                       {{
-                        item.device.customer?.primary_contact?.phone1 ?? "---"
+                        item.device?.customer?.primary_contact?.phone1 ?? "---"
                       }}
                     </div>
                   </template>
                   <template v-slot:item.device="{ item }">
-                    <div>{{ item.device.name }}</div>
+                    <div>{{ item.device?.name }}</div>
                     <div class="secondary-value">
-                      {{ item.device.serial_number }}
+                      {{ item.device?.serial_number }}
                     </div>
                   </template>
                   <template v-slot:item.sensor="{ item }">
@@ -206,7 +206,7 @@
                       {{ item.alarm_type }}
                     </div>
                     <div class="secondary-value">
-                      {{ item.device.location }}
+                      {{ item.device?.location }}
                     </div>
 
                     <!-- <div class="secondary-value">{{ item.type }}</div> -->
