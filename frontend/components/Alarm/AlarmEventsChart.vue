@@ -325,7 +325,7 @@ export default {
 
       setTimeout(() => {
         this.key += 1;
-      }, 1000);
+      }, 1000 * 3);
     },
   },
 };
