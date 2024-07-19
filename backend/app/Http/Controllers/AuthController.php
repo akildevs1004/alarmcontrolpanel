@@ -172,15 +172,15 @@ class AuthController extends Controller
         // @params User Id, action,type,companyId.
         $this->recordActivity($user->id, "Login", "Authentication", $user->company_id, $user->user_type);
 
-        $user->user_type = $this->getUserType($user);
 
-        if ($user->user_type == "department") {
+        if ($user->user_type == "customer") {
             return [
                 'token' => $user->createToken('myApp')->plainTextToken,
                 'user' => $user,
             ];
         }
 
+        $user->user_type = $this->getUserType($user);
         // $user->branch_array = [1,   5];
 
         if ($user->branch_id == 0 &&  $user->is_master === false && $request->filled("source")) {
@@ -220,7 +220,11 @@ class AuthController extends Controller
         if ($user->user_type == "department") {
             return $user->user_type;
         }
-        
+
+        if ($user->user_type == "customer") {
+            return $user->user_type;
+        }
+
         if ($user->company_id > 0) {
 
             if ($user->user_type === "company")  return $user->user_type;
@@ -308,7 +312,7 @@ class AuthController extends Controller
             throw ValidationException::withMessages([
                 'email' => ['Subscription has been expired.'],
             ]);
-        } else if (!$user->web_login_access && !$user->is_master && $user->user_type !== "department") {
+        } else if (!$user->web_login_access && !$user->is_master && $user->user_type !== "customer") {
             throw ValidationException::withMessages([
                 'email' => ['Login access is disabled. Please contact your admin.'],
             ]);
