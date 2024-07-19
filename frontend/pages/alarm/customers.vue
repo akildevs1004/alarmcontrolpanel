@@ -162,7 +162,13 @@
             </template>
             <template v-slot:item.created_date="{ item }">
               <div
-                title="End Date "
+                :title="
+                  getExpiryDatesCountColor(item.end_date) == 'red'
+                    ? 'Expired'
+                    : getExpiryDatesCountColor(item.end_date) == 'orange'
+                    ? 'Expire in 30 days'
+                    : 'End Date'
+                "
                 :style="'color:' + getExpiryDatesCountColor(item.end_date)"
               >
                 {{ $dateFormat.format_date_month_name_year(item.end_date) }}

@@ -651,9 +651,10 @@ class CustomersController extends Controller
                 $profilePercentage += $weight;
             }
         }
-        if ($customer->latitude  == '' || $customer->longitude == '') {
-            $message[] = "Google Map Latitude and Longitude are Empty";
-        }
+        if ($customer)
+            if ($customer->latitude  == '' || $customer->longitude == '') {
+                $message[] = "Google Map Latitude and Longitude are Empty";
+            }
 
 
         if ($profilePercentage < 40) {
