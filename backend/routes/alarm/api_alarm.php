@@ -58,6 +58,9 @@ Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLive
 Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
 Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
 
+Route::get('customer_profile_completion_percentage', [CustomersController::class, "customerProfileCompletionPercentage"]);
+
+
 
 //api alarm logs 
 Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);

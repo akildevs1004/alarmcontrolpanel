@@ -161,10 +161,16 @@
               </v-row>
             </template>
             <template v-slot:item.created_date="{ item }">
-              <div>
+              <div
+                title="End Date "
+                :style="'color:' + getExpiryDatesCountColor(item.end_date)"
+              >
                 {{ $dateFormat.format_date_month_name_year(item.end_date) }}
               </div>
-              <small style="font-size: 12px; color: #6c7184">
+              <small
+                title="Start Date "
+                style="font-size: 12px; color: #6c7184"
+              >
                 {{ $dateFormat.format_date_month_name_year(item.start_date) }}
               </small>
             </template>
@@ -528,7 +534,20 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    getExpiryDatesCountColor(date) {
+      const today = new Date();
 
+      const targetDate = new Date(date);
+
+      const diffTime = targetDate - today;
+
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) {
+        return "red";
+      } else if (diffDays <= 30) {
+        return "orange";
+      }
+    },
     closeCustomerDialog() {
       this.dialogViewCustomer = false;
     },
