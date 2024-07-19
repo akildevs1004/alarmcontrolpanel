@@ -256,13 +256,13 @@
         >
           <v-btn icon dark v-bind="attrs" v-on="on">
             <v-badge
-              :color="pendingNotificationsCount > 0 ? 'red' : 'green'"
+              :color="'  ' + pendingNotificationsCount > 0 ? 'red' : 'green'"
               :content="
                 pendingNotificationsCount == ''
                   ? '0'
                   : pendingNotificationsCount
               "
-              style="top: 10px; left: -19px"
+              style="top: 10px; left: -19px; z-index: 9999 !important"
             >
               <v-icon style="top: -10px; left: 10px" class="violet--text"
                 >mdi mdi-bell-ring</v-icon
@@ -275,7 +275,7 @@
             style="height: 30px; padding-left: 5px"
             :class="
               notificationsMenuItems.length > 0 &&
-              index > notificationsMenuItems.length - 1
+              index != notificationsMenuItems.length - 1
                 ? 'border-bottom'
                 : ''
             "
@@ -293,14 +293,11 @@
                   /></v-col>
                   <v-col cols="10">
                     <span style="font-size: 14px">
-                      <span
-                        >{{ item.title }}
+                      <span>
+                        {{ index }}{{ notificationsMenuItems.length - 1 }}
+                        {{ item.title }}
                         <div class="secondary-value">
-                          {{
-                            $dateFormat.formatDateMonthYear(
-                              item.alarm_start_datetime
-                            )
-                          }}
+                          {{ $dateFormat.formatDateMonthYear(item.date_from) }}
                         </div></span
                       >
                     </span>
@@ -1402,6 +1399,10 @@ header a,
 header i {
   color: black !important;
 }
+header,
+.v-sheet {
+  z-index: 99 !important;
+}
 
 .theme--dark.v-bottom-navigation .v-btn:not(.v-btn--active) {
   color: black !important;
@@ -2011,6 +2012,9 @@ button {
 
 #AlamCustomerSensorPieChart .apexcharts-legend {
   top: 0px !important;
+}
+.notificationbadge {
+  z-index: 9999;
 }
 </style>
 

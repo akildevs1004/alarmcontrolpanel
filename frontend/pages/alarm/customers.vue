@@ -125,7 +125,7 @@
               v-slot:item.building_name="{ item, index }"
               style="width: 300px"
             >
-              <v-row no-gutters>
+              <v-row no-gutters @click="viewItem(item)">
                 <v-col
                   style="
                     padding: 5px;
@@ -161,9 +161,11 @@
               </v-row>
             </template>
             <template v-slot:item.created_date="{ item }">
-              <div></div>
+              <div>
+                {{ $dateFormat.format_date_month_name_year(item.end_date) }}
+              </div>
               <small style="font-size: 12px; color: #6c7184">
-                {{ item.landmark }}
+                {{ $dateFormat.format_date_month_name_year(item.start_date) }}
               </small>
             </template>
             <template v-slot:item.building_type="{ item }">

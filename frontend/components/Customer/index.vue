@@ -138,7 +138,7 @@
       <template v-slot:item.created_date="{ item }">
         <div></div>
         <small style="font-size: 12px; color: #6c7184">
-            {{ item.start_date }}
+          {{ item.start_date }}
         </small>
       </template>
       <template v-slot:item.building_type="{ item }">
