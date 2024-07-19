@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
-
+use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
@@ -623,5 +623,74 @@ class CustomersController extends Controller
         $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"]);
 
         return $model->orderByDesc('id')->get();
+    }
+    public function customerProfileCompletionPercentage(Request $request)
+    {
+        $customer = Customers::with(['devices'])->where('id', $request->customer_id)->first();
+        $customerContactsPrimary = CustomerContacts::where('customer_id', $request->customer_id)->where('address_type', 'primary')->first();
+        $customerContactsSecondary = CustomerContacts::where('customer_id', $request->customer_id)->where('address_type', 'secondary')->first();
+        $customerContactsOthers = CustomerContacts::where('customer_id', $request->customer_id)->whereNotIn('address_type', ['primary', 'secondary'])->count();
+        $CustomerBuildingPictures = CustomerBuildingPictures::where('customer_id', $request->customer_id)->count();
+
+        $profilePercentage = 0;
+        $message = [];
+
+        $fields = [
+            'profile_picture' => 10,
+            'building_type_id' => 2,
+            'building_name' => 2,
+            'house_number' => 2,
+            'area' => 2,
+            'city' => 2,
+            'landmark' => 10,
+            'latitude' => 5,
+            'longitude' => 5,
+        ];
+        foreach ($fields as $field => $weight) {
+            if (!empty($customer->$field)) {
+                $profilePercentage += $weight;
+            }
+        }
+        if ($customer)
+            if ($customer->latitude  == '' || $customer->longitude == '') {
+                $message[] = "Google Map Latitude and Longitude are Empty";
+            }
+
+
+        if ($profilePercentage < 40) {
+            $message[] = "Address Information Is in-complete";
+        }
+
+        if (isset($customer) && count($customer->devices) > 0) {
+            $profilePercentage += 5;
+        } else
+            $message[] = "0 Devices";
+
+
+        if ($customerContactsPrimary) {
+            $profilePercentage += 10;
+        } else
+            $message[] = "No Primary Contact information";
+
+        if ($customerContactsSecondary) {
+            $profilePercentage += 10;
+        } else
+            $message[] = "No Secondary Contact information";
+
+
+        if ($CustomerBuildingPictures > 0) {
+            $profilePercentage += min($CustomerBuildingPictures, 5) * 5;
+        } else
+            $message[] = "No Building Pictures";
+
+
+        if ($customerContactsOthers > 0) {
+            $profilePercentage += min($customerContactsOthers, 5) * 5;
+        } else
+            $message[] = "No Emergency Contacts";
+
+        $profilePercentage = min($profilePercentage, 100);
+
+        return ["percentage" => $profilePercentage, "message" => $message];
     }
 }

@@ -124,7 +124,7 @@
           <template v-slot:item.device="{ item }">
             <div>{{ item.device.name }}</div>
             <div class="secondary-value">
-              {{ item.device.serial_number }}
+              {{ item.device?.serial_number ?? "---" }}
             </div>
           </template>
           <template v-slot:item.sensor="{ item }">

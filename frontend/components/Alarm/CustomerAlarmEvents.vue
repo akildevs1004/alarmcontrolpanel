@@ -125,8 +125,10 @@
             }}
           </template>
           <template v-slot:item.device="{ item }">
-            <div>{{ item.device.name }}</div>
-            <div class="secondary-value">{{ item.device.serial_number }}</div>
+            <div>{{ item.device?.name ?? "---" }}</div>
+            <div class="secondary-value">
+              {{ item.device?.serial_number ?? "---" }}
+            </div>
           </template>
           <template v-slot:item.sensor="{ item }">
             <div>
@@ -135,7 +137,7 @@
             <div class="secondary-value">{{ item.type }}</div>
           </template>
           <template v-slot:item.location="{ item }">
-            {{ item.device.location }}
+            {{ item.device?.location ?? "---" }}
           </template>
           <template v-slot:item.zone="{ item }">
             <div>{{ item.zone }}</div>

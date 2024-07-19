@@ -114,10 +114,18 @@
               </v-col>
 
               <v-col cols="4">
-                <div>Complete Profile {{ profile_percentage }}%</div>
+                <div :title="messages">
+                  Complete Profile {{ profile_percentage }}%
+                </div>
                 <v-progress-linear
                   :value="profile_percentage"
-                  color="#089259"
+                  :color="
+                    profile_percentage <= 50
+                      ? 'red'
+                      : profile_percentage <= 80
+                      ? 'orange'
+                      : '#089259'
+                  "
                   height="10"
                   rounded
                 >
@@ -368,6 +376,7 @@ export default {
   },
   props: ["_id", "isPopup"],
   data: () => ({
+    messages: [],
     customerSensors: [],
     keyContacts: 1,
     keyEmergencyy: 1,
@@ -379,7 +388,7 @@ export default {
     keyPayments: 1,
     keySettings: 1,
     key: 1,
-    profile_percentage: 60,
+    profile_percentage: 0,
     tab: null,
 
     data: null,
@@ -408,6 +417,7 @@ export default {
     // }, 3000);
 
     this.getUniqueDevices();
+    this.getCustomerProfilePercentage();
   },
   watch: {},
   methods: {
@@ -490,6 +500,28 @@ export default {
           });
       } catch (e) {}
     },
+    getCustomerProfilePercentage() {
+      this.payloadOptions = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this._id,
+        },
+      };
+
+      try {
+        this.$axios
+          .get(`customer_profile_completion_percentage`, this.payloadOptions)
+          .then(({ data }) => {
+            this.profile_percentage = data.percentage;
+
+            this.messages = "Profile is successfully completed";
+            data.message.forEach((element) => {
+              this.messages = this.messages + element + "\n";
+            });
+          });
+      } catch (e) {}
+    },
+
     async getDataFromApi() {
       if (this._id) {
         this.payloadOptions = {
