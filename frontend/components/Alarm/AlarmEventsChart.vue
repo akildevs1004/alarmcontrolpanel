@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%; height: 100%">
     <div class="text-center" v-if="data.length == 0">No Data Available</div>
-    <v-row>
+    <v-row v-if="$auth.user.user_type != 'company'">
       <v-col cols="8">
         <h4>{{ display_title }}</h4>
       </v-col>
