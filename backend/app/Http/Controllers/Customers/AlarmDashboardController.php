@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
-
+use App\Models\AlarmEvents;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
@@ -72,6 +72,41 @@ class AlarmDashboardController extends Controller
             ->first();
 
         return  $statistics;
+    }
+    public function alarmStatistics(Request $request)
+    {
+        $statistics = DB::table('alarm_events')
+            ->where('company_id', $request['company_id'])
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+            ->whereBetween('alarm_start_datetime', [
+                $request['date_from'] . ' 00:00:00',
+                $request['date_to'] . ' 23:59:59'
+            ])
+            ->selectRaw('
+            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1 ELSE 0 END), 0) AS burglary,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1 ELSE 0 END), 0) AS medical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1 ELSE 0 END), 0) AS temperature,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 ELSE 0 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 ELSE 0 END), 0) AS fire
+        ')
+            ->first();
+
+        return response()->json($statistics);
+    }
+    public function alarmEventStatistics(Request $request)
+    {
+        $events = AlarmEvents::where('company_id', $request['company_id'])
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+            ->whereBetween('alarm_start_datetime', [
+                $request['date_from'] . ' 00:00:00',
+                $request['date_to'] . ' 23:59:59'
+            ])->get();
+
+        return $events;
     }
     public function getDeviceSensorStatistics(Request $request)
     {

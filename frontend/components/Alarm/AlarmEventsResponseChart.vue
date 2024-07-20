@@ -1,8 +1,9 @@
 <template>
   <div style="width: 100%; height: 100%">
+    <h3>Alarm with Response(Minutes)</h3>
     <div
       :id="name"
-      style="width: 100%; height: 300px"
+      style="width: 100%; height: 400px"
       :key="display_title"
     ></div>
   </div>
@@ -68,7 +69,7 @@ export default {
         chart: {
           type: "bar",
           width: "98%",
-          height: "300px",
+          height: "450px",
           toolbar: {
             show: false,
           },
@@ -102,7 +103,8 @@ export default {
         tooltip: {
           y: {
             formatter: function (val) {
-              return val;
+              return "Responded in " + val + " Minutes";
+              //return val + " Minutes";
             },
           },
         },
@@ -163,7 +165,7 @@ export default {
       };
 
       await this.$axios
-        .get(`/alarm_logs_data_month_data`, options)
+        .get(`/alarm_event_statistics`, options)
         .then(({ data }) => {
           this.renderChart2(data);
         });
@@ -205,21 +207,35 @@ export default {
           categories: [],
         };
         data.forEach((item) => {
-          this.chartOptions2.series[0]["data"][counter] = parseInt(
-            item.Burglary
-          );
+          if (item.alarm_type == "Burglary")
+            this.chartOptions2.series[0]["data"][counter] =
+              item.response_minutes == 0 ? 0.2 : item.response_minutes;
 
-          this.chartOptions2.series[1]["data"][counter] = parseInt(
-            item.Medical
-          );
-          this.chartOptions2.series[2]["data"][counter] = parseInt(item.Water);
-          this.chartOptions2.series[3]["data"][counter] = parseInt(item.Fire);
-          this.chartOptions2.series[4]["data"][counter] = parseInt(
-            item.Temperature
-          );
+          if (item.alarm_type == "Medical")
+            this.chartOptions2.series[1]["data"][counter] =
+              item.response_minutes == 0 ? 0.2 : item.response_minutes;
+          if (item.alarm_type == "Water")
+            this.chartOptions2.series[2]["data"][counter] =
+              item.response_minutes == 0 ? 0.2 : item.response_minutes;
+
+          if (item.alarm_type == "Fire")
+            this.chartOptions2.series[3]["data"][counter] =
+              item.response_minutes == 0 ? 0.2 : item.response_minutes;
+          if (item.alarm_type == "Temperature")
+            this.chartOptions2.series[4]["data"][counter] =
+              item.response_minutes == 0 ? 0.2 : item.response_minutes;
+
+          // this.chartOptions2.series[1]["data"][counter] = parseInt(
+          //   item.Medical
+          // );
+          // this.chartOptions2.series[2]["data"][counter] = parseInt(item.Water);
+          // this.chartOptions2.series[3]["data"][counter] = parseInt(item.Fire);
+          // this.chartOptions2.series[4]["data"][counter] = parseInt(
+          //   item.Temperature
+          // );
 
           this.chartOptions2.xaxis.categories[counter] =
-            this.$dateFormat.format2(item.date);
+            this.$dateFormat.format3(item.alarm_start_datetime);
 
           counter++;
         });

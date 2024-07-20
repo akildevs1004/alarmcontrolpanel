@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 0px; width: 100%">
-    <h3>Response Chart</h3>
+  <div style="padding: 0px; width: 100%; margin-top: -30px">
+    <h3>Alarm Count</h3>
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
         <div
@@ -52,14 +52,7 @@ export default {
           margin: 0,
         },
 
-        colors: [
-          "#843c0c",
-          "#F4B400",
-          "#02B64B",
-          "#f44336",
-          "#00b0f0",
-          "#000000",
-        ],
+        colors: ["#7B1FA2", "#8BC34A", "#F57C00", "#4A90E2", "RED"],
 
         series: [],
         chart: {
@@ -160,35 +153,34 @@ export default {
         },
       };
 
-      this.$axios
-        .get(`/alarm_response_statistics`, options)
-        .then(({ data }) => {
-          this.categories = data;
-          this.renderChart1(data);
-        });
+      this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
+        this.categories = data;
+        this.renderChart1(data);
+      });
     },
 
     async renderChart1(data) {
       let counter = 0;
       let total = 1000;
 
-      this.chartOptions.labels[0] = "Less than Min";
-      this.chartOptions.series[0] = data.less_than_1_minute ?? 0;
+      this.chartOptions.labels[0] = "Burglary";
+      this.chartOptions.series[0] = data.burglary ?? 0;
 
-      this.chartOptions.labels[1] = "1 to 5 Min";
-      this.chartOptions.series[1] = data.between_1_and_5_minutes ?? 0;
+      this.chartOptions.labels[1] = "Medical";
+      this.chartOptions.series[1] = data.medical ?? 0;
 
-      this.chartOptions.labels[2] = "5 to 10 Min";
-      this.chartOptions.series[2] = data.between_5_and_10_minutes ?? 0;
+      this.chartOptions.labels[2] = "Temperature";
+      this.chartOptions.series[2] = data.temperature ?? 0;
 
-      this.chartOptions.labels[3] = ">10 minutes";
-      this.chartOptions.series[3] = data.more_than_10_minutes ?? 0;
+      this.chartOptions.labels[3] = "Water";
+      this.chartOptions.series[3] = data.water ?? 0;
+      this.chartOptions.labels[4] = "Fire";
+      this.chartOptions.series[4] = data.fire ?? 0;
 
       this.chartOptions.customTotalValue =
-        data.less_than_1_minute +
-        data.between_1_and_5_minutes +
-        data.between_5_and_10_minutes +
-        data.more_than_10_minutes; //this.items.ExpectingCount;
+        data.burglary + data.medical + data.temperature + data.water;
+      +data.fire;
+      //this.items.ExpectingCount;
 
       // setTimeout(() => {
       //   try {
