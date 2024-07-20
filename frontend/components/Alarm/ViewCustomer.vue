@@ -2,6 +2,27 @@
   <div max-width="100%">
     <!-- <h3>Customer Details</h3>
       -->
+    <v-dialog v-model="dialogEditBuilding" width="1000px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Edit Customer/Building Info</span>
+          <v-spacer></v-spacer>
+          <v-icon color="black" @click="dialogEditBuilding = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <NewCustomer
+              :customer_id="_id"
+              :customer="customer"
+              @closeDialog="closeDialog"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-card max-width="100%" style="margin-top: 10px">
       <div
         style="
@@ -18,6 +39,15 @@
             >Building Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
+
+            <v-btn
+              @click="dialogEditBuilding = true"
+              color="primary"
+              dense
+              x-small
+            >
+              Edit Profile
+            </v-btn>
             <v-icon
               @click="changeTab()"
               title="Refresh Content"
@@ -45,7 +75,9 @@
                 border: 1px solid #ddd;
               "
               :src="
-                customer ? customer.profile_picture : '/no-business_profile.png'
+                customer?.profile_picture
+                  ? customer.profile_picture
+                  : '/no-business_profile.png'
               "
             ></v-img>
           </v-col>
@@ -81,24 +113,31 @@
                   <span style="padding-top: 5px">customermail@gmail.com</span>
                 </div> -->
                 <div style="padding-top: 15px; font-size: 12px">
-                  <v-icon size="15" color="black">mdi mdi-map-marker</v-icon
-                  ><a
-                    href="http://www.google.com/maps/"
+                  <v-icon size="15" color="black">mdi mdi-map-marker</v-icon>
+                  <!-- <a
+                    :href="
+                      'https://www.google.com/maps/place//@' +
+                      customer.latitude +
+                      ', ' +
+                      customer.longitude +
+                      ',20z?entry=ttu'
+                    "
                     target="_blank"
                     style="text-decoration: none; color: black"
-                  >
-                    {{
-                      customer.house_number
-                        ? customer.house_number +
-                          "," +
-                          customer.street_number +
-                          "," +
-                          customer.city +
-                          "," +
-                          customer.city
-                        : "---"
-                    }}</a
-                  >
+                  > -->
+                  {{
+                    customer.house_number
+                      ? customer.house_number +
+                        "," +
+                        customer.street_number +
+                        "," +
+                        customer.city +
+                        "," +
+                        customer.city
+                      : "---"
+                  }}
+
+                  <!-- </a> -->
                   <div>
                     Landmark:
                     {{ customer.house_number ? customer.landmark : "---" }}
@@ -133,6 +172,9 @@
 
                 <v-row style="padding-top: 50px; float: right">
                   <v-col cols="12" style="font-size: 20px">
+                    <div v-if="customer.devices.length == 0">
+                      0 Devices/Sensor
+                    </div>
                     <span style="float: left; width: 60px">
                       <img
                         v-if="
@@ -225,15 +267,14 @@
               <v-icon>mdi mdi-car-emergency</v-icon>Emergency
             </v-tab>
 
-            <v-tab href="#tab-3">
-              <v-icon>mdi mdi-domain</v-icon>
-              Photos
-            </v-tab>
             <v-tab href="#tab-4">
               <v-icon>mdi mdi-shield-home-outline</v-icon>
               Devices/Sensor
             </v-tab>
-
+            <v-tab href="#tab-3">
+              <v-icon>mdi mdi-domain</v-icon>
+              Photos
+            </v-tab>
             <v-tab href="#tab-6">
               <v-icon>mdi mdi-alarm</v-icon>
               Reports
@@ -361,7 +402,7 @@ import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDash
 import CustomerAlarmEvents from "../../components/Alarm/CustomerAlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
 import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
-
+import NewCustomer from "../../components/Alarm/NewCustomer.vue";
 export default {
   components: {
     AlramCustomerContacts,
@@ -373,9 +414,11 @@ export default {
     AlarmSettings,
     CustomerDashboard,
     CustomerAlarmEvents,
+    NewCustomer,
   },
   props: ["_id", "isPopup"],
   data: () => ({
+    dialogEditBuilding: false,
     messages: [],
     customerSensors: [],
     keyContacts: 1,
@@ -445,6 +488,7 @@ export default {
     closeDialog() {
       this.key = this.key + 1;
       this.getDataFromApi();
+      this.getCustomerProfilePercentage();
     },
     getBuildingTypeById(id) {
       let buildingTypes =
@@ -513,11 +557,12 @@ export default {
           .get(`customer_profile_completion_percentage`, this.payloadOptions)
           .then(({ data }) => {
             this.profile_percentage = data.percentage;
-
-            this.messages = "Profile is successfully completed";
-            data.message.forEach((element) => {
-              this.messages = this.messages + element + "\n";
-            });
+            if (data.percentage == 100) {
+              this.messages = "Profile is successfully completed";
+            } else
+              data.message.forEach((element) => {
+                this.messages = this.messages + element + "\n";
+              });
           });
       } catch (e) {}
     },

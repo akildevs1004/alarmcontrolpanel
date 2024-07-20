@@ -1,5 +1,6 @@
 <template>
   <date-picker
+    style="z-index: 99"
     value-type="format"
     format="YYYY-MM-DD"
     type="date"

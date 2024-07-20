@@ -155,6 +155,7 @@
         <v-col
           md="6"
           v-if="
+            payload.device_model == 'XT-CPANEL' ||
             payload.device_type == 'all' ||
             payload.device_type == 'Temperature' ||
             payload.device_type == 'Control Panel'
@@ -178,7 +179,10 @@
     </v-form>
 
     <v-row>
-      <v-col cols="12">
+      <v-col cols="8" style="font-size: 14px"
+        >Note:Multiple Zones can add to Control Panel Type
+      </v-col>
+      <v-col cols="4">
         <div class="text-right">
           <v-btn :loading="loading" small color="primary" @click="store_device">
             Submit
@@ -320,7 +324,7 @@ export default {
   watch: {
     options: {
       handler() {
-        this.getDataFromApi();
+        //this.getDataFromApi();
       },
       deep: true,
     },
@@ -387,7 +391,7 @@ export default {
       //let company_id = console.log(this.payload);
 
       this.payload.company_id = this.$auth.user.company_id;
-
+      this.payload.id = this.editDevice.id;
       this.payload.ip = "0.0.0.0";
       this.payload.port = "0000";
       this.payload.customer_id = this.customer_id;
@@ -397,8 +401,6 @@ export default {
       delete this.payload.company_branch;
 
       let payload = this.payload;
-
-      console.log(payload);
 
       this.loading = true;
       if (!this.editDevice) {
@@ -430,7 +432,7 @@ export default {
               this.snackbar = true;
               this.deviceResponse = "Device details are  Created successfully";
               this.response = "Device details are  Created successfully";
-              this.getDataFromApi();
+              //this.getDataFromApi();
               this.editDialog = false;
 
               this.$emit("closeDialog");
@@ -444,6 +446,9 @@ export default {
             this.loading = false;
             if (!data.status) {
               this.errors = data.errors;
+              this.snackbar = true;
+              this.deviceResponse = data.message;
+              this.response = data.message;
             } else if (data.status == "device_api_error") {
               this.errors = [];
               this.snackbar = true;

@@ -290,7 +290,7 @@ class DeviceController extends Controller
             $model->where("name", $request->name);
 
             if ($model->exists()) {
-                return $this->response('Device already exist.', null, true);
+                return $this->response('Device already exist.', null, false);
             }
 
             $data = $request->validated();
@@ -628,6 +628,18 @@ class DeviceController extends Controller
             } else if ($request->filled("serial_number")) {
                 $data["device_id"] = $data["serial_number"];
             }
+
+            $model = Device::query();
+            $model->where("company_id", $request->company_id);
+            $model->where("serial_number", $request->serial_number);
+            $model->where("id", "!=", $request->id);
+
+            if ($model->exists()) {
+                return $this->response('Device already exist.', null, false);
+            }
+
+
+
             $record = $Device->update($data);
 
             //update to Device 

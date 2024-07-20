@@ -223,7 +223,7 @@ export default ({ app }, inject) => {
       };
       const formattedDate = inputDate.toLocaleDateString("en-US", options);
       if (year == 1970 || inputdate == 0) return "---";
-      return `${hours}:${minutes}    `;
+      return `${hours}:${minutes}`;
     },
     can(per, thisobj) {
       let u = thisobj.$auth.user;

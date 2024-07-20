@@ -690,6 +690,10 @@ class CustomersController extends Controller
             $message[] = "No Emergency Contacts";
 
         $profilePercentage = min($profilePercentage, 100);
+        if (count($message) == 0 && $profilePercentage != 100) {
+            $message[] = "Minimum 2 Building Photos are required";
+            $message[] = "Minimum 5 Emergency Contacts required";
+        }
 
         return ["percentage" => $profilePercentage, "message" => $message];
     }

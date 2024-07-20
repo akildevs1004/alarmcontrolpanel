@@ -1,5 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%">
+    <div class="text-center" v-if="data.length == 0">No Data Available</div>
     <v-row>
       <v-col cols="8">
         <h4>{{ display_title }}</h4>
@@ -61,6 +62,7 @@ export default {
 
   data() {
     return {
+      data: [],
       key: 1,
       filterDeviceId: null,
       customersList: [],
@@ -204,6 +206,7 @@ export default {
       await this.$axios
         .get(`/alarm_logs_data_month_data`, options)
         .then(({ data }) => {
+          this.data = data;
           this.renderChart2(data);
         });
 

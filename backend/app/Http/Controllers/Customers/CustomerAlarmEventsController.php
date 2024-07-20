@@ -193,9 +193,9 @@ class CustomerAlarmEventsController extends Controller
             "notes"
         ])->where('company_id', $request->company_id)->where('alarm_status', 1);
 
+        //$model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
-
-        $model->orderBy("alarm_start_datetime", "asc");
+        $model->orderBy("alarm_start_datetime", "DESC");
         return $model->get();;
     }
     public function getAlarmEvents(Request $request)
@@ -268,8 +268,9 @@ class CustomerAlarmEventsController extends Controller
                 $q->orWhereHas('device', fn (Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
             });
         });
+        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
-        $model->orderBy("alarm_start_datetime", "asc");
+        //$model->orderBy("alarm_start_datetime", "asc");
         return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
     public function getAlarmLogs(Request $request)

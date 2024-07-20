@@ -511,8 +511,9 @@ import AlarmSensorZones from "../../components/Alarm/EditSensorZones.vue";
 
 export default {
   components: { DeviceAccessSettings, AlarmEditDevice, AlarmSensorZones },
-  props: ["customer_id", "editId"],
+  props: ["customer_id"],
   data: () => ({
+    editId: null,
     key: 1,
     dialogEditDevice: false,
     deviceTypes: [],

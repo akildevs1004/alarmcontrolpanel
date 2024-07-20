@@ -63,6 +63,9 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <div v-if="customer_contacts.length == 0" class="text-center">
+      No Contacts Available
+    </div>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-btn
@@ -218,6 +221,13 @@
           </v-row>
           <v-divider></v-divider>
           <v-row>
+            <v-col cols="4" class="p1-0">Map Positions</v-col>
+            <v-col cols="8" class="bold pr-0">
+              {{ item?.latitude }} <br />
+              {{ item?.longitude }}</v-col
+            >
+          </v-row>
+          <!-- <v-row>
             <v-col cols="4" class="p1-0">Google Map Link</v-col>
             <v-col cols="3" class="bold pr-0">
               <v-btn
@@ -241,14 +251,13 @@
                 "
                 target="_blank"
               >
-                <!-- <v-icon color="green"> mdi mdi-open-in-new</v-icon> -->
                 <img
                   src="/google_map.jpg"
                   style="width: 30px; padding-top: 5px"
                 />
               </a>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-card>
       </v-col>
     </v-row>

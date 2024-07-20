@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%">
+  <div style="width: 100%; height: 100%" class="ml-3">
     <h3>Alarm with Response(Minutes)</h3>
     <div
       :id="name"

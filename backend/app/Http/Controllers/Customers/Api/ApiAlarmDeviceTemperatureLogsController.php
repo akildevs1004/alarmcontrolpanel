@@ -35,7 +35,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-        $devicesList = Device::where("serial_number", "1206280294")->get();
+        $devicesList = Device::get();
 
         // (new AlarmLogsController)->updateCompanyIds();
 
