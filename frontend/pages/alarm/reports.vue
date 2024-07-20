@@ -64,7 +64,7 @@
         <v-col cols="3">
           <div style="height: 200px">
             <AlamCustomerEventsPieChart
-              v-if="date_from"
+              v-if="key > 2"
               :name="'AlamCustomerEventsPieChart'"
               :date_from="date_from"
               :date_to="date_to"
@@ -76,7 +76,7 @@
           <div>
             <div style="height: 200px">
               <AlamCustomerResponsePieChart
-                v-if="date_from"
+                v-if="key > 2"
                 :name="'AlamCustomerResponsePieChart2'"
                 :date_from="date_from"
                 :date_to="date_to"
