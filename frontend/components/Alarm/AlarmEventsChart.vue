@@ -5,7 +5,11 @@
         <h4>{{ display_title }}</h4>
       </v-col>
 
-      <v-col cols="2" class="align-right">
+      <v-col
+        cols="2"
+        class="align-right"
+        v-if="$auth.user.user_type !== 'customer'"
+      >
         <v-autocomplete
           style="padding-top: 6px"
           @change="getDataFromApi()"
@@ -20,7 +24,9 @@
         >
         </v-autocomplete>
       </v-col>
-      <v-col cols="2" class="text-right"
+      <v-col
+        :cols="$auth.user.user_type == 'customer' ? '4' : '2'"
+        class="text-right"
         ><CustomFilter
           id="test"
           style="float: right; padding-top: 5px"
