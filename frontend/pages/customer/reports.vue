@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="customer && customer.id">
     <v-container fluid>
-      <AlarmCustomerDashboard :customer_id="customer.id" :customer="customer" />
+      <AlarmCustomerAlarmEvents :customer="customer.id" />
     </v-container>
   </v-card>
 </template>

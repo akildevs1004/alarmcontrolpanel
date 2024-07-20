@@ -9,7 +9,7 @@
       </v-card-text>
     </v-card>
 
-    <AlarmDevices :customer_id="_id" />
+    <AlarmDevices :customer_id="customer.id" />
   </div>
 </template>
 

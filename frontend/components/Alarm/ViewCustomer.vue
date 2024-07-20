@@ -257,7 +257,7 @@
             class="popup_background_noviolet customer-tabs"
           >
             <v-tabs-slider></v-tabs-slider>
-            <v-tab href="#tab-5">
+            <v-tab href="#tab-5" v-if="$auth.user.user_type !== 'customer'">
               <v-icon>mdi mdi-chart-pie</v-icon>
               Dashboard
             </v-tab>
@@ -287,7 +287,7 @@
               <v-icon>mdi mdi-cash</v-icon>
               Subscription
             </v-tab>
-            <v-tab href="#tab-9">
+            <v-tab href="#tab-9" v-if="$auth.user.user_type !== 'customer'">
               <v-icon>mdi mdi-account-cog</v-icon>
               Settings
             </v-tab>

@@ -258,6 +258,7 @@ export default ({ app }, inject) => {
   inject("pagePermission", {
     can(per, thisobj) {
       let u = thisobj.$auth.user;
+      return true;
 
       // return (
       //   (u && u.permissions.some((e) => e == per || per == "/")) ||
