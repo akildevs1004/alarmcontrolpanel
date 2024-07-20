@@ -1,6 +1,45 @@
 <template>
   <div style="width: 100%; height: 100%">
     <div class="text-center" v-if="data.length == 0">No Data Available</div>
+    <v-row>
+      <v-col cols="8">
+        <h4>{{ display_title }}</h4>
+      </v-col>
+
+      <v-col
+        cols="2"
+        class="align-right"
+        v-if="$auth.user.user_type !== 'customer'"
+      >
+        <v-autocomplete
+          style="padding-top: 6px"
+          @change="getDataFromApi()"
+          class="reports-events-autocomplete"
+          v-model="customer_id"
+          :items="customersList"
+          dense
+          placeholder="Select Building"
+          outlined
+          item-value="id"
+          item-text="building_name"
+        >
+        </v-autocomplete>
+      </v-col>
+      <v-col
+        :cols="$auth.user.user_type == 'customer' ? '4' : '2'"
+        class="text-right"
+        ><CustomFilter
+          id="test"
+          style="float: right; padding-top: 5px"
+          @filter-attr="filterAttr"
+          :default_date_from="date_from"
+          :default_date_to="date_to"
+          :defaultFilterType="1"
+          :height="'40px'"
+        />
+      </v-col>
+    </v-row>
+
     <div
       :id="name"
       style="width: 100%; height: 300px"

@@ -20,6 +20,7 @@ class MasterSeeder extends Seeder
             'email' => 'master@hrms.com',
             'password' => Hash::make('secret'),
             'is_master' => 1,
+            'user_type' => 'master',
         ]);
     }
 }

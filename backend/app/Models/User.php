@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Customers\Customers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -111,5 +112,10 @@ class User extends Authenticatable
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('id', 'desc');
         });
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class,"id");
     }
 }

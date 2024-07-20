@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can(`device_access`)">
+  <div>
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}
@@ -501,7 +501,6 @@
       </v-data-table>
     </v-card>
   </div>
-  <NoAccess v-else />
 </template>
 <script>
 // import Back from "../../components/Snippets/Back.vue";
