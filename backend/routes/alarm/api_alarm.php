@@ -59,6 +59,9 @@ Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCust
 Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
 
 Route::get('customer_profile_completion_percentage', [CustomersController::class, "customerProfileCompletionPercentage"]);
+Route::get('alarm_response_statistics', [AlarmDashboardController::class, "alarmResponseStatistics"]);
+Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
+Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
 
 
 

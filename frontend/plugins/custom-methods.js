@@ -296,12 +296,13 @@ export default ({ app }, inject) => {
       // If the alarm type is unknown, randomly select an image from the available options
       if (!selectedImage) {
         const imageLinks = Object.values(relaventImage);
-        selectedImage = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+        selectedImage =
+          imageLinks[Math.floor(Math.random() * imageLinks.length)];
       }
 
       return selectedImage;
     },
-    
+
     getRelaventImage(alarm) {
       let relaventImage = {
         Burglary: "/device-icons/burglary.png",
@@ -316,11 +317,11 @@ export default ({ app }, inject) => {
       // If the alarm type is unknown, randomly select an image from the available options
       if (!selectedImage) {
         const imageLinks = Object.values(relaventImage);
-        selectedImage = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+        selectedImage =
+          imageLinks[Math.floor(Math.random() * imageLinks.length)];
       }
 
       return selectedImage;
-
     },
     getRelaventCategoryColor(category) {
       let relaventImage = {
@@ -332,6 +333,4 @@ export default ({ app }, inject) => {
       return relaventImage[category] ?? "grey";
     },
   });
-
-
 };

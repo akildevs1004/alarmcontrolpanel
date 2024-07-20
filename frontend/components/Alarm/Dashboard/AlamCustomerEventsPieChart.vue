@@ -1,12 +1,13 @@
 <template>
-  <div style="padding: 0px; width: 100%">
+  <div style="padding: 0px; width: 100%; margin-top: -30px">
+    <h3>Alarm Count</h3>
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
         <div
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 320px; margin: 0 auto; text-align: left"
+          style="width: 100%; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
     </v-row>
@@ -29,15 +30,10 @@
 
 <script>
 export default {
-  props: ["name"],
+  props: ["name", "height", "date_from", "date_to", "customer_id"],
   data() {
     return {
-      //   items: [
-      //     { title: "Title1", value: 20 },
-      //     { title: "Title2", value: 30 },
-      //     { title: "Title3", value: 40 },
-      //     { title: "Title4", value: 50 },
-      //   ],
+      chart: null,
       totalCount: 0,
       filter1: "categories",
       categories: [],
@@ -56,21 +52,14 @@ export default {
           margin: 0,
         },
 
-        colors: [
-          "#843c0c",
-          "#F4B400",
-          "#02B64B",
-          "#f44336",
-          "#00b0f0",
-          "#000000",
-        ],
+        colors: ["#7B1FA2", "#8BC34A", "#F57C00", "#4A90E2", "RED"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          height: 250,
+          height: "200px",
           type: "donut",
         },
         customTotalValue: 0,
@@ -148,55 +137,69 @@ export default {
   mounted() {
     this.loadDevicesStatistics();
   },
+  created() {
+    //this.loadDevicesStatistics();
+  },
   methods: {
-    applyFilter() {
-      this.loadDevicesStatistics();
-    },
     loadDevicesStatistics() {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          branch_id: this.branch_id > 0 ? this.branch_id : null,
+          device_serial_number: this.device_serial_number,
+          date_from: this.date_from,
+          date_to: this.date_to,
+          customer_id: this.customer_id,
         },
       };
 
-      this.$axios.get(`/device_sensors_stats`, options).then(({ data }) => {
+      this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
         this.categories = data;
         this.renderChart1(data);
       });
     },
 
-    renderChart1(data) {
+    async renderChart1(data) {
       let counter = 0;
       let total = 1000;
 
       this.chartOptions.labels[0] = "Burglary";
-      this.chartOptions.series[0] = data.Burglary ?? 0;
+      this.chartOptions.series[0] = data.burglary ?? 0;
 
-      this.chartOptions.labels[1] = "Attendance";
-      this.chartOptions.series[1] = data.Attendance ?? 0;
+      this.chartOptions.labels[1] = "Medical";
+      this.chartOptions.series[1] = data.medical ?? 0;
 
-      this.chartOptions.labels[2] = "Medical";
-      this.chartOptions.series[2] = data.Medical ?? 0;
+      this.chartOptions.labels[2] = "Temperature";
+      this.chartOptions.series[2] = data.temperature ?? 0;
 
-      this.chartOptions.labels[3] = "Temperature" ?? 0;
-      this.chartOptions.series[3] = data.Temperature ?? 0;
+      this.chartOptions.labels[3] = "Water";
+      this.chartOptions.series[3] = data.water ?? 0;
+      this.chartOptions.labels[4] = "Fire";
+      this.chartOptions.series[4] = data.fire ?? 0;
 
-      this.chartOptions.labels[4] = "Water";
-      this.chartOptions.series[4] = data.Water ?? 0;
+      this.chartOptions.customTotalValue =
+        data.burglary + data.medical + data.temperature + data.water;
+      +data.fire;
+      //this.items.ExpectingCount;
 
-      this.chartOptions.labels[5] = "Fire";
-      this.chartOptions.series[5] = data.Fire ?? 0;
+      // setTimeout(() => {
+      //   try {
+      //     new ApexCharts(
+      //       document.querySelector("#" + this.name),
+      //       this.chartOptions
+      //     ).render();
+      //   } catch (error) {}
+      // }, 1000);
+      if (this.chart) {
+        this.chart.destroy();
+      }
 
-      this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
-
-      setTimeout(() => {
-        try {
-          new ApexCharts(
-            document.querySelector("#" + this.name),
-            this.chartOptions
-          ).render();
-        } catch (error) {}
-      }, 1000);
+      // Render the chart
+      this.chart = await new ApexCharts(
+        document.querySelector("#" + this.name),
+        this.chartOptions
+      );
+      this.chart.render();
     },
   },
   created() {

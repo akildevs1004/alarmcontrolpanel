@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlarmDeviceTemperatureLogs;
+use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
@@ -124,12 +125,12 @@ class AlarmDeviceTemperatureLogsController extends Controller
         }
 
         foreach ($dateStrings as $date) {
-            $logs = AlarmLogs::where('company_id', $request->company_id)
+            $logs = AlarmEvents::where('company_id', $request->company_id)
 
                 ->when($request->filled("customer_id"), fn ($q) => $q->where("customer_id", $request->customer_id))
                 ->when($request->filled("serial_number"), fn ($q) => $q->where("serial_number", $request->serial_number))
-                ->whereBetween('log_time', [$date . ' 00:00:00', $date . ' 23:59:59'])
-                ->where('alarm_status', 1)
+                ->whereBetween('alarm_start_datetime', [$date . ' 00:00:00', $date . ' 23:59:59'])
+                //->where('alarm_status', 1)
                 ->get();
 
             $finalarray[] = [
