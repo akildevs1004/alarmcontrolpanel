@@ -331,8 +331,6 @@ export default {
     // this.$store.commit("dashboard/resetState", null);
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
-
-    this.verifyToken();
   },
   mounted() {
     // setTimeout(() => {
@@ -346,98 +344,6 @@ export default {
     openForgotPassword() {
       this.dialogForgotPassword = true;
     },
-    verifyToken() {
-      if (this.$route.query.email && this.$route.query.password) {
-        this.email = this.$route.query.email;
-        this.password = this.$route.query.password;
-
-        this.loginWithOTP();
-      }
-    },
-    hideMobileNumber(inputString) {
-      // Check if the input is a valid string
-      if (typeof inputString !== "string" || inputString.length < 4) {
-        return inputString; // Return input as is if it's not a valid string
-      }
-
-      // Use a regular expression to match all but the last 3 digits
-      var regex = /^(.*)(\d{5})$/;
-      var matches = inputString.match(regex);
-
-      if (matches) {
-        var prefix = matches[1]; // Text before the last 3 digits
-        var lastDigits = matches[2]; // Last 3 digits
-        var maskedPrefix = "*".repeat(prefix.length); // Create a string of asterisks of the same length as the prefix
-        return maskedPrefix + lastDigits;
-      } else {
-        return inputString; // Return input as is if there are fewer than 3 digits
-      }
-    },
-
-    handleInputChange() {},
-    // mxVerify(res) {
-    //   this.reCaptcha = res;
-    //   this.showGRC = this.reCaptcha ? false : true;
-    // },
-    checkOTP(otp) {
-      if (otp == "") {
-        alert("Enter OTP");
-        return;
-      }
-      let payload = {
-        userId: this.userId,
-      };
-      this.$axios
-        .post(`check_otp/${otp}`, payload)
-        .then(({ data }) => {
-          if (!data.status) {
-            alert("Invalid OTP. Please try again");
-          } else {
-            this.login();
-          }
-        })
-        .catch((err) => console.log(err));
-    },
-
-    loginWithOTP() {
-      if (this.$refs.form.validate()) {
-        this.loading = true;
-        this.$store.commit("email", this.credentials.email);
-        this.$store.commit("password", this.credentials.password);
-
-        this.$axios
-          .post("loginwith_otp", this.credentials)
-          .then(({ data }) => {
-            if (!data.status) {
-              //alert("OTP Verification: " + data.message);
-              alert("Invalid Login Deails");
-            } else if (data.user_id) {
-              if (data.enable_whatsapp_otp == 1) {
-                this.dialogWhatsapp = true;
-                this.userId = data.user_id;
-                if (data.mobile_number) {
-                  this.maskMobileNumber = this.hideMobileNumber(
-                    data.mobile_number
-                  );
-                }
-
-                this.loading = false;
-              } else {
-                this.login();
-              }
-            } else {
-              this.snackbar = true;
-              this.snackbarMessage = "Invalid Login Details";
-              //alert("Invalid Login Deails");
-            }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        this.snackbar = true;
-        this.snackbarMessage = "Invalid Emaild and Password";
-      }
-      this.loading = false;
-    },
     login() {
       if (this.$refs.form.validate()) {
         this.$store.commit("email", this.credentials.email);
@@ -447,30 +353,6 @@ export default {
         this.loading = true;
         this.$auth
           .loginWith("local", { data: this.credentials })
-          .then(({ data }) => {
-            // console.log("$auth.user", data, this.$auth.user);
-
-            if (data.user.branch_id == 0 && data.user.is_master == false) {
-              this.snackbar = true;
-              this.snackbarMessage =
-                "You do not have Permission to access this page";
-              this.msg = "You do not have Permission to access this page";
-
-              // window.location.href = process.env.EMPLOYEE_APP_URL;
-              // this.$router.push("/login");
-              return false;
-            }
-
-            if (
-              this.$auth.user.role_id == 0 &&
-              this.$auth.user.user_type == "employee"
-            ) {
-              window.location.href = process.env.EMPLOYEE_APP_URL;
-              return "";
-            }
-
-            setTimeout(() => (this.loading = false), 2000);
-          })
           .catch(({ response }) => {
             if (!response) {
               return false;
