@@ -178,10 +178,20 @@
 
               <template v-slot:item.status="{ item }">
                 <img
+                  title="Click to Stop Alarm "
                   @click="UpdateAlarmStatus(item, 0)"
                   :src="'/device-icons/' + alarm_icons[item.alarm_type]"
                   style="width: 20px; vertical-align: middle"
                 />
+                <br />
+                <v-button
+                  class="text--red"
+                  color="red"
+                  title="Click to Stop Alarm "
+                  @click="UpdateAlarmStatus(item, 0)"
+                  type="text"
+                  >Stop</v-button
+                >
 
                 <!-- <div v-if="item.alarm_status == 1">
                   <v-icon
