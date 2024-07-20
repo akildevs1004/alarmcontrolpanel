@@ -103,7 +103,19 @@ export default {
         tooltip: {
           y: {
             formatter: function (val) {
-              return "Responded in " + val + " Minutes";
+              var hours = Math.floor(val / 60);
+              var remainingMinutes = val % 60;
+              return (
+                "Responded in " +
+                ((hours < 10 ? "0" : "") +
+                  hours +
+                  ":" +
+                  (remainingMinutes < 10 ? "0" : "") +
+                  remainingMinutes)
+              );
+              // return (
+              //   "Responded in " + $dateFormat.minutesToHHMM(val) + " Minutes"
+              // );
               //return val + " Minutes";
             },
           },
