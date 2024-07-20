@@ -71,7 +71,9 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
+    <div v-if="building_photos.length == 0" class="text-center">
+      No Photos Available
+    </div>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-btn
@@ -129,10 +131,9 @@
 
                       <v-list-item
                         v-if="can('device_notification_contnet_view')"
-                       
                       >
                         <v-list-item-title style="cursor: pointer">
-                          <AlarmSensorPlotting :key="key" :item="item"/>
+                          <AlarmSensorPlotting :key="key" :item="item" />
                         </v-list-item-title>
                       </v-list-item>
 

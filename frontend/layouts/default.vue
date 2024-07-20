@@ -294,7 +294,7 @@
                   <v-col cols="10">
                     <span style="font-size: 14px">
                       <span>
-                        {{ index }}{{ notificationsMenuItems.length - 1 }}
+                        {{ notificationsMenuItems.length - 1 }}
                         {{ item.title }}
                         <div class="secondary-value">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
@@ -455,6 +455,7 @@
         v-model="alarmPopupNotificationStatus"
         transition="dialog-top-transition"
         max-width="1000"
+        style="z-index: 9999"
       >
         <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
@@ -476,7 +477,7 @@
               >
             </v-card-title>
             <v-card-text>
-              <AlarmPopupAllAlarmEvents :alarm_icons="alarm_icons" />
+              <AlarmPopupAllAlarmEvents :key="key" :alarm_icons="alarm_icons" />
               <!-- <v-row
                 v-for="(device, index) in notificationAlarmDevices"
                 :key="index"
@@ -702,6 +703,7 @@ export default {
   },
   data() {
     return {
+      key: 1,
       snackbar: false,
       response: "",
       alarm_icons: {
@@ -1114,6 +1116,7 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
+      this.key = this.key + 1;
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;

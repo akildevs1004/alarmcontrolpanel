@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-card class="elevation-2" style="height: 850px">
+    <v-card class="elevation-2" style="height: 880px">
       <v-row>
-        <v-col cols="7">
-          <h3>Alarms</h3>
+        <v-col cols="8">
+          <h3 class="ml-2">Alarms</h3>
         </v-col>
 
         <v-col cols="2" class="align-right">
@@ -32,9 +32,9 @@
             :height="'40px'"
           />
         </v-col>
-        <v-col cols="1"> </v-col>
       </v-row>
-      <v-row>
+
+      <v-row class="pb-2">
         <v-col cols="9">
           <div style="height: 250px">
             <AlarmEventsChart
@@ -42,18 +42,6 @@
               style="height: 250px"
               :name="'AlarmEventsChart'"
               :height="'250'"
-              :date_from="date_from"
-              :date_to="date_to"
-              :customer_id="filter_customer_id"
-              :key="key"
-            />
-          </div>
-          <div style="height: 450px">
-            <AlarmEventsResponseChart
-              v-if="key > 2"
-              style="height: 450px"
-              :name="'AlarmEventsResponseChart'"
-              :height="'300'"
               :date_from="date_from"
               :date_to="date_to"
               :customer_id="filter_customer_id"
@@ -72,7 +60,27 @@
               :key="key"
             />
           </div>
-          <v-divider width="95%" />
+        </v-col>
+      </v-row>
+
+      <v-row class="pt-5">
+        <v-col cols="9">
+          <v-divider />
+          <div style="height: 450px">
+            <AlarmEventsResponseChart
+              v-if="key > 2"
+              style="height: 450px"
+              :name="'AlarmEventsResponseChart'"
+              :height="'300'"
+              :date_from="date_from"
+              :date_to="date_to"
+              :customer_id="filter_customer_id"
+              :key="key"
+            />
+          </div>
+        </v-col>
+
+        <v-col cols="3">
           <div>
             <div style="height: 200px">
               <AlamCustomerResponsePieChart
@@ -87,6 +95,7 @@
           </div>
         </v-col>
       </v-row>
+
       <!-- <v-card class="elevation-2" style="height: 600px">
       <v-row>
         <AlarmEventsChart

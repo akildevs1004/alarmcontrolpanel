@@ -79,7 +79,7 @@
           Edit Contact
         </v-btn>
         <v-btn @click="dialogEditBuilding = true" color="primary" dense x-small>
-          Edit Building
+          Edit Building/Customer
         </v-btn>
       </v-col>
 
@@ -395,6 +395,13 @@
         </v-row>
         <v-divider></v-divider>
         <v-row>
+          <v-col cols="4" class="p1-0">Map Positions</v-col>
+          <v-col cols="8" class="bold pr-0"
+            >{{ customer?.latitude }} <br />
+            {{ customer?.longitude }}
+          </v-col>
+        </v-row>
+        <!-- <v-row>
           <v-col cols="4" class="p1-0"> Map Link</v-col>
           <v-col cols="3" class="bold pr-0">
             <v-btn
@@ -424,7 +431,7 @@
               />
             </a>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
   </div>

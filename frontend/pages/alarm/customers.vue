@@ -274,7 +274,7 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
+                  <!-- <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem(item)"
                   >
@@ -282,7 +282,7 @@
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       Popup
                     </v-list-item-title>
-                  </v-list-item>
+                  </v-list-item> -->
                   <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"

@@ -93,7 +93,7 @@
                         max-width: 50px;
                       "
                       :src="
-                        item.device?.customer.profile_picture
+                        item.device?.customer?.profile_picture
                           ? item.device.customer.profile_picture
                           : '/no-business_profile.png'
                       "
@@ -102,7 +102,7 @@
                   </v-col>
                   <v-col style="padding: 10px">
                     <div style="font-size: 13px">
-                      {{ item.device?.customer.building_name || "" }}
+                      {{ item.device?.customer?.building_name || "" }}
                     </div>
                     <!-- <small style="font-size: 12px; color: #6c7184">
                       {{ item.device.customer.house_number }},
@@ -155,8 +155,12 @@
                     $dateFormat.formatDateMonthYear(item.alarm_start_datetime)
                   }}
                 </div>
-                <div class="secondary-value">
-                  {{ $dateFormat.formatDateMonthYear(item.alarm_end_datetime) }}
+                <div class="secondary-value text-center">
+                  {{
+                    item.alarm_end_datetime
+                      ? $dateFormat.formatDateMonthYear(item.alarm_end_datetime)
+                      : "---"
+                  }}
                 </div>
               </template>
               <template v-slot:item.duration="{ item }">
@@ -441,8 +445,8 @@ export default {
       let options = {
         params: {
           page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
+          sortBy: "alarm_start_datetime",
+          sortDesc: "desc",
           perPage: itemsPerPage,
           pagination: true,
           company_id: this.$auth.user.company_id,
