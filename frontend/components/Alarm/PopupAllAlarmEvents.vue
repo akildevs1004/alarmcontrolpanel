@@ -5,6 +5,36 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogCloseAlarm" width="600px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Event Close/Turn off </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogCloseAlarm = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <AlramCloseNotes
+              name="AlramCloseNotes"
+              :key="key"
+              :customer_id="customer_id"
+              @closeDialog="closeDialog"
+              :alarmId="eventId"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogViewCustomer" width="110%">
       <AlarmCustomerView
         @closeCustomerDialog="closeCustomerDialog()"
@@ -228,16 +258,18 @@
 // import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
-
+import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
 export default {
   components: {
     // EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
     AlarmCustomerView,
+    AlramCloseNotes,
   },
   props: ["showFilters", "alarm_icons"],
   data() {
     return {
+      dialogCloseAlarm: false,
       dialogViewCustomer: false,
       viewCustomerId: null,
       filterAlarmStatus: null,
@@ -368,6 +400,8 @@ export default {
     },
     closeDialog() {
       this.dialogAddCustomerNotes = false;
+      this.dialogCloseAlarm = false;
+
       this.getDataFromApi();
       this.$emit("closeDialog");
     },
@@ -378,6 +412,15 @@ export default {
       this.getDataFromApi();
     },
     UpdateAlarmStatus(item, status) {
+      if (status == 0) {
+        if (confirm("Are you sure you want to TURN OFF the Alarm")) {
+          this.customer_id = item.customer_id;
+          this.eventId = item.id;
+          this.dialogCloseAlarm = true;
+          this.$emit("callwait5MinutesNextNotification");
+        }
+      }
+      return false;
       if (status == 0) {
         if (confirm("Are you sure you want to TURN OFF the Alarm")) {
           let options = {

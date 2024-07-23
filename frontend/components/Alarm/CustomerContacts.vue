@@ -179,12 +179,7 @@
         </v-row>
         <v-divider></v-divider>
         <v-row>
-          <v-col cols="3" class="p1-0">
-            <!-- <v-icon color="primary" size="18" style="line-height: 2px"
-              >mdi mdi-whatsapp</v-icon
-            > -->
-            Whatsapp</v-col
-          >
+          <v-col cols="3" class="p1-0"> Whatsapp</v-col>
           <v-col cols="9" class="bold">
             {{
               customer && customer.primary_contact
@@ -193,21 +188,20 @@
             }}
           </v-col>
         </v-row>
-
-        <!-- <v-row>
-          <v-col cols="4" class="p1-0"> </v-col>
-          <v-col cols="8">
-            <v-img
-              style="
-                width: 100px;
-
-                border-radius: 5%;
-                margin: 0 auto;
-              "
-              src="/1696868606.jpg"
-            ></v-img
-          ></v-col>
-        </v-row> -->
+        <v-divider></v-divider>
+        <v-row>
+          <v-col cols="3" class="p1-0"> Alarm PIN </v-col>
+          <v-col cols="9" class="bold red--text">
+            {{
+              customer && customer.primary_contact
+                ? customer.primary_contact?.alarm_stop_pin
+                : "---"
+            }}
+            <v-icon title="Reset PIN" @click="resetAlarmStopPin('primary')"
+              >mdi-refresh</v-icon
+            >
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="1" style="max-width: 20px">
         <v-divider vertical></v-divider
@@ -324,7 +318,20 @@
             }}
           </v-col>
         </v-row>
-
+        <v-divider></v-divider>
+        <v-row>
+          <v-col cols="3" class="p1-0"> Alarm PIN </v-col>
+          <v-col cols="9" class="bold red--text">
+            {{
+              customer && customer.secondary_contact
+                ? customer.secondary_contact?.alarm_stop_pin
+                : "---"
+            }}
+            <v-icon title="Reset PIN" @click="resetAlarmStopPin('secondary')"
+              >mdi-refresh</v-icon
+            >
+          </v-col>
+        </v-row>
         <!-- <v-row>
           <v-col cols="4" class="p1-0"> </v-col>
           <v-col cols="8">
@@ -589,7 +596,21 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-
+    resetAlarmStopPin(contactType) {
+      if (confirm("Are you sure you want to reset?"))
+        this.$axios
+          .post(`reset_customer_alarm_pin`, {
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+            contact_type: contactType,
+          })
+          .then(({ data }) => {
+            this.$emit("closeDialog");
+            this.snackbar = true;
+            this.response =
+              "Customer Pin reset successfully and Email Notification sent";
+          });
+    },
     update() {
       let branch = new FormData();
       branch.append("company_id", this.$auth.user.company_id);

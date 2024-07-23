@@ -706,7 +706,10 @@ export default {
       if (filterDay == "") {
         filterDay = "Daily";
       }
-
+      if (!this.$auth.user) {
+        this.$router.push("/login");
+        return;
+      }
       if (this.$auth.user.user_type == "department") {
         this.payload.department_ids = [this.$auth.user.department_id];
       }
@@ -848,7 +851,6 @@ export default {
         });
     },
     async getDepartments() {
-
       try {
         const { data } = await this.$axios.get(`department-list`);
         this.departments = data;

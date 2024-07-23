@@ -141,8 +141,8 @@
             getLoginType == 'company' ||
             getLoginType == 'branch' ||
             getLoginType == 'department' ||
-            ($auth.user.role?.role_type.toLowerCase() != 'guard' &&
-              $auth.user.role?.role_type.toLowerCase() != 'host')
+            ($auth.user?.role?.role_type.toLowerCase() != 'guard' &&
+              $auth.user?.role?.role_type.toLowerCase() != 'host')
           "
         >
           <v-row align="center" justify="space-around" class="header-menu-row">
@@ -328,7 +328,7 @@
         <v-list light nav dense>
           <v-list-item-group color="primary">
             <v-list-item
-              v-if="$auth && $auth.user.user_type == 'company'"
+              v-if="$auth && $auth.user?.user_type == 'company'"
               @click="goToCompany()"
             >
               <v-list-item-icon>
@@ -477,7 +477,11 @@
               >
             </v-card-title>
             <v-card-text>
-              <AlarmPopupAllAlarmEvents :key="key" :alarm_icons="alarm_icons" />
+              <AlarmPopupAllAlarmEvents
+                @callwait5MinutesNextNotification="wait5MinutesNotification"
+                :key="key"
+                :alarm_icons="alarm_icons"
+              />
               <!-- <v-row
                 v-for="(device, index) in notificationAlarmDevices"
                 :key="index"
@@ -798,6 +802,10 @@ export default {
     };
   },
   created() {
+    // if (!this.$auth.user) {
+    //   this.$router.push("/logout");
+    //   return;
+    // }
     // this.alarm_icons["Temperature"] = "temperature.png";
     // this.alarm_icons["Burglary"] = "burglary.png";
     // this.alarm_icons["Medical"] = "medical.png";
@@ -816,6 +824,10 @@ export default {
   },
 
   mounted() {
+    // if (!this.$auth.user) {
+    //   this.$router.push("/logout");
+    //   return;
+    // }
     this.getBuildingTypes();
     this.getAddressTypes();
     this.getDeviceTypes();
@@ -931,6 +943,10 @@ export default {
       }
     },
     getLoginType() {
+      // if (!this.$auth.user) {
+      //   this.$router.push("/logout");
+      //   return;
+      // }
       return this.$auth.user.user_type || "company";
     },
   },
@@ -945,6 +961,12 @@ export default {
       }, 1000 * 60 * 30);
 
       this.alarmPopupNotificationStatus = false;
+    },
+    wait5MinutesNotification() {
+      this.wait5Minutes = true;
+      setTimeout(() => {
+        this.wait5Minutes = false;
+      }, 1000 * 60 * 60);
     },
     setTopmenuHilighter() {
       const routeMap = {
@@ -1052,6 +1074,10 @@ export default {
       }
     },
     updateTopmenu() {
+      if (!this.$auth.user) {
+        this.$router.push("/login");
+        return;
+      }
       if (this.$auth.user.user_type == "department") {
         this.company_top_menu = require("../menus/department_modules_top.json");
         return;

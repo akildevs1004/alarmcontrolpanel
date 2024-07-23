@@ -40,6 +40,7 @@ Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
+Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
 
 
 

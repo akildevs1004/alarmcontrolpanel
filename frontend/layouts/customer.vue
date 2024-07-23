@@ -857,6 +857,10 @@ export default {
       }
     },
     updateTopmenu() {
+      if (!this.$auth.user) {
+        this.$router.push("/login");
+        return;
+      }
       if (this.$auth.user.user_type == "department") {
         this.company_top_menu = require("../menus/department_modules_top.json");
         return;

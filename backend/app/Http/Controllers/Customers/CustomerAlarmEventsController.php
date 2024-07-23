@@ -7,6 +7,8 @@ use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
 use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\CustomerAlarmNotes;
+use App\Models\Customers\CustomerContacts;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -116,9 +118,83 @@ class CustomerAlarmEventsController extends Controller
     }
     public function stopEvent(Request $request)
     {
+
+
+        $data = $request->validate([
+            'primary_pin_number' => 'nullable',
+            'seconday_pin_number' => 'nullable',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+            'event_id' => 'required',
+            'notes' => 'required',
+            'title' => 'required',
+
+
+
+        ]);
+
+        if (empty($request->input('primary_pin_number')) && empty($request->input('seconday_pin_number'))) {
+            return [
+                "status" => false,
+                "errors" => ['primary_pin_number' => ['Either Primary or Secondary Pin is  required.']],
+            ];
+        }
         if ($request->event_id > 0) {
-            $data = ["alarm_status" => 0, "alarm_end_manually" => 1, "alarm_end_datetime" => date("Y-m-d H:i:s")];
-            AlarmEvents::where("id", $request->event_id)->update($data);
+            $alarmModel = AlarmEvents::where("id", $request->event_id);
+            $alarm_start_datetime = $alarmModel->first()->alarm_start_datetime;
+            $data = [];
+            $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
+                ->where("alarm_stop_pin", $request->input('primary_pin_number'))
+                ->count();
+
+            $secondaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))->where("alarm_stop_pin", $request->input('seconday_pin_number'))->count();
+
+
+            if ($primaryCount == 0 && $secondaryCount == 0) {
+                return [
+                    "status" => false,
+                    "errors" => ['primary_pin_number' => ['PIN number is not matched']],
+                ];
+            }
+
+            if ($primaryCount) {
+                $data["pin_verified_by"] = "primary";
+            } else if ($secondaryCount) {
+                $data["pin_verified_by"] = "secondary";
+            }
+
+            $data["alarm_status"] = 0;
+            $data["alarm_end_manually"] = 1;
+            $data["alarm_end_datetime"] = date("Y-m-d H:i:s");
+
+            $datetime1 = new DateTime($alarm_start_datetime);
+            $datetime2 = new DateTime(date("Y-m-d H:i:s"));
+
+            $interval = $datetime1->diff($datetime2);
+
+            $data["response_minutes"] = $interval->i + ($interval->h * 60) + ($interval->days * 1440);
+
+
+            $alarmModel->update($data);
+            //-----------------------------------------------------------------------------------------
+            $data = [];
+
+            // i represents the minutes part of the interval
+
+
+            $data['company_id'] =  $request->company_id;
+            $data['customer_id'] = $request->customer_id;
+            $data['alarm_id'] = $request->event_id;
+            $data['title'] = $request->title;
+            $data['notes'] = $request->notes;
+            $data['created_datetime'] = date("Y-m-d H:i:s");
+            $record = CustomerAlarmNotes::create($data);
+
+
+
+
+
+
             return $this->response('Alarm stopped Successfully', null, true);
         } else {
             return $this->response('Alarm Details are not available', null, false);
