@@ -712,7 +712,7 @@ export default {
       this.$refs.secondary_attachment_input.click();
     },
     secondary_attachment(e) {
-      this.secondary_upload.name = e.target.files[0] || "";
+      this.secondary_upload.name = e.target.files[1] || "";
 
       let input = this.$refs.secondary_attachment_input;
       let file = input.files;

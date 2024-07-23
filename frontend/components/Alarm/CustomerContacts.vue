@@ -197,9 +197,16 @@
                 ? customer.primary_contact?.alarm_stop_pin
                 : "---"
             }}
-            <v-icon title="Reset PIN" @click="resetAlarmStopPin('primary')"
-              >mdi-refresh</v-icon
+            <v-btn
+              color="red"
+              @click="resetAlarmStopPin('primary')"
+              small
+              outlined
+              >RESET</v-btn
             >
+            <!-- <v-icon title="Reset PIN" @click="resetAlarmStopPin('primary')"
+              >mdi-refresh</v-icon
+            > -->
           </v-col>
         </v-row>
       </v-col>
@@ -327,9 +334,17 @@
                 ? customer.secondary_contact?.alarm_stop_pin
                 : "---"
             }}
-            <v-icon title="Reset PIN" @click="resetAlarmStopPin('secondary')"
-              >mdi-refresh</v-icon
+
+            <v-btn
+              color="red"
+              @click="resetAlarmStopPin('secondary')"
+              small
+              outlined
+              >RESET</v-btn
             >
+            <!-- <v-icon title="Reset PIN" @click="resetAlarmStopPin('secondary')"
+              >mdi-refresh</v-icon
+            > -->
           </v-col>
         </v-row>
         <!-- <v-row>
