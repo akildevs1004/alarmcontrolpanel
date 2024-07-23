@@ -348,7 +348,22 @@ export default {
     for (let index = 0; index <= 60; index++) {
       this.oneTOsixty.push(index);
     }
-
+    this.payload = {
+      name: "",
+      device_type: "",
+      device_id: "",
+      model_number: "",
+      status_id: "",
+      company_id: "",
+      location: "",
+      short_name: "",
+      alarm_delay_minutes: 0,
+      ip: "",
+      function: "auto",
+      port: "",
+      camera_save_images: false,
+      threshold_temperature: "",
+    };
     if (this.editDevice) {
       // this.payload = this.editDevice;
       this.payload.name = this.editDevice.name;
