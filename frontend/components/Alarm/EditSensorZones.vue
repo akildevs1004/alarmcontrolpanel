@@ -266,7 +266,7 @@ export default {
 
         company_id: this.$auth?.user?.company?.id,
         customer_id: this.customer_id,
-        device_id: this.editDevice.id,
+        device_id: this.editDevice?.id ?? null,
       };
       this.loading = true;
       this.$axios

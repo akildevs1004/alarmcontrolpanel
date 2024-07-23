@@ -391,7 +391,7 @@ export default {
       //let company_id = console.log(this.payload);
 
       this.payload.company_id = this.$auth.user.company_id;
-      this.payload.id = this.editDevice.id;
+      this.payload.id = id;
       this.payload.ip = "0.0.0.0";
       this.payload.port = "0000";
       this.payload.customer_id = this.customer_id;

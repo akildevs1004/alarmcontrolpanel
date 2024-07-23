@@ -371,7 +371,7 @@
             <v-img
               :title="item.device_type"
               v-if="item.device_type == 'Humidity'"
-              style="width: 30px"
+              style="width: 22px"
               src="/alarm-icons/humidity.png"
             >
             </v-img>

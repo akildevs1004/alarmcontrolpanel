@@ -14,4 +14,8 @@ class DeviceNotificationsManagers extends Model
     {
         return $this->belongsTo(Device::class, "serial_number", "serial_number");
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, "company_id", "id");
+    }
 }

@@ -184,13 +184,15 @@
                   style="width: 20px; vertical-align: middle"
                 />
                 <br />
-                <v-button
+                <v-btn
                   class="text--red"
                   color="red"
                   title="Click to Stop Alarm "
                   @click="UpdateAlarmStatus(item, 0)"
-                  type="text"
-                  >Stop</v-button
+                  outlined
+                  x-small
+                  dense
+                  >Stop</v-btn
                 >
 
                 <!-- <div v-if="item.alarm_status == 1">

@@ -80,10 +80,12 @@ class AlarmDashboardController extends Controller
             ->when($request->filled('customer_id'), function ($query) use ($request) {
                 $query->where('customer_id', $request->customer_id);
             })
-            ->whereBetween('alarm_start_datetime', [
-                $request['date_from'] . ' 00:00:00',
-                $request['date_to'] . ' 23:59:59'
-            ])
+            ->when($request->filled('date_from'), function ($query) use ($request) {
+                $query->whereBetween('alarm_start_datetime', [
+                    $request['date_from'] . ' 00:00:00',
+                    $request['date_to'] . ' 23:59:59'
+                ]);
+            })
             ->selectRaw('
             COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1 ELSE 0 END), 0) AS burglary,
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1 ELSE 0 END), 0) AS medical,

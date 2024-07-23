@@ -937,12 +937,12 @@ export default {
   methods: {
     wait5MinutesNextNotification() {
       this.snackbar = true;
-      this.response = "New Alarm will be Display after 5 minutes";
+      this.response = "New Alarm will be Display after 30 minutes";
       // alert("New Alarm will be Display after 5 minutes");
       this.wait5Minutes = true;
       setTimeout(() => {
         this.wait5Minutes = false;
-      }, 1000 * 60 * 5);
+      }, 1000 * 60 * 30);
 
       this.alarmPopupNotificationStatus = false;
     },
