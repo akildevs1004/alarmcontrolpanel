@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Customers\Api;
 
 
-
+use Illuminate\Support\Facades\Log as Logger;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
 use App\Mail\DbBackupMail;
@@ -362,7 +362,6 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             //throw $th;
         }
     }
-
     /* -----------------------------------------*/
     public function AlarmLogs(Request $request)
     {
