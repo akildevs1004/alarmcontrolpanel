@@ -58,7 +58,7 @@ function getTime() {
 
 function parseMessage(message) {
   log(`${message}`);
-  const logFilePath = `../backend/storage/alarm-sensors/sensor-logs-${
+  const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
   }.csv`;
   const regex =
