@@ -36,7 +36,7 @@ server.listen(port, () => {
 });
 
 function log(message) {
-  const logRawDataFilePath = `../backend/storage/alarm-sensors/raw-sensor-${
+  const logRawDataFilePath = `../backend/storage/app/alarm-sensors/raw-sensor-${
     getFormattedDate().date
   }.txt`;
   let todayDatetime = getTime();
