@@ -5,7 +5,7 @@ const port = 2503;
 
 const server = net.createServer((socket) => {
   console.log("Client connected");
-  fs.appendFileSync(logRawDataFilePath, "");
+  //fs.appendFileSync(logRawDataFilePath, "");
 
   log(`Device    : Client connected`);
 
@@ -19,7 +19,7 @@ const server = net.createServer((socket) => {
 
   socket.on("end", () => {
     log("Client disconnected");
-    fs.appendFileSync(logRawDataFilePath, "\nClient disconnected");
+    //fs.appendFileSync(logRawDataFilePath, "\nClient disconnected");
   });
 
   socket.on("error", (error) => {
