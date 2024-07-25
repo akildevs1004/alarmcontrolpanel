@@ -146,23 +146,28 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $alarm_type = $devices->sensor_name ?? '';
                     $area =   $devices->area_code ?? '';
 
-                    $records  = [
-                        "serial_number" => $serial_number,
-                        "log_time" => $log_time,
-                        "alarm_status" => 1,
-                        "alarm_type" => $alarm_type,
-                        "area" => $area,
-                        "zone" => $zone,
-                    ];
 
-                    $insertedRecord = AlarmLogs::create($records);
+                    $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->count();
+                    if ($count == 0) {
 
 
+                        $records  = [
+                            "serial_number" => $serial_number,
+                            "log_time" => $log_time,
+                            "alarm_status" => 1,
+                            "alarm_type" => $alarm_type,
+                            "area" => $area,
+                            "zone" => $zone,
+                        ];
 
-                    $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
+                        $insertedRecord = AlarmLogs::create($records);
 
-                    $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
 
+
+                        $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
+
+                        $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                    }
                     // try {
                     //     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
                     // } catch (\Exception $e) {
