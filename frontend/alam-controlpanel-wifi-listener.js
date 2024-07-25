@@ -96,9 +96,9 @@ async function parseMessage(message) {
           timeout: 1000 * 30, // Set timeout to 5000 milliseconds (5 seconds)
         });
 
-        console.log("Response from backend:", response);
+        // console.log("Response from backend:", response);
       } catch (error) {
-        console.error("Error getting from backend:", error.message);
+        // console.error("Error getting from backend:", error.message);
       }
       isAPIConnected = false;
     }
