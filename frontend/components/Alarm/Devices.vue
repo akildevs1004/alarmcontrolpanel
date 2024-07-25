@@ -490,6 +490,12 @@ export default {
     //     this.getDataFromApi();
     //   }
     // }, 1000 * 60);
+
+    setInterval(() => {
+      if (this.$route.name == "alarm-view-customer") {
+        this.updateDevicesHealth();
+      }
+    }, 1000 * 20);
   },
   async created() {
     for (let index = 0; index <= 60; index++) {

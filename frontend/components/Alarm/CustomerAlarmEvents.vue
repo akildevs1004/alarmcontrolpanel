@@ -324,11 +324,11 @@ export default {
       //this.getDataFromApi();
     }
 
-    if (this.$route.name == "alarm-view-customer") {
-      setInterval(() => {
+    setInterval(() => {
+      if (this.$route.name == "alarm-view-customer") {
         this.getDataFromApi();
-      }, 1000 * 20);
-    }
+      }
+    }, 1000 * 20);
   },
 
   methods: {
