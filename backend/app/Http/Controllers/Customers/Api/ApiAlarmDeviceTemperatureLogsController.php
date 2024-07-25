@@ -83,6 +83,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
                             ->where("company_id", '>', 0)
+                            ->where("alarm_type",    $currentLog["alarm_type"])
                             ->where("id", "<", $currentLog["id"])
                             ->orderBy("log_time", "DESC")
                             ->first();
@@ -263,6 +264,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                 ->where("company_id", '>', 0)
                 ->where("alarm_status", 1)
+
                 ->where("verified", false)
                 ->where("time_duration_seconds", '>=', 30)
 
