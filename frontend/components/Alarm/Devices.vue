@@ -1073,7 +1073,20 @@ export default {
       });
     },
     async updateDevicesHealth() {
-      this.getDataFromApi();
+      this.loading = true;
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.customer_id,
+        },
+      };
+
+      this.$axios.get(`device`, options).then(({ data }) => {
+        this.data = data.data;
+        this.totalRowsCount = data.total;
+        this.loading = false;
+      });
+
       // let options = {
       //   params: {
       //     company_id: this.$auth.user.company_id,
