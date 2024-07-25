@@ -70,7 +70,7 @@ function parseMessage(message) {
   const regex =
     /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
   const match = message.match(regex);
-  console.log(match);
+  //console.log(match);
   if (match) {
     const recordNumber = match[1];
     const deviceId = match[2];
@@ -95,9 +95,9 @@ function parseMessage(message) {
           timeout: 1000 * 5, // Set timeout to 5000 milliseconds (5 seconds)
         });
 
-        // console.log("Response from backend:", response.data);
+        console.log("Response from backend:", response.data);
       } catch (error) {
-        //console.error("Error getting from backend:", error.message);
+        console.error("Error getting from backend:", error.message);
       }
       isAPIConnected = false;
     }
