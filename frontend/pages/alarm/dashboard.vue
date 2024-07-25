@@ -5,7 +5,9 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Total </v-card-title>
           <v-card-text
-            ><AlamDeviceCountPieChart :name="'AlamDeviceCountPieChart'"
+            ><AlamDeviceCountPieChart
+              :key="key"
+              :name="'AlamDeviceCountPieChart'"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -13,7 +15,10 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Status</v-card-title>
           <v-card-text>
-            <AlamDeviceLiveCountPieChart name="AlamDeviceLiveCountPieChart" />
+            <AlamDeviceLiveCountPieChart
+              :key="key"
+              name="AlamDeviceLiveCountPieChart"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -21,7 +26,10 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Contract</v-card-title>
           <v-card-text>
-            <AlamCustomerContractPieChart name="AlamCustomerContractPieChart" />
+            <AlamCustomerContractPieChart
+              :key="key"
+              name="AlamCustomerContractPieChart"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -31,6 +39,7 @@
           <v-card-text class="p-0">
             <!-- <AlamCustomerSensorPieChart name="AlamCustomerSensorPieChart" /> -->
             <AlamCustomerEventsPieChart
+              :key="key"
               :name="'AlamCustomerEventsPieChart'"
               :date_from="date_from"
               :date_to="date_to"
@@ -75,6 +84,9 @@ export default {
   computed: {},
   mounted() {},
   created() {
+    setInterval(() => {
+      this.key = this.key + 1;
+    }, 1000 * 20);
     // this._id = this.$route.params.id;
     let today = new Date();
 

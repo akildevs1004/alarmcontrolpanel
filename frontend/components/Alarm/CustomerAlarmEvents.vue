@@ -327,7 +327,7 @@ export default {
     if (this.$route.name == "alarm-view-customer") {
       setInterval(() => {
         this.getDataFromApi();
-      }, 1000 * 60);
+      }, 1000 * 20);
     }
   },
 

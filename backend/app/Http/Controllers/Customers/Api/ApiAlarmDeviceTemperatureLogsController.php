@@ -86,7 +86,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             ->where("id", "<", $currentLog["id"])
                             ->orderBy("log_time", "DESC")
                             ->first();
-                        $previousLogTime = $previousRecord["log_time"];
+                        if (isset($previousRecord["log_time"]))
+                            $previousLogTime = $previousRecord["log_time"];
                     }
                 }
                 if ($previousLogTime) {

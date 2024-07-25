@@ -847,12 +847,12 @@ export default {
           this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 60 * 1);
+    }, 1000 * 20 * 1);
     setInterval(() => {
       if (this.$route.name != "login") {
         this.loadHeaderNotificationMenu();
       }
-    }, 1000 * 60 * 1);
+    }, 1000 * 20 * 1);
     //this.company_menus = [];
 
     let menu_name = this.$route.name;

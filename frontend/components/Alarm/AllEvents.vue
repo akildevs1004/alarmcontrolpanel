@@ -515,7 +515,7 @@ export default {
     if (this.$route.name == "alarm-alarm-events") {
       setInterval(() => {
         this.getDataFromApi();
-      }, 1000 * 60);
+      }, 1000 * 20);
     }
     setTimeout(() => {
       this.getSensorsList();
