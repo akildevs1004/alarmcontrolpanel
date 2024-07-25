@@ -259,51 +259,54 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         $currentLog = [];
         foreach ($devicesList as $key => $device) {
 
-            $logs = AlarmLogs::where("serial_number", $device['serial_number'])
+            $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                 ->where("company_id", '>', 0)
                 ->where("alarm_status", 1)
                 ->where("verified", false)
 
-                //////////->where("time_duration_seconds", ">=", 60)
-                ->orderBy("log_time", "ASC")
-                ->first();
+
+                ->orderBy("log_time", "ASC")->get();
+
+            foreach ($logsArray  as   $logs) {
 
 
-            if (isset($logs['log_time'])) {
+                if (isset($logs['log_time'])) {
 
-                $data = [
-                    "company_id" => $logs['company_id'],
-                    "serial_number" => $logs['serial_number'],
-                    "alarm_start_datetime" => $logs['log_time'],
-                    "customer_id" => $logs['customer_id'],
-                    "zone" => $logs['zone'],
-                    "area" => $logs['area'],
-                    "alarm_type" => $logs['alarm_type'],
+                    $data = [
+                        "company_id" => $logs['company_id'],
+                        "serial_number" => $logs['serial_number'],
+                        "alarm_start_datetime" => $logs['log_time'],
+                        "customer_id" => $logs['customer_id'],
+                        "zone" => $logs['zone'],
+                        "area" => $logs['area'],
+                        "alarm_type" => $logs['alarm_type'],
 
-                ];
+                    ];
 
-                AlarmEvents::create($data);
-                AlarmLogs::where("serial_number", $logs['serial_number'])
-                    ->where("company_id", '>', 0)
-                    ->where("time_duration_seconds", "!=", null)
-                    ->where("verified", false)->update(["verified" => true]);
-                $data = [
-                    "alarm_status" => 1,
-                    "alarm_start_datetime" => $logs['log_time'],
-                    "alarm_end_datetime" => null
-                ];
+                    AlarmEvents::create($data);
+                    AlarmLogs::where("serial_number", $logs['serial_number'])
+                        ->where("company_id", '>', 0)
+                        ->where("id",   $logs["id"])
+                        ->where("time_duration_seconds", "!=", null)
+                        ->where("verified", false)->update(["verified" => true]);
+                    $data = [
+                        "alarm_status" => 1,
+                        "alarm_start_datetime" => $logs['log_time'],
+                        "alarm_end_datetime" => null
+                    ];
 
 
 
-                Device::where("serial_number", $logs['serial_number'])->update($data);
+                    Device::where("serial_number", $logs['serial_number'])->update($data);
 
-                DeviceZones::where("device_id", $device['id'])
-                    ->where("area_code", $logs['zone'])
-                    ->where("zone_code", $logs['area'])
-                    ->update($data);
+                    DeviceZones::where("device_id", $device['id'])
+                        ->where("area_code", $logs['zone'])
+                        ->where("zone_code", $logs['area'])
+                        ->update($data);
 
-                if ($device['alarm_status'] == 0) {
-                    $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+                    if ($device['alarm_status'] == 0) {
+                        $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+                    }
                 }
             }
         }

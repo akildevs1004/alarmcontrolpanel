@@ -87,7 +87,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     }
     public function readCSVLogFile()
     {
-        $date = date("Y-m-d");
+        $date = date("d-m-Y");
         $results = $this->getCSVFileLines($date);
 
         $records = [];
@@ -107,8 +107,12 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $zone = 0;
                 $alarm_type = '';
 
+                //3401 00 000 / HOME 
+
+
                 //-----------Alarm Control panel - Wifi Model 
-                if ($event == '3407' || $event == '3401') //disarm button
+                if ($event == '1407' || $event == '1401') //disarm button 
+                // 1401,000=device //1407=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 0, "armed_datetime" => $log_time]);
 
@@ -116,7 +120,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     AlarmEvents::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time]);
 
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
-                } else if ($event == '1407' || $event == '1401') //armed button
+                } else if ($event == '3407' || $event == '3401') //armed button
+                //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 

@@ -7,29 +7,28 @@ const server = net.createServer((socket) => {
   console.log("Client connected");
   //fs.appendFileSync(logRawDataFilePath, "");
 
-  // log(`Device    : Client connected`);
+  log(`Device    : Client connected`);
 
   socket.on("data", (data) => {
     let todayDatetime = getTime();
 
     const decodedData = data.toString("utf8").trim();
-    //log(`Received data in UTF-8: ${decodedData}`);
-    log(`${decodedData}`);
+    log(`Received data in UTF-8: ${decodedData}`);
     parseMessage(decodedData);
   });
 
   socket.on("end", () => {
-    //log("Client disconnected");
+    log("Client disconnected");
     //fs.appendFileSync(logRawDataFilePath, "\nClient disconnected");
   });
 
   socket.on("error", (error) => {
-    // log(`Socket Error: ${error.message}`);
+    log(`Socket Error: ${error.message}`);
   });
 });
 
 server.on("error", (error) => {
-  //log(`Server Error: ${error.message}`);
+  log(`Server Error: ${error.message}`);
 });
 
 server.listen(port, () => {
@@ -42,7 +41,7 @@ function log(message) {
   }.txt`;
   let todayDatetime = getTime();
   console.log(`${todayDatetime} - ${message}`);
-  fs.appendFileSync(logRawDataFilePath, `\n${message}`);
+  fs.appendFileSync(logRawDataFilePath, `\n${todayDatetime} - ${message}`);
 }
 
 function getTime() {
@@ -62,14 +61,10 @@ function parseMessage(message) {
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
   }.csv`;
-
-  //D2A70043"ADM-CID"0006R7896L7896#3456[#3456|3401 00 000]_11:22:55,07-25-2024
-  //7D440043"ADM-CID"0018R7896L7896#3456[#3456|1b12 00 001]_11:56:03,07-25-2024
-
   const regex =
-    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+    /(\d{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([0-9a-f]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/i;
   const match = message.match(regex);
-  console.log(match);
+
   if (match) {
     const recordNumber = match[1];
     const deviceId = match[2];
