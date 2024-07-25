@@ -3,7 +3,7 @@ const fs = require("fs");
 const axios = require("axios");
 
 const port = 2503;
-
+let isAPIConnected = false;
 const server = net.createServer((socket) => {
   console.log("Client connected");
   //fs.appendFileSync(logRawDataFilePath, "");
@@ -84,13 +84,22 @@ function parseMessage(message) {
     const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
 
-    try {
-      const response = axios.get(
-        "https://alarmbackend.xtremeguard.org/api/read_csv_file"
-      );
-      // console.log("Response from backend:", response.data);
-    } catch (error) {
-      //console.error("Error getting from backend:", error.message);
+    const params = {
+      timestamp,
+    };
+    if (!isAPIConnected) {
+      isAPIConnected = true;
+      let url = "https://alarmbackend.xtremeguard.org/api/read_csv_file";
+      try {
+        const response = axios.get(url, {
+          params,
+          timeout: 1000 * 5, // Set timeout to 5000 milliseconds (5 seconds)
+        });
+
+        // console.log("Response from backend:", response.data);
+      } catch (error) {
+        //console.error("Error getting from backend:", error.message);
+      }
     }
   }
 }
