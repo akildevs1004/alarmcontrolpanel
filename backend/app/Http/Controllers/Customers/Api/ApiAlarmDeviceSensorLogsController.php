@@ -116,8 +116,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 0, "armed_datetime" => $log_time]);
 
-                    //turn off all alarms 
-                    AlarmEvents::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time]);
+                    $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
+
+
 
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
                 } else if ($event == '3407' || $event == '3401') //armed button
@@ -187,6 +188,27 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
         } else {
             return $this->getMeta("Sync Alarm Sensor Logs", " 0 records found " . "\n");
+        }
+    }
+    public function endAllAlarmsBySerialNumber($serial_number, $log_end_datetime)
+    {
+
+        $alarmActiveEvents = AlarmEvents::where("serial_number", $serial_number)->get();
+        //turn off all alarms 
+        foreach ($alarmActiveEvents  as $key => $event) {
+            $datetime1 = new DateTime($log_end_datetime);
+            $datetime2 = new DateTime($event["alarm_start_datetime"]);
+
+            $interval = $datetime1->diff($datetime2);
+
+            $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes part of the interval 
+
+            AlarmEvents::where("id",  $event["id"])
+                ->update([
+                    "alarm_end_datetime" => $log_end_datetime,
+                    "response_minutes" => $minutesDifference,
+                    "alarm_status" => 0
+                ]);
         }
     }
     public function updateCompanyIds($insertedRecord, $serial_number, $log_time)
