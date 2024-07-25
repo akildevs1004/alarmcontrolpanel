@@ -157,9 +157,16 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                     $insertedRecord = AlarmLogs::create($records);
 
+
+
                     $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
 
                     $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+
+                    // try {
+                    //     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+                    // } catch (\Exception $e) {
+                    // }
                 }
             }
 
@@ -195,10 +202,23 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             ];
             AlarmLogs::where("id", $insertedRecord["id"])->update($data);
 
-            try {
-                $this->updateAlarmResponseTime();
-            } catch (\Exception $e) {
-            }
+
+            $data = [
+                "company_id" => $company_id,
+                "serial_number" => $serial_number,
+                "alarm_start_datetime" => $log_time,
+                "customer_id" => $customer_id,
+                "zone" => $insertedRecord['zone'],
+                "area" => $insertedRecord['area'],
+                "alarm_type" => $insertedRecord['alarm_type'],
+
+            ];
+
+            AlarmEvents::create($data);
+
+            //create alarm 
+
+
             return $this->response('Alarm Logs are created', null, true);
         }
     }
