@@ -1,5 +1,6 @@
 const net = require("net");
 const fs = require("fs");
+const axios = require("axios");
 
 const port = 2503;
 
@@ -82,6 +83,15 @@ function parseMessage(message) {
 
     const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
+
+    try {
+      const response = axios.get(
+        "https://alarmbackend.xtremeguard.org/api/read_csv_file"
+      );
+      // console.log("Response from backend:", response.data);
+    } catch (error) {
+      //console.error("Error getting from backend:", error.message);
+    }
   }
 }
 function getFormattedDate() {

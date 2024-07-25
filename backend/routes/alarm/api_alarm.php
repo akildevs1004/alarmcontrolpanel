@@ -8,6 +8,7 @@ use App\Http\Controllers\AnnouncementsCategoriesController;
 use App\Http\Controllers\Customers\AlarmDashboard;
 use App\Http\Controllers\Customers\AlarmDashboardController;
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
@@ -72,6 +73,11 @@ Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::cl
 Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::get('update_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
+Route::get('read_csv_file', [ApiAlarmDeviceSensorLogsController::class, 'readCSVLogFile']);
+
+
+
+
 //alarm logs
 Route::apiResource('alarmevents', CustomerAlarmEventsController::class);
 
