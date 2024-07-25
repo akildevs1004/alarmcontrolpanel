@@ -75,8 +75,8 @@ function parseMessage(message) {
     const deviceId = match[2];
     const eventCode = match[3];
     const time = match[4];
-    const day = match[5];
-    const month = match[6];
+    const month = match[5];
+    const day = match[6];
     const year = match[7];
     const timestamp = `${year}-${month}-${day} ${time}`;
 
