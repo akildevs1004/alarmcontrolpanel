@@ -168,10 +168,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                         $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                     }
-                    // try {
-                    //     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
-                    // } catch (\Exception $e) {
-                    // }
+                    try {
+                        (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+                    } catch (\Exception $e) {
+                    }
                 }
             }
 
@@ -208,18 +208,18 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             AlarmLogs::where("id", $insertedRecord["id"])->update($data);
 
 
-            $data = [
-                "company_id" => $company_id,
-                "serial_number" => $serial_number,
-                "alarm_start_datetime" => $log_time,
-                "customer_id" => $customer_id,
-                "zone" => $insertedRecord['zone'],
-                "area" => $insertedRecord['area'],
-                "alarm_type" => $insertedRecord['alarm_type'],
+            // $data = [
+            //     "company_id" => $company_id,
+            //     "serial_number" => $serial_number,
+            //     "alarm_start_datetime" => $log_time,
+            //     "customer_id" => $customer_id,
+            //     "zone" => $insertedRecord['zone'],
+            //     "area" => $insertedRecord['area'],
+            //     "alarm_type" => $insertedRecord['alarm_type'],
 
-            ];
+            // ];
 
-            AlarmEvents::create($data);
+            // AlarmEvents::create($data);
 
             //create alarm 
 

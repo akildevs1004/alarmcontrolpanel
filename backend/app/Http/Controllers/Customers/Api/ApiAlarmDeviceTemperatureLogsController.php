@@ -42,9 +42,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         //  $devicesList = Device::where("serial_number", "24000003")->get();
         $log[] = $this->updateDuration1($devicesList);
-        $log[] =   $this->updateAlarmEndDatetime2($devicesList);
+        // $log[] =   $this->updateAlarmEndDatetime2($devicesList);
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
-        $log[] =   $this->updateAlarmEndDatetime2($devicesList);
+        //$log[] =   $this->updateAlarmEndDatetime2($devicesList);
 
         return  json_encode($log);
     }
@@ -263,7 +263,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 ->where("company_id", '>', 0)
                 ->where("alarm_status", 1)
                 ->where("verified", false)
-
+                ->where("time_duration_seconds", '>=', 30)
 
                 ->orderBy("log_time", "ASC")->get();
 
@@ -284,27 +284,21 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     ];
 
                     AlarmEvents::create($data);
-                    AlarmLogs::where("serial_number", $logs['serial_number'])
-                        ->where("company_id", '>', 0)
-                        ->where("id",   $logs["id"])
-                        ->where("time_duration_seconds", "!=", null)
+                    AlarmLogs::where("id",   $logs["id"])
+
                         ->where("verified", false)->update(["verified" => true]);
                     $data = [
                         "alarm_status" => 1,
                         "alarm_start_datetime" => $logs['log_time'],
                         "alarm_end_datetime" => null
                     ];
-
-
-
                     Device::where("serial_number", $logs['serial_number'])->update($data);
-
                     DeviceZones::where("device_id", $device['id'])
                         ->where("area_code", $logs['zone'])
                         ->where("zone_code", $logs['area'])
                         ->update($data);
 
-                    if ($device['alarm_status'] == 0) {
+                    if ($device['alarm_status'] == 1) {
                         $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
                     }
                 }
