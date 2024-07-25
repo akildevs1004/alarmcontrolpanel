@@ -58,7 +58,7 @@ function getTime() {
   return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
 
-function parseMessage(message) {
+async function parseMessage(message) {
   log(`${message}`);
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
@@ -91,11 +91,12 @@ function parseMessage(message) {
       isAPIConnected = true;
       let url = "https://alarmbackend.xtremeguard.org/api/read_csv_file";
       try {
-        const response = axios.get(url, {
-          timeout: 1000 * 5, // Set timeout to 5000 milliseconds (5 seconds)
+        const response = await axios.get(url, {
+          params,
+          timeout: 1000 * 30, // Set timeout to 5000 milliseconds (5 seconds)
         });
 
-        console.log("Response from backend:", response.data);
+        console.log("Response from backend:", response);
       } catch (error) {
         console.error("Error getting from backend:", error.message);
       }
