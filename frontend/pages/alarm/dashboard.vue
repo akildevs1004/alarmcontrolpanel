@@ -74,6 +74,7 @@ export default {
     AlamCustomerEventsPieChart,
   },
   data: () => ({
+    key: 1,
     profile_percentage: 60,
     tab: null,
 

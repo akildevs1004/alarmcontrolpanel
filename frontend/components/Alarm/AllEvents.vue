@@ -109,9 +109,18 @@
           <v-col cols="4" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
           <v-col cols="8" class="text-right" style="width: 600px">
             <v-row>
-              <v-col cols="4">
+              <v-col cols="1"></v-col>
+              <v-col cols="3">
+                <v-icon @click="getDataFromApi()" class="mt-2 mr-2"
+                  >mdi-reload</v-icon
+                >
                 <v-text-field
-                  style="padding-top: 7px; width: 150px; float: right"
+                  style="
+                    padding-top: 7px;
+                    width: 150px;
+
+                    float: right;
+                  "
                   width="150px"
                   height="20"
                   class="employee-schedule-search-box"
@@ -129,7 +138,12 @@
               <v-col cols="3"
                 ><v-select
                   class="employee-schedule-search-box"
-                  style="padding-top: 7px; z-index: 999; width: 200px"
+                  style="
+                    padding-top: 7px;
+                    z-index: 999;
+                    width: 200px;
+                    min-width: 100%;
+                  "
                   height="20px"
                   outlined
                   @change="getDataFromApi()"
@@ -149,7 +163,12 @@
               <v-col cols="2"
                 ><v-select
                   class="employee-schedule-search-box"
-                  style="padding-top: 7px; z-index: 999; width: 150px"
+                  style="
+                    padding-top: 7px;
+                    z-index: 999;
+                    min-width: 100%;
+                    width: 150px;
+                  "
                   height="20px"
                   outlined
                   @change="getDataFromApi()"
@@ -541,7 +560,7 @@ export default {
         this.$route.name == "alarm-allevents"
       )
         this.getDataFromApi();
-    }, 1000 * 60);
+    }, 1000 * 20 * 1);
   },
 
   methods: {
