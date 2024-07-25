@@ -77,6 +77,7 @@ class AlarmDashboardController extends Controller
     {
         $statistics = DB::table('alarm_events')
             ->where('company_id', $request['company_id'])
+            ->where('alarm_status', 1)
             ->when($request->filled('customer_id'), function ($query) use ($request) {
                 $query->where('customer_id', $request->customer_id);
             })
