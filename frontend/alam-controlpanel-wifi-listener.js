@@ -92,7 +92,6 @@ function parseMessage(message) {
       let url = "https://alarmbackend.xtremeguard.org/api/read_csv_file";
       try {
         const response = axios.get(url, {
-          params,
           timeout: 1000 * 5, // Set timeout to 5000 milliseconds (5 seconds)
         });
 
@@ -100,6 +99,7 @@ function parseMessage(message) {
       } catch (error) {
         //console.error("Error getting from backend:", error.message);
       }
+      isAPIConnected = false;
     }
   }
 }
