@@ -236,7 +236,7 @@
           }}
         </template>
         <template v-slot:item.status="{ item }">
-          <div v-if="item.status == 1">
+          <div v-if="item.status_id == 1">
             <v-img style="width: 30px" src="/icons/device_status_open.png">
             </v-img>
           </div>
