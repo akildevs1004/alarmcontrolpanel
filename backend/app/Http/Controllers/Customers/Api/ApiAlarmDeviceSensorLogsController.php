@@ -107,75 +107,73 @@ class ApiAlarmDeviceSensorLogsController extends Controller
         if (isset($results["data"])) {
             foreach ($results["data"] as $row) {
 
-                try {
-                    $columns = explode(',', $row);
+
+                $columns = explode(',', $row);
 
 
-                    $serial_number = $columns[0];
-                    $event = $columns[1];
-                    $log_time = $columns[2];
+                $serial_number = $columns[0];
+                $event = $columns[1];
+                $log_time = $columns[2];
 
-                    $unique_code = $columns[3];
-                    $area = 0;
-                    $zone = 0;
-                    $alarm_type = '';
+                $unique_code = $columns[3];
+                $area = 0;
+                $zone = 0;
+                $alarm_type = '';
 
-                    //3401 00 000 / HOME 
-
-
-                    //-----------Alarm Control panel - Wifi Model 
-
-                    if ($event == 'HEARTBEAT') {
-                        Device::where("serial_number", $serial_number)->update(
-                            ["status_id" => 1, "last_live_datetime" => $log_time]
-                        );
-                        $message[] = $this->getMeta("Device HeartBeat", $log_time . "\n");
-                    } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
-                    {
-                        Device::where("serial_number", $serial_number)->update(["armed_status" => 0, "armed_datetime" => $log_time]);
-                        $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-                        $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
-                    } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
-                    {
-                        Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
-
-                        $message[] = $this->getMeta("Device Armed", $log_time . "\n");
-                    } else   //zone verification button
-                    {
-                        $zone = substr($event, 1);
-
-                        $devices = DeviceZones::with(['device'])
-                            ->whereHas('device', function ($query) use ($serial_number) {
-                                $query->where('serial_number', $serial_number);
-                            })
-                            ->where("zone_code", $zone)
-                            ->first();
-
-                        $alarm_type = $devices->sensor_name ?? '';
-                        $area =   $devices->area_code ?? '';
+                //3401 00 000 / HOME 
 
 
-                        $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->count();
-                        if ($count == 0) {
-                            $records  = [
-                                "serial_number" => $serial_number,
-                                "log_time" => $log_time,
-                                "alarm_status" => 1,
-                                "alarm_type" => $alarm_type,
-                                "area" => $area,
-                                "zone" => $zone,
-                            ];
+                //-----------Alarm Control panel - Wifi Model 
 
-                            $insertedRecord = AlarmLogs::create($records);
-                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
-                            $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
-                        }
-                        try {
-                            (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
-                        } catch (\Exception $e) {
-                        }
+                if ($event == 'HEARTBEAT') {
+                    Device::where("serial_number", $serial_number)->update(
+                        ["status_id" => 1, "last_live_datetime" => $log_time]
+                    );
+                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "\n");
+                } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
+                {
+                    Device::where("serial_number", $serial_number)->update(["armed_status" => 0, "armed_datetime" => $log_time]);
+                    $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
+                    $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
+                } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
+                {
+                    Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
+
+                    $message[] = $this->getMeta("Device Armed", $log_time . "\n");
+                } else   //zone verification button
+                {
+                    $zone = substr($event, 1);
+
+                    $devices = DeviceZones::with(['device'])
+                        ->whereHas('device', function ($query) use ($serial_number) {
+                            $query->where('serial_number', $serial_number);
+                        })
+                        ->where("zone_code", $zone)
+                        ->first();
+
+                    $alarm_type = $devices->sensor_name ?? '';
+                    $area =   $devices->area_code ?? '';
+
+
+                    $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->count();
+                    if ($count == 0) {
+                        $records  = [
+                            "serial_number" => $serial_number,
+                            "log_time" => $log_time,
+                            "alarm_status" => 1,
+                            "alarm_type" => $alarm_type,
+                            "area" => $area,
+                            "zone" => $zone,
+                        ];
+
+                        $insertedRecord = AlarmLogs::create($records);
+                        $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
+                        $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                     }
-                } catch (\Exception $e) {
+                    try {
+                        (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+                    } catch (\Exception $e) {
+                    }
                 }
             }
 
