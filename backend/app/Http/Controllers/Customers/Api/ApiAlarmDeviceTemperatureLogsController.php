@@ -59,7 +59,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             $data = AlarmLogs::where("serial_number", $device['serial_number'])
                 ->where("time_duration_seconds", null)
                 ->where("company_id", '>', 0)
-                //->where("log_time", '<=',  date("Y-m-d H:i:s", strtotime("-5 seconds")))
+                ->where("log_time", '<=',  date("Y-m-d H:i:s", strtotime("-3 seconds")))
                 ->orderBy("log_time", "DESC")
                 ->get();
 
