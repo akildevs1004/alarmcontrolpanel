@@ -36,7 +36,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-        $devicesList = Device::get();
+        $devicesList = Device::where("serial_number", "!=", null)->get();
 
         // (new AlarmLogsController)->updateCompanyIds();
 
@@ -68,10 +68,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $currentLog = $data[$i];
                 //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : date("Y-m-d H:i:0", strtotime("-10 minutes"));
                 //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : false;
-                $previousLogTime = false;
-                if (isset($data[$i + 1])) {
-                    $previousLogTime =   $data[$i + 1]['log_time'];
-                } else {
+                $previousLogTime = false; {
                     $fisrtRecord = AlarmLogs::where("serial_number", $device['serial_number'])
                         ->where("company_id", '>', 0)
                         ->orderBy("log_time", "ASC")
