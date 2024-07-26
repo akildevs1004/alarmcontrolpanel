@@ -58,12 +58,12 @@ class Kernel extends ConsoleKernel
 
 
 
-        $schedule
-            ->command('task:check_device_health')
-            ->hourly()
-            ->between('7:00', '23:59')
-            //->withoutOverlapping()
-            ->appendOutputTo(storage_path("kernal_logs/$monthYear-devices-health.log")); //->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));
+        // $schedule
+        //     ->command('task:check_device_health')
+        //     ->hourly()
+        //     ->between('7:00', '23:59')
+        //     //->withoutOverlapping()
+        //     ->appendOutputTo(storage_path("kernal_logs/$monthYear-devices-health.log")); //->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));
 
 
 
