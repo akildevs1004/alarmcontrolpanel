@@ -84,7 +84,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
                             ->where("company_id", '>', 0)
                             ->where("alarm_type",    $currentLog["alarm_type"])
-                            ->where("id", "<", $currentLog["id"])
+                            ->where("log_time", "<", $currentLog["log_time"])
                             ->orderBy("log_time", "DESC")
                             ->first();
                         if (isset($previousRecord["log_time"]))
