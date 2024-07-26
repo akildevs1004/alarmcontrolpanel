@@ -91,6 +91,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             $previousLogTime = $previousRecord["log_time"];
                     }
                 }
+
+
                 if ($previousLogTime) {
 
                     $latestLogTime = $currentLog['log_time'];

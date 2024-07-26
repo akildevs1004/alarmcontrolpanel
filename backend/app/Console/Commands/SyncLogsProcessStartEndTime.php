@@ -31,6 +31,6 @@ class SyncLogsProcessStartEndTime extends Command
     public function handle()
     {
 
-        echo (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+        // echo (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
     }
 }

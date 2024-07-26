@@ -72,7 +72,7 @@ Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::cl
 Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
 Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
-Route::get('update_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
+Route::get('update_logs_duration', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
 Route::get('read_csv_file', [ApiAlarmDeviceSensorLogsController::class, 'readCSVLogFile']);
 
 

@@ -47,9 +47,9 @@ use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
 Route::get("test900device1", function (Request $request) {
 
-    return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
+    //return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
 
-    return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+    //return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
     $curl = curl_init();
 
