@@ -157,8 +157,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                         $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->count();
                         if ($count == 0) {
-
-
                             $records  = [
                                 "serial_number" => $serial_number,
                                 "log_time" => $log_time,
@@ -169,11 +167,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
-
-
-
                             $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
-
                             $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                         }
                         try {

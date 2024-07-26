@@ -80,8 +80,8 @@ async function parseMessage(message) {
     const deviceId = match[2];
     const eventCode = isHeartbeat ? "HEARTBEAT" : match[3];
     const time = isHeartbeat ? match[3] : match[4];
-    const day = isHeartbeat ? match[4] : match[5];
-    const month = isHeartbeat ? match[5] : match[6];
+    const day = isHeartbeat ? match[5] : match[6];
+    const month = isHeartbeat ? match[4] : match[5];
     const year = isHeartbeat ? match[6] : match[7];
     const timestamp = `${year}-${month}-${day} ${time}`;
 
