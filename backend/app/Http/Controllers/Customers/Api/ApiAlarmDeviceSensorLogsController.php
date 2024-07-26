@@ -31,7 +31,18 @@ use Illuminate\View\View;
 class ApiAlarmDeviceSensorLogsController extends Controller
 {
 
+    public function verifyHeartbeat()
+    {
+        $datetime = date("Y-m-d H:i:s", strtotime("-60 minutes"));
+        $query1 = Device::query()
 
+            ->where(function ($query) use ($datetime) {
+
+                $query->where('last_live_datetime', '<=', $datetime);
+                $query->orWhere('last_live_datetime',    null);
+            })
+            ->update(["status_id" => 2]);
+    }
     public function getCSVFileLines($date)
     {
 
@@ -111,18 +122,18 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                 //-----------Alarm Control panel - Wifi Model 
-                if ($event == '1407' || $event == '1401') //disarm button 
-                // 1401,000=device //1407=remote
+
+                if ($event == 'HEARTBEAT') {
+                    Device::where("serial_number", $serial_number)->update(
+                        ["status_id" => 1, "last_live_datetime" => $log_time]
+                    );
+                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "\n");
+                } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 0, "armed_datetime" => $log_time]);
-
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-
-
-
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
-                } else if ($event == '3407' || $event == '3401') //armed button
-                //device=3401,000 //3407,001=remote
+                } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
@@ -130,12 +141,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 } else   //zone verification button
                 {
                     $zone = substr($event, 1);
-                    // return   $devices = Device::with(['sensorzones'])
-                    //     ->whereHas('sensorzones', function ($query) use ($zone) {
-                    //         $query->where('zone_code', "b12");
-                    //     })
-
-                    //     ->first();
 
                     $devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {

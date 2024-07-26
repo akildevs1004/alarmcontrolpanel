@@ -8,21 +8,21 @@ use App\Models\AccessControlTimeSlot;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class AlarmDeviceSensorLogsCsv extends Command
+class AlarmDeviceSensorHeartbeat  extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'task:alarm_device_sensor_logs_csv';
+    protected $signature = 'task:alarm_device_sensor_check_hearbeat_minutes';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'AlarmDeviceSensorLogsCsv';
+    protected $description = 'Alarm_device_sensor_checkHearbeat_minutes ';
 
     /**
      * Execute the console command.
@@ -31,7 +31,7 @@ class AlarmDeviceSensorLogsCsv extends Command
      */
     public function handle()
     {
-        $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+        $result = (new ApiAlarmDeviceSensorLogsController)->verifyHeartbeat();
 
         echo  json_encode($result);
     }

@@ -59,47 +59,52 @@ function getTime() {
 }
 
 async function parseMessage(message) {
-  log(`${message}`);
+  log(message);
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
   }.csv`;
 
-  //D2A70043"ADM-CID"0006R7896L7896#3456[#3456|3401 00 000]_11:22:55,07-25-2024
-  //7D440043"ADM-CID"0018R7896L7896#3456[#3456|1b12 00 001]_11:56:03,07-25-2024
-
-  const regex =
+  const regexEvent =
     /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
-  const match = message.match(regex);
-  //console.log(match);
-  if (match) {
+  const regexHeartbeat =
+    /([a-zA-Z0-9]{8})"NULL"\d{4}(R\d{4}L\d{4})#\d+\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+
+  const matchEvent = message.match(regexEvent);
+  const matchHeartbeat = message.match(regexHeartbeat);
+
+  if (matchEvent || matchHeartbeat) {
+    const match = matchEvent || matchHeartbeat;
+    const isHeartbeat = !!matchHeartbeat;
+
     const recordNumber = match[1];
     const deviceId = match[2];
-    const eventCode = match[3];
-    const time = match[4];
-    const month = match[5];
-    const day = match[6];
-    const year = match[7];
+    const eventCode = isHeartbeat ? "HEARTBEAT" : match[3];
+    const time = isHeartbeat ? match[3] : match[4];
+    const day = isHeartbeat ? match[4] : match[5];
+    const month = isHeartbeat ? match[5] : match[6];
+    const year = isHeartbeat ? match[6] : match[7];
     const timestamp = `${year}-${month}-${day} ${time}`;
 
     const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
-
-    const params = {
-      timestamp,
-    };
-    if (!isAPIConnected) {
-      isAPIConnected = true;
-      let url = "https://alarmbackend.xtremeguard.org/api/read_csv_file";
-      try {
-        const response = await axios.get(url, {
-          params,
-          timeout: 1000 * 30, // Set timeout to 5000 milliseconds (5 seconds)
-        });
-
-        // console.log("Response from backend:", response);
-      } catch (error) {
-        // console.error("Error getting from backend:", error.message);
-      }
+    console.log(logEntry);
+    await sendToBackend(timestamp);
+  }
+}
+async function sendToBackend(timestamp) {
+  const params = { timestamp };
+  if (!isAPIConnected) {
+    isAPIConnected = true;
+    const url = "https://alarmbackend.xtremeguard.org/api/read_csv_file";
+    try {
+      const response = await axios.get(url, {
+        params,
+        timeout: 1000 * 30, // 30 seconds timeout
+      });
+      // console.log("Response from backend:", response);
+    } catch (error) {
+      // console.error("Error getting from backend:", error.message);
+    } finally {
       isAPIConnected = false;
     }
   }
