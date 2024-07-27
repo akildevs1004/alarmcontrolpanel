@@ -844,15 +844,22 @@ export default {
       if (this.wait5Minutes == false) {
         if (this.$route.name != "login") {
           this.resetTimer();
-          this.verifyPopupAlarmStatus();
+          this.loadHeaderNotificationMenu();
+          if (this.notificationAlarmDevices) {
+            if (this.notificationAlarmDevices.length > 0) {
+              this.alarmPopupNotificationStatus = true;
+            } else {
+              this.alarmPopupNotificationStatus = false;
+            }
+          }
+          //this.verifyPopupAlarmStatus();
         }
       }
     }, 1000 * 20 * 1);
-    setInterval(() => {
-      if (this.$route.name != "login") {
-        this.loadHeaderNotificationMenu();
-      }
-    }, 1000 * 20 * 1);
+    // setInterval(() => {
+    //   if (this.$route.name != "login") {
+    //   }
+    // }, 1000 * 20 * 1);
     //this.company_menus = [];
 
     let menu_name = this.$route.name;
@@ -1159,6 +1166,7 @@ export default {
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
           this.notificationsMenuItems = [];
+          this.notificationAlarmDevices = data;
           data.forEach((element) => {
             let notificaiton = {
               title: element.device?.customer?.building_name
