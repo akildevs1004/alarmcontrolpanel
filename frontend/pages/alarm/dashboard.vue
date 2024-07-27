@@ -4,8 +4,10 @@
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Total </v-card-title>
-          <v-card-text
-            ><AlamDeviceCountPieChart :name="'AlamDeviceCountPieChart'"
+          <v-card-text>
+            <AlamDeviceCountPieChart
+              :key="key"
+              :name="'AlamDeviceCountPieChart'"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -13,7 +15,10 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Status</v-card-title>
           <v-card-text>
-            <AlamDeviceLiveCountPieChart name="AlamDeviceLiveCountPieChart" />
+            <AlamDeviceLiveCountPieChart
+              :key="key"
+              name="AlamDeviceLiveCountPieChart"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -21,15 +26,23 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Contract</v-card-title>
           <v-card-text>
-            <AlamCustomerContractPieChart name="AlamCustomerContractPieChart" />
+            <AlamCustomerContractPieChart
+              :key="key"
+              name="AlamCustomerContractPieChart"
+            />
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Sensor Devices</v-card-title>
+          <v-card-title>Sensor Events</v-card-title>
           <v-card-text class="p-0">
-            <AlamCustomerSensorPieChart name="AlamCustomerSensorPieChart" />
+            <AlamCustomerEventsPieChart
+              :key="key"
+              :name="'AlamCustomerEventsPieChart'"
+              :date_from="date_from"
+              :date_to="date_to"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,6 +61,7 @@ import AlamCustomerContractPieChart from "../../components/Alarm/Dashboard/AlamC
 import AlamCustomerSensorPieChart from "../../components/Alarm/Dashboard/AlamCustomerSensorPieChart.vue";
 
 import AlamAllEvents from "../../components/Alarm/AllEvents.vue";
+import AlamCustomerEventsPieChart from "../../components/Alarm/Dashboard/AlamCustomerEventsPieChart.vue";
 
 export default {
   components: {
@@ -56,17 +70,29 @@ export default {
     AlamCustomerContractPieChart,
     AlamCustomerSensorPieChart,
     AlamAllEvents,
+    AlamCustomerEventsPieChart,
   },
   data: () => ({
+    key: 1,
     profile_percentage: 60,
     tab: null,
 
     _id: null,
+    date_from: null,
+    date_to: null,
   }),
   computed: {},
   mounted() {},
   created() {
+    setInterval(() => {
+      this.key = this.key + 1;
+    }, 1000 * 20);
     // this._id = this.$route.params.id;
+    let today = new Date();
+
+    let monthObj = this.$dateFormat.monthStartEnd(today);
+    this.date_from = monthObj.first;
+    this.date_to = monthObj.last;
   },
   watch: {},
   methods: {},

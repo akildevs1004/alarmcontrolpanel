@@ -1,12 +1,13 @@
 <template>
-  <div style="padding: 0px; width: 100%; height: auto">
+  <div style="padding: 0px; width: 100%; margin-top: -30px">
+    <h3>Active Alarms</h3>
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
         <div
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 300px; margin: 0 auto; text-align: left"
+          style="width: 100%; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
     </v-row>
@@ -24,37 +25,15 @@
     >
       No Data available
     </div>
-    <!-- <div>
-      <v-row class="bold" style="height: auto">
-        <v-col cols="1">#</v-col>
-        <v-col cols="6">Category</v-col>
-        <v-col cols="5">Alarm Events count</v-col>
-      </v-row>
-      <div style="height: 160px; overflow-y: scroll; overflow-x: hidden">
-        <v-row :key="index" v-for="(category, index) in categories">
-          <v-col cols="1">{{ index + 1 }}</v-col>
-          <v-col cols="7"
-            ><v-icon :color="options?.colors[index]">mdi mdi-square</v-icon
-            >{{ category.category }}</v-col
-          >
-          <v-col cols="3" class="text-center">{{ category.count }}</v-col>
-        </v-row>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 export default {
-  props: ["name"],
+  props: ["name", "height", "date_from", "date_to", "customer_id"],
   data() {
     return {
-      //   items: [
-      //     { title: "Title1", value: 20 },
-      //     { title: "Title2", value: 30 },
-      //     { title: "Title3", value: 40 },
-      //     { title: "Title4", value: 50 },
-      //   ],
+      chart: null,
       totalCount: 0,
       filter1: "categories",
       categories: [],
@@ -73,15 +52,15 @@ export default {
           margin: 0,
         },
 
-        colors: ["#3E0079", "#DE3AFF", "#797D7F"],
+        colors: ["#7B1FA2", "#8BC34A", "#F57C00", "#4A90E2", "RED"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          width: 320,
-          height: 250,
+          width: "320px",
+          height: "200px",
           type: "donut",
         },
         customTotalValue: 0,
@@ -130,6 +109,7 @@ export default {
         legend: {
           align: "left",
           show: true,
+          style: "margin:10px",
           fontSize: "12px",
           formatter: (seriesName, opts) => {
             return `
@@ -158,18 +138,23 @@ export default {
   mounted() {
     this.loadDevicesStatistics();
   },
+  created() {
+    //this.loadDevicesStatistics();
+  },
   methods: {
-    applyFilter() {
-      this.loadDevicesStatistics();
-    },
     loadDevicesStatistics() {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          branch_id: this.branch_id > 0 ? this.branch_id : null,
+          device_serial_number: this.device_serial_number,
+          date_from: this.date_from,
+          date_to: this.date_to,
+          customer_id: this.customer_id,
         },
       };
 
-      this.$axios.get(`/customer_contract_stats`, options).then(({ data }) => {
+      this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
         this.categories = data;
         this.renderChart1(data);
       });
@@ -179,17 +164,23 @@ export default {
       let counter = 0;
       let total = 1000;
 
-      this.chartOptions.labels[0] = "Active";
-      this.chartOptions.series[0] =
-        data.total - data.expired - data.expiringin30days ?? 0;
+      this.chartOptions.labels[0] = "Burglary";
+      this.chartOptions.series[0] = data.burglary ?? 0;
 
-      this.chartOptions.labels[1] = "Expired";
-      this.chartOptions.series[1] = data.expired ?? 0;
+      this.chartOptions.labels[1] = "Medical";
+      this.chartOptions.series[1] = data.medical ?? 0;
 
-      this.chartOptions.labels[2] = "Renewal";
-      this.chartOptions.series[2] = data.expiringin30days ?? 0;
+      this.chartOptions.labels[2] = "Temperature";
+      this.chartOptions.series[2] = data.temperature ?? 0;
 
-      this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
+      this.chartOptions.labels[3] = "Water";
+      this.chartOptions.series[3] = data.water ?? 0;
+      this.chartOptions.labels[4] = "Fire";
+      this.chartOptions.series[4] = data.fire ?? 0;
+
+      this.chartOptions.customTotalValue =
+        data.burglary + data.medical + data.temperature + data.water;
+      +data.fire;
 
       if (this.chart) {
         this.chart.destroy();
@@ -202,16 +193,6 @@ export default {
       );
       this.chart.render();
     },
-  },
-  created() {
-    // try {
-    //   this.items.forEach((element) => {
-    //     this.totalCount += element.value;
-    //   });
-    //   this.options.labels = this.items.map((e) => e.title);
-    //   this.options.series = this.items.map((e) => e.value);
-    //   new ApexCharts(document.querySelector("#pie2"), this.options).render();
-    // } catch (error) {}
   },
 };
 </script>

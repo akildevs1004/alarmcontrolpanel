@@ -26,12 +26,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-
+        $schedule
+            ->command('task:alarm_device_sensor_logs_csv')
+            ->everyMinute()
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor-logs-csv.log")); // 
 
         $schedule
-            ->command('task:sync_alarm_logs_update_start_end_time')
-            ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-process-logs.log")); // 
+            ->command('task:alarm_device_sensor_check_hearbeat_minutes')
+            ->hourly()
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor--heartbeat-logs-csv.log")); // 
+
+        // $schedule
+        //     ->command('task:sync_alarm_logs_update_start_end_time')
+        //     ->everyMinute()
+        //     ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-process-logs.log")); // 
 
         $monthYear = date("M-Y");
 
@@ -50,12 +58,12 @@ class Kernel extends ConsoleKernel
 
 
 
-        $schedule
-            ->command('task:check_device_health')
-            ->hourly()
-            ->between('7:00', '23:59')
-            //->withoutOverlapping()
-            ->appendOutputTo(storage_path("kernal_logs/$monthYear-devices-health.log")); //->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));
+        // $schedule
+        //     ->command('task:check_device_health')
+        //     ->hourly()
+        //     ->between('7:00', '23:59')
+        //     //->withoutOverlapping()
+        //     ->appendOutputTo(storage_path("kernal_logs/$monthYear-devices-health.log")); //->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));
 
 
 

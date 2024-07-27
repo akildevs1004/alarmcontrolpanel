@@ -149,6 +149,23 @@
                 >{{ primary_errors.whatsapp[0] }}</span
               >
             </v-col>
+            <v-col md="12" cols="12" sm="12" dense>
+              <v-text-field
+                label="Alarm STOP Pin"
+                dense
+                small
+                outlined
+                type="number"
+                max-length="6"
+                v-model="payload_primary.alarm_stop_pin"
+                hide-details
+              ></v-text-field>
+              <span
+                v-if="primary_errors && primary_errors.alarm_stop_pin"
+                class="text-danger mt-2"
+                >{{ primary_errors.alarm_stop_pin[0] }}</span
+              >
+            </v-col>
           </v-row>
 
           <v-row>
@@ -306,6 +323,23 @@
                 v-if="secondary_errors && secondary_errors.whatsapp"
                 class="text-danger mt-2"
                 >{{ secondary_errors.whatsapp[0] }}</span
+              >
+            </v-col>
+            <v-col md="12" cols="12" sm="12" dense>
+              <v-text-field
+                label="Alarm STOP Pin"
+                dense
+                small
+                outlined
+                type="number"
+                max-length="6"
+                v-model="payload_secondary.alarm_stop_pin"
+                hide-details
+              ></v-text-field>
+              <span
+                v-if="secondary_errors && secondary_errors.alarm_stop_pin"
+                class="text-danger mt-2"
+                >{{ secondary_errors.alarm_stop_pin[0] }}</span
               >
             </v-col>
           </v-row>
@@ -536,8 +570,8 @@ export default {
     }
 
     if (this.customer && this.customer.secondary_contact) {
-      this.payload_primary = this.customer.secondary_contact;
-      this.primary_previewImage = this.payload_secondary.profile_picture;
+      this.payload_secondary = this.customer.secondary_contact;
+      this.secondary_previewImage = this.payload_secondary.profile_picture;
     }
 
     return;
@@ -660,16 +694,16 @@ export default {
             this.snackbar = true;
             this.response = "Customer Details Created successfully";
 
-            this.$emit("closeDialog");
+            //this.$emit("closeDialog");
           }
         })
         .catch((e) => {
-          if (e.response.data.primary_errors) {
-            this.primary_errors = e.response.data.primary_errors;
+          if (e.response.data) {
+            this.primary_errors = e.response.data.errors;
             this.color = "red";
 
-            this.snackbar = true;
-            this.response = e.response.data.message;
+            //this.snackbar = true;
+            //this.response = e.response.data.message;
           }
         });
     },
@@ -678,11 +712,11 @@ export default {
       this.$refs.secondary_attachment_input.click();
     },
     secondary_attachment(e) {
-      this.secondary_upload.name = e.target.files[0] || "";
+      this.secondary_upload.name = e.target.files[1] || "";
 
       let input = this.$refs.secondary_attachment_input;
       let file = input.files;
-      //console.log(file);
+
       if (file[0] && file[0].size > 1024 * 1024) {
         e.preventDefault();
         this.secondary_errors["logo"] = [
@@ -690,7 +724,7 @@ export default {
         ];
         return;
       }
-      console.log(file);
+
       if (file && file[0]) {
         let reader = new FileReader();
         reader.onload = (e) => {
@@ -738,12 +772,12 @@ export default {
           }
         })
         .catch((e) => {
-          if (e.response.data.primary_errors) {
-            this.primary_errors = e.response.data.primary_errors;
+          if (e.response.data) {
+            this.secondary_errors = e.response.data.errors;
             this.color = "red";
 
-            this.snackbar = true;
-            this.response = e.response.data.message;
+            // this.snackbar = true;
+            // this.response = e.response.data.message;
           }
         });
     },
@@ -817,8 +851,8 @@ export default {
             this.primary_errors = e.response.data.primary_errors;
             this.color = "red";
 
-            this.snackbar = true;
-            this.response = e.response.data.message;
+            // this.snackbar = true;
+            // this.response = e.response.data.message;
           }
         });
     },

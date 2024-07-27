@@ -8,6 +8,7 @@ use App\Http\Controllers\AnnouncementsCategoriesController;
 use App\Http\Controllers\Customers\AlarmDashboard;
 use App\Http\Controllers\Customers\AlarmDashboardController;
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
@@ -40,6 +41,7 @@ Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
+Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
 
 
 
@@ -60,6 +62,8 @@ Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceS
 
 Route::get('customer_profile_completion_percentage', [CustomersController::class, "customerProfileCompletionPercentage"]);
 Route::get('alarm_response_statistics', [AlarmDashboardController::class, "alarmResponseStatistics"]);
+Route::get('alarm_customer_statistics', [AlarmDashboardController::class, "alarmCustomerStatistics"]);
+
 Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
 Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
 
@@ -70,7 +74,12 @@ Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::cl
 Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
 Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
 Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
-Route::get('update_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
+Route::get('update_logs_duration', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
+Route::get('read_csv_file', [ApiAlarmDeviceSensorLogsController::class, 'readCSVLogFile']);
+
+
+
+
 //alarm logs
 Route::apiResource('alarmevents', CustomerAlarmEventsController::class);
 

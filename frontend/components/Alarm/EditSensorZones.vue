@@ -211,18 +211,23 @@ export default {
     getInfo() {
       this.loading = true;
       //let zones = this.editDevice.sensorzones;
-      this.editDevice.sensorzones.forEach((element) => {
-        let obj = {
-          sensor_name: element.sensor_name,
-          wired: element.wired,
-          location: element.location,
-          area_code: element.area_code,
-          zone_code: element.zone_code,
-          delay: parseInt(element.delay),
-          hours24: element.hours24,
-        };
-        this.device.sensorzones.push(obj);
-      });
+      if (this.editDevice) {
+        this.editDevice.sensorzones.forEach((element) => {
+          let obj = {
+            sensor_name: element.sensor_name,
+            wired: element.wired,
+            location: element.location,
+            area_code: element.area_code,
+            zone_code: element.zone_code,
+            delay: parseInt(element.delay),
+            hours24: element.hours24,
+          };
+          this.device.sensorzones.push(obj);
+        });
+      } else {
+        this.editDevice.sensorzones = [];
+      }
+
       if (this.editDevice.sensorzones.length == 0) {
         this.addEarning();
       }
@@ -266,7 +271,7 @@ export default {
 
         company_id: this.$auth?.user?.company?.id,
         customer_id: this.customer_id,
-        device_id: this.editDevice.id,
+        device_id: this.editDevice?.id ?? null,
       };
       this.loading = true;
       this.$axios

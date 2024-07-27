@@ -72,7 +72,10 @@
           <v-col cols="8"></v-col>
           <v-col cols="4" class="text-right" style="width: 450px">
             <v-row>
-              <v-col cols="6"
+              <v-col cols="1" class="mt-2">
+                <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+              </v-col>
+              <v-col cols="5"
                 ><v-text-field
                   style="padding-top: 7px"
                   width="150px"
@@ -148,11 +151,21 @@
               {{ $dateFormat.formatDateMonthYear(item.alarm_start_datetime) }}
             </div>
             <div class="secondary-value">
-              {{ $dateFormat.formatDateMonthYear(item.alarm_end_datetime) }}
+              {{
+                item.alarm_end_datetime
+                  ? $dateFormat.formatDateMonthYear(item.alarm_end_datetime)
+                  : "---"
+              }}
             </div>
           </template>
           <template v-slot:item.duration="{ item }">
-            <div>{{ $dateFormat.minutesToHHMM(item.response_minutes) }}</div>
+            <div>
+              {{
+                item.alarm_end_datetime
+                  ? $dateFormat.minutesToHHMM(item.response_minutes)
+                  : "---"
+              }}
+            </div>
           </template>
           <template v-slot:item.notes="{ item }">
             <div @click="viewNotes(item)">{{ item.notes.length }}</div>
@@ -221,7 +234,7 @@
                     Add Notes
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="can('branch_edit')">
+                <!-- <v-list-item v-if="can('branch_edit')">
                   <v-list-item-title
                     style="cursor: pointer"
                     @click="deleteEvent(item.id)"
@@ -229,7 +242,7 @@
                     <v-icon color="error" small> mdi-delete </v-icon>
                     Delete
                   </v-list-item-title>
-                </v-list-item>
+                </v-list-item> -->
               </v-list>
             </v-menu>
           </template>
@@ -276,7 +289,12 @@ export default {
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
         { text: "Start/End Date", value: "start_date", sortable: false },
         // { text: "End Date", value: "end_date" , sortable: false },
-        { text: "Resolved Time(H:M)", value: "duration", sortable: false },
+        {
+          text: "Resolved Time(H:M)",
+          value: "duration",
+          sortable: false,
+          align: "center",
+        },
         // { text: "Category", value: "category", sortable: false },
 
         { text: "Notes", value: "notes", sortable: false },
@@ -309,11 +327,11 @@ export default {
       //this.getDataFromApi();
     }
 
-    if (this.$route.name == "alarm-view-customer") {
-      setInterval(() => {
+    setInterval(() => {
+      if (this.$route.name == "alarm-view-customer") {
         this.getDataFromApi();
-      }, 1000 * 60);
-    }
+      }
+    }, 1000 * 20);
   },
 
   methods: {

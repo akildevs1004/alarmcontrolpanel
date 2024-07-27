@@ -236,7 +236,6 @@ export default {
   },
 
   created() {
-    console.log("customer", this.customer);
     if (this.customer) {
       this.payload.email = this.customer.email;
       this.payload.login_status = this.customer.login_status;

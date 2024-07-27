@@ -73,17 +73,38 @@ class AlarmDashboardController extends Controller
 
         return  $statistics;
     }
-    public function alarmStatistics(Request $request)
+    public function alarmCustomerStatistics(Request $request)
     {
-        $statistics = DB::table('alarm_events')
-            ->where('company_id', $request['company_id'])
+        $statistics = AlarmEvents::with('customer')
+            ->select('customer_id', DB::raw('count(*) as total_alarms')) // Add aggregate function
+            ->where('company_id', $request->company_id)
             ->when($request->filled('customer_id'), function ($query) use ($request) {
                 $query->where('customer_id', $request->customer_id);
             })
             ->whereBetween('alarm_start_datetime', [
-                $request['date_from'] . ' 00:00:00',
-                $request['date_to'] . ' 23:59:59'
+                $request->date_from . ' 00:00:00',
+                $request->date_to . ' 23:59:59'
             ])
+            ->groupBy('customer_id')
+            ->get();
+        return  $statistics;
+    }
+
+
+    public function alarmStatistics(Request $request)
+    {
+        $statistics = DB::table('alarm_events')
+            ->where('company_id', $request['company_id'])
+            ->where('alarm_status', 1)
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+            ->when($request->filled('date_from'), function ($query) use ($request) {
+                $query->whereBetween('alarm_start_datetime', [
+                    $request['date_from'] . ' 00:00:00',
+                    $request['date_to'] . ' 23:59:59'
+                ]);
+            })
             ->selectRaw('
             COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1 ELSE 0 END), 0) AS burglary,
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1 ELSE 0 END), 0) AS medical,

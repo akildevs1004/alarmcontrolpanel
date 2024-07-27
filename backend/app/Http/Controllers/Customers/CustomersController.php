@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
+use App\Mail\EmailContentDefault;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
@@ -13,6 +14,7 @@ use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class CustomersController extends Controller
@@ -223,6 +225,23 @@ class CustomersController extends Controller
     }
     public function updateSecondaryContacts(Request $request)
     {
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+            'address_type' => 'nullable',
+            'phone2' => 'nullable',
+            'office_phone' => 'nullable',
+            'whatsapp' => 'nullable',
+
+            'phone1' => 'required',
+            'mobile_number' => 'nullable',
+            'email' => 'nullable',
+            'alarm_stop_pin' => 'required',
+
+
+        ]);
         $data1 = $request->all();
         $data["first_name"] = $data1["first_name"];
         $data["last_name"] = $data1["last_name"];
@@ -310,6 +329,23 @@ class CustomersController extends Controller
     }
     public function updatePrimaryContacts(Request $request)
     {
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+            'address_type' => 'nullable',
+            'phone2' => 'nullable',
+            'office_phone' => 'nullable',
+            'whatsapp' => 'nullable',
+
+            'phone1' => 'required',
+            'mobile_number' => 'nullable',
+            'email' => 'nullable',
+            'alarm_stop_pin' => 'required',
+
+
+        ]);
         $data1 = $request->all();
         $data["first_name"] = $data1["first_name"];
         $data["last_name"] = $data1["last_name"];
@@ -321,12 +357,30 @@ class CustomersController extends Controller
         $data["office_phone"] = $data1["office_phone"];
         $data["email"] = $data1["email"];
         $data["whatsapp"] = $data1["whatsapp"];
+        $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
         $data["display_order"] = 0;
 
         return   $this->updateContactPrimary($data, $request, "primary");
     }
     public function updateCustomerContact(Request $request)
     {
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+            'address_type' => 'nullable',
+            'phone2' => 'nullable',
+            'office_phone' => 'nullable',
+            'whatsapp' => 'nullable',
+
+            'phone1' => 'required',
+            'mobile_number' => 'nullable',
+            'email' => 'nullable',
+            'alarm_stop_pin' => 'required',
+
+
+        ]);
         $data1 = $request->all();
         //$data["display_order"] = 1;
         $data["address"] = isset($data1["address"]) ? $data1["address"] : '---';
@@ -513,6 +567,47 @@ class CustomersController extends Controller
 
         ];
         return $data;
+    }
+
+    public function resetCustomerPin(Request $request)
+    {
+
+        $pin = rand(100000, 999999);
+
+        $model = CustomerContacts::where("company_id", $request->company_id)
+            ->where("customer_id", $request->customer_id)
+            ->where("address_type", $request->contact_type);
+
+        $contact = $model->first();
+
+        $model->update(["alarm_stop_pin" => $pin]);
+        if ($contact->email != '') {
+            $date = date("Y-m-d H:i:s");
+
+            $body_content1 = " Hello, {$contact->first_name} <br/>";
+
+            $body_content1 .= "This is Notifing you about Alarm Pin Reset status <br/><br/>";
+            $body_content1 .= "New PIN :  {$pin}<br/><br/>";
+
+            $body_content1 .= "Date:  $date<br/><br/><br/>";
+
+            $body_content1 .= "*Xtreme Guard*<br/>";
+
+
+            $data = [
+                'subject' => "Alarm Pin Reset Notification",
+                'body' => $body_content1,
+            ];
+
+
+            $body_content1 = new EmailContentDefault($data);
+
+
+            Mail::to($contact->email)
+                ->send($body_content1);
+        }
+
+        return $this->response('Customer  PIN updated', null, true);
     }
     public function getCustomersList(Request $request)
     {

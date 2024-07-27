@@ -15,7 +15,7 @@
     <v-dialog v-model="dialogEditDevice" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Device Information</span>
+          <span style="color: black">Device Information </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -62,178 +62,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- <Back color="primary" /> -->
-    <!-- <v-navigation-drawer v-model="editDialog" bottom temporary right fixed>
-      <v-toolbar class="popup_background" dense>
-        {{ this.editedIndex == -1 ? "New " : "Edit " }} Device
-        <v-spacer></v-spacer>
-
-        <v-icon @click="editDialog = false" outlined dark>
-          mdi mdi-close-circle
-        </v-icon>
-      </v-toolbar>
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <v-row class="ma-1">
-          <v-col md="12">
-            <v-text-field
-              hide-details
-              v-model="payload.name"
-              placeholder="Device Name"
-              outlined
-              dense
-              label="Device Name *"
-            ></v-text-field>
-            <span v-if="errors && errors.name" class="error--text pa-0 ma-0"
-              >{{ errors.name[0] }}
-            </span>
-          </v-col>
-
-          <v-col md="12">
-            <v-text-field
-              class="pb-0"
-              hide-details
-              v-model="payload.location"
-              placeholder="Device location"
-              outlined
-              dense
-              label="Device location *"
-            ></v-text-field>
-            <span v-if="errors && errors.location" class="error--text"
-              >{{ errors.location[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            <v-autocomplete
-              class="pb-0"
-              hide-details
-              v-model="payload.utc_time_zone"
-              placeholder="Time Zone"
-              outlined
-              dense
-              label="Time Zone(Ex:UTC+) *"
-              :items="getTimezones()"
-              item-value="key"
-              item-text="text"
-            ></v-autocomplete>
-            <span v-if="errors && errors.utc_time_zone" class="error--text"
-              >{{ errors.utc_time_zone[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            {{ payload.model_number }}
-            <v-select
-              outlined
-              dense
-              class="pb-0"
-              hide-details
-              v-model="payload.model_number"
-              :items="deviceTypes"
-              label="Model Number *"
-              placeholder="Model Number"
-            ></v-select>
-            
-            <span v-if="errors && errors.model_number" class="error--text"
-              >{{ errors.model_number[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            <v-text-field
-              class="pb-0"
-              hide-details
-              v-model="payload.device_id"
-              placeholder="Serial Number"
-              outlined
-              dense
-              label="Serial Number *"
-            ></v-text-field>
-            <span v-if="errors && errors.device_id" class="error--text"
-              >{{ errors.device_id[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            <v-autocomplete
-              class="pb-0"
-              hide-details
-              v-model="payload.function"
-              placeholder="Function"
-              outlined
-              dense
-              label="Function *"
-              :items="[
-                { id: 'auto', name: 'Auto' },
-                { id: 'In', name: 'In' },
-                { id: 'Out', name: 'Out' },
-                { id: 'manual', name: 'Manual Entry' },
-              ]"
-              item-value="id"
-              item-text="name"
-            ></v-autocomplete>
-            <span v-if="errors && errors.function" class="error--text"
-              >{{ errors.function[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            <v-autocomplete
-              class="pb-0"
-              hide-details
-              v-model="payload.device_type"
-              placeholder="Device Type"
-              outlined
-              dense
-              label="Device Type *"
-              :items="[
-                { id: 'all', name: 'All(Attendance and Access)' },
-                { id: 'Attendance', name: 'Attendance' },
-                { id: 'Access Control', name: 'Access Control' },
-              ]"
-              item-value="id"
-              item-text="name"
-            ></v-autocomplete>
-            <span v-if="errors && errors.device_type" class="error--text"
-              >{{ errors.device_type[0] }}
-            </span>
-          </v-col>
-          <v-col md="12">
-            <v-autocomplete
-              class="pb-0"
-              hide-details
-              v-model="payload.status_id"
-              placeholder="Time Zone"
-              outlined
-              dense
-              label="Device Status *"
-              :items="device_statusses"
-              item-value="id"
-              item-text="name"
-            ></v-autocomplete>
-            <span v-if="errors && errors.status_id" class="error--text"
-              >{{ errors.status_id[0] }}
-            </span>
-          </v-col>
-        </v-row>
-      </v-form>
-      <v-row v-if="deviceResponse">
-        <v-col>
-          <div style="color: red; font-size: 14px" class="pl-1">
-            {{ deviceResponse }}
-          </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12">
-          <div class="text-right">
-            <v-btn
-              small
-              :loading="loading"
-              color="primary"
-              @click="store_device"
-            >
-              Submit
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-    </v-navigation-drawer> -->
 
     <v-card elevation="0" class="pa-0">
       <v-toolbar class="rounded-md" dense flat>
@@ -257,7 +85,12 @@
             :ripple="false"
             title="New"
             color="primary"
-            @click="dialogEditDevice = true"
+            @click="
+              key = key + 1;
+              editId = null;
+              editDevice = null;
+              dialogEditDevice = true;
+            "
             >New Device
           </v-btn>
         </span>
@@ -371,7 +204,7 @@
             <v-img
               :title="item.device_type"
               v-if="item.device_type == 'Humidity'"
-              style="width: 30px"
+              style="width: 22px"
               src="/alarm-icons/humidity.png"
             >
             </v-img>
@@ -403,7 +236,7 @@
           }}
         </template>
         <template v-slot:item.status="{ item }">
-          <div v-if="item.status == 1">
+          <div v-if="item.status_id == 1">
             <v-img style="width: 30px" src="/icons/device_status_open.png">
             </v-img>
           </div>
@@ -657,6 +490,12 @@ export default {
     //     this.getDataFromApi();
     //   }
     // }, 1000 * 60);
+
+    setInterval(() => {
+      if (this.$route.name == "alarm-view-customer") {
+        this.updateDevicesHealth();
+      }
+    }, 1000 * 20);
   },
   async created() {
     for (let index = 0; index <= 60; index++) {
@@ -1240,19 +1079,33 @@ export default {
       });
     },
     async updateDevicesHealth() {
+      this.loading = true;
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          customer_id: this.customer_id,
         },
       };
 
-      await this.$axios
-        .get("/check_device_health", options)
-        .then(({ data }) => {
-          this.snackbar = true;
-          this.response = data;
-          this.getDataFromApi();
-        });
+      this.$axios.get(`device`, options).then(({ data }) => {
+        this.data = data.data;
+        this.totalRowsCount = data.total;
+        this.loading = false;
+      });
+
+      // let options = {
+      //   params: {
+      //     company_id: this.$auth.user.company_id,
+      //   },
+      // };
+
+      // await this.$axios
+      //   .get("/check_device_health", options)
+      //   .then(({ data }) => {
+      //     this.snackbar = true;
+      //     this.response = data;
+      //     this.getDataFromApi();
+      //   });
     },
 
     searchIt(e) {

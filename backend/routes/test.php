@@ -6,6 +6,7 @@ use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\CameraController;
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\DeviceCameraController;
 use App\Http\Controllers\DeviceCameraModel2Controller;
@@ -46,7 +47,9 @@ use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
 Route::get("test900device1", function (Request $request) {
 
-    return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+    //return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
+
+    //return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
     $curl = curl_init();
 

@@ -5,6 +5,66 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogCloseAlarm" width="600px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Event Close/Turn off </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogCloseAlarm = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <AlramCloseNotes
+              name="AlramCloseNotes"
+              :key="key"
+              :customer_id="customer_id"
+              @closeDialog="closeDialog"
+              :alarmId="eventId"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogAddCustomerNotes" width="600px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Notes </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogAddCustomerNotes = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <EditAlarmCustomerEventNotes
+              name="EditAlarmCustomerEventNotes"
+              :key="key"
+              :customer_id="customer_id"
+              @closeDialog="closeDialog"
+              :alarmId="eventId"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogNotesList" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -49,9 +109,18 @@
           <v-col cols="4" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
           <v-col cols="8" class="text-right" style="width: 600px">
             <v-row>
-              <v-col cols="4">
+              <v-col cols="1"></v-col>
+              <v-col cols="3">
+                <v-icon @click="getDataFromApi()" class="mt-2 mr-2"
+                  >mdi-reload</v-icon
+                >
                 <v-text-field
-                  style="padding-top: 7px; width: 150px; float: right"
+                  style="
+                    padding-top: 7px;
+                    width: 150px;
+
+                    float: right;
+                  "
                   width="150px"
                   height="20"
                   class="employee-schedule-search-box"
@@ -69,7 +138,12 @@
               <v-col cols="3"
                 ><v-select
                   class="employee-schedule-search-box"
-                  style="padding-top: 7px; z-index: 999; width: 200px"
+                  style="
+                    padding-top: 7px;
+                    z-index: 999;
+                    width: 200px;
+                    min-width: 100%;
+                  "
                   height="20px"
                   outlined
                   @change="getDataFromApi()"
@@ -89,7 +163,12 @@
               <v-col cols="2"
                 ><v-select
                   class="employee-schedule-search-box"
-                  style="padding-top: 7px; z-index: 999; width: 150px"
+                  style="
+                    padding-top: 7px;
+                    z-index: 999;
+                    min-width: 100%;
+                    width: 150px;
+                  "
                   height="20px"
                   outlined
                   @change="getDataFromApi()"
@@ -246,7 +325,7 @@
                     </div>
                     <div class="secondary-value">
                       {{
-                        item.alarm_end_datetime != ""
+                        item.alarm_end_datetime
                           ? $dateFormat.formatDateMonthYear(
                               item.alarm_end_datetime
                             )
@@ -256,7 +335,11 @@
                   </template>
                   <template v-slot:item.duration="{ item }">
                     <div>
-                      {{ $dateFormat.minutesToHHMM(item.response_minutes) }}
+                      {{
+                        item.alarm_end_datetime
+                          ? $dateFormat.minutesToHHMM(item.response_minutes)
+                          : "---"
+                      }}
                     </div>
                   </template>
                   <template v-slot:item.notes="{ item }">
@@ -275,6 +358,17 @@
                         title="Click to Turn OFF Alarm "
                         >mdi mdi-alarm-light</v-icon
                       >
+                      <br />
+                      <v-btn
+                        class="text--red"
+                        color="red"
+                        title="Click to Stop Alarm "
+                        @click="UpdateAlarmStatus(item, 0)"
+                        outlined
+                        x-small
+                        dense
+                        >Stop</v-btn
+                      >
                     </div>
                     <div v-else-if="item.alarm_status == 0">
                       <v-icon title="Now Alaram is OFF"
@@ -289,6 +383,46 @@
                       </div>
                     </div>
                   </template>
+                  <template v-slot:item.options="{ item }">
+                    <v-menu bottom left>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list width="120" dense>
+                        <v-list-item
+                          v-if="can('branch_view')"
+                          @click="viewNotes(item)"
+                        >
+                          <v-list-item-title style="cursor: pointer">
+                            <v-icon color="secondary" small> mdi-eye </v-icon>
+                            View Notes
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item v-if="can('branch_edit')">
+                          <v-list-item-title
+                            style="cursor: pointer"
+                            @click="addNotes(item)"
+                          >
+                            <v-icon color="secondary" small>
+                              mdi-message-bulleted
+                            </v-icon>
+                            Add Notes
+                          </v-list-item-title>
+                        </v-list-item>
+                        <!-- <v-list-item v-if="can('branch_edit')">
+                  <v-list-item-title
+                    style="cursor: pointer"
+                    @click="deleteEvent(item.id)"
+                  >
+                    <v-icon color="error" small> mdi-delete </v-icon>
+                    Delete
+                  </v-list-item-title>
+                </v-list-item> -->
+                      </v-list>
+                    </v-menu>
+                  </template>
                 </v-data-table>
               </v-card-text>
             </v-card>
@@ -300,19 +434,23 @@
 </template>
 
 <script>
-// import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
+import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
+
+import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 
 export default {
   components: {
-    // EditAlarmCustomerEventNotes,
+    EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
     AlarmCustomerView,
+    AlramCloseNotes,
   },
   props: ["showFilters"],
   data() {
     return {
+      dialogCloseAlarm: false,
       filterResponseInMinutes: null,
       dialogViewCustomer: false,
       viewCustomerId: null,
@@ -349,7 +487,12 @@ export default {
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
         { text: "Start/End Date", value: "start_date", sortable: false },
         // { text: "End Date", value: "end_date" , sortable: false },
-        { text: "Resolved Time(H:M)", value: "duration", sortable: false },
+        {
+          text: "Resolved Time(H:M)",
+          value: "duration",
+          sortable: false,
+          align: "center",
+        },
         // { text: "Category", value: "category", sortable: false },
 
         { text: "Notes", value: "notes", sortable: false },
@@ -360,7 +503,7 @@ export default {
           align: "center",
         },
 
-        // { text: "Options", value: "options", sortable: false },
+        { text: "Options", value: "options", sortable: false },
       ],
       items: [],
     };
@@ -391,7 +534,7 @@ export default {
     if (this.$route.name == "alarm-alarm-events") {
       setInterval(() => {
         this.getDataFromApi();
-      }, 1000 * 60);
+      }, 1000 * 20);
     }
     setTimeout(() => {
       this.getSensorsList();
@@ -417,7 +560,7 @@ export default {
         this.$route.name == "alarm-allevents"
       )
         this.getDataFromApi();
-    }, 1000 * 60);
+    }, 1000 * 20 * 1);
   },
 
   methods: {
@@ -452,6 +595,7 @@ export default {
     },
     closeDialog() {
       this.dialogAddCustomerNotes = false;
+      this.dialogCloseAlarm = false;
       this.getDataFromApi();
       this.$emit("closeDialog");
     },
@@ -464,37 +608,38 @@ export default {
     UpdateAlarmStatus(item, status) {
       if (status == 0) {
         if (confirm("Are you sure you want to TURN OFF the Alarm")) {
-          let options = {
-            params: {
-              company_id: this.$auth.user.company_id,
-              customer_id: this.customer_id,
-              event_id: item.id,
-              status: status,
-            },
-          };
-          this.loading = true;
-          this.$axios
-            .post(`/update-device-alarm-event-status-off`, options.params)
-            .then(({ data }) => {
-              this.getDataFromApi();
-              if (!data.status) {
-                if (data.message == "undefined") {
-                  this.response = "Try again. No connection available";
-                } else this.response = "Try again. " + data.message;
-                this.snackbar = true;
-
-                return;
-              } else {
-                setTimeout(() => {
-                  this.loading = false;
-                  this.response = data.message;
-                  this.snackbar = true;
-                }, 2000);
-
-                return;
-              }
-            })
-            .catch((e) => console.log(e));
+          this.customer_id = item.customer_id;
+          this.eventId = item.id;
+          this.dialogCloseAlarm = true;
+          // let options = {
+          //   params: {
+          //     company_id: this.$auth.user.company_id,
+          //     customer_id: this.customer_id,
+          //     event_id: item.id,
+          //     status: status,
+          //   },
+          // };
+          // this.loading = true;
+          // this.$axios
+          //   .post(`/update-device-alarm-event-status-off`, options.params)
+          //   .then(({ data }) => {
+          //     this.getDataFromApi();
+          //     if (!data.status) {
+          //       if (data.message == "undefined") {
+          //         this.response = "Try again. No connection available";
+          //       } else this.response = "Try again. " + data.message;
+          //       this.snackbar = true;
+          //       return;
+          //     } else {
+          //       setTimeout(() => {
+          //         this.loading = false;
+          //         this.response = data.message;
+          //         this.snackbar = true;
+          //       }, 2000);
+          //       return;
+          //     }
+          //   })
+          //   .catch((e) => console.log(e));
         }
       }
     },
