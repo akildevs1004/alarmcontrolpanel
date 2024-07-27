@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0px; width: 100%">
-    <h3>Response Chart</h3>
+    <h3>Event Closed in Minutes</h3>
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
         <div
@@ -66,6 +66,7 @@ export default {
           toolbar: {
             show: false,
           },
+          width: "320px",
           height: "200px",
           type: "donut",
         },
@@ -190,14 +191,6 @@ export default {
         data.between_5_and_10_minutes +
         data.more_than_10_minutes; //this.items.ExpectingCount;
 
-      // setTimeout(() => {
-      //   try {
-      //     new ApexCharts(
-      //       document.querySelector("#" + this.name),
-      //       this.chartOptions
-      //     ).render();
-      //   } catch (error) {}
-      // }, 1000);
       if (this.chart) {
         this.chart.destroy();
       }

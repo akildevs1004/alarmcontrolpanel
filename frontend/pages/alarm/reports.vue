@@ -146,6 +146,12 @@ export default {
     setTimeout(() => {
       this.updateFilters();
     }, 1000 * 3);
+
+    setInterval(() => {
+      if (this.$route.name == "alarm-reports") {
+        this.updateFilters();
+      }
+    }, 1000 * 20);
   },
 
   methods: {
