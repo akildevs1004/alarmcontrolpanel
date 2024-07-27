@@ -99,6 +99,7 @@
     <v-dialog v-model="dialogViewCustomer" width="110%">
       <AlarmCustomerView
         @closeCustomerDialog="closeCustomerDialog()"
+        :key="key"
         :_id="viewCustomerId"
         :isPopup="true"
       />
