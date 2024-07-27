@@ -7,6 +7,7 @@
     </div>
     <v-dialog v-model="dialogViewCustomer" width="110%">
       <AlarmCustomerView
+        :key="key"
         @closeCustomerDialog="closeCustomerDialog"
         :_id="viewCustomerId"
         :isPopup="true"
@@ -567,6 +568,7 @@ export default {
     },
     viewItem(item) {
       this.viewCustomerId = item.id;
+      this.key += 1;
       this.dialogViewCustomer = true;
     },
     viewItem2(item) {
