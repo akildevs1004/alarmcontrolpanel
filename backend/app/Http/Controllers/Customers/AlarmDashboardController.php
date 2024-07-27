@@ -73,6 +73,24 @@ class AlarmDashboardController extends Controller
 
         return  $statistics;
     }
+    public function alarmCustomerStatistics(Request $request)
+    {
+        $statistics = AlarmEvents::with('customer')
+            ->select('customer_id', DB::raw('count(*) as total_alarms')) // Add aggregate function
+            ->where('company_id', $request->company_id)
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+            ->whereBetween('alarm_start_datetime', [
+                $request->date_from . ' 00:00:00',
+                $request->date_to . ' 23:59:59'
+            ])
+            ->groupBy('customer_id')
+            ->get();
+        return  $statistics;
+    }
+
+
     public function alarmStatistics(Request $request)
     {
         $statistics = DB::table('alarm_events')

@@ -83,14 +83,24 @@
         <v-col cols="3">
           <div>
             <div style="height: 200px">
-              <AlamCustomerResponsePieChart
+              <AlamCustomerReportsCustomerEventsPieChart
                 v-if="key > 2"
-                :name="'AlamCustomerResponsePieChart2'"
+                :name="'AlamCustomerReportsCustomerEventsPieChart'"
                 :date_from="date_from"
                 :date_to="date_to"
                 :customer_id="filter_customer_id"
                 :key="key"
               />
+              <div class="mt-5">
+                <AlamCustomerResponsePieChart
+                  v-if="key > 2"
+                  :name="'AlamCustomerResponsePieChart2'"
+                  :date_from="date_from"
+                  :date_to="date_to"
+                  :customer_id="filter_customer_id"
+                  :key="key"
+                />
+              </div>
             </div>
           </div>
         </v-col>
@@ -112,6 +122,7 @@
 <script>
 import AlamCustomerResponsePieChart from "../../components/Alarm/Dashboard/AlamCustomerResponsePieChart.vue";
 import AlamCustomerReportsEventsPieChart from "../../components/Alarm/Dashboard/AlamCustomerReportsEventsPieChart.vue";
+import AlamCustomerReportsCustomerEventsPieChart from "../../components/Alarm/Dashboard/AlamCustomerReportsCustomerEventsPieChart.vue";
 
 import AlarmEventsResponseChart from "../../components/Alarm/AlarmEventsResponseChart.vue";
 
@@ -121,6 +132,7 @@ export default {
     AlamCustomerResponsePieChart,
     AlamCustomerReportsEventsPieChart,
     AlarmEventsResponseChart,
+    AlamCustomerReportsCustomerEventsPieChart,
   },
   data() {
     return {

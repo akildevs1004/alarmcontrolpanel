@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Models\Customers\CustomerAlarmNotes;
+use App\Models\Customers\Customers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,10 @@ class AlarmEvents extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, "customer_id", "id");
+    }
     public function device()
     {
         return $this->belongsTo(Device::class, "serial_number", "serial_number");
