@@ -35,6 +35,10 @@ server.on("error", (error) => {
 
 server.listen(port, () => {
   log(`TCP socket server is running on port: ${port}`);
+  // //let decodedData =
+  // ('F92F0043"ADM-CID"0020R7896L7896#3456[#3456|1407 00 001]_17:01:14,07-26-2024');
+  // let decodedData = 'D730002F"NULL"0000R7896L7896#3456[]_17:01:26,07-26-2024';
+  // parseMessage(decodedData);
 });
 
 function log(message) {
@@ -57,8 +61,44 @@ function getTime() {
   let seconds = ("0" + date_ob.getSeconds()).slice(-2);
   return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
-
 async function parseMessage(message) {
+  log(message);
+  const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
+    getFormattedDate().date
+  }.csv`;
+
+  const regexEvent =
+    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#(\d+)\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+
+  const regexHeartbeat =
+    /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{4}L\d{4})#(\d{4})\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+
+  const matchEvent = message.match(regexEvent);
+  const matchHeartbeat = message.match(regexHeartbeat);
+
+  if (matchEvent || matchHeartbeat) {
+    const match = matchEvent || matchHeartbeat;
+
+    console.log(match);
+    const isHeartbeat = !!matchHeartbeat;
+
+    const recordNumber = match[3];
+    const deviceId = isHeartbeat ? match[4] : match[3];
+    const eventCode = isHeartbeat ? "HEARTBEAT" : match[4];
+    const time = isHeartbeat ? match[5] : match[5];
+    const day = isHeartbeat ? match[7] : match[7];
+    const month = isHeartbeat ? match[6] : match[6];
+    const year = isHeartbeat ? match[8] : match[8];
+    const timestamp = `${year}-${month}-${day} ${time}`;
+
+    const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
+    fs.appendFileSync(logFilePath, logEntry + "\n");
+    console.log(logEntry);
+    await sendToBackend(timestamp);
+  }
+}
+
+async function parseMessage_old(message) {
   log(message);
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
