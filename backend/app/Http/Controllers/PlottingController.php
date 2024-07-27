@@ -52,10 +52,13 @@ class PlottingController extends Controller
         ]);
 
         try {
-            $plotting = Plotting::updateOrCreate(
-                ['customer_building_picture_id' => $data['customer_building_picture_id']],
-                ['plottings' => $data['plottings']]
-            );
+            $plotting = Plotting::query();
+
+            $plotting->where("customer_building_picture_id", $data['customer_building_picture_id']);
+
+            $plotting->delete();
+
+            $plotting = $plotting->create($data);
 
             return response()->json($plotting, 201);
         } catch (Exception $e) {
