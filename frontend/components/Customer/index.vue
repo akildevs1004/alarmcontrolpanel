@@ -11,14 +11,14 @@
     <v-dialog v-model="newCustomerDialog" max-width="900px">
       <v-card>
         <v-card-title dark class="popup_background">
-          <span dense> New Customer</span>
+          <span dense> New Customer </span>
           <v-spacer></v-spacer>
           <v-icon @click="newCustomerDialog = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <AlarmNewCustomer @closeDialog="getDataFromApi()" />
+          <AlarmNewCustomer :key="key" @closeDialog="getDataFromApi()" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -60,7 +60,14 @@
         ></v-text-field
       ></span>
 
-      <v-btn class="mx-1 primary" small @click="newCustomerDialog = true">
+      <v-btn
+        class="mx-1 primary"
+        small
+        @click="
+          key = key + 1;
+          newCustomerDialog = true;
+        "
+      >
         <v-icon small>mdi-plus</v-icon>
         Customer
       </v-btn>
@@ -270,6 +277,7 @@ export default {
     AlarmCustomerView,
   },
   data: () => ({
+    key: 1,
     commonSearch: "",
     perPage: 10,
     cumulativeIndex: 1,

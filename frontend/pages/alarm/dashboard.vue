@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Total </v-card-title>
+          <v-card-title>Armed </v-card-title>
           <v-card-text>
             <AlamDeviceCountPieChart
               :key="key"
@@ -13,7 +13,7 @@
       </v-col>
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Status</v-card-title>
+          <v-card-title>Live</v-card-title>
           <v-card-text>
             <AlamDeviceLiveCountPieChart
               :key="key"

@@ -79,13 +79,14 @@ class CustomersController extends Controller
                     $isExist = User::where('email', '=', $request->email)->first();
                     if ($isExist == null) {
 
-                        User::create([
+                        $user = User::create([
                             "user_type" => "customer",
                             'name' => 'null',
                             'email' => $data['email'],
                             'password' => Hash::make($data["password"]),
                             'company_id' => $request->company_id,
                         ]);
+                        $data['user_id'] = $user->id;
                     } else {
                         return $this->response('User Email is already Exist', null, false);
                     }
@@ -706,13 +707,14 @@ class CustomersController extends Controller
 
     public function customersForMap(Request $request)
     {
-        $model = Customers::with(["latest_alarm_event", "alarm_events", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where("company_id", $request->company_id);
+        $model = Customers::with(["latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+            ->whereHas("alarm_events")
+            ->where("company_id", $request->company_id);
 
         $model->when($request->filled("customer_id"), fn ($q) => $q->where("id", $request->customer_id));
 
         return $model->orderByDesc('id')->paginate($request->perPage);
     }
-
     public function customersAll()
     {
         $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"]);

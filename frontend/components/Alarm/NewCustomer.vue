@@ -420,6 +420,25 @@ export default {
       this.customer_payload.contact_number = this.customer.contact_number;
       this.customer_payload.start_date = this.customer.start_date;
       this.customer_payload.end_date = this.customer.end_date;
+    } else {
+      this.customer_payload = {
+        building_type_id: "",
+
+        building_name: "",
+        house_number: "",
+        street_number: "",
+        city: "",
+        state: "",
+        country: "",
+        landmark: "",
+        latitude: "",
+        longitude: "",
+
+        start_date: "",
+        end_date: "",
+        email: "",
+        password: "",
+      };
     }
   },
   watch: {

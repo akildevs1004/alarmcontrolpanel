@@ -11,17 +11,6 @@
         :_id="viewCustomerId"
         :isPopup="true"
       />
-      <!--<v-card>
-       <v-card-title dark class="popup_background_noviolet">
-          <span dense> New Customer</span>
-          <v-spacer></v-spacer>
-          <v-icon @click="dialogViewCustomer = false" outlined>
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title> 
-        <v-card-text>  <AlarmCustomerView @closeCustomerDialog="closeCustomerDialog" /></v-card-text>
-      </v-card>
-      -->
     </v-dialog>
     <v-dialog v-model="newCustomerDialog" max-width="900px">
       <v-card>
@@ -33,7 +22,7 @@
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <AlarmNewCustomer @closeDialog="getDataFromApi()" />
+          <AlarmNewCustomer :key="key" @closeDialog="getDataFromApi()" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -85,7 +74,10 @@
               x-small
               :ripple="false"
               text
-              @click="newCustomerDialog = true"
+              @click="
+                key += 1;
+                newCustomerDialog = true;
+              "
             >
               <v-icon class="">mdi mdi-plus-circle</v-icon>
             </v-btn>
@@ -331,6 +323,7 @@ export default {
     AlarmCustomerView,
   },
   data: () => ({
+    key: 1,
     viewCustomerId: null,
     commonSearch: "",
     perPage: 10,
