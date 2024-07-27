@@ -6,6 +6,7 @@
           v-if="name"
           :id="name"
           :name="name"
+          width="100%"
           style="width: 320px; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
@@ -58,11 +59,12 @@ export default {
 
         colors: ["#7B1FA2", "#8BC34A", "#F57C00", "#4A90E2", "RED"],
 
-        series: [],
+        series: [0, 0, 0, 0],
         chart: {
           toolbar: {
             show: false,
           },
+          width: 320,
           height: 250,
           type: "donut",
         },
@@ -155,6 +157,8 @@ export default {
       this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
         this.categories = data;
         this.renderChart1(data);
+        // try {
+        // } catch (e) {}
       });
     },
 

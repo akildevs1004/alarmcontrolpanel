@@ -4,8 +4,8 @@
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Total </v-card-title>
-          <v-card-text
-            ><AlamDeviceCountPieChart
+          <v-card-text>
+            <AlamDeviceCountPieChart
               :key="key"
               :name="'AlamDeviceCountPieChart'"
           /></v-card-text>
@@ -37,7 +37,6 @@
         <v-card class="elevation-2" style="height: 230px">
           <v-card-title>Sensor Events</v-card-title>
           <v-card-text class="p-0">
-            <!-- <AlamCustomerSensorPieChart name="AlamCustomerSensorPieChart" /> -->
             <AlamCustomerEventsPieChart
               :key="key"
               :name="'AlamCustomerEventsPieChart'"

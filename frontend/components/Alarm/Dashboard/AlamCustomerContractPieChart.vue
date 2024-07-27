@@ -80,6 +80,7 @@ export default {
           toolbar: {
             show: false,
           },
+          width: 320,
           height: 250,
           type: "donut",
         },
@@ -174,7 +175,7 @@ export default {
       });
     },
 
-    renderChart1(data) {
+    async renderChart1(data) {
       let counter = 0;
       let total = 1000;
 
@@ -190,14 +191,16 @@ export default {
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 
-      setTimeout(() => {
-        try {
-          new ApexCharts(
-            document.querySelector("#" + this.name),
-            this.chartOptions
-          ).render();
-        } catch (error) {}
-      }, 1000);
+      if (this.chart) {
+        this.chart.destroy();
+      }
+
+      // Render the chart
+      this.chart = await new ApexCharts(
+        document.querySelector("#" + this.name),
+        this.chartOptions
+      );
+      this.chart.render();
     },
   },
   created() {
