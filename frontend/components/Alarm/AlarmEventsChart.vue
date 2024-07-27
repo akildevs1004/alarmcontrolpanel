@@ -3,7 +3,7 @@
     <div class="text-center" v-if="data.length == 0">
       No Alarm Events Data is Available
     </div>
-    <v-row v-if="$auth.user.user_type != 'company'">
+    <!-- <v-row v-if="$auth.user.user_type != 'company'">
       <v-col cols="8">
         <h4>{{ display_title }}</h4>
       </v-col>
@@ -27,10 +27,9 @@
         >
         </v-autocomplete>
       </v-col>
-      <v-col
-        :cols="$auth.user.user_type == 'customer' ? '4' : '2'"
-        class="text-right"
+      <v-col class="text-right"
         ><CustomFilter
+          v-if="$auth.user.user_type !== 'customer'"
           id="test"
           style="float: right; padding-top: 5px"
           @filter-attr="filterAttr"
@@ -40,7 +39,7 @@
           :height="'40px'"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <div
       :id="name"
@@ -170,9 +169,20 @@ export default {
     //this.customer_id = this.filter_customer_id;
 
     await this.getDataFromApi();
+    setInterval(() => {
+      if (this.$route.name == "alarm-view-customer-id") {
+        this.getDataFromApi();
+      }
+    }, 1000 * 20);
   },
 
   methods: {
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
+
+      this.getDataFromApi();
+    },
     getDeviceList() {
       let options = {
         params: {

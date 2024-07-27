@@ -42,6 +42,8 @@
         :height="'300'"
         :device_serial_number="device_serial_number"
         :customer_id="customer_id"
+        :date_from="date_from"
+        :date_to="date_to"
       />
     </v-col>
   </div>
@@ -68,10 +70,16 @@ export default {
     humidity_latest: "",
     humidity_date_time: "",
     device_serial_number: "",
+    date_from: "",
+    date_to: "",
   }),
   computed: {},
   mounted() {},
   created() {
+    let today = new Date();
+    let monthObj = this.$dateFormat.monthStartEnd(today);
+    this.date_from = monthObj.first;
+    this.date_to = monthObj.last;
     this.getDataFromApi();
 
     setInterval(() => {

@@ -180,7 +180,7 @@ export default {
     // setTimeout(() => {
     ////this.getDataFromApi();
     setInterval(() => {
-      if (this.$route.name == "alarm-view-customer") {
+      if (this.$route.name == "alarm-view-customer-id") {
         this.getDataFromApi();
       }
     }, 1000 * 60 * 15);

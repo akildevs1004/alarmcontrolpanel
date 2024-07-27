@@ -37,7 +37,7 @@ div
 
       <v-row class="pb-2">
         <v-col cols="9">
-          <div style="height: 250px">
+          <div style="height: 300px">
             <AlarmEventsChart
               v-if="key > 2"
               style="height: 250px"
@@ -50,7 +50,7 @@ div
             />
           </div>
           <v-divider />
-          <div style="height: 450px">
+          <div style="height: 500px">
             <AlarmEventsResponseChart
               v-if="key > 2"
               style="height: 450px"

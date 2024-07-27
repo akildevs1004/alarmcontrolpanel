@@ -492,7 +492,7 @@ export default {
     // }, 1000 * 60);
 
     setInterval(() => {
-      if (this.$route.name == "alarm-view-customer") {
+      if (this.$route.name == "alarm-view-customer-id") {
         this.updateDevicesHealth();
       }
     }, 1000 * 20);
