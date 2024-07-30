@@ -137,8 +137,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
 
 
-                    $company = Device::where("serial_number", $serial_number)->first();
-                    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($company->id);
+                    $device = Device::where("serial_number", $serial_number)->first();
+                    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
