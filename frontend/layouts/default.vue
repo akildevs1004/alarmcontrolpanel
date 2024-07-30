@@ -478,6 +478,7 @@
             </v-card-title>
             <v-card-text>
               <AlarmPopupAllAlarmEvents
+                :items="notificationAlarmDevices"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
                 :key="key"
                 :alarm_icons="alarm_icons"
@@ -799,6 +800,7 @@ export default {
       inactivityTimeout: null,
       alarmPopupNotificationStatus: false,
       key: 1,
+      isBackendRequestOpen: false,
     };
   },
   created() {
@@ -855,7 +857,7 @@ export default {
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 2 * 1);
+    }, 1000 * 5 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -1149,6 +1151,9 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
+      if (this.isBackendRequestOpen) return false;
+
+      this.isBackendRequestOpen = true;
       this.key = this.key + 1;
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
@@ -1165,6 +1170,7 @@ export default {
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
+          this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
           this.notificationAlarmDevices = data;
           data.forEach((element) => {
@@ -1192,6 +1198,8 @@ export default {
       this.verifyPopupAlarmStatus();
     },
     verifyPopupAlarmStatus() {
+      if (this.isBackendRequestOpen) return false;
+      this.isBackendRequestOpen = true;
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;
@@ -1204,6 +1212,7 @@ export default {
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
+          this.isBackendRequestOpen = false;
           if (data.length > 0) {
             this.notificationAlarmDevices = data;
 

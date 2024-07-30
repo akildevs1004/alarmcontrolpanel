@@ -74,25 +74,14 @@
       </v-card>
     </v-dialog>
 
-    <v-row v-if="sensorItems.length == 0" class="text-center">
+    <!-- <v-row v-if="sensorItems.length == 0" class="text-center">
       <v-col cols="12" class="text-center"> No Data is available</v-col>
-    </v-row>
-    <v-row v-if="sensorItems.length > 0">
+    </v-row> -->
+    <v-row>
       <v-col cols="12">
         <v-card color="basil" flat>
           <v-card-text>
-            <v-data-table
-              v-if="showTable"
-              :headers="headers"
-              :items="items"
-              :server-items-length="totalRowsCount"
-              :loading="loading"
-              :options.sync="options"
-              :footer-props="{
-                itemsPerPageOptions: [10, 50, 100, 500, 1000],
-              }"
-              class="elevation-0"
-            >
+            <v-data-table :headers="headers" :items="items" class="elevation-0">
               <template v-slot:item.sno="{ item, index }">
                 {{
                   currentPage
@@ -266,7 +255,7 @@ export default {
     AlarmCustomerView,
     AlramCloseNotes,
   },
-  props: ["showFilters", "alarm_icons"],
+  props: ["showFilters", "alarm_icons", "items"],
   data() {
     return {
       dialogCloseAlarm: false,
@@ -318,7 +307,8 @@ export default {
 
         // { text: "Options", value: "options", sortable: false },
       ],
-      items: [],
+      // items: [],
+      isBackendRequestOpen: false,
     };
   },
   watch: {
@@ -344,11 +334,10 @@ export default {
     this.date_to = monthObj.last;
     //this.getDataFromApi();
 
-    if (this.$route.name == "alarm-alarm-events") {
-      setInterval(() => {
-        this.getDataFromApi();
-      }, 1000 * 60);
-    }
+    // setInterval(() => {
+    //   this.getDataFromApi();
+    // }, 1000 * 5);
+
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
@@ -487,7 +476,9 @@ export default {
       //   this.date_from = null;
       //   this.date_to = null;
       // }
+      if (this.isBackendRequestOpen) return false;
 
+      this.isBackendRequestOpen = true;
       this.loading = true;
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -516,14 +507,18 @@ export default {
       };
 
       try {
-        this.$axios.get(`get_alarm_events`, options).then(({ data }) => {
-          this.items = data.data;
-
-          this.totalRowsCount = data.total;
-          this.loading = false;
-          this.showTable = true;
-        });
-      } catch (e) {}
+        this.$axios
+          .get(`get_alarm_notification_display`, options)
+          .then(({ data }) => {
+            this.items = data;
+            this.isBackendRequestOpen = false;
+            this.totalRowsCount = 1000; //data.total;
+            this.loading = false;
+            this.showTable = true;
+          });
+      } catch (e) {
+        this.isBackendRequestOpen = false;
+      }
     },
   },
 };
