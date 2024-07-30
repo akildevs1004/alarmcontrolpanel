@@ -347,6 +347,48 @@ export default {
     endpoint: "customers",
     payload: {},
     loading: true,
+    data: [
+      {
+        company_id: 1,
+        data: {
+          device_name: "Tet",
+          zone: "Tet",
+          area: "Tet",
+          created_datetime: "Tet",
+          alarm_type: "Tet",
+        },
+      },
+      {
+        company_id: 2,
+        data: {
+          device_name: "Tet",
+          zone: "Tet",
+          area: "Tet",
+          created_datetime: "Tet",
+          alarm_type: "Tet",
+        },
+      },
+      {
+        company_id: 4,
+        data: {
+          device_name: "Tet",
+          zone: "Tet",
+          area: "Tet",
+          created_datetime: "Tet",
+          alarm_type: "Tet",
+        },
+      },
+      {
+        company_id: 1,
+        data: {
+          name: "Tet",
+          name: "Tet",
+          name: "Tet",
+          name: "Tet",
+          name: "Tet",
+        },
+      },
+    ],
     headers: [
       {
         text: "#",

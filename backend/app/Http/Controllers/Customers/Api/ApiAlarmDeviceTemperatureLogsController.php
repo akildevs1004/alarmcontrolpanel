@@ -285,7 +285,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                     ];
 
+
+                    //create json file for each company  json file 
+                    $this->createAlarmEventsJsonFile($logs['company_id']);
                     AlarmEvents::create($data);
+
+
                     AlarmLogs::where("id",   $logs["id"])
 
                         ->where("verified", false)->update(["verified" => true]);
@@ -307,7 +312,28 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             }
         }
     }
+    public function createAlarmEventsJsonFile($companyId)
+    {
 
+        $model = AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "notes"
+        ])->where('company_id', $companyId)->where('alarm_status', 1);
+
+
+
+        $model->orderBy("alarm_start_datetime", "DESC");
+        $events = $model->get();
+
+        $jsonFilePath = 'alarm-sensors/' . $companyId . '_live_events.json';
+
+
+        $updatedJsonData = json_encode($events, JSON_PRETTY_PRINT);
+
+        return    Storage::put($jsonFilePath, $updatedJsonData);
+        //file_put_contents($jsonFilePath, $updatedJsonData);
+    }
 
     public function stopOldAlarms($device)
     {

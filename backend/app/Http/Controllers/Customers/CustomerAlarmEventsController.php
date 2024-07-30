@@ -11,6 +11,7 @@ use App\Models\Customers\CustomerContacts;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerAlarmEventsController extends Controller
 {
@@ -263,6 +264,9 @@ class CustomerAlarmEventsController extends Controller
     }
     public function getAlarmNotificationsList(Request $request)
     {
+        $jsonFilePath = 'alarm-sensors/' . $request->company_id . '_live_events.json';
+        $fileContent = Storage::read($jsonFilePath);
+        return json_decode($fileContent, true);
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
@@ -272,7 +276,7 @@ class CustomerAlarmEventsController extends Controller
         //$model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
         $model->orderBy("alarm_start_datetime", "DESC");
-        return $model->get();;
+        return $model->get();
     }
     public function getAlarmEvents(Request $request)
     {

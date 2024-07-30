@@ -838,7 +838,7 @@ export default {
     setTimeout(() => {
       this.loadHeaderNotificationMenu();
       this.verifyPopupAlarmStatus();
-    }, 1000 * 10);
+    }, 1000 * 1);
 
     setInterval(() => {
       if (this.wait5Minutes == false) {
@@ -855,7 +855,7 @@ export default {
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 20 * 1);
+    }, 1000 * 2 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
