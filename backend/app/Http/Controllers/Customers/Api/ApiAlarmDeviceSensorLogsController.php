@@ -135,6 +135,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time, "armed_status" => 0, "armed_datetime" => $log_time]);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
+
+
+                    $company = Device::where("serial_number", $serial_number)->first();
+                    $this->createAlarmEventsJsonFile($company->id);
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
