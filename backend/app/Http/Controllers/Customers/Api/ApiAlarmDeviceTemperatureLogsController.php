@@ -287,9 +287,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                     //create json file for each company  json file 
-                    $this->createAlarmEventsJsonFile($logs['company_id']);
-                    AlarmEvents::create($data);
 
+                    AlarmEvents::create($data);
+                    $this->createAlarmEventsJsonFile($logs['company_id']);
 
                     AlarmLogs::where("id",   $logs["id"])
 
