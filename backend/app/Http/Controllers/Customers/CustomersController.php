@@ -84,7 +84,7 @@ class CustomersController extends Controller
                             'name' => 'null',
                             'email' => $data['email'],
                             'password' => Hash::make($data["password"]),
-                            'company_id' => $request->company_id,
+                            'company_id' => $request->company_id, 'web_login_access' => 1,
                         ]);
                         $data['user_id'] = $user->id;
                     } else {

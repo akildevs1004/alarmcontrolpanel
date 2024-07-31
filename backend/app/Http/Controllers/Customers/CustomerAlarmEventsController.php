@@ -264,9 +264,15 @@ class CustomerAlarmEventsController extends Controller
     }
     public function getAlarmNotificationsList(Request $request)
     {
-        $jsonFilePath = 'alarm-sensors/' . $request->company_id . '_live_events.json';
-        $fileContent = Storage::read($jsonFilePath);
-        return json_decode($fileContent, true);
+        try {
+            $jsonFilePath = 'alarm-sensors/' . $request->company_id . '_live_events.json';
+            $fileContent = Storage::read($jsonFilePath);
+            return json_decode($fileContent, true);
+        } catch (\Exception $e) {
+
+            return [];
+        }
+
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",

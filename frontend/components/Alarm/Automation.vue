@@ -91,10 +91,10 @@
                 </v-btn>
               </v-col>
               <v-col cols="1" style="width: 50px">
-                <v-btn icon small dense color="primary" class="ma-2">
+                <!-- <v-btn icon small dense color="primary" class="ma-2">
                   <v-icon>mdi mdi-download</v-icon>
-                </v-btn></v-col
-              >
+                </v-btn> -->
+              </v-col>
             </v-row>
           </v-col>
         </v-row>

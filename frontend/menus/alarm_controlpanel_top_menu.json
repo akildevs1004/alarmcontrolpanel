@@ -28,6 +28,13 @@
     "module": "topmenu"
   },
   {
+    "icon": "mdi mdi-calendar-account",
+    "title": "Security",
+    "to": "/alarm/security",
+    "menu": "alarm_security",
+    "module": "topmenu"
+  },
+  {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Reports",
     "to": "/alarm/reports",

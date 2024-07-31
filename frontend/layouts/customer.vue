@@ -136,31 +136,112 @@
       <v-spacer></v-spacer>
 
       <span class="header-menu">
-        <v-row align="center" justify="space-around" class="header-menu-row">
-          <v-col
-            v-for="(items, index) in controlpanel_top_menu"
-            :key="index"
-            class="header-menu-box"
-          >
-            <v-btn
-              class="header-menu-button"
-              small
-              text
-              :elevation="0"
-              :color="
-                menuProperties[items.menu] &&
-                menuProperties[items.menu].selected
-              "
-              fill
-              @click="setSubLeftMenuItems(items.menu, items.to)"
+        <template
+          v-if="
+            getLoginType == 'company' ||
+            getLoginType == 'branch' ||
+            getLoginType == 'department' ||
+            ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
+              $auth.user?.role?.role_type?.toLowerCase() != 'host')
+          "
+        >
+          <v-row align="center" justify="space-around" class="header-menu-row">
+            <v-col
+              v-for="(items, index) in controlpanel_top_menu"
+              :key="index"
+              class="header-menu-box"
             >
-              <b class="header-menu-item">
-                {{ items.title }}
-              </b>
-            </v-btn>
-          </v-col>
-        </v-row>
+              <v-btn
+                class="header-menu-button"
+                small
+                text
+                :elevation="0"
+                :color="
+                  menuProperties[items.menu] &&
+                  menuProperties[items.menu].selected
+                "
+                fill
+                @click="setSubLeftMenuItems(items.menu, items.to)"
+              >
+                <b class="header-menu-item">
+                  {{ items.title }}
+                </b>
+              </v-btn>
+            </v-col>
+            <!-- <v-col class="header-menu-box">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                    Employees
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(items, index) in company_top_menu"
+                    :key="index"
+                  >
+                    <v-list-item-title
+                      class="text-left"
+                      @click="setSubLeftMenuItems(items.menu, items.to)"
+                      :color="
+                        menuProperties[items.menu] &&
+                        menuProperties[items.menu].selected
+                      "
+                    >
+                      {{ items.title }}</v-list-item-title
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col> -->
+          </v-row>
+        </template>
       </span>
+
+      <span>
+        <!-- <v-icon
+          class="violet--text"
+          @click="showGlobalsearchPopup"
+          style="text-align: center"
+          >mdi-magnify</v-icon
+        > -->
+        <!-- <v-text-field
+          style="
+            width: 200px;
+            margin-top: 100px !important;
+            max-height: 30px !important;
+          "
+          max-height="10px"
+          class="custom-text-field-height mt-10 global-search-textbox"
+          color="black"
+          outlined
+          dense
+          height:="20px"
+          border-color="black"
+          append-icon="mdi-magnify"
+          v-model="globalsearch"
+        ></v-text-field> -->
+        <v-form autocomplete="off">
+          <!-- <v-text-field
+            autocomplete="off"
+            @keyup.enter="showGlobalsearchPopup"
+            @keydown="showGlobalsearchPopup"
+            @keyup="showGlobalsearchPopup"
+            style="width: 170px; padding-left: 50px"
+            height="26px"
+            class="custom-text-field-height pt-7 global-search-textbox"
+            @click="showGlobalsearchPopup"
+            color="black"
+            outlined
+            dense
+            border-color="black"
+            prepend-inner-icon="mdi-magnify"
+            placeholder="Search"
+            v-model="globalsearch"
+          ></v-text-field> -->
+        </v-form>
+      </span>
+
       <v-spacer></v-spacer>
       <v-menu
         style="z-index: 9999 !important"
@@ -213,7 +294,7 @@
                   <v-col cols="10">
                     <span style="font-size: 14px">
                       <span>
-                        {{ index }}{{ notificationsMenuItems.length - 1 }}
+                        {{ notificationsMenuItems.length - 1 }}
                         {{ item.title }}
                         <div class="secondary-value">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
@@ -247,7 +328,7 @@
         <v-list light nav dense>
           <v-list-item-group color="primary">
             <v-list-item
-              v-if="$auth && $auth.user.user_type == 'company'"
+              v-if="$auth && $auth.user?.user_type == 'company'"
               @click="goToCompany()"
             >
               <v-list-item-icon>
@@ -274,6 +355,70 @@
         </v-list>
       </v-menu>
 
+      <!-- <v-btn icon plan @click="toggleTheme">
+        <v-icon
+          >mdi-{{
+            $vuetify.theme.dark ? "white-balance-sunny" : "moon-waning-crescent"
+          }}</v-icon
+        >
+      </v-btn>  -->
+
+      <!-- <v-btn
+        v-if="getLoginType == 'company' || getLoginType == 'branch'"
+        icon
+        plan
+        @click="goToSettings()"
+        class="mr-3"
+        ><v-icon class="violet--text" style="text-align: center"
+          >mdi-cog</v-icon
+        ></v-btn
+      > -->
+
+      <!-- <v-menu
+        bottom
+        origin="center center"
+        offset-y
+        transition="scale-transition"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-badge
+            v-bind="attrs"
+            v-on="on"
+            :color="pendingLeavesCount > 0 ? 'red' : 'red'"
+            content="1"
+            style="top: 10px; left: -19px"
+          >
+            <v-icon style="top: -10px; left: 10px" class="violet--text"
+              >mdi mdi-bell-ring</v-icon
+            >
+          </v-badge>
+        </template>
+
+        <v-list>
+          <v-list-item v-for="(item, i) in notificationItems" :key="i">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu> -->
+      <!-- <label class=" ">
+        <v-badge
+          v-if="pendingLeavesCount > 0"
+          @click="navigateToLeavePage()"
+          :color="pendingLeavesCount > 0 ? 'red' : 'white'"
+          :content="pendingLeavesCount"
+        >
+          <v-icon class="violet--text" @click="navigateToLeavePage()"
+            >mdi mdi-bell-ring</v-icon
+          >
+        </v-badge>
+        <v-badge v-else @click="navigateToLeavePage()" content="0">
+          <v-icon
+            style="color: #e91919 !important"
+            @click="navigateToLeavePage()"
+            >mdi mdi-bell-ring</v-icon
+          >
+        </v-badge>
+      </label> -->
       <v-snackbar
         top="top"
         v-model="snackNotification"
@@ -310,6 +455,7 @@
         v-model="alarmPopupNotificationStatus"
         transition="dialog-top-transition"
         max-width="1000"
+        style="z-index: 9999"
       >
         <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
@@ -331,8 +477,55 @@
               >
             </v-card-title>
             <v-card-text>
-              <AlarmPopupAllAlarmEvents :alarm_icons="alarm_icons" />
+              <AlarmPopupAllAlarmEvents
+                :items="notificationAlarmDevices"
+                @callwait5MinutesNextNotification="wait5MinutesNotification"
+                :key="key"
+                :alarm_icons="alarm_icons"
+              />
+              <!-- <v-row
+                v-for="(device, index) in notificationAlarmDevices"
+                :key="index"
+              >
+                <v-col cols="2"
+                  ><img src="../static/fire2.png" width="50px"
+                /></v-col>
+                <v-col cols="10" class="pl-4">
+                  <div class="pa-3" style="font-size: 20px; font-weight: bold">
+                    Fire Alarm Triggered at :
+                    {{ $dateFormat.format5(device.alarm_start_datetime) }}
+                  </div>
+                  <div class="bold pa-1">Device Name :{{ device.name }}</div>
+                  <div class="bold pa-1">
+                    Branch Name :{{ device?.branch?.branch_name }}
+                  </div>
+                  <div class="bold pa-1">
+                    Device Location :{{ device?.branch?.location }}
+                  </div>
+                </v-col>
+              </v-row> 
+
+              <div></div>-->
+              <!-- <div>
+                 <div style="color: green">
+                  <strong>Note: </strong>All Branch Level Doors are Opened
+                </div>
+                <br />  
+                Check Devices list and Turn off Alarm to Close this popup.
+
+                <v-btn
+                  color="error"
+                  @click="
+                    goToPage('/device');
+                    alarmPopupNotificationStatus = false;
+                  "
+                  >View Devices</v-btn
+                >
+              </div> -->
             </v-card-text>
+            <!-- <v-card-actions class="justify-end">
+              <v-btn text @click="alarmPopupNotificationStatus = false">Close</v-btn>
+            </v-card-actions> -->
           </v-card>
         </template>
       </v-dialog>
@@ -494,6 +687,8 @@ import company_top_menu from "../menus/company_modules_top.json";
 import employee_top_menu from "../menus/employee_modules_top.json";
 import GlobalSearchForm from "../components/Globalsearch/GlobalSearchForm.vue";
 
+import controlpanel_top_menu from "../menus/customer_top_menu.json";
+
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
 
 export default {
@@ -513,6 +708,7 @@ export default {
   },
   data() {
     return {
+      key: 1,
       snackbar: false,
       response: "",
       alarm_icons: {
@@ -537,6 +733,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        customer_map: {
+          elevation: 0,
+          selected: "",
+        },
         customer_alarms: {
           elevation: 0,
           selected: "",
@@ -557,7 +757,7 @@ export default {
       branch_menus,
       guard_menus,
       host_menus,
-      controlpanel_top_menu: require("../menus/customer_top_menu.json"),
+      controlpanel_top_menu,
       company_top_menu,
       employee_top_menu,
       pendingLeavesCount: 0,
@@ -600,9 +800,17 @@ export default {
       inactivityTimeout: null,
       alarmPopupNotificationStatus: false,
       key: 1,
+      isBackendRequestOpen: false,
     };
   },
   created() {
+    if (this.$auth.user.user_type != "customer") {
+      this.$router.push("/logout");
+    }
+    // if (!this.$auth.user) {
+    //   this.$router.push("/logout");
+    //   return;
+    // }
     // this.alarm_icons["Temperature"] = "temperature.png";
     // this.alarm_icons["Burglary"] = "burglary.png";
     // this.alarm_icons["Medical"] = "medical.png";
@@ -621,6 +829,10 @@ export default {
   },
 
   mounted() {
+    // if (!this.$auth.user) {
+    //   this.$router.push("/logout");
+    //   return;
+    // }
     this.getBuildingTypes();
     this.getAddressTypes();
     this.getDeviceTypes();
@@ -631,57 +843,67 @@ export default {
     setTimeout(() => {
       this.loadHeaderNotificationMenu();
       this.verifyPopupAlarmStatus();
-    }, 1000 * 10);
+    }, 1000 * 1);
 
     setInterval(() => {
       if (this.wait5Minutes == false) {
         if (this.$route.name != "login") {
           this.resetTimer();
-          this.verifyPopupAlarmStatus();
+          this.loadHeaderNotificationMenu();
+          if (this.notificationAlarmDevices) {
+            if (this.notificationAlarmDevices.length > 0) {
+              this.alarmPopupNotificationStatus = true;
+            } else {
+              this.alarmPopupNotificationStatus = false;
+            }
+          }
+          //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 60 * 1);
-    setInterval(() => {
-      if (this.$route.name != "login") {
-        this.loadHeaderNotificationMenu();
-      }
-    }, 1000 * 60 * 1);
+    }, 1000 * 2 * 1);
+    // setInterval(() => {
+    //   if (this.$route.name != "login") {
+    //   }
+    // }, 1000 * 20 * 1);
     //this.company_menus = [];
 
-    let menu_name = this.$route.name;
-    let bgColor = "violet";
-    let loadSelectedMenu = "";
+    // let menu_name = this.$route.name;
+    // let bgColor = "violet";
+    // let loadSelectedMenu = "";
 
-    menu_name = menu_name.replaceAll("-", "/");
+    // menu_name = menu_name.replaceAll("-", "/");
+    // console.log("loadSelectedMenu", menu_name);
+    // //if (this.getLoginType === "company" || this.getLoginType === "branch")
+    // {
+    //   //-------------------
+    //   loadSelectedMenu = this.company_menus.filter(
+    //     (item) => item.to === "/" + menu_name && item.submenu == null
+    //   );
+    //   console.log("loadSelectedMenu", loadSelectedMenu);
+    //   if (loadSelectedMenu[0]) {
+    //     menu_name = loadSelectedMenu[0].module;
 
-    if (this.getLoginType === "company" || this.getLoginType === "branch") {
-      //-------------------
-      loadSelectedMenu = this.company_menus.filter(
-        (item) => item.to === "/" + menu_name && item.submenu == null
-      );
+    //     console.log("menu_name", menu_name);
 
-      if (loadSelectedMenu[0]) {
-        menu_name = loadSelectedMenu[0].module;
+    //     if (this.menuProperties.hasOwnProperty(menu_name)) {
+    //       for (const key in this.menuProperties) {
+    //         this.menuProperties[key].elevation = 0;
+    //         this.menuProperties[key].selected = "";
+    //       }
 
-        if (this.menuProperties.hasOwnProperty(menu_name)) {
-          for (const key in this.menuProperties) {
-            this.menuProperties[key].elevation = 0;
-            this.menuProperties[key].selected = "";
-          }
+    //       this.menuProperties[menu_name].elevation = 0;
+    //       this.menuProperties[menu_name].selected = bgColor;
+    //     }
+    //     //Color is changed and Now display sub menu - click - load left sub menu items
 
-          this.menuProperties[menu_name].elevation = 0;
-          this.menuProperties[menu_name].selected = bgColor;
-        }
-        //Color is changed and Now display sub menu - click - load left sub menu items
-
-        // this.items = this.company_menus.filter(
-        //   (item) => item.module === loadSelectedMenu[0].module
-        // );
-        this.items = this.company_menus.filter(
-          (item) => item.top_menu_name === loadSelectedMenu[0].module
-        );
-      }
-    }
+    //     // this.items = this.company_menus.filter(
+    //     //   (item) => item.module === loadSelectedMenu[0].module
+    //     // );
+    //     this.items = this.company_menus.filter(
+    //       (item) => item.top_menu_name === loadSelectedMenu[0].module
+    //     );
+    //   }
+    // }
     this.setupInactivityDetection();
 
     // setTimeout(() => {
@@ -736,6 +958,10 @@ export default {
       }
     },
     getLoginType() {
+      // if (!this.$auth.user) {
+      //   this.$router.push("/logout");
+      //   return;
+      // }
       return this.$auth.user.user_type || "company";
     },
   },
@@ -751,27 +977,37 @@ export default {
 
       this.alarmPopupNotificationStatus = false;
     },
+    wait5MinutesNotification() {
+      this.wait5Minutes = true;
+      setTimeout(() => {
+        this.wait5Minutes = false;
+      }, 1000 * 60 * 60);
+    },
     setTopmenuHilighter() {
       const routeMap = {
-        "alarm-map": { name: "alarm_map", path: "/alarm/map" },
-        "alarm-allevents": {
-          name: "alarm_allevents",
-          path: "/alarm/allevents",
+        "customer-map": { name: "alarm_map", path: "/customer/map" },
+        "customer-allevents": {
+          name: "customer_allevents",
+          path: "/customer/allevents",
         },
-        "alarm-reports": { name: "alarm_reports", path: "/alarm/reports" },
-        "alarm-customers": {
-          name: "alarm_customers",
-          path: "/alarm/customers",
+        "customer-profile": {
+          name: "customer_profile",
+          path: "/customer/profile",
         },
+        "customer-reports": {
+          name: "customer_reports",
+          path: "/customer/reports",
+        },
+
         "alarm-view-customer-id": {
-          name: "alarm_customers",
-          path: "/alarm/customers",
+          name: "customer_customers",
+          path: "/customer/customers",
         },
       };
 
       const defaultRoute = {
-        name: "alarm_dashboard",
-        path: "/alarm/dashboard",
+        name: "customer_dashboard",
+        path: "/customer/dashboard",
       };
 
       const routeConfig = routeMap[this.$route.name] || defaultRoute;
@@ -925,6 +1161,10 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
+      if (this.isBackendRequestOpen) return false;
+
+      this.isBackendRequestOpen = true;
+      this.key = this.key + 1;
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;
@@ -940,7 +1180,9 @@ export default {
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
+          this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
+          this.notificationAlarmDevices = data;
           data.forEach((element) => {
             let notificaiton = {
               title: element.device?.customer?.building_name
@@ -966,6 +1208,8 @@ export default {
       this.verifyPopupAlarmStatus();
     },
     verifyPopupAlarmStatus() {
+      if (this.isBackendRequestOpen) return false;
+      this.isBackendRequestOpen = true;
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
         return false;
@@ -978,6 +1222,7 @@ export default {
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
+          this.isBackendRequestOpen = false;
           if (data.length > 0) {
             this.notificationAlarmDevices = data;
 

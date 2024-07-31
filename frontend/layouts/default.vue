@@ -141,8 +141,8 @@
             getLoginType == 'company' ||
             getLoginType == 'branch' ||
             getLoginType == 'department' ||
-            ($auth.user?.role?.role_type.toLowerCase() != 'guard' &&
-              $auth.user?.role?.role_type.toLowerCase() != 'host')
+            ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
+              $auth.user?.role?.role_type?.toLowerCase() != 'host')
           "
         >
           <v-row align="center" justify="space-around" class="header-menu-row">
@@ -749,6 +749,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_security: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -804,6 +808,9 @@ export default {
     };
   },
   created() {
+    if (this.$auth.user.user_type != "company") {
+      this.$router.push("/logout", true);
+    }
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -857,7 +864,7 @@ export default {
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 5 * 1);
+    }, 1000 * 2 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -870,34 +877,34 @@ export default {
 
     menu_name = menu_name.replaceAll("-", "/");
 
-    if (this.getLoginType === "company" || this.getLoginType === "branch") {
-      //-------------------
-      loadSelectedMenu = this.company_menus.filter(
-        (item) => item.to === "/" + menu_name && item.submenu == null
-      );
+    // if (this.getLoginType === "company" || this.getLoginType === "branch") {
+    //   //-------------------
+    //   loadSelectedMenu = this.company_menus.filter(
+    //     (item) => item.to === "/" + menu_name && item.submenu == null
+    //   );
 
-      if (loadSelectedMenu[0]) {
-        menu_name = loadSelectedMenu[0].module;
+    //   if (loadSelectedMenu[0]) {
+    //     menu_name = loadSelectedMenu[0].module;
 
-        if (this.menuProperties.hasOwnProperty(menu_name)) {
-          for (const key in this.menuProperties) {
-            this.menuProperties[key].elevation = 0;
-            this.menuProperties[key].selected = "";
-          }
+    //     if (this.menuProperties.hasOwnProperty(menu_name)) {
+    //       for (const key in this.menuProperties) {
+    //         this.menuProperties[key].elevation = 0;
+    //         this.menuProperties[key].selected = "";
+    //       }
 
-          this.menuProperties[menu_name].elevation = 0;
-          this.menuProperties[menu_name].selected = bgColor;
-        }
-        //Color is changed and Now display sub menu - click - load left sub menu items
+    //       this.menuProperties[menu_name].elevation = 0;
+    //       this.menuProperties[menu_name].selected = bgColor;
+    //     }
+    //     //Color is changed and Now display sub menu - click - load left sub menu items
 
-        // this.items = this.company_menus.filter(
-        //   (item) => item.module === loadSelectedMenu[0].module
-        // );
-        this.items = this.company_menus.filter(
-          (item) => item.top_menu_name === loadSelectedMenu[0].module
-        );
-      }
-    }
+    //     // this.items = this.company_menus.filter(
+    //     //   (item) => item.module === loadSelectedMenu[0].module
+    //     // );
+    //     this.items = this.company_menus.filter(
+    //       (item) => item.top_menu_name === loadSelectedMenu[0].module
+    //     );
+    //   }
+    // }
     this.setupInactivityDetection();
 
     // setTimeout(() => {
@@ -992,6 +999,10 @@ export default {
         "alarm-view-customer-id": {
           name: "alarm_customers",
           path: "/alarm/customers",
+        },
+        "alarm-security": {
+          name: "alarm_security",
+          path: "/alarm/security",
         },
       };
 

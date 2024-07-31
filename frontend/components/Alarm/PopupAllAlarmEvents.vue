@@ -328,6 +328,9 @@ export default {
     },
   },
   created() {
+    if (this.items.count == 0) {
+      this.$emit("closeDialog");
+    }
     let today = new Date();
     let monthObj = this.$dateFormat.monthStartEnd(today);
     this.date_from = monthObj.first;
