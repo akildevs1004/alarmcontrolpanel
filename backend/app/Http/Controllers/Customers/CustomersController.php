@@ -9,9 +9,11 @@ use App\Mail\EmailContentDefault;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
+use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -26,9 +28,28 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where("company_id", $request->company_id);
+        $model = Customers::with(["buildingtype", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+            ->where("company_id", $request->company_id);
 
-        $model->when($request->filled("customer_id"), fn ($q) => $q->where("id", $request->customer_id));
+        $model->when($request->filled("customer_id"), function ($q) use ($request) {
+            $q->where("id", $request->customer_id);
+        });
+
+        $model->when($request->filled("common_search"), function ($q) use ($request) {
+            $q->where(function ($qwhere) use ($request) {
+                $search = $request->common_search;
+                $qwhere->where("building_name", "ILIKE", "%$search%");
+                $qwhere->orWhere("house_number", "ILIKE", "%$search%");
+                $qwhere->orWhere("street_number", "ILIKE", "%$search%");
+                $qwhere->orWhere("area", "ILIKE", "%$search%");
+                $qwhere->orWhere("city", "ILIKE", "%$search%");
+                $qwhere->orWhere("state", "ILIKE", "%$search%");
+                $qwhere->orWhere("country", "ILIKE", "%$search%");
+                $qwhere->orWhere("landmark", "ILIKE", "%$search%");
+
+                $qwhere->orWhereHas("buildingtype",  fn (Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
+            });
+        });
 
 
         return $model->orderByDesc('id')->paginate($request->perPage);;
@@ -532,13 +553,15 @@ class CustomersController extends Controller
 
     public function buildingTypes()
     {
-        $data = [
-            ["name" => "Commercial", "id" => 1],
-            ["name" => "Residencial", "id" => 2],
-            ["name" => "Semi Commercial", "id" => 3],
-            ["name" => "Inventory", "id" => 4],
-        ];
-        return $data;
+
+        return CustomersBuildingTypes::get();
+        // $data = [
+        //     ["name" => "Commercial", "id" => 1],
+        //     ["name" => "Residencial", "id" => 2],
+        //     ["name" => "Semi Commercial", "id" => 3],
+        //     ["name" => "Inventory", "id" => 4],
+        // ];
+        // return $data;
     }
     public function getCustomerTemperatureDevices(Request $request)
     {

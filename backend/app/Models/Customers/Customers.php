@@ -3,6 +3,7 @@
 namespace App\Models\Customers;
 
 use App\Models\AlarmEvents;
+use App\Models\CustomersBuildingTypes;
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +13,14 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
+
     public function devices()
     {
         return $this->hasMany(Device::class, "customer_id", "id");
+    }
+    public function buildingtype()
+    {
+        return $this->belongsTo(CustomersBuildingTypes::class, "building_type_id", "id");
     }
     public function contacts()
     {

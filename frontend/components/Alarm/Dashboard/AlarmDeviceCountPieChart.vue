@@ -6,7 +6,7 @@
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 300px; margin: 0 auto; text-align: left"
+          style="width: 320px; margin: 0 auto; text-align: left"
         ></div>
       </v-col>
     </v-row>
@@ -80,7 +80,7 @@ export default {
           toolbar: {
             show: false,
           },
-          width: 320,
+          width: 330,
           height: 250,
           type: "donut",
         },

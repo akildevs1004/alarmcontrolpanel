@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Customers\Customers;
+use App\Models\Customers\SecurityLogin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -117,5 +118,9 @@ class User extends Authenticatable
     public function customer()
     {
         return $this->belongsTo(Customers::class, "id", "user_id");
+    }
+    public function security()
+    {
+        return $this->belongsTo(SecurityLogin::class, "id", "user_id");
     }
 }

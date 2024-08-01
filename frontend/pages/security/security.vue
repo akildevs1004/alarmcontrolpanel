@@ -218,6 +218,7 @@ import AlarmNewSecurity from "../../components/Alarm/EditSecurity.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 
 export default {
+  layout: "security",
   components: {
     AlarmNewSecurity,
     AlarmCustomerView,

@@ -320,6 +320,7 @@ import AlarmNewCustomer from "../../components/Alarm/NewCustomer.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 
 export default {
+  layout: "security",
   components: {
     AlarmNewCustomer,
     AlarmCustomerView,
