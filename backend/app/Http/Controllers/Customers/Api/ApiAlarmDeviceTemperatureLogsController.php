@@ -109,7 +109,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         return  $message;
     }
-
+    /*
     public function updateAlarmEndDatetime2($devicesList)
     {
         $message = [];
@@ -251,7 +251,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         return $message;
     }
-
+*/
     public function updateAlarmStartDatetime3($devicesList)
     {
 
@@ -282,6 +282,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         "zone" => $logs['zone'],
                         "area" => $logs['area'],
                         "alarm_type" => $logs['alarm_type'],
+                        "alarm_category" => 1
 
                     ];
 

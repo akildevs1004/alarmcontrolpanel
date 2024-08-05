@@ -443,12 +443,7 @@
               mdi mdi-close-circle
             </v-icon>
           </v-card-title>
-          <v-card-text>
-            <GlobalSearchForm
-              :key="key"
-              @global-search-results-updated="GlobalSearchResultsUpdated"
-            />
-          </v-card-text>
+          <v-card-text> </v-card-text>
         </v-card>
       </v-dialog>
       <v-dialog
@@ -685,7 +680,6 @@ import host_menus from "../menus/host.json";
 import company_top_menu from "../menus/company_modules_top.json";
 
 import employee_top_menu from "../menus/employee_modules_top.json";
-import GlobalSearchForm from "../components/Globalsearch/GlobalSearchForm.vue";
 
 import controlpanel_top_menu from "../menus/security_top_menu.json";
 
@@ -703,7 +697,6 @@ export default {
     };
   },
   components: {
-    GlobalSearchForm,
     AlarmPopupAllAlarmEvents,
   },
   data() {

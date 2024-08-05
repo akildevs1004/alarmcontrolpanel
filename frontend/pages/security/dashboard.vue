@@ -35,7 +35,7 @@
       </v-col>
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Sensor Events</v-card-title>
+          <v-card-title>Alarms</v-card-title>
           <v-card-text class="p-0">
             <AlamCustomerEventsPieChart
               :key="key"

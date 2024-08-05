@@ -6,7 +6,6 @@
       </v-snackbar>
     </div>
     <!-- v-if="permissions && permissions.length > 0" -->
-    <Back color="primary" />
 
     <v-card elevation="0" class="mt-2">
       <v-form ref="form" lazy-validation>
@@ -146,11 +145,7 @@
 </template>
 
 <script>
-import Back from "../../components/Snippets/Back.vue";
-
 export default {
-  components: { Back },
-
   data: () => ({
     role_id: "",
     search: "",
@@ -187,7 +182,7 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    
+
     getPermissions(url = "dropDownList") {
       this.$axios
         .get(url)

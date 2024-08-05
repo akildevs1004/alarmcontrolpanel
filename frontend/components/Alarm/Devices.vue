@@ -336,14 +336,13 @@
   </div>
 </template>
 <script>
-// import Back from "../../components/Snippets/Back.vue";
 import timeZones from "../../defaults/utc_time_zones.json";
-import DeviceAccessSettings from "../../components/DeviceAccessSettings.vue";
+
 import AlarmEditDevice from "../../components/Alarm/EditDevice.vue";
 import AlarmSensorZones from "../../components/Alarm/EditSensorZones.vue";
 
 export default {
-  components: { DeviceAccessSettings, AlarmEditDevice, AlarmSensorZones },
+  components: { AlarmEditDevice, AlarmSensorZones },
   props: ["customer_id"],
   data: () => ({
     editId: null,

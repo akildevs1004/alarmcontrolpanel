@@ -16,7 +16,6 @@ import AllEvents from "../../components/Alarm/AllEvents.vue";
 
 export default {
   layout: "security",
-
   components: {
     AllEvents,
   },

@@ -8,8 +8,6 @@
 
     <v-row>
       <v-col md="12">
-        <Back color="primary" />
-
         <v-btn
           v-if="!data.length"
           class="primary"
@@ -230,11 +228,7 @@
   <NoAccess v-else />
 </template>
 <script>
-import Back from "../../components/Snippets/Back.vue";
-
 export default {
-  components: { Back },
-
   data: () => ({
     panel: [0, 1, 2],
     readonly: false,
@@ -297,7 +291,7 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    
+
     capsTitle(val) {
       let res = val;
       let r = res.replace(/[^a-z]/g, " ");

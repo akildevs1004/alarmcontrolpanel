@@ -14,8 +14,6 @@
 
       <v-row>
         <v-col>
-          <!-- <Back color="primary" /> -->
-
           <v-card class="mt-2">
             <v-tabs class="pt-3" :vertical="vertical">
               <v-tabs-slider color="violet"></v-tabs-slider>
@@ -881,11 +879,7 @@
 </template>
 
 <script>
-import Back from "../../components/Snippets/Back.vue";
-
 export default {
-  components: { Back },
-
   data: () => ({
     originalURL: process.env.APP_URL + "register/visitor/walkin/", //`https://mytime2cloud.com/register/visitor/walkin/`,
     fullCompanyLink: null,
