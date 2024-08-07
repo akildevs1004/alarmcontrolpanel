@@ -1176,6 +1176,7 @@ export default {
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
+          this.pendingNotificationsCount = 0;
           this.notificationAlarmDevices = data;
           data.forEach((element) => {
             let notificaiton = {
@@ -1191,6 +1192,8 @@ export default {
             };
 
             this.notificationsMenuItems.push(notificaiton);
+
+            this.pendingNotificationsCount = this.notificationsMenuItems.length;
           });
 
           this.pendingNotificationsCount = data.length;
