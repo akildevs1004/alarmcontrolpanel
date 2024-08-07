@@ -56,25 +56,27 @@
           hide-details
           outlined
           dense
-          v-model.number="d.location"
+          v-model="d.location"
         />
       </v-col>
       <v-col cols="1" style="min-width: 50px; max-width: 90px; padding: 4px">
         <v-text-field
+          type="text"
           label="Area"
           hide-details
           outlined
           dense
-          v-model.number="d.area_code"
+          v-model="d.area_code"
         />
       </v-col>
       <v-col cols="1" style="min-width: 100px; max-width: 100px; padding: 4px">
         <v-text-field
+          type="text"
           label="Zone"
           hide-details
           outlined
           dense
-          v-model.number="d.zone_code"
+          v-model="d.zone_code"
         />
       </v-col>
       <v-col cols="1" style="min-width: 110px; max-width: 110px; padding: 4px">
