@@ -101,7 +101,7 @@ async function parseMessage(message) {
     const year = isHeartbeat ? match[8] : match[11];
     const timestamp = `${year}-${month}-${day} ${time}`;
 
-    const logEntry = `${deviceId},${eventCode},${timestamp},${zone},${area}`;
+    const logEntry = `${deviceId},${eventCode},${timestamp},RECORDNUMBER,${area},${zone}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
     console.log(logEntry);
     await sendToBackend(timestamp);
