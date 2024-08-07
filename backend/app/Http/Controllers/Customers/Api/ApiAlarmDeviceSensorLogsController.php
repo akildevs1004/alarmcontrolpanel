@@ -153,11 +153,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
                     $message[] = $this->getMeta("Device Armed", $log_time . "\n");
-                } else if ($zone != '' && $event != '3401' && $zone != '141')   //zone verification button
+                } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
-                    //$zone = substr($event, 1);
-
-
+                    //$zone = substr($event, 1); 
                     $devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {
                             $query->where('serial_number', $serial_number);
@@ -168,22 +166,25 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                     $alarm_type = $devices->sensor_name ?? '';
                     //$area =   $devices->area_code ?? '';
+                    if ($alarm_type != '') {
 
 
-                    $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
-                    if ($count == 0) {
-                        $records  = [
-                            "serial_number" => $serial_number,
-                            "log_time" => $log_time,
-                            "alarm_status" => 1,
-                            "alarm_type" => $alarm_type,
-                            "area" => $area,
-                            "zone" => $zone,
-                        ];
 
-                        $insertedRecord = AlarmLogs::create($records);
-                        $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
-                        $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                        $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
+                        if ($count == 0) {
+                            $records  = [
+                                "serial_number" => $serial_number,
+                                "log_time" => $log_time,
+                                "alarm_status" => 1,
+                                "alarm_type" => $alarm_type,
+                                "area" => $area,
+                                "zone" => $zone,
+                            ];
+
+                            $insertedRecord = AlarmLogs::create($records);
+                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
+                            $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                        }
                     }
                     try {
                         (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
