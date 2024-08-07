@@ -584,7 +584,7 @@ class CustomersController extends Controller
     public function deviceModels()
     {
         $data = [
-            "OX-866", "OX-886", "OX-966", "OX-900", "XT-CPANEL", "XT-TAB", "XT-FIRE", "XT-WATER"
+            "OX-866", "OX-886", "OX-966", "OX-900", "XT-CPANEL",   "XT-FIRE", "XT-WATER"
 
 
 

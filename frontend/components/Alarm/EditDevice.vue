@@ -156,7 +156,6 @@
           md="6"
           v-if="
             payload.device_model == 'XT-CPANEL' ||
-            payload.device_model == 'XT-TAB' ||
             payload.device_type == 'all' ||
             payload.device_type == 'Temperature' ||
             payload.device_type == 'Control Panel'

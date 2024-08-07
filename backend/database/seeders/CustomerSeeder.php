@@ -214,7 +214,7 @@ class CustomerSeeder extends Seeder
             "OX-966",
             "OX-900",
             "XT-CPANEL",
-            "XT-TAB",
+            // "XT-TAB",
             "XT-FIRE",
             "XT-WATER",
         ];
