@@ -157,15 +157,28 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $message[] = $this->getMeta("Device Armed", $log_time . "\n");
                 } else if ($zone != '' && $event != '3401' && $zone != '141')   //zone verification button
                 {
-                    //$zone = substr($event, 1);
 
-                    $devices = DeviceZones::with(['device'])
-                        ->whereHas('device', function ($query) use ($serial_number) {
-                            $query->where('serial_number', $serial_number);
-                        })
-                        ->where("zone_code", $zone)
-                        ->where("area_code", $area)
-                        ->first();
+
+                    $device = Device::where('serial_number', $serial_number)->first();
+                    if ($device->model_number == 'XT-TAB') {
+                        $zone = substr($event, 1);
+                        $devices = DeviceZones::with(['device'])
+                            ->whereHas('device', function ($query) use ($serial_number) {
+                                $query->where('serial_number', $serial_number);
+                            })
+                            ->where("zone_code", $zone)
+
+                            ->first();
+                    } else if ($device->model_number == 'XT-CPANEL') { //box model 
+                        $devices = DeviceZones::with(['device'])
+                            ->whereHas('device', function ($query) use ($serial_number) {
+                                $query->where('serial_number', $serial_number);
+                            })
+                            ->where("zone_code", $zone)
+                            ->where("area_code", $area)
+                            ->first();
+                    }
+
 
                     $alarm_type = $devices->sensor_name ?? '';
                     //$area =   $devices->area_code ?? '';
