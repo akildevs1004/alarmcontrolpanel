@@ -66,7 +66,10 @@ async function parseMessage(message) {
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
     getFormattedDate().date
   }.csv`;
-
+  // 299D002F"NULL"0000R7896L7896#3456[]_17:57:42,07-30-2024
+  // ED360043"ADM-CID"0022R7896L7896#3456[#3456|3401 00 000]_18:00:05,07-30-2024
+  // 3FA70043"ADM-CID"0008R7896L7896#3456[#3456|3407 00 001]_14:11:31,07-30-2024
+  // 282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024
   const regexEvent =
     /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#(\d+)\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
 
@@ -98,39 +101,41 @@ async function parseMessage(message) {
   }
 }
 
-async function parseMessage_old(message) {
-  log(message);
-  const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
-    getFormattedDate().date
-  }.csv`;
+// async function parseMessage_old(message) {
+//   log(message);
+//   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
+//     getFormattedDate().date
+//   }.csv`;
 
-  const regexEvent =
-    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
-  const regexHeartbeat =
-    /([a-zA-Z0-9]{8})"NULL"\d{4}(R\d{4}L\d{4})#\d+\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+//   const regexEvent =
+//     /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#\d+\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+//   const regexHeartbeat =
+//     /([a-zA-Z0-9]{8})"NULL"\d{4}(R\d{4}L\d{4})#\d+\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
 
-  const matchEvent = message.match(regexEvent);
-  const matchHeartbeat = message.match(regexHeartbeat);
+//   const matchEvent = message.match(regexEvent);
+//   const matchHeartbeat = message.match(regexHeartbeat);
 
-  if (matchEvent || matchHeartbeat) {
-    const match = matchEvent || matchHeartbeat;
-    const isHeartbeat = !!matchHeartbeat;
+//   if (matchEvent || matchHeartbeat) {
+//     const match = matchEvent || matchHeartbeat;
+//     const isHeartbeat = !!matchHeartbeat;
 
-    const recordNumber = match[1];
-    const deviceId = match[2];
-    const eventCode = isHeartbeat ? "HEARTBEAT" : match[3];
-    const time = isHeartbeat ? match[3] : match[4];
-    const day = isHeartbeat ? match[5] : match[6];
-    const month = isHeartbeat ? match[4] : match[5];
-    const year = isHeartbeat ? match[6] : match[7];
-    const timestamp = `${year}-${month}-${day} ${time}`;
+//     const recordNumber = match[1];
+//     const deviceId = match[2];
+//     const eventCode = isHeartbeat ? "HEARTBEAT" : match[3];
+//     const time = isHeartbeat ? match[3] : match[4];
+//     const day = isHeartbeat ? match[5] : match[6];
+//     const month = isHeartbeat ? match[4] : match[5];
+//     const year = isHeartbeat ? match[6] : match[7];
+//     const timestamp = `${year}-${month}-${day} ${time}`;
 
-    const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
-    fs.appendFileSync(logFilePath, logEntry + "\n");
-    console.log(logEntry);
-    await sendToBackend(timestamp);
-  }
-}
+//     const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
+//     fs.appendFileSync(logFilePath, logEntry + "\n");
+//     console.log(logEntry);
+//     await sendToBackend(timestamp);
+//   } else {
+//     console.log("Pattern not found");
+//   }
+// }
 async function sendToBackend(timestamp) {
   const params = { timestamp };
   if (!isAPIConnected) {
