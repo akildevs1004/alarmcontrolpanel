@@ -115,9 +115,19 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $event = $columns[1];
                 $log_time = $columns[2];
 
-                $unique_code = $columns[3];
-                $area = 0;
-                $zone = 0;
+                // $unique_code = $columns[3];
+                // $unique_code = $columns[3];
+
+                $zone = '';
+                $area = '';
+                if (isset($columns[3])) {
+                    $zone = $columns[3];
+                    $area = $columns[4];
+                }
+
+
+
+
                 $alarm_type = '';
 
                 //3401 00 000 / HOME 
@@ -144,9 +154,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
                     $message[] = $this->getMeta("Device Armed", $log_time . "\n");
-                } else   //zone verification button
+                } else if ($zone != '')   //zone verification button
                 {
-                    $zone = substr($event, 1);
+                    //$zone = substr($event, 1);
 
                     $devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {
