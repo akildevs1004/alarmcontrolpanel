@@ -295,7 +295,9 @@ class CustomerAlarmEventsController extends Controller
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
-            "notes"
+            "notes",
+            "category",
+            "device.customer.buildingtype"
         ])->where('company_id', $request->company_id)
 
             // ->when($request->filled("common_search"), function ($query) use ($request) {

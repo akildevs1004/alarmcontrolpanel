@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Mail\EmailContentDefault;
+use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
@@ -554,7 +555,7 @@ class CustomersController extends Controller
     public function buildingTypes()
     {
 
-        return CustomersBuildingTypes::get();
+        return CustomersBuildingTypes::orderBy("name", "asc")->get();
         // $data = [
         //     ["name" => "Commercial", "id" => 1],
         //     ["name" => "Residencial", "id" => 2],
@@ -662,14 +663,16 @@ class CustomersController extends Controller
 
     public function getSensorsList()
     {
-        return  [
 
-            "Burglary",
-            "Medical",
-            "Fire",
-            "Water",
-            "Temperature",
-        ];
+        return AlarmSensorTypes::orderBy("name", "asc")->pluck("name");
+        // return  [
+
+        //     "Burglary",
+        //     "Medical",
+        //     "Fire",
+        //     "Water",
+        //     "Temperature",
+        // ];
     }
     // public function deviceTypes()
     // {

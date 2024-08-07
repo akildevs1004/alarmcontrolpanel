@@ -112,7 +112,7 @@
             <v-row>
               <v-col cols="1"></v-col>
               <v-col cols="3">
-                <v-icon @click="getDataFromApi()" class="mt-2 mr-2"
+                <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
                   >mdi-reload</v-icon
                 >
                 <v-text-field
@@ -125,7 +125,7 @@
                   width="150px"
                   height="20"
                   class="employee-schedule-search-box"
-                  @input="getDataFromApi()"
+                  @input="getDataFromApi(0)"
                   v-model="commonSearch"
                   label="Search"
                   dense
@@ -147,7 +147,7 @@
                   "
                   height="20px"
                   outlined
-                  @change="getDataFromApi()"
+                  @change="getDataFromApi(0)"
                   v-model="filterResponseInMinutes"
                   dense
                   :items="[
@@ -172,7 +172,7 @@
                   "
                   height="20px"
                   outlined
-                  @change="getDataFromApi()"
+                  @change="getDataFromApi(0)"
                   v-model="filterAlarmStatus"
                   dense
                   :items="[
@@ -226,16 +226,19 @@
                   }"
                   class="elevation-0"
                 >
-                  <template v-slot:item.sno="{ item, index }">
+                  <!-- <template v-slot:item.sno="{ item, index }">
                     {{
                       currentPage
                         ? (currentPage - 1) * perPage +
                           (cumulativeIndex + items.indexOf(item))
                         : "-"
                     }}
+                  </template> -->
+                  <template v-slot:item.sno="{ item, index }">
+                    {{ item.id }}
                   </template>
 
-                  <template
+                  <!-- <template
                     v-slot:item.building="{ item, index }"
                     style="width: 300px"
                   >
@@ -275,7 +278,7 @@
                         </small>
                       </v-col>
                     </v-row>
-                  </template>
+                  </template> -->
                   <template v-slot:item.customer="{ item }">
                     <div>
                       {{
@@ -287,31 +290,37 @@
                         "---"
                       }}
                     </div>
-                    <div class="secondary-value">
+                    <!-- <div class="secondary-value">
                       {{
                         item.device?.customer?.primary_contact?.phone1 ?? "---"
                       }}
-                    </div>
+                    </div> -->
                   </template>
-                  <template v-slot:item.device="{ item }">
+                  <template v-slot:item.address="{ item }">
+                    <div>{{ item.device?.customer?.area }}</div>
+                  </template>
+                  <template v-slot:item.city="{ item }">
+                    <div>{{ item.device?.customer?.city }}</div>
+                  </template>
+                  <!-- <template v-slot:item.device="{ item }">
                     <div>{{ item.device?.name }}</div>
                     <div class="secondary-value">
                       {{ item.device?.serial_number }}
                     </div>
-                  </template>
+                  </template> -->
                   <template v-slot:item.sensor="{ item }">
                     <div>
                       {{ item.alarm_type }}
                     </div>
-                    <div class="secondary-value">
+                    <!-- <div class="secondary-value">
                       {{ item.device?.location }}
-                    </div>
+                    </div> -->
 
                     <!-- <div class="secondary-value">{{ item.type }}</div> -->
                   </template>
-                  <!-- <template v-slot:item.location="{ item }">
-                    {{ item.device.location }}
-                  </template> -->
+                  <template v-slot:item.property="{ item }">
+                    {{ item.device?.customer?.buildingtype?.name ?? "---" }}
+                  </template>
                   <template v-slot:item.zone="{ item }">
                     <div>{{ item.zone }}</div>
                     <div class="secondary-value">{{ item.area }}</div>
@@ -324,7 +333,18 @@
                         )
                       }}
                     </div>
-                    <div class="secondary-value">
+                    <!-- <div class="secondary-value">
+                      {{
+                        item.alarm_end_datetime
+                          ? $dateFormat.formatDateMonthYear(
+                              item.alarm_end_datetime
+                            )
+                          : "---"
+                      }}
+                    </div> -->
+                  </template>
+                  <template v-slot:item.end_date="{ item }">
+                    <div>
                       {{
                         item.alarm_end_datetime
                           ? $dateFormat.formatDateMonthYear(
@@ -347,8 +367,8 @@
                     <div @click="viewNotes(item)">{{ item.notes.length }}</div>
                   </template>
 
-                  <template v-slot:item.category="{ item }">
-                    <div>{{ item.alarm_category }}</div>
+                  <template v-slot:item.alarm_category="{ item }">
+                    <div>{{ item.category.name }}</div>
                   </template>
 
                   <template v-slot:item.status="{ item }">
@@ -455,7 +475,7 @@ export default {
       filterResponseInMinutes: null,
       dialogViewCustomer: false,
       viewCustomerId: null,
-      filterAlarmStatus: null,
+      filterAlarmStatus: 1,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -478,15 +498,23 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       headers: [
-        { text: "#", value: "sno", sortable: false },
-        { text: "Building", value: "building", sortable: false },
-        { text: "Customer", value: "customer", sortable: false },
-        { text: "Device", value: "device", sortable: false },
-        { text: "Sensor", value: "sensor", sortable: false },
+        { text: "Event Id", value: "sno", sortable: false },
+        // { text: "Building", value: "building", sortable: false },
 
-        { text: "Zone", value: "zone", sortable: false },
+        { text: "Customer", value: "customer", sortable: false },
+        { text: "Property", value: "property", sortable: false },
+        { text: "Address", value: "address", sortable: false },
+
+        { text: "City", value: "city", sortable: false },
+
+        // { text: "Device", value: "device", sortable: false },
+        { text: "Type", value: "sensor", sortable: false },
+
+        // { text: "Zone", value: "zone", sortable: false },
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
-        { text: "Start/End Date", value: "start_date", sortable: false },
+        { text: "Event Time", value: "start_date", sortable: false },
+        { text: "Closed time", value: "end_date", sortable: false },
+        { text: "Priority", value: "alarm_category", sortable: false },
         // { text: "End Date", value: "end_date" , sortable: false },
         {
           text: "Resolved Time(H:M)",
@@ -496,13 +524,13 @@ export default {
         },
         // { text: "Category", value: "category", sortable: false },
 
-        { text: "Notes", value: "notes", sortable: false },
-        {
-          text: "Status",
-          value: "status",
-          sortable: false,
-          align: "center",
-        },
+        // { text: "Notes", value: "notes", sortable: false },
+        // {
+        //   text: "Status",
+        //   value: "status",
+        //   sortable: false,
+        //   align: "center",
+        // },
 
         { text: "Options", value: "options", sortable: false },
       ],
@@ -520,7 +548,7 @@ export default {
     tab: {
       handler() {
         this.showTable = false;
-        this.getDataFromApi();
+        this.getDataFromApi(0);
       },
       deep: true,
     },
@@ -530,13 +558,7 @@ export default {
     let monthObj = this.$dateFormat.monthStartEnd(today);
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
-    //this.getDataFromApi();
 
-    if (this.$route.name == "alarm-alarm-events") {
-      setInterval(() => {
-        this.getDataFromApi();
-      }, 1000 * 20);
-    }
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
@@ -555,13 +577,16 @@ export default {
       }
     }, 5000);
 
-    setInterval(() => {
-      if (
-        this.$route.name == "alarm-dashboard" ||
-        this.$route.name == "alarm-allevents"
-      )
-        this.getDataFromApi();
-    }, 1000 * 20 * 1);
+    setTimeout(() => {
+      setInterval(() => {
+        if (
+          this.$route.name == "alarm-dashboard" ||
+          this.$route.name == "alarm-allevents" ||
+          this.$route.name == "alarm-alarm-events"
+        )
+          this.getDataFromApi(0);
+      }, 1000 * 20 * 1);
+    }, 1000 * 40);
   },
 
   methods: {
@@ -597,14 +622,14 @@ export default {
     closeDialog() {
       this.dialogAddCustomerNotes = false;
       this.dialogCloseAlarm = false;
-      this.getDataFromApi();
+      this.getDataFromApi(0);
       this.$emit("closeDialog");
     },
     filterAttr(data) {
       this.date_from = data.from;
       this.date_to = data.to;
 
-      this.getDataFromApi();
+      this.getDataFromApi(0);
     },
     UpdateAlarmStatus(item, status) {
       if (status == 0) {
@@ -664,7 +689,8 @@ export default {
         } catch (e) {}
       }
     },
-    getDataFromApi() {
+    getDataFromApi(custompage = 1) {
+      if (this.loading == true) return false;
       // console.log(
       //   "this.$route.query.alarm_status",
       //   this.$route.query.alarm_status
@@ -675,7 +701,7 @@ export default {
       //   this.date_to = null;
       // }
 
-      this.loading = true;
+      if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
@@ -683,7 +709,9 @@ export default {
       let sortedDesc = sortDesc ? sortDesc[0] : "";
       this.perPage = itemsPerPage;
       this.currentPage = page;
+
       if (!page > 0) return false;
+      this.loading = true;
       let options = {
         params: {
           page: page,

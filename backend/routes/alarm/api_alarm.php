@@ -55,9 +55,27 @@ Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZon
 Route::get('customer_temperature_devices', [CustomersController::class, 'getCustomerTemperatureDevices']);
 
 Route::get('sensor_types', [CustomersController::class, 'getSensorsList']);
+
+
+//security dashboard
+Route::get('device_alarm_burglary_stats', [AlarmDashboardController::class, 'alarmEventBurglaryStatistics']);
+Route::get('device_alarm_medical_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
+Route::get('device_alarm_water_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
+Route::get('device_alarm_temperature_stats', [AlarmDashboardController::class, 'alarmEventTemperatureStatistics']);
+Route::get('device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
+
+
+
+
+
+
+
+
 //dashboard
 Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
 Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
+Route::get('device_live_stats_groupby', [AlarmDashboardController::class, 'getDeviceLiveStatisticsGroupBy']);
+
 Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
 Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
 

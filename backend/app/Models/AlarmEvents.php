@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use App\Models\Customers\AlarmCateogories;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\Customers\Customers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +15,10 @@ class AlarmEvents extends Model
     public function customer()
     {
         return $this->belongsTo(Customers::class, "customer_id", "id");
+    }
+    public function category()
+    {
+        return $this->belongsTo(AlarmCateogories::class, "alarm_category", "id");
     }
     public function device()
     {
