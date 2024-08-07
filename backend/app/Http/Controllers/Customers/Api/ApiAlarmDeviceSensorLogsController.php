@@ -120,10 +120,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 $zone = '';
                 $area = '';
-                if (isset($columns[3])) {
+                if (isset($columns[4])) {
 
-                    $area = (int)$columns[4];
-                    $zone = (int) $columns[5];
+                    $area =  $columns[4];
+                    $zone =   $columns[5];
                 }
 
 
@@ -170,7 +170,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $area =   $devices->area_code ?? '';
 
 
-                    $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->count();
+                    $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
                     if ($count == 0) {
                         $records  = [
                             "serial_number" => $serial_number,
