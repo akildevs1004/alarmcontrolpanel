@@ -418,7 +418,6 @@ export default {
     },
     getDataFromApi() {
       if (this.customer_id) {
-        if (this.loading == true) return false;
         this.loading = true;
 
         let { sortBy, sortDesc, page, itemsPerPage } = this.options;

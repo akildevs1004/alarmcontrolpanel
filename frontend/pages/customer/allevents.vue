@@ -411,12 +411,6 @@ export default {
     this.date_to = monthObj.last;
     //this.getDataFromApi();
 
-    setInterval(() => {
-      if (this.$route.name == "alarm-alarm-events") {
-        this.getDataFromApi();
-      }
-    }, 1000 * 60);
-
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
@@ -438,7 +432,8 @@ export default {
     setInterval(() => {
       if (
         this.$route.name == "alarm-dashboard" ||
-        this.$route.name == "alarm-allevents"
+        this.$route.name == "alarm-allevents" ||
+        this.$route.name == "alarm-alarm-events"
       )
         this.getDataFromApi();
     }, 1000 * 60);

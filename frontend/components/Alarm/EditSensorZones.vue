@@ -202,8 +202,8 @@ export default {
         sensor_name: "",
         wired: "wired",
         location: "",
-        area_code: "",
-        zone_code: "",
+        area_code: "00",
+        zone_code: "001",
         delay: 0,
 
         hours24: 0,

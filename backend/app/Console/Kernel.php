@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
 
         $schedule
             ->command('task:alarm_device_sensor_check_hearbeat_minutes')
-            ->hourly()
+            ->everyThirtyMinutes()
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor--heartbeat-logs-csv.log")); // 
 
         // $schedule
