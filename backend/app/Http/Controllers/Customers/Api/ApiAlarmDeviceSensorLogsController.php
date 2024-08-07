@@ -121,8 +121,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $zone = '';
                 $area = '';
                 if (isset($columns[3])) {
-                    $zone = $columns[3];
-                    $area = $columns[4];
+                    $zone = (int) $columns[4];
+                    $area = (int)$columns[5];
                 }
 
 
