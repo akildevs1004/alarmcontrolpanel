@@ -2,11 +2,10 @@ const net = require("net");
 const fs = require("fs");
 const axios = require("axios");
 
-const port = 2504;
+const port = 2503;
 let isAPIConnected = false;
 const server = net.createServer((socket) => {
   console.log("Client connected");
-
   //fs.appendFileSync(logRawDataFilePath, "");
 
   // log(`Device    : Client connected`);
@@ -62,7 +61,6 @@ function getTime() {
   let seconds = ("0" + date_ob.getSeconds()).slice(-2);
   return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
-
 async function parseMessage(message) {
   log(message);
   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
@@ -72,12 +70,8 @@ async function parseMessage(message) {
   // ED360043"ADM-CID"0022R7896L7896#3456[#3456|3401 00 000]_18:00:05,07-30-2024
   // 3FA70043"ADM-CID"0008R7896L7896#3456[#3456|3407 00 001]_14:11:31,07-30-2024
   // 282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024
-
-  // message =
-  //   '282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024';
-  // message = '299D002F"NULL"0000R7896L7896#3456[]_17:57:42,07-30-2024';
   const regexEvent =
-    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#(\d+)\[#(\d+)\|([a-zA-Z0-9]{4}) (\d{2}) (\d{3})\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#(\d+)\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
 
   const regexHeartbeat =
     /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{4}L\d{4})#(\d{4})\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
@@ -91,64 +85,21 @@ async function parseMessage(message) {
     console.log(match);
     const isHeartbeat = !!matchHeartbeat;
 
-    const deviceId = match[4]; // Extracted device code
-    const zone = isHeartbeat ? "" : match[7]; // Extracted from the pattern
-    const area = isHeartbeat ? "" : match[6]; // Extracted from the pattern
-    const eventCode = isHeartbeat ? "HEARTBEAT" : match[5];
-    const time = isHeartbeat ? match[5] : match[8];
-    const day = isHeartbeat ? match[7] : match[10];
-    const month = isHeartbeat ? match[6] : match[9];
-    const year = isHeartbeat ? match[8] : match[11];
+    const recordNumber = match[3];
+    const deviceId = isHeartbeat ? match[4] : match[3];
+    const eventCode = isHeartbeat ? "HEARTBEAT" : match[4];
+    const time = isHeartbeat ? match[5] : match[5];
+    const day = isHeartbeat ? match[7] : match[7];
+    const month = isHeartbeat ? match[6] : match[6];
+    const year = isHeartbeat ? match[8] : match[8];
     const timestamp = `${year}-${month}-${day} ${time}`;
 
-    const logEntry = `${deviceId},${eventCode},${timestamp},${zone},${area}`;
+    const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
     console.log(logEntry);
     await sendToBackend(timestamp);
   }
 }
-// async function parseMessage_working(message) {
-//   log(message);
-//   const logFilePath = `../backend/storage/app/alarm-sensors/sensor-logs-${
-//     getFormattedDate().date
-//   }.csv`;
-//   // 299D002F"NULL"0000R7896L7896#3456[]_17:57:42,07-30-2024
-//   // ED360043"ADM-CID"0022R7896L7896#3456[#3456|3401 00 000]_18:00:05,07-30-2024
-//   // 3FA70043"ADM-CID"0008R7896L7896#3456[#3456|3407 00 001]_14:11:31,07-30-2024
-//   // 282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024
-
-//   //message =
-//   //('282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024');
-//   const regexEvent =
-//     /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#\d+\[#(\d+)\|([a-zA-Z0-9]{4}) \d{2} \d{3}\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
-
-//   const regexHeartbeat =
-//     /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{4}L\d{4})#(\d{4})\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
-
-//   const matchEvent = message.match(regexEvent);
-//   const matchHeartbeat = message.match(regexHeartbeat);
-
-//   if (matchEvent || matchHeartbeat) {
-//     const match = matchEvent || matchHeartbeat;
-
-//     console.log(match);
-//     const isHeartbeat = !!matchHeartbeat;
-
-//     const recordNumber = match[3];
-//     const deviceId = isHeartbeat ? match[4] : match[3];
-//     const eventCode = isHeartbeat ? "HEARTBEAT" : match[4];
-//     const time = isHeartbeat ? match[5] : match[5];
-//     const day = isHeartbeat ? match[7] : match[7];
-//     const month = isHeartbeat ? match[6] : match[6];
-//     const year = isHeartbeat ? match[8] : match[8];
-//     const timestamp = `${year}-${month}-${day} ${time}`;
-
-//     const logEntry = `${deviceId},${eventCode},${timestamp},${recordNumber}`;
-//     fs.appendFileSync(logFilePath, logEntry + "\n");
-//     console.log(logEntry);
-//     await sendToBackend(timestamp);
-//   }
-// }
 
 // async function parseMessage_old(message) {
 //   log(message);
