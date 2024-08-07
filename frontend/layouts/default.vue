@@ -294,7 +294,6 @@
                   <v-col cols="10">
                     <span style="font-size: 14px">
                       <span>
-                        {{ notificationsMenuItems.length - 1 }}
                         {{ item.title }}
                         <div class="secondary-value">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
