@@ -497,7 +497,7 @@ export default {
       ) {
         this.updateDevicesHealth();
       }
-    }, 1000 * 20);
+    }, 1000 * 10);
   },
   async created() {
     for (let index = 0; index <= 60; index++) {
@@ -1081,6 +1081,7 @@ export default {
       });
     },
     async updateDevicesHealth() {
+      if (this.loading) return false;
       this.loading = true;
       let options = {
         params: {

@@ -155,7 +155,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
                     $message[] = $this->getMeta("Device Armed", $log_time . "\n");
-                } else if ($zone != '')   //zone verification button
+                } else if ($zone != '' && $event != '3401' && $zone != '141')   //zone verification button
                 {
                     //$zone = substr($event, 1);
 
