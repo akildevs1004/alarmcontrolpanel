@@ -164,10 +164,11 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             $query->where('serial_number', $serial_number);
                         })
                         ->where("zone_code", $zone)
+                        ->where("area_code", $area)
                         ->first();
 
                     $alarm_type = $devices->sensor_name ?? '';
-                    $area =   $devices->area_code ?? '';
+                    //$area =   $devices->area_code ?? '';
 
 
                     $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
