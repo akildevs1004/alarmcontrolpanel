@@ -368,7 +368,7 @@
                   </template>
 
                   <template v-slot:item.alarm_category="{ item }">
-                    <div>{{ item.category.name }}</div>
+                    <div>{{ item.category?.name || "---" }}</div>
                   </template>
 
                   <template v-slot:item.status="{ item }">
