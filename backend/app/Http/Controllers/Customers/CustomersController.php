@@ -56,6 +56,18 @@ class CustomersController extends Controller
         return $model->orderByDesc('id')->paginate($request->perPage);;
     }
 
+    public function customerinfo(Request $request)
+    {
+        $model = Customers::with(["user", "photos", "buildingtype", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+            ->where("company_id", $request->company_id);
+
+        $model->where("id", $request->customer_id);
+
+
+
+        return $model->first();;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

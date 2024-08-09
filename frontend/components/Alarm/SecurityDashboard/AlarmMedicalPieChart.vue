@@ -26,6 +26,7 @@
           padding-left: 0px;
           padding-right: 0px;
           line-height: 32px;
+          margin: auto;
         "
       >
         <v-row>

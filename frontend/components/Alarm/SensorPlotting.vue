@@ -25,15 +25,20 @@
                 @drop="onDrop"
                 @dragover="allowDrop"
               >
-                <v-img :src="item.picture" style="width: 100%; height: auto" />
+                <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
+
+                <img
+                  :src="item.picture"
+                  :width="IMG_PLOTTING_WIDTH"
+                  :height="IMG_PLOTTING_HEIGHT"
+                />
                 <span v-if="!loading">
                   <div
                     v-for="(plotting, index) in plottings"
                     :key="index"
                     style="position: absolute"
                     :style="{ top: plotting.top, left: plotting.left }"
-                    draggable="true"
-                    @dragstart="dragStart($event, index)"
+                    draggable="false"
                   >
                     <v-icon v-if="plotting.alarm_event" class="alarm">
                       mdi-alarm-light
@@ -115,11 +120,17 @@ export default {
       draggingIndex: null,
 
       existingPlottings: [],
+      IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "800px",
+      IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "800px",
     };
   },
   async created() {
     await this.getDevices();
     await this.getExistingPlottings();
+    if (process) {
+      this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
+      this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+    }
   },
   methods: {
     getDeviceName(device_id) {

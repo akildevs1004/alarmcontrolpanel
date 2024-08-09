@@ -5,6 +5,7 @@ namespace App\Models\Customers;
 use App\Models\AlarmEvents;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Device;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,6 +45,15 @@ class Customers extends Model
     {
         return $this->hasOne(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1)->latest();
     }
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+    public function photos()
+    {
+        return $this->hasmany(CustomerBuildingPictures::class, 'customer_id', 'id');
+    }
+
 
     public function getProfilePictureAttribute($value)
     {

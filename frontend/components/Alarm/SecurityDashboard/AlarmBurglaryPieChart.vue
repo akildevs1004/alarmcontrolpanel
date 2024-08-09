@@ -61,6 +61,7 @@
         vertical-align: middle;
         height: auto;
         padding-top: 36%;
+        margin: auto;
       "
     >
       No Data available

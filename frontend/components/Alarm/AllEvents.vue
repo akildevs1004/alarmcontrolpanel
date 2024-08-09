@@ -96,13 +96,32 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogViewCustomer" width="110%">
-      <AlarmCustomerView
-        @closeCustomerDialog="closeCustomerDialog()"
-        :key="key"
-        :_id="viewCustomerId"
-        :isPopup="true"
-      />
+    <v-dialog v-model="dialogTabViewCustomer" width="70%">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Notes List</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogTabViewCustomer = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <AlarmCustomerTabView
+            @closeCustomerDialog="closeCustomerDialog()"
+            :key="key"
+            :_id="viewCustomerId"
+            :isPopup="true"
+          />
+        </v-card-text>
+      </v-card>
     </v-dialog>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px; z-index: 9">
@@ -414,6 +433,15 @@
                       <v-list width="120" dense>
                         <v-list-item
                           v-if="can('branch_view')"
+                          @click="viewCustomerinfo(item)"
+                        >
+                          <v-list-item-title style="cursor: pointer">
+                            <v-icon color="secondary" small> mdi-eye </v-icon>
+                            Contacts
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item
+                          v-if="can('branch_view')"
                           @click="viewNotes(item)"
                         >
                           <v-list-item-title style="cursor: pointer">
@@ -459,13 +487,13 @@ import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
 
 import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
-import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
+import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerTabView.vue";
 
 export default {
   components: {
     EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
-    AlarmCustomerView,
+    AlarmCustomerTabView,
     AlramCloseNotes,
   },
   props: ["showFilters"],
@@ -473,7 +501,7 @@ export default {
     return {
       dialogCloseAlarm: false,
       filterResponseInMinutes: null,
-      dialogViewCustomer: false,
+      dialogTabViewCustomer: false,
       viewCustomerId: null,
       filterAlarmStatus: 1,
       showTable: true,
@@ -594,11 +622,11 @@ export default {
       return this.$pagePermission.can(per, this);
     },
     closeCustomerDialog() {
-      this.dialogViewCustomer = false;
+      this.dialogTabViewCustomer = false;
     },
     viewCustomerinfo(item) {
       this.viewCustomerId = item.customer_id;
-      this.dialogViewCustomer = true;
+      this.dialogTabViewCustomer = true;
     },
     viewNotes(item) {
       this.key = this.key + 1;
