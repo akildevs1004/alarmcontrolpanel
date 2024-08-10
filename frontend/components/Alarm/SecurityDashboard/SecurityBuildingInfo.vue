@@ -4,6 +4,8 @@
       <v-card-text style="padding: 0px">
         <v-row v-if="customer">
           <v-col cols="6">
+            <h3>Building Info</h3>
+            <br />
             <v-row>
               <v-col>
                 <v-text-field
@@ -130,8 +132,8 @@
             </v-row>
           </v-col>
           <v-col cols="6">
-            <v-tabs>
-              <v-tabs-slider color="yellow"></v-tabs-slider>
+            <v-tabs color="#dc7640">
+              <v-tabs-slider color="blue"></v-tabs-slider>
               <v-tab>Business Photo</v-tab>
               <v-tab>Google Map</v-tab>
               <v-tab>Device Map</v-tab>

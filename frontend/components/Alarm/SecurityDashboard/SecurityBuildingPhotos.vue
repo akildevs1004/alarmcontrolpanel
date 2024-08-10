@@ -1,10 +1,24 @@
 <template>
   <div class="text-centers">
+    <div class="fa-3x">
+      <i class="fa-solid fa-circle-plus fa-beat"></i>
+      <i class="fa-solid fa-heart fa-beat"></i>
+      <i
+        class="fa-solid fa-heart fa-beat"
+        style="--fa-animation-duration: 0.5s"
+      ></i>
+      <i
+        class="fa-solid fa-heart fa-beat"
+        style="--fa-animation-duration: 2s"
+      ></i>
+      <i class="fa-solid fa-heart fa-beat" style="--fa-beat-scale: 2"></i>
+    </div>
     <v-row>
-      <v-col cols="8"></v-col>
-      <v-col cols="4" style="float: right">
+      <v-col cols="8" dense hide-details></v-col>
+      <v-col cols="4" class="pt-6 pb-0" style="float: right">
         <v-select
           outlined
+          hide-details
           dense
           @change="changePhoto()"
           :items="photos"
@@ -15,19 +29,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        cols="12"
-        style="position: relative"
-        class="dropzone"
-        @drop="onDrop"
-        @dragover="allowDrop"
-      >
-        <!-- <div width="800px" hight="500px" style="width: 800px; height: 500px">
-          <v-img :src="item.picture" style="width: 100%; height: auto" />
-        </div> -->
-        <!-- <v-img :src="item.picture" width="600px" height="400px" /> -->
-        <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
-
+      <v-col cols="12" style="position: relative">
         <div>
           <div v-if="item">
             <img
@@ -43,70 +45,21 @@
                 style="position: absolute"
                 :style="{ top: plotting.top, left: plotting.left }"
               >
-                <v-icon v-if="plotting.alarm_event" class="alarm">
-                  mdi-alarm-light
-                </v-icon>
-                <v-img
-                  v-else
-                  style="width: 23px"
-                  :src="getRelaventImage(plotting.label)"
-                ></v-img>
+                <v-icon
+                  v-if="plotting.alarm_event"
+                  class="alarm-red-to-green"
+                  title="Aalrm ON"
+                  size="40"
+                  >mdi-circle</v-icon
+                ><v-icon v-else color="green" size="40" title="Aalrm OFF"
+                  >mdi-circle</v-icon
+                >
               </div>
             </span>
           </div>
         </div>
       </v-col>
-      <!-- <v-col cols="4">
-        <v-row no-gutters>
-          <v-col cols="12">
-            <v-autocomplete
-              multiple
-              @change="getSensors(device_ids)"
-              outlined
-              dense
-              :items="devices"
-              item-value="id"
-              item-text="name"
-              v-model="device_ids"
-            ></v-autocomplete>
-          </v-col>
-          <v-col
-            class="ma-1"
-            cols="12"
-            v-for="(device_id, index) in device_ids"
-            :key="index"
-          >
-            <v-row no-gutters>
-              <v-col
-                cols="12"
-                style="border: 1px solid #cdcccc; border-radius: 3px"
-                class="py-2 px-3"
-              >
-                <span
-                  v-for="(plotting, plotIndex) in plottings"
-                  :key="plotIndex"
-                >
-                  <div v-if="plotIndex == 0">
-                    {{ getDeviceName(device_id) }}
-                  </div>
-                  <v-img
-                    v-if="device_id == plotting.device_id"
-                    draggable="true"
-                    @dragstart="dragStart($event, plotIndex)"
-                    style="width: 23px; float: left; margin: 10px"
-                    :src="getRelaventImage(plotting.label)"
-                  ></v-img>
-                </span>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-col> -->
     </v-row>
-    <!--  </v-container>
-      </v-card-text>
-    </v-card> -->
-    <!-- </v-dialog> -->
   </div>
 </template>
 <script>

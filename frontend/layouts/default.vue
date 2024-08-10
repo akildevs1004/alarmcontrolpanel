@@ -1907,7 +1907,50 @@ button {
   height: 830px;
   overflow-y: scroll;
 }
+.col-border-label {
+  position: absolute;
+  top: -9px;
+  background: #fff;
+  margin-left: -2px;
+  width: auto;
+  padding: 0px 7px;
+  color: black;
+}
+.div-border-label {
+  position: absolute;
+  top: 3px;
+  background: #fff;
+  margin-left: 5px;
+  width: auto;
+  padding: 0px 7px;
+  color: black;
+}
+.alarm-red-to-green {
+  animation: changeBackgroundColorRed 1s infinite;
+}
 
+@keyframes changeBackgroundColorRed {
+  0% {
+    color: green;
+  }
+  20% {
+    color: #f73030;
+  }
+
+  40% {
+    color: green;
+  }
+  60% {
+    color: #f73030;
+  }
+  80% {
+    color: green;
+  }
+
+  100% {
+    color: #f73030;
+  }
+}
 .alarm {
   animation: changeBackgroundColor 1s infinite;
 }

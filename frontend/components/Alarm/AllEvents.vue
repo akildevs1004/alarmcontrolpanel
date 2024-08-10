@@ -96,10 +96,10 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogTabViewCustomer" width="70%">
+    <v-dialog v-model="dialogTabViewCustomer" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes List</span>
+          <span style="color: black">Alarm Contacts</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -117,7 +117,9 @@
           <AlarmCustomerTabView
             @closeCustomerDialog="closeCustomerDialog()"
             :key="key"
-            :_id="viewCustomerId"
+            :_customerID="viewCustomerId"
+            :alarmId="eventId"
+            :customer="customer"
             :isPopup="true"
           />
         </v-card-text>
@@ -440,7 +442,7 @@
                             Contacts
                           </v-list-item-title>
                         </v-list-item>
-                        <v-list-item
+                        <!-- <v-list-item
                           v-if="can('branch_view')"
                           @click="viewNotes(item)"
                         >
@@ -459,7 +461,7 @@
                             </v-icon>
                             Add Notes
                           </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                         <!-- <v-list-item v-if="can('branch_edit')">
                   <v-list-item-title
                     style="cursor: pointer"
@@ -496,7 +498,7 @@ export default {
     AlarmCustomerTabView,
     AlramCloseNotes,
   },
-  props: ["showFilters"],
+  props: ["showFilters", "customer"],
   data() {
     return {
       dialogCloseAlarm: false,
@@ -625,11 +627,13 @@ export default {
       this.dialogTabViewCustomer = false;
     },
     viewCustomerinfo(item) {
+      this.key += 1;
       this.viewCustomerId = item.customer_id;
+      this.eventId = item.id;
       this.dialogTabViewCustomer = true;
     },
     viewNotes(item) {
-      this.key = this.key + 1;
+      this.key += 1;
       this.eventId = item.id;
       this.customer_id = item.customer_id;
       this.dialogNotesList = true;
