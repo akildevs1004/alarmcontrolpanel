@@ -198,18 +198,18 @@ export default {
 
     async renderChart1(data) {
       let counter = 0;
-      let total = 1000;
+      let total = 0;
 
       this.chartOptions.labels[0] = "Low";
-      this.chartOptions.series[0] = data[1].length;
+      this.chartOptions.series[0] = data[0].length;
 
       this.chartOptions.labels[1] = "Medium";
-      this.chartOptions.series[1] = data[2].length;
+      this.chartOptions.series[1] = data[1].length;
 
       this.chartOptions.labels[2] = "High";
-      this.chartOptions.series[2] = data[3].length;
+      this.chartOptions.series[2] = data[2].length;
 
-      total = data[1].length + data[2].length + data[3].length;
+      total = data[0].length + data[1].length + data[2].length;
 
       this.chartOptions.customTotalValue = total;
 
