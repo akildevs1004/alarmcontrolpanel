@@ -259,7 +259,7 @@ class CustomerAlarmEventsController extends Controller
                 if ($request->event_status != "Closed") {
                     $record = CustomerAlarmNotes::create($data);
                 } else if ($request->event_status == "Closed") {
-                    if (empty($request->input('primary_pin_number')) && empty($request->input('seconday_pin_number'))) {
+                    if (empty($request->input('primary_pin_number'))) {
                         return [
                             "status" => false,
                             "errors" => ['primary_pin_number' => ['  Primary  Pin is  required.']],
@@ -270,13 +270,13 @@ class CustomerAlarmEventsController extends Controller
                         $alarm_start_datetime = $alarmModel->first()->alarm_start_datetime;
 
                         $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
-                            ->where("alarm_stop_pin", $request->input('primary_pin_number'))
+                            ->where("alarm_stop_pin", (int)$request->input('primary_pin_number'))
                             ->count();
 
-                        $secondaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))->where("alarm_stop_pin", $request->input('seconday_pin_number'))->count();
+                        // $secondaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))->where("alarm_stop_pin", $request->input('seconday_pin_number'))->count();
 
 
-                        if ($primaryCount == 0 && $secondaryCount == 0) {
+                        if ($primaryCount == 0) {
                             return [
                                 "status" => false,
                                 "errors" => ['primary_pin_number' => ['PIN number is not matched']],
@@ -285,9 +285,10 @@ class CustomerAlarmEventsController extends Controller
                         $data2 = [];
                         if ($primaryCount) {
                             $data2["pin_verified_by"] = "primary";
-                        } else if ($secondaryCount) {
-                            $data2["pin_verified_by"] = "secondary";
                         }
+                        // else if ($secondaryCount) {
+                        //     $data2["pin_verified_by"] = "secondary";
+                        // }
 
                         $data2["alarm_status"] = 0;
                         $data2["alarm_end_manually"] = 1;
