@@ -470,6 +470,7 @@ export default {
         this.$axios
           .post("/customer_add_event_notes", customer)
           .then(({ data }) => {
+            this.response = "";
             //this.loading = false;
 
             if (!data.status) {
