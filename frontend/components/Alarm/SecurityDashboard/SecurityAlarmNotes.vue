@@ -135,6 +135,7 @@ export default {
     ],
     items: [],
     globalContactDetails: null,
+    key: 1,
   }),
   computed: {},
   mounted() {},
@@ -183,14 +184,15 @@ export default {
         },
       };
 
-      try {
-        this.$axios.get(`get_alarm_events_notes`, options).then(({ data }) => {
-          this.items = data.data;
-          this.totalRowsCount = data.total;
+      // try {
+      this.$axios.get(`get_alarm_events_notes`, options).then(({ data }) => {
+        //this.key += 1;
+        this.items = data.data;
+        this.totalRowsCount = data.total;
 
-          this.loading = false;
-        });
-      } catch (e) {}
+        this.loading = false;
+      });
+      //   } catch (e) {}
     },
     submit() {
       let customer = new FormData();
@@ -226,7 +228,9 @@ export default {
 
               this.event_payload = {};
               // this.$emit("closeDialog");
-              if (this.globalContactDetails) this.getDataFromApi();
+              //if (this.globalContactDetails)
+
+              this.getDataFromApi();
             }
           })
           .catch((e) => {

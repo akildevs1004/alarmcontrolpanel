@@ -283,6 +283,7 @@
               :alarmId="alarmId"
               :customer="customer"
               :contact_id="globalContactDetails.id"
+              :key="key"
             />
             <!-- <v-data-table
               :headers="headers"
@@ -386,7 +387,7 @@ export default {
   props: ["alarmId", "customer", "contact_type"],
   data: () => ({
     snackbar: false,
-
+    key: 1,
     dialogNotes: false,
     selectedItem: null,
     loading: false,
@@ -436,12 +437,12 @@ export default {
     }
   },
   watch: {
-    options: {
-      handler() {
-        if (this.globalContactDetails) this.getDataFromApi();
-      },
-      deep: true,
-    },
+    // options: {
+    //   handler() {
+    //     if (this.globalContactDetails) this.getDataFromApi();
+    //   },
+    //   deep: true,
+    // },
   },
   methods: {
     caps(str) {
@@ -456,38 +457,38 @@ export default {
       this.selectedItem = item;
       this.dialogNotes = true;
     },
-    getDataFromApi() {
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+    // getDataFromApi() {
+    //   let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
-      if (itemsPerPage) this.perPage = itemsPerPage;
-      if (page) this.currentPage = page;
+    //   let sortedBy = sortBy ? sortBy[0] : "";
+    //   let sortedDesc = sortDesc ? sortDesc[0] : "";
+    //   if (itemsPerPage) this.perPage = itemsPerPage;
+    //   if (page) this.currentPage = page;
 
-      this.loading = true;
-      let options = {
-        params: {
-          page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
-          perPage: itemsPerPage,
-          pagination: true,
-          company_id: this.$auth.user.company_id,
-          customer_id: this.customer.customer_id,
-          contact_id: this.globalContactDetails.id,
-          alarm_id: this.alarmId,
-        },
-      };
+    //   this.loading = true;
+    //   let options = {
+    //     params: {
+    //       page: page,
+    //       sortBy: sortedBy,
+    //       sortDesc: sortedDesc,
+    //       perPage: itemsPerPage,
+    //       pagination: true,
+    //       company_id: this.$auth.user.company_id,
+    //       customer_id: this.customer.customer_id,
+    //       contact_id: this.globalContactDetails.id,
+    //       alarm_id: this.alarmId,
+    //     },
+    //   };
 
-      try {
-        this.$axios.get(`get_alarm_events_notes`, options).then(({ data }) => {
-          this.items = data.data;
-          this.totalRowsCount = data.total;
+    //   try {
+    //     this.$axios.get(`get_alarm_events_notes`, options).then(({ data }) => {
+    //       this.items = data.data;
+    //       this.totalRowsCount = data.total;
 
-          this.loading = false;
-        });
-      } catch (e) {}
-    },
+    //       this.loading = false;
+    //     });
+    //   } catch (e) {}
+    // },
     submit() {
       let customer = new FormData();
 
@@ -522,7 +523,7 @@ export default {
               this.snackbar = true;
               this.event_payload = {};
               // this.$emit("closeDialog");
-              if (this.globalContactDetails) this.getDataFromApi();
+              this.key += 1;
             }
           })
           .catch((e) => {
