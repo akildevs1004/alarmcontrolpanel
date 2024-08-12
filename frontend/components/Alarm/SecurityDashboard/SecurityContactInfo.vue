@@ -184,7 +184,9 @@
                     <v-radio label="Pending" value="Pending"></v-radio>
                     <v-radio
                       v-if="
-                        contact_type == 'primary' || contact_type == 'secondary'
+                        (contact_type == 'primary' ||
+                          contact_type == 'secondary') &&
+                        event_payload.call_status == 'Answered'
                       "
                       label="Closed"
                       value="Closed"
