@@ -118,7 +118,7 @@
               v-slot:item.building_name="{ item, index }"
               style="width: 300px"
             >
-              <v-row no-gutters @click="viewItem(item)">
+              <v-row no-gutters>
                 <v-col
                   style="
                     padding: 5px;
