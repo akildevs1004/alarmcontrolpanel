@@ -194,64 +194,41 @@
               </v-col>
             </v-row>
             <div>
-              <v-textarea
-                outlined
-                class="mt-2"
-                name="input-7-4"
-                label="Action Notes"
-                value=""
-                rows="2"
-                v-model="event_payload.notes"
-              ></v-textarea>
-
-              <div v-if="event_payload.event_status == 'Closed'">
-                <v-text-field
-                  type="number"
-                  min="0"
-                  max="10"
-                  class=""
-                  label="Enter PIN Number"
-                  dense
-                  outlined
-                  flat
-                  v-model="event_payload.pin_number"
-                  hide-details
-                >
-                </v-text-field>
-                <div
-                  v-if="errors && errors.pin_number"
-                  class="text-danger mt-2"
-                >
-                  {{ errors.pin_number[0] }}
-                </div>
-              </div>
-              <v-row style="margin-top: -40px">
-                <v-col>
-                  <div style="color: green">{{ response }}</div>
-
-                  <div v-if="errors && errors.notes" class="text-danger mt-2">
-                    {{ errors.notes[0] }}
-                  </div>
-                  <div
-                    v-if="errors && errors.call_status"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.call_status[0] }}
-                  </div>
-                  <div
-                    v-if="errors && errors.event_status"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.event_status[0] }}
-                  </div>
-                  <div
-                    v-if="errors && errors.response"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.response[0] }}
+              <v-row
+                ><v-col cols="12">
+                  <div>
+                    <v-textarea
+                      outlined
+                      class="mt-2"
+                      name="input-7-4"
+                      label="Action Notes"
+                      value=""
+                      rows="2"
+                      hide-details
+                      v-model="event_payload.notes"
+                    ></v-textarea>
+                  </div> </v-col
+              ></v-row>
+              <v-row
+                ><v-col cols="6">
+                  <div v-if="event_payload.event_status == 'Closed'">
+                    <v-text-field
+                      type="number"
+                      min="0"
+                      max="10"
+                      class=""
+                      label="Enter PIN Number"
+                      dense
+                      outlined
+                      flat
+                      v-model="event_payload.pin_number"
+                      hide-details
+                      small
+                    >
+                    </v-text-field>
                   </div>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="6">
                   <v-btn
                     @click="submit"
                     class="mt-1"
@@ -259,9 +236,37 @@
                     color="primary"
                     style="margin: auto; margin-top: -10px"
                     >Submit</v-btn
-                  ></v-col
-                ></v-row
-              >
+                  >
+                </v-col>
+              </v-row>
+
+              <div>
+                <div style="color: green">{{ response }}</div>
+                <div
+                  v-if="errors && errors.pin_number"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.pin_number[0] }}
+                </div>
+                <div v-if="errors && errors.notes" class="text-danger mt-2">
+                  {{ errors.notes[0] }}
+                </div>
+                <div
+                  v-if="errors && errors.call_status"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.call_status[0] }}
+                </div>
+                <div
+                  v-if="errors && errors.event_status"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.event_status[0] }}
+                </div>
+                <div v-if="errors && errors.response" class="text-danger mt-2">
+                  {{ errors.response[0] }}
+                </div>
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -269,7 +274,7 @@
           {{ caps(contact_type) }} contact details are not available
         </div>
 
-        <v-divider class="mb-2 mt-2"></v-divider>
+        <v-divider class="mb-2 mt-4"></v-divider>
 
         <v-row>
           <v-col>
