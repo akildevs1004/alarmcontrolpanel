@@ -77,7 +77,7 @@
               :alarmId="alarmId"
               v-if="customer"
               :customer="customer"
-              :contact_type="'Security'"
+              :contact_type="'Watchman'"
               :key="keySecurity"
           /></v-card-text>
         </v-card>

@@ -63,7 +63,10 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <div v-if="customer_contacts.length == 0" class="text-center">
+    <div
+      v-if="!customer_contacts || customer_contacts.length == 0"
+      class="text-center"
+    >
       No Contacts Available
     </div>
     <v-row>
@@ -71,6 +74,7 @@
         <v-btn
           color="primary"
           @click="
+            editId = null;
             key = key + 1;
 
             dialogEditEmergency = true;

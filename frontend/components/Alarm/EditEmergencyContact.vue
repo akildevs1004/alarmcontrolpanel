@@ -19,17 +19,18 @@
                 :hide-no-data="true"
               ></v-autocomplete> -->
 
-              <v-combobox
+              <v-select
                 @change="loadAddressContent(false)"
                 label="Contact  Type"
                 :items="addressTypes"
                 item-text="name"
+                item-value="name"
                 v-model="payload_primary.address_type"
                 dense
                 outlined
                 hide-details
                 small
-              ></v-combobox>
+              ></v-select>
               <span
                 v-if="errors && errors.address_type"
                 class="text-danger mt-2"
@@ -77,7 +78,12 @@
                 type="text"
                 v-model="payload_primary.first_name"
                 hide-details
-              ></v-text-field>
+              ></v-text-field
+              ><span
+                v-if="primary_errors && primary_errors.first_name"
+                class="text-danger mt-2"
+                >{{ primary_errors.first_name[0] }}</span
+              >
             </v-col>
             <v-col cols="6" dense>
               <v-text-field
@@ -88,7 +94,12 @@
                 type="text"
                 v-model="payload_primary.last_name"
                 hide-details
-              ></v-text-field>
+              ></v-text-field
+              ><span
+                v-if="primary_errors && primary_errors.last_name"
+                class="text-danger mt-2"
+                >{{ primary_errors.last_name[0] }}</span
+              >
             </v-col>
             <v-col cols="6" dense>
               <v-text-field
@@ -339,7 +350,6 @@ export default {
       return this.$pagePermission.can(per, this);
     },
     addNewItem(value) {
-      console.log(this.items);
       // Check if the value is already in the items list
       if (!this.items.includes(value)) {
         // Add the new value to the items list
@@ -417,7 +427,7 @@ export default {
         ];
         return;
       }
-      console.log(file);
+
       if (file && file[0]) {
         let reader = new FileReader();
         reader.onload = (e) => {
@@ -446,8 +456,10 @@ export default {
       customer.append("customer_id", this.customer_id);
       // if (this.editAddressType != "") customer.append("editAddressType", true);
 
-      if (this.editId != "") {
+      if (this.editId != "" && this.editId != null && this.editId != "null") {
         customer.append("editId", this.editId);
+      } else {
+        customer.delete("editId");
       }
 
       console.log(customer);
@@ -474,8 +486,8 @@ export default {
           }
         })
         .catch((e) => {
-          if (e.response.data.primary_errors) {
-            this.primary_errors = e.response.data.primary_errors;
+          if (e.response.data.errors) {
+            this.primary_errors = e.response.data.errors;
             this.color = "red";
 
             this.snackbar = true;

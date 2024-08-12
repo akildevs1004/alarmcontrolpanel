@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class CustomersController extends Controller
 {
@@ -442,6 +443,9 @@ class CustomersController extends Controller
 
 
         if (!$request->filled("editId")) {
+            if (!is_array($addressTypes)) {
+                $addressTypes = $addressTypes->toArray();
+            }
             $displayOrders = array_column($addressTypes, 'display_order');
             $data["display_order"] = max($displayOrders) + 1;
 
@@ -475,6 +479,8 @@ class CustomersController extends Controller
         }
         try {
             //$data = $request->all();
+
+            return $request->filled("editId");
             if ($request->filled("editId")) {
                 $record = CustomerContacts::where('company_id',   $request->company_id)
                     ->where('customer_id',   $request->customer_id)
@@ -505,7 +511,7 @@ class CustomersController extends Controller
 
 
                     if ($record) {
-                        return $this->response('Customer ' . $type . ' Contacts Updated.', $record, true);
+                        return $this->response('Customer ' . $type . ' Contacts Updated.22222', $record, true);
                     } else {
                         return $this->response('Customer  ' . $type . '  Contacts Not Updated', null, false);
                     }
@@ -520,7 +526,7 @@ class CustomersController extends Controller
 
 
                     if ($record) {
-                        return $this->response('Customer ' . $type . ' Contacts Created.', $record, true);
+                        return $this->response('Customer ' . $type . ' Contacts Created44444.', $record, true);
                     } else {
                         return $this->response('Customer ' . $type . ' Contacts Not Created', null, false);
                     }
@@ -543,20 +549,29 @@ class CustomersController extends Controller
                 $record = CustomerContacts::where('company_id',   $request->company_id)
                     ->where('customer_id',   $request->customer_id)
                     ->where('id',   $request->editId)->update($data);
-                return $this->response('Customer ' . $type . ' Contacts Updated.', $record, true);
+                return $this->response('Customer ' . $type . ' Contacts Updated.3333', $record, true);
             } else {
 
-                $data['company_id'] =  $request->company_id;
-                $data['customer_id'] = $request->customer_id;
-                $data['address_type'] = $type;
-                $record = CustomerContacts::create($data);
+                $customerPrimaryContact = CustomerContacts::where('company_id',   $request->company_id)
+                    ->where('customer_id',   $request->customer_id)
+                    ->where('address_type',  $type);
+
+                if ($customerPrimaryContact->count() == 0) {
+
+                    $data['company_id'] =  $request->company_id;
+                    $data['customer_id'] = $request->customer_id;
+                    $data['address_type'] = $type;
+                    $record = CustomerContacts::create($data);
 
 
 
-                if ($record) {
-                    return $this->response('Customer ' . $type . ' Contacts Created.', $record, true);
+                    if ($record) {
+                        return $this->response('  ' . $type . ' Contacts Created .', $record, true);
+                    } else {
+                        return $this->response('  ' . $type . ' Contacts Not Created', null, false);
+                    }
                 } else {
-                    return $this->response('Customer ' . $type . ' Contacts Not Created', null, false);
+                    return $this->response('  ' . $type . ' Contacts is already Exist', null, false);
                 }
             }
         } catch (\Throwable $th) {
@@ -718,7 +733,7 @@ class CustomersController extends Controller
         //     ["name" => "Building Security", "display_order" => 4],
         //     ["name" => "Community Security", "display_order" => 5],
         // ];
-        $data = CustomerContactTypes::orderBy("name", "asc")->get()->toArray();
+        return   $data = CustomerContactTypes::orderBy("name", "asc")->get();
 
         // Fetch addressTypes from the database
         $addressTypes = CustomerContacts::where("company_id", $request->company_id)->where("display_order", ">", 0)
