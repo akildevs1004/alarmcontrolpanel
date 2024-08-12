@@ -9,6 +9,7 @@ use App\Mail\EmailContentDefault;
 use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
+use App\Models\Customers\CustomerContactTypes;
 use App\Models\Customers\Customers;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
@@ -48,7 +49,7 @@ class CustomersController extends Controller
                 $qwhere->orWhere("country", "ILIKE", "%$search%");
                 $qwhere->orWhere("landmark", "ILIKE", "%$search%");
 
-                $qwhere->orWhereHas("buildingtype",  fn (Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
+                $qwhere->orWhereHas("buildingtype",  fn(Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
             });
         });
 
@@ -118,7 +119,8 @@ class CustomersController extends Controller
                             'name' => 'null',
                             'email' => $data['email'],
                             'password' => Hash::make($data["password"]),
-                            'company_id' => $request->company_id, 'web_login_access' => 1,
+                            'company_id' => $request->company_id,
+                            'web_login_access' => 1,
                         ]);
                         $data['user_id'] = $user->id;
                     } else {
@@ -181,9 +183,7 @@ class CustomersController extends Controller
      * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest  $request)
-    {
-    }
+    public function update(UpdateRequest  $request) {}
     public function updateCustomer(UpdateRequest  $request)
     {
         try {
@@ -412,7 +412,7 @@ class CustomersController extends Controller
             'phone1' => 'required',
             'mobile_number' => 'nullable',
             'email' => 'nullable',
-            'alarm_stop_pin' => 'required',
+
 
 
         ]);
@@ -596,7 +596,13 @@ class CustomersController extends Controller
     public function deviceModels()
     {
         $data = [
-            "OX-866", "OX-886", "OX-966", "OX-900", "XT-CPANEL",   "XT-FIRE", "XT-WATER"
+            "OX-866",
+            "OX-886",
+            "OX-966",
+            "OX-900",
+            "XT-CPANEL",
+            "XT-FIRE",
+            "XT-WATER"
 
 
 
@@ -705,14 +711,14 @@ class CustomersController extends Controller
     // }
     public function addressTypes(Request $request)
     {
-        $data = [
-            ["name" => "Police Station", "display_order" => 1],
-            ["name" => "Fire/Civil Department", "display_order" => 2],
-            ["name" => "Hopsital", "display_order" => 3],
-            ["name" => "Building Security", "display_order" => 4],
-            ["name" => "Community Security", "display_order" => 5],
-        ];
-
+        // $data = [
+        //     ["name" => "Police Station", "display_order" => 1],
+        //     ["name" => "Fire/Civil Department", "display_order" => 2],
+        //     ["name" => "Hopsital", "display_order" => 3],
+        //     ["name" => "Building Security", "display_order" => 4],
+        //     ["name" => "Community Security", "display_order" => 5],
+        // ];
+        $data = CustomerContactTypes::orderBy("name", "asc")->get()->toArray();
 
         // Fetch addressTypes from the database
         $addressTypes = CustomerContacts::where("company_id", $request->company_id)->where("display_order", ">", 0)
@@ -749,7 +755,7 @@ class CustomersController extends Controller
             ->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
 
-        $model->when($request->filled("customer_id"), fn ($q) => $q->where("id", $request->customer_id));
+        $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
 
         return $model->orderByDesc('id')->paginate($request->perPage);
     }

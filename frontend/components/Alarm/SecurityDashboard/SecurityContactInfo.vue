@@ -1,5 +1,10 @@
 <template>
   <div max-width="100%">
+    <div class="text-center ma-2">
+      <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-dialog v-model="dialogNotes" max-width="700px">
       <v-card>
         <v-card-title dark class="popup_background">
@@ -16,11 +21,11 @@
     </v-dialog>
     <v-card flat>
       <v-card-text style="padding: 0px">
-        <v-row v-if="customer">
+        <v-row v-if="globalContactDetails">
           <v-col cols="6">
-            <v-row v-if="customer.primary_contact">
+            <v-row>
               <v-col cols="4">
-                <h4>Primary Information</h4>
+                <span>{{ caps(contact_type) }} Information</span>
                 <v-img
                   style="
                     width: 200px;
@@ -29,8 +34,8 @@
                     border: 1px solid #ddd;
                   "
                   :src="
-                    customer && customer.primary_contact
-                      ? customer.primary_contact?.profile_picture
+                    globalContactDetails?.profile_picture
+                      ? globalContactDetails.profile_picture
                       : '/no-profile-image.jpg'
                   "
                 ></v-img>
@@ -46,10 +51,10 @@
                       outlined
                       flat
                       :value="
-                        customer.primary_contact?.first_name
-                          ? customer.primary_contact.first_name +
+                        globalContactDetails?.first_name
+                          ? globalContactDetails.first_name +
                             ' ' +
-                            customer.primary_contact.last_name
+                            globalContactDetails.last_name
                           : '---'
                       "
                       hide-details
@@ -65,7 +70,7 @@
                       dense
                       outlined
                       flat
-                      v-model="customer.primary_contact.phone1"
+                      v-model="globalContactDetails.phone1"
                       hide-details
                     >
                     </v-text-field>
@@ -78,7 +83,7 @@
                       dense
                       outlined
                       flat
-                      v-model="customer.primary_contact.phone2"
+                      v-model="globalContactDetails.phone2"
                       hide-details
                     >
                     </v-text-field>
@@ -91,7 +96,7 @@
                       dense
                       outlined
                       flat
-                      v-model="customer.primary_contact.office_phone"
+                      v-model="globalContactDetails.office_phone"
                       hide-details
                     >
                     </v-text-field>
@@ -177,7 +182,13 @@
                     ></v-radio>
                     <v-radio label="Flase Alarm" value="Flase Alarm"></v-radio>
                     <v-radio label="Pending" value="Pending"></v-radio>
-                    <v-radio label="Closed" value="Closed"></v-radio>
+                    <v-radio
+                      v-if="
+                        contact_type == 'primary' || contact_type == 'secondary'
+                      "
+                      label="Closed"
+                      value="Closed"
+                    ></v-radio>
                   </v-radio-group>
                 </div>
               </v-col>
@@ -195,24 +206,26 @@
 
               <div v-if="event_payload.event_status == 'Closed'">
                 <v-text-field
-                  max-length="6"
+                  type="number"
+                  min="0"
+                  max="10"
                   class=""
                   label="Enter PIN Number"
                   dense
                   outlined
                   flat
-                  v-model="event_payload.primary_pin_number"
+                  v-model="event_payload.pin_number"
                   hide-details
                 >
                 </v-text-field>
                 <div
-                  v-if="errors && errors.primary_pin_number"
+                  v-if="errors && errors.pin_number"
                   class="text-danger mt-2"
                 >
-                  {{ errors.primary_pin_number[0] }}
+                  {{ errors.pin_number[0] }}
                 </div>
               </div>
-              <v-row>
+              <v-row style="margin-top: -40px">
                 <v-col>
                   <div style="color: green">{{ response }}</div>
 
@@ -244,7 +257,7 @@
                     class="mt-1"
                     small
                     color="primary"
-                    style="float: right"
+                    style="margin: auto; margin-top: -10px"
                     >Submit</v-btn
                   ></v-col
                 ></v-row
@@ -252,12 +265,21 @@
             </div>
           </v-col>
         </v-row>
+        <div v-else>
+          {{ caps(contact_type) }} contact details are not available
+        </div>
 
-        <v-divider class="mb-2"></v-divider>
+        <v-divider class="mb-2 mt-2"></v-divider>
 
         <v-row>
           <v-col>
-            <v-data-table
+            <SecurityAlarmNotes
+              v-if="globalContactDetails"
+              :alarmId="alarmId"
+              :customer="customer"
+              :contact_id="globalContactDetails.id"
+            />
+            <!-- <v-data-table
               :headers="headers"
               :items="items"
               :server-items-length="totalRowsCount"
@@ -332,17 +354,7 @@
                   >{{ item.notes }}</span
                 >
               </template>
-              <!-- <template v-slot:item.status="{ item, index }">
-                <div style="color: red" v-if="item.alarm.alarm_status == '1'">
-                  OPEN
-                </div>
-                <div
-                  style="color: green"
-                  v-else-if="item.alarm.alarm_status == '0'"
-                >
-                  CLOSED
-                </div>
-              </template> -->
+
               <template v-slot:item.event_status="{ item, index }">
                 <div style="color: red" v-if="item.event_status != 'Closed'">
                   {{ item.event_status }}
@@ -351,7 +363,7 @@
                   {{ item.event_status }}
                 </div>
               </template>
-            </v-data-table>
+            </v-data-table> -->
           </v-col>
         </v-row>
       </v-card-text>
@@ -362,10 +374,14 @@
 <script>
 import SecurityGoogleMap from "../../Alarm/SecurityDashboard/SecurityGoogleMap.vue";
 import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
+import SecurityAlarmNotes from "../../Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
+
 export default {
-  components: { SecurityGoogleMap, SecurityBuildingPhotos },
-  props: ["alarmId", "customer"],
+  components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityAlarmNotes },
+  props: ["alarmId", "customer", "contact_type"],
   data: () => ({
+    snackbar: false,
+
     dialogNotes: false,
     selectedItem: null,
     loading: false,
@@ -394,16 +410,30 @@ export default {
       // { text: "Status", value: "status", sortable: false },
     ],
     items: [],
+    globalContactDetails: null,
   }),
   computed: {},
   mounted() {},
   created() {
-    this.getDataFromApi();
+    if (this.customer) {
+      if (this.contact_type == "primary") {
+        this.globalContactDetails = this.customer.primary_contact;
+      } else if (this.contact_type == "secondary") {
+        this.globalContactDetails = this.customer.secondary_contact;
+      } else {
+        let Contacts = this.customer.contacts.filter(
+          (e) => e.address_type.toLowerCase() == this.contact_type.toLowerCase()
+        );
+        if (Contacts.length > 0) {
+          this.globalContactDetails = Contacts[0];
+        }
+      }
+    }
   },
   watch: {
     options: {
       handler() {
-        this.getDataFromApi();
+        if (this.globalContactDetails) this.getDataFromApi();
       },
       deep: true,
     },
@@ -439,7 +469,7 @@ export default {
           pagination: true,
           company_id: this.$auth.user.company_id,
           customer_id: this.customer.customer_id,
-          contact_id: this.customer.primary_contact.id,
+          contact_id: this.globalContactDetails.id,
           alarm_id: this.alarmId,
         },
       };
@@ -463,8 +493,9 @@ export default {
       customer.append("security_id", this.$auth.user.security.id);
       customer.append("company_id", this.$auth.user.company_id);
       customer.append("customer_id", this.customer.id);
-      customer.append("contact_id", this.customer.primary_contact.id);
+      customer.append("contact_id", this.globalContactDetails.id);
       customer.append("alarm_id", this.alarmId);
+      customer.append("contact_type", this.contact_type);
 
       if (this.customer.id) {
         this.$axios
@@ -481,20 +512,20 @@ export default {
               this.error_message = "";
               this.color = "background";
               this.errors = [];
-              this.snackbar = true;
-              this.response = "Alarm Notes Details Created successfully";
 
+              this.response = "Alarm Notes Details Created successfully";
+              this.snackbar = true;
               this.event_payload = {};
               // this.$emit("closeDialog");
-
-              this.getDataFromApi();
+              if (this.globalContactDetails) this.getDataFromApi();
             }
           })
           .catch((e) => {
             if (e.response.data.errors) {
               this.errors = e.response.data.errors;
               this.color = "red";
-
+              this.snackbar = true;
+              this.response = "Some fileds are missing";
               this.snackbar = true;
               //this.response = e.response.data.message;
               if (this.errors.message) {

@@ -1,18 +1,5 @@
 <template>
   <div class="text-centers">
-    <div class="fa-3x">
-      <i class="fa-solid fa-circle-plus fa-beat"></i>
-      <i class="fa-solid fa-heart fa-beat"></i>
-      <i
-        class="fa-solid fa-heart fa-beat"
-        style="--fa-animation-duration: 0.5s"
-      ></i>
-      <i
-        class="fa-solid fa-heart fa-beat"
-        style="--fa-animation-duration: 2s"
-      ></i>
-      <i class="fa-solid fa-heart fa-beat" style="--fa-beat-scale: 2"></i>
-    </div>
     <v-row>
       <v-col cols="8" dense hide-details></v-col>
       <v-col cols="4" class="pt-6 pb-0" style="float: right">

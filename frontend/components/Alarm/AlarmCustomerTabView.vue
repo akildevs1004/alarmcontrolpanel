@@ -52,6 +52,80 @@
               :alarmId="alarmId"
               v-if="customer"
               :customer="customer"
+              :contact_type="'primary'"
+              :key="keyPrimary"
+              :key1="keyPrimary"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'secondary'"
+              :key="keySecondary"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'Security'"
+              :key="keySecurity"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'Police'"
+              :key="keyPolice"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'Medical'"
+              :key="keyMedical"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'Fire'"
+              :key="keyFire"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <SecurityAlarmNotes
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :key="keyLogs"
           /></v-card-text>
         </v-card>
       </v-tab-item>
@@ -62,23 +136,47 @@
 <script>
 import SecurityBuildingInfo from "../../components/Alarm/SecurityDashboard/SecurityBuildingInfo.vue";
 import SecurityContactInfo from "../../components/Alarm/SecurityDashboard/SecurityContactInfo.vue";
+import SecurityAlarmNotes from "../../components/Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
 
 export default {
   components: {
     SecurityBuildingInfo,
     SecurityContactInfo,
+    SecurityAlarmNotes,
   },
   props: ["_customerID", "alarmId"],
   data: () => ({
     tab: "",
     customer: null,
+    key: 1,
+    keyPrimary: 0,
+    keySecondary: 0,
+    keySecurity: 0,
+    keyPolice: 0,
+
+    keyMedical: 0,
+    keyLogs: 0,
+    keyFire: 0,
   }),
   computed: {},
   mounted() {},
   created() {
     this.getDataFromApi();
   },
-  watch: {},
+  watch: {
+    tab: {
+      handler(value) {
+        if (value == 1) this.keyPrimary += 1;
+        else if (value == 2) this.keySecondary += 1;
+        else if (value == 3) this.keySecurity += 1;
+        else if (value == 4) this.keyPolice += 1;
+        else if (value == 5) this.keyMedical += 1;
+        else if (value == 6) this.keyFire += 1;
+        else if (value == 7) this.keyLogs += 1;
+      },
+      deep: true,
+    },
+  },
   methods: {
     getDataFromApi() {
       if (this._customerID) {

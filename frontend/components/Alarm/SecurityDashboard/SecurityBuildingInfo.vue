@@ -3,7 +3,7 @@
     <v-card flat>
       <v-card-text style="padding: 0px">
         <v-row v-if="customer">
-          <v-col cols="6">
+          <v-col cols="5">
             <h3>Building Info</h3>
             <br />
             <v-row>
@@ -131,7 +131,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="7">
             <v-tabs color="#dc7640">
               <v-tabs-slider color="blue"></v-tabs-slider>
               <v-tab>Business Photo</v-tab>

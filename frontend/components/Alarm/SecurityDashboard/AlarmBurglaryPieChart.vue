@@ -210,10 +210,9 @@ export default {
       this.chartOptions.series[2] = data["3"]?.length ?? 0;
 
       total =
-        data["1"]?.length ??
-        0 + data["2"]?.length ??
-        0 + data["3"]?.length ??
-        0;
+        this.chartOptions.series[0] +
+        this.chartOptions.series[1] +
+        this.chartOptions.series[2];
 
       this.chartOptions.customTotalValue = total;
 

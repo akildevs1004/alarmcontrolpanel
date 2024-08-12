@@ -258,37 +258,60 @@ class CustomerAlarmEventsController extends Controller
 
                 if ($request->event_status != "Closed") {
                     $record = CustomerAlarmNotes::create($data);
+
+                    $alarmModel = AlarmEvents::where("id", $request->alarm_id);
+                    $data2 = [];
+                    $data2["alarm_status"] = 1;
+                    $alarmModel->update($data2);
                 } else if ($request->event_status == "Closed") {
-                    if (empty($request->input('primary_pin_number'))) {
+                    if (empty($request->input('pin_number'))) {
                         return [
                             "status" => false,
-                            "errors" => ['primary_pin_number' => ['  Primary  Pin is  required.']],
+                            "errors" => ['pin_number' => ['  Primary  Pin is  required.']],
                         ];
                     }
                     if ($request->alarm_id > 0) {
                         $alarmModel = AlarmEvents::where("id", $request->alarm_id);
                         $alarm_start_datetime = $alarmModel->first()->alarm_start_datetime;
-
-                        $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
-                            ->where("alarm_stop_pin", (int)$request->input('primary_pin_number'))
-                            ->count();
-
-                        // $secondaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))->where("alarm_stop_pin", $request->input('seconday_pin_number'))->count();
-
-
-                        if ($primaryCount == 0) {
-                            return [
-                                "status" => false,
-                                "errors" => ['primary_pin_number' => ['PIN number is not matched']],
-                            ];
-                        }
                         $data2 = [];
-                        if ($primaryCount) {
-                            $data2["pin_verified_by"] = "primary";
+                        if ($request->filled("contact_type")) {
+
+                            if ($request->contact_type == 'primary') {
+
+                                $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
+                                    ->where("alarm_stop_pin", (int)$request->input('pin_number'))
+                                    ->count();
+
+                                if ($primaryCount == 0) {
+                                    return [
+                                        "status" => false,
+                                        "errors" => ['pin_number' => ['PIN number is not matched']],
+                                    ];
+                                }
+
+                                if ($primaryCount) {
+                                    $data2["pin_verified_by"] = "primary";
+                                }
+                            }
+
+                            if ($request->contact_type == 'secondary') {
+
+                                $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
+                                    ->where("alarm_stop_pin", (int)$request->input('pin_number'))
+                                    ->count();
+
+                                if ($primaryCount == 0) {
+                                    return [
+                                        "status" => false,
+                                        "errors" => ['pin_number' => ['PIN number is not matched']],
+                                    ];
+                                }
+
+                                if ($primaryCount) {
+                                    $data2["pin_verified_by"] = "secondary";
+                                }
+                            }
                         }
-                        // else if ($secondaryCount) {
-                        //     $data2["pin_verified_by"] = "secondary";
-                        // }
 
                         $data2["alarm_status"] = 0;
                         $data2["alarm_end_manually"] = 1;

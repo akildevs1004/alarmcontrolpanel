@@ -113,7 +113,7 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text style="padding: 0px">
           <AlarmCustomerTabView
             @closeCustomerDialog="closeCustomerDialog()"
             :key="key"
