@@ -201,15 +201,19 @@ export default {
       let total = 0;
 
       this.chartOptions.labels[0] = "Low";
-      this.chartOptions.series[0] = data["1"].length;
+      this.chartOptions.series[0] = data["1"]?.length ?? 0;
 
       this.chartOptions.labels[1] = "Medium";
-      this.chartOptions.series[1] = data["2"].length;
+      this.chartOptions.series[1] = data["2"]?.length ?? 0;
 
       this.chartOptions.labels[2] = "High";
-      this.chartOptions.series[2] = data["3"].length;
+      this.chartOptions.series[2] = data["3"]?.length ?? 0;
 
-      total = data["1"].length + data["2"].length + data["3"].length;
+      total =
+        data["1"]?.length ??
+        0 + data["2"]?.length ??
+        0 + data["3"]?.length ??
+        0;
 
       this.chartOptions.customTotalValue = total;
 

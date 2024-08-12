@@ -194,12 +194,13 @@ export default {
       let total = 0;
 
       this.chartOptions.labels[0] = "Active";
-      this.chartOptions.series[0] = data.active;
+      this.chartOptions.series[0] = data?.active ?? 0;
 
       this.chartOptions.labels[1] = "Closed";
-      this.chartOptions.series[1] = data.closed;
+      this.chartOptions.series[1] = data?.closed ?? 0;
 
-      total = data.active + data.closed;
+      total = data?.active ?? 0;
+      +data?.closed ?? 0;
 
       this.chartOptions.customTotalValue = total;
 
