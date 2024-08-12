@@ -526,7 +526,7 @@ class CustomersController extends Controller
 
 
                     if ($record) {
-                        return $this->response('Customer ' . $type . ' Contacts Created44444.', $record, true);
+                        return $this->response('Customer ' . $type . ' Contacts Created.', $record, true);
                     } else {
                         return $this->response('Customer ' . $type . ' Contacts Not Created', null, false);
                     }
