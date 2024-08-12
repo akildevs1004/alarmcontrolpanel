@@ -21,7 +21,7 @@
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab>
-        Security
+        Watchman
         <v-icon>mdi-shield-account</v-icon>
       </v-tab>
       <v-tab>
@@ -32,7 +32,7 @@
         <v-icon>mdi-medical-bag</v-icon> </v-tab
       ><v-tab>
         Fire
-        <v-icon>mdi-fire-alert</v-icon> </v-tab
+        <v-icon>mdi-fire</v-icon> </v-tab
       ><v-tab>
         Logs
         <v-icon>mdi-text-box-outline</v-icon>

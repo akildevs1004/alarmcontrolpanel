@@ -5,17 +5,156 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogNotes" max-width="700px">
+    <v-dialog v-model="dialogNotes" max-width="700px" :key="key">
       <v-card>
         <v-card-title dark class="popup_background">
-          <span dense>Notes</span>
+          <span dense
+            >Alarm Notes - ID: {{ selectedItem?.alarm_id || "---" }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon @click="dialogNotes = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
         <v-card-text>
-          {{ selectedItem ? selectedItem.notes : "---" }}
+          <v-row v-if="selectedItem" class="mt-2">
+            <!-- <v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Event ID"
+                dense
+                outlined
+                flat
+                :value="selectedItem.alarm_id"
+                hide-details
+              >
+              </v-text-field>
+            </v-col> -->
+            <v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Date"
+                dense
+                outlined
+                flat
+                :value="selectedItem.created_datetime"
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Security Login Name"
+                dense
+                outlined
+                flat
+                :value="
+                  selectedItem.security
+                    ? selectedItem.security.first_name +
+                      ' ' +
+                      selectedItem.security?.last_name
+                    : '---'
+                "
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Customer Name"
+                dense
+                outlined
+                flat
+                :value="
+                  selectedItem.contact
+                    ? selectedItem.contact.first_name +
+                      ' ' +
+                      selectedItem.contact?.last_name
+                    : '---'
+                "
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Customer Type"
+                dense
+                outlined
+                flat
+                :value="selectedItem.contact?.address_type || '---'"
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Phone"
+                dense
+                outlined
+                flat
+                :value="selectedItem.contact?.phone1 || '---'"
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Call Status"
+                dense
+                outlined
+                flat
+                :value="selectedItem.call_status"
+                hide-details
+              >
+              </v-text-field> </v-col
+            ><v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Response"
+                dense
+                outlined
+                flat
+                :value="selectedItem.response"
+                hide-details
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                readonly
+                class=""
+                label="Event/Alarm Status"
+                dense
+                outlined
+                flat
+                :value="selectedItem.event_status"
+                hide-details
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-textarea
+                outlined
+                class="mt-2"
+                name="input-7-4"
+                label="Action Notes"
+                value=""
+                rows="2"
+                hide-details
+                v-model="selectedItem.notes"
+              ></v-textarea>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -76,7 +215,6 @@
                 <span
                   class="d-inline-block text-truncate"
                   style="max-width: 100px"
-                  @click="displayNotes(item)"
                   >{{ item.notes }}</span
                 >
               </template>
@@ -88,6 +226,11 @@
                 <div style="color: green" v-else>
                   {{ item.event_status }}
                 </div>
+              </template>
+              <template v-slot:item.action="{ item, index }">
+                <v-icon @click="displayNotes(item)" color="black"
+                  >mdi mdi-information-slab-circle</v-icon
+                >
               </template>
             </v-data-table>
           </v-col>
@@ -131,6 +274,7 @@ export default {
 
       { text: "Notes", value: "notes", sortable: false },
       { text: "Event Status", value: "event_status", sortable: false },
+      { text: "Actions", value: "action", sortable: false },
       // { text: "Status", value: "status", sortable: false },
     ],
     items: [],
@@ -158,6 +302,7 @@ export default {
       }
     },
     displayNotes(item) {
+      this.key += 1;
       this.selectedItem = item;
       this.dialogNotes = true;
     },
