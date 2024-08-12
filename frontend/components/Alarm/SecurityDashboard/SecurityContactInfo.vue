@@ -24,7 +24,10 @@
         <v-row v-if="globalContactDetails">
           <v-col cols="6">
             <v-row>
-              <v-col cols="4">
+              <v-col
+                cols="4"
+                v-if="contact_type == 'primary' || contact_type == 'secondary'"
+              >
                 <span>{{ caps(contact_type) }} Information</span>
                 <v-img
                   style="
@@ -40,7 +43,14 @@
                   "
                 ></v-img>
               </v-col>
-              <v-col cols="8" style="line-height: 20px; font-weight: bold">
+              <v-col
+                :cols="
+                  contact_type == 'primary' || contact_type == 'secondary'
+                    ? 8
+                    : 12
+                "
+                style="line-height: 20px; font-weight: bold"
+              >
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
