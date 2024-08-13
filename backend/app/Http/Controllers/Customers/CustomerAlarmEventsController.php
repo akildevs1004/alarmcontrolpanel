@@ -164,7 +164,7 @@ class CustomerAlarmEventsController extends Controller
             } else if ($secondaryCount) {
                 $data["pin_verified_by"] = "secondary";
             }
-
+            $data["event_status"] = "Closed";
             $data["alarm_status"] = 0;
             $data["alarm_end_manually"] = 1;
             $data["alarm_end_datetime"] = date("Y-m-d H:i:s");
