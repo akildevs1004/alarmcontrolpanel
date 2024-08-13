@@ -747,8 +747,8 @@ export default {
       let options = {
         params: {
           page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
+          //sortBy: sortedBy,
+          //sortDesc: sortedDesc,
           perPage: itemsPerPage,
           pagination: true,
           company_id: this.$auth.user.company_id,
@@ -756,10 +756,13 @@ export default {
           date_from: this.date_from,
           date_to: this.date_to,
           common_search: this.commonSearch,
+
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
           filterSensorname: this.tab > 0 ? this.sensorItems[this.tab] : null,
           filterResponseInMinutes: this.filterResponseInMinutes,
+          sortBy: "alarm_start_datetime",
+          sortDesc: "DESC",
         },
       };
 

@@ -133,7 +133,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                 //-----------Alarm Control panel - Wifi Model 
-
+                //$message[] = $event;
                 if ($event == 'HEARTBEAT') {
                     Device::where("serial_number", $serial_number)->update(
                         ["status_id" => 1, "last_live_datetime" => $log_time]
@@ -155,6 +155,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $message[] = $this->getMeta("Device Armed", $log_time . "\n");
                 } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
+
+                    //$message[] = [$zone, $event, $area, $serial_number];
                     //$zone = substr($event, 1); 
                     $devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {
@@ -194,7 +196,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             }
 
             // try {
-            Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
+            ///////Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {
 

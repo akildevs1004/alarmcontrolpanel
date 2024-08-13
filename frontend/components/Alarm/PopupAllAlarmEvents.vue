@@ -395,6 +395,7 @@ export default {
       this.dialogCloseAlarm = false;
 
       this.getDataFromApi();
+      this.$emit("callReset5Minutes");
       this.$emit("closeDialog");
     },
     filterAttr(data) {
@@ -404,12 +405,13 @@ export default {
       this.getDataFromApi();
     },
     UpdateAlarmStatus(item, status) {
+      this.$emit("callwait5MinutesNextNotification");
       if (status == 0) {
         if (confirm("Are you sure you want to TURN OFF the Alarm")) {
           this.customer_id = item.customer_id;
           this.eventId = item.id;
           this.dialogCloseAlarm = true;
-          this.$emit("callwait5MinutesNextNotification");
+          // this.$emit("callwait5MinutesNextNotification");
         }
       }
       return false;

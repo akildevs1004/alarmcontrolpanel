@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
 use App\Models\Customers\CustomerAlarmEvents;
@@ -193,8 +194,8 @@ class CustomerAlarmEventsController extends Controller
 
 
 
-
-
+            //udapte json file 
+            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
 
             return $this->response('Alarm stopped Successfully', null, true);
         } else {
@@ -313,6 +314,7 @@ class CustomerAlarmEventsController extends Controller
                             }
                         }
 
+                        $data2["event_status"] = "Closed";
                         $data2["alarm_status"] = 0;
                         $data2["alarm_end_manually"] = 1;
                         $data2["alarm_end_datetime"] = date("Y-m-d H:i:s");
@@ -333,6 +335,8 @@ class CustomerAlarmEventsController extends Controller
 
 
 
+                        //udapte json file 
+                        (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
 
 
 

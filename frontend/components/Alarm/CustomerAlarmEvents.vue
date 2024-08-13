@@ -430,7 +430,7 @@ export default {
         let options = {
           params: {
             page: page,
-            sortBy: sortedBy,
+            //sortBy: sortedBy,
             sortDesc: sortedDesc,
             perPage: itemsPerPage,
             pagination: true,
@@ -439,6 +439,7 @@ export default {
             date_from: this.date_from,
             date_to: this.date_to,
             common_search: this.commonSearch,
+            sortBy: "alarm_start_datetime",
           },
         };
 

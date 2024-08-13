@@ -450,6 +450,7 @@
         transition="dialog-top-transition"
         max-width="1000"
         style="z-index: 9999"
+        key="key"
       >
         <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
@@ -472,13 +473,14 @@
             </v-card-title>
             <v-card-text>
               <AlarmPopupAllAlarmEvents
-                :items="notificationAlarmDevices"
+                :items="notificationAlarmDevicesContent"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
+                @callReset5Minutes="Reset5Minutes"
                 :key="key"
                 :alarm_icons="alarm_icons"
               />
               <!-- <v-row
-                v-for="(device, index) in notificationAlarmDevices"
+                v-for="(device, index) in notificationAlarmDevicesContent"
                 :key="index"
               >
                 <v-col cols="2"
@@ -716,7 +718,7 @@ export default {
       globalsearch: "",
       globalSearchPopup: false,
       notificationsMenuItems: [],
-      notificationAlarmDevices: {},
+      notificationAlarmDevicesContent: {},
       selectedBranchName: "All Branches",
       seelctedBranchId: "",
       branch_id: "",
@@ -838,7 +840,7 @@ export default {
 
     setTimeout(() => {
       this.loadHeaderNotificationMenu();
-      this.verifyPopupAlarmStatus();
+      //this.verifyPopupAlarmStatus();
     }, 1000 * 1);
 
     setInterval(() => {
@@ -846,8 +848,8 @@ export default {
         if (this.$route.name != "login") {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
-          if (this.notificationAlarmDevices) {
-            if (this.notificationAlarmDevices.length > 0) {
+          if (this.notificationAlarmDevicesContent) {
+            if (this.notificationAlarmDevicesContent.length > 0) {
               this.alarmPopupNotificationStatus = true;
             } else {
               this.alarmPopupNotificationStatus = false;
@@ -856,7 +858,7 @@ export default {
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 2 * 1);
+    }, 1000 * 10 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -969,6 +971,9 @@ export default {
       }, 1000 * 60 * 30);
 
       this.alarmPopupNotificationStatus = false;
+    },
+    Reset5Minutes() {
+      this.wait5Minutes = false;
     },
     wait5MinutesNotification() {
       this.wait5Minutes = true;
@@ -1176,7 +1181,14 @@ export default {
           this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
           this.pendingNotificationsCount = 0;
-          this.notificationAlarmDevices = data;
+          this.notificationAlarmDevicesContent = data;
+          this.key += 1;
+          if (data.length > 0) {
+            this.alarmPopupNotificationStatus = true;
+          } else {
+            this.alarmPopupNotificationStatus = false;
+          }
+
           data.forEach((element) => {
             let notificaiton = {
               title: element.device?.customer?.building_name
@@ -1201,33 +1213,33 @@ export default {
 
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
-      this.verifyPopupAlarmStatus();
+      // this.verifyPopupAlarmStatus();
     },
-    verifyPopupAlarmStatus() {
-      if (this.isBackendRequestOpen) return false;
-      this.isBackendRequestOpen = true;
-      let company_id = this.$auth.user?.company?.id || 0;
-      if (company_id == 0) {
-        return false;
-      }
-      let options = {
-        params: {
-          company_id: company_id,
-        },
-      };
-      this.$axios
-        .get(`get_alarm_notification_display`, options)
-        .then(({ data }) => {
-          this.isBackendRequestOpen = false;
-          if (data.length > 0) {
-            this.notificationAlarmDevices = data;
+    // verifyPopupAlarmStatus() {
+    //   if (this.isBackendRequestOpen) return false;
+    //   this.isBackendRequestOpen = true;
+    //   let company_id = this.$auth.user?.company?.id || 0;
+    //   if (company_id == 0) {
+    //     return false;
+    //   }
+    //   let options = {
+    //     params: {
+    //       company_id: company_id,
+    //     },
+    //   };
+    //   this.$axios
+    //     .get(`get_alarm_notification_display`, options)
+    //     .then(({ data }) => {
+    //       this.isBackendRequestOpen = false;
+    //       if (data.length > 0) {
+    //         this.notificationAlarmDevicesContent = data;
 
-            this.alarmPopupNotificationStatus = true;
-          } else {
-            this.alarmPopupNotificationStatus = false;
-          }
-        });
-    },
+    //         this.alarmPopupNotificationStatus = true;
+    //       } else {
+    //         this.alarmPopupNotificationStatus = false;
+    //       }
+    //     });
+    // },
 
     getBranchName() {
       return this.$auth.user.branch_name;

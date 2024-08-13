@@ -30,7 +30,7 @@ class SecurityLoginController extends Controller
                 $qwhere->orWhere("contact_number", "ILIKE", "%$request->common_search%");
 
 
-                $qwhere->orWhereHas("user",  fn (Builder $query) => $query->where("email", "ILIKE", "%$request->common_search%"));
+                $qwhere->orWhereHas("user",  fn(Builder $query) => $query->where("email", "ILIKE", "%$request->common_search%"));
             });
         });
         return $model->orderByDesc('id')->paginate($request->perPage);;
@@ -165,6 +165,8 @@ class SecurityLoginController extends Controller
 
                 ]);
                 $data['user_id'] = $user->id;
+
+                User::where('id', $user->id)->update(["web_login_access" => 1]);
             } else {
                 return ["status" => false, "errors" => ["email_id" => ["User Email is already Exist"]]];
             }
