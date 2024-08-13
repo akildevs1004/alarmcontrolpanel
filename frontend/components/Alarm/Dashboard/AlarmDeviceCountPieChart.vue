@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
-    <v-dialog v-model="dialogDevicesList" max-width="900px">
+    <v-dialog v-model="dialogDevicesList" max-width="1000px">
       <v-card>
         <v-card-title dark class="popup_background">
           <span dense>Disamed Devices</span>
