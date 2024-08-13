@@ -152,12 +152,26 @@ class CustomerAlarmEventsController extends Controller
             $secondaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))->where("alarm_stop_pin", $request->input('seconday_pin_number'))->count();
 
 
-            if ($primaryCount == 0 && $secondaryCount == 0) {
+
+            if ($request->filled('primary_pin_number') && $primaryCount == 0) {
                 return [
                     "status" => false,
                     "errors" => ['primary_pin_number' => ['PIN number is not matched']],
                 ];
             }
+            if ($request->filled('seconday_pin_number') && $secondaryCount == 0) {
+                return [
+                    "status" => false,
+                    "errors" => ['primary_pin_number' => ['PIN number is not matched']],
+                ];
+            }
+
+            // if ($primaryCount == 0 && $secondaryCount == 0) {
+            //     return [
+            //         "status" => false,
+            //         "errors" => ['primary_pin_number' => ['PIN number is not matched']],
+            //     ];
+            // }
 
             if ($primaryCount) {
                 $data["pin_verified_by"] = "primary";
