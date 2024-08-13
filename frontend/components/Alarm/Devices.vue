@@ -64,7 +64,7 @@
     </v-dialog>
 
     <v-card elevation="0" class="pa-0">
-      <v-toolbar class="rounded-md" dense flat>
+      <v-toolbar class="rounded-md" dense flat v-if="!eventFilter">
         <v-spacer></v-spacer>
 
         <span>
@@ -343,7 +343,7 @@ import AlarmSensorZones from "../../components/Alarm/EditSensorZones.vue";
 
 export default {
   components: { AlarmEditDevice, AlarmSensorZones },
-  props: ["customer_id"],
+  props: ["customer_id", "eventFilter"],
   data: () => ({
     editId: null,
     key: 1,
@@ -1025,6 +1025,7 @@ export default {
       this.loading = true;
 
       this.filters["customer_id"] = this.customer_id;
+      this.filters["dashboardFilter"] = this.eventFilter;
       const data = await this.$store.dispatch("fetchData", {
         key: "devices",
         options: this.options,

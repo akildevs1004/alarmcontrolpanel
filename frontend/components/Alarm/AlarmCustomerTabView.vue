@@ -35,7 +35,7 @@
         <v-icon>mdi-fire</v-icon> </v-tab
       ><v-tab>
         Technician
-        <v-icon>mdi-fire</v-icon> </v-tab
+        <v-icon>mdi mdi-briefcase-account</v-icon> </v-tab
       ><v-tab>
         Logs
         <v-icon>mdi-text-box-outline</v-icon>

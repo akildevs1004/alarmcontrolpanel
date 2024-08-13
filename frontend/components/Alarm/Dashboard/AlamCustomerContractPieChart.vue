@@ -1,13 +1,90 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
+    <v-dialog v-model="dialogCustomersList" max-width="1000px">
+      <v-card>
+        <v-card-title dark class="popup_background">
+          <span dense>Expired Contract Customers</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogCustomersList = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text class="p-0" style="padding-left: 0px">
+          <AlarmCustomersList
+            style="padding: 0px"
+            :key="key"
+            :eventFilter="'contractExpired'"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-row style="margin-top: -27px"
+      ><v-col cols="8" style="color: black; font-size: 12px">Contract</v-col>
+
+      <v-col cols="4" class="text-right align-right"
+        ><img
+          @click="showDialogEvents()"
+          src="/dashboard-arrow.png"
+          style="width: 18px; padding-top: 5px"
+      /></v-col>
+    </v-row>
+    <v-divider color="#DDD" style="margin-bottom: 0px" />
     <v-row class="pt-0 mt-0">
-      <v-col cols="12" class="text-center pt-0">
+      <v-col
+        cols="7"
+        class="text-center pt-0"
+        style="margin: 0 auto; text-align: left; margin-left: -10px"
+      >
         <div
           v-if="name"
           :id="name"
           :name="name"
-          style="width: 300px; margin: 0 auto; text-align: left"
+          style="width: 320px; margin: 0 auto; text-align: left"
         ></div>
+      </v-col>
+      <v-col
+        cols="5"
+        class="pt-0"
+        style="
+          font-size: 11px;
+          color: #000000;
+          padding-left: 0px;
+          padding-right: 0px;
+          line-height: 32px;
+          margin: auto;
+        "
+      >
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon
+            >Expired</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.expired : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#f57c00">mdi mdi-square-medium</v-icon
+            >Renewal</v-col
+          ><v-col cols="4" style="padding-left: 0px">
+            {{ categories ? categories.expiringin30days : 0 }}</v-col
+          >
+        </v-row>
+        <v-divider color="#dddddd" /><v-row>
+          <v-col cols="8"
+            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Active</v-col
+          ><v-col cols="4" style="padding-left: 0px">
+            {{
+              categories
+                ? categories.total -
+                  categories.expired -
+                  categories.expiringin30days
+                : 0
+            }}</v-col
+          >
+        </v-row>
+        <v-divider color="#dddddd" />
       </v-col>
     </v-row>
 
@@ -19,42 +96,24 @@
         text-align: center;
         vertical-align: middle;
         height: auto;
-        padding-top: 36%;
+        padding-top: 20%;
       "
     >
       No Data available
     </div>
-    <!-- <div>
-      <v-row class="bold" style="height: auto">
-        <v-col cols="1">#</v-col>
-        <v-col cols="6">Category</v-col>
-        <v-col cols="5">Alarm Events count</v-col>
-      </v-row>
-      <div style="height: 160px; overflow-y: scroll; overflow-x: hidden">
-        <v-row :key="index" v-for="(category, index) in categories">
-          <v-col cols="1">{{ index + 1 }}</v-col>
-          <v-col cols="7"
-            ><v-icon :color="options?.colors[index]">mdi mdi-square</v-icon
-            >{{ category.category }}</v-col
-          >
-          <v-col cols="3" class="text-center">{{ category.count }}</v-col>
-        </v-row>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
+import AlarmCustomersList from "../../Alarm/CustomersList.vue";
+
 export default {
   props: ["name"],
+  components: { AlarmCustomersList },
   data() {
     return {
-      //   items: [
-      //     { title: "Title1", value: 20 },
-      //     { title: "Title2", value: 30 },
-      //     { title: "Title3", value: 40 },
-      //     { title: "Title4", value: 50 },
-      //   ],
+      key: 1,
+      dialogCustomersList: false,
       totalCount: 0,
       filter1: "categories",
       categories: [],
@@ -73,15 +132,15 @@ export default {
           margin: 0,
         },
 
-        colors: ["#3E0079", "#DE3AFF", "#797D7F"],
+        colors: ["#92d050", "#ff0000", "#f57c00"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          width: 320,
-          height: 250,
+          width: 180,
+          height: 180,
           type: "donut",
         },
         customTotalValue: 0,
@@ -129,7 +188,7 @@ export default {
         },
         legend: {
           align: "left",
-          show: true,
+          show: false,
           fontSize: "12px",
           formatter: (seriesName, opts) => {
             return `
@@ -159,6 +218,10 @@ export default {
     this.loadDevicesStatistics();
   },
   methods: {
+    showDialogEvents() {
+      this.key += 1;
+      this.dialogCustomersList = true;
+    },
     applyFilter() {
       this.loadDevicesStatistics();
     },

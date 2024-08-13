@@ -39,10 +39,10 @@ class DeviceController extends Controller
 
         $model->with(['status', 'company', 'companyBranch', 'sensorzones']);
         $model->where('company_id', request('company_id'));
-        $model->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->customer_id));
+        $model->when($request->filled('customer_id'), fn($q) => $q->where('customer_id', $request->customer_id));
         //$model->where("status_id", self::ONLINE_STATUS_ID);
         $model->excludeMobile();
-        $model->when(request()->filled('branch_id'), fn ($q) => $q->where('branch_id', request('branch_id')));
+        $model->when(request()->filled('branch_id'), fn($q) => $q->where('branch_id', request('branch_id')));
         $model->orderBy(request('order_by') ?? "name", request('sort_by_desc') ? "desc" : "asc");
         return $model->get(["id", "name", "location", "device_id", "serial_number", "device_type"]);
     }
@@ -65,7 +65,7 @@ class DeviceController extends Controller
             $q->where('name', 'ILIKE', "$request->name%");
         });
 
-        $model->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->customer_id));
+        $model->when($request->filled('customer_id'), fn($q) => $q->where('customer_id', $request->customer_id));
         $model->when($request->filled('short_name'), function ($q) use ($request) {
             $q->where('short_name', 'ILIKE', "$request->short_name%");
         });
@@ -84,7 +84,15 @@ class DeviceController extends Controller
         $model->when($request->filled('branch_id'), function ($q) use ($request) {
             $q->where('branch_id', $request->branch_id);
         });
+        $model->when($request->filled('dashboardFilter'), function ($q) use ($request) {
 
+            if ($request->dashboardFilter == 'disamed') {
+                $q->where('armed_status', 0);
+            }
+            if ($request->dashboardFilter == 'offline') {
+                $q->where('status_id', 2);
+            }
+        });
 
 
         // array_push($cols, 'status.id');
@@ -360,10 +368,10 @@ class DeviceController extends Controller
         $model->with(['device']);
         $model->where('company_id', $id);
         $model->when($request->filled("branch_id"), function ($q) use ($request) {
-            $q->whereHas("employee", fn ($q) => $q->where("branch_id", $request->branch_id));
+            $q->whereHas("employee", fn($q) => $q->where("branch_id", $request->branch_id));
         });
         $model->when($request->filled("department_id") && $request->department_id > 0, function ($q) use ($request) {
-            $q->whereHas("employee", fn ($q) => $q->where("department_id", $request->department_id));
+            $q->whereHas("employee", fn($q) => $q->where("department_id", $request->department_id));
         });
         $model->whereIn('UserID', function ($query) use ($request) {
             // $model1 = Employee::query();
@@ -716,7 +724,10 @@ class DeviceController extends Controller
         $model = Device::query();
 
         $fields = [
-            'name', 'device_id', 'location', 'short_name',
+            'name',
+            'device_id',
+            'location',
+            'short_name',
             'status' => ['name'],
             'company' => ['name'],
         ];
@@ -1125,7 +1136,7 @@ class DeviceController extends Controller
     public function checkDevicesHealthCompanyId($company_id = '')
     {
         $total_devices_count = Device::where("device_type", "!=", "Mobile")
-            ->when($company_id > 0, fn ($q) => $q->where('company_id', $company_id))
+            ->when($company_id > 0, fn($q) => $q->where('company_id', $company_id))
             ->where("device_type", "!=", "Manual")
             ->where("device_id", "!=", "Manual")
 
@@ -1135,7 +1146,7 @@ class DeviceController extends Controller
         $devicesHealth = (new SDKController())->GetAllDevicesHealth();
 
         $companyDevices = Device::where("device_type", "!=", "Mobile")
-            ->when($company_id > 0, fn ($q) => $q->where('company_id', $company_id))
+            ->when($company_id > 0, fn($q) => $q->where('company_id', $company_id))
             ->where("device_type", "!=", "Manual")
             ->where("device_id", "!=", "Manual")
 
@@ -1309,7 +1320,12 @@ class DeviceController extends Controller
         $device_settings_id = '';
 
         $devices_active_settings_array = [
-            'device_id' => $device_id, 'company_id' =>  $request->company_id, 'date_from' => $request->date_from, 'date_to' => $request->date_to,   'open_json' => json_encode($open_time_array), 'close_json' => json_encode($closing_time_array)
+            'device_id' => $device_id,
+            'company_id' =>  $request->company_id,
+            'date_from' => $request->date_from,
+            'date_to' => $request->date_to,
+            'open_json' => json_encode($open_time_array),
+            'close_json' => json_encode($closing_time_array)
         ];
 
         $record = DeviceActivesettings::where("device_id", $device_id)->where("company_id", $request->company_id);

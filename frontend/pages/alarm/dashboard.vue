@@ -2,8 +2,8 @@
   <div>
     <v-row>
       <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Armed </v-card-title>
+        <v-card class="elevation-2" style="height: 200px">
+          <!-- <v-card-title>Armed </v-card-title> -->
           <v-card-text>
             <AlamDeviceCountPieChart
               :key="key"
@@ -12,8 +12,8 @@
         </v-card>
       </v-col>
       <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Live</v-card-title>
+        <v-card class="elevation-2" style="height: 200px">
+          <!-- <v-card-title>Live</v-card-title> -->
           <v-card-text>
             <AlamDeviceLiveCountPieChart
               :key="key"
@@ -23,8 +23,8 @@
         </v-card>
       </v-col>
       <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Contract</v-card-title>
+        <v-card class="elevation-2" style="height: 200px">
+          <!-- <v-card-title>Contract</v-card-title> -->
           <v-card-text>
             <AlamCustomerContractPieChart
               :key="key"
@@ -34,8 +34,8 @@
         </v-card>
       </v-col>
       <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 230px">
-          <v-card-title>Alarms</v-card-title>
+        <v-card class="elevation-2" style="height: 200px">
+          <!-- <v-card-title>Alarms</v-card-title> -->
           <v-card-text class="p-0">
             <AlamCustomerEventsPieChart
               :key="key"
@@ -84,9 +84,9 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    setInterval(() => {
-      this.key = this.key + 1;
-    }, 1000 * 20);
+    // setInterval(() => {
+    //   if (this.$router.name == "alarm-dashboard") this.key = this.key + 1;
+    // }, 1000 * 20);
     // this._id = this.$route.params.id;
     let today = new Date();
 

@@ -1,14 +1,81 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
+    <v-row style="margin-top: -27px"
+      ><v-col cols="8" style="color: black; font-size: 12px">Events</v-col>
+
+      <v-col cols="4" class="text-right align-right"
+        ><img src="/dashboard-arrow.png" style="width: 18px; padding-top: 5px"
+      /></v-col>
+    </v-row>
+    <v-divider color="#DDD" style="margin-bottom: 0px" />
     <v-row class="pt-0 mt-0">
-      <v-col cols="12" class="text-center pt-0">
+      <v-col
+        cols="6"
+        class="text-center pt-0"
+        style="margin: 0 auto; text-align: left; margin-left: -10px"
+      >
         <div
           v-if="name"
           :id="name"
           :name="name"
-          width="100%"
           style="width: 320px; margin: 0 auto; text-align: left"
         ></div>
+      </v-col>
+      <v-col
+        cols="6"
+        class="pt-0"
+        style="
+          font-size: 11px;
+          color: #000000;
+          padding-left: 0px;
+          padding-right: 0px;
+          line-height: 32px;
+          margin: auto;
+        "
+      >
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#7B1FA2">mdi mdi-square-medium</v-icon
+            >Burglary</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.burglary : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#8BC34A">mdi mdi-square-medium</v-icon
+            >Medical</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.medical : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#F57C00">mdi mdi-square-medium</v-icon
+            >Temperature</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.temperature : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#4A90E2">mdi mdi-square-medium</v-icon>Water</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.water : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="8"
+            ><v-icon color="#RED">mdi mdi-square-medium</v-icon>Fire</v-col
+          ><v-col cols="4" style="padding-left: 0px">{{
+            categories ? categories.fire : 0
+          }}</v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
       </v-col>
     </v-row>
 
@@ -20,7 +87,7 @@
         text-align: center;
         vertical-align: middle;
         height: auto;
-        padding-top: 36%;
+        padding-top: 20%;
       "
     >
       No Data available
@@ -33,12 +100,6 @@ export default {
   props: ["name"],
   data() {
     return {
-      //   items: [
-      //     { title: "Title1", value: 20 },
-      //     { title: "Title2", value: 30 },
-      //     { title: "Title3", value: 40 },
-      //     { title: "Title4", value: 50 },
-      //   ],
       totalCount: 0,
       filter1: "categories",
       categories: [],
@@ -59,13 +120,13 @@ export default {
 
         colors: ["#7B1FA2", "#8BC34A", "#F57C00", "#4A90E2", "RED"],
 
-        series: [0, 0, 0, 0],
+        series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          width: 320,
-          height: 250,
+          width: 180,
+          height: 180,
           type: "donut",
         },
         customTotalValue: 0,
@@ -113,7 +174,7 @@ export default {
         },
         legend: {
           align: "left",
-          show: true,
+          show: false,
           fontSize: "12px",
           formatter: (seriesName, opts) => {
             return `

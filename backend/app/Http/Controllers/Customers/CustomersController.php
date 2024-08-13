@@ -37,6 +37,11 @@ class CustomersController extends Controller
         $model->when($request->filled("customer_id"), function ($q) use ($request) {
             $q->where("id", $request->customer_id);
         });
+        $model->when($request->filled("eventFilter"), function ($q) use ($request) {
+            $q->where("end_date", "<", date("Y-m-d"));
+        });
+
+
 
         $model->when($request->filled("common_search"), function ($q) use ($request) {
             $q->where(function ($qwhere) use ($request) {
