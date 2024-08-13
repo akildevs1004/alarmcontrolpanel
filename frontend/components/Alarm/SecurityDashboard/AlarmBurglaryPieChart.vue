@@ -1,10 +1,32 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
+    <v-dialog v-model="dialogEventsList" max-width="900px">
+      <v-card>
+        <v-card-title dark class="popup_background">
+          <span dense>Burglary Events</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogEventsList = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text class="p-0" style="padding-left: 0px">
+          <AlamAllEvents
+            style="padding: 0px"
+            :key="key"
+            :popup="true"
+            :eventFilter="'Burglary'"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row style="margin-top: -27px"
       ><v-col cols="8" style="color: black; font-size: 12px">Burglary</v-col>
 
       <v-col cols="4" class="text-right align-right"
-        ><img src="/dashboard-arrow.png" style="width: 18px; padding-top: 5px"
+        ><img
+          @click="showDialogEvents()"
+          src="/dashboard-arrow.png"
+          style="width: 18px; padding-top: 5px"
       /></v-col>
     </v-row>
     <v-divider color="#DDD" style="margin-bottom: 10px" />
@@ -29,21 +51,24 @@
         "
       >
         <v-row>
-          <v-col cols="8">Low</v-col
+          <v-col cols="8"
+            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Low</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data[1]?.length ?? "0"
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
         <v-row>
-          <v-col cols="8">Medium</v-col
+          <v-col cols="8"
+            ><v-icon color="#ffc000">mdi mdi-square-medium</v-icon>Medium</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data[2]?.length ?? "0"
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
         <v-row>
-          <v-col cols="8">High</v-col
+          <v-col cols="8"
+            ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon>High</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data[3]?.length ?? "0"
           }}</v-col>
@@ -60,8 +85,6 @@
         text-align: center;
         vertical-align: middle;
         height: auto;
-        padding-top: 36%;
-        margin: auto;
       "
     >
       No Data available
@@ -70,10 +93,14 @@
 </template>
 
 <script>
+import AlamAllEvents from "../../Alarm/AllEvents.vue";
 export default {
   props: ["name"],
+  components: { AlamAllEvents },
   data() {
     return {
+      dialogEventsList: false,
+      key: 1,
       totalCount: 0,
       filter1: "categories",
       data: [],
@@ -92,7 +119,7 @@ export default {
           margin: 0,
         },
 
-        colors: ["#ffc000", "#ff0000", "#92d050"],
+        colors: ["#92d050", "#ffc000", "#ff0000"],
 
         series: [],
         chart: {
@@ -176,8 +203,16 @@ export default {
   },
   mounted() {
     this.loadDevicesStatistics();
+    setInterval(() => {
+      if (this.$route.name == "security-dashboard")
+        this.loadDevicesStatistics();
+    }, 1000 * 30);
   },
   methods: {
+    showDialogEvents() {
+      this.key += 1;
+      this.dialogEventsList = true;
+    },
     applyFilter() {
       this.loadDevicesStatistics();
     },

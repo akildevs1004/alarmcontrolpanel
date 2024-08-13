@@ -30,14 +30,17 @@
         "
       >
         <v-row>
-          <v-col cols="8">Online</v-col
+          <v-col cols="8"
+            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Online</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data?.online ?? "0"
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
         <v-row>
-          <v-col cols="8">Offline</v-col
+          <v-col cols="8"
+            ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon
+            >Offline</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data?.total ? data.total - data.online : "0"
           }}</v-col>
@@ -85,7 +88,7 @@ export default {
           margin: 0,
         },
 
-        colors: ["#ffc000", "#ff0000", "#92d050"],
+        colors: ["#ff0000", "#92d050"],
 
         series: [],
         chart: {
@@ -171,6 +174,10 @@ export default {
   },
   mounted() {
     this.loadDevicesStatistics();
+    setInterval(() => {
+      if (this.$route.name == "security-dashboard")
+        this.loadDevicesStatistics();
+    }, 1000 * 30);
   },
   methods: {
     applyFilter() {

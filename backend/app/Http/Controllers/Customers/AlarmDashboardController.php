@@ -159,7 +159,7 @@ class AlarmDashboardController extends Controller
             })
             ->where('alarm_type', "Temperature");
 
-        return ["active" => $events->clone()->where("alarm_status", 0)->count(), "closed" => $events->clone()->where("alarm_status", 1)->count()];
+        return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventWaterStatistics(Request $request)
     {
@@ -169,7 +169,7 @@ class AlarmDashboardController extends Controller
             })
             ->where('alarm_type', "Water");
 
-        return ["active" => $events->clone()->where("alarm_status", 0)->count(), "closed" => $events->clone()->where("alarm_status", 1)->count()];
+        return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventFireStatistics(Request $request)
     {
@@ -179,7 +179,7 @@ class AlarmDashboardController extends Controller
             })
             ->where('alarm_type', "Fire");
 
-        return ["active" => $events->clone()->where("alarm_status", 0)->count(), "closed" => $events->clone()->where("alarm_status", 1)->count()];
+        return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventMedicalStatistics(Request $request)
     {
@@ -189,7 +189,7 @@ class AlarmDashboardController extends Controller
             })
             ->where('alarm_type', "Medical");
 
-        return ["active" => $events->clone()->where("alarm_status", 0)->count(), "closed" => $events->clone()->where("alarm_status", 1)->count()];
+        return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventBurglaryStatistics(Request $request)
     {

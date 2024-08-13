@@ -49,7 +49,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12"><AlamAllEvents :key="key" /></v-col>
+      <v-col cols="12"><AlamAllEvents /></v-col>
     </v-row>
   </div>
 </template>

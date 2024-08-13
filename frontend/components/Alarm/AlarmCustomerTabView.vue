@@ -34,6 +34,9 @@
         Fire
         <v-icon>mdi-fire</v-icon> </v-tab
       ><v-tab>
+        Technician
+        <v-icon>mdi-fire</v-icon> </v-tab
+      ><v-tab>
         Logs
         <v-icon>mdi-text-box-outline</v-icon>
       </v-tab>
@@ -121,6 +124,18 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text>
+            <SecurityContactInfo
+              :alarmId="alarmId"
+              v-if="customer"
+              :customer="customer"
+              :contact_type="'Technician'"
+              :key="keyTechnician"
+          /></v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
             <SecurityAlarmNotes
               :alarmId="alarmId"
               v-if="customer"
@@ -157,6 +172,7 @@ export default {
     keyMedical: 0,
     keyLogs: 0,
     keyFire: 0,
+    keyTechnician: 0,
   }),
   computed: {},
   mounted() {},
@@ -172,7 +188,8 @@ export default {
         else if (value == 4) this.keyPolice += 1;
         else if (value == 5) this.keyMedical += 1;
         else if (value == 6) this.keyFire += 1;
-        else if (value == 7) this.keyLogs += 1;
+        else if (value == 7) this.keyTechnician += 1;
+        else if (value == 8) this.keyLogs += 1;
       },
       deep: true,
     },

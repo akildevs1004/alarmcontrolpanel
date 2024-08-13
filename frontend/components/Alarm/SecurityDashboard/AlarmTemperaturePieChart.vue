@@ -1,10 +1,32 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
+    <v-dialog v-model="dialogEventsList" max-width="900px">
+      <v-card>
+        <v-card-title dark class="popup_background">
+          <span dense>Temperature Events</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogEventsList = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text class="p-0" style="padding-left: 0px">
+          <AlamAllEvents
+            style="padding: 0px"
+            :key="key"
+            :popup="true"
+            :eventFilter="'Temperature'"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row style="margin-top: -27px"
       ><v-col cols="8" style="color: black; font-size: 12px">Temperature</v-col>
 
       <v-col cols="4" class="text-right align-right"
-        ><img src="/dashboard-arrow.png" style="width: 18px; padding-top: 5px"
+        ><img
+          @click="showDialogEvents()"
+          src="/dashboard-arrow.png"
+          style="width: 18px; padding-top: 5px"
       /></v-col>
     </v-row>
     <v-divider color="#5a82ca" />
@@ -30,14 +52,16 @@
         "
       >
         <v-row>
-          <v-col cols="8">Active</v-col
+          <v-col cols="8"
+            ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon>Active</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data?.active ?? "0"
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
         <v-row>
-          <v-col cols="8">Closed</v-col
+          <v-col cols="8"
+            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Closed</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             data?.closed ?? "0"
           }}</v-col>
@@ -63,10 +87,14 @@
 </template>
 
 <script>
+import AlamAllEvents from "../../Alarm/AllEvents.vue";
 export default {
   props: ["name"],
+  components: { AlamAllEvents },
   data() {
     return {
+      dialogEventsList: false,
+      key: 1,
       totalCount: 0,
       filter1: "categories",
       data: [],
@@ -85,7 +113,7 @@ export default {
           margin: 0,
         },
 
-        colors: ["#ffc000", "#ff0000", "#92d050"],
+        colors: ["#ffc000", "#92d050"],
 
         series: [],
         chart: {
@@ -169,8 +197,16 @@ export default {
   },
   mounted() {
     this.loadDevicesStatistics();
+    setInterval(() => {
+      if (this.$route.name == "security-dashboard")
+        this.loadDevicesStatistics();
+    }, 1000 * 30);
   },
   methods: {
+    showDialogEvents() {
+      this.key += 1;
+      this.dialogEventsList = true;
+    },
     applyFilter() {
       this.loadDevicesStatistics();
     },

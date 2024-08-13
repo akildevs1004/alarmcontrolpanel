@@ -116,7 +116,7 @@
             </v-row>
           </v-col>
           <v-col cols="6">
-            <v-row
+            <v-row v-if="getUserType() == 'security'"
               ><v-col cols="4">
                 <div
                   style="
@@ -205,7 +205,7 @@
                 </div>
               </v-col>
             </v-row>
-            <div>
+            <div v-if="getUserType() == 'security'">
               <v-row
                 ><v-col cols="12">
                   <div>
@@ -464,6 +464,15 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    getUserType() {
+      if (this.$auth.user) {
+        const user = this.$auth.user;
+        const userType = user.user_type;
+
+        return userType;
+      }
+      return "";
     },
     displayNotes(item) {
       this.selectedItem = item;

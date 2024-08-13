@@ -125,14 +125,19 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row>
+    <v-row class="p-0">
       <v-col cols="12" class="text-right" style="padding-top: 0px; z-index: 9">
-        <v-row>
-          <v-col cols="4" class="text-left mt-1"> <h3>Alarm Events</h3></v-col>
-          <v-col cols="8" class="text-right" style="width: 600px">
+        <v-row class="mt-3">
+          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
+            <h3>Alarm Events</h3></v-col
+          >
+          <v-col
+            :cols="sensorItems.length > 1 ? 8 : 12"
+            class="text-right"
+            style="width: 600px"
+          >
             <v-row>
-              <v-col cols="1"></v-col>
-              <v-col cols="3">
+              <v-col cols="4">
                 <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
                   >mdi-reload</v-icon
                 >
@@ -225,7 +230,13 @@
     </v-row>
     <v-row v-if="sensorItems.length > 0">
       <v-col cols="12">
-        <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
+        <v-tabs
+          v-if="sensorItems.length > 1"
+          v-model="tab"
+          background-color="transparent"
+          color="basil"
+          grow
+        >
           <v-tab v-for="item in sensorItems" :key="item">
             {{ item }}
           </v-tab>
@@ -247,59 +258,10 @@
                   }"
                   class="elevation-0"
                 >
-                  <!-- <template v-slot:item.sno="{ item, index }">
-                    {{
-                      currentPage
-                        ? (currentPage - 1) * perPage +
-                          (cumulativeIndex + items.indexOf(item))
-                        : "-"
-                    }}
-                  </template> -->
                   <template v-slot:item.sno="{ item, index }">
                     {{ item.id }}
                   </template>
 
-                  <!-- <template
-                    v-slot:item.building="{ item, index }"
-                    style="width: 300px"
-                  >
-                    <v-row no-gutters @click="viewCustomerinfo(item)">
-                      <v-col
-                        style="
-                          padding: 5px;
-                          padding-left: 0px;
-                          width: 50px;
-                          max-width: 50px;
-                        "
-                      >
-                        <v-img
-                          style="
-                            border-radius: 10%;
-                            height: auto;
-                            width: 50px;
-                            max-width: 50px;
-                          "
-                          :src="
-                            item.device?.customer?.profile_picture
-                              ? item.device.customer.profile_picture
-                              : '/no-business_profile.png'
-                          "
-                        >
-                        </v-img>
-                      </v-col>
-                      <v-col style="padding: 10px">
-                        <div style="font-size: 13px">
-                          {{ item.device?.customer?.building_name || "" }}
-                        </div>
-                        <small style="font-size: 12px; color: #6c7184">
-                          {{ item.device?.customer?.house_number }},
-                          {{ item.device?.customer?.street_number }},
-                          {{ item.device?.customer?.area }},
-                          {{ item.device?.customer?.city }}
-                        </small>
-                      </v-col>
-                    </v-row>
-                  </template> -->
                   <template v-slot:item.customer="{ item }">
                     <div>
                       {{
@@ -311,11 +273,6 @@
                         "---"
                       }}
                     </div>
-                    <!-- <div class="secondary-value">
-                      {{
-                        item.device?.customer?.primary_contact?.phone1 ?? "---"
-                      }}
-                    </div> -->
                   </template>
                   <template v-slot:item.address="{ item }">
                     <div>{{ item.device?.customer?.area }}</div>
@@ -323,12 +280,7 @@
                   <template v-slot:item.city="{ item }">
                     <div>{{ item.device?.customer?.city }}</div>
                   </template>
-                  <!-- <template v-slot:item.device="{ item }">
-                    <div>{{ item.device?.name }}</div>
-                    <div class="secondary-value">
-                      {{ item.device?.serial_number }}
-                    </div>
-                  </template> -->
+
                   <template v-slot:item.sensor="{ item }">
                     <div>
                       {{ item.alarm_type }}
@@ -498,7 +450,7 @@ export default {
     AlarmCustomerTabView,
     AlramCloseNotes,
   },
-  props: ["showFilters", "customer"],
+  props: ["showFilters", "customer", "eventFilter"],
   data() {
     return {
       dialogCloseAlarm: false,
@@ -610,9 +562,10 @@ export default {
     setTimeout(() => {
       setInterval(() => {
         if (
-          this.$route.name == "alarm-dashboard" ||
-          this.$route.name == "alarm-allevents" ||
-          this.$route.name == "alarm-alarm-events"
+          (this.$route.name == "alarm-dashboard" ||
+            this.$route.name == "alarm-allevents" ||
+            this.$route.name == "alarm-alarm-events") &&
+          this.filterAlarmStatus == "1"
         )
           this.getDataFromApi(0);
       }, 1000 * 20 * 1);
@@ -646,6 +599,10 @@ export default {
           ...this.$store.state.storeAlarmControlPanel.SensorTypes,
         ];
       }
+
+      if (this.eventFilter) {
+        this.sensorItems = [this.eventFilter];
+      }
     },
     addNotes(item) {
       this.eventId = item.id;
@@ -669,35 +626,6 @@ export default {
           this.customer_id = item.customer_id;
           this.eventId = item.id;
           this.dialogCloseAlarm = true;
-          // let options = {
-          //   params: {
-          //     company_id: this.$auth.user.company_id,
-          //     customer_id: this.customer_id,
-          //     event_id: item.id,
-          //     status: status,
-          //   },
-          // };
-          // this.loading = true;
-          // this.$axios
-          //   .post(`/update-device-alarm-event-status-off`, options.params)
-          //   .then(({ data }) => {
-          //     this.getDataFromApi();
-          //     if (!data.status) {
-          //       if (data.message == "undefined") {
-          //         this.response = "Try again. No connection available";
-          //       } else this.response = "Try again. " + data.message;
-          //       this.snackbar = true;
-          //       return;
-          //     } else {
-          //       setTimeout(() => {
-          //         this.loading = false;
-          //         this.response = data.message;
-          //         this.snackbar = true;
-          //       }, 2000);
-          //       return;
-          //     }
-          //   })
-          //   .catch((e) => console.log(e));
         }
       }
     },
@@ -744,6 +672,13 @@ export default {
 
       if (!page > 0) return false;
       this.loading = true;
+
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
+
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
+      }
+
       let options = {
         params: {
           page: page,
@@ -759,7 +694,7 @@ export default {
 
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
-          filterSensorname: this.tab > 0 ? this.sensorItems[this.tab] : null,
+          filterSensorname: filterSensorname,
           filterResponseInMinutes: this.filterResponseInMinutes,
           sortBy: "alarm_start_datetime",
           sortDesc: "DESC",
