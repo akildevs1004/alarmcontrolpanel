@@ -853,7 +853,7 @@ export default {
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 2 * 1);
+    }, 1000 * 5 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
