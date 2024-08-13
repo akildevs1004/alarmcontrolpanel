@@ -256,7 +256,7 @@
       ><v-col><v-divider color="#DDD" /></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12"><AlamAllEvents /></v-col>
+      <v-col cols="12"><AlamAllEvents :key="key" /></v-col>
     </v-row>
   </v-card>
 </template>
@@ -309,9 +309,10 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    // setInterval(() => {
-    //   this.key = this.key + 1;
-    // }, 1000 * 20);
+    setInterval(() => {
+      this.key = this.key + 1;
+      this.getDatafromApi();
+    }, 1000 * 10);
     // this._id = this.$route.params.id;
     let today = new Date();
 
@@ -328,7 +329,6 @@ export default {
         (this.onlineStats.Temperature.online,
         this.onlineStats.Temperature.offline);
 
-      console.log("test", this.onlineStats.Temperature.offline);
       return test;
     },
     getDatafromApi() {

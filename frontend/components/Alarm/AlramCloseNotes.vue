@@ -106,7 +106,9 @@
     </v-row>
     <v-row style="margin-top: 80px">
       <v-col cols="12" class="text-right">
-        <v-btn small color="primary" @click="submit"> Submit </v-btn></v-col
+        <v-btn small color="primary" @click="submit" :loading="loading">
+          Submit
+        </v-btn></v-col
       >
     </v-row>
   </div>
@@ -222,9 +224,9 @@ export default {
       this.$axios
         .post(`/update-device-alarm-event-status-off`, options.params)
         .then(({ data }) => {
-          console.log("data", data);
           // this.getDataFromApi();
           if (!data.status) {
+            this.loading = false;
             this.errors = data.errors;
             this.color = "red";
             if (data.message == "undefined") {
@@ -249,7 +251,7 @@ export default {
           if (e.response.data) {
             this.errors = e.response.data.errors;
             this.color = "red";
-
+            this.loading = false;
             // this.snackbar = true;
             // this.response = e.response.data.message;
           }

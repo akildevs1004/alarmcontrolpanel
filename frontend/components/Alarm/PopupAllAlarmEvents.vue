@@ -197,13 +197,13 @@
 
               <template v-slot:item.status="{ item }">
                 <img
-                  title="Click to Stop Alarm "
-                  @click="UpdateAlarmStatus(item, 0)"
                   :src="'/device-icons/' + alarm_icons[item.alarm_type]"
                   style="width: 20px; vertical-align: middle"
                 />
                 <br />
+
                 <v-btn
+                  v-if="getUserType() != 'security'"
                   class="text--red"
                   color="red"
                   title="Click to Stop Alarm "
@@ -361,6 +361,15 @@ export default {
   },
 
   methods: {
+    getUserType() {
+      if (this.$auth.user) {
+        const user = this.$auth.user;
+        const userType = user.user_type;
+
+        return userType;
+      }
+      return "";
+    },
     can(per) {
       return this.$pagePermission.can(per, this);
     },
@@ -406,6 +415,7 @@ export default {
     },
     UpdateAlarmStatus(item, status) {
       this.$emit("callwait5MinutesNextNotification");
+
       if (status == 0) {
         if (confirm("Are you sure you want to TURN OFF the Alarm")) {
           this.customer_id = item.customer_id;
@@ -415,41 +425,41 @@ export default {
         }
       }
       return false;
-      if (status == 0) {
-        if (confirm("Are you sure you want to TURN OFF the Alarm")) {
-          let options = {
-            params: {
-              company_id: this.$auth.user.company_id,
-              customer_id: this.customer_id,
-              event_id: item.id,
-              status: status,
-            },
-          };
-          this.loading = true;
-          this.$axios
-            .post(`/update-device-alarm-event-status-off`, options.params)
-            .then(({ data }) => {
-              this.getDataFromApi();
-              if (!data.status) {
-                if (data.message == "undefined") {
-                  this.response = "Try again. No connection available";
-                } else this.response = "Try again. " + data.message;
-                this.snackbar = true;
+      // if (status == 0) {
+      //   if (confirm("Are you sure you want to TURN OFF the Alarm")) {
+      //     let options = {
+      //       params: {
+      //         company_id: this.$auth.user.company_id,
+      //         customer_id: this.customer_id,
+      //         event_id: item.id,
+      //         status: status,
+      //       },
+      //     };
+      //     this.loading = true;
+      //     this.$axios
+      //       .post(`/update-device-alarm-event-status-off`, options.params)
+      //       .then(({ data }) => {
+      //         this.getDataFromApi();
+      //         if (!data.status) {
+      //           if (data.message == "undefined") {
+      //             this.response = "Try again. No connection available";
+      //           } else this.response = "Try again. " + data.message;
+      //           this.snackbar = true;
 
-                return;
-              } else {
-                setTimeout(() => {
-                  this.loading = false;
-                  this.response = data.message;
-                  this.snackbar = true;
-                }, 2000);
+      //           return;
+      //         } else {
+      //           setTimeout(() => {
+      //             this.loading = false;
+      //             this.response = data.message;
+      //             this.snackbar = true;
+      //           }, 2000);
 
-                return;
-              }
-            })
-            .catch((e) => console.log(e));
-        }
-      }
+      //           return;
+      //         }
+      //       })
+      //       .catch((e) => console.log(e));
+      //   }
+      // }
     },
     deleteEvent(id) {
       if (confirm("Are you sure want to delete Alarm Event notes?")) {

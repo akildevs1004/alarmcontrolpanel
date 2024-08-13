@@ -164,7 +164,7 @@ class CustomerAlarmEventsController extends Controller
             } else if ($secondaryCount) {
                 $data["pin_verified_by"] = "secondary";
             }
-            $data["event_status"] = "Closed";
+
             $data["alarm_status"] = 0;
             $data["alarm_end_manually"] = 1;
             $data["alarm_end_datetime"] = date("Y-m-d H:i:s");
@@ -183,7 +183,7 @@ class CustomerAlarmEventsController extends Controller
 
             // i represents the minutes part of the interval
 
-
+            $data["event_status"] = "Closed";
             $data['company_id'] =  $request->company_id;
             $data['customer_id'] = $request->customer_id;
             $data['alarm_id'] = $request->event_id;
@@ -314,7 +314,7 @@ class CustomerAlarmEventsController extends Controller
                             }
                         }
 
-                        $data2["event_status"] = "Closed";
+                        ///$data2["event_status"] = "Closed";
                         $data2["alarm_status"] = 0;
                         $data2["alarm_end_manually"] = 1;
                         $data2["alarm_end_datetime"] = date("Y-m-d H:i:s");
