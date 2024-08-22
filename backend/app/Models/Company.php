@@ -17,10 +17,12 @@ class Company extends Model
     protected $guarded = [];
 
     protected $hidden = [
-        'password', 'updated_at',
+        'password',
+        'updated_at',
     ];
     protected $dates = [
-        'member_from', 'expiry',
+        'member_from',
+        'expiry',
     ];
 
     protected $casts = [
@@ -29,8 +31,12 @@ class Company extends Model
         'created_at' => 'datetime:d-M-y',
         'no_branch' => 'boolean',
     ];
-    protected $appends = ['show_member_from', 'show_expiry'];
-
+    protected $appends = ['show_member_from', 'show_expiry', "logo_raw"];
+    public function getLogoRawAttribute($value)
+    {
+        $arr = explode('upload/', $this->logo);
+        return isset($arr[1]) ? 'upload/' . $arr[1] : '';
+    }
     public function documents()
     {
         return $this->morphMany(Document::class, 'documentable');
@@ -145,8 +151,8 @@ class Company extends Model
     protected function companyCode(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value < 1000 ? 'AE000' . $value : 'AE' . $value,
-            set: fn ($value) => $value,
+            get: fn($value) => $value < 1000 ? 'AE000' . $value : 'AE' . $value,
+            set: fn($value) => $value,
         );
     }
 }

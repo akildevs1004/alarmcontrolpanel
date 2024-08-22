@@ -15,9 +15,11 @@ use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
+use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\PlottingController;
+use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
 use App\Models\MapKey;
 use Illuminate\Support\Facades\Route;
@@ -66,12 +68,6 @@ Route::get('device_alarm_temperature_stats', [AlarmDashboardController::class, '
 Route::get('device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
 
 
-
-
-
-
-
-
 //dashboard
 Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
 Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
@@ -97,9 +93,6 @@ Route::post('api_alarm_logs', [ApiAlarmDeviceTemperatureLogsController::class, '
 Route::get('update_logs_duration', [ApiAlarmDeviceTemperatureLogsController::class, 'updateAlarmResponseTime']);
 Route::get('read_csv_file', [ApiAlarmDeviceSensorLogsController::class, 'readCSVLogFile']);
 
-
-
-
 //alarm logs
 Route::apiResource('alarmevents', CustomerAlarmEventsController::class);
 
@@ -112,9 +105,6 @@ Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLog
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
 
 Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);
-
-
-
 
 Route::get('get_alarm_events_notes', [CustomerAlarmEventsController::class, 'getAlarmEventsNotes']);
 
@@ -142,3 +132,10 @@ Route::apiResource('security', SecurityLoginController::class);
 Route::get('get-map-key', function () {
     return MapKey::where("isActive", 1)->value("key");
 });
+
+//download report
+Route::get('/alarm_events_print_pdf', [AlarmReportsController::class, 'alarmEventsPrintPdf']);
+Route::get('/alarm_events_download_pdf', [AlarmReportsController::class, 'alarmEventsDownloadPdf']);
+Route::get('/alarm_events_export_excel', [AlarmReportsController::class, 'alarmEventsExportCsv']);
+
+Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);

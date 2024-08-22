@@ -2015,6 +2015,16 @@ button {
   border-color: #fff !important;
 }
 
+.small-custom-textbox .v-input__slot {
+  min-height: 30px !important;
+}
+.small-custom-textbox .v-label {
+  line-height: 11px !important;
+}
+.small-custom-textbox .v-input__icon {
+  height: 17px !important;
+}
+
 .global-search-textbox fieldset,
 .global-search-textbox .v-label,
 .global-search-textbox .v-icon,

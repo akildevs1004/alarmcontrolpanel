@@ -9,61 +9,61 @@
         </v-toolbar>
         <v-row>
           <v-col cols="12" md="6">
-          <v-container>
-            <v-card outlined>
-            <v-card-title>Primary Contact</v-card-title>
-            <v-card-text>
-              <v-list dense>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Name:</v-list-item-title>
-                    <v-list-item-subtitle
-                      >{{ customerInfo?.primary_contact?.first_name }}
-                      {{
-                        customerInfo?.primary_contact?.last_name
-                      }}</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Phone:</v-list-item-title>
-                    <v-list-item-subtitle
-                      >{{ customerInfo?.primary_contact?.phone1 }} /
-                      {{
-                        customerInfo?.primary_contact?.phone2
-                      }}</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Office Phone:</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      customerInfo?.primary_contact?.office_phone
-                    }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Email:</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      customerInfo?.primary_contact?.email
-                    }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>WhatsApp:</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      customerInfo?.primary_contact?.whatsapp
-                    }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-           </v-card>
-          </v-container>
+            <v-container>
+              <v-card outlined>
+                <v-card-title>Primary Contact</v-card-title>
+                <v-card-text>
+                  <v-list dense>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>Name:</v-list-item-title>
+                        <v-list-item-subtitle
+                          >{{ customerInfo?.primary_contact?.first_name }}
+                          {{
+                            customerInfo?.primary_contact?.last_name
+                          }}</v-list-item-subtitle
+                        >
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>Phone:</v-list-item-title>
+                        <v-list-item-subtitle
+                          >{{ customerInfo?.primary_contact?.phone1 }} /
+                          {{
+                            customerInfo?.primary_contact?.phone2
+                          }}</v-list-item-subtitle
+                        >
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>Office Phone:</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          customerInfo?.primary_contact?.office_phone
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>Email:</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          customerInfo?.primary_contact?.email
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>WhatsApp:</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          customerInfo?.primary_contact?.whatsapp
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
+              </v-card>
+            </v-container>
           </v-col>
 
           <v-col cols="12" md="6">
@@ -250,9 +250,10 @@
           <template v-slot:top>
             <v-container>
               <v-row>
-                <v-col cols="4">Customers</v-col>
+                <v-col cols="4">Alarm List</v-col>
                 <v-col>
                   <v-text-field
+                    class="small-custom-textbox"
                     @input="getCustomers()"
                     v-model="commonSearch"
                     label="Search..."
@@ -265,74 +266,121 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-divider class="mt-3" color="#DDD"></v-divider>
             </v-container>
           </template>
           <template v-slot:item.building_name="{ item, index }">
-            <div class="mt-3" style="font-size: 13px">
-              {{ item.building_name || "" }}
-            </div>
-            <small style="font-size: 12px; color: #6c7184">
-              <!-- <v-icon color="green" small>mdi-map-marker-radius</v-icon
-        > -->
-              {{ item.city }}
-            </small>
-            <div class="py-3">
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName('Burglary', item.devices)
-                "
-              >
-                <img
-                  title="Burglary"
-                  style="width: 15px; float: left"
-                  src="/device-icons/burglary.png"
-                />
-              </div>
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName(
-                    'Temperature',
-                    item.devices
-                  )
-                "
-              >
-                <img
-                  title="Burglary"
-                  style="width: 15px; float: left"
-                  src="/device-icons/temperature.png"
-                />
-              </div>
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName('Medical', item.devices)
-                "
-              >
-                <img
-                  title="Burglary"
-                  style="width: 15px; float: left"
-                  src="/device-icons/medical.png"
-                />
-              </div>
-              <div
-                v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)"
-              >
-                <img
-                  title="Burglary"
-                  style="width: 15px; float: left"
-                  src="/device-icons/fire.png"
-                />
-              </div>
-              <div
-                v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)"
-              >
-                <img
-                  title="Burglary"
-                  style="width: 15px; float: left"
-                  src="/device-icons/water.png"
-                />
-              </div>
-              <br />
-            </div>
+            <v-row>
+              <v-col>
+                <v-col
+                  cols="5"
+                  class="pt-0"
+                  style="
+                    font-size: 11px;
+                    color: #000000;
+                    padding-left: 0px;
+                    padding-right: 0px;
+                    line-height: 32px;
+                    margin: auto;
+                  "
+                >
+                  <v-row>
+                    <v-col cols="8"
+                      ><v-icon color="#92d050">mdi mdi-square-medium</v-icon
+                      >Online</v-col
+                    ><v-col cols="4" style="padding-left: 0px">{{
+                      categories ? categories.online : "0"
+                    }}</v-col>
+                  </v-row>
+                  <v-divider color="#dddddd" />
+                  <v-row>
+                    <v-col cols="8"
+                      ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon
+                      >Offline</v-col
+                    ><v-col cols="4" style="padding-left: 0px">{{
+                      categories ? categories.total - categories.online : "0"
+                    }}</v-col>
+                  </v-row>
+                  <v-divider color="#dddddd" />
+                </v-col>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="1">{{ index + 1 }}) </v-col>
+              <v-col>
+                <span style="font-size: 13px">
+                  {{ item.building_name || "" }} ,{{ item.city }}
+                </span>
+                <v-row>
+                  <v-col cols="4"> Time :</v-col>
+                  <v-col>
+                    {{
+                      $dateFormat.formatDateMonthYear(
+                        item.latest_alarm_event.alarm_start_datetime
+                      )
+                    }}
+                  </v-col>
+                </v-row>
+                <v-row class="pa-0 ma-0">
+                  <v-col cols="4" class="pl-0">Alarm Type:</v-col>
+                  <v-col cols="4">
+                    {{ item.latest_alarm_event.alarm_type }}
+                    <img
+                      v-if="item.latest_alarm_event.alarm_type == 'Burglary'"
+                      title="Burglary"
+                      style="width: 15px; float: left"
+                      src="/device-icons/burglary.png" />
+
+                    <img
+                      v-if="item.latest_alarm_event.alarm_type == 'Temperature'"
+                      title="Temperature"
+                      style="width: 15px; float: left"
+                      src="/device-icons/temperature.png" />
+
+                    <img
+                      v-if="item.latest_alarm_event.alarm_type == 'Medical'"
+                      title="Medical"
+                      style="width: 15px; float: left"
+                      src="/device-icons/medical.png" />
+
+                    <img
+                      v-if="item.latest_alarm_event.alarm_type == 'Fire'"
+                      title="Fire"
+                      style="width: 15px; float: left"
+                      src="/device-icons/fire.png" />
+
+                    <img
+                      v-if="item.latest_alarm_event.alarm_type == 'Water'"
+                      title="Water"
+                      style="width: 15px; float: left"
+                      src="/device-icons/water.png"
+                  /></v-col>
+                </v-row>
+                <!-- <v-row class="pa-0 ma-0">
+                  <v-col cols="4">Address</v-col>
+                  <v-col>
+                    {{ item.latest_alarm_event.alarm_type }}
+                  </v-col>
+                </v-row>
+                 <div></div>
+                <div>
+                  <div>{{ item.latest_alarm_event.zone }}</div>
+                  <div class="secondary-value">
+                    {{ item.latest_alarm_event.area }}
+
+                    {{
+                      item.latest_alarm_event.primary_contact?.first_name ??
+                      "---"
+                    }}
+                    {{
+                      item.latest_alarm_event.primary_contact?.last_name ??
+                      "---"
+                    }}
+                  </div>
+                </div> -->
+              </v-col>
+            </v-row>
+            <v-divider class="mt-3" color="#DDD"></v-divider>
           </template>
         </v-data-table>
       </v-col>

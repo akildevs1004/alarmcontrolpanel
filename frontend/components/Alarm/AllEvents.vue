@@ -125,188 +125,239 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row class="p-0">
+    <v-row class="p-0" style="padding-top: 0px">
       <v-col cols="12" class="text-right" style="padding-top: 0px; z-index: 9">
-        <v-row class="mt-3">
-          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
-            <h3>Alarm Events</h3></v-col
-          >
-          <v-col
-            :cols="sensorItems.length > 1 ? 8 : 12"
-            class="text-right"
-            style="width: 600px"
-          >
-            <v-row>
-              <v-col cols="4">
-                <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
-                  >mdi-reload</v-icon
-                >
-                <v-text-field
-                  style="
-                    padding-top: 7px;
-                    width: 150px;
+        <v-card class="elevation-2">
+          <v-card-text>
+            <v-row class="mt-0">
+              <v-col
+                v-if="sensorItems.length > 1"
+                cols="4"
+                class="text-left mt-1"
+              >
+                <h3>Alarm Events</h3></v-col
+              >
 
-                    float: right;
-                  "
-                  width="150px"
-                  height="20"
-                  class="employee-schedule-search-box"
-                  @input="getDataFromApi(0)"
-                  v-model="commonSearch"
-                  label="Search"
-                  dense
-                  outlined
-                  type="text"
-                  append-icon="mdi-magnify"
-                  clearable
-                  hide-details
-                ></v-text-field
-              ></v-col>
-              <v-col cols="3"
-                ><v-select
-                  class="employee-schedule-search-box"
-                  style="
-                    padding-top: 7px;
-                    z-index: 999;
-                    width: 200px;
-                    min-width: 100%;
-                  "
-                  height="20px"
-                  outlined
-                  @change="getDataFromApi(0)"
-                  v-model="filterResponseInMinutes"
-                  dense
-                  :items="[
-                    { id: null, name: 'All Responses' },
-                    { id: 1, name: 'Resolved <1 min' },
-                    { id: 5, name: 'Resolved 1 to 5 min' },
-                    { id: 10, name: 'Resolved 5 to 10 min' },
-                    { id: 0, name: 'Resolved > 10 min' },
-                  ]"
-                  item-text="name"
-                  item-value="id"
-                ></v-select>
+              <v-col
+                :cols="sensorItems.length > 1 ? 8 : 12"
+                class="text-right"
+                style="width: 600px"
+              >
+                <v-row>
+                  <v-col cols="3">
+                    <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
+                      >mdi-reload</v-icon
+                    >
+                    <v-text-field
+                      style="
+                        padding-top: 7px;
+                        width: 150px;
+
+                        float: right;
+                      "
+                      width="150px"
+                      height="20"
+                      class="employee-schedule-search-box"
+                      @input="getDataFromApi(0)"
+                      v-model="commonSearch"
+                      label="Search"
+                      dense
+                      outlined
+                      type="text"
+                      append-icon="mdi-magnify"
+                      clearable
+                      hide-details
+                    ></v-text-field
+                  ></v-col>
+                  <v-col cols="3"
+                    ><v-select
+                      class="employee-schedule-search-box"
+                      style="
+                        padding-top: 7px;
+                        z-index: 999;
+                        width: 200px;
+                        min-width: 100%;
+                      "
+                      height="20px"
+                      outlined
+                      @change="getDataFromApi(0)"
+                      v-model="filterResponseInMinutes"
+                      dense
+                      :items="[
+                        { id: null, name: 'All Responses' },
+                        { id: 1, name: 'Resolved <1 min' },
+                        { id: 5, name: 'Resolved 1 to 5 min' },
+                        { id: 10, name: 'Resolved 5 to 10 min' },
+                        { id: 0, name: 'Resolved > 10 min' },
+                      ]"
+                      item-text="name"
+                      item-value="id"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="2"
+                    ><v-select
+                      class="employee-schedule-search-box"
+                      style="
+                        padding-top: 7px;
+                        z-index: 999;
+                        min-width: 100%;
+                        width: 150px;
+                      "
+                      height="20px"
+                      outlined
+                      @change="getDataFromApi(0)"
+                      v-model="filterAlarmStatus"
+                      dense
+                      :items="[
+                        { id: null, name: 'All Events' },
+                        { id: 1, name: 'Alarm ON' },
+                        { id: 0, name: 'Alarm OFF' },
+                      ]"
+                      item-text="name"
+                      item-value="id"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="2">
+                    <CustomFilter
+                      style="float: left; padding-top: 5px; z-index: 999"
+                      @filter-attr="filterAttr"
+                      :default_date_from="date_from"
+                      :default_date_to="date_to"
+                      :defaultFilterType="1"
+                      :height="'60px'"
+                  /></v-col>
+                  <v-col cols="2" style="margin-top: 10px">
+                    <v-menu bottom right>
+                      <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">
+                          <v-icon dark-2 icon color="violet" small
+                            >mdi-file</v-icon
+                          >
+                          Print/PDF
+                        </span>
+                      </template>
+                      <v-list width="100" dense>
+                        <v-list-item @click="downloadOptions(`print`)">
+                          <v-list-item-title style="cursor: pointer">
+                            <span
+                              ><img
+                                style="padding-top: 5px"
+                                src="/icons/icon_print.png"
+                                class="iconsize"
+                            /></span>
+                            <span>Print</span>
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="downloadOptions('download')">
+                          <v-list-item-title style="cursor: pointer">
+                            <img
+                              style="padding-top: 5px"
+                              src="/icons/icon_pdf.png"
+                              class="iconsize"
+                            />
+                            PDF
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="downloadOptions('excel')">
+                          <v-list-item-title style="cursor: pointer">
+                            <img src="/icons/icon_excel.png" class="iconsize" />
+                            EXCEL
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-col>
+                </v-row>
               </v-col>
-              <v-col cols="2"
-                ><v-select
-                  class="employee-schedule-search-box"
-                  style="
-                    padding-top: 7px;
-                    z-index: 999;
-                    min-width: 100%;
-                    width: 150px;
-                  "
-                  height="20px"
-                  outlined
-                  @change="getDataFromApi(0)"
-                  v-model="filterAlarmStatus"
-                  dense
-                  :items="[
-                    { id: null, name: 'All Events' },
-                    { id: 1, name: 'Alarm ON' },
-                    { id: 0, name: 'Alarm OFF' },
-                  ]"
-                  item-text="name"
-                  item-value="id"
-                ></v-select>
-              </v-col>
-              <v-col cols="3">
-                <CustomFilter
-                  style="float: left; padding-top: 5px; z-index: 999"
-                  @filter-attr="filterAttr"
-                  :default_date_from="date_from"
-                  :default_date_to="date_to"
-                  :defaultFilterType="1"
-                  :height="'60px'"
-              /></v-col>
             </v-row>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
 
-    <v-row v-if="sensorItems.length == 0" class="text-center">
-      <v-col cols="12" class="text-center"> No Data is available</v-col>
-    </v-row>
-    <v-row v-if="sensorItems.length > 0">
-      <v-col cols="12">
-        <v-tabs
-          v-if="sensorItems.length > 1"
-          v-model="tab"
-          background-color="transparent"
-          color="basil"
-          grow
-        >
-          <v-tab v-for="item in sensorItems" :key="item">
-            {{ item }}
-          </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item v-for="item in sensorItems" :key="item">
-            <v-card color="basil" flat>
-              <v-card-text>
-                <v-data-table
-                  v-if="showTable"
-                  :headers="headers"
-                  :items="items"
-                  :server-items-length="totalRowsCount"
-                  :loading="loading"
-                  :options.sync="options"
-                  :footer-props="{
-                    itemsPerPageOptions: [10, 50, 100, 500, 1000],
-                  }"
-                  class="elevation-0"
+            <v-row v-if="sensorItems.length > 0">
+              <v-col cols="12" style="padding-top: 0px; margin-top: -30px">
+                <v-tabs
+                  v-if="sensorItems.length > 1"
+                  v-model="tab"
+                  background-color="transparent"
+                  color="red"
+                  right
+                  bold
                 >
-                  <template v-slot:item.sno="{ item, index }">
-                    {{ item.id }}
-                  </template>
+                  <v-tab
+                    v-for="item in sensorItems"
+                    :key="item"
+                    style="font-weight: bold"
+                  >
+                    {{ item }}
+                  </v-tab>
+                </v-tabs>
 
-                  <template v-slot:item.customer="{ item }">
-                    <div>
-                      {{
-                        item.device?.customer?.primary_contact?.first_name ??
-                        "---"
-                      }}
-                      {{
-                        item.device?.customer?.primary_contact?.last_name ??
-                        "---"
-                      }}
-                    </div>
-                  </template>
-                  <template v-slot:item.address="{ item }">
-                    <div>{{ item.device?.customer?.area }}</div>
-                  </template>
-                  <template v-slot:item.city="{ item }">
-                    <div>{{ item.device?.customer?.city }}</div>
-                  </template>
+                <v-tabs-items v-model="tab">
+                  <v-tab-item v-for="item in sensorItems" :key="item">
+                    <v-card color="basil" flat>
+                      <v-card-text>
+                        <v-data-table
+                          v-if="showTable"
+                          :headers="headers"
+                          :items="items"
+                          :server-items-length="totalRowsCount"
+                          :loading="loading"
+                          :options.sync="options"
+                          :footer-props="{
+                            itemsPerPageOptions: [10, 50, 100, 500, 1000],
+                          }"
+                          class="elevation-0"
+                        >
+                          <template v-slot:item.sno="{ item, index }">
+                            {{ item.id }}
+                          </template>
 
-                  <template v-slot:item.sensor="{ item }">
-                    <div>
-                      {{ item.alarm_type }}
-                    </div>
-                    <!-- <div class="secondary-value">
+                          <template v-slot:item.customer="{ item }">
+                            <div>
+                              {{
+                                item.device?.customer?.primary_contact
+                                  ?.first_name ?? "---"
+                              }}
+                              {{
+                                item.device?.customer?.primary_contact
+                                  ?.last_name ?? "---"
+                              }}
+                            </div>
+                          </template>
+                          <template v-slot:item.address="{ item }">
+                            <div>{{ item.device?.customer?.area }}</div>
+                          </template>
+                          <template v-slot:item.city="{ item }">
+                            <div>{{ item.device?.customer?.city }}</div>
+                          </template>
+
+                          <template v-slot:item.sensor="{ item }">
+                            <div>
+                              {{ item.alarm_type }}
+                            </div>
+                            <!-- <div class="secondary-value">
                       {{ item.device?.location }}
                     </div> -->
 
-                    <!-- <div class="secondary-value">{{ item.type }}</div> -->
-                  </template>
-                  <template v-slot:item.property="{ item }">
-                    {{ item.device?.customer?.buildingtype?.name ?? "---" }}
-                  </template>
-                  <template v-slot:item.zone="{ item }">
-                    <div>{{ item.zone }}</div>
-                    <div class="secondary-value">{{ item.area }}</div>
-                  </template>
-                  <template v-slot:item.start_date="{ item }">
-                    <div>
-                      {{
-                        $dateFormat.formatDateMonthYear(
-                          item.alarm_start_datetime
-                        )
-                      }}
-                    </div>
-                    <!-- <div class="secondary-value">
+                            <!-- <div class="secondary-value">{{ item.type }}</div> -->
+                          </template>
+                          <template v-slot:item.property="{ item }">
+                            {{
+                              item.device?.customer?.buildingtype?.name ?? "---"
+                            }}
+                          </template>
+                          <template v-slot:item.zone="{ item }">
+                            <div>{{ item.zone }}</div>
+                            <div class="secondary-value">{{ item.area }}</div>
+                          </template>
+                          <template v-slot:item.start_date="{ item }">
+                            <div>
+                              {{
+                                $dateFormat.formatDateMonthYear(
+                                  item.alarm_start_datetime
+                                )
+                              }}
+                            </div>
+                            <!-- <div class="secondary-value">
                       {{
                         item.alarm_end_datetime
                           ? $dateFormat.formatDateMonthYear(
@@ -315,86 +366,92 @@
                           : "---"
                       }}
                     </div> -->
-                  </template>
-                  <template v-slot:item.end_date="{ item }">
-                    <div>
-                      {{
-                        item.alarm_end_datetime
-                          ? $dateFormat.formatDateMonthYear(
-                              item.alarm_end_datetime
-                            )
-                          : "---"
-                      }}
-                    </div>
-                  </template>
-                  <template v-slot:item.duration="{ item }">
-                    <div>
-                      {{
-                        item.alarm_end_datetime
-                          ? $dateFormat.minutesToHHMM(item.response_minutes)
-                          : "---"
-                      }}
-                    </div>
-                  </template>
-                  <template v-slot:item.notes="{ item }">
-                    <div @click="viewNotes(item)">{{ item.notes.length }}</div>
-                  </template>
+                          </template>
+                          <template v-slot:item.end_date="{ item }">
+                            <div>
+                              {{
+                                item.alarm_end_datetime
+                                  ? $dateFormat.formatDateMonthYear(
+                                      item.alarm_end_datetime
+                                    )
+                                  : "---"
+                              }}
+                            </div>
+                          </template>
+                          <template v-slot:item.duration="{ item }">
+                            <div>
+                              {{
+                                item.alarm_end_datetime
+                                  ? $dateFormat.minutesToHHMM(
+                                      item.response_minutes
+                                    )
+                                  : "---"
+                              }}
+                            </div>
+                          </template>
+                          <template v-slot:item.notes="{ item }">
+                            <div @click="viewNotes(item)">
+                              {{ item.notes.length }}
+                            </div>
+                          </template>
 
-                  <template v-slot:item.alarm_category="{ item }">
-                    <div>{{ item.category?.name || "---" }}</div>
-                  </template>
+                          <template v-slot:item.alarm_category="{ item }">
+                            <div>{{ item.category?.name || "---" }}</div>
+                          </template>
 
-                  <template v-slot:item.status="{ item }">
-                    <div v-if="item.alarm_status == 1">
-                      <v-icon
-                        class="alarm"
-                        @click="UpdateAlarmStatus(item, 0)"
-                        title="Click to Turn OFF Alarm "
-                        >mdi mdi-alarm-light</v-icon
-                      >
-                      <br />
-                      <v-btn
-                        class="text--red"
-                        color="red"
-                        title="Click to Stop Alarm "
-                        @click="UpdateAlarmStatus(item, 0)"
-                        outlined
-                        x-small
-                        dense
-                        >Stop</v-btn
-                      >
-                    </div>
-                    <div v-else-if="item.alarm_status == 0">
-                      <v-icon title="Now Alaram is OFF"
-                        >mdi mdi-alarm-light-outline</v-icon
-                      >
-                      <div class="secondary-value">
-                        {{
-                          item.alarm_end_manually == 1
-                            ? "Closed Manually"
-                            : "Auto Closed"
-                        }}
-                      </div>
-                    </div>
-                  </template>
-                  <template v-slot:item.options="{ item }">
-                    <v-menu bottom left>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                          <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list width="120" dense>
-                        <v-list-item
-                          v-if="can('branch_view')"
-                          @click="viewCustomerinfo(item)"
-                        >
-                          <v-list-item-title style="cursor: pointer">
-                            <v-icon color="secondary" small> mdi-eye </v-icon>
-                            Contacts
-                          </v-list-item-title>
-                        </v-list-item>
-                        <!-- <v-list-item
+                          <template v-slot:item.status="{ item }">
+                            <div v-if="item.alarm_status == 1">
+                              <v-icon
+                                class="alarm"
+                                @click="UpdateAlarmStatus(item, 0)"
+                                title="Click to Turn OFF Alarm "
+                                >mdi mdi-alarm-light</v-icon
+                              >
+                              <br />
+                              <v-btn
+                                class="text--red"
+                                color="red"
+                                title="Click to Stop Alarm "
+                                @click="UpdateAlarmStatus(item, 0)"
+                                outlined
+                                x-small
+                                dense
+                                >Stop</v-btn
+                              >
+                            </div>
+                            <div v-else-if="item.alarm_status == 0">
+                              <v-icon title="Now Alaram is OFF"
+                                >mdi mdi-alarm-light-outline</v-icon
+                              >
+                              <div class="secondary-value">
+                                {{
+                                  item.alarm_end_manually == 1
+                                    ? "Closed Manually"
+                                    : "Auto Closed"
+                                }}
+                              </div>
+                            </div>
+                          </template>
+                          <template v-slot:item.options="{ item }">
+                            <v-menu bottom left>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                                  <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                              </template>
+                              <v-list width="120" dense>
+                                <v-list-item
+                                  v-if="can('branch_view')"
+                                  @click="viewCustomerinfo(item)"
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-icon color="secondary" small>
+                                      mdi-eye
+                                    </v-icon>
+                                    Contacts
+                                  </v-list-item-title>
+                                </v-list-item>
+                                <!-- <v-list-item
                           v-if="can('branch_view')"
                           @click="viewNotes(item)"
                         >
@@ -414,7 +471,7 @@
                             Add Notes
                           </v-list-item-title>
                         </v-list-item> -->
-                        <!-- <v-list-item v-if="can('branch_edit')">
+                                <!-- <v-list-item v-if="can('branch_edit')">
                   <v-list-item-title
                     style="cursor: pointer"
                     @click="deleteEvent(item.id)"
@@ -423,15 +480,23 @@
                     Delete
                   </v-list-item-title>
                 </v-list-item> -->
-                      </v-list>
-                    </v-menu>
-                  </template>
-                </v-data-table>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs-items>
+                              </v-list>
+                            </v-menu>
+                          </template>
+                        </v-data-table>
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-col>
+            </v-row>
+          </v-card-text></v-card
+        >
       </v-col>
+    </v-row>
+
+    <v-row v-if="sensorItems.length == 0" class="text-center">
+      <v-col cols="12" class="text-center"> No Data is available</v-col>
     </v-row>
   </div>
 </template>
@@ -648,6 +713,21 @@ export default {
           });
         } catch (e) {}
       }
+    },
+
+    downloadOptions(option) {
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/alarm_events_print_pdf";
+      if (option == "excel") url += "/alarm_events_export_excel";
+      if (option == "download") url += "/alarm_events_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&date_from=" + this.date_from;
+      url += "&date_to=" + this.date_to;
+      url += "&common_search=" + this.commonSearch;
+      url += "&tab=" + this.tab;
+      //  url += "&alarm_status=" + this.filterAlarmStatus;
+
+      window.open(url, "_blank");
     },
     getDataFromApi(custompage = 1) {
       if (this.loading == true) return false;
