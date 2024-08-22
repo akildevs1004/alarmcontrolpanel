@@ -270,7 +270,7 @@
             </v-container>
           </template>
           <template v-slot:item.building_name="{ item, index }">
-            <v-row>
+            <!-- <v-row>
               <v-col>
                 <v-col
                   cols="5"
@@ -284,7 +284,7 @@
                     margin: auto;
                   "
                 >
-                  <v-row>
+                    <v-row>
                     <v-col cols="8"
                       ><v-icon color="#92d050">mdi mdi-square-medium</v-icon
                       >Online</v-col
@@ -301,10 +301,10 @@
                       categories ? categories.total - categories.online : "0"
                     }}</v-col>
                   </v-row>
-                  <v-divider color="#dddddd" />
+                  <v-divider color="#dddddd" />  
                 </v-col>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row>
               <v-col cols="1">{{ index + 1 }}) </v-col>
               <v-col>
@@ -324,37 +324,46 @@
                 <v-row class="pa-0 ma-0">
                   <v-col cols="4" class="pl-0">Alarm Type:</v-col>
                   <v-col cols="4">
-                    {{ item.latest_alarm_event.alarm_type }}
-                    <img
-                      v-if="item.latest_alarm_event.alarm_type == 'Burglary'"
-                      title="Burglary"
-                      style="width: 15px; float: left"
-                      src="/device-icons/burglary.png" />
+                    <v-row
+                      ><v-col cols="2" style="padding-top: 15px"
+                        ><img
+                          v-if="
+                            item.latest_alarm_event.alarm_type == 'Burglary'
+                          "
+                          title="Burglary"
+                          style="width: 15px; float: left"
+                          src="/device-icons/burglary.png" />
 
-                    <img
-                      v-if="item.latest_alarm_event.alarm_type == 'Temperature'"
-                      title="Temperature"
-                      style="width: 15px; float: left"
-                      src="/device-icons/temperature.png" />
+                        <img
+                          v-if="
+                            item.latest_alarm_event.alarm_type == 'Temperature'
+                          "
+                          title="Temperature"
+                          style="width: 15px; float: left"
+                          src="/device-icons/temperature.png" />
 
-                    <img
-                      v-if="item.latest_alarm_event.alarm_type == 'Medical'"
-                      title="Medical"
-                      style="width: 15px; float: left"
-                      src="/device-icons/medical.png" />
+                        <img
+                          v-if="item.latest_alarm_event.alarm_type == 'Medical'"
+                          title="Medical"
+                          style="width: 15px; float: left"
+                          src="/device-icons/medical.png" />
 
-                    <img
-                      v-if="item.latest_alarm_event.alarm_type == 'Fire'"
-                      title="Fire"
-                      style="width: 15px; float: left"
-                      src="/device-icons/fire.png" />
+                        <img
+                          v-if="item.latest_alarm_event.alarm_type == 'Fire'"
+                          title="Fire"
+                          style="width: 15px; float: left"
+                          src="/device-icons/fire.png" />
 
-                    <img
-                      v-if="item.latest_alarm_event.alarm_type == 'Water'"
-                      title="Water"
-                      style="width: 15px; float: left"
-                      src="/device-icons/water.png"
-                  /></v-col>
+                        <img
+                          v-if="item.latest_alarm_event.alarm_type == 'Water'"
+                          title="Water"
+                          style="width: 15px; float: left"
+                          src="/device-icons/water.png" /></v-col
+                      ><v-col cols="8">{{
+                        item.latest_alarm_event.alarm_type
+                      }}</v-col></v-row
+                    >
+                  </v-col>
                 </v-row>
                 <!-- <v-row class="pa-0 ma-0">
                   <v-col cols="4">Address</v-col>

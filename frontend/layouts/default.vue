@@ -283,7 +283,7 @@
             v-for="(item, index) in notificationsMenuItems"
             :key="index"
           >
-            <v-list-item-content>
+            <v-list-item-content @click="showPopupAlarmStatus()">
               <v-list-item-title class="black--text align-left text-left">
                 <v-row>
                   <v-col cols="2" class="align-right text-right pr-1"
@@ -446,7 +446,7 @@
         </v-card>
       </v-dialog>
       <v-dialog
-        v-model="alarmPopupNotificationStatus"
+        v-model="dialogAlarmPopupNotificationStatus"
         transition="dialog-top-transition"
         max-width="1000"
         style="z-index: 9999"
@@ -513,14 +513,14 @@
                   color="error"
                   @click="
                     goToPage('/device');
-                    alarmPopupNotificationStatus = false;
+                    dialogAlarmPopupNotificationStatus = false;
                   "
                   >View Devices</v-btn
                 >
               </div> -->
             </v-card-text>
             <!-- <v-card-actions class="justify-end">
-              <v-btn text @click="alarmPopupNotificationStatus = false">Close</v-btn>
+              <v-btn text @click="dialogAlarmPopupNotificationStatus = false">Close</v-btn>
             </v-card-actions> -->
           </v-card>
         </template>
@@ -796,7 +796,7 @@ export default {
       viewing_page_name: "",
 
       inactivityTimeout: null,
-      alarmPopupNotificationStatus: false,
+      dialogAlarmPopupNotificationStatus: false,
       key: 1,
       isBackendRequestOpen: false,
     };
@@ -844,15 +844,21 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
-      if (this.wait5Minutes == false) {
+      //this.loadHeaderNotificationMenu();
+
+      //console.log("wait5Minutes", this.wait5Minutes);
+      //if (this.wait5Minutes == false)
+      {
         if (this.$route.name != "login") {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
-          if (this.notificationAlarmDevicesContent) {
-            if (this.notificationAlarmDevicesContent.length > 0) {
-              this.alarmPopupNotificationStatus = true;
-            } else {
-              this.alarmPopupNotificationStatus = false;
+          if (this.wait5Minutes == false) {
+            if (this.notificationAlarmDevicesContent) {
+              if (this.notificationAlarmDevicesContent.length > 0) {
+                this.dialogAlarmPopupNotificationStatus = true;
+              } else {
+                this.dialogAlarmPopupNotificationStatus = false;
+              }
             }
           }
           //this.verifyPopupAlarmStatus();
@@ -970,7 +976,7 @@ export default {
         this.wait5Minutes = false;
       }, 1000 * 60 * 30);
 
-      this.alarmPopupNotificationStatus = false;
+      this.dialogAlarmPopupNotificationStatus = false;
     },
     Reset5Minutes() {
       this.wait5Minutes = false;
@@ -1159,6 +1165,7 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
+      // console.log(this.isBackendRequestOpen);
       if (this.isBackendRequestOpen) return false;
 
       this.isBackendRequestOpen = true;
@@ -1183,11 +1190,11 @@ export default {
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
           this.key += 1;
-          if (data.length > 0) {
-            this.alarmPopupNotificationStatus = true;
-          } else {
-            this.alarmPopupNotificationStatus = false;
-          }
+          // if (data.length > 0) {
+          //   this.dialogAlarmPopupNotificationStatus = true;
+          // } else {
+          //   this.dialogAlarmPopupNotificationStatus = false;
+          // }
 
           data.forEach((element) => {
             let notificaiton = {
@@ -1213,6 +1220,7 @@ export default {
 
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
+      this.dialogAlarmPopupNotificationStatus = true;
       // this.verifyPopupAlarmStatus();
     },
     // verifyPopupAlarmStatus() {
@@ -1234,9 +1242,9 @@ export default {
     //       if (data.length > 0) {
     //         this.notificationAlarmDevicesContent = data;
 
-    //         this.alarmPopupNotificationStatus = true;
+    //         this.dialogAlarmPopupNotificationStatus = true;
     //       } else {
-    //         this.alarmPopupNotificationStatus = false;
+    //         this.dialogAlarmPopupNotificationStatus = false;
     //       }
     //     });
     // },
