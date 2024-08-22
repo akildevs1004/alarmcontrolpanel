@@ -759,8 +759,8 @@ export default {
       if (this.commonSearch) url += "&common_search=" + this.commonSearch;
       if (this.filterAlarmStatus)
         url += "&alarm_status=" + this.filterAlarmStatus;
-
-      url += "&filterSensorname=" + filterSensorname;
+      if (filterSensorname != "null" && filterSensorname)
+        url += "&filterSensorname=" + filterSensorname;
       if (this.filterResponseInMinutes)
         url += "&filterResponseInMinutes=" + this.filterResponseInMinutes;
       url += "&tab=" + this.tab;
