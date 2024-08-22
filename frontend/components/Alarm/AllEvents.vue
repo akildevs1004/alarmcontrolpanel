@@ -743,6 +743,12 @@ export default {
     },
 
     downloadOptions(option) {
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
+
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
+      }
+
       let url = process.env.BACKEND_URL;
       if (option == "print") url += "/alarm_events_print_pdf";
       if (option == "excel") url += "/alarm_events_export_excel";
@@ -753,6 +759,8 @@ export default {
       if (this.commonSearch) url += "&common_search=" + this.commonSearch;
       if (this.filterAlarmStatus)
         url += "&alarm_status=" + this.filterAlarmStatus;
+
+      url += "&filterSensorname=" + filterSensorname;
       if (this.filterResponseInMinutes)
         url += "&filterResponseInMinutes=" + this.filterResponseInMinutes;
       url += "&tab=" + this.tab;
