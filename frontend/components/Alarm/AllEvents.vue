@@ -239,30 +239,57 @@
                       <v-list width="100" dense>
                         <v-list-item @click="downloadOptions(`print`)">
                           <v-list-item-title style="cursor: pointer">
-                            <span
-                              ><img
-                                style="padding-top: 5px"
-                                src="/icons/icon_print.png"
-                                class="iconsize"
-                            /></span>
-                            <span>Print</span>
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_print.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                Print
+                              </v-col>
+                            </v-row>
                           </v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="downloadOptions('download')">
                           <v-list-item-title style="cursor: pointer">
-                            <img
-                              style="padding-top: 5px"
-                              src="/icons/icon_pdf.png"
-                              class="iconsize"
-                            />
-                            PDF
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_pdf.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                PDF
+                              </v-col>
+                            </v-row>
                           </v-list-item-title>
                         </v-list-item>
 
                         <v-list-item @click="downloadOptions('excel')">
                           <v-list-item-title style="cursor: pointer">
-                            <img src="/icons/icon_excel.png" class="iconsize" />
-                            EXCEL
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_excel.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                EXCEL
+                              </v-col>
+                            </v-row>
                           </v-list-item-title>
                         </v-list-item>
                       </v-list>
@@ -723,7 +750,11 @@ export default {
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&date_from=" + this.date_from;
       url += "&date_to=" + this.date_to;
-      url += "&common_search=" + this.commonSearch;
+      if (this.commonSearch) url += "&common_search=" + this.commonSearch;
+      if (this.filterAlarmStatus)
+        url += "&alarm_status=" + this.filterAlarmStatus;
+      if (this.filterResponseInMinutes)
+        url += "&filterResponseInMinutes=" + this.filterResponseInMinutes;
       url += "&tab=" + this.tab;
       //  url += "&alarm_status=" + this.filterAlarmStatus;
 

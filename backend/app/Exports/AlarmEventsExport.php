@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 
-class AlarmEventsExport implements FromCollection, WithHeadings,  ShouldAutoSize
+class AlarmEventsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
     protected $data;
 
@@ -27,7 +27,7 @@ class AlarmEventsExport implements FromCollection, WithHeadings,  ShouldAutoSize
     public function headings(): array
     {
         return [
-            "Event Id ",
+            "Event Id",
             "Customer",
             "Property",
             "Address",
@@ -41,32 +41,35 @@ class AlarmEventsExport implements FromCollection, WithHeadings,  ShouldAutoSize
         ];
     }
 
-    // public function map($row): array
-    // {
-    //     return [
-    //         $row['date'],
-    //         (string)$row['employee']["employee_id"] ?? "---",
-    //         $row['employee']["full_name"] ?? $row['employee']["first_name"] . " " . $row['employee']["last_name"],
-    //         $row["in1"] ?? "---",
-    //         $row["out1"] ?? "---",
-    //         $row["in2"] ?? "---",
-    //         $row["out2"] ?? "---",
-    //         $row["in3"] ?? "---",
-    //         $row["out3"] ?? "---",
-    //         $row["in4"] ?? "---",
-    //         $row["out4"] ?? "---",
-    //         $row["in5"] ?? "---",
-    //         $row["out5"] ?? "---",
-    //         $row["in6"] ?? "---",
-    //         $row["out6"] ?? "---",
-    //         $row["in7"] ?? "---",
-    //         $row["out7"] ?? "---",
-    //         $row["total_hrs"] ?? "---",
-    //         $row["ot"] ?? "---",
-    //         $row["status"] ?? "---",
-    //     ];
-    // }
+    public function map($row): array
+    {
+        return [
+            $row['id'],
 
+            $row['device']['customer']['primary_contact']['first_name'] . ' ' . $row['device']['customer']['primary_contact']['last_name'],
+            $row['device']['customer']['buildingtype']['name'],
+            $row['device']['customer']['area'],
+            $row['device']['customer']['city'],
+            $row['alarm_type'],
+            $row['alarm_start_datetime'],
+            $row['alarm_end_datetime'],
+            $row['category']['name'],
+            $this->minutesToTime($row['response_minutes']),
+
+
+        ];
+    }
+    public function minutesToTime($totalMinutes)
+    {
+        if ($totalMinutes == 0) return '00:00';
+        if ($totalMinutes == null) return '---';
+        // Calculate hours and minutes
+        $hours = intdiv($totalMinutes, 60); // Integer division to get hours
+        $minutes = $totalMinutes % 60; // Remainder to get minutes
+
+        // Format hours and minutes to HH:MM
+        return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
+    }
     // public function styles($sheet)
     // {
     //     return [

@@ -49,18 +49,18 @@
         }
 
         main {
-            margin-top: 0px;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <header style="min-height:60px">
+    <header style="height:100px">
 
-        <table style="margin-top:  0px !important; padding-bottom:0px ;width:100%">
+        <table style="margin-top:  0px !important; padding-bottom:0px;height:100px; ;width:100%;border:0px solid red">
             <tr>
                 <td style="border: nonse;width:30%">
-                    <div style="text-align:left;  float:left ;margin:auto;">
+                    <div style="text-align:left;    ;margin:auto;">
 
                         @if (env('APP_ENV') !== 'local')
                         <img src="{{ $company->logo }}" style=" margin:auto;width:100px;max-width:150px;max-height:60px ">
@@ -69,51 +69,58 @@
                         @endif
                     </div>
                 </td>
-                <td style="text-align: left;width: 35%; border :0px solid red;vertical-align:top   ">
+                <td style="text-align: center;width: 35%; border :0px solid red;padding-left:0px;margin:0px   ">
+                    <table style="width:100%">
+                        <tr>
+                            <td style="text-align:center;font-size:14px">
+                                Alarm Events Report
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">
+                                From {{changeDateformat($request->date_from)[0]}} to {{changeDateformat($request->date_to)[0]}}
+                            </td>
+                        </tr>
+                    </table>
 
-                    <div style="clear:both;text-align:center;font-size:14px;vertical-align:top">
-                        Alarm Events Report
-                        <div>
-                            From {{changeDateformat($request->date_from)[0]}} to {{changeDateformat($request->date_to)[0]}}
-                        </div>
+
+
+
                     </div>
                 </td>
-                <td style="text-align: right; width:35% ;margin:auto">
-                    <div class="row">
+                <td style=" text-align: right; width:35% ;margin:auto">
 
-                        <div class="col-12" style=" padding:0px; ">
-                            <table style="padding:0px;margin:0px;border-left :1px solid #DDD; ">
-                                <tr style="text-align: left; border :none;padding:10px 0px">
-                                    <td style="text-align: left; border :none;font-size:12px;padding:0 0 5px 0px;">
-                                        <b style="padding:0px;margin:0px">
-                                            {{ $company->name }}
-                                        </b>
-                                        <br>
-                                    </td>
-                                </tr>
-                                <tr style="text-align: left; border :none;padding:10px 0px">
-                                    <td style="text-align: left; border :none;font-size:10px;padding:5px 0px;">
-                                        <span style="margin-left: 3px">P.O.Box
-                                            {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
-                                        <br>
-                                    </td>
-                                </tr>
-                                <tr style="text-align: left; border :none;padding:10px 0px">
-                                    <td style="text-align: left; border :none;font-size:10px;padding:5px 0px">
-                                        <span style="margin-left: 3px">{{ $company->location }}</span>
-                                        <br>
-                                    </td>
-                                </tr>
-                                <tr style="text-align: left; border :none;padding:10px 0px">
-                                    <td style="text-align: left; border :none;font-size:10px;padding:5px 0px">
-                                        <span style="margin-left: 3px">{{ $company->contact->number ?? '' }}</span>
-                                        <br>
-                                    </td>
-                                </tr>
+                    <table style="padding:0px;margin:0px;border-left :1px solid #DDD; ">
+                        <tr style="text-align: left; border :none;padding:10px 0px">
+                            <td style="text-align: left; border :none;font-size:12px;padding:0 0 5px 0px;">
+                                <b style="padding:0px;margin:0px">
+                                    {{ $company->name }}
+                                </b>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr style="text-align: left; border :none;padding:10px 0px">
+                            <td style="text-align: left; border :none;font-size:10px;padding:5px 0px;">
+                                <span style="margin-left: 3px">P.O.Box
+                                    {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr style="text-align: left; border :none;padding:10px 0px">
+                            <td style="text-align: left; border :none;font-size:10px;padding:5px 0px">
+                                <span style="margin-left: 3px">{{ $company->location }}</span>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr style="text-align: left; border :none;padding:10px 0px">
+                            <td style="text-align: left; border :none;font-size:10px;padding:5px 0px">
+                                <span style="margin-left: 3px">{{ $company->contact->number ?? '' }}</span>
+                                <br>
+                            </td>
+                        </tr>
 
-                            </table>
-                        </div>
-                    </div>
+                    </table>
+
                 </td>
             </tr>
         </table>
@@ -185,9 +192,19 @@
         </table>
 
         @php }
+        else { @endphp
 
-        else echo "No Data is Available";
+        <div style="text-align: center;padding-top:10%">
+            No Data is Available
+
+        </div>
+
+        @php
+        }
+
         @endphp
+
+
     </main>
 
     <footer>
