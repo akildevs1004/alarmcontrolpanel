@@ -5,6 +5,35 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewLogs" width="1000px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm - Logs</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogViewLogs = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <SecurityAlarmNotes
+              v-if="customer"
+              :alarmId="eventId"
+              :customer="customer"
+              :key="key"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogForwardEventDetails" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -502,6 +531,17 @@
                                     Forward
                                   </v-list-item-title>
                                 </v-list-item>
+                                <v-list-item
+                                  v-if="can('branch_view')"
+                                  @click="viewLogs(item)"
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-icon color="secondary" small>
+                                      mdi-format-list-numbered
+                                    </v-icon>
+                                    Logs
+                                  </v-list-item-title>
+                                </v-list-item>
                               </v-list>
                             </v-menu>
                           </template>
@@ -531,6 +571,7 @@ import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList
 import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerTabView.vue";
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
+import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
 
 export default {
   components: {
@@ -539,10 +580,14 @@ export default {
     AlarmCustomerTabView,
     AlramCloseNotes,
     AlarmForwardEvent,
+    SecurityAlarmNotes,
   },
-  props: ["showFilters", "customer", "eventFilter"],
+  props: ["showFilters", "eventFilter"],
   data() {
     return {
+      customer: null,
+      dialogViewLogs: false,
+
       dialogForwardEventDetails: false,
       dialogCloseAlarm: false,
       filterResponseInMinutes: null,
@@ -686,6 +731,7 @@ export default {
       this.eventId = item.id;
       this.dialogTabViewCustomer = true;
     },
+
     eventForward(item) {
       this.popupEventText =
         item.device.customer.buildingtype.name +
@@ -700,6 +746,22 @@ export default {
       this.viewCustomerId = item.customer_id;
       this.eventId = item.id;
       this.dialogForwardEventDetails = true;
+    },
+    viewLogs(item) {
+      this.popupEventText =
+        item.device.customer.buildingtype.name +
+        " -    " +
+        item.alarm_type +
+        " alarm " +
+        "   Time " +
+        item.alarm_start_datetime +
+        " -  Priority " +
+        item.category.name;
+      this.key += 1;
+      this.viewCustomerId = item.customer_id;
+      this.eventId = item.id;
+      this.customer = item.device.customer;
+      this.dialogViewLogs = true;
     },
     viewNotes(item) {
       this.key += 1;

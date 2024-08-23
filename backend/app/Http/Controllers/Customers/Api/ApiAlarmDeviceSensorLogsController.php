@@ -249,22 +249,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             AlarmLogs::where("id", $insertedRecord["id"])->update($data);
 
 
-            // $data = [
-            //     "company_id" => $company_id,
-            //     "serial_number" => $serial_number,
-            //     "alarm_start_datetime" => $log_time,
-            //     "customer_id" => $customer_id,
-            //     "zone" => $insertedRecord['zone'],
-            //     "area" => $insertedRecord['area'],
-            //     "alarm_type" => $insertedRecord['alarm_type'],
-
-            // ];
-
-            // AlarmEvents::create($data);
-
-            //create alarm 
-
-
             return $this->response('Alarm Logs are created', null, true);
         }
     }
