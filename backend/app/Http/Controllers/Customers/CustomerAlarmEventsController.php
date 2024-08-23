@@ -522,11 +522,32 @@ class CustomerAlarmEventsController extends Controller
 
         $model->when($request->filled('common_search'), function ($q) use ($request) {
             $q->where(function ($q) use ($request) {
-                $q->Where('serial_number', 'ILIKE', "%$request->common_search%");
+
+                //$q->Where('serial_number', 'ILIKE', "$request->common_search%");
+                $q->Where('id',  'ILIKE', "%$request->common_search");
                 $q->orWhere('alarm_type', 'ILIKE', "%$request->common_search%");
-                $q->orWhere('alarm_category', 'ILIKE', "%$request->common_search%");
+                //$q->orWhere('alarm_category', 'ILIKE', "%$request->common_search%");
                 $q->orWhere('zone', 'ILIKE', "%$request->common_search%");
                 $q->orWhere('area', 'ILIKE', "%$request->common_search%");
+
+                $q->orWhereHas('device.customer.primary_contact', fn(Builder $query) => $query->where('first_name', 'ILIKE', "$request->common_search%")
+                    ->orWhere('last_name', 'ILIKE', "$request->common_search%"));
+
+                $q->orWhereHas(
+                    'device.customer',
+                    fn(Builder $query) => $query->where('city', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas(
+                    'device.customer.buildingtype',
+                    fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas(
+                    'category',
+                    fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
 
                 $q->when(
                     !$request->filled("customer_id"),
@@ -539,10 +560,6 @@ class CustomerAlarmEventsController extends Controller
                     }
 
                 );
-
-                $q->orWhereHas('device', fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                $q->orWhereHas('device', fn(Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                $q->orWhereHas('device', fn(Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
             });
         });
 

@@ -580,6 +580,7 @@ export default {
 
         marker.addListener("click", () => {
           this.dialog = true;
+
           this.customerInfo = e;
         });
       });

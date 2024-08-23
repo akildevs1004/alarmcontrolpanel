@@ -144,23 +144,19 @@
                 style="width: 600px"
               >
                 <v-row>
-                  <v-col cols="3">
+                  <v-col cols="6">
                     <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
                       >mdi-reload</v-icon
                     >
-                    <v-text-field
-                      style="
-                        padding-top: 7px;
-                        width: 150px;
 
-                        float: right;
-                      "
-                      width="150px"
+                    <v-text-field
+                      style="padding-top: 7px; float: right; width: 350px"
                       height="20"
                       class="employee-schedule-search-box"
                       @input="getDataFromApi(0)"
                       v-model="commonSearch"
-                      label="Search"
+                      label="Common Search(All Content)"
+                      placeholder="ID,Name,location,Type, Priority, location etc..."
                       dense
                       outlined
                       type="text"
@@ -169,7 +165,7 @@
                       hide-details
                     ></v-text-field
                   ></v-col>
-                  <v-col cols="3"
+                  <!-- <v-col cols="3"
                     ><v-select
                       class="employee-schedule-search-box"
                       style="
@@ -193,7 +189,7 @@
                       item-text="name"
                       item-value="id"
                     ></v-select>
-                  </v-col>
+                  </v-col> -->
                   <v-col cols="2"
                     ><v-select
                       class="employee-schedule-search-box"
@@ -549,7 +545,7 @@ export default {
       filterResponseInMinutes: null,
       dialogTabViewCustomer: false,
       viewCustomerId: null,
-      filterAlarmStatus: 1,
+      filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -769,7 +765,7 @@ export default {
       window.open(url, "_blank");
     },
     getDataFromApi(custompage = 1) {
-      if (this.loading == true) return false;
+      if (this.loading == true && this.commonSearch == null) return false;
       // console.log(
       //   "this.$route.query.alarm_status",
       //   this.$route.query.alarm_status

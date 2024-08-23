@@ -167,8 +167,8 @@
 
 
                     <td>{{ $item->id }}</td>
-                    <td>{{ $item->device->customer->primary_contact->first_name  }}
-                        {{ $item->device->customer->primary_contact->last_name  }}
+                    <td>{{ $item->device->customer->primary_contact? $item->device->customer->primary_contact->first_name:'---'  }}
+                        {{ $item->device->customer->primary_contact? $item->device->customer->primary_contact->last_name :'---'  }}
                     </td>
                     <td>{{ $item->device->customer->buildingtype->name  }} </td>
                     <td>{{ $item->device->customer->area  }} </td>
