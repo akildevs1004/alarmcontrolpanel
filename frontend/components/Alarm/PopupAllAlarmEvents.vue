@@ -99,7 +99,7 @@
                 style="width: 300px"
               >
                 <v-row no-gutters @click="viewCustomerinfo(item)">
-                  <v-col
+                  <!-- <v-col
                     style="
                       padding: 5px;
                       padding-left: 0px;
@@ -121,7 +121,7 @@
                       "
                     >
                     </v-img>
-                  </v-col>
+                  </v-col> -->
                   <v-col style="padding: 10px">
                     <div style="font-size: 13px">
                       {{ item.device?.customer?.buildingtype?.name || "---" }}

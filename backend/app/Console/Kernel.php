@@ -57,11 +57,11 @@ class Kernel extends ConsoleKernel
             info($count . "companies has been updated");
         })->dailyAt('00:00');
 
-        $schedule->call(function () {
-            //udapte json file 
-            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
-            info("companies  json file has been updated");
-        })->everyMinute();
+        // $schedule->call(function () {
+        //     //udapte json file 
+        //     (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+        //     info("companies  json file has been updated");
+        // })->everyMinute();
 
 
         // $schedule
