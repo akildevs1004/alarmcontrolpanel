@@ -14,6 +14,8 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $with = ['devices', 'buildingtype',  'primary_contact', 'secondary_contact'];
+
 
     public function devices()
     {

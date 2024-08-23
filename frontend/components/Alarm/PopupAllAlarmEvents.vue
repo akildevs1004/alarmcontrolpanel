@@ -82,13 +82,16 @@
         <v-card color="basil" flat>
           <v-card-text>
             <v-data-table :headers="headers" :items="items" class="elevation-0">
-              <template v-slot:item.sno="{ item, index }">
+              <!-- <template v-slot:item.sno="{ item, index }">
                 {{
                   currentPage
                     ? (currentPage - 1) * perPage +
                       (cumulativeIndex + items.indexOf(item))
                     : "-"
                 }}
+              </template> -->
+              <template v-slot:item.sno="{ item, index }">
+                {{ item.id }}
               </template>
 
               <template
@@ -121,6 +124,9 @@
                   </v-col>
                   <v-col style="padding: 10px">
                     <div style="font-size: 13px">
+                      {{ item.device?.customer?.buildingtype?.name || "---" }}
+                    </div>
+                    <div class="secondary-value">
                       {{ item.device?.customer?.building_name || "" }}
                     </div>
                     <!-- <small style="font-size: 12px; color: #6c7184">
@@ -191,16 +197,18 @@
                 <div @click="viewNotes(item)">{{ item.notes.length }}</div>
               </template>
 
-              <template v-slot:item.category="{ item }">
-                <div>{{ item.alarm_category }}</div>
+              <template v-slot:item.address="{ item }">
+                <div>{{ item.device.customer.area }}</div>
               </template>
-
+              <template v-slot:item.priority="{ item }">
+                <div>{{ item.category.name }}</div>
+              </template>
               <template v-slot:item.status="{ item }">
                 <img
                   :src="'/device-icons/' + alarm_icons[item.alarm_type]"
                   style="width: 20px; vertical-align: middle"
                 />
-                <br />
+                <!-- <br />
 
                 <v-btn
                   v-if="getUserType() != 'security'"
@@ -212,7 +220,7 @@
                   x-small
                   dense
                   >Stop</v-btn
-                >
+                > -->
 
                 <!-- <div v-if="item.alarm_status == 1">
                   <v-icon
@@ -284,26 +292,30 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       headers: [
-        { text: "#", value: "sno", sortable: false },
+        { text: "Event Id", value: "sno", sortable: false },
         { text: "Building", value: "building", sortable: false },
         { text: "Customer", value: "customer", sortable: false },
+        { text: "Address", value: "address", sortable: false },
         // { text: "Device", value: "device", sortable: false },
-        { text: "Sensor", value: "sensor", sortable: false },
+        { text: "Type", value: "sensor", sortable: false },
 
-        { text: "Zone/Area", value: "zone", sortable: false },
+        //{ text: "Zone/Area", value: "zone", sortable: false },
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
-        { text: "Start/End Date", value: "start_date", sortable: false },
+        { text: "Event Time", value: "start_date", sortable: false },
+
+        { text: "Priority", value: "priority", sortable: false },
+
         // { text: "End Date", value: "end_date" , sortable: false },
         // { text: "Resolved Time(H:M)", value: "duration", sortable: false },
         // { text: "Category", value: "category", sortable: false },
 
-        { text: "Notes", value: "notes", sortable: false },
-        {
-          text: "Status",
-          value: "status",
-          sortable: false,
-          align: "center",
-        },
+        // { text: "Notes", value: "notes", sortable: false },
+        // {
+        //   text: "Status",
+        //   value: "status",
+        //   sortable: false,
+        //   align: "center",
+        // },
 
         // { text: "Options", value: "options", sortable: false },
       ],

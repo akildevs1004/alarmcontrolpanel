@@ -313,26 +313,35 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             }
         }
     }
-    public function createAlarmEventsJsonFile($companyId)
+    public function createAlarmEventsJsonFile($companyIdFilter = '')
     {
 
-        $model = AlarmEvents::with([
-            "device.customer.primary_contact",
-            "device.customer.secondary_contact",
-            "notes"
-        ])->where('company_id', $companyId)->where('alarm_status', 1);
+
+        $companyIds = Company::when($companyIdFilter != '', function ($query) use ($companyIdFilter) {
+            return $query->where('id', $companyIdFilter);
+        })->pluck('id');
+        foreach ($companyIds as $companyId) {
+            $model = AlarmEvents::with([
+                "device.customer.primary_contact",
+                "device.customer.secondary_contact",
+                "notes",
+                "category"
+            ])->where('company_id', $companyId)->where('alarm_status', 1);
 
 
 
-        $model->orderBy("alarm_start_datetime", "DESC");
-        $events = $model->get();
+            $model->orderBy("alarm_start_datetime", "DESC");
+            $events = $model->get();
 
-        $jsonFilePath = 'alarm-sensors/' . $companyId . '_live_events.json';
+            $jsonFilePath = 'alarm-sensors/' . $companyId . '_live_events.json';
 
 
-        $updatedJsonData = json_encode($events, JSON_PRETTY_PRINT);
+            $updatedJsonData = json_encode($events, JSON_PRETTY_PRINT);
 
-        return    Storage::put($jsonFilePath, $updatedJsonData);
+            Storage::put($jsonFilePath, $updatedJsonData);
+            if ($companyIdFilter != '')
+                return $updatedJsonData;
+        }
         //file_put_contents($jsonFilePath, $updatedJsonData);
     }
 

@@ -382,14 +382,21 @@ class CustomerAlarmEventsController extends Controller
     }
     public function getAlarmNotificationsList(Request $request)
     {
+        // 
+
+
+
+
         try {
             $jsonFilePath = 'alarm-sensors/' . $request->company_id . '_live_events.json';
             $fileContent = Storage::read($jsonFilePath);
             return json_decode($fileContent, true);
         } catch (\Exception $e) {
 
-            return [];
+            return (new ApiAlarmDeviceTemperatureLogsController())->createAlarmEventsJsonFile($request->company_id);
         }
+
+
 
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
@@ -397,10 +404,10 @@ class CustomerAlarmEventsController extends Controller
             "notes"
         ])->where('company_id', $request->company_id)->where('alarm_status', 1);
 
-        //$model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
+
 
         $model->orderBy("alarm_start_datetime", "DESC");
-        return $model->get();
+        return  $events = $model->get();
     }
     public function getAlarmEvents(Request $request)
     {

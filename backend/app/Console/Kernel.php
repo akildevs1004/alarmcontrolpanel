@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\SDKController;
 use App\Models\AccessControlTimeSlot;
@@ -56,6 +57,11 @@ class Kernel extends ConsoleKernel
             info($count . "companies has been updated");
         })->dailyAt('00:00');
 
+        $schedule->call(function () {
+            //udapte json file 
+            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+            info("companies  json file has been updated");
+        })->everyMinute();
 
 
         // $schedule

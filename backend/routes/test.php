@@ -48,6 +48,9 @@ use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
 Route::get("create_test_alarm", function (Request $request) {
 
+
+    //return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+
     $date = date("d-m-Y");
     $csvPath = "alarm-sensors/sensor-logs-$date.csv";
 

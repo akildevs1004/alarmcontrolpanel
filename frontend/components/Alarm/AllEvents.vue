@@ -99,7 +99,7 @@
     <v-dialog v-model="dialogTabViewCustomer" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Contacts</span>
+          <span style="color: black">Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -545,6 +545,7 @@ export default {
       filterResponseInMinutes: null,
       dialogTabViewCustomer: false,
       viewCustomerId: null,
+      popupEventText: "",
       filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
@@ -668,6 +669,15 @@ export default {
       this.dialogTabViewCustomer = false;
     },
     viewCustomerinfo(item) {
+      this.popupEventText =
+        item.device.customer.buildingtype.name +
+        " -    " +
+        item.alarm_type +
+        " alarm " +
+        "   Time " +
+        item.alarm_start_datetime +
+        " -  Priority " +
+        item.category.name;
       this.key += 1;
       this.viewCustomerId = item.customer_id;
       this.eventId = item.id;
