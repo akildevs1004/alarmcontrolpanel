@@ -116,8 +116,9 @@
             </v-row>
           </v-col>
           <v-col cols="6">
-            <v-row v-if="getUserType() == 'security'"
-              ><v-col cols="4">
+            <!-- <v-row v-if="getUserType() == 'security'"> -->
+            <v-row>
+              <v-col cols="4">
                 <div
                   style="
                     height: 170px;
@@ -205,7 +206,8 @@
                 </div>
               </v-col>
             </v-row>
-            <div v-if="getUserType() == 'security'">
+            <!-- <div v-if="getUserType() == 'security'"> -->
+            <div>
               <v-row
                 ><v-col cols="12">
                   <div>
@@ -229,7 +231,7 @@
                       min="0"
                       max="10"
                       class=""
-                      label="Enter PIN Number"
+                      label="Enter Contact PIN Number"
                       dense
                       outlined
                       flat
@@ -517,7 +519,8 @@ export default {
         if (this.event_payload[key] != "")
           customer.append(key, this.event_payload[key]);
       }
-      customer.append("security_id", this.$auth.user.security.id);
+      if (this.$auth.user.security?.id)
+        customer.append("security_id", this.$auth.user.security.id);
       customer.append("company_id", this.$auth.user.company_id);
       customer.append("customer_id", this.customer.id);
       customer.append("contact_id", this.globalContactDetails.id);
