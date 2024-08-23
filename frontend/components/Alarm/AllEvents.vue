@@ -474,6 +474,17 @@
                                     Contacts
                                   </v-list-item-title>
                                 </v-list-item>
+                                <v-list-item
+                                  v-if="can('branch_view')"
+                                  @click="viewCustomerinfo(item)"
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-icon color="secondary" small>
+                                      mdi mdi-share-all
+                                    </v-icon>
+                                    Forward
+                                  </v-list-item-title>
+                                </v-list-item>
                                 <!-- <v-list-item
                           v-if="can('branch_view')"
                           @click="viewNotes(item)"

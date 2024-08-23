@@ -198,10 +198,10 @@
               </template>
 
               <template v-slot:item.address="{ item }">
-                <div>{{ item.device.customer.area }}</div>
+                <div>{{ item.device.customer?.area || "---" }}</div>
               </template>
               <template v-slot:item.priority="{ item }">
-                <div>{{ item.category.name }}</div>
+                <div>{{ item.category?.name || "---" }}</div>
               </template>
               <template v-slot:item.status="{ item }">
                 <img
