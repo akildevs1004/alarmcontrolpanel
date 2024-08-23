@@ -5,6 +5,37 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogForwardEventDetails" width="800px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm - Forward Details</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogForwardEventDetails = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <AlarmForwardEvent
+              name="AlramCloseNotes"
+              :key="key"
+              :customer_id="customer_id"
+              @closeDialog="closeDialog"
+              :alarm_id="eventId"
+              :popupEventText="popupEventText"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogCloseAlarm" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -357,11 +388,6 @@
                             <div>
                               {{ item.alarm_type }}
                             </div>
-                            <!-- <div class="secondary-value">
-                      {{ item.device?.location }}
-                    </div> -->
-
-                            <!-- <div class="secondary-value">{{ item.type }}</div> -->
                           </template>
                           <template v-slot:item.property="{ item }">
                             {{
@@ -380,15 +406,6 @@
                                 )
                               }}
                             </div>
-                            <!-- <div class="secondary-value">
-                      {{
-                        item.alarm_end_datetime
-                          ? $dateFormat.formatDateMonthYear(
-                              item.alarm_end_datetime
-                            )
-                          : "---"
-                      }}
-                    </div> -->
                           </template>
                           <template v-slot:item.end_date="{ item }">
                             <div>
@@ -476,7 +493,7 @@
                                 </v-list-item>
                                 <v-list-item
                                   v-if="can('branch_view')"
-                                  @click="viewCustomerinfo(item)"
+                                  @click="eventForward(item)"
                                 >
                                   <v-list-item-title style="cursor: pointer">
                                     <v-icon color="secondary" small>
@@ -485,35 +502,6 @@
                                     Forward
                                   </v-list-item-title>
                                 </v-list-item>
-                                <!-- <v-list-item
-                          v-if="can('branch_view')"
-                          @click="viewNotes(item)"
-                        >
-                          <v-list-item-title style="cursor: pointer">
-                            <v-icon color="secondary" small> mdi-eye </v-icon>
-                            View Notes
-                          </v-list-item-title>
-                        </v-list-item>
-                        <v-list-item v-if="can('branch_edit')">
-                          <v-list-item-title
-                            style="cursor: pointer"
-                            @click="addNotes(item)"
-                          >
-                            <v-icon color="secondary" small>
-                              mdi-message-bulleted
-                            </v-icon>
-                            Add Notes
-                          </v-list-item-title>
-                        </v-list-item> -->
-                                <!-- <v-list-item v-if="can('branch_edit')">
-                  <v-list-item-title
-                    style="cursor: pointer"
-                    @click="deleteEvent(item.id)"
-                  >
-                    <v-icon color="error" small> mdi-delete </v-icon>
-                    Delete
-                  </v-list-item-title>
-                </v-list-item> -->
                               </v-list>
                             </v-menu>
                           </template>
@@ -542,16 +530,20 @@ import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEven
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerTabView.vue";
 
+import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
+
 export default {
   components: {
     EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
     AlarmCustomerTabView,
     AlramCloseNotes,
+    AlarmForwardEvent,
   },
   props: ["showFilters", "customer", "eventFilter"],
   data() {
     return {
+      dialogForwardEventDetails: false,
       dialogCloseAlarm: false,
       filterResponseInMinutes: null,
       dialogTabViewCustomer: false,
@@ -693,6 +685,21 @@ export default {
       this.viewCustomerId = item.customer_id;
       this.eventId = item.id;
       this.dialogTabViewCustomer = true;
+    },
+    eventForward(item) {
+      this.popupEventText =
+        item.device.customer.buildingtype.name +
+        " -    " +
+        item.alarm_type +
+        " alarm " +
+        "   Time " +
+        item.alarm_start_datetime +
+        " -  Priority " +
+        item.category.name;
+      this.key += 1;
+      this.viewCustomerId = item.customer_id;
+      this.eventId = item.id;
+      this.dialogForwardEventDetails = true;
     },
     viewNotes(item) {
       this.key += 1;

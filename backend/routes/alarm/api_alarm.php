@@ -2,9 +2,10 @@
 
 
 use App\Http\Controllers;
-
+use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
+use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\AlarmDashboard;
 use App\Http\Controllers\Customers\AlarmDashboardController;
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
@@ -139,3 +140,8 @@ Route::get('/alarm_events_download_pdf', [AlarmReportsController::class, 'alarmE
 Route::get('/alarm_events_export_excel', [AlarmReportsController::class, 'alarmEventsExportCsv']);
 
 Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);
+
+
+//notifications 
+
+Route::post("alarm_forward_notification", [AlarmNotificationController::class, "sendAlarmForwardNotification"]);
