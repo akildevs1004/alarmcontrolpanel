@@ -40,7 +40,7 @@ class Customers extends Model
 
     public function alarm_events()
     {
-        return $this->hasMany(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1)->latest();
+        return $this->hasMany(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1);
     }
 
     public function latest_alarm_event()

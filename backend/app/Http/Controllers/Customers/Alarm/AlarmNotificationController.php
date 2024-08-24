@@ -70,6 +70,8 @@ class AlarmNotificationController extends Controller
         $property_type = $alarm['device']['customer']['buildingtype']['name'];
         $address = $alarm['device']['customer']['area'];
         $city = $alarm['device']['customer']['city'];
+        $location = $alarm['device']['customer']['latitude'] . ',' . $alarm['device']['customer']['longitude'];
+
         $alarm_type = $alarm['alarm_type'];
         $priority = $alarm['category']['name'];
         $event_datetime = $this->changeDateformat($alarm['alarm_start_datetime']);
@@ -91,8 +93,8 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Customer: {$primary_contact}<br/>";
         $body_content1 .= "Property: {$property_type}<br/>";
         $body_content1 .= "Address: {$address}<br/>";
-        $body_content1 .= "City: {$city}<br/><br/><br/><br/>";
-
+        $body_content1 .= "City: {$city}<br/><br/> ";
+        $body_content1 .= "Google Map Link : https://maps.google.com/?q={$location}  <br/><br/><br/><br/>";
 
 
         $body_content1 .= "Thanks<br/>Xtreme Guard<br/>";
@@ -133,6 +135,7 @@ class AlarmNotificationController extends Controller
         $priority = $alarm['category']['name'];
         $event_datetime = $this->changeDateformat($alarm['alarm_start_datetime']);
         $company_name = $alarm['device']['company']['name'];
+        $location = $alarm['device']['customer']['latitude'] . ',' . $alarm['device']['customer']['longitude'];
 
         $primary_contact = 'User';
         if ($alarm['device']['customer']['primary_contact'])
@@ -151,6 +154,7 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Property: {$property_type}\n";
         $body_content1 .= "Address: {$address}\n";
         $body_content1 .= "City: {$city}\n\n\n";
+        $body_content1 .= "Google Map Link : https://maps.google.com/?q={$location}  <br/><br/><br/><br/>";
 
         $body_content1 .= "Thanks *Xtreme Guard*";
         (new WhatsappController())->sendWhatsappNotification($alarm['company'], $body_content1, $whatsapp_number, []);

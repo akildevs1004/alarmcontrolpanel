@@ -13,6 +13,9 @@ class AlarmEvents extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $with = ["category"];
+
+
     public function customer()
     {
         return $this->belongsTo(Customers::class, "customer_id", "id");

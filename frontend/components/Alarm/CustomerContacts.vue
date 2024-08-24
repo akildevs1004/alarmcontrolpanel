@@ -421,6 +421,22 @@
           <v-col cols="8" class="bold pr-0"
             >{{ customer?.latitude }} <br />
             {{ customer?.longitude }}
+            <br />
+            <a
+              style="text-decoration: none"
+              :href="
+                'https://maps.google.com/?q=' +
+                customer.latitude +
+                ',' +
+                customer.longitude
+              "
+              target="_blank"
+            >
+              <img
+                src="/google_map.jpg"
+                style="width: 30px; padding-top: 5px"
+              />
+            </a>
           </v-col>
         </v-row>
         <!-- <v-row>
@@ -441,7 +457,7 @@
             <a
               style="text-decoration: none"
               :href="
-                'http://maps.google.com/?q=' + customer
+                'https://maps.google.com/?q=' + customer
                   ? customer?.latitude + ',' + customer?.longitude
                   : '-'
               "

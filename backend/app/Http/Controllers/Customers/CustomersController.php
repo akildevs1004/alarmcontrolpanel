@@ -771,9 +771,17 @@ class CustomersController extends Controller
 
     public function customersForMap(Request $request)
     {
-        $model = Customers::with(["latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["alarm_events", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             ->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
+
+        $model->when($request->filled("commonSearch"), function ($query) use ($request) {
+
+            return $query->where("building_name", "ILIKE", "$request->commonSearch%")
+                ->orWhere("house_number", "ILIKE", "$request->commonSearch%")
+                ->orWhere("area", "ILIKE", "$request->commonSearch%");
+        });
+
 
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
 

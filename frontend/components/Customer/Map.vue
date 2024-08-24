@@ -305,7 +305,10 @@
                 </v-col>
               </v-col>
             </v-row> -->
-            <v-row>
+            <v-row
+              style="border-bottom: 0px solid #ddd"
+              @click="setCustomerLocationOnMap(item)"
+            >
               <v-col cols="1">{{ index + 1 }}) </v-col>
               <v-col>
                 <span style="font-size: 13px">
@@ -365,31 +368,8 @@
                     >
                   </v-col>
                 </v-row>
-                <!-- <v-row class="pa-0 ma-0">
-                  <v-col cols="4">Address</v-col>
-                  <v-col>
-                    {{ item.latest_alarm_event.alarm_type }}
-                  </v-col>
-                </v-row>
-                 <div></div>
-                <div>
-                  <div>{{ item.latest_alarm_event.zone }}</div>
-                  <div class="secondary-value">
-                    {{ item.latest_alarm_event.area }}
-
-                    {{
-                      item.latest_alarm_event.primary_contact?.first_name ??
-                      "---"
-                    }}
-                    {{
-                      item.latest_alarm_event.primary_contact?.last_name ??
-                      "---"
-                    }}
-                  </div>
-                </div> -->
               </v-col>
             </v-row>
-            <v-divider class="mt-3" color="#DDD"></v-divider>
           </template>
         </v-data-table>
       </v-col>
@@ -428,7 +408,7 @@ export default {
     Model: "Log",
     endpoint: "customers",
     payload: {},
-    loading: true,
+    loading: false,
     headers: [
       {
         text: "Building Name",
@@ -460,6 +440,9 @@ export default {
     response: "",
     buildingTypes: [],
     _id: null,
+
+    mapMarkersList: [],
+    mapInfowindowsList: [],
   }),
   computed: {},
   async mounted() {
@@ -467,7 +450,6 @@ export default {
   },
   created() {
     this._id = 4; //this.$route.params.id;
-    this.loading = true;
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -518,15 +500,17 @@ export default {
     async getMapKey() {
       let { data } = await this.$axios.get(`get-map-key`);
       this.mapKey = data;
-      if (this.mapKey) {
+      if (this.mapKey && this.loading == false) {
         this.loadGoogleMapsScript(this.initMap);
       }
     },
 
     async getCustomers() {
+      this.loading = true;
       let config = {
         params: {
           company_id: this.$auth.user.company_id,
+          commonSearch: this.commonSearch,
         },
       };
       let { data } = await this.$axios.get(`customers-for-map`, config);
@@ -547,44 +531,132 @@ export default {
       window.initMap = callback;
       document.head.appendChild(script);
     },
+
+    setCustomerLocationOnMap(item) {
+      if (item.latitude && item.longitude) {
+        const position = {
+          lat: parseFloat(item.latitude),
+          lng: parseFloat(item.longitude),
+        };
+
+        //close all infowindows
+        this.mapInfowindowsList.forEach((infowindow) => {
+          infowindow.close();
+        });
+
+        this.map.panTo(position);
+        let infowindow = this.mapInfowindowsList[item.id];
+        let marker = this.mapMarkersList[item.id];
+
+        infowindow.open(this.map, marker);
+      }
+    },
     initMap() {
       this.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12,
         center: { lat: 25.276987, lng: 55.296249 },
       });
       this.geocoder = new google.maps.Geocoder();
-      this.infowindow = new google.maps.InfoWindow();
+      // this.infowindow = new google.maps.InfoWindow();
       this.plotLocations();
     },
     plotLocations() {
-      this.data.forEach((e) => {
-        // { latitude: lat, longitude: lng, name, alarm }
-        const position = {
-          lat: parseFloat(e.latitude),
-          lng: parseFloat(e.longitude),
-        };
+      this.data.forEach((item) => {
+        try {
+          // { latitude: lat, longitude: lng, name, alarm }
+          const position = {
+            lat: parseFloat(item.latitude),
+            lng: parseFloat(item.longitude),
+          };
 
-        const icon = {
-          url: this.$utils.getRelaventMarkers(e.alarm), // Path to the customer image
-          scaledSize: new google.maps.Size(75, 75), // Adjust the size as needed
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
-        };
+          const icon = {
+            url: this.$utils.getRelaventMarkers(item.alarm), // Path to the customer image
+            scaledSize: new google.maps.Size(75, 75), // Adjust the size as needed
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
+          };
 
-        const marker = new google.maps.Marker({
-          position,
-          map: this.map,
-          title: e.name,
-          //icon: icon,
-        });
+          const marker = new google.maps.Marker({
+            position,
+            map: this.map,
+            title: item.name,
+            //icon: icon,
+          });
+          let html =
+            "<div style='width:250px'><div style='width:100px;float:left'>  " +
+            "<img style='width:100px;padding-right:5px;' src='" +
+            item.profile_picture +
+            "'/>" +
+            "</div>";
+          html +=
+            "<div style='width:150px; float:left'>" +
+            item.building_name +
+            " <br/> " +
+            item.city +
+            "<div>Landmark: " +
+            item.landmark +
+            "</div>" +
+            "" +
+            " ";
+          html +=
+            "<br/> <a target='_blank' href='https://www.google.com/maps?q=" +
+            item.latitude +
+            "," +
+            item.longitude +
+            "'>Google Map Link</a>" +
+            " ";
+          html += "</div></div>";
 
-        marker.addListener("click", () => {
-          this.dialog = true;
+          var infowindow = new google.maps.InfoWindow({
+            content: html,
+            map: this.map,
+            position: position,
+          });
+          infowindow.close();
+          this.mapInfowindowsList[item.id] = infowindow;
+          this.mapMarkersList[item.id] = marker;
 
-          this.customerInfo = e;
-        });
+          marker.addListener("mouseover", function () {
+            infowindow.open(this.map, this);
+          });
+
+          // marker.addListener("mouseout", function () {
+          //   infowindow.close();
+          // });
+          marker.addListener("click", () => {
+            this.dialog = true;
+
+            this.customerInfo = item;
+          });
+        } catch (e) {}
       });
     },
   },
 };
 </script>
+<style>
+.gm-style-iw-ch {
+  padding-top: 10px !important;
+}
+.gm-ui-hover-effect span {
+  width: 13px !important;
+  height: 11px !important;
+  margin: 0px !important;
+}
+.gm-ui-hover-effect {
+  width: 21px !important;
+  height: 19px !important;
+}
+/* .gm-ui-hover-effect {
+  height: 10px !important;
+  width: 10px !important;
+  right: 15px !important;
+}
+ 
+.gm-ui-hover-effect span {
+  height: 10px !important;
+  width: 10px !important;
+  margin: 5px;
+  color: red;
+} */
+</style>
