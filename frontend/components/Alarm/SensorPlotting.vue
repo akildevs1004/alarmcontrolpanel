@@ -18,41 +18,61 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="6"
-                style="position: relative"
-                class="dropzone"
-                @drop="onDrop"
-                @dragover="allowDrop"
-              >
-                <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
+              <v-col cols="6"
+                ><v-row
+                  ><v-col>
+                    <v-col
+                      cols="12"
+                      style="position: relative"
+                      class="dropzone"
+                      @drop="onDrop"
+                      @dragover="allowDrop"
+                    >
+                      <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
 
-                <img
-                  :src="item.picture"
-                  :width="IMG_PLOTTING_WIDTH"
-                  :height="IMG_PLOTTING_HEIGHT"
-                />
-                <span v-if="!loading">
-                  <div
-                    v-for="(plotting, index) in plottings"
-                    :key="index"
-                    style="position: absolute"
-                    :style="{ top: plotting.top, left: plotting.left }"
-                    draggable="false"
-                  >
-                    <v-icon v-if="plotting.alarm_event" class="alarm">
-                      mdi-alarm-light
-                    </v-icon>
-                    <v-img
-                      v-else
-                      draggable="true"
-                      @dragstart="dragStart($event, index)"
-                      style="width: 23px"
-                      :src="getRelaventImage(plotting.label)"
-                    ></v-img>
-                  </div>
-                </span>
-              </v-col>
+                      <img
+                        :src="item.picture"
+                        :width="IMG_PLOTTING_WIDTH"
+                        :height="IMG_PLOTTING_HEIGHT"
+                      />
+                      <span v-if="!loading">
+                        <div
+                          v-for="(plotting, index) in plottings"
+                          :key="index"
+                          style="position: absolute"
+                          :style="{ top: plotting.top, left: plotting.left }"
+                          draggable="false"
+                        >
+                          <v-icon v-if="plotting.alarm_event" class="alarm">
+                            mdi-alarm-light
+                          </v-icon>
+                          <v-img
+                            v-else
+                            draggable="true"
+                            @dragstart="dragStart($event, index)"
+                            style="width: 23px"
+                            :src="getRelaventImage(plotting.label)"
+                          ></v-img>
+                        </div>
+                      </span>
+                    </v-col>
+
+                    <v-col
+                      cols="12"
+                      style="
+                        position: relative;
+                        height: 50px;
+                        border: 1px solid red;
+                      "
+                      class="dropzone"
+                      @drop="deleteOnDrop"
+                      @dragover="allowDrop"
+                      >DELETE ZONE - Drag Icon here to delete
+                    </v-col></v-col
+                  ></v-row
+                ></v-col
+              >
+
               <v-col cols="6">
                 <v-row no-gutters>
                   <v-col cols="12">
@@ -123,7 +143,7 @@
                 </v-row>
 
                 <v-row>
-                  <v-col class="text-right align-right"
+                  <v-col cols="6" class="text-right align-right"
                     ><v-btn dense small color="primary" @click="submit()"
                       >Save</v-btn
                     ></v-col
@@ -195,6 +215,14 @@ export default {
         // { id: ``, name: "Select Device" },
         ...data,
       ];
+
+      this.device_ids = [];
+      await this.devices.forEach((element) => {
+        this.device_ids.push(element.id);
+      });
+      console.log(this.device_ids);
+
+      await this.getSensors(this.device_ids);
     },
 
     async getExistingPlottings() {
@@ -255,6 +283,26 @@ export default {
       this.draggingIndex = null;
 
       ////////await this.submit();
+    },
+    async deleteOnDrop(event) {
+      if (confirm(`Are you sure you want to delete`)) {
+        const dropZoneRect = event.currentTarget.getBoundingClientRect();
+        const offsetX = ""; // event.clientX - dropZoneRect.left;
+        const offsetY = event.clientY - dropZoneRect.top;
+
+        this.plottings[this.draggingIndex].left = "-500px"; // `${offsetX}px`;
+        this.plottings[this.draggingIndex].top = "-500px"; // `${offsetY}px`;
+
+        this.draggingIndex = null;
+
+        await this.submit();
+        await this.getDevices();
+        await this.getExistingPlottings();
+        if (process) {
+          this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
+          this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+        }
+      }
     },
 
     async submit() {
