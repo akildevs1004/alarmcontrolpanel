@@ -270,102 +270,71 @@
             </v-container>
           </template>
           <template v-slot:item.building_name="{ item, index }">
-            <!-- <v-row>
-              <v-col>
-                <v-col
-                  cols="5"
-                  class="pt-0"
-                  style="
-                    font-size: 11px;
-                    color: #000000;
-                    padding-left: 0px;
-                    padding-right: 0px;
-                    line-height: 32px;
-                    margin: auto;
-                  "
-                >
-                    <v-row>
-                    <v-col cols="8"
-                      ><v-icon color="#92d050">mdi mdi-square-medium</v-icon
-                      >Online</v-col
-                    ><v-col cols="4" style="padding-left: 0px">{{
-                      categories ? categories.online : "0"
-                    }}</v-col>
-                  </v-row>
-                  <v-divider color="#dddddd" />
-                  <v-row>
-                    <v-col cols="8"
-                      ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon
-                      >Offline</v-col
-                    ><v-col cols="4" style="padding-left: 0px">{{
-                      categories ? categories.total - categories.online : "0"
-                    }}</v-col>
-                  </v-row>
-                  <v-divider color="#dddddd" />  
-                </v-col>
-              </v-col>
-            </v-row> -->
             <v-row
               style="border-bottom: 0px solid #ddd"
               @click="setCustomerLocationOnMap(item)"
             >
               <v-col cols="1">{{ index + 1 }}) </v-col>
               <v-col>
-                <span style="font-size: 13px">
+                <span style="font-size: 13px; margin-bottom: 15px">
                   {{ item.building_name || "" }} ,{{ item.city }}
                 </span>
-                <v-row>
-                  <v-col cols="4"> Time :</v-col>
-                  <v-col>
-                    {{
-                      $dateFormat.formatDateMonthYear(
-                        item.latest_alarm_event.alarm_start_datetime
-                      )
-                    }}
-                  </v-col>
-                </v-row>
-                <v-row class="pa-0 ma-0">
-                  <v-col cols="4" class="pl-0">Alarm Type:</v-col>
-                  <v-col cols="4">
-                    <v-row
-                      ><v-col cols="2" style="padding-top: 15px"
-                        ><img
-                          v-if="
-                            item.latest_alarm_event.alarm_type == 'Burglary'
-                          "
+                <div style="height: 10px">&nbsp;</div>
+                <v-row
+                  :key="index1 + 11"
+                  v-for="(alarm, index1) in item.alarm_events"
+                >
+                  <v-col cols="12">
+                    <v-row>
+                      <v-col
+                        cols="1"
+                        style="max-width: 20px; padding-top: 16px"
+                      >
+                        <img
+                          v-if="alarm.alarm_type == 'Burglary'"
                           title="Burglary"
                           style="width: 15px; float: left"
-                          src="/device-icons/burglary.png" />
+                          src="/device-icons/burglary.png"
+                        />
 
                         <img
-                          v-if="
-                            item.latest_alarm_event.alarm_type == 'Temperature'
-                          "
+                          v-if="alarm.alarm_type == 'Temperature'"
                           title="Temperature"
                           style="width: 15px; float: left"
-                          src="/device-icons/temperature.png" />
+                          src="/device-icons/temperature.png"
+                        />
 
                         <img
-                          v-if="item.latest_alarm_event.alarm_type == 'Medical'"
+                          v-if="alarm.alarm_type == 'Medical'"
                           title="Medical"
                           style="width: 15px; float: left"
-                          src="/device-icons/medical.png" />
+                          src="/device-icons/medical.png"
+                        />
 
                         <img
-                          v-if="item.latest_alarm_event.alarm_type == 'Fire'"
+                          v-if="alarm.alarm_type == 'Fire'"
                           title="Fire"
                           style="width: 15px; float: left"
-                          src="/device-icons/fire.png" />
+                          src="/device-icons/fire.png"
+                        />
 
                         <img
-                          v-if="item.latest_alarm_event.alarm_type == 'Water'"
+                          v-if="alarm.alarm_type == 'Water'"
                           title="Water"
                           style="width: 15px; float: left"
-                          src="/device-icons/water.png" /></v-col
-                      ><v-col cols="8">{{
-                        item.latest_alarm_event.alarm_type
-                      }}</v-col></v-row
-                    >
+                          src="/device-icons/water.png"
+                        />
+                      </v-col>
+
+                      <v-col cols="7">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            item.latest_alarm_event.alarm_start_datetime
+                          )
+                        }}
+                      </v-col>
+                      <v-col cols="4"> {{ alarm.alarm_type }}</v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
               </v-col>
@@ -634,29 +603,3 @@ export default {
   },
 };
 </script>
-<style>
-.gm-style-iw-ch {
-  padding-top: 10px !important;
-}
-.gm-ui-hover-effect span {
-  width: 13px !important;
-  height: 11px !important;
-  margin: 0px !important;
-}
-.gm-ui-hover-effect {
-  width: 21px !important;
-  height: 19px !important;
-}
-/* .gm-ui-hover-effect {
-  height: 10px !important;
-  width: 10px !important;
-  right: 15px !important;
-}
- 
-.gm-ui-hover-effect span {
-  height: 10px !important;
-  width: 10px !important;
-  margin: 5px;
-  color: red;
-} */
-</style>

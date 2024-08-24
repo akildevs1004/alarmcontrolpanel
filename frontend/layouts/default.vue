@@ -2211,6 +2211,18 @@ button {
     width: 100px !important;
   }
 }
+.gm-style-iw-ch {
+  padding-top: 10px !important;
+}
+.gm-ui-hover-effect span {
+  width: 13px !important;
+  height: 11px !important;
+  margin: 0px !important;
+}
+.gm-ui-hover-effect {
+  width: 21px !important;
+  height: 19px !important;
+}
 </style>
 
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

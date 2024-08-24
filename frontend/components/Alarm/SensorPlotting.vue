@@ -1,25 +1,25 @@
 <template>
   <div class="text-centers">
-    <v-dialog v-model="dialog" width="1100">
+    <v-dialog v-model="dialog" width="1000">
       <template v-slot:activator="{ on, attrs }">
         <v-icon color="secondary" small v-bind="attrs" v-on="on">
-          mdi-pencil
+          mdi-leak
         </v-icon>
         Sensor Plotting
       </template>
 
       <v-card>
-        <v-card-title class="primary">
-          <span class="white--text">Sensor Plotting</span>
+        <v-card-title dense class="popup_background_noviolet">
+          <span class="black--text">Sensor Plotting</span>
           <v-spacer></v-spacer>
-          <v-icon color="white" @click="dialog = false">mdi-close</v-icon>
+          <v-icon color="black" @click="dialog = false">mdi-close</v-icon>
         </v-card-title>
 
         <v-card-text>
           <v-container>
             <v-row>
               <v-col
-                cols="8"
+                cols="6"
                 style="position: relative"
                 class="dropzone"
                 @drop="onDrop"
@@ -53,10 +53,11 @@
                   </div>
                 </span>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-row no-gutters>
                   <v-col cols="12">
                     <v-autocomplete
+                      label="Select Device "
                       multiple
                       @change="getSensors(device_ids)"
                       outlined
@@ -67,6 +68,9 @@
                       v-model="device_ids"
                     ></v-autocomplete>
                   </v-col>
+                  <v-col cols="12" v-if="device_ids.length == 0"
+                    >Select Devices List</v-col
+                  >
                   <v-col
                     class="ma-1"
                     cols="12"
@@ -79,24 +83,51 @@
                         style="border: 1px solid #cdcccc; border-radius: 3px"
                         class="py-2 px-3"
                       >
-                        <span
+                        Device: {{ getDeviceName(device_id) }}
+
+                        <div
                           v-for="(plotting, plotIndex) in plottings"
                           :key="plotIndex"
                         >
-                          <div v-if="plotIndex == 0">
-                            {{ getDeviceName(device_id) }}
-                          </div>
-                          <v-img
+                          <div
                             v-if="device_id == plotting.device_id"
-                            draggable="true"
-                            @dragstart="dragStart($event, plotIndex)"
-                            style="width: 23px; float: left; margin: 10px"
-                            :src="getRelaventImage(plotting.label)"
-                          ></v-img>
-                        </span>
+                            style="color: green"
+                          >
+                            <v-img
+                              :title="plotting.label"
+                              v-if="plotting.top == '-500px'"
+                              draggable="true"
+                              @dragstart="dragStart($event, plotIndex)"
+                              style="width: 23px; float: left; margin: 10px"
+                              :src="getRelaventImage(plotting.label)"
+                            ></v-img>
+
+                            <v-img
+                              v-else
+                              :title="plotting.label"
+                              disabled="true"
+                              draggable="false"
+                              style="
+                                width: 23px;
+                                float: left;
+                                margin: 10px;
+                                filter: grayscale(100%);
+                              "
+                              :src="getRelaventImage(plotting.label)"
+                            ></v-img>
+                          </div>
+                        </div>
                       </v-col>
                     </v-row>
                   </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col class="text-right align-right"
+                    ><v-btn dense small color="primary" @click="submit()"
+                      >Save</v-btn
+                    ></v-col
+                  >
                 </v-row>
               </v-col>
             </v-row>
@@ -124,6 +155,16 @@ export default {
       IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "800px",
     };
   },
+  watch: {
+    async dialog() {
+      await this.getDevices();
+      await this.getExistingPlottings();
+      if (process) {
+        this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
+        this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+      }
+    },
+  },
   async created() {
     await this.getDevices();
     await this.getExistingPlottings();
@@ -133,6 +174,11 @@ export default {
     }
   },
   methods: {
+    getPlotIndex(sensorId) {
+      let result = this.plottings.findIndex((e) => e.device_id == sensorId);
+
+      return result;
+    },
     getDeviceName(device_id) {
       return this.devices.find((e) => e.id == device_id).name || "";
     },
@@ -175,6 +221,8 @@ export default {
       };
       let { data: sensors } = await this.$axios.get("sensor-list", config);
 
+      this.sensors = sensors;
+      //display on map
       this.plottings = sensors.map((sensor) => {
         let plotting = this.existingPlottings.find(
           (e) => e.sensor_id == sensor.id
@@ -206,7 +254,7 @@ export default {
 
       this.draggingIndex = null;
 
-      await this.submit();
+      ////////await this.submit();
     },
 
     async submit() {
@@ -215,7 +263,6 @@ export default {
           customer_building_picture_id: this.item.id,
           plottings: this.plottings,
         });
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -223,11 +270,12 @@ export default {
 
     getRelaventImage(label) {
       let relaventImage = {
-        Burglary: "/device-icons/burglary.png",
-        Medical: "/device-icons/temperature.png",
-        Fire: "/device-icons/medical.png",
-        Water: "/device-icons/fire.png",
-        Temperature: "/device-icons/water.png",
+        Burglary: "/alarm-icons/burglary.png",
+        Medical: "/alarm-icons/temperature.png",
+        Fire: "/alarm-icons/medical.png",
+        Water: "/alarm-icons/water.png",
+        Temperature: "/alarm-icons/temperature.png",
+        Humidity: "/alarm-icons/humidity.png",
       };
       return relaventImage[label] ?? "Unknown";
     },

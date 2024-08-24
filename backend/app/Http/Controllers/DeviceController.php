@@ -49,7 +49,11 @@ class DeviceController extends Controller
 
     public function sensorList()
     {
-        return DeviceZones::whereIn('device_id', request('device_ids', []))->get(["id", "sensor_name as label", "device_id"]);
+        $result1 = DeviceZones::whereIn('device_id', request('device_ids', []))->get(["id", "sensor_name as label", "device_id"])->toArray();
+
+        $result2 = Device::whereIn('id', request('device_ids', []))->where("device_type", "!=", "Control Panel")->get(["id", "device_type as label", "id as device_id"])->toArray();
+
+        return array_merge(($result1), ($result2));
     }
 
     public function index(Request $request)
