@@ -9,7 +9,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text class="p-0" style="padding-left: 0px">
+        <v-card-text class="p-0" style="padding: 0px">
           <Devices style="padding: 0px" :key="key" :eventFilter="'disamed'" />
         </v-card-text>
       </v-card>

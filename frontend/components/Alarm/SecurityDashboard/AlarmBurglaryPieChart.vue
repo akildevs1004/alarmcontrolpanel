@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
-    <v-dialog v-model="dialogEventsList" max-width="900px">
+    <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background">
           <span dense>Burglary Events</span>
@@ -9,9 +9,9 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text class="p-0" style="padding-left: 0px">
+        <v-card-text style="padding: 20px; padding-left: 0px">
           <AlamAllEvents
-            style="padding: 0px"
+            style="padding: 0px; padding-top: 0px"
             :key="key"
             :popup="true"
             :eventFilter="'Burglary'"

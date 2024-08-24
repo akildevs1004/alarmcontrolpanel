@@ -9,7 +9,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text class="p-0" style="padding-left: 0px">
+        <v-card-text class="p-0" style="padding: 0px; padding-right: 13px">
           <AlarmCustomersList
             style="padding: 0px"
             :key="key"

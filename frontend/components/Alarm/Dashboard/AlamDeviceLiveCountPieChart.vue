@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0px; width: 100%; height: auto">
-    <v-dialog v-model="dialogDevicesList" max-width="900px">
+    <v-dialog v-model="dialogDevicesList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background">
           <span dense>Offline Devices</span>
@@ -9,7 +9,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text class="p-0" style="padding-left: 0px">
+        <v-card-text class="p-0" style="padding: 0px">
           <Devices style="padding: 0px" :key="key" :eventFilter="'offline'" />
         </v-card-text>
       </v-card>

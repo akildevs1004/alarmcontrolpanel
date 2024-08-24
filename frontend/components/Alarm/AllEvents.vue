@@ -5,10 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogViewLogs" width="1000px">
+    <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm - Logs</span>
+          <span style="color: black">Alarm - Note Logs #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -22,8 +22,8 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text>
-          <v-container style="min-height: 100px">
+        <v-card-text style="padding: 0px">
+          <v-container style="min-height: 100px; padding-left: 0px">
             <SecurityAlarmNotes
               v-if="customer"
               :alarmId="eventId"
@@ -37,7 +37,9 @@
     <v-dialog v-model="dialogForwardEventDetails" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm - Forward Details</span>
+          <span style="color: black"
+            >Alarm - Forward Details #{{ eventId }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -186,7 +188,11 @@
       </v-card>
     </v-dialog>
     <v-row class="p-0" style="padding-top: 0px">
-      <v-col cols="12" class="text-right" style="padding-top: 0px; z-index: 9">
+      <v-col
+        cols="12"
+        class="text-right"
+        style="padding-top: 0px; z-index: 9; padding-right: 0px"
+      >
         <v-card class="elevation-2">
           <v-card-text>
             <v-row class="mt-0">
