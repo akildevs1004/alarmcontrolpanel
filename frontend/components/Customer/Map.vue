@@ -329,7 +329,7 @@
                       <v-col cols="7">
                         {{
                           $dateFormat.formatDateMonthYear(
-                            item.latest_alarm_event.alarm_start_datetime
+                            alarm.alarm_start_datetime
                           )
                         }}
                       </v-col>
