@@ -46,6 +46,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
 
+Route::get("sync_alarm_logs", function (Request $request) {
+    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+});
 Route::get("create_test_alarm", function (Request $request) {
 
 
