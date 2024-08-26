@@ -140,7 +140,11 @@
           </template>
           <template v-slot:item.armed_datetime="{ item }">
             <div>
-              {{ $dateFormat.formatDateMonthYear(item.armed_datetime) }}
+              {{
+                item.armed_datetime
+                  ? $dateFormat.formatDateMonthYear(item.armed_datetime)
+                  : "---"
+              }}
             </div>
           </template>
           <template v-slot:item.duration="{ item }">
