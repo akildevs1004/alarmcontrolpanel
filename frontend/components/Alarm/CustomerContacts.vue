@@ -426,9 +426,9 @@
               style="text-decoration: none"
               :href="
                 'https://maps.google.com/?q=' +
-                customer.latitude +
+                customer?.latitude +
                 ',' +
-                customer.longitude
+                customer?.longitude
               "
               target="_blank"
             >

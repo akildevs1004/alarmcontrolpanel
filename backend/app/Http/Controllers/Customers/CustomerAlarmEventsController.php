@@ -9,6 +9,7 @@ use App\Models\AlarmLogs;
 use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\Customers\CustomerContacts;
+use App\Models\Device;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -144,6 +145,7 @@ class CustomerAlarmEventsController extends Controller
         if ($request->event_id > 0) {
             $alarmModel = AlarmEvents::where("id", $request->event_id);
             $alarm_start_datetime = $alarmModel->first()->alarm_start_datetime;
+            $device_serial_number = $alarmModel->first()->serial_number;
             $data = [];
             $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
                 ->where("alarm_stop_pin", $request->input('primary_pin_number'))
@@ -210,6 +212,18 @@ class CustomerAlarmEventsController extends Controller
 
             //udapte json file 
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
+
+            //turnoff device alarm status 
+            if ($device_serial_number != '') {
+                $alarm_event_active_count = AlarmEvents::where("serial_number", $device_serial_number)->where("alarm_status", 1)->count();
+                if ($alarm_event_active_count == 0) {
+                    $device_Data = [];
+                    $device_Data["alarm_status"] = 0;
+                    $device_Data["alarm_end_datetime"] = date('Y-m-d H:i:s');
+
+                    Device::where("serial_number", $device_serial_number)->update($device_Data);
+                }
+            }
 
             return $this->response('Alarm stopped Successfully', null, true);
         } else {
@@ -288,6 +302,7 @@ class CustomerAlarmEventsController extends Controller
                     if ($request->alarm_id > 0) {
                         $alarmModel = AlarmEvents::where("id", $request->alarm_id);
                         $alarm_start_datetime = $alarmModel->first()->alarm_start_datetime;
+                        $device_serial_number = $alarmModel->first()->serial_number;
                         $data2 = [];
                         if ($request->filled("contact_type")) {
 
@@ -352,8 +367,17 @@ class CustomerAlarmEventsController extends Controller
                         //udapte json file 
                         (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
 
+                        //turnoff device alarm status 
+                        if ($device_serial_number != '') {
+                            $alarm_event_active_count = AlarmEvents::where("serial_number", $device_serial_number)->where("alarm_status", 1)->count();
+                            if ($alarm_event_active_count == 0) {
+                                $device_Data = [];
+                                $device_Data["alarm_status"] = 0;
+                                $device_Data["alarm_end_datetime"] = date('Y-m-d H:i:s');
 
-
+                                Device::where("serial_number", $device_serial_number)->update($device_Data);
+                            }
+                        }
                         return $this->response('Alarm stopped Successfully', null, true);
                     } else {
                         return $this->response('Alarm Details are not available', null, false);

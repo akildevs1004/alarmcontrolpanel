@@ -114,9 +114,13 @@ export default {
       }
     },
     openInGoogleMaps() {
-      if (this.customer && this.customer.latitude && this.customer.longitude) {
-        const lat = parseFloat(this.customer.latitude);
-        const lng = parseFloat(this.customer.longitude);
+      if (
+        this.customer &&
+        this.customer?.latitude &&
+        this.customer?.longitude
+      ) {
+        const lat = parseFloat(this.customer?.latitude);
+        const lng = parseFloat(this.customer?.longitude);
         const url = `https://www.google.com/maps?q=${lat},${lng}`;
         window.open(url, "_blank");
       }

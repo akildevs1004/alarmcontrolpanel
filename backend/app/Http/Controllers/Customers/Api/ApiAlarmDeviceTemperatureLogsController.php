@@ -346,6 +346,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             $updatedJsonData = json_encode($events, JSON_PRETTY_PRINT);
 
             Storage::put($jsonFilePath, $updatedJsonData);
+
+
+
             if ($companyIdFilter != '')
                 return $updatedJsonData;
         }
