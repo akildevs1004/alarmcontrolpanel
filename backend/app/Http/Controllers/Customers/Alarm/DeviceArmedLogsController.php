@@ -15,6 +15,15 @@ class DeviceArmedLogsController extends Controller
      */
     public function index(Request $request)
     {
+
+        $model = $this->filter($request);
+
+
+        return $model->paginate($request->perPage ?? 10);;
+    }
+
+    public function filter($request)
+    {
         $model = DeviceArmedLogs::with(["device"])->where("company_id", $request->company_id);
 
 
@@ -36,11 +45,7 @@ class DeviceArmedLogsController extends Controller
         if ($request->filled("date_from")) {
             $model->whereBetween('armed_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
         }
-        $model->orderBy("armed_datetime", "DESC");
-
-
-
-        return $model->paginate($request->perPage ?? 10);;
+        return  $model->orderBy("armed_datetime", "DESC");
     }
 
     /**

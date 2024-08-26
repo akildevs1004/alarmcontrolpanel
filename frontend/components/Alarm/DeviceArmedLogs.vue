@@ -5,72 +5,12 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogAddCustomerNotes" width="600px">
-      <v-card>
-        <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes </span>
-          <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="
-              closeDialog();
-              dialogAddCustomerNotes = false;
-            "
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
 
-        <v-card-text>
-          <v-container style="min-height: 100px">
-            <EditAlarmCustomerEventNotes
-              name="EditAlarmCustomerEventNotes"
-              :key="key"
-              :customer_id="customer_id"
-              @closeDialog="closeDialog"
-              :alarmId="eventId"
-            />
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="dialogNotesList" width="900px">
-      <v-card>
-        <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes List</span>
-          <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="
-              closeDialog();
-              dialogNotesList = false;
-            "
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container style="min-height: 100px">
-            <AlarmEventNotesListView
-              name="AlarmEventNotesListView"
-              :key="key"
-              :customer_id="customer_id"
-              @closeDialog="closeDialog"
-              :alarm_id="eventId"
-              showOptions="true"
-            />
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
-          <v-col cols="8"></v-col>
-          <v-col cols="4" class="text-right" style="width: 450px">
+          <v-col cols="6"></v-col>
+          <v-col cols="6" class="text-right" style="max-width: 660px">
             <v-row>
               <v-col cols="1" class="mt-2">
                 <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
@@ -78,12 +18,12 @@
               <v-col cols="5"
                 ><v-text-field
                   style="padding-top: 7px"
-                  width="150px"
+                  width="200px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
                   v-model="commonSearch"
-                  label="Search"
+                  label="Device Name"
                   dense
                   outlined
                   type="text"
@@ -92,7 +32,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="6">
+              <v-col cols="4">
                 <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
@@ -101,6 +41,73 @@
                   :defaultFilterType="1"
                   :height="'40px'"
               /></v-col>
+              <v-col cols="2" style="width: 100px; margin-top: 10px">
+                <v-menu bottom right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <span v-bind="attrs" v-on="on">
+                      <v-icon dark-2 icon color="violet" small>mdi-file</v-icon>
+                      Print/PDF
+                    </span>
+                  </template>
+                  <v-list width="100" dense>
+                    <v-list-item @click="downloadOptions(`print`)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_print.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            Print
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="downloadOptions('download')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_pdf.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            PDF
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item @click="downloadOptions('excel')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_excel.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            EXCEL
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -247,63 +254,27 @@ export default {
 
       this.getDataFromApi();
     },
-    UpdateAlarmStatus(item, status) {
-      if (status == 0) {
-        if (confirm("Are you sure you want to TURN OFF the Alarm")) {
-          let options = {
-            params: {
-              company_id: this.$auth.user.company_id,
-              customer_id: this.customer_id,
-              event_id: item.id,
-              status: status,
-            },
-          };
-          this.loading = true;
-          this.$axios
-            .post(`/update-device-alarm-event-status-off`, options.params)
-            .then(({ data }) => {
-              this.getDataFromApi();
-              if (!data.status) {
-                if (data.message == "undefined") {
-                  this.response = "Try again. No connection available";
-                } else this.response = "Try again. " + data.message;
-                this.snackbar = true;
+    downloadOptions(option) {
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
 
-                return;
-              } else {
-                setTimeout(() => {
-                  this.loading = false;
-                  this.response = data.message;
-                  this.snackbar = true;
-                }, 2000);
-
-                return;
-              }
-            })
-            .catch((e) => console.log(e));
-        }
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
       }
-    },
-    deleteEvent(id) {
-      if (confirm("Are you sure want to delete Alarm Event notes?")) {
-        this.loading = true;
-        let options = {
-          params: {
-            company_id: this.$auth.user.company_id,
-            id: id,
-          },
-        };
 
-        try {
-          this.$axios.delete(`delete-event`, options).then(({ data }) => {
-            this.snackbar = true;
-            this.response = "Event Note Deleted Successfully";
-            this.getDataFromApi();
-            this.loading = false;
-          });
-        } catch (e) {}
-      }
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/device_armed_logs_print_pdf";
+      if (option == "excel") url += "/device_armed_logs_export_excel";
+      if (option == "download") url += "/device_armed_logs_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&date_from=" + this.date_from;
+      url += "&date_to=" + this.date_to;
+      if (this.commonSearch) url += "&common_search=" + this.commonSearch;
+
+      //  url += "&alarm_status=" + this.filterAlarmStatus;
+
+      window.open(url, "_blank");
     },
+
     getDataFromApi() {
       this.loading = true;
 

@@ -144,6 +144,11 @@ Route::get('/alarm_events_print_pdf', [AlarmReportsController::class, 'alarmEven
 Route::get('/alarm_events_download_pdf', [AlarmReportsController::class, 'alarmEventsDownloadPdf']);
 Route::get('/alarm_events_export_excel', [AlarmReportsController::class, 'alarmEventsExportCsv']);
 
+Route::get('/device_armed_logs_print_pdf', [AlarmReportsController::class, 'deviceArmedLogsPrintPdf']);
+Route::get('/device_armed_logs_download_pdf', [AlarmReportsController::class, 'deviceArmedLogsDownloadPdf']);
+Route::get('/device_armed_logs_export_excel', [AlarmReportsController::class, 'deviceArmedLogsExportExcel']);
+
+
 Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);
 
 

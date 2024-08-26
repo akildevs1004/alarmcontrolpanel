@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customers\Reports;
 
 use App\Exports\AlarmEventsExport;
+use App\Exports\DeviceArmedExport;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Models\AlarmLogs;
 use App\Models\AttendanceLog;
@@ -51,8 +53,40 @@ class AlarmReportsController extends Controller
         $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
         return $pdf->stream('report.pdf');
     }
+    //----------------------------------------DEVICE ARMED REPORTS 
+    public function deviceArmedLogsPrintPdf(Request $request)
+    {
+        $model =   (new DeviceArmedLogsController())->filter($request);
+        $model->orderBy("armed_datetime", "asc");
+        $reports = $model->get();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
 
 
+        $pdf = Pdf::loadView('alarm_reports/device_armed_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
+        return $pdf->stream('report.pdf');
+    }
+    public function deviceArmedLogsDownloadPdf(Request $request)
+    {
+        $model =   (new DeviceArmedLogsController())->filter($request);
+        $model->orderBy("armed_datetime", "asc");
+        $reports = $model->get();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+
+        $pdf = Pdf::loadView('alarm_reports/device_armed_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
+        return $pdf->download('report.pdf');
+    }
+    public function deviceArmedLogsExportExcel(Request $request)
+    {
+        $model =   (new DeviceArmedLogsController())->filter($request);
+        $model->orderBy("armed_datetime", "asc");
+        $reports = $model->get();
+
+        $file_name =  'Device Armed Reports from ' . $request->date_from . ' to ' . $request->date_to . ' .xlsx';
+
+        return Excel::download((new DeviceArmedExport($reports)), $file_name);
+    }
+    //----------------------------------------------------------------
     public function sample_pdf_pagenumbers()
     {
         $reports =   AttendanceLog::where("UserID", "1001")->get();

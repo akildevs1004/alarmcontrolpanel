@@ -294,7 +294,7 @@
               Settings
             </v-tab>
             <v-tab href="#tab-10">
-              <v-icon>mdi mdi-account-cog</v-icon>
+              <v-icon>mdi mdi-shield-sun</v-icon>
               Armed
             </v-tab>
           </v-tabs>
