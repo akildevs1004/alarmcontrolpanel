@@ -155,7 +155,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                     $device = Device::where("serial_number", $serial_number)->first();
-                    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
@@ -192,7 +191,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
-                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "<br/>\n");
+                            $message[] =  $this->getMeta("New Alarm Log Is interted With zone", $log_time . "<br/>\n");
                             $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                         } else {
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
@@ -222,7 +221,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
-                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "<br/>\n");
+                            $message[] =  $this->getMeta("New Alarm Log Is interted without Zone", $log_time . "<br/>\n");
                             $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                         } else {
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
@@ -238,6 +237,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
             // try {
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
+            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {
 
