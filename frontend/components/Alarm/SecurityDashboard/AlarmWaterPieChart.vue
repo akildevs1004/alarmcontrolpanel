@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import AlamAllEvents from "../../Alarm/AllEvents.vue";
+import AlamAllEvents from "../../Alarm/ComponentAllEvents.vue";
 export default {
   props: ["name"],
   components: { AlamAllEvents },

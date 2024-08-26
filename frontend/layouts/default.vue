@@ -747,6 +747,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_armed_reports: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -787,7 +791,7 @@ export default {
       clipped: true,
 
       miniVariant: true,
-      title: "MyTime2Cloud",
+      title: "Alarm Control Panel",
       socket: null,
       logout_btn: {
         icon: "mdi-logout",
@@ -1006,6 +1010,10 @@ export default {
         "alarm-security": {
           name: "alarm_security",
           path: "/alarm/security",
+        },
+        "alarm-armedreports": {
+          name: "alarm_armed_reports",
+          path: "/alarm/armedreports",
         },
       };
 

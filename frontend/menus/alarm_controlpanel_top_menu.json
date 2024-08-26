@@ -40,5 +40,12 @@
     "to": "/alarm/reports",
     "menu": "alarm_reports",
     "module": "topmenu"
+  },
+  {
+    "icon": "mdi mdi-calendar-star-four-points",
+    "title": "Armed",
+    "to": "/alarm/armedreports",
+    "menu": "alarm_armed_reports",
+    "module": "topmenu"
   }
 ]

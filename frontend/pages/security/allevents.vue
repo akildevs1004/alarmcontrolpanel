@@ -6,12 +6,12 @@
       </v-snackbar>
     </div>
 
-    <AllEvents :showFilters="true" />
+    <AllEvents name="AllEvents2" :showFilters="true" />
   </div>
 </template>
 
 <script>
-import AllEvents from "../../components/Alarm/AllEvents.vue";
+import AllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 // import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
 export default {

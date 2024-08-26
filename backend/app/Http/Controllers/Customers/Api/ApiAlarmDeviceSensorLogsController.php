@@ -17,6 +17,7 @@ use App\Models\Community\AttendanceLog;
 use App\Models\Company;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
+use App\Models\DeviceArmedLogs;
 use App\Models\DeviceNotificationsManagers;
 use App\Models\ReportNotification;
 use App\Models\ReportNotificationLogs;
@@ -141,7 +142,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                 //-----------Alarm Control panel - Wifi Model 
-                //$message[] = $event;
+
                 if ($event == 'HEARTBEAT') {
                     Device::where("serial_number", $serial_number)->update(
                         ["status_id" => 1, "last_live_datetime" => $log_time]
@@ -151,17 +152,30 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 {
                     Device::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time, "armed_status" => 0, "armed_datetime" => $log_time]);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-                    $message[] = $this->getMeta("Device Disarmed", $log_time . "<br/>\n");
+
+
+                    //update armed log 
+                    $armedRow = ["disarm_datetime" => $log_time];
+                    $record = DeviceArmedLogs::where("serial_number", $serial_number)
+                        ->where("disarm_datetime", null)
+                        ->orderBy("armed_datetime", "desc")
+                        ->first();
+                    if ($record) {
+                        $record->update($armedRow);
+                    }
+
+                    $message[] = $this->getMeta("Device Disarm", $log_time . "<br/>\n");
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
+                    //create log
+                    $armedRow = ["serial_number" => $serial_number, "armed_datetime" => $log_time];
+                    $record = DeviceArmedLogs::create($armedRow);
                     $message[] = $this->getMeta("Device Armed", $log_time . "<br/>\n");
                 } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
 
-                    //$message[] = [$zone, $event, $area, $serial_number];
-                    //$zone = substr($event, 1); 
                     $devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {
                             $query->where('serial_number', $serial_number);
@@ -173,8 +187,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $alarm_type = $devices->sensor_name ?? '';
                     //$area =   $devices->area_code ?? '';
                     if ($alarm_type != '') {
-
-
 
                         $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
                         if ($count == 0) {
@@ -196,8 +208,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
                 } else if ($zone == '') {
 
-                    //$message[] = [$zone, $event, $area, $serial_number];
-                    //$zone = substr($event, 1); 
                     $devices = Device::where('serial_number', $serial_number)->first();;
 
                     $alarm_type = $devices->device_type ?? '';
@@ -234,6 +244,12 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 }
             }
 
+            //update company ids armed logs 
+
+            $this->updateArmedTableCompanyLogs();
+
+            $this->updateDisardTableCompanyLogs();
+
             // try {
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
@@ -267,6 +283,63 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     "response_minutes" => $minutesDifference,
                     "alarm_status" => 0
                 ]);
+        }
+
+        //turnoff device alarm status 
+        if ($serial_number != '') {
+            $alarm_event_active_count = AlarmEvents::where("serial_number", $serial_number)->where("alarm_status", 1)->count();
+            if ($alarm_event_active_count == 0) {
+                $device_Data = [];
+                $device_Data["alarm_status"] = 0;
+                $device_Data["alarm_end_datetime"] = date('Y-m-d H:i:s');
+
+                Device::where("serial_number", $serial_number)->update($device_Data);
+            }
+        }
+    }
+
+    public function updateArmedTableCompanyLogs()
+    {
+
+        $logs = DeviceArmedLogs::where("company_id", null)->get();
+
+        foreach ($logs as $key => $log) {
+
+            $device = Device::where("serial_number", $log->serial_number)->get();
+
+            $armed_datetime = new DateTime($log->armed_datetime);
+            $armed_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
+
+            $data = [
+                "company_id" => $device->company_id,
+                "armed_datetime" => $armed_datetime->format('Y-m-d H:i:s')
+            ];
+            AlarmLogs::where("id",  $log->id)->update($data);
+        }
+    }
+    public function updateDisardTableCompanyLogs()
+    {
+
+        $logs = DeviceArmedLogs::where("duration_in_minutes", null)->get();
+
+        foreach ($logs as $key => $log) {
+
+            $device = Device::where("serial_number", $log->serial_number)->get();
+
+            $disarm_datetime = new DateTime($log->disarm_datetime);
+            $disarm_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
+
+
+            $datetime1 = new DateTime($log->armed_datetime);
+            $datetime2 = new DateTime($log->disarm_datetime);
+            $interval = $datetime1->diff($datetime2);
+            $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes 
+
+            $data = [
+                "duration_in_minutes" => $minutesDifference,
+                "disarm_datetime" => $disarm_datetime->format('Y-m-d H:i:s')
+            ];
+            AlarmLogs::where("id",  $log->id)->update($data);
         }
     }
     public function updateCompanyIds($insertedRecord, $serial_number, $log_time)

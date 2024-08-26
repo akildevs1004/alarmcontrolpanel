@@ -270,7 +270,7 @@ import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFir
 
 import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
 import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
-import AlamAllEvents from "../../components/Alarm/AllEvents.vue";
+import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
   layout: "security",

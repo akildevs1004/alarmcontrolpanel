@@ -6,6 +6,7 @@ use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
 use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
+use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
 use App\Http\Controllers\Customers\AlarmDashboard;
 use App\Http\Controllers\Customers\AlarmDashboardController;
 use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\PlottingController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
+use App\Models\DeviceArmedLogs;
 use App\Models\MapKey;
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +72,8 @@ Route::get('device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEv
 
 
 //dashboard
+// Route::get('get_device_armed_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
+Route::apiResource('device_armed_logs', DeviceArmedLogsController::class);
 Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
 Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
 Route::get('device_live_stats_groupby', [AlarmDashboardController::class, 'getDeviceLiveStatisticsGroupBy']);
@@ -103,6 +107,7 @@ Route::get('alarm_dashboard_get_hourly_data', [AlarmDeviceTemperatureLogsControl
 Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::class, 'getAlarmLogsMonthwise']);
 
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
+
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
 
 Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);

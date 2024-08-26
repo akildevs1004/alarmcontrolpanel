@@ -211,7 +211,10 @@
               >
                 <v-row>
                   <v-col cols="6">
-                    <v-icon @click="getDataFromApi(0)" class="mt-2 mr-2"
+                    <v-icon
+                      loading="true"
+                      @click="getDataFromApi(0)"
+                      class="mt-2 mr-2"
                       >mdi-reload</v-icon
                     >
 
@@ -588,7 +591,7 @@ export default {
     AlarmForwardEvent,
     SecurityAlarmNotes,
   },
-  props: ["showFilters", "eventFilter"],
+  props: ["showFilters", "eventFilter", "filter_customer_id"],
   data() {
     return {
       customer: null,
@@ -903,6 +906,8 @@ export default {
           date_to: this.date_to,
           common_search: this.commonSearch,
 
+          customer_id: this.filter_customer_id,
+
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
           filterSensorname: filterSensorname,
@@ -917,8 +922,9 @@ export default {
           this.items = data.data;
 
           this.totalRowsCount = data.total;
-          this.loading = false;
+
           this.showTable = true;
+          this.loading = false;
         });
       } catch (e) {}
     },

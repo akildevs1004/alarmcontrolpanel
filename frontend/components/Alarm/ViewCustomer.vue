@@ -39,7 +39,9 @@
             >Building Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
-
+            <v-btn @click="gotoCustomers()" color="primary" dense x-small>
+              Customers
+            </v-btn>
             <v-btn
               @click="dialogEditBuilding = true"
               color="primary"
@@ -291,6 +293,10 @@
               <v-icon>mdi mdi-account-cog</v-icon>
               Settings
             </v-tab>
+            <v-tab href="#tab-10">
+              <v-icon>mdi mdi-account-cog</v-icon>
+              Armed
+            </v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="tab" style="width: 100%; min-height: 400px">
@@ -349,8 +355,10 @@
             ><v-tab-item value="tab-6">
               <v-card flat>
                 <v-card-text>
-                  <CustomerAlarmEvents :key="keyEvents" :customer_id="_id"
-                /></v-card-text>
+                  <!-- <CustomerAlarmEvents :key="keyEvents" :customer_id="_id" /> -->
+
+                  <AlamAllEvents :filter_customer_id="_id" :key="keyEvents" />
+                </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-7">
               <v-card flat>
@@ -375,6 +383,13 @@
                     :key="keySettings"
                     :customer_id="_id"
                     :customer="customer"
+                /></v-card-text>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item value="tab-10">
+              <v-card flat>
+                <v-card-text>
+                  <DeviceArmedLogs :key="keyEvents" :customer_id="_id"
                 /></v-card-text>
               </v-card>
             </v-tab-item>
@@ -403,6 +418,9 @@ import CustomerAlarmEvents from "../../components/Alarm/CustomerAlarmEvents.vue"
 import AlarmSettings from "../../components/Alarm/Settings.vue";
 import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
 import NewCustomer from "../../components/Alarm/NewCustomer.vue";
+import DeviceArmedLogs from "./DeviceArmedLogs.vue";
+import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
+
 export default {
   components: {
     AlramCustomerContacts,
@@ -415,6 +433,8 @@ export default {
     CustomerDashboard,
     CustomerAlarmEvents,
     NewCustomer,
+    DeviceArmedLogs,
+    AlamAllEvents,
   },
   props: ["_id", "isPopup"],
   data: () => ({
@@ -430,6 +450,8 @@ export default {
     keyAutomation: 1,
     keyPayments: 1,
     keySettings: 1,
+    keyArmed: 1,
+
     key: 1,
     profile_percentage: 0,
     tab: null,
@@ -464,6 +486,10 @@ export default {
   },
   watch: {},
   methods: {
+    gotoCustomers() {
+      this.$router.push("/alarm/customers");
+      return;
+    },
     changeTab() {
       if (this.tab == "tab-1") {
         this.keyContacts = this.keyContacts + 1;
@@ -483,6 +509,8 @@ export default {
         this.keyPayments = this.keyPayments + 1;
       } else if (this.tab == "tab-9") {
         this.keySettings = this.keySettings + 1;
+      } else if (this.tab == "tab-10") {
+        this.keyArmed = this.keyArmed + 1;
       }
     },
     closeDialog() {

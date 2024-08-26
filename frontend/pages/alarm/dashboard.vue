@@ -60,7 +60,7 @@ import AlamDeviceLiveCountPieChart from "../../components/Alarm/Dashboard/AlamDe
 import AlamCustomerContractPieChart from "../../components/Alarm/Dashboard/AlamCustomerContractPieChart.vue";
 import AlamCustomerSensorPieChart from "../../components/Alarm/Dashboard/AlamCustomerSensorPieChart.vue";
 
-import AlamAllEvents from "../../components/Alarm/AllEvents.vue";
+import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 import AlamCustomerEventsPieChart from "../../components/Alarm/Dashboard/AlamCustomerEventsPieChart.vue";
 
 export default {
