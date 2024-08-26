@@ -34,7 +34,7 @@ class DeviceArmedLogsController extends Controller
             );
         });
         if ($request->filled("date_from")) {
-            $model->whereBetween('disarm_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+            $model->whereBetween('armed_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
         }
         $model->orderBy("armed_datetime", "DESC");
 
