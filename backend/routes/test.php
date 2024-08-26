@@ -57,7 +57,17 @@ Route::get("create_test_alarm", function (Request $request) {
     $date = date("d-m-Y");
     $csvPath = "alarm-sensors/sensor-logs-$date.csv";
 
-    $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $request->area . "," . $request->zone;
+    $area = '';
+    $zone = '';
+    if ($request->filled("area"))
+        $area  =   $request->area;
+
+    if ($request->filled("area"))
+        $zone  =   $request->zone;
+
+    $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+
+
 
     Storage::append($csvPath,  $content);
 

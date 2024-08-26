@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\Calculation\TextData\Replace;
 
 class ApiAlarmDeviceSensorLogsController extends Controller
 {
@@ -121,9 +122,16 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $zone = '';
                 $area = '';
                 if (isset($columns[5])) {
+                    if ($columns[4] != '')
+                        $area = trim($columns[4]);
+                    if ($columns[5] != '')
+                        $zone =  trim($columns[5]);
 
-                    $area =  $columns[4];
-                    $zone =   $columns[5];
+                    $zone = str_replace('"', '', $zone);
+                    $zone = str_replace("'", '', $zone);
+
+                    $area = str_replace('"', '', $area);
+                    $area = str_replace("'", '', $area);
                 }
 
 
@@ -138,12 +146,12 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(
                         ["status_id" => 1, "last_live_datetime" => $log_time]
                     );
-                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "\n");
+                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
                 } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time, "armed_status" => 0, "armed_datetime" => $log_time]);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-                    $message[] = $this->getMeta("Device Disarmed", $log_time . "\n");
+                    $message[] = $this->getMeta("Device Disarmed", $log_time . "<br/>\n");
 
 
                     $device = Device::where("serial_number", $serial_number)->first();
@@ -152,7 +160,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
-                    $message[] = $this->getMeta("Device Armed", $log_time . "\n");
+                    $message[] = $this->getMeta("Device Armed", $log_time . "<br/>\n");
                 } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
 
@@ -184,19 +192,52 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
-                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "\n");
+                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "<br/>\n");
                             $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                        } else {
+                            $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
                     try {
                         (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
                     } catch (\Exception $e) {
                     }
-                }
+                } else if ($zone == '') {
+
+                    //$message[] = [$zone, $event, $area, $serial_number];
+                    //$zone = substr($event, 1); 
+                    $devices = Device::where('serial_number', $serial_number)->first();;
+
+                    $alarm_type = $devices->device_type ?? '';
+                    //$area =   $devices->area_code ?? '';
+                    if ($alarm_type != '') {
+                        $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->count();
+                        if ($count == 0) {
+                            $records  = [
+                                "serial_number" => $serial_number,
+                                "log_time" => $log_time,
+                                "alarm_status" => 1,
+                                "alarm_type" => $alarm_type,
+
+                            ];
+
+                            $insertedRecord = AlarmLogs::create($records);
+                            $message[] =  $this->getMeta("New Alarm Log Is interted", $log_time . "<br/>\n");
+                            $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                        } else {
+                            $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
+                        }
+                    }
+                    try {
+                        (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+                    } catch (\Exception $e) {
+                    }
+                } else
+                    $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
             }
 
             // try {
-            ///////Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
+            Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {
 
@@ -206,7 +247,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             //     }
 
         } else {
-            return $this->getMeta("Sync Alarm Sensor Logs", " 0 records found " . "\n");
+            return $this->getMeta("Sync Alarm Sensor Logs", " 0 records found " . "<br/>\n");
         }
     }
     public function endAllAlarmsBySerialNumber($serial_number, $log_end_datetime)
