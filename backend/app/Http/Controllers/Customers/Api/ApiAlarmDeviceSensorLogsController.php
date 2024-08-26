@@ -220,9 +220,11 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
-                } else
+                } else {
                     $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
+                }
 
+                //----------Update Alarm Duration
                 try {
                     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
