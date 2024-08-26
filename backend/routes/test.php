@@ -45,7 +45,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
+Route::get("updatearmedCompanyIds", function (Request $request) {
+    (new ApiAlarmDeviceSensorLogsController())->updateArmedTableCompanyLogs();
 
+    (new ApiAlarmDeviceSensorLogsController())->updateDisarmTableCompanyLogs();
+});
 Route::get("sync_alarm_logs", function (Request $request) {
     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 });

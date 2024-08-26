@@ -248,7 +248,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
             $this->updateArmedTableCompanyLogs();
 
-            $this->updateDisardTableCompanyLogs();
+            $this->updateDisarmTableCompanyLogs();
 
             // try {
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
@@ -305,7 +305,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
         foreach ($logs as $key => $log) {
 
-            $device = Device::where("serial_number", $log->serial_number)->get();
+            $device = Device::where("serial_number", $log->serial_number)->first();
 
             $armed_datetime = new DateTime($log->armed_datetime);
             $armed_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
@@ -314,24 +314,24 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 "company_id" => $device->company_id,
                 "armed_datetime" => $armed_datetime->format('Y-m-d H:i:s')
             ];
-            AlarmLogs::where("id",  $log->id)->update($data);
+            DeviceArmedLogs::where("id",  $log->id)->update($data);
         }
     }
-    public function updateDisardTableCompanyLogs()
+    public function updateDisarmTableCompanyLogs()
     {
 
         $logs = DeviceArmedLogs::where("duration_in_minutes", null)->get();
 
         foreach ($logs as $key => $log) {
 
-            $device = Device::where("serial_number", $log->serial_number)->get();
+            $device = Device::where("serial_number", $log->serial_number)->first();
 
             $disarm_datetime = new DateTime($log->disarm_datetime);
             $disarm_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
 
 
             $datetime1 = new DateTime($log->armed_datetime);
-            $datetime2 = new DateTime($log->disarm_datetime);
+            $datetime2 = $disarm_datetime;
             $interval = $datetime1->diff($datetime2);
             $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes 
 
@@ -339,7 +339,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 "duration_in_minutes" => $minutesDifference,
                 "disarm_datetime" => $disarm_datetime->format('Y-m-d H:i:s')
             ];
-            AlarmLogs::where("id",  $log->id)->update($data);
+            DeviceArmedLogs::where("id",  $log->id)->update($data);
         }
     }
     public function updateCompanyIds($insertedRecord, $serial_number, $log_time)
