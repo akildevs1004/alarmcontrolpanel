@@ -194,10 +194,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
-                    try {
-                        (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
-                    } catch (\Exception $e) {
-                    }
                 } else if ($zone == '') {
 
                     //$message[] = [$zone, $event, $area, $serial_number];
@@ -224,16 +220,16 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
-                    try {
-                        (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
-                    } catch (\Exception $e) {
-                    }
                 } else
                     $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
 
+                try {
+                    (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
-                $device = Device::where("serial_number", $serial_number)->first();
-                (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
+                    $device = Device::where("serial_number", $serial_number)->first();
+                    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
+                } catch (\Exception $e) {
+                }
             }
 
             // try {
