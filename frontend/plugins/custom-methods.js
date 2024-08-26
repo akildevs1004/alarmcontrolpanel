@@ -37,7 +37,7 @@ export default ({ app }, inject) => {
       return `${year}-${month}-${day} ${hours}:${minutes} `;
     },
     format4: (inputdate) => {
-      if (inputdate == "--") return "---";
+      if (!inputdate || inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
 
       const year = currentDate.getFullYear();
@@ -59,7 +59,7 @@ export default ({ app }, inject) => {
       return `${formattedDate}  ${hours}:${minutes} `;
     },
     formatDateMonthYear: (inputdate) => {
-      if (inputdate == "--") return "---";
+      if (!inputdate || inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
 
       const year = currentDate.getFullYear();
