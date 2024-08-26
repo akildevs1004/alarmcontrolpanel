@@ -152,9 +152,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time, "armed_status" => 0, "armed_datetime" => $log_time]);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
                     $message[] = $this->getMeta("Device Disarmed", $log_time . "<br/>\n");
-
-
-                    $device = Device::where("serial_number", $serial_number)->first();
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
@@ -233,11 +230,14 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
                 } else
                     $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
+
+
+                $device = Device::where("serial_number", $serial_number)->first();
+                (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
             }
 
             // try {
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
-            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {
 
