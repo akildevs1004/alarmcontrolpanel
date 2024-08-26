@@ -163,7 +163,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     if ($record) {
                         $record->update($armedRow);
                     }
-
+                    $this->updateDisarmTableCompanyLogs();
                     $message[] = $this->getMeta("Device Disarm", $log_time . "<br/>\n");
                 } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
@@ -252,7 +252,6 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
             try {
                 $this->updateArmedTableCompanyLogs();
-                $this->updateDisarmTableCompanyLogs();
             } catch (\Exception $e) {
             }
 
