@@ -246,12 +246,16 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
             //update company ids armed logs 
 
-            $this->updateArmedTableCompanyLogs();
 
-            $this->updateDisarmTableCompanyLogs();
 
             // try {
             Storage::put("alarm-sensors/sensor-logs-count-" . $date . ".txt", $results['totalLines']);
+            try {
+                $this->updateArmedTableCompanyLogs();
+                $this->updateDisarmTableCompanyLogs();
+            } catch (\Exception $e) {
+            }
+
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {
 
