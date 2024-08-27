@@ -284,11 +284,12 @@ export default ({ app }, inject) => {
     },
     getRelaventMarkers(alarm) {
       let relaventImage = {
-        Burglary: "/location-icons/burglary_green.png",
-        Medical: "/location-icons/temperature_green.png",
-        Fire: "/location-icons/medical_green.png",
-        Water: "/location-icons/fire_green.png",
-        Temperature: "/location-icons/water_green.png",
+        Burglary: "/alarm-icons/burglary.png",
+        Medical: "/alarm-icons/medical.png",
+        Fire: "/alarm-icons/fire.png",
+        Water: "/alarm-icons/water.png",
+        Temperature: "/alarm-icons/temperature.png",
+        Humidity: "/alarm-icons/humidity.png",
       };
 
       // Get the image URL based on the alarm key, if exists
@@ -306,11 +307,12 @@ export default ({ app }, inject) => {
 
     getRelaventImage(alarm) {
       let relaventImage = {
-        Burglary: "/device-icons/burglary.png",
-        Medical: "/device-icons/temperature.png",
-        Fire: "/device-icons/medical.png",
-        Water: "/device-icons/fire.png",
-        Temperature: "/device-icons/water.png",
+        Burglary: "/alarm-icons/burglary.png",
+        Medical: "/alarm-icons/medical.png",
+        Fire: "/alarm-icons/fire.png",
+        Water: "/alarm-icons/water.png",
+        Temperature: "/alarm-icons/temperature.png",
+        Humidity: "/alarm-icons/humidity.png",
       };
       // Get the image URL based on the alarm key, if exists
       let selectedImage = relaventImage[alarm];

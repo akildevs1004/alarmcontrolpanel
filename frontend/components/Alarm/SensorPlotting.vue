@@ -9,6 +9,16 @@
       </template>
 
       <v-card>
+        <div class="text-center">
+          <v-snackbar
+            v-model="snackbar"
+            top="top"
+            color="primary"
+            elevation="24"
+          >
+            {{ response }}
+          </v-snackbar>
+        </div>
         <v-card-title dense class="popup_background_noviolet">
           <span class="black--text"
             >Sensor Plotting - {{ item?.title || "---" }}
@@ -144,9 +154,9 @@
                 </v-row>
 
                 <v-row>
-                  <v-col cols="6" class="text-right align-right"
-                    ><v-btn dense small color="primary" @click="submit()"
-                      >Save</v-btn
+                  <v-col cols="12" class="text-right align-right"
+                    ><v-btn dense small color="primary" @click="submit(true)"
+                      >Save and close</v-btn
                     ></v-col
                   >
                 </v-row>
@@ -163,6 +173,8 @@ export default {
   props: ["item"],
   data() {
     return {
+      snackbar: false,
+      response: "",
       dialog: false,
       loading: false,
       device_ids: [],
@@ -309,7 +321,13 @@ export default {
 
       this.draggingIndex = null;
 
-      ////////await this.submit();
+      await this.submit(false);
+      await this.getDevices();
+      await this.getExistingPlottings();
+      if (process) {
+        this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
+        this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+      }
     },
     async deleteOnDrop(event) {
       if (confirm(`Are you sure you want to delete`)) {
@@ -338,6 +356,9 @@ export default {
           customer_building_picture_id: this.item.id,
           plottings: this.plottings,
         });
+
+        this.snackbar = true;
+        this.response = "Plotting Details are updated successfully";
         if (status) this.dialog = false;
       } catch (error) {
         console.log(error);
@@ -347,8 +368,8 @@ export default {
     getRelaventImage(label) {
       let relaventImage = {
         Burglary: "/alarm-icons/burglary.png",
-        Medical: "/alarm-icons/temperature.png",
-        Fire: "/alarm-icons/medical.png",
+        Medical: "/alarm-icons/medical.png",
+        Fire: "/alarm-icons/fire.png",
         Water: "/alarm-icons/water.png",
         Temperature: "/alarm-icons/temperature.png",
         Humidity: "/alarm-icons/humidity.png",

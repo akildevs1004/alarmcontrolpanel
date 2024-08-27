@@ -458,6 +458,26 @@
         <template v-slot:default="dialog">
           <v-card style="z-index: 9999">
             <v-card-title
+              dense
+              class="error popup_background_red"
+              style="
+                text-align: center !important;
+                padding-left: 30%;
+                color: #fff !important;
+                background-color: red;
+              "
+            >
+              Attention : Alarm Notification(s)
+              <v-spacer></v-spacer>
+              <v-icon
+                style="color: #fff"
+                @click="dialogAlarmPopupNotificationStatus = false"
+                outlined
+              >
+                mdi mdi-close-circle
+              </v-icon>
+            </v-card-title>
+            <!-- <v-card-title
               class="error alarm-popup-header"
               background-color="error"
               style="
@@ -470,7 +490,7 @@
               <v-icon color="white" @click="wait5MinutesNextNotification()"
                 >mdi-close-circle-outline</v-icon
               >
-            </v-card-title>
+            </v-card-title> -->
             <v-card-text>
               <AlarmPopupAllAlarmEvents
                 :items="notificationAlarmDevicesContent"
@@ -1586,6 +1606,14 @@ header,
 }
 .popup_background_noviolet .v-tabs-bar {
   background-color: #ecf0f4 !important;
+}
+.v-dialog > .v-card > .popup_background_red {
+  background-color: red !important  ;
+  padding: 5px 6px 5px !important;
+  color: #fff !important;
+}
+.popup_background_red .v-tabs-bar {
+  background-color: red !important;
 }
 .noviolet {
   background-color: #ecf0f4 !important   ;

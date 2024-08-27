@@ -196,11 +196,12 @@ export default {
 
     getRelaventImage(label) {
       let relaventImage = {
-        Burglary: "/device-icons/burglary.png",
-        Medical: "/device-icons/temperature.png",
-        Fire: "/device-icons/medical.png",
-        Water: "/device-icons/fire.png",
-        Temperature: "/device-icons/water.png",
+        Burglary: "/alarm-icons/burglary.png",
+        Medical: "/alarm-icons/medical.png",
+        Fire: "/alarm-icons/fire.png",
+        Water: "/alarm-icons/water.png",
+        Temperature: "/alarm-icons/temperature.png",
+        Humidity: "/alarm-icons/humidity.png",
       };
       return relaventImage[label] ?? "Unknown";
     },
