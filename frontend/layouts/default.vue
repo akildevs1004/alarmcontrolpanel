@@ -471,7 +471,7 @@
               <v-spacer></v-spacer>
               <v-icon
                 style="color: #fff"
-                @click="dialogAlarmPopupNotificationStatus = false"
+                @click="wait5MinutesNextNotification()"
                 outlined
               >
                 mdi mdi-close-circle
