@@ -51,7 +51,7 @@
                           <v-img
                             draggable="true"
                             @dragstart="dragStart($event, index)"
-                            style="width: 23px"
+                            style="width: 40px"
                             :src="getRelaventImage(plotting.label)"
                           ></v-img>
                         </div>
@@ -322,9 +322,9 @@ export default {
 
         this.draggingIndex = null;
 
-        //await this.submit();
-        //await this.getDevices();
-        //await this.getExistingPlottings();
+        await this.submit(false);
+        await this.getDevices();
+        await this.getExistingPlottings();
         if (process) {
           this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
           this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
@@ -332,14 +332,13 @@ export default {
       }
     },
 
-    async submit() {
+    async submit(status = true) {
       try {
         let { data } = await this.$axios.post(`plotting`, {
           customer_building_picture_id: this.item.id,
           plottings: this.plottings,
         });
-
-        this.dialog = false;
+        if (status) this.dialog = false;
       } catch (error) {
         console.log(error);
       }
