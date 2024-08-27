@@ -71,10 +71,10 @@ class AlarmReportsController extends Controller
         $model->orderBy("armed_datetime", "asc");
         $reports = $model->get();
         $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
-
+        $file_name =  'Device Armed Reports from ' . $request->date_from . ' to ' . $request->date_to . ' .pdf';
 
         $pdf = Pdf::loadView('alarm_reports/device_armed_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
-        return $pdf->download('report.pdf');
+        return $pdf->download($file_name);
     }
     public function deviceArmedLogsExportExcel(Request $request)
     {

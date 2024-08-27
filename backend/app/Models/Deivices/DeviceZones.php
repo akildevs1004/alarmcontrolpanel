@@ -16,6 +16,6 @@ class DeviceZones extends Model
     public function device()
     {
 
-        return $this->hasOne(Device::class, "id", "device_id");
+        return $this->belongsTo(Device::class, "device_id", "id");
     }
 }

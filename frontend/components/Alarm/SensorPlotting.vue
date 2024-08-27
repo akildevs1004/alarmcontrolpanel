@@ -10,7 +10,9 @@
 
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span class="black--text">Sensor Plotting</span>
+          <span class="black--text"
+            >Sensor Plotting - {{ item?.title || "---" }}
+          </span>
           <v-spacer></v-spacer>
           <v-icon color="black" @click="dialog = false">mdi-close</v-icon>
         </v-card-title>
@@ -43,11 +45,10 @@
                           :style="{ top: plotting.top, left: plotting.left }"
                           draggable="false"
                         >
-                          <v-icon v-if="plotting.alarm_event" class="alarm">
+                          <!-- <v-icon v-if="plotting.alarm_event" class="alarm">
                             mdi-alarm-light
-                          </v-icon>
+                          </v-icon> -->
                           <v-img
-                            v-else
                             draggable="true"
                             @dragstart="dragStart($event, index)"
                             style="width: 23px"
@@ -115,10 +116,10 @@
                           >
                             <v-img
                               :title="plotting.label"
-                              v-if="plotting.top == '-500px'"
+                              v-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
                               draggable="true"
                               @dragstart="dragStart($event, plotIndex)"
-                              style="width: 23px; float: left; margin: 10px"
+                              style="width: 40px; float: left; margin: 10px"
                               :src="getRelaventImage(plotting.label)"
                             ></v-img>
 
@@ -128,7 +129,7 @@
                               disabled="true"
                               draggable="false"
                               style="
-                                width: 23px;
+                                width: 40px;
                                 float: left;
                                 margin: 10px;
                                 filter: grayscale(100%);
@@ -169,6 +170,7 @@ export default {
       sensors: [],
       plottings: [],
       draggingIndex: null,
+      buildingPhotosPlottings: [],
 
       existingPlottings: [],
       IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "800px",
@@ -202,6 +204,27 @@ export default {
     getDeviceName(device_id) {
       return this.devices.find((e) => e.id == device_id).name || "";
     },
+
+    checkIsSensorAddedAnyPhoto(verifyPlotting) {
+      let matchCount = 0;
+
+      this.buildingPhotosPlottings.forEach((building) => {
+        building.photo_plottings.forEach((plotting) => {
+          const sensors = plotting.plottings;
+          sensors.forEach((sensor) => {
+            if (
+              sensor.device_id == verifyPlotting.device_id &&
+              sensor.sensor_id == verifyPlotting.sensor_id &&
+              sensor.top !== "-500px"
+            ) {
+              matchCount++;
+            }
+          });
+        });
+      });
+
+      return matchCount;
+    },
     async getDevices() {
       let config = {
         params: {
@@ -229,6 +252,8 @@ export default {
       this.loading = true;
       let config = {
         params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.item.customer_id,
           customer_building_picture_id: this.item.id,
         },
       };
@@ -237,6 +262,8 @@ export default {
       if (data) {
         this.existingPlottings = data.plottings;
         this.plottings = data.plottings;
+
+        this.buildingPhotosPlottings = data.buildingPhotosPlottings;
       }
 
       this.loading = false;
@@ -295,9 +322,9 @@ export default {
 
         this.draggingIndex = null;
 
-        await this.submit();
-        await this.getDevices();
-        await this.getExistingPlottings();
+        //await this.submit();
+        //await this.getDevices();
+        //await this.getExistingPlottings();
         if (process) {
           this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
           this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
@@ -311,6 +338,8 @@ export default {
           customer_building_picture_id: this.item.id,
           plottings: this.plottings,
         });
+
+        this.dialog = false;
       } catch (error) {
         console.log(error);
       }

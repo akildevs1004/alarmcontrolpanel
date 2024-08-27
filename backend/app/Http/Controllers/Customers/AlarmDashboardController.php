@@ -71,9 +71,9 @@ class AlarmDashboardController extends Controller
 
         $model = Device::where("company_id", $request->company_id);
         $totalCount = $model->count();
-        $armedCount = $model->where("status_id", 1)->count();
+        $online = $model->where("status_id", 1)->count();
 
-        return ["total" => $totalCount, "online" => $armedCount];
+        return ["total" => $totalCount, "online" => $online];
     }
     public function getCustomerContractStatistics(Request $request)
     {

@@ -84,9 +84,6 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    // setInterval(() => {
-    //   if (this.$router.name == "alarm-dashboard") this.key = this.key + 1;
-    // }, 1000 * 20);
     // this._id = this.$route.params.id;
     let today = new Date();
 

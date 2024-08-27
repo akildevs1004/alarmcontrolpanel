@@ -215,6 +215,9 @@ export default {
     };
   },
   mounted() {
+    setInterval(() => {
+      if (this.$route.name == "alarm-dashboard") this.loadDevicesStatistics();
+    }, 1000 * 20);
     this.loadDevicesStatistics();
   },
   methods: {

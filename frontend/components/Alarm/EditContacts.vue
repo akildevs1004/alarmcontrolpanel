@@ -662,11 +662,11 @@ export default {
         this.$emit("input", file[0]);
       }
     },
-    submit_primary() {
+    async submit_primary() {
       let customer = new FormData();
 
       for (const key in this.payload_primary) {
-        if (this.payload_primary[key] != "")
+        if (this.payload_primary[key] !== "")
           customer.append(key, this.payload_primary[key]);
       }
       customer.append("company_id", this.$auth.user.company_id);
@@ -676,36 +676,32 @@ export default {
         customer.append("profile_picture", this.primary_upload.name);
       }
 
-      this.$axios
-        .post("/customers_primary_contact_update", customer)
-        .then(({ data }) => {
-          //this.loading = false;
+      try {
+        const { data } = await this.$axios.post(
+          "/customers_primary_contact_update",
+          customer
+        );
 
-          if (!data.status) {
-            this.primary_errors = [];
-            if (data.primary_errors) this.primary_errors = data.primary_errors;
-            this.color = "red";
-
-            this.snackbar = true;
-            this.response = data.message;
-          } else {
-            this.color = "background";
-            this.primary_errors = [];
-            this.snackbar = true;
-            this.response = "Customer Details Created successfully";
-
-            //this.$emit("closeDialog");
-          }
-        })
-        .catch((e) => {
-          if (e.response.data) {
-            this.primary_errors = e.response.data.errors;
-            this.color = "red";
-
-            //this.snackbar = true;
-            //this.response = e.response.data.message;
-          }
-        });
+        if (!data.status) {
+          this.primary_errors = data.primary_errors || [];
+          this.color = "red";
+          this.snackbar = true;
+          this.response = data.message;
+          return false;
+        } else {
+          this.color = "background";
+          this.primary_errors = [];
+          this.snackbar = true;
+          this.response = "Customer Details Created successfully";
+          return true;
+        }
+      } catch (e) {
+        if (e.response?.data) {
+          this.primary_errors = e.response.data.errors;
+          this.color = "red";
+        }
+        return false;
+      }
     },
     //secondary
     onpick_secondary_attachment() {
@@ -734,52 +730,54 @@ export default {
         this.$emit("input", file[0]);
       }
     },
-    submit_secondary() {
-      this.submit_primary();
-      let customer = new FormData();
+    async submit_secondary() {
+      const primaryResult = await this.submit_primary();
+      alert("Primary", primaryResult);
 
-      for (const key in this.payload_secondary) {
-        if (this.payload_secondary[key] != "")
-          customer.append(key, this.payload_secondary[key]);
-      }
-      customer.append("company_id", this.$auth.user.company_id);
-      customer.append("customer_id", this.customer_id);
+      if (primaryResult) {
+        let customer = new FormData();
 
-      if (this.secondary_upload.name) {
-        customer.append("profile_picture", this.secondary_upload.name);
-      }
+        for (const key in this.payload_secondary) {
+          if (this.payload_secondary[key] !== "")
+            customer.append(key, this.payload_secondary[key]);
+        }
+        customer.append("company_id", this.$auth.user.company_id);
+        customer.append("customer_id", this.customer_id);
 
-      this.$axios
-        .post("/customers_secondary_contact_update", customer)
-        .then(({ data }) => {
-          //this.loading = false;
+        if (this.secondary_upload.name) {
+          customer.append("profile_picture", this.secondary_upload.name);
+        }
+
+        try {
+          const { data } = await this.$axios.post(
+            "/customers_secondary_contact_update",
+            customer
+          );
 
           if (!data.status) {
-            this.secondary_errors = [];
-            if (data.secondary_errors)
-              this.secondary_errors = data.secondary_errors;
+            this.secondary_errors = data.secondary_errors || [];
             this.color = "red";
-
             this.snackbar = true;
             this.response = data.message;
+            return false;
           } else {
             this.color = "background";
             this.secondary_errors = [];
             this.snackbar = true;
             this.response = "Customer Details Created successfully";
-
             this.$emit("closeDialog");
+            return true;
           }
-        })
-        .catch((e) => {
-          if (e.response.data) {
+        } catch (e) {
+          if (e.response?.data) {
             this.secondary_errors = e.response.data.errors;
             this.color = "red";
-
-            // this.snackbar = true;
-            // this.response = e.response.data.message;
           }
-        });
+          return false;
+        }
+      } else {
+        return false;
+      }
     },
     //building
     onpick_building_attachment() {
@@ -808,53 +806,57 @@ export default {
         this.$emit("input", file[0]);
       }
     },
-    submit_building() {
-      this.submit_primary();
-      this.submit_secondary();
-      let customer = new FormData();
+    async submit_building() {
+      // const secondaryResult = await this.submit_secondary();
+      // alert("secondaryResult", secondaryResult);
+      // if (secondaryResult)
+      {
+        // this.submit_secondary();
+        let customer = new FormData();
 
-      for (const key in this.payload_building) {
-        if (this.payload_building[key] != "")
-          customer.append(key, this.payload_building[key]);
+        for (const key in this.payload_building) {
+          if (this.payload_building[key] != "")
+            customer.append(key, this.payload_building[key]);
+        }
+        customer.append("company_id", this.$auth.user.company_id);
+        customer.append("customer_id", this.customer_id);
+
+        if (this.building_upload.name) {
+          customer.append("profile_picture", this.building_upload.name);
+        }
+
+        this.$axios
+          .post("/customers_building_contact_update", customer)
+          .then(({ data }) => {
+            //this.loading = false;
+
+            if (!data.status) {
+              this.building_errors = [];
+              if (data.building_errors)
+                this.building_errors = data.building_errors;
+              this.color = "red";
+
+              this.snackbar = true;
+              this.response = data.message;
+            } else {
+              this.color = "background";
+              this.building_errors = [];
+              this.snackbar = true;
+              this.response = "Customer Details Created successfully";
+
+              this.$emit("closeDialog");
+            }
+          })
+          .catch((e) => {
+            if (e.response.data.primary_errors) {
+              this.primary_errors = e.response.data.primary_errors;
+              this.color = "red";
+
+              // this.snackbar = true;
+              // this.response = e.response.data.message;
+            }
+          });
       }
-      customer.append("company_id", this.$auth.user.company_id);
-      customer.append("customer_id", this.customer_id);
-
-      if (this.building_upload.name) {
-        customer.append("profile_picture", this.building_upload.name);
-      }
-
-      this.$axios
-        .post("/customers_building_contact_update", customer)
-        .then(({ data }) => {
-          //this.loading = false;
-
-          if (!data.status) {
-            this.building_errors = [];
-            if (data.building_errors)
-              this.building_errors = data.building_errors;
-            this.color = "red";
-
-            this.snackbar = true;
-            this.response = data.message;
-          } else {
-            this.color = "background";
-            this.building_errors = [];
-            this.snackbar = true;
-            this.response = "Customer Details Created successfully";
-
-            this.$emit("closeDialog");
-          }
-        })
-        .catch((e) => {
-          if (e.response.data.primary_errors) {
-            this.primary_errors = e.response.data.primary_errors;
-            this.color = "red";
-
-            // this.snackbar = true;
-            // this.response = e.response.data.message;
-          }
-        });
     },
     update() {
       let branch = new FormData();

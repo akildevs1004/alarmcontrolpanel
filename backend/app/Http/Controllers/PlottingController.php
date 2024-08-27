@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlarmEvents;
+use App\Models\Customers\CustomerBuildingPictures;
+use App\Models\Deivices\DeviceZones;
 use App\Models\Plotting;
 use Exception;
 use Illuminate\Http\Request;
 
 class PlottingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $customerBuildingPictureId = request("customer_building_picture_id");
 
         // Retrieve the model
-        $model = Plotting::where("customer_building_picture_id", $customerBuildingPictureId)->first();
+        $model = Plotting::with(["photos"])->where("customer_building_picture_id", $customerBuildingPictureId)->first();
 
         if (!$model || !isset($model->plottings)) {
             return $model;
@@ -22,23 +24,70 @@ class PlottingController extends Controller
         // Decode the plottings JSON field
         $plottings = $model->plottings;
 
-        // Collect unique sensor IDs to minimize queries
-        $sensorIds = collect($plottings)->pluck('sensor_id')->unique();
 
-        // Fetch alarm events for these sensor IDs
-        $alarmEvents = AlarmEvents::whereIn('zone', $sensorIds)->where("alarm_status", 1)->get()->keyBy('zone');
+        $plottings =  $this->updatePlottingWithDeviceZones($plottings);
 
-        // Map plottings to include alarm events
-        $plottings = collect($plottings)->map(function ($plotting) use ($alarmEvents) {
-            $plotting['alarm_event'] = $alarmEvents->get($plotting['sensor_id']);
-            return $plotting;
-        });
+        // // Collect unique sensor IDs to minimize queries
+        // // $sensorIds = collect($plottings)->pluck('sensor_id')->unique();
+
+
+        // // Fetch alarm events for these sensor IDs
+        // $alarmEvents = AlarmEvents::where("alarm_status", 1)->get()->keyBy('zone');
+
+        // // Map plottings to include alarm events
+        // $plottings = collect($plottings)->map(function ($plotting) use ($alarmEvents) {
+        //     $plotting['alarm_event'] = $alarmEvents->get($plotting['sensor_id']);
+        //     return $plotting;
+        // });
 
         // Encode the plottings back to JSON
-        $model->plottings = $plottings;
 
+
+        //  return CustomerBuildingPictures::with("photoPlottings")->where("customer_id", $request->customer_id)->get();
+
+        $model->plottings = $plottings;
+        $buildingPhotosPlottings = [];
+        //get customer all photos plottings
+        if ($request->filled('customer_id'))
+            $buildingPhotosPlottings = CustomerBuildingPictures::with("photoPlottings")->where("customer_id", $request->customer_id)->get();
+        $model->buildingPhotosPlottings = $buildingPhotosPlottings;
         return $model;
     }
+
+    public function updatePlottingWithDeviceZones($plottings)
+    {
+        $sensorIds = array_column($plottings, 'sensor_id');
+        $deviceZones = DeviceZones::with('device')
+            ->whereIn('id', array_filter($sensorIds))
+            ->get()
+            ->keyBy('id');
+
+        foreach ($plottings as &$plot) {
+            $plot['alarm_event'] = null;
+
+            if ($plot['sensor_id'] && $plot['sensor_id'] != $plot['device_id']) {
+                $deviceZone = $deviceZones->get($plot['sensor_id']);
+
+                if ($deviceZone) {
+                    $plot['alarm_event'] = AlarmEvents::where('alarm_status', 1)
+                        ->where('serial_number', $deviceZone->device->serial_number)
+                        ->where('zone', $deviceZone->zone_code)
+                        ->where('area', $deviceZone->area_code)
+                        ->get();
+                }
+            } else {
+                $plot['alarm_event'] = AlarmEvents::with('device')
+                    ->where('alarm_status', 1)
+                    ->whereHas('device', function ($q) use ($plot) {
+                        $q->where('id', $plot['device_id']);
+                    })
+                    ->get();
+            }
+        }
+
+        return $plottings;
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

@@ -394,10 +394,10 @@ class CustomersController extends Controller
         $data["customer_id"] = $data1["customer_id"];
         $data["address_type"] = $data1["address_type"] ?? "primary";
         $data["phone1"] = $data1["phone1"];
-        $data["phone2"] = $data1["phone2"];
-        $data["office_phone"] = $data1["office_phone"];
-        $data["email"] = $data1["email"];
-        $data["whatsapp"] = $data1["whatsapp"];
+        $data["phone2"] = $data1["phone2"] ?? '---';;
+        $data["office_phone"] = $data1["office_phone"] ?? '---';;
+        $data["email"] = $data1["email"] ?? '---';;
+        $data["whatsapp"] = $data1["whatsapp"] ?? '---';;
         $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
         $data["display_order"] = 0;
 
@@ -422,6 +422,9 @@ class CustomersController extends Controller
 
 
         ]);
+
+        if (!$data) return false;
+
         $data1 = $request->all();
         //$data["display_order"] = 1;
         $data["address"] = isset($data1["address"]) ? $data1["address"] : '---';
@@ -485,7 +488,7 @@ class CustomersController extends Controller
         try {
             //$data = $request->all();
 
-            return $request->filled("editId");
+
             if ($request->filled("editId")) {
                 $record = CustomerContacts::where('company_id',   $request->company_id)
                     ->where('customer_id',   $request->customer_id)
@@ -516,7 +519,7 @@ class CustomersController extends Controller
 
 
                     if ($record) {
-                        return $this->response('Customer ' . $type . ' Contacts Updated.22222', $record, true);
+                        return $this->response('Customer ' . $type . ' Contacts Updated ', $record, true);
                     } else {
                         return $this->response('Customer  ' . $type . '  Contacts Not Updated', null, false);
                     }
@@ -538,6 +541,7 @@ class CustomersController extends Controller
                 }
             }
         } catch (\Throwable $th) {
+            return $this->response('Customer ' . $type . ' Error', null, false);
             throw $th;
         }
     }

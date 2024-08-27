@@ -3,7 +3,7 @@
     <!-- <v-dialog v-model="dialog" max-width="200px">TTTTTTTTTTT</v-dialog> -->
     <div id="map" style="height: 550px; width: 100%"></div>
 
-    <v-btn
+    <!-- <v-btn
       class="text-right"
       style="float: right"
       small
@@ -12,7 +12,7 @@
       color="blue"
       @click="openInGoogleMaps()"
       >Open In Google Map
-    </v-btn>
+    </v-btn> -->
   </div>
 </template>
 
@@ -111,6 +111,41 @@ export default {
         //   this.dialog = true;
         //   this.customerInfo = this.customer.building_name;
         // });
+
+        let html =
+          "<div style='width:250px'><div style='width:100px;float:left'>  " +
+          "<img style='width:100px;padding-right:5px;' src='" +
+          this.customer.profile_picture +
+          "'/>" +
+          "</div>";
+        html +=
+          "<div style='width:150px; float:left'>" +
+          this.customer.building_name +
+          " <br/> " +
+          this.customer.city +
+          "<div>Landmark: " +
+          this.customer.landmark +
+          "</div>" +
+          "" +
+          " ";
+        html +=
+          "<br/> <a target='_blank' href='https://www.google.com/maps?q=" +
+          this.customer.latitude +
+          "," +
+          this.customer.longitude +
+          "'>Google Map Link</a>" +
+          " ";
+        html += "</div></div>";
+
+        var infowindow = new google.maps.InfoWindow({
+          content: html,
+          map: this.map,
+          position: position,
+        });
+
+        marker.addListener("mouseover", function () {
+          infowindow.open(this.map, this);
+        });
       }
     },
     openInGoogleMaps() {

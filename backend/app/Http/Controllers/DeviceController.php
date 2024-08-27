@@ -60,7 +60,7 @@ class DeviceController extends Controller
     {
         $model = Device::query();
 
-        $model->excludeMobile();
+        //$model->excludeMobile();
 
         $cols = $request->cols;
         $model->with(['status', 'company', 'companyBranch', 'sensorzones']);
@@ -91,7 +91,12 @@ class DeviceController extends Controller
         $model->when($request->filled('dashboardFilter'), function ($q) use ($request) {
 
             if ($request->dashboardFilter == 'disamed') {
-                $q->where('armed_status', 0);
+
+                $q->where(function ($model) use ($request) {
+                    $model->where('armed_status',   0)
+                        ->orWhere('armed_status',  null);
+                    // $model->where('armed_status',  "!=", 1);
+                });
             }
             if ($request->dashboardFilter == 'offline') {
                 $q->where('status_id', 2);

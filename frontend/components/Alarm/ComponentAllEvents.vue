@@ -414,6 +414,11 @@
                                   ?.last_name ?? "---"
                               }}
                             </div>
+                            <div class="secondary-value">
+                              {{
+                                item.device?.customer?.building_name ?? "---"
+                              }}
+                            </div>
                           </template>
                           <template v-slot:item.address="{ item }">
                             <div>{{ item.device?.customer?.area }}</div>

@@ -1,7 +1,10 @@
 <template>
   <div class="text-centers">
     <v-row>
-      <v-col cols="8" dense hide-details></v-col>
+      <v-col cols="8" class="pt-8 pb-0 pl-10 text-left" dense hide-details
+        >Total
+        {{ plottings ? checkIsSensorAddedAnyPhoto() : "--" }} Sensor(s)</v-col
+      >
       <v-col cols="4" class="pt-6 pb-0" style="float: right">
         <v-select
           outlined
@@ -29,18 +32,21 @@
               <div
                 v-for="(plotting, index) in plottings"
                 :key="index"
-                style="position: absolute"
+                style="position: absolute; text-align: center"
                 :style="{ top: plotting.top, left: plotting.left }"
               >
                 <v-icon
-                  v-if="plotting.alarm_event"
+                  v-if="plotting.alarm_event?.length"
                   class="alarm-red-to-green"
-                  title="Aalrm ON"
+                  :title="plotting.alarm_event[0].alarm_type + ' Aalrm ON'"
                   size="40"
                   >mdi-circle</v-icon
                 ><v-icon v-else color="green" size="40" title="Aalrm OFF"
                   >mdi-circle</v-icon
                 >
+                <div style="background: black; color: #fff">
+                  {{ plotting.label }}
+                </div>
               </div>
             </span>
           </div>
@@ -107,6 +113,7 @@ export default {
 
     async getExistingPlottings() {
       this.loading = true;
+      this.plottings = [];
       let config = {
         params: {
           customer_building_picture_id: this.item.id,
@@ -120,6 +127,18 @@ export default {
       }
 
       this.loading = false;
+    },
+
+    checkIsSensorAddedAnyPhoto() {
+      let matchCount = 0;
+
+      this.plottings.forEach((sensor) => {
+        if (sensor.top !== "-500px") {
+          matchCount++;
+        }
+      });
+
+      return matchCount;
     },
     async getSensors(device_ids) {
       await this.getExistingPlottings();

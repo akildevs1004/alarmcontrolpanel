@@ -212,7 +212,7 @@
             }}</span>
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
-            <LocationFinderDialogBox />
+            <!-- <LocationFinderDialogBox /> -->
           </v-col>
         </v-row>
         <v-row v-if="!customer_id">
