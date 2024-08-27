@@ -25,7 +25,7 @@ class PlottingController extends Controller
         $plottings = $model->plottings;
 
 
-        $plottings =  $this->updatePlottingWithDeviceZones($plottings);
+        $plottings =  $this->updatePlottingWithalarm_event($plottings);
 
         // // Collect unique sensor IDs to minimize queries
         // // $sensorIds = collect($plottings)->pluck('sensor_id')->unique();
@@ -54,7 +54,7 @@ class PlottingController extends Controller
         return $model;
     }
 
-    public function updatePlottingWithDeviceZones($plottings)
+    public function updatePlottingWithalarm_event($plottings)
     {
         $sensorIds = array_column($plottings, 'sensor_id');
         $deviceZones = DeviceZones::with('device')
@@ -75,7 +75,7 @@ class PlottingController extends Controller
                         ->where('area', $deviceZone->area_code)
                         ->get();
                 }
-            } else {
+            } else if ($plot['sensor_id'] == $plot['device_id']) {
                 $plot['alarm_event'] = AlarmEvents::with('device')
                     ->where('alarm_status', 1)
                     ->whereHas('device', function ($q) use ($plot) {
