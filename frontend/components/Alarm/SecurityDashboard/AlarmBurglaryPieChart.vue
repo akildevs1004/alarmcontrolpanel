@@ -203,10 +203,10 @@ export default {
   },
   mounted() {
     this.loadDevicesStatistics();
-    setInterval(() => {
-      if (this.$route.name == "security-dashboard")
-        this.loadDevicesStatistics();
-    }, 1000 * 30);
+    // setInterval(() => {
+    //   if (this.$route.name == "security-dashboard")
+    //     this.loadDevicesStatistics();
+    // }, 1000 * 30);
   },
   methods: {
     showDialogEvents() {

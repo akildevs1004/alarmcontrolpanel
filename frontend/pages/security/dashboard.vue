@@ -5,35 +5,50 @@
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmBurglaryPieChart :name="'AlarmBurglaryPieChart'"
+              <AlarmBurglaryPieChart
+                v-if="key"
+                :key="key"
+                :name="'AlarmBurglaryPieChart'"
             /></v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmMedicalPieChart :name="'AlarmMedicalPieChart'"
+              <AlarmMedicalPieChart
+                v-if="key"
+                :key="key"
+                :name="'AlarmMedicalPieChart'"
             /></v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmWaterPieChart :name="'AlarmWaterPieChart3'"
+              <AlarmWaterPieChart
+                v-if="key"
+                :key="key"
+                :name="'AlarmWaterPieChart3'"
             /></v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmFirePieChart :name="'AlarmBFirePieChart4'"
+              <AlarmFirePieChart
+                v-if="key"
+                :key="key"
+                :name="'AlarmBFirePieChart4'"
             /></v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmTemperaturePieChart :name="'AlarmTemperaturePieChart5'"
+              <AlarmTemperaturePieChart
+                v-if="key"
+                :key="key"
+                :name="'AlarmTemperaturePieChart5'"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -299,7 +314,7 @@ export default {
       Medical: { online: 0, offline: 0 },
     },
 
-    key: null,
+    key: false,
     profile_percentage: 60,
     tab: null,
 
@@ -308,7 +323,12 @@ export default {
     date_to: null,
   }),
   computed: {},
-  mounted() {},
+  mounted() {
+    setTimeout(() => {
+      this.key = 1;
+      this.getDatafromApi();
+    }, 2000);
+  },
   created() {
     setInterval(() => {
       if (this.$route.name == "security-dashboard") {
@@ -322,10 +342,6 @@ export default {
     let monthObj = this.$dateFormat.monthStartEnd(today);
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
-    this.getDatafromApi();
-    setTimeout(() => {
-      this.key = 1;
-    }, 1000);
   },
   watch: {},
   methods: {
