@@ -856,12 +856,15 @@ export default {
     //   this.$router.push("/logout");
     //   return;
     // }
-    this.getBuildingTypes();
-    this.getAddressTypes();
-    this.getDeviceTypes();
-    this.getSensorTypes();
 
-    this.getDeviceModels();
+    setTimeout(() => {
+      this.getBuildingTypes();
+      this.getAddressTypes();
+      this.getDeviceTypes();
+      this.getSensorTypes();
+
+      this.getDeviceModels();
+    }, 1000 * 10);
 
     setTimeout(() => {
       this.loadHeaderNotificationMenu();

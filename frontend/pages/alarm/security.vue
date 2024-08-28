@@ -168,7 +168,7 @@
               </v-row>
             </template>
             <template v-slot:item.customers="{ item }">
-              {{ item.customers_assigned.length }}
+              {{ item.customers_assigned?.length || "0" }}
             </template>
             <template v-slot:item.contact_number="{ item }">
               {{ item.contact_number }}

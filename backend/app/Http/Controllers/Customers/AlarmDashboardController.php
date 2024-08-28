@@ -213,6 +213,7 @@ class AlarmDashboardController extends Controller
             ->when($request->filled('customer_id'), function ($query) use ($request) {
                 $query->where('customer_id', $request->customer_id);
             })
+            ->where('alarm_status', 1)
             ->where('alarm_type', "Burglary")
             ->when($request->filled("filter_customers_list"), function ($query) use ($request) {
                 $query->whereIn('customer_id', $request->filter_customers_list);
