@@ -286,15 +286,14 @@
             <v-list-item-content>
               <v-list-item-title class="black--text align-left text-left">
                 <v-row>
-                  <v-col cols="2" class="align-right text-right pr-1"
-                    ><img
+                  <v-col cols="2" class="align-right text-right pr-1">
+                    <img
                       :src="'/device-icons/' + item.icon"
                       style="width: 20px; vertical-align: middle"
                   /></v-col>
                   <v-col cols="10">
                     <span style="font-size: 14px">
                       <span>
-                        {{ notificationsMenuItems.length - 1 }}
                         {{ item.title }}
                         <div class="secondary-value">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
@@ -447,7 +446,7 @@
         </v-card>
       </v-dialog>
       <v-dialog
-        v-model="alarmPopupNotificationStatus"
+        v-model="dialogAlarmPopupNotificationStatus"
         transition="dialog-top-transition"
         max-width="1000"
         style="z-index: 9999"
@@ -458,23 +457,30 @@
         <template v-slot:default="dialog">
           <v-card style="z-index: 9999">
             <v-card-title
-              class="error alarm-popup-header"
-              background-color="error"
+              dense
+              class="error popup_background_red"
               style="
-                text-align: center;
-                padding-left: 35%;
+                text-align: center !important;
+                padding-left: 30%;
                 color: #fff !important;
+                background-color: red;
               "
-              >Attention : Alarm Notification(s)
+            >
+              Attention : Alarm Notification(s)
               <v-spacer></v-spacer>
-              <v-icon color="white" @click="wait5MinutesNextNotification()"
-                >mdi-close-circle-outline</v-icon
+              <v-icon
+                style="color: #fff"
+                @click="wait5MinutesNextNotification()"
+                outlined
               >
+                mdi mdi-close-circle
+              </v-icon>
             </v-card-title>
             <v-card-text>
               <AlarmPopupAllAlarmEvents
-                :items="notificationAlarmDevices"
+                :items="notificationAlarmDevicesContent"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
+                @callReset5Minutes="Reset5Minutes"
                 :key="key"
                 :alarm_icons="alarm_icons"
               />
@@ -512,14 +518,14 @@
                   color="error"
                   @click="
                     goToPage('/device');
-                    alarmPopupNotificationStatus = false;
+                    dialogAlarmPopupNotificationStatus = false;
                   "
                   >View Devices</v-btn
                 >
               </div> -->
             </v-card-text>
             <!-- <v-card-actions class="justify-end">
-              <v-btn text @click="alarmPopupNotificationStatus = false">Close</v-btn>
+              <v-btn text @click="dialogAlarmPopupNotificationStatus = false">Close</v-btn>
             </v-card-actions> -->
           </v-card>
         </template>
@@ -710,6 +716,7 @@ export default {
         Medical: "medical.png",
         Water: "water.png",
         Fire: "fire.png",
+        Humidity: "humidity.png",
       },
 
       wait5Minutes: false,
@@ -718,6 +725,7 @@ export default {
       globalSearchPopup: false,
       notificationsMenuItems: [],
       notificationAlarmDevices: {},
+      notificationAlarmDevicesContent: {},
       selectedBranchName: "All Branches",
       seelctedBranchId: "",
       branch_id: "",
@@ -795,7 +803,7 @@ export default {
       viewing_page_name: "",
 
       inactivityTimeout: null,
-      alarmPopupNotificationStatus: false,
+      dialogAlarmPopupNotificationStatus: false,
       key: 1,
       isBackendRequestOpen: false,
     };
@@ -843,21 +851,27 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
-      if (this.wait5Minutes == false) {
+      //this.loadHeaderNotificationMenu();
+
+      //console.log("wait5Minutes", this.wait5Minutes);
+      //if (this.wait5Minutes == false)
+      {
         if (this.$route.name != "login") {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
-          if (this.notificationAlarmDevices) {
-            if (this.notificationAlarmDevices.length > 0) {
-              this.alarmPopupNotificationStatus = true;
-            } else {
-              this.alarmPopupNotificationStatus = false;
+          if (this.wait5Minutes == false) {
+            if (this.notificationAlarmDevicesContent) {
+              if (this.notificationAlarmDevicesContent.length > 0) {
+                this.dialogAlarmPopupNotificationStatus = true;
+              } else {
+                this.dialogAlarmPopupNotificationStatus = false;
+              }
             }
           }
           //this.verifyPopupAlarmStatus();
         }
       }
-    }, 1000 * 3 * 1);
+    }, 1000 * 5 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -960,6 +974,9 @@ export default {
     },
   },
   methods: {
+    Reset5Minutes() {
+      this.wait5Minutes = false;
+    },
     wait5MinutesNextNotification() {
       this.snackbar = true;
       this.response = "New Alarm will be Display after 30 minutes";
@@ -969,7 +986,7 @@ export default {
         this.wait5Minutes = false;
       }, 1000 * 60 * 30);
 
-      this.alarmPopupNotificationStatus = false;
+      this.dialogAlarmPopupNotificationStatus = false;
     },
     wait5MinutesNotification() {
       this.wait5Minutes = true;
@@ -1177,6 +1194,9 @@ export default {
           this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
           this.notificationAlarmDevices = data;
+          this.pendingNotificationsCount = data.length;
+          this.notificationAlarmDevicesContent = data;
+
           data.forEach((element) => {
             let notificaiton = {
               title: element.device?.customer?.building_name
@@ -1185,21 +1205,20 @@ export default {
                   element.alarm_type
                 : "---",
               date_from: element.alarm_start_datetime,
-              click: "/security/allevents",
+              click: "/alarm/allevents",
               icon: this.alarm_icons[element.alarm_type] ?? "---",
               key: "leaves",
             };
 
             this.notificationsMenuItems.push(notificaiton);
           });
-
-          this.pendingNotificationsCount = data.length;
         });
     },
 
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
-      this.verifyPopupAlarmStatus();
+      this.dialogAlarmPopupNotificationStatus = true;
+      // this.verifyPopupAlarmStatus();
     },
     verifyPopupAlarmStatus() {
       if (this.isBackendRequestOpen) return false;
@@ -1220,9 +1239,9 @@ export default {
           if (data.length > 0) {
             this.notificationAlarmDevices = data;
 
-            this.alarmPopupNotificationStatus = true;
+            this.dialogAlarmPopupNotificationStatus = true;
           } else {
-            this.alarmPopupNotificationStatus = false;
+            this.dialogAlarmPopupNotificationStatus = false;
           }
         });
     },

@@ -217,10 +217,12 @@ export default {
         },
       };
 
-      this.$axios.get(`/device_alarm_fire_stats`, options).then(({ data }) => {
-        this.data = data;
-        this.renderChart1(data);
-      });
+      this.$axios
+        .get(`/security_device_alarm_fire_stats`, options)
+        .then(({ data }) => {
+          this.data = data;
+          this.renderChart1(data);
+        });
     },
 
     async renderChart1(data) {

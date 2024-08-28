@@ -50,6 +50,7 @@ class AuthController extends Controller
         }
         if ($user->user_type == "security") {
             $user->load("security");
+            $user->load("security.customersAssigned");
         }
 
         return ['user' => $user];

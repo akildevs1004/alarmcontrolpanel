@@ -731,6 +731,7 @@ export default {
         Medical: "medical.png",
         Water: "water.png",
         Fire: "fire.png",
+        Humidity: "humidity.png",
       },
 
       wait5Minutes: false,

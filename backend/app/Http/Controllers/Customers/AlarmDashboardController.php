@@ -52,6 +52,10 @@ class AlarmDashboardController extends Controller
                         });
                 });
 
+
+            $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                $model->whereIn('customer_id', $request->filter_customers_list);
+            });
             $statuses[$type]['online'] = $model->clone()->where('status_id', 1)->count();
             $statuses[$type]['offline'] = $model->clone()->where('status_id', 2)->count();
             $statuses[$type]['percentage'] = ($statuses[$type]['online'] + $statuses[$type]['offline'] > 0) ?  round($statuses[$type]['online'] * 100 / ($statuses[$type]['online'] + $statuses[$type]['offline'])) : 0;
@@ -158,7 +162,9 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
             ->where('alarm_type', "Temperature");
-
+        $events->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('customer_id', $request->filter_customers_list);
+        });
         return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventWaterStatistics(Request $request)
@@ -168,6 +174,9 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
             ->where('alarm_type', "Water");
+        $events->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('customer_id', $request->filter_customers_list);
+        });
 
         return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
@@ -178,7 +187,9 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
             ->where('alarm_type', "Fire");
-
+        $events->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+            $query->whereIn('customer_id', $request->filter_customers_list);
+        });
         return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
     public function alarmEventMedicalStatistics(Request $request)
@@ -189,8 +200,13 @@ class AlarmDashboardController extends Controller
             })
             ->where('alarm_type', "Medical");
 
+        $events->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('customer_id', $request->filter_customers_list);
+        });
+
         return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
+
     public function alarmEventBurglaryStatistics(Request $request)
     {
         $events = AlarmEvents::with(["category"])->where('company_id', $request['company_id'])
@@ -198,7 +214,9 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
             ->where('alarm_type', "Burglary")
-
+            ->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+                $query->whereIn('customer_id', $request->filter_customers_list);
+            })
             ->get()->groupBy("alarm_category");
 
         return $events;

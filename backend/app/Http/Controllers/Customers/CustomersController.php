@@ -14,6 +14,7 @@ use App\Models\Customers\Customers;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
+use App\Models\SecurityCustomers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -635,7 +636,23 @@ class CustomersController extends Controller
         ];
         return $data;
     }
+    public function SecurityCustomersListUpdate(Request $request)
+    {
 
+        if ($request->filled("security_id")) {
+            SecurityCustomers::where("security_id", $request->security_id)->delete();
+
+            foreach ($request->customers as $customer_id) {
+
+                if ((int)$customer_id) {
+                    $data = ["company_id" => $request->company_id, "security_id" => $request->security_id, "customer_id" => $customer_id];
+
+                    SecurityCustomers::create($data);
+                }
+            }
+        }
+        return $this->response('Customer Details are updated', null, true);
+    }
     public function resetCustomerPin(Request $request)
     {
 

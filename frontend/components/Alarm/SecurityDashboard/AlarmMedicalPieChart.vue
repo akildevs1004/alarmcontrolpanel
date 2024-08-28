@@ -218,7 +218,7 @@ export default {
       };
 
       this.$axios
-        .get(`/device_alarm_medical_stats`, options)
+        .get(`/security_device_alarm_medical_stats`, options)
         .then(({ data }) => {
           this.data = data;
           this.renderChart1(data);

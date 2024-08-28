@@ -5,7 +5,25 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-dialog v-model="dialogSecurityCustomers" max-width="800px">
+      <v-card>
+        <v-card-title dark class="popup_background">
+          <span dense> Add Customers Access</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="closeSecurityDialog()" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <SecurityCustomersList
+            :key="key"
+            :security_id="security_id"
+            :security="item"
+            @closeDialog="closeSecurityDialog"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="newSecurityDialog" max-width="700px">
       <v-card>
         <v-card-title dark class="popup_background">
@@ -149,7 +167,9 @@
                 </v-col>
               </v-row>
             </template>
-
+            <template v-slot:item.customers="{ item }">
+              {{ item.customers_assigned.length }}
+            </template>
             <template v-slot:item.contact_number="{ item }">
               {{ item.contact_number }}
             </template>
@@ -187,6 +207,17 @@
                       View
                     </v-list-item-title>
                   </v-list-item>
+                  <v-list-item
+                    v-if="can('device_notification_contnet_view')"
+                    @click="viewCustomers(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small>
+                        mdi-account-multiple
+                      </v-icon>
+                      Customers
+                    </v-list-item-title>
+                  </v-list-item>
                   <v-list-item @click="editItem(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
@@ -216,13 +247,16 @@
 <script>
 import AlarmNewSecurity from "../../components/Alarm/EditSecurity.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
+import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
 
 export default {
   components: {
     AlarmNewSecurity,
     AlarmCustomerView,
+    SecurityCustomersList,
   },
   data: () => ({
+    dialogSecurityCustomers: false,
     editId: null,
     item: null,
     editable: false,
@@ -246,6 +280,7 @@ export default {
     snackText: "",
     departments: [],
     Model: "Log",
+    security_id: null,
     endpoint: "security",
     payload: {},
     loading: true,
@@ -266,6 +301,10 @@ export default {
       {
         text: "Email",
         value: "email",
+      },
+      {
+        text: "Customers",
+        value: "customers",
       },
 
       {
@@ -338,6 +377,12 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    viewCustomers(item) {
+      this.security_id = item.id;
+      this.item = item;
+      this.key += 1;
+      this.dialogSecurityCustomers = true;
+    },
     getExpiryDatesCountColor(date) {
       const today = new Date();
 
@@ -354,6 +399,7 @@ export default {
     },
     closeSecurityDialog() {
       this.newSecurityDialog = false;
+      this.dialogSecurityCustomers = false;
       this.getDataFromApi();
     },
     getBuildingTypes() {

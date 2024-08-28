@@ -31,7 +31,17 @@ export default ({ $axios, store }, inject) => {
         user_type: user && user.user_type,
       };
     }
+    if (user && user.user_type == "security") {
+      let customersList = user.security.customers_assigned.map(
+        (e) => e.customer_id
+      );
 
+      config.params = {
+        ...config.params,
+        filter_customers_list: customersList,
+        user_type: user && user.user_type,
+      };
+    }
     return config; // Return the modified config
   });
 };

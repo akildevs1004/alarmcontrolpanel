@@ -49,7 +49,7 @@ Route::post('update_customer_settings', [CustomersController::class, 'updateCust
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
 Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
-
+Route::post("security_customers_update", [CustomersController::class, "SecurityCustomersListUpdate"]);
 
 
 //Devices
@@ -64,11 +64,11 @@ Route::get('sensor_types', [CustomersController::class, 'getSensorsList']);
 
 
 //security dashboard
-Route::get('device_alarm_burglary_stats', [AlarmDashboardController::class, 'alarmEventBurglaryStatistics']);
-Route::get('device_alarm_medical_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
-Route::get('device_alarm_water_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
-Route::get('device_alarm_temperature_stats', [AlarmDashboardController::class, 'alarmEventTemperatureStatistics']);
-Route::get('device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
+Route::get('security_device_alarm_burglary_stats', [AlarmDashboardController::class, 'alarmEventBurglaryStatistics']);
+Route::get('security_device_alarm_medical_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
+Route::get('security_device_alarm_water_stats', [AlarmDashboardController::class, 'alarmEventWaterStatistics']);
+Route::get('security_device_alarm_temperature_stats', [AlarmDashboardController::class, 'alarmEventTemperatureStatistics']);
+Route::get('security_device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
 
 
 //dashboard
@@ -76,7 +76,7 @@ Route::get('device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEv
 Route::apiResource('device_armed_logs', DeviceArmedLogsController::class);
 Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
 Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
-Route::get('device_live_stats_groupby', [AlarmDashboardController::class, 'getDeviceLiveStatisticsGroupBy']);
+Route::get('security_device_live_stats_groupby', [AlarmDashboardController::class, 'getDeviceLiveStatisticsGroupBy']);
 
 Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
 Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);

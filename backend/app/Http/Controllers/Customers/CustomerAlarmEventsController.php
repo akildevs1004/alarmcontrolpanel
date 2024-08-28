@@ -414,6 +414,23 @@ class CustomerAlarmEventsController extends Controller
         try {
             $jsonFilePath = 'alarm-sensors/' . $request->company_id . '_live_events.json';
             $fileContent = Storage::read($jsonFilePath);
+
+            if ($request->filled("filter_customers_list")) {
+                $data = json_decode($fileContent, true);
+
+                $filteredData = array_filter($data, function ($item) use ($request) {
+                    return in_array($item['customer_id'], $request->filter_customers_list);
+                });
+                $return = [];
+                foreach ($filteredData as $key => $value) {
+                    $return[] = $value;
+                }
+
+                return $return;
+            }
+
+
+
             return json_decode($fileContent, true);
         } catch (\Exception $e) {
 
@@ -436,6 +453,8 @@ class CustomerAlarmEventsController extends Controller
     public function getAlarmEvents(Request $request)
     {
         $model = $this->filter($request);
+
+
         $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
         return $model->paginate($request->perPage ?? 10);;
@@ -544,7 +563,9 @@ class CustomerAlarmEventsController extends Controller
         if ($request->filled("date_from")) {
             $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
         }
-
+        $model->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+            $query->whereIn('customer_id', $request->filter_customers_list);
+        });
 
         $model->when($request->filled('filterSensorname'), function ($q) use ($request) {
 

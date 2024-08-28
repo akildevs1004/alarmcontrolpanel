@@ -299,7 +299,7 @@ export default {
       Medical: { online: 0, offline: 0 },
     },
 
-    key: 1,
+    key: null,
     profile_percentage: 60,
     tab: null,
 
@@ -311,9 +311,11 @@ export default {
   mounted() {},
   created() {
     setInterval(() => {
-      this.key = this.key + 1;
-      this.getDatafromApi();
-    }, 1000 * 10);
+      if (this.$route.name == "security-dashboard") {
+        this.key = this.key + 1;
+        this.getDatafromApi();
+      }
+    }, 1000 * 30);
     // this._id = this.$route.params.id;
     let today = new Date();
 
@@ -321,6 +323,9 @@ export default {
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
     this.getDatafromApi();
+    setTimeout(() => {
+      this.key = 1;
+    }, 1000);
   },
   watch: {},
   methods: {
@@ -340,7 +345,7 @@ export default {
       };
 
       this.$axios
-        .get(`/device_live_stats_groupby`, options)
+        .get(`/security_device_live_stats_groupby`, options)
         .then(({ data }) => {
           this.onlineStats = data;
         });

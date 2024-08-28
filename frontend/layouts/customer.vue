@@ -458,18 +458,24 @@
         <template v-slot:default="dialog">
           <v-card style="z-index: 9999">
             <v-card-title
-              class="error alarm-popup-header"
-              background-color="error"
+              dense
+              class="error popup_background_red"
               style="
-                text-align: center;
-                padding-left: 35%;
+                text-align: center !important;
+                padding-left: 30%;
                 color: #fff !important;
+                background-color: red;
               "
-              >Attention : Alarm Notification(s)
+            >
+              Attention : Alarm Notification(s)
               <v-spacer></v-spacer>
-              <v-icon color="white" @click="wait5MinutesNextNotification()"
-                >mdi-close-circle-outline</v-icon
+              <v-icon
+                style="color: #fff"
+                @click="wait5MinutesNextNotification()"
+                outlined
               >
+                mdi mdi-close-circle
+              </v-icon>
             </v-card-title>
             <v-card-text>
               <AlarmPopupAllAlarmEvents
@@ -710,6 +716,7 @@ export default {
         Medical: "medical.png",
         Water: "water.png",
         Fire: "fire.png",
+        Humidity: "humidity.png",
       },
 
       wait5Minutes: false,
