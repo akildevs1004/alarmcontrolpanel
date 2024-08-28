@@ -223,7 +223,10 @@ export default {
     //this.getDataFromApi();
 
     setInterval(() => {
-      if (this.$route.name == "alarm-view-customer-id") {
+      if (
+        this.$route.name == "alarm-view-customer-id" ||
+        this.$route.name == "alarm-armedreports"
+      ) {
         this.getDataFromApi();
       }
     }, 1000 * 20);

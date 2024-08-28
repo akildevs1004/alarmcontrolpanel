@@ -270,7 +270,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     public function endAllAlarmsBySerialNumber($serial_number, $log_end_datetime)
     {
 
-        $alarmActiveEvents = AlarmEvents::where("serial_number", $serial_number)->where("alarm_end_datetime", null)->get();
+        $alarmActiveEvents = AlarmEvents::where("serial_number", $serial_number)->where("alarm_status", 1)->get();
         //turn off all alarms 
         foreach ($alarmActiveEvents  as $key => $event) {
             $datetime1 = new DateTime($log_end_datetime);
