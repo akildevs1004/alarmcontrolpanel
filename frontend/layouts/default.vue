@@ -902,8 +902,7 @@ export default {
     let menu_name = this.$route.name;
     let bgColor = "violet";
     let loadSelectedMenu = "";
-
-    menu_name = menu_name.replaceAll("-", "/");
+    if (menu_name) menu_name = menu_name.replaceAll("-", "/");
 
     // if (this.getLoginType === "company" || this.getLoginType === "branch") {
     //   //-------------------

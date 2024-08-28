@@ -326,7 +326,7 @@
 
         <v-list light nav dense>
           <v-list-item-group color="primary">
-            <v-list-item
+            <!-- <v-list-item
               v-if="$auth && $auth.user?.user_type == 'security'"
               @click="goToCompany()"
             >
@@ -338,7 +338,7 @@
                   >Profile</v-list-item-title
                 >
               </v-list-item-content>
-            </v-list-item>
+            </v-list-item> -->
 
             <v-list-item @click="logout">
               <v-list-item-icon>
@@ -883,8 +883,7 @@ export default {
     let menu_name = this.$route.name;
     let bgColor = "violet";
     let loadSelectedMenu = "";
-
-    menu_name = menu_name.replaceAll("-", "/");
+    if (menu_name) menu_name = menu_name.replaceAll("-", "/");
 
     // if (this.getLoginType === "company" || this.getLoginType === "branch") {
     //   //-------------------
