@@ -50,6 +50,10 @@
               </div>
             </span>
           </div>
+          <div>
+            Note: Check Customers Photo Mapping page incase any sensor is
+            missing
+          </div>
         </div>
       </v-col>
     </v-row>

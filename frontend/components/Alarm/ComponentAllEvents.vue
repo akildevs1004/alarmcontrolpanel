@@ -365,7 +365,7 @@
             </v-row>
 
             <v-row v-if="sensorItems.length > 0">
-              <v-col cols="12" style="padding-top: 0px; margin-top: -30px">
+              <v-col cols="12" style="padding: 0px; margin-top: -30px">
                 <v-tabs
                   v-if="sensorItems.length > 1"
                   v-model="tab"
@@ -375,8 +375,8 @@
                   bold
                 >
                   <v-tab
+                    @click="showTabContent()"
                     v-for="item in sensorItems"
-                    :key="item"
                     style="font-weight: bold"
                   >
                     {{ item }}
@@ -384,9 +384,9 @@
                 </v-tabs>
 
                 <v-tabs-items v-model="tab">
-                  <v-tab-item v-for="item in sensorItems" :key="item">
+                  <v-tab-item v-for="item in sensorItems">
                     <v-card color="basil" flat>
-                      <v-card-text>
+                      <v-card-text style="padding: 0px">
                         <v-data-table
                           v-if="showTable"
                           :headers="headers"
@@ -678,13 +678,13 @@ export default {
       deep: true,
     },
 
-    tab: {
-      handler() {
-        this.showTable = false;
-        this.getDataFromApi(0);
-      },
-      deep: true,
-    },
+    // tab: {
+    //   handler() {
+    //     this.showTable = false;
+    //     this.getDataFromApi(0);
+    //   },
+    //   deep: true,
+    // },
   },
   created() {
     let today = new Date();
@@ -726,6 +726,11 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    showTabContent() {
+      this.showTable = false;
+      console.log("Test", this.tab);
+      this.getDataFromApi(0);
     },
     closeCustomerDialog() {
       this.dialogTabViewCustomer = false;
@@ -890,6 +895,8 @@ export default {
       if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+      console.log(itemsPerPage);
 
       let sortedBy = sortBy ? sortBy[0] : "";
       let sortedDesc = sortDesc ? sortDesc[0] : "";

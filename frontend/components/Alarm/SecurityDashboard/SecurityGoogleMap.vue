@@ -81,6 +81,24 @@ export default {
       this.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12,
         center: { lat: 25.276987, lng: 55.296249 },
+        styles: [
+          {
+            featureType: "administrative",
+            stylers: [{ visibility: "off" }],
+          },
+          {
+            featureType: "administrative",
+            stylers: [{ visibility: "off" }],
+          },
+          {
+            featureType: "landscape",
+            stylers: [{ visibility: "off" }],
+          },
+          {
+            featureType: "poi",
+            stylers: [{ visibility: "off" }],
+          },
+        ],
       });
       this.geocoder = new google.maps.Geocoder();
       this.infowindow = new google.maps.InfoWindow();
