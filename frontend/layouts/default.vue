@@ -830,6 +830,12 @@ export default {
     if (this.$auth.user.user_type != "company") {
       this.$router.push("/logout", true);
     }
+    this.getBuildingTypes();
+    this.getAddressTypes();
+    this.getDeviceTypes();
+    this.getSensorTypes();
+
+    this.getDeviceModels();
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -856,15 +862,6 @@ export default {
     //   this.$router.push("/logout");
     //   return;
     // }
-
-    setTimeout(() => {
-      this.getBuildingTypes();
-      this.getAddressTypes();
-      this.getDeviceTypes();
-      this.getSensorTypes();
-
-      this.getDeviceModels();
-    }, 1000 * 10);
 
     setTimeout(() => {
       this.loadHeaderNotificationMenu();

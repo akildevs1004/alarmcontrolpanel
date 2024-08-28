@@ -79,8 +79,8 @@
     </v-row> -->
     <v-row>
       <v-col cols="12">
-        <v-card color="basil" flat>
-          <v-card-text>
+        <v-card color="basil" flat style="padding-left: 0px">
+          <v-card-text style="padding-left: 0px">
             <v-data-table :headers="headers" :items="items" class="elevation-0">
               <!-- <template v-slot:item.sno="{ item, index }">
                 {{

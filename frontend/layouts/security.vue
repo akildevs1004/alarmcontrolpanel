@@ -313,7 +313,7 @@
         origin="center center"
         bottom
         left
-        min-width="200"
+        min-width="100"
         nudge-left="20"
       >
         <template v-slot:activator="{ on, attrs }">
@@ -476,7 +476,7 @@
                 mdi mdi-close-circle
               </v-icon>
             </v-card-title>
-            <v-card-text>
+            <v-card-text style="padding-left: 0px">
               <AlarmPopupAllAlarmEvents
                 :items="notificationAlarmDevicesContent"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
@@ -812,6 +812,12 @@ export default {
     if (this.$auth.user.user_type != "security") {
       this.$router.push("/logout");
     }
+
+    this.getBuildingTypes();
+    this.getAddressTypes();
+    this.getDeviceTypes();
+    this.getSensorTypes();
+    this.getDeviceModels();
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -838,14 +844,7 @@ export default {
     //   this.$router.push("/logout");
     //   return;
     // }
-    setTimeout(() => {
-      this.getBuildingTypes();
-      this.getAddressTypes();
-      this.getDeviceTypes();
-      this.getSensorTypes();
-
-      this.getDeviceModels();
-    }, 1000 * 10);
+    setTimeout(() => {}, 1000 * 10);
 
     setTimeout(() => {
       this.loadHeaderNotificationMenu();
