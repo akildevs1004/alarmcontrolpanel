@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Customers\Alarm;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
+use App\Mail\EmailAlarmForwardMail;
 use App\Mail\EmailContentDefault;
 use App\Models\AlarmEvents;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\ReportNotificationLogs;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -27,7 +29,9 @@ class AlarmNotificationController extends Controller
             if ($alarm) {
 
                 foreach ($contacts as   $contact) {
+                    //return $contact;
 
+                    $contact = json_decode($contact, true);
 
                     $email = $contact['email'];
                     $name = $contact['name'];
@@ -37,13 +41,13 @@ class AlarmNotificationController extends Controller
                         try {
                             $this->sendMail($name, $alarm, $email, $alarm_id);
                         } catch (\Exception $e) {
-                            $response = $response . $email . ' - Error. ';
+                            $response = $response . $email . ' - Error. ' . $e;
                         }
                     }
 
                     if ($whatsapp_number != '') {
                         try {
-                            $this->sendMail($name, $alarm, $whatsapp_number, $alarm_id);
+                            $this->sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id);
                         } catch (\Exception $e) {
                             $response = $response . $whatsapp_number . ' - Whatsapp Error. ';
                         }
@@ -90,7 +94,11 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Type: {$alarm_type}<br/>";
         $body_content1 .= "Event Time:  {$event_datetime}<br/>";
         $body_content1 .= "Priority:  {$priority}<br/><br/>";
-        $body_content1 .= "Customer: {$primary_contact}<br/>";
+
+        $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
+        $body_content1 .= "Phone1: {$alarm['device']['customer']['primary_contact']}<br/>";
+        $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
+        $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
         $body_content1 .= "Property: {$property_type}<br/>";
         $body_content1 .= "Address: {$address}<br/>";
         $body_content1 .= "City: {$city}<br/><br/> ";
@@ -100,13 +108,16 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Thanks<br/>Xtreme Guard<br/>";
 
         $data = [
-            'subject' =>  "Event {$alarm_type} Notification at {$building_name} at  " .  $event_datetime,
+            'subject' =>  "#" . $alarm_id . "   '{$alarm_type}' Notification at {$building_name} Time  " .  $event_datetime,
 
             'body' => $body_content1,
+            'alarm' => $alarm,
+            'name' => $name,
+
         ];
 
 
-        $body_content1 = new EmailContentDefault($data); {
+        $body_content1 = new EmailAlarmForwardMail($data); {
             Mail::to($email)
                 ->send($body_content1);
             $data = [
@@ -121,6 +132,7 @@ class AlarmNotificationController extends Controller
 
             CustomerAlarmNotes::create($data);
         }
+        //return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
     }
 
     public function sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id)

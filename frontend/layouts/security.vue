@@ -466,7 +466,9 @@
                 background-color: red;
               "
             >
-              Attention : Alarm Notification(s)
+              <div style="text-align: right; width: 60%">
+                Attention : Alarm Notification(s)
+              </div>
               <v-spacer></v-spacer>
               <v-icon
                 style="color: #fff"
