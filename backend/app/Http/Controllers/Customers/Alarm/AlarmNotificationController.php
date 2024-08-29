@@ -31,7 +31,7 @@ class AlarmNotificationController extends Controller
                 foreach ($contacts as   $contact) {
                     //return $contact;
 
-                    $contact = json_decode($contact, true);
+                    //$contact = json_decode($contact, true);
 
                     $email = $contact['email'];
                     $name = $contact['name'];
