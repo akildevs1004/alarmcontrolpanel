@@ -173,7 +173,7 @@
                     <td> {{ $item->event_status   }} <br /> {{ $item->email   }} </td>
 
 
-
+                    <td>{{ changeDateformat($item->created_datetime) }} </td>
 
 
                 </tr>
