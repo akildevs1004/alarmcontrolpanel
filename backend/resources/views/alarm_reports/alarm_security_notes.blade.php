@@ -70,15 +70,16 @@
                     </div>
                 </td>
                 <td style="text-align: center;width: 35%; border :0px solid red;padding-left:0px;margin:0px   ">
+                    @php if($reports) { @endphp
                     <table style="width:100%">
                         <tr>
                             <td style="text-align:center;font-size:14px">
-                                Event ID : {{$reports[0]?$reports[0]->alarm_id:'---'}}
+                                Event ID : {{$reports?$reports[0]->alarm_id:'---'}}
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align:center;font-size:14px">
-                                Alarm : {{$reports[0]?$reports[0]->alarm->alarm_type:'---'}}
+                                Alarm : {{$reports ?$reports[0]->alarm->alarm_type:'---'}}
                             </td>
                         </tr>
                         <tr>
@@ -90,13 +91,13 @@
                         </tr>
                     </table>
 
-
+                    @php } @endphp
 
 
                     </div>
                 </td>
                 <td style=" text-align: right; width:35% ;margin:auto">
-
+                    @php if($reports) { @endphp
                     <table style="padding:0px;margin:0px;border-left :1px solid #DDD; ">
                         <tr style="text-align: left; border :none;padding:10px 0px">
                             <td style="text-align: left; border :none;font-size:12px;padding:0 0 5px 0px;">
@@ -127,7 +128,7 @@
                         </tr>
 
                     </table>
-
+                    @php } @endphp
                 </td>
             </tr>
         </table>
