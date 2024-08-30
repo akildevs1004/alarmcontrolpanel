@@ -45,8 +45,10 @@
                 <v-menu bottom right>
                   <template v-slot:activator="{ on, attrs }">
                     <span v-bind="attrs" v-on="on">
-                      <v-icon dark-2 icon color="violet" small>mdi-file</v-icon>
-                      Print/PDF
+                      <v-icon dark-2 icon color="violet" small
+                        >mdi-printer-outline</v-icon
+                      >
+                      Print
                     </span>
                   </template>
                   <v-list width="100" dense>

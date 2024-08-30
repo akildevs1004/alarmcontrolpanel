@@ -87,7 +87,7 @@ export default {
         }
 
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.mapKey}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?loading=async&key=${this.mapKey}&libraries=places`;
         script.async = true;
         script.defer = true;
         script.onload = resolve;

@@ -114,6 +114,10 @@ Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::cla
 
 Route::get('get_alarm_events_notes', [CustomerAlarmEventsController::class, 'getAlarmEventsNotes']);
 
+Route::get('security_alarm_notes_print_pdf', [CustomerAlarmEventsController::class, 'securityAlarmNotesPrintPdf']);
+Route::get('security_alarm_notes_export_excel', [CustomerAlarmEventsController::class, 'securityAlarmNotesExportExcel']);
+Route::get('security_alarm_notes_download_pdf', [CustomerAlarmEventsController::class, 'securityAlarmNotesDownloadPdf']);
+
 Route::post('customer_add_event_notes', [CustomerAlarmEventsController::class, "createEventNotes"]);
 Route::delete('delete-notes', [CustomerAlarmEventsController::class, "destroyNotes"]);
 Route::delete('delete-event', [CustomerAlarmEventsController::class, "destroyEvent"]);

@@ -163,7 +163,7 @@
         <v-row>
           <v-col cols="12" class="text-right" style="padding-top: 0px">
             <v-row>
-              <v-col cols="7"></v-col>
+              <v-col cols="6"></v-col>
               <v-col cols="5" class="text-right" style="width: 550px">
                 <v-row>
                   <v-col cols="1" class="mt-2">
@@ -196,6 +196,75 @@
                       :height="'40px'"
                   /></v-col>
                 </v-row>
+              </v-col>
+              <v-col cols="1" class="text-left pt-5 pl-0"
+                ><v-menu bottom right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <span v-bind="attrs" v-on="on" style="font-size: 16px">
+                      <v-icon dark-2 icon color="violet"
+                        >mdi-printer-outline</v-icon
+                      >
+                      Print
+                    </span>
+                  </template>
+                  <v-list width="100" dense>
+                    <v-list-item @click="downloadOptions(`print`)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_print.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            Print
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="downloadOptions('download')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_pdf.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            PDF
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item @click="downloadOptions('excel')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="5"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_excel.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="7"
+                            style="padding-left: 0px; padding-top: 19px"
+                          >
+                            EXCEL
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </v-col>
             </v-row>
           </v-col>
@@ -360,6 +429,21 @@ export default {
       this.date_to = data.to;
 
       this.getDataFromApi();
+    },
+    downloadOptions(option) {
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/security_alarm_notes_print_pdf";
+      if (option == "excel") url += "/security_alarm_notes_export_excel";
+      if (option == "download") url += "/security_alarm_notes_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&date_from=" + this.date_from;
+      url += "&date_to=" + this.date_to;
+      url += "&alarm_id=" + this.alarmId;
+      if (this.commonSearch) url += "&common_search=" + this.commonSearch;
+
+      //  url += "&alarm_status=" + this.filterAlarmStatus;
+
+      window.open(url, "_blank");
     },
     getDataFromApi() {
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;

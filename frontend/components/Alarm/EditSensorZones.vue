@@ -79,7 +79,7 @@
           v-model="d.zone_code"
         />
       </v-col>
-      <v-col cols="1" style="min-width: 110px; max-width: 110px; padding: 4px">
+      <!-- <v-col cols="1" style="min-width: 110px; max-width: 110px; padding: 4px">
         <v-select
           class="pb-0"
           hide-details
@@ -105,7 +105,7 @@
             { id: 0, name: 'No' },
           ]"
         ></v-select>
-      </v-col>
+      </v-col> -->
       <v-col cols="1" style="min-width: 50px; max-width: 50px; padding: 4px">
         <!-- <v-icon
           v-if="index == device.zones.length - 1"

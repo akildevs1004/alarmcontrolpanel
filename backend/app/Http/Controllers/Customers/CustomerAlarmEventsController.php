@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Exports\AlarmEventNotesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
+use App\Models\Company;
 use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Device;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerAlarmEventsController extends Controller
 {
@@ -394,9 +398,46 @@ class CustomerAlarmEventsController extends Controller
             throw $th;
         }
     }
+    public function securityAlarmNotesExportExcel(Request $request)
+    {
+        $model = $this->filterNotes($request);
+        $model->orderBy("created_datetime", "asc");
+        $reports = $model->get();
+
+        $file_name =  "Alarm Event Id " . $request->alarm_id . ' notes.xlsx';
+
+        return Excel::download((new AlarmEventNotesExport($reports)), $file_name);
+    }
+    public function securityAlarmNotesDownloadPdf(Request $request)
+    {
+
+        $model = $this->filterNotes($request);
+        $model->orderBy("created_datetime", "asc");
+        $report = $model->get();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $fileName = "Alarm Event Id " . $request->alarm_id . ' notes.pdf';
+        return   Pdf::loadview("alarm_reports/alarm_security_notes", ["reports" => $report, "company" => $company])->setpaper("A4", "potrait")->download($fileName);
+    }
+    public function securityAlarmNotesPrintPdf(Request $request)
+    {
+
+        $model = $this->filterNotes($request);
+        $model->orderBy("created_datetime", "asc");
+        $report = $model->get();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        return   Pdf::loadview("alarm_reports/alarm_security_notes", ["reports" => $report, "company" => $company])->setpaper("A4", "potrait")->stream("report.pdf");
+    }
     public function getAlarmEventsNotes(Request $request)
     {
-        $model = CustomerAlarmNotes::with(["security", "contact", "alarm"])->where("company_id", $request->company_id)
+        $model = $this->filterNotes($request);
+        $model->orderBy("created_datetime", "DESC");
+        return $model->paginate($request->perPage ?? 10);;
+    }
+    public function filterNotes($request)
+    {
+        $model = CustomerAlarmNotes::with(["security", "contact", "alarm.customer"])->where("company_id", $request->company_id)
             ->where("alarm_id", $request->alarm_id);
         $model->when($request->filled("contact_id"), function ($query) use ($request) {
             $query->where("contact_id", $request->contact_id);
@@ -428,8 +469,8 @@ class CustomerAlarmEventsController extends Controller
                     });
             });
         });
-        $model->orderBy("created_datetime", "DESC");
-        return $model->paginate($request->perPage ?? 10);;
+
+        return $model;
     }
     public function getAlarmNotificationsList(Request $request)
     {
