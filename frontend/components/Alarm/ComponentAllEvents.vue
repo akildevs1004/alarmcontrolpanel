@@ -733,7 +733,7 @@ export default {
     },
     showTabContent() {
       this.showTable = false;
-      console.log("Test", this.tab);
+
       this.getDataFromApi(0);
     },
     closeCustomerDialog() {
@@ -880,7 +880,9 @@ export default {
         let customersList = this.$auth.user.security.customers_assigned.map(
           (e) => e.customer_id
         );
-        url += "&filter_customers_list=" + customersList;
+        customersList.forEach((element) => {
+          url += "&filter_customers_list[]=" + element;
+        });
       }
       window.open(url, "_blank");
     },
@@ -899,8 +901,6 @@ export default {
       if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-      console.log(itemsPerPage);
 
       let sortedBy = sortBy ? sortBy[0] : "";
       let sortedDesc = sortDesc ? sortDesc[0] : "";
