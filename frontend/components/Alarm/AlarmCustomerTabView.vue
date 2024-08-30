@@ -6,44 +6,45 @@
       vertical
       background-color="#203864"
       dark
-      color="yellow"
+      color="#0aafeb"
+      class="customer-tabs-left-menu"
     >
-      <v-tab>
+      <v-tab class="customer-tab">
         Customer
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab class="customer-tab">
         Primary
         <v-icon>mdi-account-tie</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab class="customer-tab">
         Secondary
         <v-icon>mdi-account</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab class="customer-tab">
         Watchman
         <v-icon>mdi-shield-account</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab class="customer-tab">
         Poilice
         <v-icon>mdi-car-emergency</v-icon> </v-tab
-      ><v-tab>
+      ><v-tab class="customer-tab">
         Medical
         <v-icon>mdi-medical-bag</v-icon> </v-tab
-      ><v-tab>
+      ><v-tab class="customer-tab">
         Fire
         <v-icon>mdi-fire</v-icon> </v-tab
-      ><v-tab>
+      ><v-tab class="customer-tab">
         Technician
         <v-icon>mdi mdi-briefcase-account</v-icon> </v-tab
-      ><v-tab>
+      ><v-tab class="customer-tab">
         Logs
         <v-icon>mdi-text-box-outline</v-icon>
       </v-tab>
 
       <v-tab-item>
         <v-card flat>
-          <v-card-text>
+          <v-card-text class="customer-building-tabs-left-menu">
             <SecurityBuildingInfo v-if="customer" :customer="customer" />
           </v-card-text>
         </v-card>

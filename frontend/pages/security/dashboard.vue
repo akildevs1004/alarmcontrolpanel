@@ -269,8 +269,8 @@
       <v-row
         ><v-col><v-divider color="#DDD" /></v-col>
       </v-row>
-      <v-row>
-        <v-col cols="12"><AlamAllEvents /></v-col>
+      <v-row class="mt-5">
+        <v-col cols="12" style="padding-right: 25px"><AlamAllEvents /></v-col>
       </v-row>
     </v-card>
   </div>

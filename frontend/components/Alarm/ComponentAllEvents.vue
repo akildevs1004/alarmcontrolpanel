@@ -291,14 +291,14 @@
                       :defaultFilterType="1"
                       :height="'60px'"
                   /></v-col>
-                  <v-col cols="2" style="margin-top: 10px">
+                  <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>
                       <template v-slot:activator="{ on, attrs }">
                         <span v-bind="attrs" v-on="on">
-                          <v-icon dark-2 icon color="violet" small
-                            >mdi-file</v-icon
+                          <v-icon dark-2 icon color="violet"
+                            >mdi-printer-outline</v-icon
                           >
-                          Print/PDF
+                          Print
                         </span>
                       </template>
                       <v-list width="100" dense>
@@ -376,7 +376,8 @@
                 >
                   <v-tab
                     @click="showTabContent()"
-                    v-for="item in sensorItems"
+                    v-for="(item, index) in sensorItems"
+                    :key="item.id"
                     style="font-weight: bold"
                   >
                     {{ item }}
@@ -384,7 +385,10 @@
                 </v-tabs>
 
                 <v-tabs-items v-model="tab">
-                  <v-tab-item v-for="item in sensorItems">
+                  <v-tab-item
+                    v-for="(item, index) in sensorItems"
+                    :key="item.id"
+                  >
                     <v-card color="basil" flat>
                       <v-card-text style="padding: 0px">
                         <v-data-table

@@ -180,7 +180,8 @@
 
     <v-row>
       <v-col cols="8" style="font-size: 14px"
-        >Note:Multiple Zones can add to Control Panel Type
+        ><div style="color: red">{{ response }}</div>
+        Note:Multiple Zones can add to Control Panel Type
       </v-col>
       <v-col cols="4">
         <div class="text-right">
@@ -427,10 +428,10 @@ export default {
               if (data.errors) this.errors = data.errors;
 
               this.snackbar = true;
-              if (data.message) {
+              if (data.message != "") {
                 this.deviceResponse = data.message;
                 this.response = data.message;
-                this.$emit("closeDialog");
+                //this.$emit("closeDialog");
               } else {
                 this.deviceResponse = "Some fields are missing";
                 this.response = "Some fields are missing";

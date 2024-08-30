@@ -161,6 +161,46 @@
     <v-card flat>
       <v-card-text style="padding: 0px">
         <v-row>
+          <v-col cols="12" class="text-right" style="padding-top: 0px">
+            <v-row>
+              <v-col cols="7"></v-col>
+              <v-col cols="5" class="text-right" style="width: 550px">
+                <v-row>
+                  <v-col cols="1" class="mt-2">
+                    <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+                  </v-col>
+                  <v-col cols="5"
+                    ><v-text-field
+                      style="padding-top: 7px"
+                      width="150px"
+                      height="20"
+                      class="employee-schedule-search-box"
+                      @input="getDataFromApi()"
+                      v-model="commonSearch"
+                      label="Search"
+                      dense
+                      outlined
+                      type="text"
+                      append-icon="mdi-magnify"
+                      clearable
+                      hide-details
+                    ></v-text-field
+                  ></v-col>
+                  <v-col cols="6">
+                    <CustomFilter
+                      style="float: right; padding-top: 5px; z-index: 9999"
+                      @filter-attr="filterAttr"
+                      :default_date_from="date_from"
+                      :default_date_to="date_to"
+                      :defaultFilterType="1"
+                      :height="'40px'"
+                  /></v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col>
             <v-data-table
               :style="
@@ -264,7 +304,7 @@ export default {
     totalRowsCount: 0,
     headers: [
       { text: "#", value: "sno", sortable: false },
-      { text: "Date", value: "date", sortable: false },
+
       { text: "Security", value: "security", sortable: false },
       { text: "Customer", value: "customer", sortable: false },
       { text: "Phone", value: "phone", sortable: false },
@@ -275,15 +315,24 @@ export default {
       { text: "Notes", value: "notes", sortable: false },
       { text: "Event Status", value: "event_status", sortable: false },
       { text: "Actions", value: "action", sortable: false },
+      { text: "Date", value: "date", sortable: false },
       // { text: "Status", value: "status", sortable: false },
     ],
     items: [],
     globalContactDetails: null,
     key: 1,
+    date_from: "",
+    date_to: "",
+    commonSearch: "",
   }),
   computed: {},
   mounted() {},
-  created() {},
+  created() {
+    let today = new Date();
+    let monthObj = this.$dateFormat.monthStartEnd(today);
+    this.date_from = monthObj.first;
+    this.date_to = monthObj.last;
+  },
   watch: {
     options: {
       handler() {
@@ -306,6 +355,12 @@ export default {
       this.selectedItem = item;
       this.dialogNotes = true;
     },
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
+
+      this.getDataFromApi();
+    },
     getDataFromApi() {
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
@@ -326,6 +381,9 @@ export default {
           customer_id: this.customer.customer_id,
           contact_id: this.contact_id,
           alarm_id: this.alarmId,
+          date_from: this.date_from,
+          date_to: this.date_to,
+          common_search: this.commonSearch,
         },
       };
 

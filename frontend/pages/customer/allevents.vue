@@ -143,13 +143,13 @@
               color="basil"
               grow
             >
-              <v-tab v-for="item in sensorItems" :key="item">
+              <v-tab v-for="(item, index) in sensorItems" :key="item.id">
                 {{ item }}
               </v-tab>
             </v-tabs>
 
             <v-tabs-items v-model="tab">
-              <v-tab-item v-for="item in sensorItems" :key="item">
+              <v-tab-item v-for="(item, index) in sensorItems" :key="item.id">
                 <v-card color="basil" flat>
                   <v-card-text>
                     <v-data-table

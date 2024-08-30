@@ -302,12 +302,12 @@ class DeviceController extends Controller
             }
 
             $model = Device::query();
-            $model->where("company_id", $request->company_id);
+            //$model->where("company_id", $request->company_id);
             $model->where("serial_number", $request->serial_number);
-            $model->where("name", $request->name);
+            //$model->where("name", $request->name);
 
             if ($model->exists()) {
-                return $this->response('Device already exist.', null, false);
+                return $this->response('Device Serial Number is already exist ' . $request->serial_number, null, false);
             }
 
             $data = $request->validated();
@@ -326,7 +326,7 @@ class DeviceController extends Controller
 
             $data["ip"] = "0.0.0.0";
             $data["port"] = "0000";
-            $record = $model->create($data);
+            $record = Device::create($data);
             $this->updateDevicesJson();
             if ($record) {
                 return $this->response('Device successfully added.', $record, true);

@@ -1,4 +1,13 @@
-export default ({ $axios, store }, inject) => {
+export default ({ app, $axios, store }, inject) => {
+  $axios.onError((error) => {
+    console.log("error", error);
+    if (error.response && error.response.status === 401) {
+      app.$auth.refreshTokens();
+      app.$auth.reset();
+    }
+
+    return Promise.reject(error);
+  });
   $axios.onRequest(async (config) => {
     let user = store.state.auth.user;
 

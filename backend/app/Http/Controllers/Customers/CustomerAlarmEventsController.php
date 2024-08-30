@@ -401,6 +401,33 @@ class CustomerAlarmEventsController extends Controller
         $model->when($request->filled("contact_id"), function ($query) use ($request) {
             $query->where("contact_id", $request->contact_id);
         });
+
+        $model->when($request->filled("date_from"), function ($query) use ($request) {
+            $query->WhereBetween("created_datetime", [$request->date_from . " 00:00:00", $request->date_to . " 23:59:59"]);
+        });
+
+        $model->when($request->filled("common_search"), function ($query) use ($request) {
+
+
+            $query->where(function ($q) use ($request) {
+                $q->where("notes", "ILIKE", "%$request->common_search%")
+
+                    ->orWhere("call_status", "ILIKE", "%$request->common_search%")
+                    ->orWhere("response", "ILIKE", "%$request->common_search%")
+                    ->orWhere("event_status", "ILIKE", "%$request->common_search%")
+                    ->orWherehas("contact", function ($query) use ($request) {
+
+                        $query->where("first_name", "ILIKE",  "%$request->common_search%")
+                            ->orWhere("last_name", "ILIKE",  "%$request->common_search%")
+                            ->orWhere("phone1", "ILIKE",  "%$request->common_search%");
+                    })
+                    ->orWherehas("security", function ($query) use ($request) {
+
+                        $query->where("first_name", "ILIKE",  "%$request->common_search%")
+                            ->orWhere("last_name", "ILIKE",  "%$request->common_search%");
+                    });
+            });
+        });
         $model->orderBy("created_datetime", "DESC");
         return $model->paginate($request->perPage ?? 10);;
     }

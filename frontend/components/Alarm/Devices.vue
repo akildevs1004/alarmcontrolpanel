@@ -436,14 +436,14 @@ export default {
 
       { text: "Location", value: "location" },
 
-      { text: "Delay(Min)", value: "delay" },
+      // { text: "Delay(Min)", value: "delay" },
       { text: "24 Hrs", value: "hrs_24" },
-      { text: "Sensor", value: "sensor", align: "center" },
+      // { text: "Sensor", value: "sensor", align: "center" },
       { text: "Temperature", value: "threshold_temperature" },
       { text: "Online", value: "status" },
-      { text: "Armed", value: "armed", align: "center" },
+      // { text: "Armed", value: "armed", align: "center" },
 
-      { text: "Alarm", value: "alarm" },
+      // { text: "Alarm", value: "alarm" },
       { text: "Options", value: "options", align: "center" },
     ],
     editedIndex: -1,

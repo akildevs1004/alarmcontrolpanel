@@ -26,9 +26,9 @@
             <v-row>
               <v-col
                 cols="4"
+                style="padding-top: 5px"
                 v-if="contact_type == 'primary' || contact_type == 'secondary'"
               >
-                <span>{{ caps(contact_type) }} Information</span>
                 <v-img
                   style="
                     width: 200px;
@@ -42,6 +42,9 @@
                       : '/no-profile-image.jpg'
                   "
                 ></v-img>
+                <div style="" class="text-center">
+                  {{ caps(contact_type) }} Contact
+                </div>
               </v-col>
               <v-col
                 :cols="
@@ -49,7 +52,7 @@
                     ? 8
                     : 12
                 "
-                style="line-height: 20px; font-weight: bold"
+                style="line-height: 20px; color: #000"
               >
                 <v-row>
                   <v-col cols="12">
@@ -109,6 +112,18 @@
                       v-model="globalContactDetails.office_phone"
                       hide-details
                     >
+                    </v-text-field> </v-col
+                  ><v-col cols="12">
+                    <v-text-field
+                      readonly
+                      class=""
+                      label="Email"
+                      dense
+                      outlined
+                      flat
+                      v-model="globalContactDetails.email"
+                      hide-details
+                    >
                     </v-text-field>
                   </v-col>
                 </v-row>
@@ -121,7 +136,7 @@
               <v-col cols="4">
                 <div
                   style="
-                    height: 170px;
+                    height: 160px;
                     width: 100%;
                     border: 1px solid rgb(157, 157, 157);
                     border-radius: 5px;
@@ -149,7 +164,7 @@
               <v-col cols="4">
                 <div
                   style="
-                    height: 170px;
+                    height: 160px;
                     width: 100%;
                     border: 1px solid rgb(157, 157, 157);
                     border-radius: 5px;
@@ -166,17 +181,14 @@
                     ></v-radio>
                     <v-radio label="True alarm" value="True alarm"></v-radio>
                     <v-radio label="Not aware " value="Not aware"></v-radio>
-                    <v-radio
-                      label="Out of the property"
-                      value="Out of the property"
-                    ></v-radio>
+                    <v-radio label="Not in Town" value="Not in Town"></v-radio>
                   </v-radio-group>
                 </div>
               </v-col>
               <v-col cols="4">
                 <div
                   style="
-                    height: 170px;
+                    height: 160px;
                     width: 100%;
                     border: 1px solid rgb(157, 157, 157);
                     border-radius: 5px;
@@ -213,7 +225,7 @@
                   <div>
                     <v-textarea
                       outlined
-                      class="mt-2"
+                      class="mt-1"
                       name="input-7-4"
                       label="Action Notes"
                       value=""
@@ -223,15 +235,18 @@
                     ></v-textarea>
                   </div> </v-col
               ></v-row>
-              <v-row
-                ><v-col cols="6">
-                  <div v-if="event_payload.event_status == 'Closed'">
+              <v-row style="margin-top: 3px"
+                ><v-col cols="4">
+                  <div>
                     <v-text-field
+                      :disabled="
+                        event_payload.event_status == 'Closed' ? false : true
+                      "
                       type="number"
                       min="0"
                       max="10"
                       class=""
-                      label="Enter Contact PIN Number"
+                      label="PIN Number"
                       dense
                       outlined
                       flat
@@ -242,13 +257,18 @@
                     </v-text-field>
                   </div>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="4">
                   <v-btn
                     @click="submit"
                     class="mt-1"
                     small
-                    color="primary"
-                    style="margin: auto; margin-top: -10px"
+                    color="#203864"
+                    style="
+                      margin: auto;
+                      margin-top: -10px;
+                      width: 100px;
+                      color: #00b8fb;
+                    "
                     >Submit</v-btn
                   >
                 </v-col>
