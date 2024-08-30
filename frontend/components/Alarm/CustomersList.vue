@@ -8,7 +8,7 @@
     <v-dialog v-model="dialogViewCustomer" width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> New Customer</span>
+          <span dense style="color: black"> Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
