@@ -586,7 +586,7 @@ import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
 
 import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
-import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerTabView.vue";
+import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerContactsTabView.vue";
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";

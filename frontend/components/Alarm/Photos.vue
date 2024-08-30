@@ -90,8 +90,8 @@
       <v-col
         v-for="(item, index) in building_photos"
         :key="index"
-        cols="3"
-        class="mt-3"
+        cols="4"
+        class="mt-1"
         style="line-height: 35px; border-right: #ddd 0px solid"
       >
         <v-card class="elevation-1 pl-1">

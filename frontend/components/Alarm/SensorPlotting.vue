@@ -2,10 +2,10 @@
   <div class="text-centers">
     <v-dialog v-model="dialog" width="1000">
       <template v-slot:activator="{ on, attrs }">
-        <v-icon color="secondary" small v-bind="attrs" v-on="on">
-          mdi-leak
-        </v-icon>
-        Sensor Plotting
+        <div v-bind="attrs" v-on="on">
+          <v-icon color="secondary" small> mdi-leak </v-icon>
+          Sensor Plotting
+        </div>
       </template>
 
       <v-card>

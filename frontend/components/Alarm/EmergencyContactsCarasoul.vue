@@ -85,7 +85,174 @@
           Add
         </v-btn>
       </v-col>
+      <v-carousel>
+        <template v-for="(item, index) in customer_contacts">
+          <v-carousel-item
+            v-if="(index + 1) % columns === 1 || columns === 1"
+            :key="index"
+          >
+            <v-row class="flex-nowrap" style="height: 100%">
+              <template v-for="(n, i) in columns">
+                <template v-if="+index + i < customer_contacts.length">
+                  <v-col :key="i">
+                    <v-sheet v-if="+index + i < customer_contacts.length">
+                      <v-card class="elevation-1 pl-1">
+                        <v-row>
+                          <v-col cols="10"
+                            ><h3 style="">
+                              {{ customer_contacts[+index + i].address_type }}
+                            </h3></v-col
+                          >
 
+                          <v-col cols="2" class="text-right">
+                            <v-menu bottom left>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                                  <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                              </template>
+                              <v-list width="120" dense>
+                                <v-list-item
+                                  v-if="can('device_notification_contnet_view')"
+                                  @click="
+                                    editContactDetails(
+                                      customer_contacts[+index + i].id
+                                    )
+                                  "
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-icon color="secondary" small>
+                                      mdi-eye
+                                    </v-icon>
+                                    Edit
+                                  </v-list-item-title>
+                                </v-list-item>
+
+                                <v-list-item
+                                  v-if="
+                                    can('device_notification_contnet_delete')
+                                  "
+                                  @click="
+                                    deleteContactDetails(
+                                      customer_contacts[+index + i].id
+                                    )
+                                  "
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-icon color="error" small>
+                                      mdi-delete
+                                    </v-icon>
+                                    Delete
+                                  </v-list-item-title>
+                                </v-list-item>
+                              </v-list>
+                            </v-menu>
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4">Address</v-col>
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].address }}
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4">Contact Person</v-col>
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].first_name }}
+                            {{ customer_contacts[+index + i].last_name }}
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4">
+                            <!-- <v-icon color="primary" size="18" style="line-height: 2px"
+              >mdi mdi-phone-classic</v-icon
+            > -->
+                            Office</v-col
+                          >
+                          <v-col cols="8" class="bold">{{
+                            customer_contacts[+index + i].office_phone
+                          }}</v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4">
+                            <!-- <v-icon color="primary" style="line-height: 2px"
+              >mdi mdi-cellphone-basic</v-icon
+            > -->
+                            Phone 1
+                          </v-col>
+                          <v-col cols="8" class="bold"
+                            >{{ customer_contacts[+index + i].phone1 }}
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4">
+                            <!-- <v-icon color="primary" style="line-height: 2px"
+              >mdi mdi-cellphone-basic</v-icon
+            > -->
+                            Phone 2</v-col
+                          >
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].phone2 }}</v-col
+                          >
+                        </v-row>
+
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4" class="p1-0">
+                            <!-- <v-icon color="primary" size="18" style="line-height: 2px"
+              >mdi mdi-at</v-icon
+            > -->
+                            Email</v-col
+                          >
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].email }}</v-col
+                          >
+                        </v-row>
+                        <v-divider></v-divider>
+
+                        <v-row>
+                          <v-col cols="4" class="p1-0">
+                            <!-- <v-icon color="primary" size="18" style="line-height: 2px"
+              >mdi mdi-whatsapp</v-icon
+            > -->
+                            Whatsapp</v-col
+                          >
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].whatsapp }}
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4" class="p1-0"> Distance </v-col>
+                          <v-col cols="8" class="bold">
+                            {{ customer_contacts[+index + i].distance }}</v-col
+                          >
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row>
+                          <v-col cols="4" class="p1-0">Map Positions</v-col>
+                          <v-col cols="8" class="bold pr-0">
+                            {{ customer_contacts[+index + i]?.latitude }}
+                            <br />
+                            {{
+                              customer_contacts[+index + i]?.longitude
+                            }}</v-col
+                          >
+                        </v-row>
+                      </v-card>
+                    </v-sheet>
+                  </v-col>
+                </template>
+              </template>
+            </v-row>
+          </v-carousel-item>
+        </template>
+      </v-carousel>
       <v-col
         v-for="(item, index) in customer_contacts"
         :key="index"

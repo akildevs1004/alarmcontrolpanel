@@ -5,13 +5,27 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogViewCustomer" width="110%">
-      <AlarmCustomerView
-        :key="key"
-        @closeCustomerDialog="closeCustomerDialog"
-        :_id="viewCustomerId"
-        :isPopup="true"
-      />
+    <v-dialog v-model="dialogViewCustomer" width="80%">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"> New Customer</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewCustomer = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding: 0px"
+          ><AlarmCustomerTabsView
+            :key="key"
+            @closeCustomerDialog="closeCustomerDialog"
+            :_id="viewCustomerId"
+            :isPopup="true"
+        /></v-card-text>
+      </v-card>
     </v-dialog>
     <v-dialog v-model="newCustomerDialog" max-width="900px">
       <v-card>
@@ -268,6 +282,15 @@
                 <v-list width="120" dense>
                   <v-list-item
                     v-if="can('device_notification_contnet_view')"
+                    @click="viewItem(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-eye </v-icon>
+                      View
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -299,6 +322,7 @@
 <script>
 import AlarmNewCustomer from "../../components/Alarm/NewCustomer.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
+import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
 
 export default {
   props: ["eventFilter"],

@@ -6,17 +6,17 @@
       </v-snackbar>
     </div>
     <v-row>
-      <v-col md="6" sm="12" cols="12" dense>
+      <v-col cols="6" dense>
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <h3>Primary Contact</h3>
           <v-row class="pt-0">
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="12" dense>
               <div class="text-center mt-0">
                 <v-img
                   style="
                     height: auto;
-                    min-height: 100px;
-                    width: 100px;
+                    min-height: 150px;
+                    width: 150px;
                     border-radius: 50%;
                     margin: 0 auto;
                   "
@@ -47,7 +47,7 @@
                 >
               </div>
             </v-col>
-            <v-col md="6" cols="6" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="First Name"
                 dense
@@ -58,7 +58,7 @@
                 hide-details
               ></v-text-field>
             </v-col>
-            <v-col md="6" cols="6" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Last Name"
                 dense
@@ -69,7 +69,7 @@
                 hide-details
               ></v-text-field>
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 1"
                 dense
@@ -85,7 +85,7 @@
                 >{{ primary_errors.phone1[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 2"
                 dense
@@ -101,7 +101,7 @@
                 >{{ primary_errors.phone2[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Office Phone"
                 dense
@@ -117,7 +117,7 @@
                 >{{ primary_errors.office_phone[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Email"
                 dense
@@ -133,7 +133,7 @@
                 >{{ primary_errors.email[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Whatsapp"
                 dense
@@ -149,7 +149,7 @@
                 >{{ primary_errors.whatsapp[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Alarm STOP Pin"
                 dense
@@ -182,17 +182,17 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col md="6" sm="12" cols="12" dense style="border-left: 1px solid #ddd">
+      <v-col cols="6" dense style="border-left: 1px solid #ddd">
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <h3>Secondary Contact</h3>
           <v-row class="pt-0">
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="12" dense>
               <div class="text-center mt-0">
                 <v-img
                   style="
                     height: auto;
-                    min-height: 100px;
-                    width: 100px;
+                    min-height: 150px;
+                    width: 150px;
                     border-radius: 50%;
                     margin: 0 auto;
                   "
@@ -223,7 +223,7 @@
                 >
               </div>
             </v-col>
-            <v-col md="6" cols="6" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="First Name"
                 dense
@@ -234,7 +234,7 @@
                 hide-details
               ></v-text-field>
             </v-col>
-            <v-col md="6" cols="6" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Last Name"
                 dense
@@ -245,7 +245,7 @@
                 hide-details
               ></v-text-field>
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 1"
                 dense
@@ -261,7 +261,7 @@
                 >{{ secondary_errors.phone1[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 2"
                 dense
@@ -277,7 +277,7 @@
                 >{{ secondary_errors.phone2[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Office Phone"
                 dense
@@ -293,7 +293,7 @@
                 >{{ secondary_errors.office_phone[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Email"
                 dense
@@ -309,7 +309,7 @@
                 >{{ secondary_errors.email[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Whatsapp"
                 dense
@@ -325,7 +325,7 @@
                 >{{ secondary_errors.whatsapp[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Alarm STOP Pin"
                 dense
@@ -362,7 +362,7 @@
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <h3>Building Details</h3>
           <v-row class="pt-0">
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <div class="text-center mt-0">
                 <v-img
                   style="
@@ -400,7 +400,7 @@
               </div>
             </v-col>
 
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 1"
                 dense
@@ -416,7 +416,7 @@
                 >{{ building_errors.phone1[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Phone 2"
                 dense
@@ -432,7 +432,7 @@
                 >{{ building_errors.phone2[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Office Phone"
                 dense
@@ -448,7 +448,7 @@
                 >{{ building_errors.office_phone[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Email"
                 dense
@@ -464,7 +464,7 @@
                 >{{ building_errors.email[0] }}</span
               >
             </v-col>
-            <v-col md="12" cols="12" sm="12" dense>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Whatsapp"
                 dense
@@ -732,7 +732,6 @@ export default {
     },
     async submit_secondary() {
       const primaryResult = await this.submit_primary();
-      alert("Primary", primaryResult);
 
       if (primaryResult) {
         let customer = new FormData();

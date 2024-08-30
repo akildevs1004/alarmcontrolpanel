@@ -39,9 +39,9 @@
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
           <v-col
-            cols="8"
+            cols="6"
             style="
-              font-size: 18px;
+              font-size: 14px;
               font-weight: bold;
               padding-top: 25px;
               text-align: left;
@@ -56,7 +56,7 @@
               >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
             </span></v-col
           >
-          <v-col cols="4" class="text-right" style="width: 450px">
+          <v-col cols="6" class="text-right" style="width: 550px">
             <v-row>
               <v-col cols="4"
                 ><v-text-field

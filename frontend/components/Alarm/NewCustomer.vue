@@ -9,12 +9,7 @@
       <v-col cols="12" md="3">
         <div class="text-center mt-7">
           <v-img
-            style="
-              width: 150px;
-              height: 150px;
-              border-radius: 50%;
-              margin: 0 auto;
-            "
+            style="width: 100%; height: auto; border-radius: 2%; margin: 0 auto"
             :src="previewImage || '/no-business_profile.png'"
           ></v-img>
           <v-btn
@@ -22,7 +17,7 @@
             style="width: 100%"
             small
             @click="onpick_attachment"
-            >{{ !upload.name ? "Upload" : "Change" }}
+            >{{ !previewImage ? "Upload" : "Change" }}
             <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
           </v-btn>
 
@@ -401,11 +396,13 @@ export default {
     previewImage: null,
   }),
   created() {
+    console.log(this.customer);
+
     this.preloader = false;
     // this.getBranchesList();
     this.getBuildingTypes();
 
-    if (this.customer_id) {
+    if (this.customer) {
       this.previewImage = this.customer.profile_picture;
       this.customer_payload.building_type_id = this.customer.building_type_id;
       this.customer_payload.building_name = this.customer.building_name;
