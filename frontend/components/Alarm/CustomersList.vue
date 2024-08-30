@@ -289,7 +289,7 @@
                       View
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
+                  <!-- <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
                   >
@@ -297,7 +297,7 @@
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
                     </v-list-item-title>
-                  </v-list-item>
+                  </v-list-item> -->
 
                   <v-list-item
                     v-if="can('device_notification_contnet_delete')"
