@@ -202,17 +202,11 @@
 </template>
 
 <script>
-import EditSerialNumbers from "../../../components/Master/EditSerialNumbers.vue";
-// import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
-// import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
+//import EditSerialNumbers111 from "../../../components/Master/EditSerialNumbers.vue";
 
 export default {
   layout: "master",
-  components: {
-    EditSerialNumbers,
-    // AlarmCustomerView,
-    // SecurityCustomersList,
-  },
+  components: {},
   data: () => ({
     dialogSecurityCustomers: false,
     editId: null,
