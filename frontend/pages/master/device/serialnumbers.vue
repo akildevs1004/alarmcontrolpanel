@@ -202,11 +202,11 @@
 </template>
 
 <script>
-//import EditSerialNumbers111 from "../../../components/Master/EditSerialNumbers.vue";
+import EditSerialNumbers from "../../../components/master/EditSerialNumbers.vue";
 
 export default {
   layout: "master",
-  components: {},
+  components: { EditSerialNumbers },
   data: () => ({
     dialogSecurityCustomers: false,
     editId: null,
