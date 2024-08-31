@@ -2,13 +2,13 @@
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
+      expand-on-hover
+      rail
       dark
-      :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
-      class="no_print"
-      color="background"
+      :width="!miniVariant ? '200px!important' : '60px'"
     >
       <v-list v-for="(i, idx) in items" :key="idx" style="padding: 5px 0 0 0px">
         <v-list-item
@@ -67,12 +67,12 @@
 
     <v-app-bar color="primary" dark :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+      <!--<v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
+       <v-btn icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
-      </v-btn>
+      </v-btn> -->
       {{ title }}
       <v-spacer></v-spacer>
       <!-- <v-btn icon @click.stop="rightDrawer = !rightDrawer">
@@ -84,7 +84,7 @@
         origin="center center"
         bottom
         left
-        min-width="200"
+        min-width="150"
         nudge-left="5"
         nudge-right="5"
         fixed
@@ -196,18 +196,18 @@ export default {
           to: "/master/companies",
           permission: this.can("company_access"),
         },
-        {
-          icon: "mdi-account-multiple",
-          title: "Communities",
-          to: "/master/communities",
-          permission: this.can("company_access"),
-        },
-        {
-          icon: "mdi mdi-playlist-remove",
-          title: "Missing Logs",
-          to: "/master/attendance/missingrecords",
-          permission: this.can("master"),
-        },
+        // {
+        //   icon: "mdi-account-multiple",
+        //   title: "Communities",
+        //   to: "/master/communities",
+        //   permission: this.can("company_access"),
+        // },
+        // {
+        //   icon: "mdi mdi-playlist-remove",
+        //   title: "Missing Logs",
+        //   to: "/master/attendance/missingrecords",
+        //   permission: this.can("master"),
+        // },
         {
           icon: "mdi-login-variant",
           title: "Web Logs",
@@ -215,25 +215,31 @@ export default {
           permission: this.can("master"),
         },
         {
-          icon: "mdi-apps",
-          title: "Module",
-          open_menu: false,
-          permission: this.can("module_access"),
-          hasChildren: [
-            {
-              icon: "mdi-chart-bubble",
-              title: "Module",
-              to: "/master/module",
-              permission: this.can("module_access"),
-            },
-            {
-              icon: "mdi-chart-bubble",
-              title: "Assign Modules",
-              to: "/master/assign_module",
-              permission: this.can("assign_module_access"),
-            },
-          ],
+          icon: "mdi-login-variant",
+          title: "Serial Numbers",
+          to: "/master/device/serialnumbers",
+          permission: this.can("master"),
         },
+        // {
+        //   icon: "mdi-apps",
+        //   title: "Module",
+        //   open_menu: false,
+        //   permission: this.can("module_access"),
+        //   hasChildren: [
+        //     {
+        //       icon: "mdi-chart-bubble",
+        //       title: "Module",
+        //       to: "/master/module",
+        //       permission: this.can("module_access"),
+        //     },
+        //     {
+        //       icon: "mdi-chart-bubble",
+        //       title: "Assign Modules",
+        //       to: "/master/assign_module",
+        //       permission: this.can("assign_module_access"),
+        //     },
+        //   ],
+        // },
 
         // {
         //   icon: "mdi-account",
@@ -271,7 +277,7 @@ export default {
       clipped: true,
 
       miniVariant: false,
-      title: "Attendance System",
+      title: "Alarm Control Panel",
       logout_btn: {
         icon: "mdi-logout",
         label: "Logout",
@@ -295,10 +301,16 @@ export default {
     },
 
     getLogo() {
-      return Array.from(
-        this.$auth.user && this.$auth.user.name
-      )[0].toUpperCase();
+      if (this.$auth.user)
+        return Array.from(
+          this.$auth.user && this.$auth.user.name
+        )[0].toUpperCase();
     },
   },
 };
 </script>
+<style>
+.container {
+  max-width: 100% !important;
+}
+</style>

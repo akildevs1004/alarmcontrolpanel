@@ -14,6 +14,7 @@ use App\Models\Customers\Customers;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
+use App\Models\MasterDeviceSerialNumbers;
 use App\Models\SecurityCustomers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -628,11 +629,6 @@ class CustomersController extends Controller
             "XT-CPANEL",
             "XT-FIRE",
             "XT-WATER"
-
-
-
-
-
         ];
         return $data;
     }
@@ -886,5 +882,10 @@ class CustomersController extends Controller
         }
 
         return ["percentage" => $profilePercentage, "message" => $message];
+    }
+
+    public function getCustomerDeviceDerialNumbers(Request $request)
+    {
+        $model = MasterDeviceSerialNumbers::where("company_id", $request);
     }
 }

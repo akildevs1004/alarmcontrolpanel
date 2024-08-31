@@ -328,6 +328,10 @@ export default {
     },
   }),
   created() {
+    // this.$axios.get(`/logout`).then(({ res }) => {
+    //   this.$auth.logout();
+    // });
+
     // this.$store.commit("dashboard/resetState", null);
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
@@ -353,6 +357,10 @@ export default {
         this.loading = true;
         this.$auth
           .loginWith("local", { data: this.credentials })
+          .then((data) => {
+            console.log("data", data);
+            //redirect("/alarm/dashboard");
+          })
           .catch(({ response }) => {
             if (!response) {
               return false;

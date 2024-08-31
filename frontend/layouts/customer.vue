@@ -679,7 +679,7 @@
 </template>
 
 <script>
-import company_menus from "../menus/company.json";
+import company_menus from "../menus/left_menu.json";
 import employee_menus from "../menus/employee.json";
 import branch_menus from "../menus/branch.json";
 import guard_menus from "../menus/guard.json";
@@ -1368,7 +1368,7 @@ export default {
       this.$router.push("/leaves");
     },
     goToCompany() {
-      this.$router.push(`/companies`);
+      this.$router.push(`/settings`);
     },
     getCompanyDetails() {
       this.$axios

@@ -12,7 +12,13 @@ class Device extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
+    public function getPictureAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+        return asset('master_devices/' . $value);
+    }
     public function zone()
     {
         return $this->belongsTo(Zone::class);

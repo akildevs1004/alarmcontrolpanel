@@ -5,6 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
+
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -15,7 +16,7 @@
       fixed
       app
       :color="sideBarcolor"
-      :width="150"
+      :width="!miniVariant ? '80px!important' : '150px'"
     >
       <br />
       <v-list
@@ -35,7 +36,7 @@
           :title="i.title"
         >
           <v-list-item-icon class="ma-2" :title="i.title">
-            <v-icon>{{ i.icon }}</v-icon>
+            <v-icon>{{ i.icon }} </v-icon>
           </v-list-item-icon>
 
           <v-list-item-title class="text-center p-2">
@@ -163,9 +164,7 @@
                 fill
                 @click="setSubLeftMenuItems(items.menu, items.to)"
               >
-                <b class="header-menu-item">
-                  {{ items.title }}
-                </b>
+                <b class="header-menu-item"> {{ items.title }} </b>
               </v-btn>
             </v-col>
             <!-- <v-col class="header-menu-box">
@@ -694,7 +693,7 @@
 </template>
 
 <script>
-import company_menus from "../menus/company.json";
+import company_menus from "../menus/left_menu.json";
 import employee_menus from "../menus/employee.json";
 import branch_menus from "../menus/branch.json";
 import guard_menus from "../menus/guard.json";
@@ -771,6 +770,10 @@ export default {
           selected: "",
         },
         alarm_armed_reports: {
+          elevation: 0,
+          selected: "",
+        },
+        settings: {
           elevation: 0,
           selected: "",
         },
@@ -1036,6 +1039,11 @@ export default {
         "alarm-armedreports": {
           name: "alarm_armed_reports",
           path: "/alarm/armedreports",
+        },
+
+        settings: {
+          name: "settings",
+          path: "/settings",
         },
       };
 
@@ -1311,6 +1319,13 @@ export default {
         this.menuProperties[menu_name].elevation = 0;
         this.menuProperties[menu_name].selected = bgColor;
       }
+
+      // console.log(
+      //   this.menuProperties,
+      //   menu_name,
+      //   this.menuProperties.hasOwnProperty(menu_name)
+      // );
+
       //alarm menu select color
       if (this.menuProperties.hasOwnProperty(menu_name)) {
         for (const key in this.menuProperties) {
@@ -1325,6 +1340,7 @@ export default {
     },
 
     setMenus() {
+      //left menu sub menu
       // this.items = this.company_menus.filter(
       //   (item) => item.module === this.topMenu_Selected
       // );
@@ -1412,7 +1428,7 @@ export default {
       this.$router.push("/leaves");
     },
     goToCompany() {
-      this.$router.push(`/companies`);
+      this.$router.push(`/settings`);
     },
     getCompanyDetails() {
       this.$axios

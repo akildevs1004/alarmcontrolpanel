@@ -4,7 +4,10 @@ const data = async ({ $auth, redirect }) => {
     customer: "/customer/dashboard",
     security: "/security/dashboard",
   };
-
-  redirect(userType[$auth.user.user_type] || "master");
+  console.log("is_master", $auth.user.is_master);
+  if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
+    return redirect("/master");
+  }
+  redirect(userType[$auth.user.user_type] || "/master");
 };
 export default data;

@@ -41,6 +41,7 @@ use App\Http\Controllers\ReportNotificationController;
 use App\Http\Controllers\ReportNotificationLogsController;
 use App\Http\Controllers\Reports\AutoReportController;
 use App\Http\Controllers\Reports\ManualReportController;
+use App\Http\Controllers\Reports\ReportController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RosterController;
@@ -61,7 +62,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/get-company-id-by-device', [DeviceController::class, 'get_company_id_by_device']);
 
 
-Route::get('/master_dashboard', [CompanyController::class, 'getMasterDashboardCounts']);
+
 
 // employee reporter
 Route::post('/employee_to_reporter/{id}', [EmployeeController::class, 'employeeToReporter']);

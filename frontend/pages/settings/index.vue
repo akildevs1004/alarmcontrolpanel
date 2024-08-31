@@ -21,92 +21,20 @@
                 <v-icon left> mdi-domain </v-icon>
                 <span>Profile</span>
               </v-tab>
-              <v-tab>
-                <v-icon left> mdi-license </v-icon>
-                <span>License</span>
-              </v-tab>
-              <!-- <v-tab>
-                <v-icon left> mdi-account </v-icon>
-                <span>Contact</span>
-              </v-tab> -->
-              <!-- <v-tab>
-                <v-icon left> mdi-earth </v-icon>
-                <span>Location</span>
-              </v-tab> -->
-              <v-tab>
-                <v-icon left> mdi-file </v-icon>
-                <span>Documents</span>
-              </v-tab>
+
               <v-tab>
                 <v-icon left> mdi-lock </v-icon>
                 <span>Password</span>
               </v-tab>
-
-              <!-- <v-tab>
-                <v-icon left> mdi-qrcode </v-icon>
-                <span>QrCode - Visitor </span>
-              </v-tab> -->
 
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>
                     <v-row>
                       <v-col cols="3">
-                        <!-- <label class="col-form-label"
-                          >Company Profile Picture</label
-                        > -->
-
                         <v-card class="ml-1 mr-1" style="text-align: center">
                           <v-card-title>Profile Picture</v-card-title>
                           <div style="width: 100%; text-align: center">
-                            <!-- Test
-                            <img
-                              :src="
-                                previewImage ||
-                                company_payload.logo ||
-                                '/no-image.PNG'
-                              "
-                              alt="Paris"
-                              style="
-                                display: block;
-                                margin-left: auto;
-                                margin-right: auto;
-                                width: 50%;
-                              "
-                            /> -->
-                            <!-- <div>
-                              <v-img
-                                @click="onpick_attachment"
-                                style="
-                                  max-width: 90%;
-                                  margin: 0 auto;
-                                  border-radius: 10%;
-                                "
-                                :src="
-                                  previewImage ||
-                                  company_payload.logo ||
-                                  '/no-image.PNG'
-                                "
-                              ></v-img>
-                            </div> -->
-                            <!-- <div>
-                              <v-img
-                                @click="onpick_attachment"
-                                style="
-                                  display: block;
-                                  margin-left: auto;
-                                  margin-right: auto;
-                                  width: 300px;
-                                  height: 200px;
-                                  border-radius: 50%;
-                                "
-                                :src="
-                                  previewImage ||
-                                  company_payload.logo ||
-                                  '/no-image.PNG'
-                                "
-                              ></v-img>
-                            </div> -->
                             <div class="pb-2">
                               <v-img
                                 @click="onpick_attachment"
@@ -156,31 +84,6 @@
                             >{{ !upload.name ? "Change Logo" : "Submit" }}
                             <v-icon right dark> </v-icon>
                           </v-btn>
-
-                          <!-- <v-btn
-                            v-if="!upload.name"
-                            style="width: 100%"
-                            @click="onpick_attachment"
-                            class="primary"
-                            >{{
-                              !upload.name
-                                ? "Change Logo"
-                                : "Submit to Save logo"
-                            }}
-                            <v-icon right dark>mdi mdi-cloud-upload </v-icon>
-                          </v-btn> 
-                          <v-btn
-                            v-if="upload.name"
-                            style="width: 100%"
-                            @click="update_company"
-                            class="primary"
-                            >{{
-                              !upload.name
-                                ? "Change Logo"
-                                : "Submit to Save logo"
-                            }}
-                            <v-icon right dark> </v-icon>
-                          </v-btn>-->
                         </v-card>
 
                         <input
@@ -197,28 +100,6 @@
                           class="text-danger mt-2"
                           >{{ errors.logo[0] }}</span
                         >
-                        <v-card
-                          class="ml-1 mr-1 mt-2"
-                          style="text-align: center"
-                        >
-                          <v-card-title>Visitor QR Code</v-card-title>
-                          <!-- <div class="bold pt-10"></div> -->
-                          <div style="text-align: center">
-                            <v-avatar
-                              v-if="qrCompanyCodeDataURL"
-                              size="150"
-                              tile
-                            >
-                              <img :src="qrCompanyCodeDataURL" alt="Avatar" />
-                            </v-avatar>
-                          </div>
-                        </v-card>
-
-                        <!-- <span style="text-align: center">
-                          <a :href="`${fullCompanyLink}`" target="_blank">
-                            {{ fullCompanyLink }}
-                          </a>
-                        </span> -->
                       </v-col>
                       <v-col cols="4">
                         <v-card elevation="2" style="height: 540px">
@@ -227,8 +108,6 @@
                           <v-card-text>
                             <v-row>
                               <v-col cols="6" md="6" sm="6">
-                                <!-- <label class="col-form-label">Company Code</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Company Code"
                                   color="grey"
@@ -241,8 +120,6 @@
                               </v-col>
 
                               <v-col cols="6" md="6" sm="6">
-                                <!-- <label class="col-form-label">Company Name</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Company Name"
                                   color="grey"
@@ -568,193 +445,6 @@
               </v-tab-item>
 
               <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-row>
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> License Type</label>
-                            <span class="text-danger">*</span> -->
-                            <v-select
-                              label="License Type"
-                              outlined
-                              dense
-                              v-model="company_trade_license.license_type"
-                              x-small
-                              :items="[
-                                {
-                                  value: '',
-                                  text: 'Select Type',
-                                },
-                                {
-                                  value: 'commercial_licenses',
-                                  text: 'Commercial licenses',
-                                },
-                                {
-                                  value: 'industrial_license',
-                                  text: 'Industrial License',
-                                },
-                                {
-                                  value: 'professional_license',
-                                  text: 'Professional license',
-                                },
-                              ]"
-                              item-value="value"
-                              item-text="text"
-                              :hide-details="true"
-                            ></v-select>
-                          </v-col>
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> License </label>
-                            <span class="text-danger">*</span> -->
-                            <v-text-field
-                              label="License"
-                              dense
-                              outlined
-                              v-model="company_trade_license.license_no"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> Emirate </label>
-                            <span class="text-danger">*</span> -->
-                            <v-text-field
-                              label="Emirate"
-                              dense
-                              outlined
-                              v-model="company_trade_license.emirate"
-                            ></v-text-field>
-                            <span
-                              v-if="errors && errors.emirate"
-                              class="text-danger mt-2"
-                              >{{ errors.emirate[0] }}</span
-                            >
-                          </v-col>
-
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> Manager </label>
-                            <span class="text-danger">*</span> -->
-                            <v-text-field
-                              label="Manager"
-                              dense
-                              outlined
-                              v-model="company_trade_license.manager"
-                            ></v-text-field>
-                            <span
-                              v-if="errors && errors.manager"
-                              class="text-danger mt-2"
-                              >{{ errors.manager[0] }}</span
-                            >
-                          </v-col>
-
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> Issue Date </label>
-                            <span class="text-danger">*</span> -->
-                            <v-menu
-                              v-model="menuIssueDate"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on }">
-                                <v-text-field
-                                  label="Issue Date"
-                                  dense
-                                  outlined
-                                  v-model="company_trade_license.issue_date"
-                                  readonly
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                v-model="company_trade_license.issue_date"
-                                @input="menuIssueDate = false"
-                              ></v-date-picker>
-                            </v-menu>
-                            <span
-                              v-if="errors && errors.issue_date"
-                              class="text-danger mt-2"
-                              >{{ errors.issue_date[0] }}</span
-                            >
-                          </v-col>
-
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> Expiry Date </label>
-                            <span class="text-danger">*</span> -->
-                            <v-menu
-                              v-model="menuExpiryDate"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on }">
-                                <v-text-field
-                                  label="Expiry Date "
-                                  dense
-                                  outlined
-                                  v-model="company_trade_license.expiry_date"
-                                  readonly
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                v-model="company_trade_license.expiry_date"
-                                @input="menuExpiryDate = false"
-                              ></v-date-picker>
-                            </v-menu>
-                            <span
-                              v-if="errors && errors.expiry_date"
-                              class="text-danger mt-2"
-                              >{{ errors.expiry_date[0] }}</span
-                            >
-                          </v-col>
-
-                          <v-col cols="3">
-                            <!-- <label class="col-form-label"> Makeem No </label>
-                            <span class="text-danger">*</span> -->
-                            <v-text-field
-                              label="Makeem No "
-                              dense
-                              outlined
-                              v-model="company_trade_license.makeem_no"
-                            ></v-text-field>
-                            <span
-                              v-if="errors && errors.makeem_no"
-                              class="text-danger mt-2"
-                              >{{ errors.makeem_no[0] }}</span
-                            >
-                          </v-col>
-                          <v-col cols="12">
-                            <div class="text-right">
-                              <v-btn
-                                v-if="can('company_edit')"
-                                small
-                                :loading="loading"
-                                color="primary"
-                                @click="update_license"
-                              >
-                                Submit
-                              </v-btn>
-                            </div>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-
-              <v-tab-item>
-                <Document />
-              </v-tab-item>
-
-              <v-tab-item>
                 <v-container>
                   <v-row>
                     <v-col cols="3">
@@ -851,21 +541,6 @@
                       </v-col>
                     </v-col>
                   </v-row>
-                </v-container>
-              </v-tab-item>
-
-              <v-tab-item>
-                <v-container>
-                  <div style="text-align: center">
-                    <v-avatar v-if="qrCompanyCodeDataURL" size="150" tile>
-                      <img :src="qrCompanyCodeDataURL" alt="Avatar" />
-                    </v-avatar>
-                  </div>
-                  <span>
-                    <a :href="`${fullCompanyLink}`" target="_blank">
-                      {{ fullCompanyLink }}
-                    </a>
-                  </span>
                 </v-container>
               </v-tab-item>
             </v-tabs>

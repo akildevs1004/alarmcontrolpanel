@@ -27,7 +27,9 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-
+        // if ($user->is_master === true) {
+        //     $user->user_type = "master";
+        // }
         $this->throwErrorIfFail($request, $user);
 
         // @params User Id, action,type,companyId.
@@ -52,6 +54,10 @@ class AuthController extends Controller
             $user->load("security");
             $user->load("security.customersAssigned");
         }
+
+        // if ($user->is_master === true) {
+        //     $user->user_type = "master";
+        // }
 
         return ['user' => $user];
     }

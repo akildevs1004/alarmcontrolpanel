@@ -16,7 +16,7 @@
           </v-btn>
         </span>
         <v-row>
-          <v-col cols="2">
+          <v-col cols="4">
             <div style="width: 250px">
               <v-autocomplete
                 @change="getRecords()"
@@ -32,7 +32,7 @@
               </v-autocomplete>
             </div>
           </v-col>
-          <v-col cols="2">
+          <v-col cols="4">
             <div style="width: 250px">
               <v-select
                 @change="getRecords()"
@@ -48,7 +48,7 @@
               </v-select>
             </div>
           </v-col>
-          <v-col cols="2" style="padding-top: 56px; padding-left: 38px">
+          <v-col cols="4" style="padding-top: 56px; padding-left: 38px">
             <Calender
               @filter-attr="filterAttr"
               :defaultFilterType="1"
@@ -67,7 +67,7 @@
         :loading="loading"
         :options.sync="options"
         :footer-props="{
-          itemsPerPageOptions: [20, 50, 100],
+          itemsPerPageOptions: [10, 20, 50, 100],
         }"
         :server-items-length="totalRowsCount"
       >

@@ -72,124 +72,7 @@
     "module": "dashboard",
     "top_menu_name": "dashboard"
   },
-  {
-    "icon": "mdi-domain",
-    "title": "Company",
-    "to": "/companies",
-    "menu": "setting_access",
-    "class": "submenutitle",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-filmstrip-box-multiple",
-    "title": "Branches",
-    "to": "/branches",
-    "menu": "branch_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-chair-rolling",
-    "title": "Departments",
-    "to": "/department",
-    "menu": "department_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-email",
-    "title": "Automation",
-    "to": "/automation",
-    "menu": "notifications_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-account-supervisor-circle",
-    "title": "Roles",
-    "to": "/role",
-    "menu": "role_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-cellphone-text",
-    "title": "Devices",
-    "to": "/device",
-    "menu": "device_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi mdi-calendar-star-four-points",
-    "title": "Holidays",
-    "to": "/holidays",
-    "menu": "holiday_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi mdi-calendar",
-    "title": "Leaves",
-    "to": "/leaves/leave_types",
-    "menu": "leave_type_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-bell",
-    "title": "Announcements",
-    "open_menu": false,
-    "to": "/announcement_type",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
 
-  {
-    "icon": "mdi-web-box",
-    "title": "Web Logs",
-    "open_menu": false,
-    "to": "/web_login_logs",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-
-  {
-    "icon": "mdi mdi-calculator",
-    "title": "Settings",
-    "to": "/payroll/create",
-    "menu": "payroll_settings_access",
-    "open_menu": false,
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-format-list-bulleted",
-    "title": "Payroll Formulla List",
-    "to": "/payroll_formula",
-    "menu": "payroll_settings_access",
-    "open_menu": false,
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-format-list-bulleted",
-    "title": "Payroll Generation Date List",
-    "to": "/payroll_generate_date",
-    "menu": "payroll_settings_access",
-    "open_menu": false,
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-mail",
-    "title": "Mail",
-    "open_menu": false,
-    "to": "/automation_mail_content",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
   {
     "icon": "mdi-account-tie",
     "title": "Employees",
@@ -476,5 +359,32 @@
     "menu": "reports",
     "module": "reports",
     "top_menu_name": "reports"
+  },
+  {
+    "icon": "mdi-domain",
+    "title": "Company",
+    "to": "/settings",
+    "menu": "setting_access",
+    "class": "submenutitle",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+
+  {
+    "icon": "mdi-cellphone-text",
+    "title": "Devices",
+    "to": "/device",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+
+  {
+    "icon": "mdi-web-box",
+    "title": "Web Logs",
+    "open_menu": false,
+    "to": "/web_login_logs",
+    "module": "settings",
+    "top_menu_name": "settings"
   }
 ]

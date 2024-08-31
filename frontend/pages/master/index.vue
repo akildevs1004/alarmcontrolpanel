@@ -94,21 +94,21 @@ export default {
             value: companies,
             icon: "mdi-domain",
           },
-          {
-            title: "TOTAL Communities",
-            value: employees,
-            icon: "mdi-account-multiple",
-          },
-          {
-            title: "TOTAL UNPAID",
-            value: "0",
-            icon: "mdi-bank",
-          },
-          {
-            title: "TOTAL PAID",
-            value: "0",
-            icon: "mdi-bank",
-          },
+          // {
+          //   title: "TOTAL Communities",
+          //   value: employees,
+          //   icon: "mdi-account-multiple",
+          // },
+          // {
+          //   title: "TOTAL UNPAID",
+          //   value: "0",
+          //   icon: "mdi-bank",
+          // },
+          // {
+          //   title: "TOTAL PAID",
+          //   value: "0",
+          //   icon: "mdi-bank",
+          // },
         ];
       });
     },

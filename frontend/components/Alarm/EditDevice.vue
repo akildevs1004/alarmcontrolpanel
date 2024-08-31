@@ -7,6 +7,33 @@
     </div>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-row class="ma-1">
+        <!-- <v-col md="6">
+          <v-text-field
+            class="pb-0"
+            hide-details
+            v-model="payload.serial_number"
+            outlined
+            dense
+            label="Serial Number"
+          ></v-text-field>
+          <span v-if="errors && errors.serial_number" class="error--text"
+            >{{ errors.serial_number[0] }}
+          </span>
+        </v-col> -->
+        <v-col md="6">
+          <v-autocomplete
+            :items="master_serial_number"
+            class="pb-0"
+            hide-details
+            v-model="payload.serial_number"
+            outlined
+            dense
+            label="Serial Number"
+          ></v-autocomplete>
+          <span v-if="errors && errors.serial_number" class="error--text"
+            >{{ errors.serial_number[0] }}
+          </span>
+        </v-col>
         <v-col md="6">
           <v-text-field
             hide-details
@@ -62,19 +89,6 @@
           <!-- <v-text-field></v-text-field> -->
           <span v-if="errors && errors.model_number" class="error--text"
             >{{ errors.model_number[0] }}
-          </span>
-        </v-col>
-        <v-col md="6">
-          <v-text-field
-            class="pb-0"
-            hide-details
-            v-model="payload.serial_number"
-            outlined
-            dense
-            label="Serial Number"
-          ></v-text-field>
-          <span v-if="errors && errors.serial_number" class="error--text"
-            >{{ errors.serial_number[0] }}
           </span>
         </v-col>
 
@@ -201,6 +215,7 @@ export default {
   components: {},
   props: ["editDevice", "customer_id"],
   data: () => ({
+    master_serial_number: [],
     deviceTypes: [],
     deviceModels: [],
     oneTOsixty: [],
@@ -385,6 +400,14 @@ export default {
     if (this.$store.state.storeAlarmControlPanel?.DeviceModels) {
       this.deviceModels = this.$store.state.storeAlarmControlPanel.DeviceModels;
     }
+    let options = {
+      params: {
+        company_id: this.$auth.user.company_id,
+      },
+    };
+    this.$axios
+      .get("get_master_device_serial_numbers", options)
+      .then((data) => {});
   },
 
   methods: {
