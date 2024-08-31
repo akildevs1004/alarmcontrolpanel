@@ -291,8 +291,10 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    async logout() {
-      await this.$auth.logout();
+    logout() {
+      this.$axios.get(`/logout`).then(({ res }) => {
+        this.$auth.logout();
+      });
     },
   },
   computed: {
