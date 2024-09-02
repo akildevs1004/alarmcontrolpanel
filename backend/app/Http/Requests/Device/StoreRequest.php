@@ -49,7 +49,7 @@ class StoreRequest extends FormRequest
 
             'serial_number' => ['required'],
             'model_number' => ['required'],
-            'customer_id' => ['nullable'],
+
             'threshold_temperature' => ['nullable'],
 
 

@@ -22,7 +22,10 @@
         </v-col> -->
         <v-col md="6">
           <v-autocomplete
-            :items="master_serial_number"
+            :items="master_serial_numbers"
+            @change="loadDeviceDetails(payload.serial_number)"
+            item-text="serial_number"
+            item-value="serial_number"
             class="pb-0"
             hide-details
             v-model="payload.serial_number"
@@ -78,6 +81,7 @@
         </v-col>
         <v-col md="6">
           <v-select
+            disabled
             outlined
             dense
             class="pb-0"
@@ -107,7 +111,7 @@
             >{{ errors.wired[0] }}
           </span>
         </v-col> -->
-        <v-col md="6">
+        <!-- <v-col md="6">
           <v-select
             class="pb-0"
             hide-details
@@ -120,10 +124,11 @@
           <span v-if="errors && errors.alarm_delay_minutes" class="error--text"
             >{{ errors.alarm_delay_minutes[0] }}
           </span>
-        </v-col>
+        </v-col> -->
 
         <v-col md="6">
           <v-select
+            disabled
             class="pb-0"
             hide-details
             v-model="payload.device_type"
@@ -138,7 +143,7 @@
             >{{ errors.device_type[0] }}
           </span>
         </v-col>
-        <v-col
+        <!-- <v-col
           md="6"
           v-if="
             payload.device_type == 'all' ||
@@ -165,8 +170,8 @@
           <span v-if="errors && errors.function" class="error--text"
             >{{ errors.function[0] }}
           </span>
-        </v-col>
-        <v-col
+        </v-col> -->
+        <!-- <v-col
           md="6"
           v-if="
             payload.device_model == 'XT-CPANEL' ||
@@ -188,7 +193,7 @@
             class="error--text"
             >{{ errors.threshold_temperature[0] }}
           </span>
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-form>
 
@@ -215,7 +220,7 @@ export default {
   components: {},
   props: ["editDevice", "customer_id"],
   data: () => ({
-    master_serial_number: [],
+    master_serial_numbers: [],
     deviceTypes: [],
     deviceModels: [],
     oneTOsixty: [],
@@ -407,7 +412,19 @@ export default {
     };
     this.$axios
       .get("get_master_device_serial_numbers", options)
-      .then((data) => {});
+      .then((data) => {
+        this.master_serial_numbers = data.data;
+
+        if (this.editDevice)
+          this.master_serial_numbers = [
+            {
+              model_number: this.editDevice.model_number,
+              device_type: this.editDevice.device_type,
+              serial_number: this.editDevice.serial_number,
+            },
+            ...this.master_serial_numbers,
+          ];
+      });
   },
 
   methods: {
@@ -422,6 +439,15 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    loadDeviceDetails(serial_number) {
+      let device = this.master_serial_numbers.find(
+        (e) => e.serial_number == serial_number
+      );
+      if (device) {
+        this.payload.device_type = device.device_type;
+        this.payload.model_number = device.model_number;
+      }
+    },
     store_device() {
       this.errors = [];
       let id = -1;
@@ -433,6 +459,10 @@ export default {
       this.payload.ip = "0.0.0.0";
       this.payload.port = "0000";
       this.payload.customer_id = this.customer_id;
+
+      this.payload.old_serial_number = this.editDevice
+        ? this.editDevice.serial_number
+        : null;
 
       delete this.payload.status;
       delete this.payload.company;

@@ -227,12 +227,14 @@ export default {
           this.device.sensorzones.push(obj);
         });
       } else {
-        this.editDevice.sensorzones = [];
+        if (this.editDevice) {
+          if (this.editDevice.sensorzones.length == 0) {
+            this.addEarning();
+          }
+          this.editDevice.sensorzones = [];
+        }
       }
 
-      if (this.editDevice.sensorzones.length == 0) {
-        this.addEarning();
-      }
       // this.device.sensorzones = zones;
       // console.log("this.device", this.device);
       // if (this.device?.sensorzones?.length == 0) {

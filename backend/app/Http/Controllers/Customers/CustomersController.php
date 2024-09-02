@@ -884,8 +884,16 @@ class CustomersController extends Controller
         return ["percentage" => $profilePercentage, "message" => $message];
     }
 
-    public function getCustomerDeviceDerialNumbers(Request $request)
+    public function getMasterDeviceSerialNumbers(Request $request)
     {
-        $model = MasterDeviceSerialNumbers::where("company_id", $request);
+        return  Device::where("company_id", $request->company_id)
+            ->where("customer_id", null)
+            ->where("device_type", "!=", "Manual")
+            ->where("serial_number", "!=", "Manual")
+            ->where("serial_number", "!=", "Mobile")
+            ->where("serial_number", "!=", "mobile")
+            ->where("serial_number", "!=", null)
+            ->where("serial_number", "!=", null)
+            ->get();
     }
 }

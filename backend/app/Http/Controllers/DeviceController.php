@@ -285,8 +285,12 @@ class DeviceController extends Controller
 
 
     }
-    public function store(StoreRequest $request)
+    public function store(updateRequest $request)
     {
+
+
+        return $this->update(new Device(), $request);
+
         try {
 
             $company = Company::find($request->company_id);
@@ -303,35 +307,47 @@ class DeviceController extends Controller
 
             $model = Device::query();
             //$model->where("company_id", $request->company_id);
-            $model->where("serial_number", $request->serial_number);
+            $model->where("serial_number", $request->serial_number);;
             //$model->where("name", $request->name);
 
+            if ($model->first()->customer_id) {
+                return $this->response('Device Serial Number is already asigned to Customer ' . $request->serial_number, null, false);
+            }
             if ($model->exists()) {
-                return $this->response('Device Serial Number is already exist ' . $request->serial_number, null, false);
-            }
-
-            $data = $request->validated();
-
-            if ($data["model_number"] == "OX-900") {
-                $data["camera_sdk_url"] = env('OX900_SDK_URL');
-            }
-            if ($request->filled("device_id")) {
-                $data["serial_number"] = $data["device_id"];
-            } else if ($request->filled("serial_number")) {
-                $data["device_id"] = $data["serial_number"];
-            }
 
 
-            $data["status_id"] = 2;
+                return  $data = $request->validated();
 
-            $data["ip"] = "0.0.0.0";
-            $data["port"] = "0000";
-            $record = Device::create($data);
-            $this->updateDevicesJson();
-            if ($record) {
-                return $this->response('Device successfully added.', $record, true);
+                if ($data["model_number"] == "OX-900") {
+                    $data["camera_sdk_url"] = env('OX900_SDK_URL');
+                }
+                if ($request->filled("device_id")) {
+                    $data["serial_number"] = $data["device_id"];
+                } else if ($request->filled("serial_number")) {
+                    $data["device_id"] = $data["serial_number"];
+                }
+
+                //verify serial number on master database 
+
+
+
+                $data["status_id"] = 2;
+                // $data["ip"] = "0.0.0.0";
+                // $data["port"] = "0000";
+                //$record = Device::create($data);
+
+                Device::where("serial_number", $request->serial_number)
+                    ->where("customer_id", null)
+                    ->update($data);
+                $this->updateDevicesJson();
+
+                if ($record) {
+                    return $this->response('Device successfully added.', $record, true);
+                } else {
+                    return $this->response('Device cannot add.', null, 'device_api_error');
+                }
             } else {
-                return $this->response('Device cannot add.', null, 'device_api_error');
+                return $this->response('Device Serial Number is not exist', null, 'device_api_error');
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -646,18 +662,40 @@ class DeviceController extends Controller
                 $data["device_id"] = $data["serial_number"];
             }
 
+            unset($data["serial_number"]);
+            unset($data["model_number"]);
+            unset($data["device_type"]);
+
+
             $model = Device::query();
             $model->where("company_id", $request->company_id);
             $model->where("serial_number", $request->serial_number);
+            $model->where("customer_id", "!=", null);
             $model->where("id", "!=", $request->id);
 
             if ($model->exists()) {
-                return $this->response('Device already exist.', null, false);
+                return $this->response('Device already assigned to another customer.', null, false);
             }
 
+            $model = Device::query();
+            $model->where("company_id", $request->company_id);
+            $model->where("serial_number", $request->serial_number);
+            if ($model->exists()) {
+                $model = Device::query();
+                $model->where("company_id", $request->company_id);
+                $model->where("serial_number", $request->serial_number);
+                $record = $model->update($data);
 
 
-            $record = $Device->update($data);
+
+                if ($request->filled("old_serial_number") && $request->old_serial_number != $request->serial_number) {
+                    $model = Device::query();
+                    $model->where("serial_number", $request->old_serial_number)
+                        ->update(["customer_id" => null]);
+                }
+            } else {
+                return $this->response('Device serial Number is not exist', null, false);
+            }
 
             //update to Device 
             if ($request->model_number == 'OX-900') {
@@ -714,7 +752,9 @@ class DeviceController extends Controller
         try {
 
             $device_id = $device->id;
-            $record = $device->delete();
+            // $record = $device->delete();
+
+            $record = Device::where("serial_number", $device->serial_number)->update(["customer_id" => null]);
             if ($device_id > 0)
                 DeviceZones::where('device_id', $device_id)->delete();
 

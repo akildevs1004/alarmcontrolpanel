@@ -51,6 +51,25 @@
             <v-col cols="8">
               <v-row class="pt-0">
                 <v-col cols="6" dense>
+                  <v-text-field
+                    label="Serial Number"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload_serial_number.serial_number"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.serial_number"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.serial_number[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="6" dense>
                   <v-select
                     :readonly="!editable"
                     :filled="!editable"
@@ -79,29 +98,11 @@
                   ></v-select>
                 </v-col>
                 <v-col cols="6" dense>
-                  <v-text-field
-                    label="Serial Number"
-                    dense
-                    small
-                    outlined
-                    clearable
-                    autocomplete="off"
-                    v-model="payload_serial_number.serial_number"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.serial_number"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.serial_number[0] }}</span
-                  > </v-col
-                ><v-col cols="6" dense>
                   <v-autocomplete
                     v-model="payload_serial_number.company_id"
                     :items="[{ id: ``, name: `None` }, ...companiesList]"
                     dense
-                    Label="Select Company"
+                    label="Company"
                     outlined
                     hide-details
                     item-value="id"
@@ -246,8 +247,6 @@ export default {
       this.payload_serial_number.device_type = this.item.device_type;
       this.primary_previewImage = this.item.picture;
     }
-
-    console.log(this.payload_serial_number);
   },
   methods: {
     can(per) {
@@ -314,6 +313,12 @@ export default {
 
             this.snackbar = true;
             this.response = data.message;
+
+            for (let error in data.errors) {
+              if (data.errors.hasOwnProperty(error)) {
+                this.response = data.errors[error][0];
+              }
+            }
           } else {
             this.color = "background";
             this.primary_errors = [];
@@ -325,12 +330,16 @@ export default {
           }
         })
         .catch((e) => {
-          if (e.response.data.errors) {
+          if (e.response && e.response.data) {
             this.primary_errors = e.response.data.errors;
             this.color = "red";
-
             this.snackbar = true;
             this.response = e.response.data.message;
+            for (let error in e.response.data.errors) {
+              if (e.response.data.errors.hasOwnProperty(error)) {
+                this.response = e.response.data.errors[error][0];
+              }
+            }
           }
         });
     },
