@@ -5,7 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogViewCustomer" width="80%">
+    <v-dialog v-model="dialogViewCustomer" width="60%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"> Customer Information</span>
@@ -439,10 +439,10 @@ export default {
         text: "Water",
         value: "water",
       },
-      {
-        text: "Temp",
-        value: "temperature",
-      },
+      // {
+      //   text: "Temp",
+      //   value: "temperature",
+      // },
       {
         text: "Options",
         value: "options",

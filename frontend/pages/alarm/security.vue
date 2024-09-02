@@ -145,8 +145,8 @@
                 >
                   <v-img
                     style="
-                      border-radius: 10%;
-                      height: auto;
+                      border-radius: 50%;
+                      height: 50px;
                       width: 50px;
                       max-width: 50px;
                     "

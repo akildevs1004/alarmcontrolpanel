@@ -2277,6 +2277,24 @@ button {
   width: 21px !important;
   height: 19px !important;
 }
+
+.empty-doughnut2 {
+  border: 20px solid rgb(150, 150, 150);
+  border-radius: 100px;
+  height: 130px;
+  width: 130px;
+  padding-top: 23px;
+  padding-left: 2px;
+  font-size: 18px;
+  margin: auto;
+  line-height: 30px;
+}
+</style>
+
+<style scoped>
+label.v-label.v-label--active.v-label--is-disabled.theme--light {
+  color: red !important;
+}
 </style>
 
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

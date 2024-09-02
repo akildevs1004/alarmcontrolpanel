@@ -3,8 +3,11 @@
     <h3>Event Closed in Minutes</h3>
     <v-row class="pt-0 mt-0">
       <v-col cols="12" class="text-center pt-0">
+        <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut2">
+          Total 0
+        </div>
         <div
-          v-if="name"
+          :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
           :id="name"
           :name="name"
           style="width: 100%; margin: 0 auto; text-align: left"
@@ -12,7 +15,7 @@
       </v-col>
     </v-row>
 
-    <div
+    <!-- <div
       v-if="categories.length == 0"
       style="
         padding: 0px;
@@ -24,7 +27,7 @@
       "
     >
       No Data available
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -39,14 +39,14 @@
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
           <v-col
-            cols="6"
+            cols="4"
             style="
               font-size: 14px;
               font-weight: bold;
               padding-top: 25px;
               text-align: left;
             "
-            >Contract/Subscription: From
+          >
             <span style="color: green">
               {{
                 $dateFormat.format_date_month_name_year(customer?.start_date)
@@ -56,7 +56,7 @@
               >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
             </span></v-col
           >
-          <v-col cols="6" class="text-right" style="width: 550px">
+          <v-col cols="8" class="text-right" style="width: 550px">
             <v-row>
               <v-col cols="4"
                 ><v-text-field

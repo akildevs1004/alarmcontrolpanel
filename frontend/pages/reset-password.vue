@@ -141,6 +141,7 @@
                         >
                         <v-text-field
                           dense
+                          label="Confirm Password"
                           outlined
                           :append-icon="
                             show_password_confirm ? 'mdi-eye' : 'mdi-eye-off'

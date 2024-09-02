@@ -14,7 +14,7 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $with = ['devices', 'buildingtype',  'primary_contact', 'secondary_contact'];
+    protected $with = ['devices', 'buildingtype',  'primary_contact', 'secondary_contact', "profilePictures"];
 
 
     public function devices()
@@ -56,12 +56,28 @@ class Customers extends Model
         return $this->hasmany(CustomerBuildingPictures::class, 'customer_id', 'id');
     }
 
-
-    public function getProfilePictureAttribute($value)
+    public function profilePictures()
     {
-        if (!$value) {
+        return $this->hasMany(CustomerBuildingPhotos::class, "customer_id", 'id');
+    }
+    public function getProfilePictureAttribute()
+    {
+        // Get the first profile picture from the related table
+        $profilePicture = $this->profilePictures()->first();
+
+        if (!$profilePicture || !$profilePicture->picture) {
             return null;
         }
-        return asset('customers/building/' . $value);
+        return $profilePicture->picture;
+
+
+        // return asset('customers/building/' . $profilePicture->picture);
     }
+    // public function getProfilePictureAttribute($value)
+    // {
+    //     if (!$value) {
+    //         return null;
+    //     }
+    //     return asset('customers/building/' . $value);
+    // }
 }

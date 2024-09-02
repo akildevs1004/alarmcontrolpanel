@@ -408,7 +408,7 @@
 
 <script>
 import AlramCustomerContacts from "../../components/Alarm/CustomerContacts.vue";
-import AlramEmergencyContacts from "../../components/Alarm/EmergencyContacts.vue";
+import AlramEmergencyContacts from "../../components/Alarm/AlarmEmergencyContacts.vue";
 import AlramPhotos from "../../components/Alarm/Photos.vue";
 import AlarmDevices from "../../components/Alarm/Devices.vue";
 import AlarmDashboardTemparatureChart1 from "../../components/Alarm/CustomerDashboardTemparatureChart1.vue";

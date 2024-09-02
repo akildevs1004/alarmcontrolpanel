@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerBuildingPhotos\StoreRequest;
-use App\Models\Customers\CustomerBuildingPictures;
+use App\Models\Customers\CustomerBuildingPhotos;
 use Illuminate\Http\Request;
 
-class CustomerBuildingPicturesController extends Controller
+class CustomerBuildingPhotosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class CustomerBuildingPicturesController extends Controller
      */
     public function index(Request $request)
     {
-        $model = CustomerBuildingPictures::where("company_id", $request->company_id)->where("customer_id", $request->customer_id)->orderBy("display_order", "ASC");
+        $model = CustomerBuildingPhotos::where("company_id", $request->company_id)->where("customer_id", $request->customer_id)->orderBy("display_order", "ASC");
 
 
 
@@ -49,15 +49,15 @@ class CustomerBuildingPicturesController extends Controller
                 $ext = $file->getClientOriginalExtension();
                 $fileName = time() . '.' . $ext;
 
-                $request->file('attachment')->move(public_path('/customers/building'), $fileName);
+                $request->file('attachment')->move(public_path('/customers/building_photos'), $fileName);
                 $data['picture'] = $fileName;
             }
 
             if ($request->filled("editId")) {
-                $record = CustomerBuildingPictures::where("id", $request->editId)->update($data);
+                $record = CustomerBuildingPhotos::where("id", $request->editId)->update($data);
             } else {
 
-                $record = CustomerBuildingPictures::create($data);
+                $record = CustomerBuildingPhotos::create($data);
             }
 
 
@@ -75,10 +75,10 @@ class CustomerBuildingPicturesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customers\CustomerBuildingPictures  $customerBuildingPictures
+     * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
-    public function show(CustomerBuildingPictures $customerBuildingPictures)
+    public function show(CustomerBuildingPhotos $CustomerBuildingPhotos)
     {
         //
     }
@@ -86,10 +86,10 @@ class CustomerBuildingPicturesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customers\CustomerBuildingPictures  $customerBuildingPictures
+     * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
-    public function edit(CustomerBuildingPictures $customerBuildingPictures)
+    public function edit(CustomerBuildingPhotos $CustomerBuildingPhotos)
     {
         //
     }
@@ -98,10 +98,10 @@ class CustomerBuildingPicturesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customers\CustomerBuildingPictures  $customerBuildingPictures
+     * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CustomerBuildingPictures $customerBuildingPictures)
+    public function update(Request $request, CustomerBuildingPhotos $CustomerBuildingPhotos)
     {
         //
     }
@@ -109,15 +109,15 @@ class CustomerBuildingPicturesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customers\CustomerBuildingPictures  $customerBuildingPictures
+     * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         if ($id > 0) {
-            $contact = CustomerBuildingPictures::find($id);
-            if (file_exists(public_path('/customers/building') . '/' . $contact->picture_raw))
-                unlink(public_path('/customers/building') . '/' . $contact->picture_raw);
+            $contact = CustomerBuildingPhotos::find($id);
+            if (file_exists(public_path('/customers/building_photos') . '/' . $contact->picture_raw))
+                unlink(public_path('/customers/building_photos') . '/' . $contact->picture_raw);
             if ($contact->delete()) {
 
                 return $this->response('Contact Details are Deleted', null, true);

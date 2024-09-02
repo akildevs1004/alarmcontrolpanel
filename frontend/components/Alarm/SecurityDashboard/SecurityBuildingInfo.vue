@@ -132,7 +132,7 @@
             </v-row>
           </v-col>
           <v-col cols="7">
-            <v-tabs color="#dc7640">
+            <v-tabs color="#dc7640" right>
               <v-tabs-slider color="blue"></v-tabs-slider>
               <v-tab>Business Photo</v-tab>
               <v-tab>Google Map</v-tab>
@@ -142,7 +142,12 @@
                 <v-card elevation="13" outlined>
                   <img
                     :src="customer.profile_picture"
-                    style="width: 100%; max-height: 550px; height: auto"
+                    style="
+                      width: 100%;
+                      max-height: 550px;
+                      height: auto;
+                      padding: 20px;
+                    "
                   />
                 </v-card>
               </v-tab-item>
@@ -151,6 +156,7 @@
                   <SecurityGoogleMap
                     class="rounded-lg"
                     :customer="customer"
+                    style="padding: 20px"
                   /> </v-card></v-tab-item
               ><v-tab-item>
                 <v-card elevation="13" outlined>

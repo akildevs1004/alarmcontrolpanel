@@ -439,7 +439,7 @@ export default {
       // { text: "Delay(Min)", value: "delay" },
       { text: "24 Hrs", value: "hrs_24" },
       // { text: "Sensor", value: "sensor", align: "center" },
-      { text: "Temperature", value: "threshold_temperature" },
+      // { text: "Temperature", value: "threshold_temperature" },
       { text: "Online", value: "status" },
       // { text: "Armed", value: "armed", align: "center" },
 

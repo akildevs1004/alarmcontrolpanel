@@ -314,19 +314,19 @@ export default {
       return;
     }
 
-    const branch_header = [
-      {
-        text: "Branch",
-        align: "left",
-        sortable: true,
-        key: "branch_id",
-        value: "user.employee.branch.name",
-        width: "300px",
-        filterable: true,
-        filterSpecial: true,
-      },
-    ];
-    this.headers.splice(6, 0, ...branch_header);
+    // const branch_header = [
+    //   {
+    //     text: "Branch",
+    //     align: "left",
+    //     sortable: true,
+    //     key: "branch_id",
+    //     value: "user.employee.branch.name",
+    //     width: "300px",
+    //     filterable: true,
+    //     filterSpecial: true,
+    //   },
+    // ];
+    // this.headers.splice(6, 0, ...branch_header);
 
     this.$axios.get(`company/list`).then(({ data }) => {
       this.companiesList = data;

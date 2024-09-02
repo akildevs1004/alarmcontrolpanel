@@ -24,15 +24,18 @@
           style="width: 18px; padding-top: 5px"
       /></v-col>
     </v-row>
-    <v-divider color="#DDD" style="margin-bottom: 0px" />
+    <v-divider color="#5a82ca" style="margin-bottom: 10px" />
     <v-row class="pt-0 mt-0">
       <v-col
         cols="7"
         class="text-center pt-0"
         style="margin: 0 auto; text-align: left; margin-left: -10px"
       >
+        <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut2">
+          Total <br />0
+        </div>
         <div
-          v-if="name"
+          :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
           :id="name"
           :name="name"
           style="width: 320px; margin: 0 auto; text-align: left"
@@ -70,7 +73,7 @@
       </v-col>
     </v-row>
 
-    <div
+    <!-- <div
       v-if="categories.length == 0"
       style="
         padding: 0px;
@@ -82,7 +85,7 @@
       "
     >
       No Data available
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

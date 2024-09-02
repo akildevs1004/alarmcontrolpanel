@@ -362,8 +362,25 @@ class CustomersController extends Controller
             $data["account_status"] = $request->account_status;
             $data["login_status"] = $request->login_status;
             if ($request->filled("password")) {
-                $data["password"] = Hash::make($request->password);
+
+
+
+                if ($request->password == $request->password_confirmation) {
+                    $data["password"] = Hash::make($request->password);
+                } else {
+
+                    return [
+                        "message" => 'Confirm Passsword is not matching password',
+                        "errors" => [
+                            "password_confirmation" => [
+                                'Confirm Passsword is not matching password'
+                            ]
+                        ]
+                    ];
+                }
             }
+
+
 
             Customers::where("company_id", $request->company_id)->where("id", $request->customer_id)->update($data);
         }

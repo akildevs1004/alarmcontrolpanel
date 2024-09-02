@@ -69,6 +69,7 @@
     >
       No Contacts Available
     </div>
+
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-btn
@@ -86,9 +87,226 @@
         </v-btn>
       </v-col>
 
+      <v-row>
+        <v-col cols="11">
+          <v-tabs right>
+            <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
+              {{ item.address_type }}</v-tab
+            >
+            <v-tab-item
+              v-for="(item, index) in customer_contacts"
+              :key="item.id + 50"
+              name="index+50"
+            >
+              <v-card class="elevation-1">
+                <v-row>
+                  <v-col cols="10">
+                    <!-- <h3 style="">{{ item.address_type }}</h3> -->
+                  </v-col>
+
+                  <v-col cols="2" class="text-right">
+                    <v-menu bottom left>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list width="120" dense>
+                        <v-list-item
+                          v-if="can('device_notification_contnet_view')"
+                          @click="editContactDetails(item.id)"
+                        >
+                          <v-list-item-title style="cursor: pointer">
+                            <v-icon color="secondary" small> mdi-eye </v-icon>
+                            Edit
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item
+                          v-if="can('device_notification_contnet_delete')"
+                          @click="deleteContactDetails(item.id)"
+                        >
+                          <v-list-item-title style="cursor: pointer">
+                            <v-icon color="error" small> mdi-delete </v-icon>
+                            Delete
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+                <v-divider></v-divider>
+
+                <v-row class="pt-5 color-black">
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Address"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.address"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Office Phone"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.office_phone"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Person First  Name"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.first_name"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Person Last Name"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.last_name"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Phone 1"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.phone1"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Phone 2"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.phone2"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Email"
+                      dense
+                      small
+                      outlined
+                      type="email"
+                      v-model="item.email"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Whatsapp"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.whatsapp"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Working Hours"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.working_hours"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Distance From Building"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.distance"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Latitude"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.latitude"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" dense>
+                    <v-text-field
+                      readonly
+                      label="Longitude"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.longitude"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" dense>
+                    <v-text-field
+                      readonly
+                      label="Notes"
+                      dense
+                      small
+                      outlined
+                      type="text"
+                      v-model="item.notes"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+        </v-col>
+      </v-row>
+
       <v-col
+        v-if="1 == 8"
         v-for="(item, index) in customer_contacts"
-        :key="index"
+        :key="item.id"
         cols="4"
         class="mt-3"
         style="line-height: 35px; border-right: #ddd 0px solid"

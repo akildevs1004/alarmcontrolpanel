@@ -15,7 +15,7 @@
             <v-icon class="ml-2" @click="getRecords()" dark>mdi-reload</v-icon>
           </v-btn>
         </span>
-        <div v-if="isCompany" style="width: 250px">
+        <!-- <div v-if="isCompany" style="width: 250px">
           <v-select
             @change="getRecords()"
             class="pt-10 px-2"
@@ -28,7 +28,7 @@
             item-text="branch_name"
           >
           </v-select>
-        </div>
+        </div> -->
       </v-toolbar>
       <v-data-table
         class="pt-5"
@@ -200,19 +200,19 @@ export default {
       return;
     }
 
-    const branch_header = [
-      {
-        text: "Branch",
-        align: "left",
-        sortable: true,
-        key: "branch_id",
-        value: "user.employee.branch.branch_name",
-        width: "300px",
-        filterable: true,
-        filterSpecial: true,
-      },
-    ];
-    this.headers.splice(1, 0, ...branch_header);
+    // const branch_header = [
+    //   {
+    //     text: "Branch",
+    //     align: "left",
+    //     sortable: true,
+    //     key: "branch_id",
+    //     value: "user.employee.branch.branch_name",
+    //     width: "300px",
+    //     filterable: true,
+    //     filterSpecial: true,
+    //   },
+    // ];
+    // this.headers.splice(1, 0, ...branch_header);
 
     try {
       const { data } = await this.$axios.get(`branches_list`, {

@@ -60,7 +60,7 @@
 
         <v-card-text>
           <v-container style="min-height: 100px">
-            <AlarmEditPhotos
+            <EditCustomerBuildingPhotos
               :key="key"
               :customer_id="customer_id"
               @closeDialog="closeDialog"
@@ -98,10 +98,10 @@
           <v-row>
             <v-col cols="12" class="text-left">
               <v-row>
-                <v-col cols="10"
+                <v-col cols="8"
                   ><h3>{{ caps(item.title) }}</h3></v-col
                 >
-                <v-col cols="2" class="text-right"
+                <v-col cols="4" class="text-right"
                   ><v-menu bottom left>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn dark-2 icon v-bind="attrs" v-on="on">
@@ -130,14 +130,6 @@
                       </v-list-item>
 
                       <v-list-item
-                        v-if="can('device_notification_contnet_view')"
-                      >
-                        <v-list-item-title style="cursor: pointer">
-                          <AlarmSensorPlotting :key="key" :item="item" />
-                        </v-list-item-title>
-                      </v-list-item>
-
-                      <v-list-item
                         v-if="can('device_notification_contnet_delete')"
                         @click="deletePhoto(item.id)"
                       >
@@ -150,26 +142,30 @@
                   </v-menu></v-col
                 >
               </v-row>
-
-              <v-img
-                @dblclick="viewPhoto(item)"
-                :src="item.picture ? item.picture : '/no-business_profile.png'"
-                aspect-ratio="1"
-                class="grey lighten-2"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
+              <v-divider color="red" />
+              <div>
+                <v-img
+                  @dblclick="viewPhoto(item)"
+                  :src="
+                    item.picture ? item.picture : '/no-business_profile.png'
+                  "
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </div>
             </v-col>
           </v-row>
         </v-card>
@@ -179,10 +175,10 @@
 </template>
 
 <script>
-import AlarmEditPhotos from "../../components/Alarm/EditPhotos.vue";
+import EditCustomerBuildingPhotos from "./EditCustomerBuildingPhotos.vue";
 
 export default {
-  components: { AlarmEditPhotos },
+  components: { EditCustomerBuildingPhotos },
   props: ["customer_id"],
   data: () => ({
     editItem: null,
@@ -264,15 +260,16 @@ export default {
     deletePhoto(id) {
       if (confirm("Are you sure  wish to delete ?")) {
         this.$axios
-          .delete(`customers_building_picture/${id}`)
+          .delete(`customers_building_photos/${id}`)
 
           .then(({ data }) => {
             this.color = "background";
             this.errors = [];
             this.snackbar = true;
             this.response = "Photo Details are deleted successfully";
-            this.getDatafromapi();
+
             this.$emit("closeDialog");
+            this.getDatafromapi();
             //this.branch_id = this.$auth.user.branch_id || "";
           });
       }
@@ -286,7 +283,7 @@ export default {
     getDatafromapi() {
       this.loading = true;
       this.$axios
-        .get(`customers_building_picture`, {
+        .get(`customers_building_photos`, {
           params: {
             company_id: this.$auth.user.company_id,
             customer_id: this.customer_id,

@@ -5,6 +5,7 @@ use App\Http\Controllers;
 use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
+
 use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
 use App\Http\Controllers\Customers\AlarmDashboard;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Customers\AlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
+use App\Http\Controllers\Customers\CustomerBuildingPhotosController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerPaymentsController;
@@ -44,6 +46,8 @@ Route::post('customers_building_contact_update', [CustomersController::class, 'u
 Route::post('customer-update', [CustomersController::class, 'updateCustomer']);
 Route::post('customers_contact_update', [CustomersController::class, 'updateCustomerContact']);
 Route::apiResource('customers_building_picture', CustomerBuildingPicturesController::class);
+Route::apiResource('customers_building_photos', CustomerBuildingPhotosController::class);
+
 Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);

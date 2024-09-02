@@ -86,7 +86,7 @@
         </v-btn>
       </v-col>
       <v-carousel>
-        <template v-for="(item, index) in customer_contacts">
+        <template v-for="(item, index) in customer_contacts" :name="item.id">
           <v-carousel-item
             v-if="(index + 1) % columns === 1 || columns === 1"
             :key="index"
@@ -255,7 +255,7 @@
       </v-carousel>
       <v-col
         v-for="(item, index) in customer_contacts"
-        :key="index"
+        :key="item.id"
         cols="4"
         class="mt-3"
         style="line-height: 35px; border-right: #ddd 0px solid"

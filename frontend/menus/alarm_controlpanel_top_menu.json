@@ -34,13 +34,7 @@
     "menu": "alarm_security",
     "module": "topmenu"
   },
-  {
-    "icon": "mdi mdi-calendar-star-four-points",
-    "title": "Reports",
-    "to": "/alarm/reports",
-    "menu": "alarm_reports",
-    "module": "topmenu"
-  },
+
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Armed",

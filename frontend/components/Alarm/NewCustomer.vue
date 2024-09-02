@@ -5,8 +5,9 @@
         {{ response }}
       </v-snackbar>
     </div>
+
     <v-row>
-      <v-col cols="12" md="3">
+      <!-- <v-col cols="12" md="3">
         <div class="text-center mt-7">
           <v-img
             style="width: 100%; height: auto; border-radius: 2%; margin: 0 auto"
@@ -34,8 +35,8 @@
             errors.logo[0]
           }}</span>
         </div>
-      </v-col>
-      <v-col md="9" sm="12" cols="12" dense>
+      </v-col> -->
+      <v-col cols="12" dense>
         <v-row class="pt-5">
           <!-- <v-col md="4" cols="12" sm="12" dense>
             <v-select
@@ -344,7 +345,10 @@
 </template>
 
 <script>
+import BuildingPhotos from "./BuildingPhotos.vue";
+
 export default {
+  components: { BuildingPhotos },
   props: ["customer_id", "customer"],
   data: () => ({
     response: "",
@@ -396,8 +400,6 @@ export default {
     previewImage: null,
   }),
   created() {
-    console.log(this.customer);
-
     this.preloader = false;
     // this.getBranchesList();
     this.getBuildingTypes();

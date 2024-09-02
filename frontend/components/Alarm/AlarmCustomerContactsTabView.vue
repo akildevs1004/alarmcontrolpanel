@@ -219,3 +219,27 @@ export default {
   },
 };
 </script>
+<style scoped>
+/* .v-tabs--vertical {
+  align-items: end;
+  flex-direction: column;
+} */
+.v-tabs-slider-wrapper {
+  left: auto !important;
+  right: 0 !important;
+}
+.customer-tabs-left-menu .v-tabs-slider-wrapper {
+  left: auto !important;
+  right: 0 !important;
+}
+.customer-building-tabs-left-menu .v-tabs-slider-wrapper {
+  left: 0;
+  right: auto;
+}
+.customer-tabs-left-menu .v-slide-group__content {
+}
+.customer-tab {
+  font-size: 9px !important;
+  min-width: 75px !important;
+}
+</style>

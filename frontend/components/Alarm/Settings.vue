@@ -8,7 +8,7 @@
     <v-row>
       <v-col cols="6">
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12">
             <v-form autocomplete="off">
               <v-col md="12" sm="12" cols="12" dense>
                 <!-- <label class="col-form-label"
@@ -50,6 +50,34 @@
                     errors && errors.password ? errors.password[0] : ''
                   "
                 ></v-text-field>
+              </v-col>
+              <v-col md="12" sm="12" cols="12" dense>
+                <!-- <label class="col-form-label"
+                          >Password <span class="text-danger">*</span></label
+                        > -->
+                <v-text-field
+                  label="Password Confirmation"
+                  dense
+                  outlined
+                  :append-icon="
+                    show_password_confirm ? 'mdi-eye' : 'mdi-eye-off'
+                  "
+                  :type="show_password_confirm ? 'text' : 'password'"
+                  v-model="payload.password_confirmation"
+                  class="input-group--focused"
+                  @click:append="show_password_confirm = !show_password_confirm"
+                  :error="errors.password_confirmation"
+                  :error-messages="
+                    errors && errors.password_confirmation
+                      ? errors.password_confirmation[0]
+                      : ''
+                  "
+                ></v-text-field>
+                <span>{{
+                  errors && errors.password_confirmation
+                    ? errors.password_confirmation[0]
+                    : ""
+                }}</span>
               </v-col>
             </v-form>
           </v-col>
@@ -241,6 +269,7 @@ export default {
       this.payload.login_status = this.customer.login_status;
       this.payload.account_status = this.customer.account_status;
       this.payload.password = "";
+      this.payload.password_confirmation = "";
     }
   },
 
@@ -251,11 +280,15 @@ export default {
     update_setting() {
       this.payload.company_id = this.$auth.user.company_id;
       this.payload.customer_id = this.customer.id;
-
+      this.errors = [];
       this.$axios
         .post("/update_customer_settings", this.payload)
         .then(({ data }) => {
           this.loading = false;
+
+          if (!data.status) {
+            this.errors = data.errors;
+          }
 
           this.snackbar = data.status;
           this.response = data.message;

@@ -14,6 +14,10 @@
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab>
       <v-tab class="customer-tab">
+        Photos
+        <v-icon>mdi-card-account-details</v-icon>
+      </v-tab>
+      <v-tab class="customer-tab">
         Contacts
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab>
@@ -26,7 +30,7 @@
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab class="customer-tab">
-        Plotting
+        Sensors
         <v-icon>mdi-shield-account</v-icon>
       </v-tab>
       <v-tab class="customer-tab">
@@ -40,6 +44,7 @@
         Settings
         <v-icon>mdi mdi-briefcase-account</v-icon>
       </v-tab>
+
       <v-tab-item>
         <v-card flat>
           <v-card-text class="customer-building-tabs-left-menu"
@@ -48,6 +53,17 @@
               :customer_id="_id"
               :customer="data"
               @closeDialog="closeDialog"
+            />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text class="customer-building-tabs-left-menu">
+            <BuildingPhotos
+              v-if="_id"
+              @closeDialog="closeDialog"
+              :customer_id="_id"
             />
           </v-card-text>
         </v-card>
@@ -140,7 +156,7 @@
 
 <script>
 import AlramCustomerContacts from "../../components/Alarm/CustomerContacts.vue";
-import AlramEmergencyContacts from "../../components/Alarm/EmergencyContacts.vue";
+import AlramEmergencyContacts from "../../components/Alarm/AlarmEmergencyContacts.vue";
 import AlramPhotos from "../../components/Alarm/Photos.vue";
 import AlarmDevices from "../../components/Alarm/Devices.vue";
 import AlarmDashboardTemparatureChart1 from "../../components/Alarm/CustomerDashboardTemparatureChart1.vue";
@@ -153,6 +169,7 @@ import NewCustomer from "../../components/Alarm/NewCustomer.vue";
 import DeviceArmedLogs from "./DeviceArmedLogs.vue";
 import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
 import AlarmEditContact from "../../components/Alarm/EditContacts.vue";
+import BuildingPhotos from "./BuildingPhotos.vue";
 
 export default {
   components: {
@@ -169,6 +186,7 @@ export default {
     DeviceArmedLogs,
     AlamAllEvents,
     AlarmEditContact,
+    BuildingPhotos,
   },
   props: ["_id", "isPopup"],
   data: () => ({
