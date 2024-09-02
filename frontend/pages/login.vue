@@ -358,7 +358,6 @@ export default {
         this.$auth
           .loginWith("local", { data: this.credentials })
           .then((data) => {
-            console.log("data", data);
             //redirect("/alarm/dashboard");
           })
           .catch(({ response }) => {

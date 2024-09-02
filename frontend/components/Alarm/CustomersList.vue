@@ -146,10 +146,11 @@
                 >
                   <v-img
                     style="
-                      border-radius: 10%;
+                      border-radius: 50%;
                       height: auto;
-                      width: 50px;
-                      max-width: 50px;
+                      min-height: 60px;
+                      width: 60px;
+                      max-width: 60px;
                     "
                     :src="
                       item.profile_picture

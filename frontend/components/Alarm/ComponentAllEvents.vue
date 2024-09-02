@@ -740,19 +740,21 @@ export default {
       this.dialogTabViewCustomer = false;
     },
     viewCustomerinfo(item) {
-      this.popupEventText =
-        item.device.customer.buildingtype.name +
-        " -    " +
-        item.alarm_type +
-        " alarm " +
-        "   Time " +
-        item.alarm_start_datetime +
-        " -  Priority " +
-        item.category.name;
-      this.key += 1;
-      this.viewCustomerId = item.customer_id;
-      this.eventId = item.id;
-      this.dialogTabViewCustomer = true;
+      if (item.device) {
+        this.popupEventText =
+          item.device.customer.buildingtype.name +
+          " -    " +
+          item.alarm_type +
+          " alarm " +
+          "   Time " +
+          item.alarm_start_datetime +
+          " -  Priority " +
+          item.category.name;
+        this.key += 1;
+        this.viewCustomerId = item.customer_id;
+        this.eventId = item.id;
+        this.dialogTabViewCustomer = true;
+      }
     },
 
     eventForward(item) {

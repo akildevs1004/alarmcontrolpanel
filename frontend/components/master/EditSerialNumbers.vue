@@ -237,7 +237,6 @@ export default {
     // setTimeout(() => {
 
     if (this.editId != "" && this.item) {
-      console.log(this.editId, this.item);
       this.payload_serial_number.editId = this.editId;
       this.payload_serial_number.company_id = this.item.company_id;
       this.payload_serial_number.serial_number = this.item.serial_number;
