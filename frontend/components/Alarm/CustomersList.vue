@@ -5,7 +5,11 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogViewCustomer" width="1000px">
+    <v-dialog
+      v-model="dialogViewCustomer"
+      width="1000px"
+      style="overflow: visible"
+    >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"> Customer Information</span>
