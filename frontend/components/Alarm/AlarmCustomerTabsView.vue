@@ -7,9 +7,9 @@
       background-color="#203864"
       dark
       color="#0aafeb"
-      class="customer-tabs-left-menu"
+      class="customer-tabs-left-menu111111111111"
     >
-      <v-tab class="customer-tab">
+      <v-tab class="customer-tab3333333333">
         Customer
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab>
@@ -47,7 +47,7 @@
 
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu"
+          <v-card-text
             ><NewCustomer
               v-if="data"
               :customer_id="_id"
@@ -59,7 +59,7 @@
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <BuildingPhotos
               v-if="_id"
               @closeDialog="closeDialog"
@@ -70,7 +70,7 @@
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlarmEditContact
               v-if="data"
               :customer_id="_id"
@@ -82,7 +82,7 @@
         </v-card> </v-tab-item
       ><v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlramEmergencyContacts
               v-if="data"
               @closeDialog="closeDialog"
@@ -96,7 +96,7 @@
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlarmDevices
               v-if="_id"
               :customer_id="_id"
@@ -107,7 +107,7 @@
         </v-card> </v-tab-item
       ><v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlramPhotos
               v-if="_id"
               :key="keyPhotos"
@@ -118,7 +118,7 @@
         </v-card> </v-tab-item
       ><v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlarmAutomation
               v-if="_id"
               :key="keyAutomation"
@@ -128,7 +128,7 @@
         </v-card> </v-tab-item
       ><v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlarmPayments
               v-if="_id"
               :customer="data"
@@ -139,7 +139,7 @@
         </v-card> </v-tab-item
       ><v-tab-item>
         <v-card flat>
-          <v-card-text class="customer-building-tabs-left-menu">
+          <v-card-text>
             <AlarmSettings
               v-if="_id"
               @closeDialog="closeDialog"

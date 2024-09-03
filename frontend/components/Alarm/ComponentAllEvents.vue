@@ -175,7 +175,7 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text style="padding: 0px">
+        <v-card-text style="padding: 0px; overflow: hidden">
           <AlarmCustomerTabView
             @closeCustomerDialog="closeCustomerDialog()"
             :key="key"

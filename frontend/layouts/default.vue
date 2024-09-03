@@ -2277,7 +2277,15 @@ button {
   width: 21px !important;
   height: 19px !important;
 }
+</style>
 
+<style scoped>
+label.v-label.v-label--active.v-label--is-disabled.theme--light {
+  color: red !important;
+}
+</style>
+
+<style>
 .empty-doughnut2 {
   border: 20px solid rgb(150, 150, 150);
   border-radius: 100px;
@@ -2288,12 +2296,6 @@ button {
   font-size: 18px;
   margin: auto;
   line-height: 30px;
-}
-</style>
-
-<style scoped>
-label.v-label.v-label--active.v-label--is-disabled.theme--light {
-  color: red !important;
 }
 </style>
 

@@ -132,7 +132,11 @@
             </v-row>
           </v-col>
           <v-col cols="7">
-            <v-tabs color="#dc7640" right>
+            <v-tabs
+              color="#dc7640"
+              right
+              class="customer-building-tabs-left-line"
+            >
               <v-tabs-slider color="blue"></v-tabs-slider>
               <v-tab>Business Photo</v-tab>
               <v-tab>Google Map</v-tab>

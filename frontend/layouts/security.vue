@@ -2158,37 +2158,13 @@ button {
   }
 }
 </style>
-<style scoped>
-.customer-tabs-left-menu .v-tabs-slider-wrapper {
-  left: auto !important;
-  right: 0 !important;
-}
-/* .v-tabs--vertical {
-  align-items: end;
-  flex-direction: column;
-} */
-/*
-.customer-tabs-left-menu .v-tabs-slider-wrapper {
-  left: auto !important;
-  right: 0;
-}
-.customer-building-tabs-left-menu .v-tabs-slider-wrapper {
-  left: 0;
-  right: auto;
-}
-.customer-tabs-left-menu .v-slide-group__content {
-  
-}
-.customer-tab {
-  font-size: 9px !important;
-  min-width: 75px !important;
-}
-*/
+<style scoped></style>
+<style>
 .empty-doughnut {
   border: 18px solid rgb(150, 150, 150);
   border-radius: 100px;
-  height: 112px;
-  width: 112px;
+  height: 110px;
+  width: 110px;
   padding-top: 23px;
   padding-left: 2px;
   font-size: 14px;

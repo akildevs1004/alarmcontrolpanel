@@ -34,7 +34,7 @@
     <v-row class="pt-0 mt-0">
       <v-col cols="7" class="text-center p-0" style="padding: 0px">
         <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut">
-          Total 0
+          Total {{ chartOptions.customTotalValue }}
         </div>
         <div
           :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
