@@ -35,7 +35,7 @@
     <v-dialog v-model="dialogEditEmergency" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Add Contacts </span>
+          <span style="color: black">Contacts </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"

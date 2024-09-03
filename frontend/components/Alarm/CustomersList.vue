@@ -16,7 +16,10 @@
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
-            @click="dialogViewCustomer = false"
+            @click="
+              dialogViewCustomer = false;
+              closeCustomerDialog();
+            "
             outlined
           >
             mdi mdi-close-circle

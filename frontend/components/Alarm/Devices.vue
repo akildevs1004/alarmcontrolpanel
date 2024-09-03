@@ -15,7 +15,9 @@
     <v-dialog v-model="dialogEditDevice" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Device Information </span>
+          <span style="color: black"
+            >Device Information {{ customer_id }}
+          </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -124,8 +126,8 @@
           {{ ++index }}
         </template>
         <template v-slot:item.device="{ item }">
-          <div>{{ item.name }}</div>
-          <div class="secondary-value">{{ item.serial_number }}</div>
+          <div>{{ item.serial_number }}</div>
+          <div class="secondary-value">{{ item.name }}</div>
         </template>
         <template v-slot:item.device_type="{ item }">
           <div>{{ item.device_type }}</div>
@@ -235,6 +237,10 @@
               : "---"
           }}
         </template>
+        <template v-slot:item.customer="{ item }">
+          {{ item.customer ? item.customer.building_name : "---" }}
+        </template>
+
         <template v-slot:item.status="{ item }">
           <div v-if="item.status_id == 1">
             <v-img style="width: 30px" src="/icons/device_status_open.png">
@@ -430,12 +436,12 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno" },
-      { text: "Device", value: "device" },
-      { text: "Device Type", value: "device_type" },
+      { text: "Serial Number", value: "device" },
+      { text: "Device Type/Model", value: "device_type" },
       { text: "Zones", value: "zones", align: "left" },
 
-      { text: "Location", value: "location" },
-
+      // { text: "Location", value: "location" },
+      { text: "Building/Customer", value: "customer" },
       // { text: "Delay(Min)", value: "delay" },
       { text: "24 Hrs", value: "hrs_24" },
       // { text: "Sensor", value: "sensor", align: "center" },

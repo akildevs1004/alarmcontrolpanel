@@ -166,12 +166,19 @@
 
                   <div>
                     <v-img
+                      :src="
+                        item.picture ? item.picture : '/no-business_profile.png'
+                      "
+                      style="max-width: 100%; height: auto"
+                    />
+                    <!-- <v-img
                       @dblclick="viewPhoto(item)"
                       :src="
                         item.picture ? item.picture : '/no-business_profile.png'
                       "
                       aspect-ratio="1"
                       class="grey lighten-2"
+                      style="width: auto; max-width: 100%"
                     >
                       <template v-slot:placeholder>
                         <v-row
@@ -185,7 +192,7 @@
                           ></v-progress-circular>
                         </v-row>
                       </template>
-                    </v-img>
+                    </v-img> -->
                   </div>
                 </v-col>
               </v-row>

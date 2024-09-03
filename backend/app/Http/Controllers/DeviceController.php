@@ -63,7 +63,7 @@ class DeviceController extends Controller
         //$model->excludeMobile();
 
         $cols = $request->cols;
-        $model->with(['status', 'company', 'companyBranch', 'sensorzones']);
+        $model->with(['status', 'company', 'customer', 'companyBranch', 'sensorzones']);
         $model->where('company_id', $request->company_id);
         $model->when($request->filled('name'), function ($q) use ($request) {
             $q->where('name', 'ILIKE', "$request->name%");

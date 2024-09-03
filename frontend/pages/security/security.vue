@@ -8,8 +8,8 @@
 
     <v-dialog v-model="newSecurityDialog" max-width="700px">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense> {{ editId ? "Update" : "New" }} Security Account</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> {{ editId ? "Update" : "New" }} Operator Account</span>
           <v-spacer></v-spacer>
           <v-icon @click="newSecurityDialog = false" outlined>
             mdi mdi-close-circle
@@ -32,9 +32,7 @@
         <v-card elevation="0" class="mt-2">
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
-              <span style="color: black">
-                Security Guards</span
-              ></v-toolbar-title
+              <span style="color: black"> Operators</span></v-toolbar-title
             >
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->

@@ -22,6 +22,22 @@
         </v-col> -->
         <v-col md="6">
           <v-autocomplete
+            class="pb-0"
+            hide-details
+            v-model="payload.customer_id"
+            outlined
+            dense
+            label="Building/Customer Name"
+            :items="customersList"
+            item-value="id"
+            item-text="building_name"
+          ></v-autocomplete>
+          <span v-if="errors && errors.customer_id" class="error--text"
+            >{{ errors.customer_id[0] }}
+          </span>
+        </v-col>
+        <v-col md="6">
+          <v-autocomplete
             :items="master_serial_numbers"
             @change="loadDeviceDetails(payload.serial_number)"
             item-text="serial_number"
@@ -325,7 +341,7 @@ export default {
 
     response: "",
     errors: [],
-
+    customersList: [],
     device_statusses: [],
     branches: [],
     branchesList: [],
@@ -397,6 +413,8 @@ export default {
       this.payload.function = this.editDevice.function;
       this.payload.threshold_temperature =
         this.editDevice.threshold_temperature;
+      if (this.editDevice.customer_id)
+        this.payload.customer_id = this.editDevice.customer_id;
     }
 
     if (this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
@@ -410,6 +428,7 @@ export default {
         company_id: this.$auth.user.company_id,
       },
     };
+    this.getCustomersList();
     this.$axios
       .get("get_master_device_serial_numbers", options)
       .then((data) => {
@@ -458,7 +477,7 @@ export default {
       this.payload.id = id;
       this.payload.ip = "0.0.0.0";
       this.payload.port = "0000";
-      this.payload.customer_id = this.customer_id;
+      if (this.customer_id) this.payload.customer_id = this.customer_id;
 
       this.payload.old_serial_number = this.editDevice
         ? this.editDevice.serial_number
@@ -553,7 +572,21 @@ export default {
           })
           .catch((err) => console.log(err));
     },
+    getCustomersList() {
+      this.payloadOptions = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
 
+      try {
+        this.$axios
+          .get("customers-all", this.payloadOptions)
+          .then(({ data }) => {
+            this.customersList = data;
+          });
+      } catch (e) {}
+    },
     getTimezones() {
       return Object.keys(this.timeZones).map((key) => ({
         offset: this.timeZones[key].offset,

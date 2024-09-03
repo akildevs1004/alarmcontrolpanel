@@ -373,7 +373,7 @@
   {
     "icon": "mdi-cellphone-text",
     "title": "Devices",
-    "to": "/device",
+    "to": "/devices",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "settings"
