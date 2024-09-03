@@ -104,6 +104,12 @@ class DeviceController extends Controller
         });
 
 
+        $model->where("device_type", "!=", "Mobile")
+
+            ->where("device_type", "!=", "Manual")
+            ->where("device_id", "!=", "Manual");
+
+
         // array_push($cols, 'status.id');
 
         $model->when(isset($cols) && count($cols) > 0, function ($q) use ($cols) {
