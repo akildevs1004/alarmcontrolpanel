@@ -106,7 +106,7 @@
             </div>
           </v-col>
         </v-row>
-        <v-row class="pl-5">
+        <!-- <v-row class="pl-5">
           <v-col class="pt-5" style="max-width: 100px">Account </v-col>
           <v-col class="pl-0 pt-1" style="max-width: 80px">
             <div
@@ -124,7 +124,7 @@
               <v-img class="ele1" src="/on.png" style="width: 60px"> </v-img>
             </div>
           </v-col>
-        </v-row>
+        </v-row> -->
         <!-- <v-row>
           <v-col class="pt-5" style="max-width: 100px">Account </v-col>
           <v-col class="pl-0 pt-1" style="max-width: 80px">

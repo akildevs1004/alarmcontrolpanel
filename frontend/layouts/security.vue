@@ -2160,7 +2160,7 @@ button {
 </style>
 <style scoped></style>
 <style>
-.empty-doughnut {
+.empty-doughnut1 {
   border: 18px solid rgb(150, 150, 150);
   border-radius: 100px;
   height: 110px;
@@ -2168,6 +2168,7 @@ button {
   padding-top: 23px;
   padding-left: 2px;
   font-size: 14px;
+  margin-top: 8px;
 }
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

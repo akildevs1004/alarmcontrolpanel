@@ -18,7 +18,11 @@
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <AlarmNewCustomer :key="key" @closeDialog="getDataFromApi()" />
+          <AlarmNewCustomer
+            name="AlarmNewCustomerIndex"
+            :key="key"
+            @closeDialog="getDataFromApi()"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>

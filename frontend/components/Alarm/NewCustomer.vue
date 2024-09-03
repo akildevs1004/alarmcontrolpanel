@@ -7,51 +7,8 @@
     </div>
 
     <v-row>
-      <!-- <v-col cols="12" md="3">
-        <div class="text-center mt-7">
-          <v-img
-            style="width: 100%; height: auto; border-radius: 2%; margin: 0 auto"
-            :src="previewImage || '/no-business_profile.png'"
-          ></v-img>
-          <v-btn
-            class="mt-2"
-            style="width: 100%"
-            small
-            @click="onpick_attachment"
-            >{{ !previewImage ? "Upload" : "Change" }}
-            <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
-          </v-btn>
-
-          <input
-            required
-            type="file"
-            @change="attachment"
-            style="display: none"
-            accept="image/*"
-            ref="attachment_input"
-          />
-
-          <span v-if="errors && errors.logo" class="text-danger mt-2">{{
-            errors.logo[0]
-          }}</span>
-        </div>
-      </v-col> -->
       <v-col cols="12" dense>
         <v-row class="pt-5">
-          <!-- <v-col md="4" cols="12" sm="12" dense>
-            <v-select
-              dense
-              v-model="customer_payload.branch_id"
-              :items="branchesList"
-              outlined
-              item-value="id"
-              item-text="branch_name"
-              label="Branch"
-              hide-details
-            >
-            </v-select>
-          </v-col> -->
-
           <v-col md="4" cols="12" sm="12" dense>
             <v-select
               label="Building Type"
@@ -345,10 +302,7 @@
 </template>
 
 <script>
-import BuildingPhotos from "./BuildingPhotos.vue";
-
 export default {
-  components: { BuildingPhotos },
   props: ["customer_id", "customer"],
   data: () => ({
     response: "",

@@ -46,18 +46,18 @@
           </v-tab>
         </v-tabs></v-col
       >
-      <v-col cols="10" style="width: 110%">
-        <v-tabs-items v-model="tab">
+      <v-col cols="10" style="width: 108%">
+        <v-tabs-items v-model="tab" style="overflow: visible">
           <v-tab-item value="Customer">
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityBuildingInfo v-if="customer" :customer="customer" />
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -70,7 +70,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -82,7 +82,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -94,7 +94,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -106,7 +106,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -118,7 +118,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -130,7 +130,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityContactInfo
                   :alarmId="alarmId"
                   v-if="customer"
@@ -142,7 +142,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text style="width: 108%">
                 <SecurityAlarmNotes
                   :alarmId="alarmId"
                   v-if="customer"

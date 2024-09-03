@@ -87,7 +87,124 @@
         </v-btn>
       </v-col>
 
-      <v-col
+      <v-col cols="12" style="padding-top: 0px; margin-top: 7px">
+        <v-tabs v-model="tab" right>
+          <v-tabs-slider></v-tabs-slider>
+
+          <v-tab href="#tabAddress">Address</v-tab>
+          <v-tab
+            v-for="(item, index) in building_photos"
+            :key="'photo' + item.id"
+            :href="'#tab' + item.id"
+            >{{ caps(item.title) }}</v-tab
+          >
+          <v-tabs-items v-model="tab">
+            <v-tab-item
+              v-for="(item, index) in building_photos"
+              :key="'photo2' + item.id"
+              :value="'tab' + item.id"
+              ><v-row>
+                <v-col cols="12" class="text-left">
+                  <v-row>
+                    <v-col cols="8">
+                      <!-- <h3>{{ caps(item.title) }}</h3> -->
+                    </v-col>
+                    <v-col cols="4" class="text-right"
+                      ><v-menu bottom left>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            dark-2
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                            style="
+                              position: absolute;
+                              color: black;
+                              right: 5px;
+                              z-index: 9999;
+                            "
+                          >
+                            <v-icon>mdi-dots-vertical</v-icon>
+                          </v-btn>
+                        </template>
+                        <v-list width="150" dense>
+                          <v-list-item
+                            v-if="can('device_notification_contnet_view')"
+                            @click="viewPhoto(item)"
+                          >
+                            <v-list-item-title style="cursor: pointer">
+                              <v-icon color="secondary" small> mdi-eye </v-icon>
+                              View
+                            </v-list-item-title>
+                          </v-list-item>
+
+                          <v-list-item
+                            v-if="can('device_notification_contnet_view')"
+                            @click="editPhoto(item)"
+                          >
+                            <v-list-item-title style="cursor: pointer">
+                              <v-icon color="secondary" small>
+                                mdi-pencil
+                              </v-icon>
+                              Edit
+                            </v-list-item-title>
+                          </v-list-item>
+
+                          <v-list-item
+                            v-if="can('device_notification_contnet_delete')"
+                            @click="deletePhoto(item.id)"
+                          >
+                            <v-list-item-title style="cursor: pointer">
+                              <v-icon color="error" small> mdi-delete </v-icon>
+                              Delete
+                            </v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu></v-col
+                    >
+                  </v-row>
+
+                  <div>
+                    <v-img
+                      @dblclick="viewPhoto(item)"
+                      :src="
+                        item.picture ? item.picture : '/no-business_profile.png'
+                      "
+                      aspect-ratio="1"
+                      class="grey lighten-2"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-tab-item>
+            <v-tab-item value="tabAddress">
+              <NewCustomerPhotopage
+                name="NewCustomerPhotopage"
+                id="NewCustomerPhotopage"
+                key="NewCustomerPhotopage"
+                v-if="customer"
+                :customer_id="customer_id"
+                :customer="customer"
+                @closeDialog="closeDialog"
+            /></v-tab-item>
+          </v-tabs-items>
+        </v-tabs>
+      </v-col>
+
+      <!-- <v-col
         v-for="(item, index) in building_photos"
         :key="index"
         cols="4"
@@ -169,18 +286,19 @@
             </v-col>
           </v-row>
         </v-card>
-      </v-col>
+      </v-col> -->
     </v-row>
   </div>
 </template>
 
 <script>
 import EditCustomerBuildingPhotos from "./EditCustomerBuildingPhotos.vue";
-
+import NewCustomerPhotopage from "../../components/Alarm/NewCustomer.vue";
 export default {
-  components: { EditCustomerBuildingPhotos },
-  props: ["customer_id"],
+  components: { EditCustomerBuildingPhotos, NewCustomerPhotopage },
+  props: ["customer_id", "customer"],
   data: () => ({
+    tab: 0,
     editItem: null,
     key: 1,
     building_photos: [],
@@ -291,6 +409,7 @@ export default {
         })
         .then(({ data }) => {
           this.building_photos = data.data;
+          if (this.building_photos[0]) this.tab = this.building_photos[0].id;
           this.loading = false;
         });
     },

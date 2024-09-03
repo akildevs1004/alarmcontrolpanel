@@ -53,11 +53,14 @@ export default {
     if (this.filterType == 5) document.querySelector(".mx-input").focus();
 
     const elementsArray = document.getElementsByClassName("mx-input");
+    //console.log(elementsArray);
     // Loop through the elements and change their height
     for (let i = 0; i < elementsArray.length; i++) {
       const element = elementsArray[i];
       // Set the height to 50 pixels (adjust as needed)
-      element.style.height = this.height + "px";
+      element.style.height = this.height + "px!important";
+
+      //console.log("element.style.height", element, element.style.height);
     }
     // if (this.height && this.height != "") {
     //    elementsArray[0].style.height = this.height;
@@ -219,6 +222,9 @@ export default {
   /*height: 45px !important;*/
   border: 1px solid #9e9e9e !important;
   color: black !important;
+
+  margin-top: 2px !important;
+  height: 30px !important;
 }
 .mx-datepicker {
   width: 200px;

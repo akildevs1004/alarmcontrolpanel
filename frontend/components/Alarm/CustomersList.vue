@@ -5,7 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogViewCustomer" width="60%">
+    <v-dialog v-model="dialogViewCustomer" width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"> Customer Information</span>
@@ -37,7 +37,11 @@
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <AlarmNewCustomer :key="key" @closeDialog="getDataFromApi()" />
+          <AlarmNewCustomer
+            name="AlarmNewCustomerCustomersList"
+            :key="key"
+            @closeDialog="getDataFromApi()"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -147,7 +151,7 @@
                   <v-img
                     style="
                       border-radius: 50%;
-                      height: auto;
+                      height: 60px;
                       min-height: 60px;
                       width: 60px;
                       max-width: 60px;

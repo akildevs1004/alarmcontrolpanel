@@ -88,7 +88,7 @@
       </v-col>
 
       <v-row>
-        <v-col cols="11">
+        <v-col cols="12">
           <v-tabs right>
             <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
               {{ item.address_type }}</v-tab

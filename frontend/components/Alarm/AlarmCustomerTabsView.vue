@@ -1,51 +1,56 @@
 <template>
   <div max-width="100%">
-    <v-tabs
-      icons-and-text
-      v-model="tab"
-      vertical
-      background-color="#203864"
-      dark
-      color="#0aafeb"
-      class="customer-tabs-left-menu111111111111"
-    >
-      <v-tab class="customer-tab3333333333">
+    <v-row>
+      <v-col cols="2" style="max-width: 115px">
+        <v-tabs
+          icons-and-text
+          v-model="tab"
+          vertical
+          background-color="#203864"
+          dark
+          color="#0aafeb"
+          class="customer-tabs-right-line"
+        >
+          <!-- <v-tab class="customer-tab">
         Customer
         <v-icon>mdi-card-account-details</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Photos
-        <v-icon>mdi-card-account-details</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Contacts
-        <v-icon>mdi-card-account-details</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Emergency
-        <v-icon>mdi-account-tie</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Devices
-        <v-icon>mdi-account</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Sensors
-        <v-icon>mdi-shield-account</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Automation
-        <v-icon>mdi-car-emergency</v-icon> </v-tab
-      ><v-tab class="customer-tab">
-        Subscription
-        <v-icon>mdi-medical-bag</v-icon>
-      </v-tab>
-      <v-tab class="customer-tab">
-        Settings
-        <v-icon>mdi mdi-briefcase-account</v-icon>
-      </v-tab>
-
-      <v-tab-item>
+      </v-tab> -->
+          <v-tab class="customer-tab">
+            Address
+            <v-icon>mdi-card-account-details</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Contacts
+            <v-icon>mdi-card-account-details</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Emergency
+            <v-icon>mdi-account-tie</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Devices
+            <v-icon>mdi-account</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Sensors
+            <v-icon>mdi-shield-account</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Automation
+            <v-icon>mdi-car-emergency</v-icon> </v-tab
+          ><v-tab class="customer-tab">
+            Subscription
+            <v-icon>mdi-medical-bag</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Settings
+            <v-icon>mdi mdi-briefcase-account</v-icon>
+          </v-tab>
+        </v-tabs>
+      </v-col>
+      <v-col cols="10" style="width: 108%">
+        <v-tabs-items v-model="tab" style="overflow: visible">
+          <!-- <v-tab-item>
         <v-card flat>
           <v-card-text
             ><NewCustomer
@@ -56,101 +61,103 @@
             />
           </v-card-text>
         </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <BuildingPhotos
-              v-if="_id"
-              @closeDialog="closeDialog"
-              :customer_id="_id"
-            />
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlarmEditContact
-              v-if="data"
-              :customer_id="_id"
-              :customer_contacts="customer_contacts"
-              :customer="data"
-              @closeDialog="closeDialog"
-            />
-          </v-card-text>
-        </v-card> </v-tab-item
-      ><v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlramEmergencyContacts
-              v-if="data"
-              @closeDialog="closeDialog"
-              :customer_id="_id"
-              :customer_contacts="customer_contacts"
-              :customer="data"
-              :key="keyEmergencyy"
-            />
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlarmDevices
-              v-if="_id"
-              :customer_id="_id"
-              @closeDialog="closeDialog"
-              :key="keyDevices"
-            />
-          </v-card-text>
-        </v-card> </v-tab-item
-      ><v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlramPhotos
-              v-if="_id"
-              :key="keyPhotos"
-              @closeDialog="closeDialog"
-              :customer_id="_id"
-            />
-          </v-card-text>
-        </v-card> </v-tab-item
-      ><v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlarmAutomation
-              v-if="_id"
-              :key="keyAutomation"
-              :customer_id="_id"
-            />
-          </v-card-text>
-        </v-card> </v-tab-item
-      ><v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlarmPayments
-              v-if="_id"
-              :customer="data"
-              :key="keyPayments"
-              :customer_id="_id"
-            />
-          </v-card-text>
-        </v-card> </v-tab-item
-      ><v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <AlarmSettings
-              v-if="_id"
-              @closeDialog="closeDialog"
-              :key="keySettings"
-              :customer_id="_id"
-              :customer="customer"
-            />
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs>
+      </v-tab-item> -->
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <BuildingPhotos
+                  v-if="_id"
+                  @closeDialog="closeDialog"
+                  :customer_id="_id"
+                  :customer="data"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlarmEditContact
+                  v-if="data"
+                  :customer_id="_id"
+                  :customer_contacts="customer_contacts"
+                  :customer="data"
+                  @closeDialog="closeDialog"
+                />
+              </v-card-text>
+            </v-card> </v-tab-item
+          ><v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlramEmergencyContacts
+                  v-if="data"
+                  @closeDialog="closeDialog"
+                  :customer_id="_id"
+                  :customer_contacts="customer_contacts"
+                  :customer="data"
+                  :key="keyEmergencyy"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text style="width: 110%; margin-left: -20px">
+                <AlarmDevices
+                  v-if="_id"
+                  :customer_id="_id"
+                  @closeDialog="closeDialog"
+                  :key="keyDevices"
+                />
+              </v-card-text>
+            </v-card> </v-tab-item
+          ><v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlramPhotos
+                  v-if="_id"
+                  :key="keyPhotos"
+                  @closeDialog="closeDialog"
+                  :customer_id="_id"
+                />
+              </v-card-text>
+            </v-card> </v-tab-item
+          ><v-tab-item>
+            <v-card flat>
+              <v-card-text style="width: 107%; margin-left: -20px">
+                <AlarmAutomation
+                  v-if="_id"
+                  :key="keyAutomation"
+                  :customer_id="_id"
+                />
+              </v-card-text>
+            </v-card> </v-tab-item
+          ><v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlarmPayments
+                  v-if="_id"
+                  :customer="data"
+                  :key="keyPayments"
+                  :customer_id="_id"
+                />
+              </v-card-text>
+            </v-card> </v-tab-item
+          ><v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlarmSettings
+                  v-if="_id"
+                  @closeDialog="closeDialog"
+                  :key="keySettings"
+                  :customer_id="_id"
+                  :customer="customer"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item> </v-tabs-items
+      ></v-col>
+    </v-row>
   </div>
 </template>
 
@@ -165,7 +172,7 @@ import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDash
 import CustomerAlarmEvents from "../../components/Alarm/CustomerAlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
 import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
-import NewCustomer from "../../components/Alarm/NewCustomer.vue";
+// import NewCustomer from "../../components/Alarm/NewCustomer.vue";
 import DeviceArmedLogs from "./DeviceArmedLogs.vue";
 import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
 import AlarmEditContact from "../../components/Alarm/EditContacts.vue";
@@ -182,7 +189,7 @@ export default {
     AlarmSettings,
     CustomerDashboard,
     CustomerAlarmEvents,
-    NewCustomer,
+    // NewCustomer,
     DeviceArmedLogs,
     AlamAllEvents,
     AlarmEditContact,

@@ -268,7 +268,7 @@
                         min-width: 100%;
                         width: 150px;
                       "
-                      height="20px"
+                      height="25px"
                       outlined
                       @change="getDataFromApi(0)"
                       v-model="filterAlarmStatus"
@@ -289,7 +289,7 @@
                       :default_date_from="date_from"
                       :default_date_to="date_to"
                       :defaultFilterType="1"
-                      :height="'60px'"
+                      :height="'30px'"
                   /></v-col>
                   <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>

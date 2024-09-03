@@ -64,6 +64,7 @@
         <v-card-text>
           <v-container style="min-height: 100px">
             <NewCustomer
+              name="NewCustomerCustomerContact"
               :customer_id="customer_id"
               :customer="customer"
               @closeDialog="closeDialog"

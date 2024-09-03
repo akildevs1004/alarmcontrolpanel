@@ -6,170 +6,179 @@
       </v-snackbar>
     </div>
     <v-row>
-      <v-col cols="6" dense>
-        <v-card class="elevation-0 p-2" style="padding: 5px">
-          <h3>Primary Contact</h3>
-          <v-row class="pt-0">
-            <v-col cols="12" dense>
-              <div class="text-center mt-0">
-                <v-img
-                  style="
-                    height: auto;
-                    min-height: 150px;
-                    width: 150px;
-                    border-radius: 50%;
-                    margin: 0 auto;
-                  "
-                  :src="primary_previewImage || '/no-business_profile.png'"
-                ></v-img>
-                <v-btn
-                  class="mt-2"
-                  style="width: 50%"
-                  small
-                  @click="onpick_primary_attachment"
-                  >{{ !primary_upload.name ? "Upload" : "Change" }}
-                  <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
-                </v-btn>
+      <v-col cols="12">
+        <v-tabs right>
+          <v-tab>Primary Contact</v-tab>
+          <v-tab>Secondary Contact</v-tab>
 
-                <input
-                  required
-                  type="file"
-                  @change="primary_attachment"
-                  style="display: none"
-                  accept="image/*"
-                  ref="primary_attachment_input"
-                />
+          <v-tab-item>
+            <v-card class="elevation-0 p-2" style="padding: 5px">
+              <v-row class="pt-5">
+                <v-col cols="4" dense>
+                  <div class="text-center mt-0">
+                    <v-img
+                      style="
+                        height: auto;
+                        min-height: 150px;
+                        width: 150px;
+                        border-radius: 50%;
+                        margin: 0 auto;
+                      "
+                      :src="primary_previewImage || '/no-business_profile.png'"
+                    ></v-img>
+                    <v-btn
+                      class="mt-2"
+                      style="width: 50%"
+                      small
+                      @click="onpick_primary_attachment"
+                      >{{ !primary_upload.name ? "Upload" : "Change" }}
+                      <v-icon right dark color="primary"
+                        >mdi-cloud-upload</v-icon
+                      >
+                    </v-btn>
 
-                <span
-                  v-if="primary_errors && primary_errors.logo"
-                  class="text-danger mt-2"
-                  >{{ primary_errors.logo[0] }}</span
+                    <input
+                      required
+                      type="file"
+                      @change="primary_attachment"
+                      style="display: none"
+                      accept="image/*"
+                      ref="primary_attachment_input"
+                    />
+
+                    <span
+                      v-if="primary_errors && primary_errors.logo"
+                      class="text-danger mt-2"
+                      >{{ primary_errors.logo[0] }}</span
+                    >
+                  </div>
+                </v-col>
+                <v-col cols="8"
+                  ><v-row>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="First Name"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_primary.first_name"
+                        hide-details
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Last Name"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_primary.last_name"
+                        hide-details
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Phone 1"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_primary.phone1"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.phone1"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.phone1[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Phone 2"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_primary.phone2"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.phone2"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.phone2[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Office Phone"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_primary.office_phone"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.office_phone"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.office_phone[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Email"
+                        dense
+                        small
+                        outlined
+                        type="email"
+                        v-model="payload_primary.email"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.email"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.email[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Whatsapp"
+                        dense
+                        small
+                        outlined
+                        type="whatsapp"
+                        v-model="payload_primary.whatsapp"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.whatsapp"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.whatsapp[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Alarm STOP Pin"
+                        dense
+                        small
+                        outlined
+                        type="number"
+                        max-length="6"
+                        v-model="payload_primary.alarm_stop_pin"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="primary_errors && primary_errors.alarm_stop_pin"
+                        class="text-danger mt-2"
+                        >{{ primary_errors.alarm_stop_pin[0] }}</span
+                      >
+                    </v-col>
+                  </v-row></v-col
                 >
-              </div>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="First Name"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_primary.first_name"
-                hide-details
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Last Name"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_primary.last_name"
-                hide-details
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Phone 1"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_primary.phone1"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.phone1"
-                class="text-danger mt-2"
-                >{{ primary_errors.phone1[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Phone 2"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_primary.phone2"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.phone2"
-                class="text-danger mt-2"
-                >{{ primary_errors.phone2[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Office Phone"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_primary.office_phone"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.office_phone"
-                class="text-danger mt-2"
-                >{{ primary_errors.office_phone[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Email"
-                dense
-                small
-                outlined
-                type="email"
-                v-model="payload_primary.email"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.email"
-                class="text-danger mt-2"
-                >{{ primary_errors.email[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Whatsapp"
-                dense
-                small
-                outlined
-                type="whatsapp"
-                v-model="payload_primary.whatsapp"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.whatsapp"
-                class="text-danger mt-2"
-                >{{ primary_errors.whatsapp[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Alarm STOP Pin"
-                dense
-                small
-                outlined
-                type="number"
-                max-length="6"
-                v-model="payload_primary.alarm_stop_pin"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="primary_errors && primary_errors.alarm_stop_pin"
-                class="text-danger mt-2"
-                >{{ primary_errors.alarm_stop_pin[0] }}</span
-              >
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <!-- <v-col cols="12" class="text-right">
+              </v-row>
+              <v-row>
+                <!-- <v-col cols="12" class="text-right">
             <v-btn
               small
               :loading="loading"
@@ -179,185 +188,199 @@
               Submit
             </v-btn></v-col
           > -->
-          </v-row>
-        </v-card>
+              </v-row>
+            </v-card>
+          </v-tab-item>
+
+          <v-tab-item>
+            <v-card class="elevation-0 p-2" style="padding: 5px">
+              <v-row class="pt-5">
+                <v-col cols="4" dense>
+                  <div class="text-center mt-0">
+                    <v-img
+                      style="
+                        height: auto;
+                        min-height: 150px;
+                        width: 150px;
+                        border-radius: 50%;
+                        margin: 0 auto;
+                      "
+                      :src="
+                        secondary_previewImage || '/no-business_profile.png'
+                      "
+                    ></v-img>
+                    <v-btn
+                      class="mt-2"
+                      style="width: 50%"
+                      small
+                      @click="onpick_secondary_attachment"
+                      >{{ !secondary_upload.name ? "Upload" : "Change" }}
+                      <v-icon right dark color="primary"
+                        >mdi-cloud-upload</v-icon
+                      >
+                    </v-btn>
+
+                    <input
+                      required
+                      type="file"
+                      @change="secondary_attachment"
+                      style="display: none"
+                      accept="image/*"
+                      ref="secondary_attachment_input"
+                    />
+
+                    <span
+                      v-if="secondary_errors && secondary_errors.logo"
+                      class="text-danger mt-2"
+                      >{{ secondary_errors.logo[0] }}</span
+                    >
+                  </div>
+                </v-col>
+                <v-col cols="8"
+                  ><v-row>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="First Name"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_secondary.first_name"
+                        hide-details
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Last Name"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_secondary.last_name"
+                        hide-details
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Phone 1"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_secondary.phone1"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="secondary_errors && secondary_errors.phone1"
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.phone1[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Phone 2"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_secondary.phone2"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="secondary_errors && secondary_errors.phone2"
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.phone2[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Office Phone"
+                        dense
+                        small
+                        outlined
+                        type="text"
+                        v-model="payload_secondary.office_phone"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="secondary_errors && secondary_errors.office_phone"
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.office_phone[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Email"
+                        dense
+                        small
+                        outlined
+                        type="email"
+                        v-model="payload_secondary.email"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="secondary_errors && secondary_errors.email"
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.email[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Whatsapp"
+                        dense
+                        small
+                        outlined
+                        type="whatsapp"
+                        v-model="payload_secondary.whatsapp"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="secondary_errors && secondary_errors.whatsapp"
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.whatsapp[0] }}</span
+                      >
+                    </v-col>
+                    <v-col cols="6" dense>
+                      <v-text-field
+                        label="Alarm STOP Pin"
+                        dense
+                        small
+                        outlined
+                        type="number"
+                        max-length="6"
+                        v-model="payload_secondary.alarm_stop_pin"
+                        hide-details
+                      ></v-text-field>
+                      <span
+                        v-if="
+                          secondary_errors && secondary_errors.alarm_stop_pin
+                        "
+                        class="text-danger mt-2"
+                        >{{ secondary_errors.alarm_stop_pin[0] }}</span
+                      >
+                    </v-col>
+                  </v-row></v-col
+                ></v-row
+              >
+              <v-row>
+                <v-col cols="12" class="text-right">
+                  <v-btn
+                    small
+                    :loading="loading"
+                    color="primary"
+                    @click="submit_secondary"
+                  >
+                    Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-tab-item></v-tabs
+        >
       </v-col>
-      <v-col cols="6" dense style="border-left: 1px solid #ddd">
-        <v-card class="elevation-0 p-2" style="padding: 5px">
-          <h3>Secondary Contact</h3>
-          <v-row class="pt-0">
-            <v-col cols="12" dense>
-              <div class="text-center mt-0">
-                <v-img
-                  style="
-                    height: auto;
-                    min-height: 150px;
-                    width: 150px;
-                    border-radius: 50%;
-                    margin: 0 auto;
-                  "
-                  :src="secondary_previewImage || '/no-business_profile.png'"
-                ></v-img>
-                <v-btn
-                  class="mt-2"
-                  style="width: 50%"
-                  small
-                  @click="onpick_secondary_attachment"
-                  >{{ !secondary_upload.name ? "Upload" : "Change" }}
-                  <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
-                </v-btn>
 
-                <input
-                  required
-                  type="file"
-                  @change="secondary_attachment"
-                  style="display: none"
-                  accept="image/*"
-                  ref="secondary_attachment_input"
-                />
-
-                <span
-                  v-if="secondary_errors && secondary_errors.logo"
-                  class="text-danger mt-2"
-                  >{{ secondary_errors.logo[0] }}</span
-                >
-              </div>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="First Name"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_secondary.first_name"
-                hide-details
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Last Name"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_secondary.last_name"
-                hide-details
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Phone 1"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_secondary.phone1"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.phone1"
-                class="text-danger mt-2"
-                >{{ secondary_errors.phone1[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Phone 2"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_secondary.phone2"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.phone2"
-                class="text-danger mt-2"
-                >{{ secondary_errors.phone2[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Office Phone"
-                dense
-                small
-                outlined
-                type="text"
-                v-model="payload_secondary.office_phone"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.office_phone"
-                class="text-danger mt-2"
-                >{{ secondary_errors.office_phone[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Email"
-                dense
-                small
-                outlined
-                type="email"
-                v-model="payload_secondary.email"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.email"
-                class="text-danger mt-2"
-                >{{ secondary_errors.email[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Whatsapp"
-                dense
-                small
-                outlined
-                type="whatsapp"
-                v-model="payload_secondary.whatsapp"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.whatsapp"
-                class="text-danger mt-2"
-                >{{ secondary_errors.whatsapp[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-text-field
-                label="Alarm STOP Pin"
-                dense
-                small
-                outlined
-                type="number"
-                max-length="6"
-                v-model="payload_secondary.alarm_stop_pin"
-                hide-details
-              ></v-text-field>
-              <span
-                v-if="secondary_errors && secondary_errors.alarm_stop_pin"
-                class="text-danger mt-2"
-                >{{ secondary_errors.alarm_stop_pin[0] }}</span
-              >
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" class="text-right">
-              <v-btn
-                small
-                :loading="loading"
-                color="primary"
-                @click="submit_secondary"
-              >
-                Submit
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
+      <v-col cols="6" dense> </v-col>
+      <v-col cols="6" dense style="border-left: 1px solid #ddd"> </v-col>
       <!-- <v-col md="4" sm="12" cols="12" dense>
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <h3>Building Details</h3>
