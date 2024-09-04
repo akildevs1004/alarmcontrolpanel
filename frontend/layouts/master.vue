@@ -209,17 +209,18 @@ export default {
         //   permission: this.can("master"),
         // },
         {
+          icon: "mdi-cellphone-text",
+          title: "Serial Numbers",
+          to: "/master/device/serialnumbers",
+          permission: this.can("master"),
+        },
+        {
           icon: "mdi-login-variant",
           title: "Web Logs",
           to: "/master/web_login_logs",
           permission: this.can("master"),
         },
-        {
-          icon: "mdi-login-variant",
-          title: "Serial Numbers",
-          to: "/master/device/serialnumbers",
-          permission: this.can("master"),
-        },
+
         // {
         //   icon: "mdi-apps",
         //   title: "Module",

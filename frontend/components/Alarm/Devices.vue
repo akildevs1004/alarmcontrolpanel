@@ -15,9 +15,7 @@
     <v-dialog v-model="dialogEditDevice" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Device Information {{ customer_id }}
-          </span>
+          <span style="color: black">Device Information </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -41,7 +39,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogZones" width="1000px">
+    <v-dialog v-model="dialogZones" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Control Panel - Zones</span>
@@ -127,11 +125,11 @@
         </template>
         <template v-slot:item.device="{ item }">
           <div>{{ item.serial_number }}</div>
-          <div class="secondary-value">{{ item.name }}</div>
+          <!-- <div class="secondary-value">{{ item.name }}</div> -->
         </template>
         <template v-slot:item.device_type="{ item }">
           <div>{{ item.device_type }}</div>
-          <div class="secondary-value">{{ item.model_number }}</div>
+          <!-- <div class="secondary-value">{{ item.model_number }}</div> -->
         </template>
         <template v-slot:item.name="{ item }">
           {{ caps(item.name) }}
@@ -238,7 +236,14 @@
           }}
         </template>
         <template v-slot:item.customer="{ item }">
-          {{ item.customer ? item.customer.building_name : "---" }}
+          <div v-if="item.customer_id && item.customer_id > 0">
+            <div v-if="item.customer">{{ item.customer.building_name }}</div>
+            <span v-else style="color: red"
+              >Customer Account is Deleted<br />
+              Unlink Customer</span
+            >
+          </div>
+          <div v-else>---</div>
         </template>
 
         <template v-slot:item.status="{ item }">
@@ -331,7 +336,7 @@
               >
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="error" small> mdi-delete </v-icon>
-                  Delete
+                  Unlink Customer
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -437,11 +442,12 @@ export default {
     headers: [
       { text: "#", value: "sno" },
       { text: "Serial Number", value: "device" },
-      { text: "Device Type/Model", value: "device_type" },
-      { text: "Zones", value: "zones", align: "left" },
+      { text: "Device Type", value: "device_type" },
+      { text: "Device Model", value: "model_number" },
+      // { text: "Zones", value: "zones", align: "left" },
 
       // { text: "Location", value: "location" },
-      { text: "Building/Customer", value: "customer" },
+      { text: "Building/Customer Name", value: "customer" },
       // { text: "Delay(Min)", value: "delay" },
       { text: "24 Hrs", value: "hrs_24" },
       // { text: "Sensor", value: "sensor", align: "center" },
@@ -1254,9 +1260,7 @@ export default {
     },
 
     deleteItem(item) {
-      confirm(
-        "Are you sure you wish to delete , to mitigate any inconvenience in future."
-      ) &&
+      confirm("Are you sure you wish to Unlink Customer?") &&
         this.$axios
           .delete(this.endpoint + "/" + item.id)
           .then(({ data }) => {

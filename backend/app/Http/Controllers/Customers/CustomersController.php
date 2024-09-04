@@ -910,7 +910,19 @@ class CustomersController extends Controller
             ->where("serial_number", "!=", "Mobile")
             ->where("serial_number", "!=", "mobile")
             ->where("serial_number", "!=", null)
+
+            ->get();
+    }
+    public function getCustomerNewSerialNumbers(Request $request)
+    {
+        return  Device::where("company_id", $request->company_id)
+            ->where("customer_id", null)
+            ->where("device_type", "!=", "Manual")
+            ->where("serial_number", "!=", "Manual")
+            ->where("serial_number", "!=", "Mobile")
+            ->where("serial_number", "!=", "mobile")
             ->where("serial_number", "!=", null)
+
             ->get();
     }
 }

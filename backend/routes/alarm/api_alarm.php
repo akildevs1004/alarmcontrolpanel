@@ -54,7 +54,8 @@ Route::get('customer_device_types', [CustomersController::class, 'customerDevice
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
 Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
 Route::post("security_customers_update", [CustomersController::class, "SecurityCustomersListUpdate"]);
-Route::get('get_master_device_serial_numbers', [CustomersController::class, 'getMasterDeviceSerialNumbers']);
+// Route::get('get_master_device_serial_numbers', [CustomersController::class, 'getMasterDeviceSerialNumbers']);
+Route::get('get_customer_new_serial_numbers', [CustomersController::class, 'getCustomerNewSerialNumbers']);
 
 
 //Devices

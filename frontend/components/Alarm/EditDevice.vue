@@ -19,25 +19,9 @@
           <span v-if="errors && errors.serial_number" class="error--text"
             >{{ errors.serial_number[0] }}
           </span>
-        </v-col> -->
-        <v-col md="6">
+        </v-col> --><v-col md="6">
           <v-autocomplete
-            class="pb-0"
-            hide-details
-            v-model="payload.customer_id"
-            outlined
-            dense
-            label="Building/Customer Name"
-            :items="customersList"
-            item-value="id"
-            item-text="building_name"
-          ></v-autocomplete>
-          <span v-if="errors && errors.customer_id" class="error--text"
-            >{{ errors.customer_id[0] }}
-          </span>
-        </v-col>
-        <v-col md="6">
-          <v-autocomplete
+            :disabled="editDevice && payload.serial_number"
             :items="master_serial_numbers"
             @change="loadDeviceDetails(payload.serial_number)"
             item-text="serial_number"
@@ -53,6 +37,24 @@
             >{{ errors.serial_number[0] }}
           </span>
         </v-col>
+        <v-col md="6">
+          <v-autocomplete
+            class="pb-0"
+            hide-details
+            v-model="payload.customer_id"
+            outlined
+            dense
+            label="Building Name/Customer"
+            :items="customersList"
+            item-value="id"
+            item-text="building_name"
+            clearable
+          ></v-autocomplete>
+          <span v-if="errors && errors.customer_id" class="error--text"
+            >{{ errors.customer_id[0] }}
+          </span>
+        </v-col>
+
         <v-col md="6">
           <v-text-field
             hide-details
@@ -142,7 +144,7 @@
           </span>
         </v-col> -->
 
-        <v-col md="6">
+        <!-- <v-col md="6">
           <v-select
             disabled
             class="pb-0"
@@ -158,7 +160,7 @@
           <span v-if="errors && errors.device_type" class="error--text"
             >{{ errors.device_type[0] }}
           </span>
-        </v-col>
+        </v-col> -->
         <!-- <v-col
           md="6"
           v-if="
@@ -216,7 +218,7 @@
     <v-row>
       <v-col cols="8" style="font-size: 14px"
         ><div style="color: red">{{ response }}</div>
-        Note:Multiple Zones can add to Control Panel Type
+        <!-- Note:Multiple Zones can add to Control Panel Type -->
       </v-col>
       <v-col cols="4">
         <div class="text-right">
@@ -429,21 +431,19 @@ export default {
       },
     };
     this.getCustomersList();
-    this.$axios
-      .get("get_master_device_serial_numbers", options)
-      .then((data) => {
-        this.master_serial_numbers = data.data;
+    this.$axios.get("get_customer_new_serial_numbers", options).then((data) => {
+      this.master_serial_numbers = data.data;
 
-        if (this.editDevice)
-          this.master_serial_numbers = [
-            {
-              model_number: this.editDevice.model_number,
-              device_type: this.editDevice.device_type,
-              serial_number: this.editDevice.serial_number,
-            },
-            ...this.master_serial_numbers,
-          ];
-      });
+      if (this.editDevice)
+        this.master_serial_numbers = [
+          {
+            model_number: this.editDevice.model_number,
+            device_type: this.editDevice.device_type,
+            serial_number: this.editDevice.serial_number,
+          },
+          ...this.master_serial_numbers,
+        ];
+    });
   },
 
   methods: {
