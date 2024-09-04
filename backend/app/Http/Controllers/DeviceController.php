@@ -107,8 +107,8 @@ class DeviceController extends Controller
         $model->where("device_type", "!=", "Mobile")
 
             ->where("device_type", "!=", "Manual")
-            ->where("device_id", "!=", "Manual");
-
+            ->where("device_id", "!=", "Manual")
+            ->where("serial_number", "!=", null);
 
         // array_push($cols, 'status.id');
 
