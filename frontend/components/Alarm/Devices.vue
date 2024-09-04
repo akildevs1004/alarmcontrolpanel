@@ -65,46 +65,59 @@
 
     <v-card elevation="0" class="pa-0">
       <v-toolbar class="rounded-md" dense flat v-if="!eventFilter">
-        <v-spacer></v-spacer>
+        <v-row
+          ><v-col cols="8"></v-col>
+          <v-col cols="4">
+            <v-row class="pt-5"
+              ><v-col cols="2" class="text-right pull-right"
+                ><v-btn
+                  class="pl-10 pt-5"
+                  x-small
+                  :ripple="false"
+                  text
+                  title="Sync Devices"
+                  @click="updateDevicesHealth"
+                >
+                  <v-icon dark white>mdi-cached</v-icon>
+                </v-btn></v-col
+              ><v-col cols="5"
+                ><v-text-field
+                  clearable
+                  style="padding-top: 7px; width: 170px"
+                  height="20"
+                  class="employee-schedule-search-box"
+                  @input="getDataFromApi()"
+                  v-model="commonSearch"
+                  label="Search "
+                  dense
+                  outlined
+                  type="text"
+                  append-icon="mdi-magnify"
+                  hide-details
+                ></v-text-field
+              ></v-col>
 
-        <span>
-          <v-btn
-            x-small
-            :ripple="false"
-            text
-            title="Sync Devices"
-            @click="updateDevicesHealth"
-          >
-            <v-icon dark white>mdi-cached</v-icon>
-          </v-btn>
-        </span>
-        <span>
-          <v-btn
-            v-if="can(`device_create`)"
-            x-small
-            :ripple="false"
-            title="New"
-            color="primary"
-            @click="
-              key = key + 1;
-              editId = null;
-              editDevice = null;
-              dialogEditDevice = true;
-            "
-            >New Device
-          </v-btn>
-        </span>
-        <!-- <span class="ml-3">
-          <v-btn
-            v-if="can(`device_create`)"
-            x-small
-            :ripple="false"
-            title="New"
-            color="primary"
-            @click="addItem()"
-            >New Zone
-          </v-btn>
-        </span> -->
+              <v-col cols="5">
+                <v-select
+                  @change="getDataFromApi()"
+                  label="Assigned Devices"
+                  outlined
+                  class="employee-schedule-search-box"
+                  dense
+                  x-small
+                  height="20"
+                  style="padding-top: 7px; width: 200px"
+                  v-model="filterCustomersMapped"
+                  :items="[
+                    { value: '', text: 'All Customers' },
+                    { value: 0, text: 'Un-Assigned' },
+                    { value: 1, text: 'Assigned' },
+                  ]"
+                >
+                </v-select
+              ></v-col> </v-row
+          ></v-col>
+        </v-row>
       </v-toolbar>
 
       <v-data-table
@@ -238,7 +251,7 @@
         <template v-slot:item.customer="{ item }">
           <div v-if="item.customer_id && item.customer_id > 0">
             <div v-if="item.customer">{{ item.customer.building_name }}</div>
-            <span v-else style="color: red"
+            <span v-else style="color: red" title="Delete Customer"
               >Customer Account is Deleted<br />
               Unlink Customer</span
             >
@@ -356,6 +369,8 @@ export default {
   components: { AlarmEditDevice, AlarmSensorZones },
   props: ["customer_id", "eventFilter"],
   data: () => ({
+    commonSearch: "",
+    filterCustomersMapped: "",
     editId: null,
     key: 1,
     dialogEditDevice: false,
@@ -441,11 +456,11 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno" },
-      { text: "Serial Number", value: "device" },
-      { text: "Device Type", value: "device_type" },
+
+      { text: "Device Category", value: "device_type" },
       { text: "Device Model", value: "model_number" },
       // { text: "Zones", value: "zones", align: "left" },
-
+      { text: "Serial Number", value: "device" },
       // { text: "Location", value: "location" },
       { text: "Building/Customer Name", value: "customer" },
       // { text: "Delay(Min)", value: "delay" },
@@ -1034,10 +1049,17 @@ export default {
       filter_column = "",
       filter_value = ""
     ) {
-      this.loading = true;
-
       this.filters["customer_id"] = this.customer_id;
       this.filters["dashboardFilter"] = this.eventFilter;
+      if (this.commonSearch != "") {
+        // if (this.commonSearch?.length <= 1) {
+        //   return false;
+        // }
+        this.filters["commonSearch"] = this.commonSearch;
+      }
+      //if (this.filterCustomersMapped != "")
+      this.filters["filterCustomersMapped"] = this.filterCustomersMapped;
+      this.loading = true;
       const data = await this.$store.dispatch("fetchData", {
         key: "devices",
         options: this.options,

@@ -49,7 +49,36 @@
             </v-col>
 
             <v-col cols="8">
-              <v-row class="pt-0">
+              <v-row class="pt-0"
+                ><v-col cols="6" dense>
+                  <v-select
+                    class="pb-0"
+                    :readonly="!editable"
+                    :filled="!editable"
+                    hide-details
+                    v-model="payload_serial_number.device_type"
+                    outlined
+                    dense
+                    label="Device Category/Type"
+                    :items="deviceTypes"
+                    item-value="id"
+                    item-text="name"
+                  ></v-select>
+                </v-col>
+
+                <v-col cols="6" dense>
+                  <v-select
+                    :readonly="!editable"
+                    :filled="!editable"
+                    class="pb-0"
+                    hide-details
+                    v-model="payload_serial_number.model_number"
+                    outlined
+                    dense
+                    label="Device Model"
+                    :items="deviceModels"
+                  ></v-select>
+                </v-col>
                 <v-col cols="6" dense>
                   <v-text-field
                     label="Serial Number"
@@ -68,34 +97,6 @@
                     class="text-danger mt-2"
                     >{{ primary_errors.serial_number[0] }}</span
                   >
-                </v-col>
-                <v-col cols="6" dense>
-                  <v-select
-                    :readonly="!editable"
-                    :filled="!editable"
-                    class="pb-0"
-                    hide-details
-                    v-model="payload_serial_number.model_number"
-                    outlined
-                    dense
-                    label="Device Model"
-                    :items="deviceModels"
-                  ></v-select>
-                </v-col>
-                <v-col cols="6" dense>
-                  <v-select
-                    class="pb-0"
-                    :readonly="!editable"
-                    :filled="!editable"
-                    hide-details
-                    v-model="payload_serial_number.device_type"
-                    outlined
-                    dense
-                    label="Device Type"
-                    :items="deviceTypes"
-                    item-value="id"
-                    item-text="name"
-                  ></v-select>
                 </v-col>
                 <v-col cols="6" dense>
                   <v-autocomplete
@@ -119,7 +120,7 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-text-field
-                    label="Description"
+                    label="Description/About Device"
                     dense
                     outlined
                     clearable

@@ -243,17 +243,18 @@ export default {
         value: "sno",
       },
       {
-        text: "Serial Number",
-        value: "serial_number",
+        text: "Category/Type",
+        value: "device_type",
       },
       {
         text: "Model",
         value: "model_number",
       },
       {
-        text: "Type",
-        value: "device_type",
+        text: "Serial Number",
+        value: "serial_number",
       },
+
       {
         text: "  Company",
         value: "assignedcompany",

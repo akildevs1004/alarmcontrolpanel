@@ -833,7 +833,15 @@ export default {
   },
   created() {
     if (this.$auth.user.user_type != "company") {
-      this.$router.push("/logout", true);
+      try {
+        if (window) {
+          if (this.$route.name != "logout") window.location.href = "../logout";
+          //window.location.reload();
+        }
+      } catch (e) {}
+      this.$router.push("/login", true);
+
+      return false;
     }
     this.getBuildingTypes();
     this.getAddressTypes();

@@ -112,6 +112,36 @@ class DeviceController extends Controller
 
         // array_push($cols, 'status.id');
 
+
+
+        // $model->when($request->filled("filterCustomersMapped"), fn($query) => $query->where("customer_id", $request->filterCustomersMapped));
+
+        $model->when($request->filled("filterCustomersMapped"), function ($query) use ($request) {
+            if ($request->filterCustomersMapped == 1) {
+                $query->where("customer_id", "!=", null);
+            }
+            if ($request->filterCustomersMapped == 0) {
+                $query->where("customer_id",  null);
+            }
+        });
+
+
+        $model->when($request->filled('commonSearch'), function ($query) use ($request) {
+
+
+            $query->where(function ($q) use ($request) {
+                $q->where("model_number", "ILIKE", "%$request->commonSearch%")
+                    ->orWhere("device_type", "ILIKE", "%$request->commonSearch%")
+                    ->orWhere("serial_number", "ILIKE", "%$request->commonSearch%")
+                    ->orWherehas("customer", function ($qq) use ($request) {
+
+                        $qq->where("building_name", "ILIKE", "%$request->commonSearch%");
+                    })
+
+                ;
+            });
+        });
+
         $model->when(isset($cols) && count($cols) > 0, function ($q) use ($cols) {
             $q->select($cols);
         });

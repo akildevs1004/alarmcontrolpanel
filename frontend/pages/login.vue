@@ -328,6 +328,14 @@ export default {
     },
   }),
   created() {
+    try {
+      if (localStorage)
+        console.log("localstorage", localStorage.getItem("auth._token.local"));
+      if (!localStorage.getItem("auth._token.local")) {
+        this.$router.push("/alarm/dashboard");
+        return false;
+      }
+    } catch (e) {}
     // this.$axios.get(`/logout`).then(({ res }) => {
     //   this.$auth.logout();
     // });

@@ -807,7 +807,15 @@ export default {
   },
   created() {
     if (this.$auth.user.user_type != "customer") {
-      this.$router.push("/logout");
+      try {
+        if (window) {
+          if (this.$route.name != "logout") window.location.href = "../logout";
+          //window.location.reload();
+        }
+      } catch (e) {}
+      this.$router.push("/login", true);
+
+      return false;
     }
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");

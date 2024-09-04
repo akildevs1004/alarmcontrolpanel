@@ -812,7 +812,15 @@ export default {
   },
   created() {
     if (this.$auth.user.user_type != "security") {
-      this.$router.push("/logout");
+      try {
+        if (window) {
+          if (this.$route.name != "logout") window.location.href = "../logout";
+          //window.location.reload();
+        }
+      } catch (e) {}
+      this.$router.push("/login", true);
+
+      return false;
     }
 
     this.getBuildingTypes();
