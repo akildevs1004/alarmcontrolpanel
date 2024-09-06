@@ -522,16 +522,12 @@ export default {
     data: [],
     devices: [],
     total: 0,
-    pagination: {
-      current: 1,
-      total: 0,
-      itemsPerPage: 1000,
-    },
+
     payloadOptions: {},
     options: {
       current: 1,
       total: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 13,
     },
     errors: [],
     snackbar: false,
