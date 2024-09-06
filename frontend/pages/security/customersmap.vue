@@ -290,7 +290,7 @@
             :loading="loading"
             :options.sync="options"
             :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              itemsPerPageOptions: [13, 50, 100, 500, 1000],
               'disable-items-per-page': true,
               'items-per-page-text': ' ',
             }"
@@ -323,14 +323,14 @@
             <template v-slot:item.building_name="{ item, index }">
               <v-row style="border-bottom: 0px solid #ddd">
                 <v-col
-                  cols="2"
-                  style="padding-left: 0px; padding-right: 0px; max-width: 40px"
+                  cols="1"
+                  style="padding-left: 0px; padding-right: 0px; max-width: 20px"
                   >{{ index + 1 }}
+                </v-col>
+                <v-col style="padding-left: 0px">
                   <v-icon :color="getCustomerColorObject(item).color"
                     >mdi mdi-square-medium</v-icon
                   >
-                </v-col>
-                <v-col style="padding-left: 0px">
                   <span
                     @click="setCustomerLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
