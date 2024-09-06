@@ -290,7 +290,7 @@
             :loading="loading"
             :options.sync="options"
             :footer-props="{
-              itemsPerPageOptions: [2, 10, 50, 100, 500, 1000],
+              itemsPerPageOptions: [10, 50, 100, 500, 1000],
               'disable-items-per-page': true,
               'items-per-page-text': ' ',
             }"
@@ -527,7 +527,7 @@ export default {
     options: {
       current: 1,
       total: 0,
-      itemsPerPage: 2,
+      itemsPerPage: 10,
     },
     errors: [],
     snackbar: false,
