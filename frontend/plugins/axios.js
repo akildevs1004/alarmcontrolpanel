@@ -41,6 +41,7 @@ export default ({ app, $axios, store }, inject) => {
       };
     }
     if (user && user.user_type == "security") {
+      if (!user.security) return null;
       let customersList = user.security.customers_assigned.map(
         (e) => e.customer_id
       );

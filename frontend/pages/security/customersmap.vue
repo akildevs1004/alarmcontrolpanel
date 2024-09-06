@@ -621,12 +621,11 @@ export default {
           commonSearch: this.commonSearch,
         },
       };
+      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      this.currentPage = page;
       let { data } = await this.$axios.get(`customers-for-map`, config);
       this.data = data.data;
       this.loading = false;
-
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      this.currentPage = page;
 
       await this.getMapKey();
     },
