@@ -325,10 +325,18 @@
                 <v-col
                   cols="1"
                   style="padding-left: 0px; padding-right: 0px; max-width: 20px"
-                  >{{ index + 1 }}
+                >
+                  {{
+                    currentPage
+                      ? (currentPage - 1) * perPage +
+                        (cumulativeIndex + data.indexOf(item))
+                      : "-"
+                  }}
                 </v-col>
                 <v-col style="padding-left: 0px">
-                  <v-icon :color="getCustomerColorObject(item).color"
+                  <v-icon
+                    :title="getCustomerColorObject(item).text"
+                    :color="getCustomerColorObject(item).color"
                     >mdi mdi-square-medium</v-icon
                   >
                   <span
@@ -458,9 +466,10 @@ export default {
     infowindow: null,
     viewCustomerId: null,
     commonSearch: "",
-    perPage: 10,
+    perPage: 13,
     cumulativeIndex: 1,
     currentPage: 1,
+    totalRowsCount: 0,
     branchesList: [],
     isCompany: true,
     tableHeight: 750,
@@ -474,19 +483,23 @@ export default {
     colorcodes: {
       online: {
         color: "#28a745",
+        text: "Online",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_online.png",
       },
       alarm: {
         color: "#dc3545",
+        text: "Alarm",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
       },
       offline: {
         color: "#6c757d",
+        text: "Offline",
         image:
           process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
       },
       armed: {
         color: "#fd7e14",
+        text: "Armed",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
       },
     },
@@ -615,6 +628,9 @@ export default {
       let { data } = await this.$axios.get(`customers-for-map`, config);
       this.data = data.data;
       this.loading = false;
+
+      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      this.currentPage = page;
 
       await this.getMapKey();
     },
