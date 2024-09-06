@@ -283,11 +283,10 @@
       <v-col cols="3" style="padding: 0px; padding-top: 10px">
         <v-card elevation="2" style="height: 600px">
           <v-data-table
-            style="padding: 0px"
+            style="padding: 0px; overflow: scroll"
             dense
             :headers="headers"
             :items="data"
-            :server-items-length="totalRowsCount"
             :loading="loading"
             :options.sync="options"
             :footer-props="{
@@ -296,7 +295,7 @@
               'items-per-page-text': ' ',
             }"
             fixed-header
-            height="400px"
+            height="500px"
             hide-default-header
           >
             <template v-slot:top>
@@ -622,7 +621,7 @@ export default {
       let sortedBy = sortBy ? sortBy[0] : "";
       let sortedDesc = sortDesc ? sortDesc[0] : "";
       this.perPage = itemsPerPage;
-      this.currentPage = page;
+      if (page > 1) this.currentPage = page - 1;
       if (!page > 0) return false;
       let options = {
         params: {
@@ -641,9 +640,9 @@ export default {
 
       try {
         this.$axios.get(`customers-for-map`, options).then(({ data }) => {
-          this.data = data.data;
+          this.data = data; //data.data;
 
-          this.totalRowsCount = data.total;
+          //  this.totalRowsCount = data.total;
           this.loading = false;
           this.getMapKey();
         });
