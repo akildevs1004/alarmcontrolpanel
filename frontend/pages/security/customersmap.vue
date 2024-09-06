@@ -686,23 +686,25 @@ export default {
     },
 
     setCustomerLocationOnMap(item) {
-      if (item.latitude && item.longitude) {
-        const position = {
-          lat: parseFloat(item.latitude),
-          lng: parseFloat(item.longitude),
-        };
+      try {
+        if (item.latitude && item.longitude) {
+          const position = {
+            lat: parseFloat(item.latitude),
+            lng: parseFloat(item.longitude),
+          };
 
-        this.mapInfowindowsList.forEach((infowindow) => {
-          infowindow.close();
-        });
+          this.mapInfowindowsList.forEach((infowindow) => {
+            infowindow.close();
+          });
 
-        this.map.panTo(position);
-        this.map.setZoom(14);
+          this.map.panTo(position);
+          this.map.setZoom(14);
 
-        let infowindow = this.mapInfowindowsList[item.id];
-        let marker = this.mapMarkersList[item.id];
-        if (infowindow) infowindow.open(this.map, marker);
-      }
+          let infowindow = this.mapInfowindowsList[item.id];
+          let marker = this.mapMarkersList[item.id];
+          if (infowindow) infowindow.open(this.map, marker);
+        }
+      } catch (e) {}
     },
     initMap() {
       if (!this.map) {
