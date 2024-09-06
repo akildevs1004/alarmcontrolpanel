@@ -278,10 +278,10 @@
     </v-dialog>
     <v-row>
       <v-col cols="9">
-        <div id="map" style="height: 100vh"></div>
+        <div id="map" style="height: 600px"></div>
       </v-col>
-      <v-col cols="3" style="padding: 0px">
-        <v-card elevation="2">
+      <v-col cols="3" style="padding: 0px; padding-top: 10px">
+        <v-card elevation="2" style="height: 600px">
           <v-data-table
             style="padding: 0px"
             dense
@@ -295,7 +295,7 @@
               'items-per-page-text': ' ',
             }"
             fixed-header
-            height="300px"
+            height="400px"
             hide-default-header
           >
             <template v-slot:top>
