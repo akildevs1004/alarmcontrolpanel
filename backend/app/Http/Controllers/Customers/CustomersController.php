@@ -833,7 +833,7 @@ class CustomersController extends Controller
         $model = Customers::with(["alarm_events", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
-
+        $model->withCount("alarm_events"); // Add this to get the count of related alarm_events
         $model->when($request->filled("commonSearch"), function ($query) use ($request) {
 
             return $query->where("building_name", "ILIKE", "$request->commonSearch%")
@@ -845,8 +845,8 @@ class CustomersController extends Controller
             $model->whereIn('id', $request->filter_customers_list);
         });
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
-
-        return $model->orderByDesc('id')->paginate($request->perPage);
+        $model->orderBy('alarm_events_count', 'desc');
+        return $model->paginate($request->perPage);
     }
     public function customersAll()
     {

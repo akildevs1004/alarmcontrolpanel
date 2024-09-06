@@ -348,7 +348,11 @@
                       <v-row>
                         <v-col
                           cols="1"
-                          style="max-width: 20px; padding-top: 16px"
+                          style="
+                            max-width: 20px;
+                            margin: auto;
+                            padding-top: 7px;
+                          "
                         >
                           <img
                             v-if="alarm.alarm_type == 'Burglary'"
