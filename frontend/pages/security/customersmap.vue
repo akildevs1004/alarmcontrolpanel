@@ -290,7 +290,7 @@
             :loading="loading"
             :options.sync="options"
             :footer-props="{
-              itemsPerPageOptions: [13, 50, 100, 500, 1000],
+              itemsPerPageOptions: [10, 50, 100, 500, 1000],
               'disable-items-per-page': true,
               'items-per-page-text': ' ',
             }"
@@ -466,7 +466,7 @@ export default {
     infowindow: null,
     viewCustomerId: null,
     commonSearch: "",
-    perPage: 13,
+    perPage: 10,
     cumulativeIndex: 1,
     currentPage: 1,
     totalRowsCount: 0,
@@ -527,7 +527,7 @@ export default {
     options: {
       current: 1,
       total: 0,
-      itemsPerPage: 13,
+      itemsPerPage: 10,
     },
     errors: [],
     snackbar: false,
