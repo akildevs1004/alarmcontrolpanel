@@ -63,7 +63,9 @@ export default {
   mounted() {
     this.options.labels = this.items.map((e) => e.title);
     this.options.series = this.items.map((e) => e.value);
-    new ApexCharts(document.querySelector("#pie2"), this.options).render();
+    try {
+      new ApexCharts(document.querySelector("#pie2"), this.options).render();
+    } catch (e) {}
   },
   methods: {},
 };

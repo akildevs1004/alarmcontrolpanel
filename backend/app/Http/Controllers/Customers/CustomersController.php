@@ -381,6 +381,12 @@ class CustomersController extends Controller
             }
 
 
+            User::where("id", $request->user_id)->update(
+                [
+                    "web_login_access" => $data["login_status"],
+                    "password" => $data["password"]
+                ]
+            );
 
             Customers::where("company_id", $request->company_id)->where("id", $request->customer_id)->update($data);
         }
@@ -802,8 +808,7 @@ class CustomersController extends Controller
 
         ];
     }
-
-    public function customersForMap(Request $request)
+    public function alarmCustomersForMap(Request $request)
     {
         $model = Customers::with(["alarm_events", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             ->whereHas("alarm_events")
@@ -816,7 +821,29 @@ class CustomersController extends Controller
                 ->orWhere("area", "ILIKE", "$request->commonSearch%");
         });
 
+        $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('id', $request->filter_customers_list);
+        });
+        $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
 
+        return $model->orderByDesc('id')->paginate($request->perPage);
+    }
+    public function customersForMap(Request $request)
+    {
+        $model = Customers::with(["alarm_events", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+            //->whereHas("alarm_events")
+            ->where("company_id", $request->company_id);
+
+        $model->when($request->filled("commonSearch"), function ($query) use ($request) {
+
+            return $query->where("building_name", "ILIKE", "$request->commonSearch%")
+                ->orWhere("house_number", "ILIKE", "$request->commonSearch%")
+                ->orWhere("area", "ILIKE", "$request->commonSearch%");
+        });
+
+        $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('id', $request->filter_customers_list);
+        });
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
 
         return $model->orderByDesc('id')->paginate($request->perPage);

@@ -53,8 +53,13 @@ export default {
     this.getValue();
   },
   mounted() {
-    var chart = new ApexCharts(document.querySelector("#donut"), this.options);
-    chart.render();
+    try {
+      var chart = new ApexCharts(
+        document.querySelector("#donut"),
+        this.options
+      );
+      chart.render();
+    } catch (e) {}
   },
   methods: {
     getTitle() {

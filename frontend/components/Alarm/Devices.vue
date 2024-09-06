@@ -71,7 +71,7 @@
             <v-row class="pt-5"
               ><v-col cols="2" class="text-right pull-right"
                 ><v-btn
-                  class="pl-10 pt-5"
+                  class="pt-5"
                   x-small
                   :ripple="false"
                   text
@@ -80,7 +80,7 @@
                 >
                   <v-icon dark white>mdi-cached</v-icon>
                 </v-btn></v-col
-              ><v-col cols="5"
+              ><v-col :cols="!customer_id ? 5 : 10"
                 ><v-text-field
                   clearable
                   style="padding-top: 7px; width: 170px"
@@ -99,6 +99,7 @@
 
               <v-col cols="5">
                 <v-select
+                  v-if="!customer_id"
                   @change="getDataFromApi()"
                   label="Assigned Devices"
                   outlined
@@ -287,7 +288,7 @@
         </template>
 
         <template v-slot:item.options="{ item }">
-          <v-menu bottom left>
+          <v-menu bottom left v-if="!isReadableonly">
             <template v-slot:activator="{ on, attrs }">
               <div class="text-center">
                 <v-btn dark-2 icon v-bind="attrs" v-on="on">
@@ -344,7 +345,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can(`device_delete`)"
+                v-if="can(`device_delete`) && !customer_id"
                 @click="deleteItem(item)"
               >
                 <v-list-item-title style="cursor: pointer">
@@ -367,7 +368,7 @@ import AlarmSensorZones from "../../components/Alarm/EditSensorZones.vue";
 
 export default {
   components: { AlarmEditDevice, AlarmSensorZones },
-  props: ["customer_id", "eventFilter"],
+  props: ["customer_id", "eventFilter", "isReadableonly"],
   data: () => ({
     commonSearch: "",
     filterCustomersMapped: "",
@@ -455,23 +456,23 @@ export default {
     total: 0,
     deviceResponse: "",
     headers: [
-      { text: "#", value: "sno" },
+      { text: "#", value: "sno", sortable: false },
 
-      { text: "Device Category", value: "device_type" },
-      { text: "Device Model", value: "model_number" },
+      { text: "Device Category", value: "device_type", sortable: false },
+      { text: "Device Model", value: "model_number", sortable: false },
       // { text: "Zones", value: "zones", align: "left" },
-      { text: "Serial Number", value: "device" },
+      { text: "Serial Number", value: "device", sortable: false },
       // { text: "Location", value: "location" },
-      { text: "Building/Customer Name", value: "customer" },
+      { text: "Building/Customer Name", value: "customer", sortable: false },
       // { text: "Delay(Min)", value: "delay" },
-      { text: "24 Hrs", value: "hrs_24" },
+      { text: "24 Hrs", value: "hrs_24", sortable: false },
       // { text: "Sensor", value: "sensor", align: "center" },
       // { text: "Temperature", value: "threshold_temperature" },
-      { text: "Online", value: "status" },
-      // { text: "Armed", value: "armed", align: "center" },
+      { text: "Online", value: "status", sortable: false },
+      { text: "Armed", value: "armed", align: "center", sortable: false },
 
       // { text: "Alarm", value: "alarm" },
-      { text: "Options", value: "options", align: "center" },
+      { text: "Options", value: "options", align: "center", sortable: false },
     ],
     editedIndex: -1,
     response: "",

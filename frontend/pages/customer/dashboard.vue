@@ -23,7 +23,6 @@ export default {
   },
 
   async created() {
-    console.log(this.$auth.user);
     await this.getDataFromApi(this.$auth.user?.customer?.id || null);
   },
   methods: {

@@ -268,7 +268,7 @@ export default {
       this.payload_security.contact_number = this.item.contact_number;
       this.payload_security.email_id = this.item.user.email;
       this.web_login_access = this.item.user?.web_login_access || 0;
-      this.payload_security.password = "";
+      this.payload_security.password = null;
 
       this.primary_previewImage = this.item.picture;
     }
@@ -313,7 +313,8 @@ export default {
 
       for (const key in this.payload_security) {
         if (this.payload_security[key] != "")
-          customer.append(key, this.payload_security[key]);
+          if (this.payload_security[key] != null)
+            customer.append(key, this.payload_security[key]);
       }
 
       if (this.primary_upload.name) {

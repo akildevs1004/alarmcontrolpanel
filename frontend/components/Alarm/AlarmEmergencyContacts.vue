@@ -105,7 +105,7 @@
                   </v-col>
 
                   <v-col cols="2" class="text-right">
-                    <v-menu bottom left>
+                    <v-menu bottom left v-if="!isReadableonly">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn dark-2 icon v-bind="attrs" v-on="on">
                           <v-icon>mdi-dots-vertical</v-icon>
@@ -491,7 +491,7 @@ import AlarmEditEmergencyContact from "../../components/Alarm/EditEmergencyConta
 
 export default {
   components: { AlarmEditEmergencyContact },
-  props: ["customer", "customer_id", "customer_contacts"],
+  props: ["customer", "customer_id", "customer_contacts", "isReadableonly"],
   data: () => ({
     slider: [
       "red",

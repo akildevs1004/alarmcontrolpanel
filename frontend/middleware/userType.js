@@ -4,7 +4,7 @@ const data = async ({ $auth, redirect }) => {
     customer: "/customer/dashboard",
     security: "/security/dashboard",
   };
-  console.log("is_master", $auth.user.is_master);
+
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
     return redirect("/master");
   }

@@ -277,7 +277,13 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer_contacts", "customer", "editId"],
+  props: [
+    "customer_id",
+    "customer_contacts",
+    "customer",
+    "editId",
+    "isReadableonly",
+  ],
   data: () => ({
     show1: false,
     contactTypes: [],

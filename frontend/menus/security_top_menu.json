@@ -5,5 +5,12 @@
     "to": "/security/dashboard",
     "menu": "alarm_dashboard",
     "module": "topmenu"
+  },
+  {
+    "icon": "mdi-home",
+    "title": "Map",
+    "to": "/security/customersmap",
+    "menu": "alarm_customersmap",
+    "module": "topmenu"
   }
 ]

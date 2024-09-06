@@ -1,3 +1,3 @@
 <template>
-  <CustomerMap />
+  <CustomerAlarmMap />
 </template>

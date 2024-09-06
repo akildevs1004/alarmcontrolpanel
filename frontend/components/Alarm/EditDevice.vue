@@ -21,7 +21,7 @@
           </span>
         </v-col> --><v-col md="6">
           <v-autocomplete
-            :disabled="editDevice && payload.serial_number"
+            :disabled="editDevice && payload.serial_number != ''"
             :items="master_serial_numbers"
             @change="loadDeviceDetails(payload.serial_number)"
             item-text="serial_number"

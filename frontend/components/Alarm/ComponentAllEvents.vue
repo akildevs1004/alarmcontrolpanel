@@ -176,7 +176,7 @@
         </v-card-title>
 
         <v-card-text style="padding: 0px; overflow: hidden">
-          <AlarmCustomerTabView
+          <AlarmEventCustomerContactsTabView
             @closeCustomerDialog="closeCustomerDialog()"
             :key="key"
             :_customerID="viewCustomerId"
@@ -586,7 +586,7 @@ import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
 
 import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
-import AlarmCustomerTabView from "../../components/Alarm/AlarmCustomerContactsTabView.vue";
+import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
@@ -595,7 +595,7 @@ export default {
   components: {
     EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
-    AlarmCustomerTabView,
+    AlarmEventCustomerContactsTabView,
     AlramCloseNotes,
     AlarmForwardEvent,
     SecurityAlarmNotes,

@@ -67,6 +67,10 @@ class SecurityLoginController extends Controller
 
 
             ]);
+
+            if ($request->password != '' && $request->password != $request->confirm_password) {
+                return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
+            }
         } else {
             $request->validate([
 
@@ -79,16 +83,18 @@ class SecurityLoginController extends Controller
                 'contact_number' => 'required',
 
                 'password' => 'required',
-                'confirm_password' => 'nullable',
+                'confirm_password' => 'required',
             ]);
+
+            if ($request->password != $request->confirm_password) {
+                return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
+            }
         }
 
 
         $data =  $request->all();
 
-        if ($request->password != $request->confirm_password) {
-            return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
-        }
+
 
 
         if (isset($request->attachment) && $request->hasFile('attachment')) {
@@ -104,7 +110,7 @@ class SecurityLoginController extends Controller
         unset($data['email_id']);
         unset($data['password']);
         unset($data['attachment']);
-        unset($data['web_login_access']);
+
 
 
 
@@ -147,6 +153,7 @@ class SecurityLoginController extends Controller
                 User::where("id", $request->user_id)->update([
                     'web_login_access' =>  $request->web_login_access,
                 ]);
+            unset($data['web_login_access']);
             $record = SecurityLogin::where("id", $request->editId)->update($data);
 
             return $this->response('Security account details are updated', $record, true);

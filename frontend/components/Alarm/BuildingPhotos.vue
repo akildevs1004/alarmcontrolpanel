@@ -74,8 +74,14 @@
     <div v-if="building_photos.length == 0" class="text-center">
       No Photos Available
     </div>
+
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col
+        v-if="!isReadableonly"
+        cols="12"
+        class="text-right"
+        style="padding-top: 0px"
+      >
         <v-btn
           :loading="loading"
           color="primary"
@@ -110,7 +116,7 @@
                       <!-- <h3>{{ caps(item.title) }}</h3> -->
                     </v-col>
                     <v-col cols="4" class="text-right"
-                      ><v-menu bottom left>
+                      ><v-menu bottom left v-if="!isReadableonly">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
                             dark-2
@@ -206,6 +212,7 @@
                 :customer_id="customer_id"
                 :customer="customer"
                 @closeDialog="closeDialog"
+                :isReadableonly="isReadableonly"
             /></v-tab-item>
           </v-tabs-items>
         </v-tabs>
@@ -303,7 +310,7 @@ import EditCustomerBuildingPhotos from "./EditCustomerBuildingPhotos.vue";
 import NewCustomerPhotopage from "../../components/Alarm/NewCustomer.vue";
 export default {
   components: { EditCustomerBuildingPhotos, NewCustomerPhotopage },
-  props: ["customer_id", "customer"],
+  props: ["customer_id", "customer", "isReadableonly"],
   data: () => ({
     tab: 0,
     editItem: null,

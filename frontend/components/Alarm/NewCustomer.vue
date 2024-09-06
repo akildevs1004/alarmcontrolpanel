@@ -11,6 +11,7 @@
         <v-row class="pt-5">
           <v-col md="4" cols="12" sm="12" dense>
             <v-select
+              :readonly="isReadableonly"
               label="Building Type"
               :items="buildingTypes"
               item-text="name"
@@ -28,6 +29,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Building Name"
               dense
               outlined
@@ -43,6 +45,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="House Number"
               dense
               outlined
@@ -58,6 +61,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Street Number"
               dense
               outlined
@@ -73,6 +77,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Area"
               dense
               outlined
@@ -86,6 +91,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="City"
               dense
               outlined
@@ -99,6 +105,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="State"
               dense
               outlined
@@ -112,6 +119,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Country"
               dense
               outlined
@@ -125,6 +133,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Landmark"
               dense
               outlined
@@ -140,6 +149,7 @@
         <v-row>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Latitude"
               dense
               outlined
@@ -153,6 +163,7 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Longitude"
               dense
               outlined
@@ -171,6 +182,7 @@
         <v-row v-if="!customer_id">
           <v-col md="4" cols="2" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Login Email"
               dense
               outlined
@@ -184,6 +196,7 @@
           </v-col>
           <v-col v-if="!customer_id" md="4" cols="2" sm="12" dense>
             <v-text-field
+              :readonly="isReadableonly"
               label="Login Password"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
@@ -213,7 +226,7 @@
             >
           </v-col> -->
         </v-row>
-        <v-row>
+        <v-row v-if="!isReadableonly">
           <v-col md="4" sm="12" cols="12">
             <v-menu
               v-model="startDateMenuOpen"
@@ -289,7 +302,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="!isReadableonly">
           <v-col cols="12" class="text-right">
             <v-btn small :loading="loading" color="primary" @click="submit">
               {{ !customer_id ? "Submit" : "Update" }}
@@ -303,7 +316,7 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer"],
+  props: ["customer_id", "customer", "isReadableonly"],
   data: () => ({
     response: "",
     snackbar: false,

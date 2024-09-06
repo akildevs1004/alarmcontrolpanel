@@ -27,6 +27,7 @@
                       :src="primary_previewImage || '/no-business_profile.png'"
                     ></v-img>
                     <v-btn
+                      v-if="!isReadableonly"
                       class="mt-2"
                       style="width: 50%"
                       small
@@ -57,6 +58,7 @@
                   ><v-row>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="First Name"
                         dense
                         small
@@ -68,6 +70,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Last Name"
                         dense
                         small
@@ -79,6 +82,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Phone 1"
                         dense
                         small
@@ -95,6 +99,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Phone 2"
                         dense
                         small
@@ -111,6 +116,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Office Phone"
                         dense
                         small
@@ -127,6 +133,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Email"
                         dense
                         small
@@ -143,6 +150,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Whatsapp"
                         dense
                         small
@@ -159,6 +167,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Alarm STOP Pin"
                         dense
                         small
@@ -178,16 +187,17 @@
                 >
               </v-row>
               <v-row>
-                <!-- <v-col cols="12" class="text-right">
-            <v-btn
-              small
-              :loading="loading"
-              color="primary"
-              @click="submit_primary"
-            >
-              Submit
-            </v-btn></v-col
-          > -->
+                <v-col cols="12" class="text-right">
+                  <v-btn
+                    small
+                    v-if="!isReadableonly"
+                    :loading="loading"
+                    color="primary"
+                    @click="submit_primary"
+                  >
+                    Submit
+                  </v-btn></v-col
+                >
               </v-row>
             </v-card>
           </v-tab-item>
@@ -210,6 +220,7 @@
                       "
                     ></v-img>
                     <v-btn
+                      v-if="!isReadableonly"
                       class="mt-2"
                       style="width: 50%"
                       small
@@ -240,6 +251,7 @@
                   ><v-row>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="First Name"
                         dense
                         small
@@ -251,6 +263,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Last Name"
                         dense
                         small
@@ -262,6 +275,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Phone 1"
                         dense
                         small
@@ -278,6 +292,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Phone 2"
                         dense
                         small
@@ -294,6 +309,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Office Phone"
                         dense
                         small
@@ -310,6 +326,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Email"
                         dense
                         small
@@ -326,6 +343,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Whatsapp"
                         dense
                         small
@@ -342,6 +360,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
+                        :readonly="isReadableonly"
                         label="Alarm STOP Pin"
                         dense
                         small
@@ -365,6 +384,7 @@
               <v-row>
                 <v-col cols="12" class="text-right">
                   <v-btn
+                    v-if="!isReadableonly"
                     small
                     :loading="loading"
                     color="primary"
@@ -525,7 +545,7 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer_contacts", "customer"],
+  props: ["customer_id", "customer_contacts", "customer", "isReadableonly"],
   data: () => ({
     show1: false,
     buildingTypes: [],

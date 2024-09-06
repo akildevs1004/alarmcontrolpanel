@@ -77,6 +77,7 @@
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-btn
+          v-if="!isReadableonly"
           :loading="loading"
           color="primary"
           @click="newPhoto()"
@@ -105,7 +106,7 @@
                   <v-row>
                     <v-col cols="10"> </v-col>
                     <v-col cols="2" class="text-right"
-                      ><v-menu bottom left>
+                      ><v-menu v-if="!isReadableonly" bottom left>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn dark-2 icon v-bind="attrs" v-on="on">
                             <v-icon>mdi-dots-vertical</v-icon>
@@ -281,7 +282,7 @@ import AlarmEditPhotos from "../../components/Alarm/EditPhotos.vue";
 
 export default {
   components: { AlarmEditPhotos },
-  props: ["customer_id"],
+  props: ["customer_id", "isReadableonly"],
   data: () => ({
     editItem: null,
     key: 1,

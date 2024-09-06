@@ -280,6 +280,7 @@ export default {
     update_setting() {
       this.payload.company_id = this.$auth.user.company_id;
       this.payload.customer_id = this.customer.id;
+      this.payload.user_id = this.customer.user_id;
       this.errors = [];
       this.$axios
         .post("/update_customer_settings", this.payload)

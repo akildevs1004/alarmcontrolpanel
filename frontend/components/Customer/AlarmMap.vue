@@ -482,7 +482,7 @@ export default {
           commonSearch: this.commonSearch,
         },
       };
-      let { data } = await this.$axios.get(`customers-for-map`, config);
+      let { data } = await this.$axios.get(`alarm_customers__for_map`, config);
       this.data = data.data;
       this.loading = false;
 

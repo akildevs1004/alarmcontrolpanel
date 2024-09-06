@@ -35,14 +35,14 @@
             Sensors
             <v-icon>mdi-shield-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" v-if="!isReadableonly">
             Automation
             <v-icon>mdi-car-emergency</v-icon> </v-tab
-          ><v-tab class="customer-tab">
+          ><v-tab class="customer-tab" v-if="!isReadableonly">
             Subscription
             <v-icon>mdi-medical-bag</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" v-if="!isReadableonly">
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
           </v-tab>
@@ -70,6 +70,7 @@
                   @closeDialog="closeDialog"
                   :customer_id="_id"
                   :customer="data"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card>
@@ -83,6 +84,7 @@
                   :customer_contacts="customer_contacts"
                   :customer="data"
                   @closeDialog="closeDialog"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -96,6 +98,7 @@
                   :customer_contacts="customer_contacts"
                   :customer="data"
                   :key="keyEmergencyy"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card>
@@ -108,6 +111,7 @@
                   :customer_id="_id"
                   @closeDialog="closeDialog"
                   :key="keyDevices"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -119,6 +123,7 @@
                   :key="keyPhotos"
                   @closeDialog="closeDialog"
                   :customer_id="_id"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -129,6 +134,7 @@
                   v-if="_id"
                   :key="keyAutomation"
                   :customer_id="_id"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -140,6 +146,7 @@
                   :customer="data"
                   :key="keyPayments"
                   :customer_id="_id"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -152,6 +159,7 @@
                   :key="keySettings"
                   :customer_id="_id"
                   :customer="customer"
+                  :isReadableonly="isReadableonly"
                 />
               </v-card-text>
             </v-card>
@@ -195,7 +203,7 @@ export default {
     AlarmEditContact,
     BuildingPhotos,
   },
-  props: ["_id", "isPopup"],
+  props: ["_id", "isPopup", "isReadableonly"],
   data: () => ({
     dialogEditBuilding: false,
     messages: [],
