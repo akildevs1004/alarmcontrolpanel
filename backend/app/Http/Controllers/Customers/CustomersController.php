@@ -830,10 +830,11 @@ class CustomersController extends Controller
     }
     public function customersForMap(Request $request)
     {
-        $model = Customers::with(["alarm_events", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["alarm_events", "devicesOffline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
-        $model->withCount("alarm_events"); // Add this to get the count of related alarm_events
+        $model->withCount("alarm_events");
+        $model->withCount("devicesOffline");
         $model->when($request->filled("commonSearch"), function ($query) use ($request) {
 
             return $query->where("building_name", "ILIKE", "$request->commonSearch%")
@@ -845,7 +846,7 @@ class CustomersController extends Controller
             $model->whereIn('id', $request->filter_customers_list);
         });
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
-        $model->orderBy('alarm_events_count', 'desc');
+        $model->orderBy('alarm_events_count', 'desc')->orderBy('devices_offline_count', 'desc');
         return $model->paginate($request->perPage);
     }
     public function customersAll()
