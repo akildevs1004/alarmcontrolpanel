@@ -322,13 +322,15 @@
             </template>
             <template v-slot:item.building_name="{ item, index }">
               <v-row style="border-bottom: 0px solid #ddd">
-                <v-col cols="2"
+                <v-col
+                  cols="2"
+                  style="padding-left: 0px; padding-right: 0px; max-width: 40px"
                   >{{ index + 1 }}
                   <v-icon :color="getCustomerColorObject(item).color"
                     >mdi mdi-square-medium</v-icon
                   >
                 </v-col>
-                <v-col>
+                <v-col style="padding-left: 0px">
                   <span
                     @click="setCustomerLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
@@ -751,11 +753,15 @@ export default {
           if (item.latest_alarm_event)
             alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
+          let profile_picture =
+            "https://alarm.xtremeguard.org/no-business_profile.png";
+          if (item.profile_picture) profile_picture = item.profile_picture;
+
           let html = `
   <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
     <tr>
       <td style="width:100px; vertical-align: top;">
-        <img style="width:100px;max-height:100px; padding-right:5px;" src="${item.profile_picture}" />
+        <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
         <br />
         
       </td>
@@ -768,7 +774,7 @@ export default {
       </td>
     </tr>
     <tr>
-<td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Map Link</a>
+<td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
   </td>
   <td style="text-align:right">
 ${alarmHtmlLink}

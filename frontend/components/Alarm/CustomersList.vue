@@ -547,6 +547,7 @@ export default {
     },
     closeCustomerDialog() {
       this.dialogViewCustomer = false;
+      this.getDataFromApi();
     },
     getBuildingTypes() {
       if (this.$store.state.storeAlarmControlPanel?.BuildingTypes) {

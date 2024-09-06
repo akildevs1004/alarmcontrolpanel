@@ -284,6 +284,7 @@ export default {
       this.key = this.key + 1;
       this.getDataFromApi();
       this.getCustomerProfilePercentage();
+      this.$emit("closeCustomerDialog");
     },
     getBuildingTypeById(id) {
       let buildingTypes =
