@@ -287,10 +287,11 @@
             dense
             :headers="headers"
             :items="data"
+            :server-items-length="totalRowsCount"
             :loading="loading"
             :options.sync="options"
             :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              itemsPerPageOptions: [2, 10, 50, 100, 500, 1000],
               'disable-items-per-page': true,
               'items-per-page-text': ' ',
             }"
@@ -328,7 +329,7 @@
                 >
                   {{
                     currentPage
-                      ? (currentPage - 1) * perPage +
+                      ? (currentPage - 1) * options.itemsPerPage +
                         (cumulativeIndex + data.indexOf(item))
                       : "-"
                   }}
@@ -466,7 +467,7 @@ export default {
     infowindow: null,
     viewCustomerId: null,
     commonSearch: "",
-    perPage: 10,
+    // perPage: 10,
     cumulativeIndex: 1,
     currentPage: 1,
     totalRowsCount: 0,
@@ -527,7 +528,7 @@ export default {
     options: {
       current: 1,
       total: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 2,
     },
     errors: [],
     snackbar: false,
@@ -612,22 +613,56 @@ export default {
       }
     },
 
-    async getCustomers() {
-      if (this.loading == true) return false;
+    getCustomers() {
+      // if (this.loading == true) return false;
       this.loading = true;
-      let config = {
+
+      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+      let sortedBy = sortBy ? sortBy[0] : "";
+      let sortedDesc = sortDesc ? sortDesc[0] : "";
+      this.perPage = itemsPerPage;
+      this.currentPage = page;
+      if (!page > 0) return false;
+      let options = {
         params: {
+          page: page,
+          sortBy: sortedBy,
+          sortDesc: sortedDesc,
+          perPage: itemsPerPage,
+          pagination: true,
           company_id: this.$auth.user.company_id,
-          commonSearch: this.commonSearch,
+          customer_id: this.customer_id,
+          // date_from: this.date_from,
+          // date_to: this.date_to,
+          common_search: this.commonSearch,
         },
       };
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      this.currentPage = page;
-      let { data } = await this.$axios.get(`customers-for-map`, config);
-      this.data = data.data;
-      this.loading = false;
 
-      await this.getMapKey();
+      try {
+        this.$axios.get(`customers-for-map`, options).then(({ data }) => {
+          this.data = data.data;
+
+          this.totalRowsCount = data.total;
+          this.loading = false;
+          this.getMapKey();
+        });
+      } catch (e) {}
+
+      // let config = {
+      //   params: {
+      //     company_id: this.$auth.user.company_id,
+      //     commonSearch: this.commonSearch,
+      //   },
+      // };
+      // let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      // console.log(this.options);
+
+      // if (page) this.currentPage = page - 1;
+      // let { data } = await this.$axios.get(`customers-for-map`, config);
+      // this.data = data.data;
+      // this.loading = false;
+      // this.totalRowsCount = data.total;
     },
     getImageicon(value) {
       if (process) return value.image;
@@ -776,13 +811,13 @@ export default {
       <td style="width:100px; vertical-align: top;">
         <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
         <br />
-        
+
       </td>
       <td style="width:150px; vertical-align: top;">
         ${item.building_name} <br/> ${item.city}
         <div>Landmark: ${item.landmark}</div>
         <div style="text-align: right; width: 100%;">
-          
+
         </div>
       </td>
     </tr>

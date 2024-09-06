@@ -847,7 +847,7 @@ class CustomersController extends Controller
         });
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
         $model->orderBy('alarm_events_count', 'desc')->orderBy('devices_offline_count', 'desc');
-        return $model->paginate($request->perPage);
+        return $model->paginate($request->perPage ?? 10);
     }
     public function customersAll()
     {

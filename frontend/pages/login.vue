@@ -332,7 +332,11 @@ export default {
       if (localStorage)
         if (!localStorage.getItem("auth._token.local")) {
           //console.log("localstorage", localStorage.getItem("auth._token.local"));
-          this.$router.push("/alarm/dashboard");
+          //this.$router.push("/alarm/dashboard");
+
+          localStorage.setItem("auth._token.local", false);
+          localStorage.setItem("auth._token_expiration.local", false);
+
           return false;
         }
     } catch (e) {}
