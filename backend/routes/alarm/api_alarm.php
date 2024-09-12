@@ -163,6 +163,8 @@ Route::post('plotting', [PlottingController::class, "store"]);
 Route::apiResource('security', SecurityLoginController::class);
 
 
+
+
 Route::get('get-map-key', function () {
     return MapKey::where("isActive", 1)->value("key");
 });

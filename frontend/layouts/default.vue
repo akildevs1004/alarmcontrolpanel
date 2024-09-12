@@ -769,6 +769,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_technicians: {
+          elevation: 0,
+          selected: "",
+        },
         alarm_armed_reports: {
           elevation: 0,
           selected: "",
@@ -1044,6 +1048,11 @@ export default {
           name: "alarm_security",
           path: "/alarm/security",
         },
+        "alarm-technicians": {
+          name: "alarm_technicians",
+          path: "/alarm/technicians",
+        },
+
         "alarm-armedreports": {
           name: "alarm_armed_reports",
           path: "/alarm/armedreports",
@@ -1620,7 +1629,10 @@ header,
 .v-dialog > .v-card > .popup_background_noviolet {
   background-color: #ecf0f4 !important  ;
   padding: 5px 6px 5px !important;
-  color: #fff !important;
+  color: black !important;
+}
+.popup_background_noviolet button {
+  color: black !important;
 }
 .v-dialog > .v-card > .popup_background_white {
   background-color: #fff !important  ;
@@ -1632,6 +1644,10 @@ header,
 }
 .popup_background_noviolet .v-tabs-bar {
   background-color: #ecf0f4 !important;
+}
+.popup_background_noviolet .v-card__title,
+.popup_background_noviolet button {
+  color: black;
 }
 .v-dialog > .v-card > .popup_background_red {
   background-color: red !important  ;

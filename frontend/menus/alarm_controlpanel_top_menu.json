@@ -34,7 +34,13 @@
     "menu": "alarm_security",
     "module": "topmenu"
   },
-
+  {
+    "icon": "mdi mdi-calendar-account",
+    "title": "Technicians",
+    "to": "/alarm/technicians",
+    "menu": "alarm_technicians",
+    "module": "topmenu"
+  },
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Armed",
