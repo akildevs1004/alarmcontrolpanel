@@ -283,7 +283,7 @@
       <v-col cols="3" style="padding: 0px; padding-top: 10px">
         <v-card elevation="2" style="height: 600px">
           <v-data-table
-            style="padding: 0px; overflow: scroll"
+            style="padding: 0px"
             dense
             :headers="headers"
             :items="data"
@@ -295,7 +295,7 @@
               'items-per-page-text': ' ',
             }"
             fixed-header
-            height="500px"
+            height="400px"
             hide-default-header
           >
             <template v-slot:top>

@@ -3,6 +3,7 @@
 
 use App\Http\Controllers;
 use App\Http\Controllers\AlarmLogsController;
+use App\Http\Controllers\AlarmSensorTypesController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AnnouncementsCategoriesController;
 
@@ -22,6 +23,7 @@ use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
+use App\Http\Controllers\DeviceZonesController;
 use App\Http\Controllers\PlottingController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
@@ -69,6 +71,20 @@ Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZon
 Route::get('customer_temperature_devices', [CustomersController::class, 'getCustomerTemperatureDevices']);
 
 Route::get('sensor_types', [CustomersController::class, 'getSensorsList']);
+
+Route::get('get_device_zones', [CustomersController::class, 'getDeviceZonesList']);
+Route::post('update_device_zone', [CustomersController::class, 'updateDeviceZoneIndividual']);
+Route::post('create_device_zone', [CustomersController::class, 'createDeviceZoneIndividual']);
+Route::delete('delete_device_zone', [CustomersController::class, 'deleteDeviceZoneIndividual']);
+
+Route::apiResource('alarm_sensor_types',  AlarmSensorTypesController::class);
+
+
+Route::post('update_sensor_type', [AlarmSensorTypesController::class, 'update']);
+Route::post('create_sensor_type', [AlarmSensorTypesController::class, 'create']);
+Route::delete('delete_sensor_type', [AlarmSensorTypesController::class, 'destroy']);
+
+
 
 
 //security dashboard

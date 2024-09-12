@@ -14,7 +14,7 @@ class AlarmSensorTypesController extends Controller
      */
     public function index()
     {
-        //
+        return AlarmSensorTypes::orderBy('name', 'asc')->paginate($this->per_page ?? 10);
     }
 
     /**
@@ -22,9 +22,26 @@ class AlarmSensorTypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = $request->validate(["name" => "required"]);
+
+        // if ($request->company_id) {
+        //     $data["company_id"] = $request->company_id;
+        // }
+
+        $verifyDuplicate = AlarmSensorTypes::where("name", $request->name);
+        if ($verifyDuplicate->count() == 0) {
+            $record = AlarmSensorTypes::create($data);
+
+            if ($record) {
+                return $this->response('New Sensor Type is  successfully added.', $record, true);
+            } else {
+                return $this->response('New Sensor cannot add.', null, false);
+            }
+        } else {
+            return $this->response('New Sensor is already Exist', null, false);
+        }
     }
 
     /**
@@ -67,9 +84,27 @@ class AlarmSensorTypesController extends Controller
      * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AlarmSensorTypes $alarmSensorTypes)
+    public function update(Request $request)
     {
-        //
+
+
+        $request->validate(["name" => "required", "id" => "required"]);
+
+
+
+        $verifyDuplicate = AlarmSensorTypes::where("name", "=", $request->name)->where("id", "!=", $request->id);
+
+        if ($verifyDuplicate->count() == 0) {
+            $record = AlarmSensorTypes::where("id", $request->id)->update(["name" => $request->name]);
+
+            if ($record) {
+                return $this->response('Sensor Type successfully updated.', null, true);
+            } else {
+                return $this->response('Sensor Type cannot updated.', null, false);
+            }
+        } else {
+            return $this->response('Sensor Type Already Exist', null, false);
+        }
     }
 
     /**
@@ -78,8 +113,16 @@ class AlarmSensorTypesController extends Controller
      * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AlarmSensorTypes $alarmSensorTypes)
+    public function destroy(Request $request)
     {
+
+
+        if ($request->filled('id')) {
+            AlarmSensorTypes::where("id", $request->id)->delete();
+        }
+
+        $this->response("Sensor name Deleted Successfully", null, true);
+
         //
     }
 }

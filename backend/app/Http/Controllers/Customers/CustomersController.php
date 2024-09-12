@@ -299,7 +299,114 @@ class CustomersController extends Controller
         $data["display_order"] = 0;
         return   $this->updateContactPrimary($data, $request, "secondary");
     }
+    public function deleteDeviceZoneIndividual(Request $request)
+    {
 
+
+        if ($request->filled('id')) {
+            DeviceZones::where("id", $request->id)->delete();
+        }
+
+        $this->response("Sensor Deleted Successfully", null, true);
+    }
+    public function createDeviceZoneIndividual(Request $request)
+    {
+
+
+
+        $data = $request->validate([
+            'zone_code' => 'required',
+            'location' => 'required',
+
+            'sensor_name' => 'required',
+            'area_code' => 'required',
+            'hours24' => 'required',
+
+
+            'device_id' => 'required',
+
+
+
+
+        ]);
+
+        $data = $request->all();
+
+
+        unset($data['editId']);
+
+
+
+
+        //verify same zone name exist in Table 
+        $deviceZoneDuplicate = DeviceZones::where("device_id", $request->device_id)
+            ->where("zone_code", $request->zone_code);
+
+        if ($deviceZoneDuplicate->count() == 0) {
+            DeviceZones::create($data);
+        } else {
+            return $this->response("Zone Number " . $request->zone_code . " is already Exist", null, false);
+        }
+
+
+        return $this->response("Zone Details are Created successfully", null, true);
+    }
+    public function updateDeviceZoneIndividual(Request $request)
+    {
+
+
+
+        $data = $request->validate([
+            'zone_code' => 'required',
+            'location' => 'required',
+
+            'sensor_name' => 'required',
+            'area_code' => 'required',
+            'hours24' => 'required',
+
+            'device_zone_id' => 'required',
+            'device_id' => 'required',
+
+
+
+
+        ]);
+
+        $data = $request->all();
+        if ($request->filled('device_zone_id')) {
+
+            unset($data['editId']);
+            unset($data['device_zone_id']);
+            $deviceZone = DeviceZones::where("id", $request->device_zone_id);
+
+
+
+
+
+
+            if ($deviceZone) {
+
+
+                //verify same zone name exist in Table 
+                $deviceZoneDuplicate = DeviceZones::where("device_id", $request->device_id)
+                    ->where("zone_code", $request->zone_code)
+                    ->where("id", "!=", $request->device_zone_id);
+
+                if ($deviceZoneDuplicate->count() == 0) {
+                    $deviceZone->update($data);
+                } else {
+                    return $this->response("Zone Number " . $request->zone_code . " is already Exist", null, false);
+                }
+
+
+                return $this->response("Zone Details are updated successfully", null, true);
+            } else {
+                return $this->response("Zone Details are Not Available", null, false);
+            }
+        } else {
+            return $this->response("Zone ID is missing ", null, false);
+        }
+    }
     public function updateDeviceZones(Request $request)
     {
         $zones = $request->sensorzones;
@@ -737,6 +844,14 @@ class CustomersController extends Controller
 
         ];
         return $data;
+    }
+
+    public function getDeviceZonesList(Request $request)
+    {
+        $model = DeviceZones::where("company_id", $request->company_id)->where("device_id", $request->deviceId);
+
+
+        return $model->orderBy("zone_code", "ASC")->paginate($request->per_page ?? 10);
     }
 
     public function getSensorsList()

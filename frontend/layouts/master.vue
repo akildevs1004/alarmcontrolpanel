@@ -215,6 +215,12 @@ export default {
           permission: this.can("master"),
         },
         {
+          icon: "mdi-cellphone-text",
+          title: "Sensors List",
+          to: "/master/sensors",
+          permission: this.can("master"),
+        },
+        {
           icon: "mdi-login-variant",
           title: "Web Logs",
           to: "/master/web_login_logs",

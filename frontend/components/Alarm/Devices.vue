@@ -42,7 +42,7 @@
     <v-dialog v-model="dialogZones" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Control Panel - Zones</span>
+          <span style="color: black">Control Panel - Sensors </span>
           <v-spacer></v-spacer>
           <v-icon style="color: black" @click="dialogZones = false" outlined>
             mdi mdi-close-circle
@@ -51,7 +51,7 @@
 
         <v-card-text>
           <v-container style="min-height: 100px">
-            <AlarmSensorZones
+            <DeviceSensorZones
               :key="key"
               :customer_id="customer_id"
               @closeDialog="closeDialog"
@@ -364,10 +364,10 @@
 import timeZones from "../../defaults/utc_time_zones.json";
 
 import AlarmEditDevice from "../../components/Alarm/EditDevice.vue";
-import AlarmSensorZones from "../../components/Alarm/EditSensorZones.vue";
+import DeviceSensorZones from "../../components/Alarm/DeviceSensorZones.vue";
 
 export default {
-  components: { AlarmEditDevice, AlarmSensorZones },
+  components: { AlarmEditDevice, DeviceSensorZones },
   props: ["customer_id", "eventFilter", "isReadableonly"],
   data: () => ({
     commonSearch: "",
@@ -568,6 +568,7 @@ export default {
       this.$emit("closeDialog");
     },
     editZones(item) {
+      this.editId = item.id;
       this.key = this.key + 1;
       this.editDevice = item;
       this.dialogZones = true;
