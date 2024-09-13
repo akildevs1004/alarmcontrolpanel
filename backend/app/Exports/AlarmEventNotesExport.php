@@ -39,7 +39,7 @@ class AlarmEventNotesExport implements FromCollection, WithHeadings, WithMapping
             "Response",
             "Event Status",
             "Date",
-
+            "Notes",
 
         ];
     }
@@ -59,6 +59,7 @@ class AlarmEventNotesExport implements FromCollection, WithHeadings, WithMapping
             $row['response'],
             $row['event_status'],
             $row['created_datetime'],
+            $row['notes'],
 
 
 

@@ -101,7 +101,7 @@ class TechnicianLoginsController extends Controller
             $ext = $file->getClientOriginalExtension();
             $fileName = time() . '.' . $ext;
 
-            $request->file('attachment')->move(public_path('/technician'), $fileName);
+            $request->file('attachment')->move(public_path('/technicians'), $fileName);
             $data['picture'] = $fileName;
         }
         unset($data['editId']);
@@ -233,7 +233,7 @@ class TechnicianLoginsController extends Controller
         if ($id > 0) {
 
             $model = TechnicianLogins::where("id", $id)->first();;
-            $filepath = public_path('/technician') . "/" . $model->picture;
+            $filepath = public_path('/technicians') . "/" . $model->picture;
             if (file_exists($filepath)) {
                 unlink($filepath);
             }

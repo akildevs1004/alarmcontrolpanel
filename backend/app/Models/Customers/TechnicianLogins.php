@@ -20,11 +20,6 @@ class TechnicianLogins extends Model
 
     public function getProfilePictureAttribute($value)
     {
-        return asset('technician/' . $this->picture);
+        return asset('technicians/' . $this->picture);
     }
-    // public function getPictureRawAttribute($value)
-    // {
-    //     $arr = explode('technician/', $this->picture);
-    //     return    $arr[1] ?? '';
-    // }
 }

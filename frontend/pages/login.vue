@@ -328,30 +328,18 @@ export default {
     },
   }),
   created() {
-    try {
-      if (localStorage)
-        if (!localStorage.getItem("auth._token.local")) {
-          //console.log("localstorage", localStorage.getItem("auth._token.local"));
-          //this.$router.push("/alarm/dashboard");
-
-          localStorage.setItem("auth._token.local", false);
-          localStorage.setItem("auth._token_expiration.local", false);
-
-          return false;
-        }
-    } catch (e) {}
-    // this.$axios.get(`/logout`).then(({ res }) => {
-    //   this.$auth.logout();
-    // });
-
-    // this.$store.commit("dashboard/resetState", null);
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
   },
   mounted() {
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 1000 * 60 * 15); //15 minutes
+    try {
+      const userType = this.$auth.user?.user_type;
+      if (userType) {
+        if (this.$route.name === "login") {
+          window.location.reload();
+        }
+      }
+    } catch (error) {}
 
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
@@ -361,6 +349,10 @@ export default {
       this.dialogForgotPassword = true;
     },
     login() {
+      this.$store.dispatch("dashboard/resetState");
+      this.$store.dispatch("resetState");
+      localStorage.clear();
+
       if (this.$refs.form.validate()) {
         this.$store.commit("email", this.credentials.email);
         this.$store.commit("password", this.credentials.password);
@@ -371,6 +363,14 @@ export default {
           .loginWith("local", { data: this.credentials })
           .then((data) => {
             //redirect("/alarm/dashboard");
+
+            setTimeout(() => {
+              {
+                if (this.loading == true && this.$route.name == "login") {
+                  window.location.reload();
+                }
+              }
+            }, 1000 * 2);
           })
           .catch(({ response }) => {
             if (!response) {
