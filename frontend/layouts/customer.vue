@@ -751,6 +751,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        customer_tickets: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -1008,7 +1012,10 @@ export default {
           name: "customer_reports",
           path: "/customer/reports",
         },
-
+        "customer-tickets": {
+          name: "customer_tickets",
+          path: "/customer/tickets",
+        },
         "alarm-view-customer-id": {
           name: "customer_customers",
           path: "/customer/customers",
@@ -2151,6 +2158,21 @@ button {
   .logo-image {
     width: 100px !important;
   }
+}
+</style>
+<style>
+.smalltextbox .v-input__slot {
+  min-height: 30px !important;
+}
+.smalltextbox .v-label {
+  line-height: 11px !important;
+}
+.smalltextbox .v-input__icon {
+  height: 17px !important;
+}
+
+.tiptap-vuetify-editor__content p {
+  height: 150px;
 }
 </style>
 

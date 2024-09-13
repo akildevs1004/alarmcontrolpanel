@@ -22,9 +22,9 @@
   },
   {
     "icon": "mdi mdi-calendar-star-four-points",
-    "title": "Reports",
-    "to": "/customer/reports",
-    "menu": "customer_reports",
+    "title": "Tickets",
+    "to": "/customer/tickets",
+    "menu": "customer_tickets",
     "module": "topmenu"
   }
 ]

@@ -143,13 +143,17 @@
               color="basil"
               grow
             >
-              <v-tab v-for="(item, index) in sensorItems" :key="item.id">
+              <v-tab
+                @click="processTabData()"
+                v-for="(item, index) in sensorItems"
+                :key="index"
+              >
                 {{ item }}
               </v-tab>
             </v-tabs>
 
             <v-tabs-items v-model="tab">
-              <v-tab-item v-for="(item, index) in sensorItems" :key="item.id">
+              <v-tab-item v-for="(item, index) in sensorItems" :key="index">
                 <v-card color="basil" flat>
                   <v-card-text>
                     <v-data-table
@@ -385,6 +389,7 @@ export default {
         // { text: "Options", value: "options", sortable: false },
       ],
       items: [],
+      selectedTab: 0,
     };
   },
   watch: {
@@ -395,13 +400,14 @@ export default {
       deep: true,
     },
 
-    tab: {
-      handler() {
-        this.showTable = false;
-        this.getDataFromApi();
-      },
-      deep: true,
-    },
+    // tab: {
+    //   handler() {
+    //     this.showTable = false;
+    //     console.log(this.tab);
+    //     //if (this.tab) this.getDataFromApi();
+    //   },
+    //   deep: true,
+    // },
   },
   created() {
     this.customer_id = this.$auth.user?.customer?.id || null;
@@ -440,6 +446,11 @@ export default {
   },
 
   methods: {
+    processTabData() {
+      //this.selectedTab = this.tab;
+
+      this.getDataFromApi();
+    },
     can(per) {
       return this.$pagePermission.can(per, this);
     },
@@ -538,7 +549,7 @@ export default {
       }
     },
     getDataFromApi() {
-      if (this.loading == true) return false;
+      //if (this.loading == true) return false;
       // console.log(
       //   "this.$route.query.alarm_status",
       //   this.$route.query.alarm_status
@@ -548,6 +559,9 @@ export default {
       //   this.date_from = null;
       //   this.date_to = null;
       // }
+
+      // console.log(selectedTab);
+      // console.log(this.selectedTab);
 
       this.loading = true;
 

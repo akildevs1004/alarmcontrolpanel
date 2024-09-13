@@ -363,14 +363,13 @@ export default {
           .loginWith("local", { data: this.credentials })
           .then((data) => {
             //redirect("/alarm/dashboard");
-
-            setTimeout(() => {
-              {
-                if (this.loading == true && this.$route.name == "login") {
-                  window.location.reload();
-                }
-              }
-            }, 1000 * 2);
+            // setTimeout(() => {
+            //   {
+            //     if (this.loading == true && this.$route.name == "login") {
+            //       window.location.reload();
+            //     }
+            //   }
+            // }, 1000 * 2);
           })
           .catch(({ response }) => {
             if (!response) {

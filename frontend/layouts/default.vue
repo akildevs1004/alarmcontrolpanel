@@ -1683,7 +1683,18 @@ header,
 .v-card .v-toolbar__title {
   color: black;
 } */
+/* For all INPUT boxes */
+/* fieldset {
+  height: 30px;
+}
+input {
+  margin-top: -15px;
+}
+.v-input__append-inner {
+  margin-top: -2px;
+} */
 
+/* For all INPUT boxes */
 .input-small-fieldset fieldset {
   height: 30px;
 }
