@@ -15,7 +15,48 @@
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <NewTicket :editable="true" :close_dialog="close_dialog_reaction" />
+          <NewTicket :key="key" @close_dialog="close_dialog_reaction" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogReply" max-width="700px" style="z-index: 9999">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> Reply to Ticket</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogReply = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <ReplyToTicket
+            :key="key"
+            :editId="editId"
+            :editItem="editItem"
+            :ticketId="ticketId"
+            @close_dialog="close_dialog_reaction"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="dialogViewTicket"
+      max-width="700px"
+      style="z-index: 9999"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> View Ticket</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogViewTicket = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <ViewTicket
+            :editItem="editItem"
+            @close_dialog="close_dialog_reaction"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -162,6 +203,11 @@
                   : "-"
               }}
             </template>
+            <template v-slot:item.created_datetime="{ item }">
+              <div>
+                {{ $dateFormat.formatDateMonthYear(item.created_datetime) }}
+              </div>
+            </template>
             <template v-slot:item.subject="{ item }">
               <div :title="item.subject">
                 {{ item.subject.slice(0, 10) }}...
@@ -174,12 +220,63 @@
               </div>
             </template>
             <template v-slot:item.ticket_responses="{ item }">
-              <div>{{ item.ticket_responses?.length || 0 }}</div>
+              <div>{{ item.responses?.length || 0 }}</div>
             </template>
-            <template v-slot:item.created_datetime="{ item }">
+            <template v-slot:item.last_active_datetime="{ item }">
               <div>
-                {{ $dateFormat.formatDateMonthYear(item.created_datetime) }}
+                {{ $dateFormat.formatDateMonthYear(item.last_active_datetime) }}
               </div>
+            </template>
+
+            <template v-slot:item.status="{ item }">
+              <div>{{ item.status == 1 ? "Open" : "Closed" }}</div>
+            </template>
+            <template v-slot:item.closed_datetime="{ item }">
+              <div v-if="item.status == 0">
+                {{ $dateFormat.formatDateMonthYear(item.last_active_datetime) }}
+              </div>
+              <div>---</div>
+            </template>
+            <template v-slot:item.options="{ item }">
+              <v-menu bottom left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list width="120" dense>
+                  <v-list-item @click="addReply(item)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-reply</v-icon>
+                      Reply
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="viewTicket(item)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-information</v-icon>
+                      View
+                    </v-list-item-title>
+                  </v-list-item>
+                  <!-- <v-list-item
+                    v-if="can('branch_view')"
+                    @click="editTicket(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-pencil </v-icon>
+                      Edit
+                    </v-list-item-title>
+                  </v-list-item> 
+                  <v-list-item
+                    v-if="can('branch_edit')"
+                    @click="deleteNotes(item.id)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="red" small> mdi-delete </v-icon>
+                      Delete
+                    </v-list-item-title>
+                  </v-list-item>-->
+                </v-list>
+              </v-menu>
             </template>
           </v-data-table>
         </v-col>
@@ -190,15 +287,24 @@
 
 <script>
 import NewTicket from "../../components/Tickets/NewTicket.vue";
+import ReplyToTicket from "../../components/Tickets/ReplyToTicket.vue";
+import ViewTicket from "../../components/Tickets/ViewTicket.vue";
 
 export default {
   layout: "customer",
   components: {
     NewTicket,
+    ReplyToTicket,
+    ViewTicket,
   },
   props: ["customer_id"],
   data() {
     return {
+      dialogViewTicket: false,
+      editId: null,
+      editItem: null,
+      ticketId: null,
+      dialogReply: false,
       snackbar: false,
       response: "",
       key: "",
@@ -222,9 +328,13 @@ export default {
         { text: "Request From", value: "customer", sortable: false },
         { text: "Reply Count", value: "ticket_responses", sortable: false },
 
-        { text: "Last Activity", value: "updated_datetime", sortable: false },
+        {
+          text: "Last Activity",
+          value: "last_active_datetime",
+          sortable: false,
+        },
         { text: "Status", value: "status", sortable: false },
-        { text: "Closed Date", value: "updated_datetime", sortable: false },
+        { text: "Closed Date", value: "closed_datetime", sortable: false },
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
@@ -260,18 +370,31 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    viewNotes(item) {
-      this.key = this.key + 1;
-      this.eventId = item.id;
-      this.dialogNotesList = true;
+    viewTicket(item) {
+      this.editItem = item;
+      this.key += 1;
+      this.dialogViewTicket = true;
     },
     close_dialog_reaction() {
       this.getDataFromApi();
+
+      this.dialogReply = false;
       this.dialogNewTicket = false;
     },
-    addNotes(item) {
-      this.eventId = item.id;
-      this.dialogAddCustomerNotes = true;
+    editTicket(item) {
+      this.editId = item.id;
+      this.editItem = item;
+    },
+    addReply(item) {
+      this.editItem = item;
+      this.editId = item.id;
+      this.dialogReply = true;
+    },
+    editTicket(item) {
+      this.editId = item.id;
+      this.editItem = item;
+      this.key += 1;
+      this.dialogNewTicket = true;
     },
     closeDialog() {
       this.dialogAddCustomerNotes = false;

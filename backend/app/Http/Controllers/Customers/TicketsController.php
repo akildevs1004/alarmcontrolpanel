@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customers;
 
-use App\Models\Tickets;
+use App\Http\Controllers\Controller;
+use App\Models\Customers\TicketAttachments;
+use App\Models\Customers\Tickets;
 use Illuminate\Http\Request;
 
 class TicketsController extends Controller
@@ -44,10 +46,34 @@ class TicketsController extends Controller
 
         $data = $request->all();
 
-        $columns = ['company_id', 'customer_id', 'subject',  'description'];
+        $columns = ['company_id', 'customer_id', 'operator_id', 'subject',  'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
         $model = Tickets::create($selected);
+
+
+
+
+        $insertedId = $model->id;
+        $attachments = [];
+        foreach ($request->items as $item) {
+
+            $file = $item["file"];
+            $title = $item["title"];
+            $ext = $file->getClientOriginalExtension();
+            $fileName = time() . '.' . $ext;
+            $file->move(public_path('tickets/attachments/' . $insertedId . "/"), $fileName);
+
+
+            $attachments[] = [
+                "title" => $title,
+                "attachment" => $fileName,
+                "file_type" => $ext,
+                "ticket_id" => $insertedId,
+            ];
+        }
+
+        TicketAttachments::insert($attachments);
 
         return $this->response("New Ticket is created successfully", $model, true);
     }
@@ -95,5 +121,20 @@ class TicketsController extends Controller
     public function destroy(Tickets $tickets)
     {
         //
+    }
+
+    public function downloadTicketAttachment(Request $request, $ticket_id, $file_name)
+    {
+
+        $filePath = public_path("tickets/attachments/" . $ticket_id) .  '/' . $file_name;
+
+
+        if (file_exists($filePath)) {
+
+            return response()->download($filePath, $file_name);
+        } else {
+
+            abort(404);
+        }
     }
 }

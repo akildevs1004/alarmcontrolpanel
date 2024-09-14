@@ -66,7 +66,7 @@ class Customers extends Model
     }
     public function getProfilePictureAttribute()
     {
-        // Get the first profile picture from the related table
+
         $profilePicture = $this->profilePictures()->first();
 
         if (!$profilePicture || !$profilePicture->picture) {

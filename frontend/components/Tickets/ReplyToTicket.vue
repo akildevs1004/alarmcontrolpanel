@@ -8,26 +8,12 @@
 
     <v-row>
       <v-col md="12" sm="12" cols="12" dense>
-        <v-card class="elevation-0 p-2" style="padding: 5px">
+        <v-card class="elevation-0 p-2 pa-2" style="border: 1px solid #ddd">
           <v-row>
             <v-col cols="12" style="height: 300px">
               <v-row class="pt-0">
-                <v-col cols="12" dense>
-                  <v-text-field
-                    label="Subject"
-                    dense
-                    small
-                    outlined
-                    type="text"
-                    class="smalltextbox"
-                    v-model="payload_ticket.subject"
-                    hide-details
-                  ></v-text-field>
-                  <span
-                    v-if="errors && errors.subject"
-                    class="text-danger mt-2"
-                    >{{ errors.subject[0] }}</span
-                  >
+                <v-col>
+                  <h3>Subject: {{ payload_ticket.subject }}</h3>
                 </v-col>
                 <v-col cols="12" dense style-="height:600px">
                   <ClientOnly style-="height:600px">
@@ -53,7 +39,16 @@
           </v-row>
 
           <v-row style="margin-top: 15px">
-            <v-col cols="12"> <h3>Attachments</h3></v-col>
+            <v-col cols="6"> <h3>Attachments</h3></v-col>
+            <v-col cols="6">
+              <div style="float: right">
+                <v-checkbox
+                  style="color: red"
+                  v-model="payload_ticket.closed"
+                  label="Close Ticket"
+                ></v-checkbox>
+              </div>
+            </v-col>
             <v-col cols="12" class="text-right mt-0 pt-0">
               <v-form class="mt-0" ref="form" method="post" lazy-validation>
                 <v-row v-for="(d, index) in Document.items" :key="index">
@@ -119,7 +114,7 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" class="text-right">
+            <v-col cols="12" class="text-right pb-5">
               <v-btn
                 small
                 :loading="loading"
@@ -131,6 +126,12 @@
             >
           </v-row>
         </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" class="text-right">
+        <TicketResponses v-if="editItem" :ticket="editItem" />
       </v-col>
     </v-row>
   </div>
@@ -151,9 +152,10 @@ import {
   Blockquote,
   History,
 } from "tiptap-vuetify";
+import TicketResponses from "./TicketResponses.vue";
 export default {
-  props: ["customer_id", "editId", "editItem", "editable"],
-  components: { TiptapVuetify },
+  props: ["editItem", "editId"],
+  components: { TiptapVuetify, TicketResponses },
   data: () => ({
     TitleRules: [(v) => !!v || "Title is required"],
     extensions: [
@@ -240,6 +242,11 @@ export default {
     this.primary_previewImage = null;
     this.payload_ticket = { subject: "", description: "" };
     this.preloader = false;
+
+    if (this.editId != "" && this.editItem) {
+      this.payload_ticket.subject = this.editItem.subject;
+      //this.payload_ticket.description = this.editItem.description;
+    }
   },
 
   methods: {
@@ -263,6 +270,8 @@ export default {
       //this.displayForm = false;
     },
     save_documents() {
+      if (!this.editId) alert("Ticket Id is missing");
+
       if (!this.$auth?.user?.customer) return false;
       this.errors = {};
       if (!this.$refs.form.validate()) {
@@ -283,14 +292,14 @@ export default {
           payload.append(`items[][file]`, e.file || {});
         }
       });
-
+      payload.append(`ticket_id`, this.editId);
       payload.append(`company_id`, this.$auth?.user?.company?.id);
       payload.append(`customer_id`, this.$auth?.user.customer.id);
       payload.append(`subject`, this.payload_ticket.subject);
       payload.append(`description`, this.payload_ticket.description);
 
       this.$axios
-        .post(`tickets`, payload, options)
+        .post(`tickets_responses`, payload, options)
         .then(({ data }) => {
           this.dialogUploadDocuments = false;
           this.loading = false;
@@ -323,88 +332,6 @@ export default {
           }
         });
     },
-    // //primary
-    // onpick_primary_attachment() {
-    //   this.$refs.primary_attachment_input.click();
-    // },
-    // primary_attachment(e) {
-    //   this.primary_upload.name = e.target.files[0] || "";
-
-    //   let input = this.$refs.primary_attachment_input;
-    //   let file = input.files;
-    //   //console.log(file);
-    //   if (file[0] && file[0].size > 1024 * 1024) {
-    //     e.preventDefault();
-    //     this.primary_errors["logo"] = [
-    //       "File too big (> 1MB). Upload less than 1MB",
-    //     ];
-    //     return;
-    //   }
-
-    //   if (file && file[0]) {
-    //     let reader = new FileReader();
-    //     reader.onload = (e) => {
-    //       this.primary_previewImage = e.target.result;
-    //     };
-    //     reader.readAsDataURL(file[0]);
-    //     this.$emit("input", file[0]);
-    //   }
-    // },
-
-    // submit_primary() {
-    //   let customer = new FormData();
-
-    //   for (const key in this.payload_ticket) {
-    //     if (this.payload_ticket[key] != "")
-    //       if (this.payload_ticket[key] != null)
-    //         customer.append(key, this.payload_ticket[key]);
-    //   }
-
-    //   if (this.primary_upload.name) {
-    //     customer.append("attachment", this.primary_upload.name);
-    //   }
-
-    //   customer.append("company_id", this.$auth.user.company_id);
-
-    //   // if (this.editAddressType != "") customer.append("editAddressType", true);
-
-    //   if (this.editId) {
-    //     customer.append("editId", this.editId);
-    //     customer.append("web_login_access", this.web_login_access);
-    //   }
-
-    //   this.$axios
-    //     .post("/technicians", customer)
-    //     .then(({ data }) => {
-    //       //this.loading = false;
-
-    //       if (!data.status) {
-    //         this.primary_errors = [];
-    //         if (data.errors) this.primary_errors = data.errors;
-    //         this.color = "red";
-
-    //         this.snackbar = true;
-    //         this.response = data.message;
-    //       } else {
-    //         this.color = "background";
-    //         this.primary_errors = [];
-    //         this.snackbar = true;
-    //         this.response = data.message;
-    //         setTimeout(() => {
-    //           this.$emit("closeDialog");
-    //         }, 1000);
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       if (e.response.data.errors) {
-    //         this.primary_errors = e.response.data.errors;
-    //         this.color = "red";
-
-    //         this.snackbar = true;
-    //         this.response = e.response.data.message;
-    //       }
-    //     });
-    // },
   },
 };
 </script>
