@@ -56,23 +56,24 @@ class TicketResponsesController extends Controller
 
         $insertedId = $model->id;
         $attachments = [];
-        foreach ($request->items as $item) {
+        if ($request->items)
+            foreach ($request->items as $item) {
 
-            $file = $item["file"];
-            $title = $item["title"];
-            $ext = $file->getClientOriginalExtension();
-            $fileName = time() . '.' . $ext;
-            $file->move(public_path('ticket_responses/attachments/' . $insertedId . "/"), $fileName);
+                $file = $item["file"];
+                $title = $item["title"];
+                $ext = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $ext;
+                $file->move(public_path('ticket_responses/attachments/' . $insertedId . "/"), $fileName);
 
 
-            $attachments[] = [
-                "title" => $title,
-                "attachment" => $fileName,
-                "file_type" => $ext,
-                "ticket_response_id" => $insertedId,
+                $attachments[] = [
+                    "title" => $title,
+                    "attachment" => $fileName,
+                    "file_type" => $ext,
+                    "ticket_response_id" => $insertedId,
 
-            ];
-        }
+                ];
+            }
 
         TicketResponsesAttachments::insert($attachments);
 
