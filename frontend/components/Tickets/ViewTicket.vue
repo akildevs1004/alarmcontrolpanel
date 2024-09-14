@@ -18,7 +18,7 @@
               dense
               style="height: 270px; border: 1px solid #ddd"
             >
-              <div v-html="payload_ticket.description"></div>
+              <div v-html="payload_ticket.subject"></div>
             </v-col>
           </v-row>
         </v-col>
@@ -71,7 +71,7 @@ export default {
 
     if (this.editId != "" && this.editItem) {
       this.payload_ticket.subject = this.editItem.subject;
-      //this.payload_ticket.description = this.editItem.description;
+      this.payload_ticket.description = this.editItem.description;
     }
   },
 
