@@ -18,7 +18,7 @@
               dense
               style="height: 270px; border: 1px solid #ddd"
             >
-              <div v-html="payload_ticket.subject"></div>
+              <div v-html="payload_ticket.description"></div>
             </v-col>
           </v-row>
         </v-col>
