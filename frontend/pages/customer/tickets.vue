@@ -54,6 +54,7 @@
         </v-card-title>
         <v-card-text>
           <ViewTicket
+            :key="key"
             :editItem="editItem"
             @close_dialog="close_dialog_reaction"
           />
