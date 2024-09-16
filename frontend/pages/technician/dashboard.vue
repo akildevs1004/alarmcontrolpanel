@@ -288,7 +288,7 @@ import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLiv
 import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
-  layout: "security",
+  layout: "technician",
   components: {
     AlarmBurglaryPieChart,
     AlarmTemperaturePieChart,
@@ -329,9 +329,9 @@ export default {
       this.getDatafromApi();
     }, 2000);
   },
-  async created() {
+  created() {
     setInterval(() => {
-      if (this.$route.name == "security-dashboard") {
+      if (this.$route.name == "technician-dashboard") {
         this.key = this.key + 1;
         this.getDatafromApi();
       }

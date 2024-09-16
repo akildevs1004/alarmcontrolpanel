@@ -328,6 +328,10 @@ export default {
     },
   }),
   created() {
+    // Manually clear any other user-related data
+    // this.$auth.setUser(false); // Clear user data
+    // this.$auth.setToken("local", null); // Clear the token
+
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
   },

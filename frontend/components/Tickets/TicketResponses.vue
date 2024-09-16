@@ -43,6 +43,10 @@
                 <div v-else-if="item.customer">
                   Customer: {{ item.customer.building_name }}
                 </div>
+                <div v-else-if="item.technician">
+                  Technician: {{ item.technician.first_name }}
+                  {{ item.technician.last_name }}
+                </div>
                 <div v-else>---</div>
               </v-col>
               <v-col cols="6" style="text-align: right">
@@ -124,7 +128,7 @@ export default {
       this.$axios
         .post("update_ticket_read_status", options.params)
         .then((data) => {
-          //this.$emit("loadResponses");
+          this.$emit("updateTicketReadStatus");
         });
     },
   },

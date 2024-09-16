@@ -47,7 +47,7 @@ class TicketResponsesController extends Controller
 
         $data = $request->all();
 
-        $columns = ['company_id', 'ticket_id',  'customer_id', 'security_id', 'technician_id', 'description'];
+        $columns = ['company_id', 'ticket_id',  'customer_id', 'technician_id', 'security_id', 'technician_id', 'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
         $selected["is_read"] = false;

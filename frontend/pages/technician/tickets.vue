@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TicketsList :security_id="security_id" />
+    <TicketsList v-if="technician_id" :technician_id="technician_id" />
   </div>
 </template>
 
@@ -8,22 +8,18 @@
 import TicketsList from "../../components/Tickets/TicketsList.vue";
 
 export default {
-  layout: "security",
+  layout: "technician",
   components: {
     TicketsList,
   },
 
   data() {
-    return { security_id: null };
+    return { technician_id: null };
   },
   watch: {},
   created() {
-    // console.log(this.$auth.user);
-
-    // console.log(this.$auth.user.security);
-
-    if (this.$auth.user.security)
-      this.security_id = this.$auth.user.security.id;
+    if (this.$auth.user.technician)
+      this.technician_id = this.$auth.user.technician.id;
   },
 
   methods: {

@@ -303,6 +303,8 @@ export default {
         payload.append(`customer_id`, this.$auth?.user.customer.id);
       if (this.$auth?.user.security)
         payload.append(`security_id`, this.$auth?.user.security.id);
+      if (this.$auth?.user.technician)
+        payload.append(`technician_id`, this.$auth?.user.technician.id);
       payload.append(`subject`, this.payload_ticket.subject);
       payload.append(`description`, this.payload_ticket.description);
       payload.append(`status`, this.payload_ticket.status ? 0 : 1);

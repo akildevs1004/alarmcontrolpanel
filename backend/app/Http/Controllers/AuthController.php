@@ -44,6 +44,7 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $user = $request->user();
+
         $user->load(["company", "role:id,name,role_type"]);
         $user->permissions = $user->assigned_permissions ? $user->assigned_permissions->permission_names : [];
         unset($user->assigned_permissions);
@@ -53,6 +54,9 @@ class AuthController extends Controller
         if ($user->user_type == "security") {
             $user->load("security");
             $user->load("security.customersAssigned");
+        }
+        if ($user->user_type == "technician") {
+            $user->load("technician");
         }
 
         // if ($user->is_master === true) {

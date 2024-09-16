@@ -62,6 +62,7 @@
             :key="key"
             :editItem="editItem"
             @close_dialog="close_dialog_reaction"
+            @refreshTickets="getDataFromApi"
           />
         </v-card-text>
       </v-card>
@@ -175,6 +176,7 @@
 
                 <v-col cols="1" class="pt-5">
                   <v-btn
+                    v-if="technician_id == null"
                     title="Add Ticket"
                     x-small
                     :ripple="false"
@@ -227,10 +229,23 @@
                   {{ item.customer.building_name }}
                 </div>
               </div>
-              <div :class="item.is_read ? '' : 'bold'" v-if="item.security">
+              <div
+                :class="item.is_read ? '' : 'bold'"
+                v-else-if="item.security"
+              >
                 Operator
                 <div class="secondary-value">
                   {{ item.security.first_name }} {{ item.security.last_name }}
+                </div>
+              </div>
+              <div
+                :class="item.is_read ? '' : 'bold'"
+                v-else-if="item.technician"
+              >
+                Technician
+                <div class="secondary-value">
+                  {{ item.technician.first_name }}
+                  {{ item.technician.last_name }}
                 </div>
               </div>
             </template>
@@ -311,7 +326,7 @@ export default {
     ReplyToTicket,
     ViewTicket,
   },
-  props: ["customer_id", "security_id"],
+  props: ["customer_id", "security_id", "technician_id"],
   data() {
     return {
       displayDateFilter: false,
@@ -340,7 +355,7 @@ export default {
         { text: "Ticket ID", value: "id", sortable: false },
 
         { text: "Subject", value: "subject", sortable: false },
-        { text: "Request From", value: "customer", sortable: false },
+        { text: "Created By", value: "customer", sortable: false },
         { text: "Reply Count", value: "ticket_responses", sortable: false },
 
         {

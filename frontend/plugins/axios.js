@@ -9,6 +9,7 @@ export default ({ app, $axios, store }, inject) => {
     return Promise.reject(error);
   });
   $axios.onRequest(async (config) => {
+    if (!config) return config;
     let user = store.state.auth.user;
 
     if (user) {
@@ -41,17 +42,25 @@ export default ({ app, $axios, store }, inject) => {
       };
     }
     if (user && user.user_type == "security") {
-      if (!user.security) return null;
+      if (!user.security) return config;
       let customersList = user.security.customers_assigned.map(
         (e) => e.customer_id
       );
-
-      config.params = {
-        ...config.params,
-        filter_customers_list: customersList,
-        user_type: user && user.user_type,
-      };
+      if (customersList.length > 0) {
+        config.params = {
+          ...config.params,
+          filter_customers_list: customersList,
+          user_type: user && user.user_type,
+        };
+      }
     }
+
+    config.params = {
+      ...config.params,
+
+      user_type: user && user.user_type,
+    };
+
     return config; // Return the modified config
   });
 };

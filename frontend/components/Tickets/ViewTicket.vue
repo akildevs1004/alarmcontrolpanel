@@ -48,6 +48,7 @@
           :expandPanels="false"
           v-if="editItem"
           :ticket="editItem"
+          @updateTicketReadStatus="updateTickets"
         />
       </v-col>
     </v-row>
@@ -88,6 +89,9 @@ export default {
         "/" +
         file_name
       );
+    },
+    updateTickets() {
+      this.$emit("refreshTickets");
     },
   },
 };
