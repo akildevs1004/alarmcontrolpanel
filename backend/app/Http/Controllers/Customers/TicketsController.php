@@ -16,11 +16,36 @@ class TicketsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Tickets::where("company_id", $request->company_id);
+        $model = Tickets::with("customer")->where("company_id", $request->company_id);
+
+        $model->when($request->filled("common_search"), function ($query) use ($request) {
+
+            $query->where(function ($q) use ($request) {
+                $q->where("id", "ILIKE", "%$request->common_search%")
+                    ->orWhere("subject", "ILIKE", "%$request->common_search%")
+                    ->orWhereHas("customer", function ($qqq) use ($request) {
+                        $qqq->where("building_name", "ILIKE", "%$request->common_search%");
+                    });
+            });
+        });
+
+        $model->when($request->filled("date_from"), function ($q) use ($request) {
+            $q->whereBetween("created_datetime", [$request->date_from . " 00:00:00", $request->date_to . " 23:59:00"]);
+        });
+
+        $model->when($request->filled("customer_id"), function ($q) use ($request) {
+
+            $q->where("customer_id", $request->customer_id);
+        });
+        $model->when($request->filled("security_id"), function ($q) use ($request) {
+
+            $q->where("security_id", $request->security_id);
+        });
+
 
 
         $model->orderBy("created_datetime", "desc");
-        return $model->paginate();
+        return $model->paginate($request->per_page ?? 10);
     }
 
     /**
@@ -46,9 +71,12 @@ class TicketsController extends Controller
 
         $data = $request->all();
 
-        $columns = ['company_id', 'customer_id', 'operator_id', 'subject',  'description'];
+        $columns = ['company_id', 'customer_id', 'security_id', 'subject',  'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
+        $selected["is_read"] = false;
+
+
         $model = Tickets::create($selected);
 
 

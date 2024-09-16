@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TicketsList :customer_id="customer_id" />
+    <TicketsList :security_id="security_id" />
   </div>
 </template>
 
@@ -8,17 +8,17 @@
 import TicketsList from "../../components/Tickets/TicketsList.vue";
 
 export default {
-  layout: "customer",
+  layout: "security",
   components: {
     TicketsList,
   },
 
   data() {
-    return { customer_id: null };
+    return { security_id: null };
   },
   watch: {},
   created() {
-    this.customer_id = this.$auth.user.customer.id;
+    this.security_id = this.$auth.user.security.id;
   },
 
   methods: {

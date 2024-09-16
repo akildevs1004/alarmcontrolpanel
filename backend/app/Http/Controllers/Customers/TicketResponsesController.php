@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Models\Customers\TicketResponses;
 use App\Models\Customers\TicketResponsesAttachments;
+use App\Models\Customers\Tickets;
 use Illuminate\Http\Request;
 
 class TicketResponsesController extends Controller
@@ -41,17 +42,21 @@ class TicketResponsesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(["description" => "required"]);
+        $request->validate(["description" => "required", "status" => "nullable"]);
 
 
         $data = $request->all();
 
-        $columns = ['company_id', 'ticket_id', 'customer_id', 'operator_id', 'technician_id', 'description'];
+        $columns = ['company_id', 'ticket_id',  'customer_id', 'security_id', 'technician_id', 'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
+        $selected["is_read"] = false;
         $model = TicketResponses::create($selected);
 
-
+        if ($request->status == 0) {
+            Tickets::where("id", $request->ticket_id)->update(["status" => 0, "updated_datetime" => date("Y-m-d H:i:s")]);
+        }
+        Tickets::where("id", $request->ticket_id)->update(["is_read" => false]);
 
 
         $insertedId = $model->id;
@@ -143,5 +148,19 @@ class TicketResponsesController extends Controller
 
             abort(404);
         }
+    }
+
+    public function updateTicketReadStatus(Request $request)
+    {
+
+
+        if ($request->filled("ticket_id") && $request->filled("ticket_response_id")) {
+
+            Tickets::where("id", $request->ticket_id)->update(["is_read" => true]);
+            TicketResponses::where("id", $request->ticket_response_id)->update(["is_read" => true]);
+        }
+
+
+        return $this->response("Updated Ticket Details", null, true);
     }
 }

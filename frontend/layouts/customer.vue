@@ -2176,4 +2176,10 @@ button {
 }
 </style>
 
+<!-- <style>
+.ProseMirror {
+  margin: 2px !important  ;
+}
+</style> -->
+
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

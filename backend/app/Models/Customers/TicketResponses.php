@@ -11,7 +11,7 @@ class TicketResponses extends Model
 
     protected $guarded = [];
 
-    protected $with = ["customer", "operator", "technician", "attachments"];
+    protected $with = ["customer", "security", "technician", "attachments"];
 
     public function customer()
     {
@@ -21,9 +21,9 @@ class TicketResponses extends Model
     {
         return $this->hasMany(TicketResponsesAttachments::class, "ticket_response_id", "id");
     }
-    public function operator()
+    public function security()
     {
-        return $this->belongsTo(SecurityLogin::class, "operator_id", "id");
+        return $this->belongsTo(SecurityLogin::class, "security_id", "id");
     }
     public function technician()
     {

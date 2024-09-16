@@ -14,14 +14,39 @@
         v-if="ticket?.responses"
       >
         <v-expansion-panel v-for="(item, i) in ticket.responses" :key="i">
-          <v-expansion-panel-header style="min-height: 25px">
-            <v-row>
-              <v-col cols="6"
-                ><div v-if="item.customer_id == $auth.user.customer.id">
-                  Me
-                </div></v-col
-              >
+          <v-expansion-panel-header
+            style="min-height: 25px"
+            @click="updateTicketReadStatus(item)"
+          >
+            <v-row :class="item.is_read ? '' : 'bold'">
+              <v-col cols="6">
+                <div
+                  v-if="
+                    item.customer_id &&
+                    item.customer_id == $auth.user.customer?.id
+                  "
+                >
+                  You
+                </div>
+                <div
+                  v-else-if="
+                    item.security_id &&
+                    item.security_id == $auth.user.security?.id
+                  "
+                >
+                  You
+                </div>
+                <div v-else-if="item.security">
+                  Operator: {{ item.security.first_name }}
+                  {{ item.security.last_name }}
+                </div>
+                <div v-else-if="item.customer">
+                  Customer: {{ item.customer.building_name }}
+                </div>
+                <div v-else>---</div>
+              </v-col>
               <v-col cols="6" style="text-align: right">
+                <v-icon size="20">mdi-clock-time-four-outline</v-icon>
                 {{ item.created_datetime }}</v-col
               >
             </v-row>
@@ -83,6 +108,24 @@ export default {
         "/" +
         file_name
       );
+    },
+
+    updateTicketReadStatus(item) {
+      if (item.status) return false;
+
+      let options = {
+        params: {
+          ticket_id: item.ticket_id,
+          ticket_response_id: item.id,
+          is_read_status: true,
+        },
+      };
+
+      this.$axios
+        .post("update_ticket_read_status", options.params)
+        .then((data) => {
+          //this.$emit("loadResponses");
+        });
     },
   },
 };

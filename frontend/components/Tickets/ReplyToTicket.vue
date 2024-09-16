@@ -44,7 +44,7 @@
               <div style="float: right">
                 <v-checkbox
                   style="color: red"
-                  v-model="payload_ticket.closed"
+                  v-model="payload_ticket.status"
                   label="Close Ticket"
                 ></v-checkbox>
               </div>
@@ -159,24 +159,24 @@ export default {
   data: () => ({
     TitleRules: [(v) => !!v || "Title is required"],
     extensions: [
-      History,
-      Blockquote,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      Bold,
-      Paragraph,
+      // History,
+      // Blockquote,
+      // Underline,
+      // Strike,
+      // Italic,
+      // ListItem,
+      // BulletList,
+      // OrderedList,
+      // [
+      //   Heading,
+      //   {
+      //     options: {
+      //       levels: [1, 2, 3],
+      //     },
+      //   },
+      // ],
+      // Bold,
+      // Paragraph,
     ],
     documents: false,
 
@@ -215,6 +215,7 @@ export default {
     payload_ticket: {
       description: "",
       subject: "",
+      status: "",
     },
 
     e1: 1,
@@ -272,7 +273,11 @@ export default {
     save_documents() {
       if (!this.editId) alert("Ticket Id is missing");
 
-      if (!this.$auth?.user?.customer) return false;
+      if (this.customer_id && this.security_id) {
+      } else {
+        this.snackbar = true;
+        this.response = "Operator or Customer Details are not available";
+      }
       this.errors = {};
       if (!this.$refs.form.validate()) {
         alert("Enter required fields!");
@@ -294,9 +299,13 @@ export default {
       });
       payload.append(`ticket_id`, this.editId);
       payload.append(`company_id`, this.$auth?.user?.company?.id);
-      payload.append(`customer_id`, this.$auth?.user.customer.id);
+      if (this.$auth?.user.customer)
+        payload.append(`customer_id`, this.$auth?.user.customer.id);
+      if (this.$auth?.user.security)
+        payload.append(`security_id`, this.$auth?.user.security.id);
       payload.append(`subject`, this.payload_ticket.subject);
       payload.append(`description`, this.payload_ticket.description);
+      payload.append(`status`, this.payload_ticket.status ? 0 : 1);
 
       this.$axios
         .post(`tickets_responses`, payload, options)

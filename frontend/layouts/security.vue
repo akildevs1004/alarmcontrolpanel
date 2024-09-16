@@ -740,6 +740,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        security_tickets: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -1014,6 +1018,10 @@ export default {
         "alarm-customersmap": {
           name: "alarm_customersmap",
           path: "/security/customersmap",
+        },
+        "security-tickets": {
+          name: "security_tickets",
+          path: "/security/tickets",
         },
       };
 

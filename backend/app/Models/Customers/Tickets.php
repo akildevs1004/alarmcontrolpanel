@@ -16,7 +16,7 @@ class Tickets extends Model
 
 
     protected $appends = ['last_active_datetime'];
-    protected $with = ["customer", "operator", "responses", "attachments"];
+    protected $with = ["customer", "security", "responses", "attachments"];
     public function responses()
     {
         return $this->hasMany(TicketResponses::class, "ticket_id", "id")->orderBy("created_datetime", 'DESC');
@@ -30,9 +30,9 @@ class Tickets extends Model
         return $this->belongsTo(Customers::class, "customer_id", "id");
     }
 
-    public function operator()
+    public function security()
     {
-        return $this->belongsTo(SecurityLogin::class, "operator_id", "id");
+        return $this->belongsTo(SecurityLogin::class, "security_id", "id");
     }
     public function  getlastActiveDatetimeAttribute()
     {

@@ -32,7 +32,7 @@
                 <v-col cols="12" dense style-="height:600px">
                   <ClientOnly style-="height:600px">
                     <tiptap-vuetify
-                      class="tiptap-icon"
+                      class="tiptap-icon ma-1"
                       v-model="payload_ticket.description"
                       :extensions="extensions"
                       v-scroll.self="onScroll"
@@ -152,29 +152,29 @@ import {
   History,
 } from "tiptap-vuetify";
 export default {
-  props: ["customer_id", "editId", "editItem", "editable"],
+  props: ["customer_id", "security_id", "editId", "editItem", "editable"],
   components: { TiptapVuetify },
   data: () => ({
     TitleRules: [(v) => !!v || "Title is required"],
     extensions: [
-      History,
-      Blockquote,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      Bold,
-      Paragraph,
+      // History,
+      // Blockquote,
+      // Underline,
+      // Strike,
+      // Italic,
+      // ListItem,
+      // BulletList,
+      // OrderedList,
+      // [
+      //   Heading,
+      //   {
+      //     options: {
+      //       levels: [1, 2, 3],
+      //     },
+      //   },
+      // ],
+      // Bold,
+      // Paragraph,
     ],
     documents: false,
 
@@ -263,7 +263,13 @@ export default {
       //this.displayForm = false;
     },
     save_documents() {
-      if (!this.$auth?.user?.customer) return false;
+      //if (!this.$auth?.user?.customer) return false;
+
+      if (this.customer_id && this.security_id) {
+      } else {
+        this.snackbar = true;
+        this.response = "Operator or Customer Details are not available";
+      }
       this.errors = {};
       if (!this.$refs.form.validate()) {
         alert("Enter required fields!");
@@ -285,7 +291,10 @@ export default {
       });
 
       payload.append(`company_id`, this.$auth?.user?.company?.id);
-      payload.append(`customer_id`, this.$auth?.user.customer.id);
+      if (this.$auth?.user.customer)
+        payload.append(`customer_id`, this.$auth?.user.customer.id);
+      if (this.$auth?.user.security)
+        payload.append(`security_id`, this.$auth?.user.security.id);
       payload.append(`subject`, this.payload_ticket.subject);
       payload.append(`description`, this.payload_ticket.description);
 

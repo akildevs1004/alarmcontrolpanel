@@ -63,7 +63,8 @@ export default {
     snack: false,
     snackColor: "",
     snackText: "",
-
+    snackbar: false,
+    response: "",
     //end editor
   }),
   created() {
