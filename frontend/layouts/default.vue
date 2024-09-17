@@ -294,7 +294,7 @@
                     <span style="font-size: 14px">
                       <span>
                         {{ item.title }}
-                        <div class="secondary-value">
+                        <div class="secondary-value" v-if="item.date_from">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
                         </div></span
                       >

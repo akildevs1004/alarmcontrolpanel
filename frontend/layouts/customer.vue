@@ -294,9 +294,9 @@
                   <v-col cols="10">
                     <span style="font-size: 14px">
                       <span>
-                        {{ notificationsMenuItems.length - 1 }}
+                        <!-- {{ notificationsMenuItems.length - 1 }} -->
                         {{ item.title }}
-                        <div class="secondary-value">
+                        <div class="secondary-value" v-if="item.date_from">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
                         </div></span
                       >
