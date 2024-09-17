@@ -20,8 +20,6 @@ export default {
   created() {
     // console.log(this.$auth.user);
 
-    // console.log(this.$auth.user.security);
-
     if (this.$auth.user.security)
       this.security_id = this.$auth.user.security.id;
   },

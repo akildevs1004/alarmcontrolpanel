@@ -799,7 +799,10 @@ export default {
     };
   },
   created() {
-    if (this.$auth.user.user_type != "security") {
+    if (
+      this.$auth.user.user_type != "security" ||
+      this.$auth.user.security == null
+    ) {
       try {
         if (window) {
           if (this.$route.name != "logout") window.location.href = "../logout";
@@ -850,6 +853,8 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
+      if (!this.$route.name.includes("security")) return false;
+
       //this.loadHeaderNotificationMenu();
 
       //console.log("wait5Minutes", this.wait5Minutes);
@@ -1201,11 +1206,9 @@ export default {
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
-          this.notificationsMenuItems = [];
-          this.notificationAlarmDevices = data;
-          this.pendingNotificationsCount = data.length;
-          this.notificationAlarmDevicesContent = data;
+          this.notificationsMenuItemsUpdated = [];
 
+          this.notificationAlarmDevices = data;
           data.forEach((element) => {
             let notificaiton = {
               title: element.device?.customer?.building_name
@@ -1219,8 +1222,74 @@ export default {
               key: "leaves",
             };
 
+            this.notificationsMenuItemsUpdated.push(notificaiton);
+          });
+
+          this.notificationsMenuItems = this.notificationsMenuItemsUpdated;
+          this.loadHeaderNotificationTicketMenu();
+          //this.pendingNotificationsCount = data.length;
+        });
+    },
+
+    loadHeaderNotificationTicketMenu() {
+      if (this.isBackendRequestOpen) return false;
+
+      if (!this.$auth.user?.customer?.id) return false;
+
+      this.isBackendRequestOpen = true;
+      this.key = this.key + 1;
+      let company_id = this.$auth.user?.company?.id || 0;
+      if (company_id == 0) {
+        return false;
+      }
+
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+
+          security_id: this.$auth.user?.security?.id || null,
+        },
+      };
+
+      this.$axios
+        .get(`tickets_unread_notifications`, options)
+        .then(({ data }) => {
+          this.isBackendRequestOpen = false;
+          //this.notificationsMenuItems = [];
+
+          data.forEach((element) => {
+            let title = "  ";
+            if (element.customer) {
+              title = title + " Customer: " + element.customer.building_name;
+            }
+            if (element.security) {
+              title =
+                title +
+                " Operator: " +
+                element.security.first_name +
+                " " +
+                element.security.last_name;
+            }
+            // if (element.customer) {
+            //   title =
+            //     title +
+            //     " Customer: " +
+            //     element.customer.first_name +
+            //     " " +
+            //     element.customer.last_name;
+            // }
+            let notificaiton = {
+              title: title,
+              date_from: "",
+              click: "/alarm/allevents",
+              icon: "mail.png",
+              key: "leaves",
+            };
+
             this.notificationsMenuItems.push(notificaiton);
           });
+
+          this.pendingNotificationsCount = this.notificationsMenuItems.length;
         });
     },
 

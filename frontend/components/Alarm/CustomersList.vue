@@ -158,10 +158,10 @@
                   <v-img
                     style="
                       border-radius: 50%;
-                      height: 60px;
-                      min-height: 60px;
-                      width: 60px;
-                      max-width: 60px;
+                      height: 45px;
+                      min-height: 45px;
+                      width: 45px;
+                      max-width: 45px;
                     "
                     :src="
                       item.profile_picture
@@ -219,7 +219,7 @@
               >
                 <img
                   title="Burglary"
-                  style="width: 23px; float: left"
+                  style="width: 30px; float: left"
                   src="/device-icons/burglary.png"
                 />
               </div>
@@ -236,7 +236,7 @@
               >
                 <img
                   title="Burglary"
-                  style="width: 23px; float: left"
+                  style="width: 30px; float: left"
                   src="/device-icons/temperature.png"
                 />
               </div>
@@ -250,7 +250,7 @@
               >
                 <img
                   title="Burglary"
-                  style="width: 23px; float: left"
+                  style="width: 30px; float: left"
                   src="/device-icons/medical.png"
                 />
               </div>
@@ -262,7 +262,7 @@
               >
                 <img
                   title="Burglary"
-                  style="width: 23px; float: left"
+                  style="width: 30px; float: left"
                   src="/device-icons/fire.png"
                 />
               </div>
@@ -274,7 +274,7 @@
               >
                 <img
                   title="Burglary"
-                  style="width: 23px; float: left"
+                  style="width: 30px; float: left"
                   src="/device-icons/water.png"
                 />
               </div>

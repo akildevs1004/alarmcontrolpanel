@@ -2332,6 +2332,17 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
   margin: auto;
   line-height: 30px;
 }
+
+/* .employee-schedule-search-box .v-input__append-inner {
+  background: red !important;
+  padding: 6px !important;
+  margin-top: 0px !important;
+  margin-right: -11px !important;
+  color: #fff !important;
+}
+.employee-schedule-search-box .v-icon {
+  color: #fff !important;
+} */
 </style>
 
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

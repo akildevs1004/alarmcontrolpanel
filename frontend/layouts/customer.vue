@@ -272,7 +272,7 @@
         </template>
         <v-list style="z-index: 9999">
           <v-list-item
-            style="height: 30px; padding-left: 5px"
+            style="height: 30px; padding-left: 5px; width: 300px"
             :class="
               notificationsMenuItems.length > 0 &&
               index != notificationsMenuItems.length - 1
@@ -860,6 +860,7 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
+      if (!this.$route.name.includes("customer")) return false;
       if (this.wait5Minutes == false) {
         if (this.$route.name != "login") {
           this.resetTimer();
@@ -1198,7 +1199,8 @@ export default {
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
-          this.notificationsMenuItems = [];
+          this.notificationsMenuItemsUpdated = [];
+
           this.notificationAlarmDevices = data;
           data.forEach((element) => {
             let notificaiton = {
@@ -1213,13 +1215,76 @@ export default {
               key: "leaves",
             };
 
-            this.notificationsMenuItems.push(notificaiton);
+            this.notificationsMenuItemsUpdated.push(notificaiton);
           });
 
-          this.pendingNotificationsCount = data.length;
+          this.notificationsMenuItems = this.notificationsMenuItemsUpdated;
+          this.loadHeaderNotificationTicketMenu();
+          //this.pendingNotificationsCount = data.length;
         });
     },
 
+    loadHeaderNotificationTicketMenu() {
+      if (this.isBackendRequestOpen) return false;
+
+      if (!this.$auth.user?.customer?.id) return false;
+
+      this.isBackendRequestOpen = true;
+      this.key = this.key + 1;
+      let company_id = this.$auth.user?.company?.id || 0;
+      if (company_id == 0) {
+        return false;
+      }
+
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+
+          customer_id: this.$auth.user?.customer?.id || null,
+        },
+      };
+
+      this.$axios
+        .get(`tickets_unread_notifications`, options)
+        .then(({ data }) => {
+          this.isBackendRequestOpen = false;
+          //this.notificationsMenuItems = [];
+
+          data.forEach((element) => {
+            let title = "  ";
+            if (element.customer) {
+              title = title + " Customer: " + element.customer.building_name;
+            }
+            if (element.security) {
+              title =
+                title +
+                " Operator: " +
+                element.security.first_name +
+                " " +
+                element.security.last_name;
+            }
+            // if (element.customer) {
+            //   title =
+            //     title +
+            //     " Customer: " +
+            //     element.customer.first_name +
+            //     " " +
+            //     element.customer.last_name;
+            // }
+            let notificaiton = {
+              title: title,
+              date_from: "",
+              click: "/alarm/allevents",
+              icon: "mail.png",
+              key: "leaves",
+            };
+
+            this.notificationsMenuItems.push(notificaiton);
+          });
+
+          this.pendingNotificationsCount = this.notificationsMenuItems.length;
+        });
+    },
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
       this.verifyPopupAlarmStatus();

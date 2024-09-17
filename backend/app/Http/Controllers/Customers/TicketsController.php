@@ -256,4 +256,36 @@ class TicketsController extends Controller
         $customer_count = $model->clone()->whereNotNull("customer_id")->count();
         return ["total" => $total, "customer_count" => $customer_count, "security_count" => $security_count];
     }
+    public function ticketsUnreadNotifications(Request $request)
+    {
+        $model = Tickets::where("company_id", $request->company_id)
+
+            ->where("is_read", false);
+
+        if ($request->filled("technician_id")) {
+
+            $model->orderBy("created_datetime", "desc");
+
+            return $model->get();
+        }
+        if ($request->filled("customer_id")) {
+
+            $model->where("customer_id", $request->customer_id);
+            $model->orderBy("created_datetime", "desc");
+
+            return $model->get();
+        }
+
+        if ($request->filled("security_id")) {
+
+            $model->where("security_id", $request->security_id);
+            $model->orderBy("created_datetime", "desc");
+
+            return $model->get();
+        }
+
+
+
+        return [];
+    }
 }

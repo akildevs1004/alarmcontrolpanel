@@ -1,6 +1,5 @@
 export default ({ app, $axios, store }, inject) => {
   $axios.onError((error) => {
-    console.log("error", error);
     if (error.response && error.response.status === 401) {
       app.$auth.refreshTokens();
       app.$auth.reset();
@@ -55,11 +54,11 @@ export default ({ app, $axios, store }, inject) => {
       }
     }
 
-    config.params = {
-      ...config.params,
+    // config.params = {
+    //   ...config.params,
 
-      user_type: user && user.user_type,
-    };
+    //   user_type: user && user.user_type,
+    // };
 
     return config; // Return the modified config
   });

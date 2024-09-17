@@ -244,7 +244,7 @@
 
       <v-spacer></v-spacer>
       <v-menu
-        style="z-index: 9999 !important"
+        style="z-index: 9999 !important; width: 300px"
         bottom
         origin="center center"
         offset-y
@@ -279,7 +279,6 @@
                 ? 'border-bottom'
                 : ''
             "
-            @click="showPopupAlarmStatus()"
             v-for="(item, index) in notificationsMenuItems"
             :key="index"
           >
@@ -295,7 +294,7 @@
                     <span style="font-size: 14px">
                       <span>
                         {{ item.title }}
-                        <div class="secondary-value">
+                        <div class="secondary-value" v-if="item.date_from">
                           {{ $dateFormat.formatDateMonthYear(item.date_from) }}
                         </div></span
                       >
@@ -847,6 +846,7 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
+      if (!this.$route.name.includes("technician")) return false;
       //this.loadHeaderNotificationMenu();
 
       //console.log("wait5Minutes", this.wait5Minutes);
@@ -1156,7 +1156,7 @@ export default {
       //location.href = process.env.APP_URL + "/dashboard2";
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
-    loadHeaderNotificationMenu() {
+    async loadHeaderNotificationMenu() {
       if (this.isBackendRequestOpen) return false;
 
       this.isBackendRequestOpen = true;
@@ -1177,29 +1177,101 @@ export default {
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
-          this.notificationsMenuItems = [];
+
+          this.notificationsMenuItemsUpdated = [];
           this.notificationAlarmDevices = data;
-          this.pendingNotificationsCount = data.length;
+
           this.notificationAlarmDevicesContent = data;
 
           data.forEach((element) => {
-            let notificaiton = {
-              title: element.device?.customer?.building_name
+            let title = "";
+            if (element.device.customer)
+              title = element.device?.customer?.building_name
                 ? element.device.customer.building_name +
                   " - " +
                   element.alarm_type
-                : "---",
+                : "---";
+            let notificaiton = {
+              title: title,
               date_from: element.alarm_start_datetime,
               click: "/alarm/allevents",
               icon: this.alarm_icons[element.alarm_type] ?? "---",
               key: "leaves",
             };
 
-            this.notificationsMenuItems.push(notificaiton);
+            this.notificationsMenuItemsUpdated.push(notificaiton);
           });
+
+          this.notificationsMenuItems = this.notificationsMenuItemsUpdated;
+
+          this.loadHeaderNotificationTicketMenu();
+          //this.pendingNotificationsCount = this.notificationsMenuItems.length;
         });
     },
 
+    async loadHeaderNotificationTicketMenu() {
+      if (this.isBackendRequestOpen) return false;
+
+      if (!this.$auth.user?.technician?.id) return false;
+
+      this.isBackendRequestOpen = true;
+      this.key = this.key + 1;
+      let company_id = this.$auth.user?.company?.id || 0;
+      if (company_id == 0) {
+        return false;
+      }
+
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+
+          technician_id: this.$auth.user?.technician?.id || null,
+        },
+      };
+
+      await this.$axios
+        .get(`tickets_unread_notifications`, options)
+        .then(({ data }) => {
+          this.isBackendRequestOpen = false;
+          // this.notificationsMenuItems = [];
+
+          // this.pendingNotificationsCount = data.length;
+
+          data.forEach((element) => {
+            let title = "  ";
+            if (element.customer) {
+              title = title + " Customer: " + element.customer.building_name;
+            }
+            if (element.security) {
+              title =
+                title +
+                " Operator: " +
+                element.security.first_name +
+                " " +
+                element.security.last_name;
+            }
+            // if (element.security) {
+            //   title =
+            //     title +
+            //     " Operator: " +
+            //     element.security.first_name +
+            //     " " +
+            //     element.security.last_name;
+            // }
+            let notificaiton = {
+              title: title,
+              date_from: "",
+              click: "/alarm/allevents",
+              icon: "mail.png",
+              key: "leaves",
+            };
+
+            this.notificationsMenuItems.push(notificaiton);
+          });
+
+          this.pendingNotificationsCount = this.notificationsMenuItems.length;
+        });
+    },
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
       this.dialogAlarmPopupNotificationStatus = true;

@@ -23,3 +23,5 @@ Route::get("technician_tickets_today_stats", [TicketsController::class, 'technic
 
 
 Route::get("technician_tickets_pending_days_stats", [TicketsController::class, "technicianDashboardPendingMorethanDaysStats"]);
+
+Route::get("tickets_unread_notifications", [TicketsController::class, "ticketsUnreadNotifications"]);
