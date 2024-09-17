@@ -5,301 +5,100 @@
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmBurglaryPieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmBurglaryPieChart'"
+              <TicketsStats v-if="key" :key="key" :name="'TicketsStats'"
             /></v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmMedicalPieChart
+              <TicketsTodayStats
+                @emitStoprefresh="stopRefreshdata"
+                @emitStartrefresh="startRefreshdata"
                 v-if="key"
                 :key="key"
-                :name="'AlarmMedicalPieChart'"
-            /></v-card-text>
+                :name="'TicketsTodayStats'"
+              />
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmWaterPieChart
+              <TicketsMonthlyStats
+                @emitStoprefresh="stopRefreshdata"
+                @emitStartrefresh="startRefreshdata"
                 v-if="key"
                 :key="key"
-                :name="'AlarmWaterPieChart3'"
+                :name="'TicketsMonthlyStats'"
             /></v-card-text>
           </v-card>
         </v-col>
+
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmFirePieChart
+              <Tickets10DaysPendingStats
+                @emitStoprefresh="stopRefreshdata"
+                @emitStartrefresh="startRefreshdata"
                 v-if="key"
                 :key="key"
-                :name="'AlarmBFirePieChart4'"
-            /></v-card-text>
+                :name="'Tickets10DaysPendingStats'"
+              />
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="3" style="max-width: 20%">
           <v-card class="elevation-2" style="height: 180px">
             <v-card-text>
-              <AlarmTemperaturePieChart
+              <Tickets30DaysPendingStats
+                @emitStoprefresh="stopRefreshdata"
+                @emitStartrefresh="startRefreshdata"
                 v-if="key"
                 :key="key"
-                :name="'AlarmTemperaturePieChart5'"
-            /></v-card-text>
+                :name="'Tickets30DaysPendingStats'"
+              />
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
 
-      <v-row style="margin-top: 0px">
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-5">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Burglary.percentage"
-              background-color="grey"
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                  "
-                >
-                  {{ onlineStats.Burglary.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: red;
-                  "
-                >
-                  {{ onlineStats.Burglary.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-5">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Medical.percentage"
-              background-color="grey"
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                  "
-                >
-                  {{ onlineStats.Medical.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: red;
-                  "
-                >
-                  {{ onlineStats.Medical.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-5">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Water.percentage"
-              background-color="grey"
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                  "
-                >
-                  {{ onlineStats.Water.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: red;
-                  "
-                >
-                  {{ onlineStats.Water.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-5">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Fire.percentage"
-              background-color="grey"
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                  "
-                >
-                  {{ onlineStats.Fire.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: red;
-                  "
-                >
-                  {{ onlineStats.Fire.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col>
-        <v-col cols="3" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-5">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Temperature.percentage"
-              background-color="grey"
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                  "
-                >
-                  {{ onlineStats.Temperature.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: red;
-                  "
-                >
-                  {{ onlineStats.Temperature.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col>
-      </v-row>
       <v-row
         ><v-col><v-divider color="#DDD" /></v-col>
       </v-row>
       <v-row class="mt-5">
-        <v-col cols="12" style="padding-right: 25px"><AlamAllEvents /></v-col>
+        <v-col cols="12" style="padding-right: 25px"
+          ><TicketsList :status="1" :technician_id="technician_id"
+        /></v-col>
       </v-row>
     </v-card>
   </div>
 </template>
 
 <script>
-import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
-import AlarmMedicalPieChart from "../../components/Alarm/SecurityDashboard/AlarmMedicalPieChart.vue";
-import AlarmTemperaturePieChart from "../../components/Alarm/SecurityDashboard/AlarmTemperaturePieChart.vue";
+import TicketsStats from "../../components/Alarm/TechnicianDashboard/TicketsStats.vue";
+import TicketsMonthlyStats from "../../components/Alarm/TechnicianDashboard/TicketsMonthlyStats.vue";
+import TicketsTodayStats from "../../components/Alarm/TechnicianDashboard/TicketsTodayStats.vue";
 
-import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFirePieChart.vue";
+import Tickets10DaysPendingStats from "../../components/Alarm/TechnicianDashboard/Tickets10DaysPendingStats.vue";
 
-import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
-import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
-import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
+import Tickets30DaysPendingStats from "../../components/Alarm/TechnicianDashboard/Tickets30DaysPendingStats.vue";
+
+import TicketsList from "../../components/Tickets/TicketsList.vue";
 
 export default {
   layout: "technician",
   components: {
-    AlarmBurglaryPieChart,
-    AlarmTemperaturePieChart,
-    AlarmMedicalPieChart,
-    AlarmFirePieChart,
-    AlarmWaterPieChart,
-    AlarmLivePieChart,
-    AlamAllEvents,
+    TicketsStats,
+    TicketsMonthlyStats,
+    TicketsTodayStats,
+    Tickets10DaysPendingStats,
+    Tickets30DaysPendingStats,
+    TicketsList,
   },
   data: () => ({
     dialogEventsList: false,
+    technician_id: null,
     // burglaryOnline: { offline: 0, online: 0 },
     // fireOnline: { offline: 0, online: 0 },
     // waterOnline: { offline: 0, online: 0 },
@@ -321,6 +120,7 @@ export default {
     _id: null,
     date_from: null,
     date_to: null,
+    refreshData: true,
   }),
   computed: {},
   mounted() {
@@ -330,12 +130,14 @@ export default {
     }, 2000);
   },
   created() {
+    if (this.$auth.user.technician)
+      this.technician_id = this.$auth.user.technician.id;
     setInterval(() => {
-      if (this.$route.name == "technician-dashboard") {
+      if (this.$route.name == "technician-dashboard" && this.refreshData) {
         this.key = this.key + 1;
         this.getDatafromApi();
       }
-    }, 1000 * 30);
+    }, 1000 * 10);
     // this._id = this.$route.params.id;
     let today = new Date();
 
@@ -345,6 +147,14 @@ export default {
   },
   watch: {},
   methods: {
+    stopRefreshdata() {
+      this.refreshData = false;
+    },
+    startRefreshdata() {
+      this.refreshData = true;
+      this.key = this.key + 1;
+      this.getDatafromApi();
+    },
     getPercentage($key) {
       let test =
         (this.onlineStats.Temperature.online * 100) /

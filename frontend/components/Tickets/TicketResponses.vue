@@ -14,10 +14,7 @@
         v-if="ticket?.responses"
       >
         <v-expansion-panel v-for="(item, i) in ticket.responses" :key="i">
-          <v-expansion-panel-header
-            style="min-height: 25px"
-            @click="updateTicketReadStatus(item)"
-          >
+          <v-expansion-panel-header style="min-height: 25px">
             <v-row :class="item.is_read ? '' : 'bold'">
               <v-col cols="6">
                 <div
@@ -97,10 +94,13 @@ export default {
 
   data: () => ({ snackbar: false, response: "", panel: [] }),
   created() {
-    if (this.ticket && this.expandPanels)
+    if (this.ticket && this.expandPanels) {
       for (var i = 0; i < this.ticket.responses.length; i++) {
         this.panel.push(i);
       }
+    }
+
+    this.updateTicketReadStatus1(this.ticket);
   },
 
   methods: {
@@ -113,7 +113,23 @@ export default {
         file_name
       );
     },
+    updateTicketReadStatus1(ticket) {
+      if (ticket.is_read) return false;
 
+      let options = {
+        params: {
+          ticket_id: ticket.id,
+
+          is_read_status: true,
+        },
+      };
+
+      this.$axios
+        .post("update_ticket_read_status", options.params)
+        .then((data) => {
+          this.$emit("updateTicketReadStatus");
+        });
+    },
     updateTicketReadStatus(item) {
       if (item.status) return false;
 

@@ -3,18 +3,22 @@
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Burglary Events</span>
+          <span style="color: black" dense>Pending More than 30 days</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
-            @click="dialogEventsList = false"
+            @click="
+              dialogEventsList = false;
+              $emit('emitStartrefresh');
+            "
             outlined
           >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
         <v-card-text style="padding: 20px; padding-left: 0px">
-          <AlamAllEvents
+          <TicketsList
+            :filterWord="'30daysPending'"
             style="padding: 0px; padding-top: 0px"
             :key="key"
             :popup="true"
@@ -24,7 +28,9 @@
       </v-card>
     </v-dialog>
     <v-row style="margin-top: -27px"
-      ><v-col cols="8" style="color: black; font-size: 12px">Burglary</v-col>
+      ><v-col cols="8" style="color: black; font-size: 12px"
+        >Pending More than 30 Days
+      </v-col>
 
       <v-col cols="4" class="text-right align-right"
         ><img
@@ -49,7 +55,7 @@
       </v-col>
       <v-col
         cols="5"
-        class="p-0 pt-2"
+        class="p-0 pt-5"
         style="
           font-size: 11px;
           color: #000000;
@@ -57,30 +63,23 @@
           padding-right: 0px;
           line-height: 32px;
         "
-      >
+        ><v-row>
+          <v-col cols="9"
+            ><v-icon color="#ffc000">mdi mdi-square-medium</v-icon
+            >Customer</v-col
+          ><v-col cols="3" style="padding-left: 0px">{{
+            data.customer_count ?? "0"
+          }}</v-col> </v-row
+        ><v-divider color="#dddddd" />
         <v-row>
-          <v-col cols="8"
-            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Low</v-col
-          ><v-col cols="4" style="padding-left: 0px">{{
-            data[1]?.length ?? "0"
+          <v-col cols="9"
+            ><v-icon color="#92d050">mdi mdi-square-medium</v-icon
+            >Operator</v-col
+          ><v-col cols="3" style="padding-left: 0px">{{
+            data.security_count ?? "0"
           }}</v-col>
         </v-row>
-        <v-divider color="#dddddd" />
-        <v-row>
-          <v-col cols="8"
-            ><v-icon color="#ffc000">mdi mdi-square-medium</v-icon>Medium</v-col
-          ><v-col cols="4" style="padding-left: 0px">{{
-            data[2]?.length ?? "0"
-          }}</v-col>
-        </v-row>
-        <v-divider color="#dddddd" />
-        <v-row>
-          <v-col cols="8"
-            ><v-icon color="#ff0000">mdi mdi-square-medium</v-icon>High</v-col
-          ><v-col cols="4" style="padding-left: 0px">{{
-            data[3]?.length ?? "0"
-          }}</v-col>
-        </v-row>
+
         <v-divider color="#dddddd" />
       </v-col>
     </v-row>
@@ -101,10 +100,10 @@
 </template>
 
 <script>
-import AlamAllEvents from "../../Alarm/ComponentAllEvents.vue";
+import TicketsList from "../../Tickets/TicketsList.vue";
 export default {
-  props: ["name"],
-  components: { AlamAllEvents },
+  props: ["name", "technician_id"],
+  components: { TicketsList },
   data() {
     return {
       dialogEventsList: false,
@@ -220,6 +219,7 @@ export default {
     showDialogEvents() {
       this.key += 1;
       this.dialogEventsList = true;
+      this.$emit("emitStoprefresh");
     },
     applyFilter() {
       this.loadDevicesStatistics();
@@ -228,11 +228,12 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          days: 30,
         },
       };
 
       this.$axios
-        .get(`/security_device_alarm_burglary_stats`, options)
+        .get(`/technician_tickets_pending_days_stats`, options)
         .then(({ data }) => {
           this.data = data;
           this.renderChart1(data);
@@ -243,19 +244,13 @@ export default {
       let counter = 0;
       let total = 0;
 
-      this.chartOptions.labels[0] = "Low";
-      this.chartOptions.series[0] = data["1"]?.length ?? 0;
+      this.chartOptions.labels[0] = "Customer";
+      this.chartOptions.series[0] = data.customer_count ?? 0;
 
-      this.chartOptions.labels[1] = "Medium";
-      this.chartOptions.series[1] = data["2"]?.length ?? 0;
+      this.chartOptions.labels[1] = "Operator";
+      this.chartOptions.series[1] = data.security_count ?? 0;
 
-      this.chartOptions.labels[2] = "High";
-      this.chartOptions.series[2] = data["3"]?.length ?? 0;
-
-      total =
-        this.chartOptions.series[0] +
-        this.chartOptions.series[1] +
-        this.chartOptions.series[2];
+      total = this.chartOptions.series[0] + this.chartOptions.series[1];
 
       this.chartOptions.customTotalValue = total;
 

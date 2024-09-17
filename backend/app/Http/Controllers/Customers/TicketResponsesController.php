@@ -154,10 +154,11 @@ class TicketResponsesController extends Controller
     {
 
 
-        if ($request->filled("ticket_id") && $request->filled("ticket_response_id")) {
-
+        if ($request->filled("ticket_response_id")) {
+        }
+        if ($request->filled("ticket_id")) {
+            TicketResponses::where("ticket_id", $request->ticket_id)->update(["is_read" => true]);
             Tickets::where("id", $request->ticket_id)->update(["is_read" => true]);
-            TicketResponses::where("id", $request->ticket_response_id)->update(["is_read" => true]);
         }
 
 

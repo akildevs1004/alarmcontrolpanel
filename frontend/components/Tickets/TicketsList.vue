@@ -69,15 +69,17 @@
     </v-dialog>
     <v-card flat>
       <v-row>
-        <v-col cols="12" class="text-right" style="padding-top: 0px">
-          <v-row>
-            <v-col cols="6"></v-col>
-            <v-col cols="6" class="text-right" style="max-width: 660px">
+        <v-col cols="12" style="padding-top: 0px">
+          <v-row v-if="!filterWord">
+            <v-col cols="5"
+              ><h3 class="pl-5" v-if="status">Active Tickets</h3></v-col
+            >
+            <v-col cols="7" class="text-right" style="max-width: 100%">
               <v-row>
-                <v-col cols="1" class="mt-2">
+                <v-col cols="1" class="mt-2" style="max-width: 50px">
                   <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
                 </v-col>
-                <v-col cols="4"
+                <v-col cols="4" style="max-width: 250px; padding-right: 25px"
                   ><v-text-field
                     style="padding-top: 7px"
                     width="200px"
@@ -94,7 +96,7 @@
                     hide-details
                   ></v-text-field
                 ></v-col>
-                <v-col cols="4">
+                <v-col cols="3" style="max-width: 200px">
                   <CustomFilter
                     v-if="displayDateFilter"
                     style="float: right; padding-top: 5px; z-index: 9"
@@ -102,81 +104,14 @@
                     :default_date_from="date_from"
                     :default_date_to="date_to"
                     :defaultFilterType="1"
-                    :height="'40px'"
-                /></v-col>
-                <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
-                    <v-menu bottom right>
-                      <template v-slot:activator="{ on, attrs }">
-                        <span v-bind="attrs" v-on="on">
-                          <v-icon dark-2 icon color="violet" small
-                            >mdi-printer-outline</v-icon
-                          >
-                          Print
-                        </span>
-                      </template>
-                      <v-list width="100" dense>
-                        <v-list-item @click="downloadOptions(`print`)">
-                          <v-list-item-title style="cursor: pointer">
-                            <v-row>
-                              <v-col cols="5"
-                                ><img
-                                  style="padding-top: 5px"
-                                  src="/icons/icon_print.png"
-                                  class="iconsize"
-                              /></v-col>
-                              <v-col
-                                cols="7"
-                                style="padding-left: 0px; padding-top: 19px"
-                              >
-                                Print
-                              </v-col>
-                            </v-row>
-                          </v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="downloadOptions('download')">
-                          <v-list-item-title style="cursor: pointer">
-                            <v-row>
-                              <v-col cols="5"
-                                ><img
-                                  style="padding-top: 5px"
-                                  src="/icons/icon_pdf.png"
-                                  class="iconsize"
-                              /></v-col>
-                              <v-col
-                                cols="7"
-                                style="padding-left: 0px; padding-top: 19px"
-                              >
-                                PDF
-                              </v-col>
-                            </v-row>
-                          </v-list-item-title>
-                        </v-list-item>
-  
-                        <v-list-item @click="downloadOptions('excel')">
-                          <v-list-item-title style="cursor: pointer">
-                            <v-row>
-                              <v-col cols="5"
-                                ><img
-                                  style="padding-top: 5px"
-                                  src="/icons/icon_excel.png"
-                                  class="iconsize"
-                              /></v-col>
-                              <v-col
-                                cols="7"
-                                style="padding-left: 0px; padding-top: 19px"
-                              >
-                                EXCEL
-                              </v-col>
-                            </v-row>
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-col> -->
-
-                <v-col cols="1" class="pt-5">
+                    :height="'40px'" /></v-col
+                ><v-col
+                  cols="1"
+                  v-if="technician_id == null"
+                  class="pt-5"
+                  style="max-width: 100px"
+                >
                   <v-btn
-                    v-if="technician_id == null"
                     title="Add Ticket"
                     x-small
                     :ripple="false"
@@ -185,6 +120,96 @@
                   >
                     <v-icon class="">mdi mdi-plus-circle</v-icon>
                   </v-btn>
+                </v-col>
+                <v-col
+                  cols="2"
+                  v-if="technician_id != null"
+                  class="pt-5"
+                  style="max-width: 160px"
+                >
+                  <v-select
+                    @change="getDataFromApi()"
+                    :items="[
+                      { text: 'All', value: '' },
+                      { text: 'Operator', value: 'security' },
+                      { text: 'Customer', value: 'customer' },
+                    ]"
+                    v-model="filterRequestfrom"
+                    outlined
+                    dense
+                    height="20px"
+                    class="employee-schedule-search-box"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="2" style="max-width: 80px; margin-top: 10px">
+                  <v-menu bottom right>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        <v-icon dark-2 icon color="violet" small
+                          >mdi-printer-outline</v-icon
+                        >
+                        Print
+                      </span>
+                    </template>
+                    <v-list width="100" dense>
+                      <v-list-item @click="downloadOptions(`print`)">
+                        <v-list-item-title style="cursor: pointer">
+                          <v-row>
+                            <v-col cols="5"
+                              ><img
+                                style="padding-top: 5px"
+                                src="/icons/icon_print.png"
+                                class="iconsize"
+                            /></v-col>
+                            <v-col
+                              cols="7"
+                              style="padding-left: 0px; padding-top: 19px"
+                            >
+                              Print
+                            </v-col>
+                          </v-row>
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="downloadOptions('download')">
+                        <v-list-item-title style="cursor: pointer">
+                          <v-row>
+                            <v-col cols="5"
+                              ><img
+                                style="padding-top: 5px"
+                                src="/icons/icon_pdf.png"
+                                class="iconsize"
+                            /></v-col>
+                            <v-col
+                              cols="7"
+                              style="padding-left: 0px; padding-top: 19px"
+                            >
+                              PDF
+                            </v-col>
+                          </v-row>
+                        </v-list-item-title>
+                      </v-list-item>
+
+                      <v-list-item @click="downloadOptions('excel')">
+                        <v-list-item-title style="cursor: pointer">
+                          <v-row>
+                            <v-col cols="5"
+                              ><img
+                                style="padding-top: 5px"
+                                src="/icons/icon_excel.png"
+                                class="iconsize"
+                            /></v-col>
+                            <v-col
+                              cols="7"
+                              style="padding-left: 0px; padding-top: 19px"
+                            >
+                              EXCEL
+                            </v-col>
+                          </v-row>
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
                 </v-col>
               </v-row>
             </v-col>
@@ -326,9 +351,16 @@ export default {
     ReplyToTicket,
     ViewTicket,
   },
-  props: ["customer_id", "security_id", "technician_id"],
+  props: [
+    "customer_id",
+    "security_id",
+    "technician_id",
+    "status",
+    "filterWord",
+  ],
   data() {
     return {
+      filterRequestfrom: "",
       displayDateFilter: false,
       dialogViewTicket: false,
       editId: null,
@@ -482,6 +514,11 @@ export default {
           date_to: this.date_to,
           common_search: this.commonSearch,
           sortBy: "alarm_start_datetime",
+          filterRequestfrom:
+            this.filterRequestfrom == "" ? null : this.filterRequestfrom,
+
+          status: this.status ?? null,
+          filterWord: this.filterWord ?? null,
         },
       };
 

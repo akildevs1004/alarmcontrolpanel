@@ -194,8 +194,8 @@
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
         <v-card class="elevation-2">
-          <v-card-text>
-            <v-row class="mt-0">
+          <v-card-text class="mt-5">
+            <v-row class="mt-0" v-if="!eventFilter">
               <v-col
                 v-if="sensorItems.length > 1"
                 cols="4"

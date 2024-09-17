@@ -16,3 +16,10 @@ Route::get('download_ticket_response_atachment/{id}/{file_name}', [TicketRespons
 
 
 Route::post('update_ticket_read_status', [TicketResponsesController::class, 'updateTicketReadStatus']);
+
+Route::get("technician_tickets_stats", [TicketsController::class, 'technicianDashboardTicketStats']);
+Route::get("technician_tickets_monthly_stats", [TicketsController::class, 'technicianDashboardMonthlyTicketStats']);
+Route::get("technician_tickets_today_stats", [TicketsController::class, 'technicianDashboardTodayTicketStats']);
+
+
+Route::get("technician_tickets_pending_days_stats", [TicketsController::class, "technicianDashboardPendingMorethanDaysStats"]);
