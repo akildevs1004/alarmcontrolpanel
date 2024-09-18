@@ -434,6 +434,7 @@ export default {
         text: "Customer",
         value: "primary_contact.first_name",
       },
+
       {
         text: "Burglary",
         value: "burglary",
@@ -450,10 +451,10 @@ export default {
         text: "Water",
         value: "water",
       },
-      // {
-      //   text: "Temp",
-      //   value: "temperature",
-      // },
+      {
+        text: "Temp",
+        value: "temperature",
+      },
       {
         text: "Options",
         value: "options",
