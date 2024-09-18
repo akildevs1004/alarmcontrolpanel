@@ -143,7 +143,7 @@
                   </v-select>
                 </v-col>
                 <v-col cols="2" style="max-width: 80px; margin-top: 10px">
-                  <v-menu bottom right>
+                  <!-- <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
                         <v-icon dark-2 icon color="violet" small
@@ -209,7 +209,7 @@
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
-                  </v-menu>
+                  </v-menu> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -249,7 +249,7 @@
             </template>
             <template v-slot:item.customer="{ item }">
               <div
-                :class="item.is_customer_read ? '' : 'bold'"
+                :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-if="item.customer"
               >
                 Customer
@@ -267,7 +267,7 @@
                 </div>
               </div>
               <div
-                :class="item.is_technician_read ? '' : 'bold'"
+                :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-else-if="item.technician"
               >
                 Technician
