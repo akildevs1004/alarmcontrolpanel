@@ -235,7 +235,7 @@
                 "
               >
                 <img
-                  title="Burglary"
+                  title="Temperature"
                   style="width: 30px; float: left"
                   src="/device-icons/temperature.png"
                 />
@@ -249,7 +249,7 @@
                 "
               >
                 <img
-                  title="Burglary"
+                  title="Medical"
                   style="width: 30px; float: left"
                   src="/device-icons/medical.png"
                 />
@@ -261,7 +261,7 @@
                 v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)"
               >
                 <img
-                  title="Burglary"
+                  title="Fire"
                   style="width: 30px; float: left"
                   src="/device-icons/fire.png"
                 />
@@ -273,7 +273,7 @@
                 v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)"
               >
                 <img
-                  title="Burglary"
+                  title="Water"
                   style="width: 30px; float: left"
                   src="/device-icons/water.png"
                 />
