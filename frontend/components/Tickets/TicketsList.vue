@@ -424,13 +424,9 @@ export default {
     this.getDataFromApi();
 
     setInterval(() => {
-      if (
-        this.$route.name == "alarm-view-customer-id" ||
-        this.$route.name == "alarm-armedreports"
-      ) {
+      if (this.dialogViewTicket == false && this.dialogReply == false)
         this.getDataFromApi();
-      }
-    }, 1000 * 20);
+    }, 1000 * 30);
   },
 
   methods: {
