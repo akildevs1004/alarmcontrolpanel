@@ -49,16 +49,10 @@ export default ({ app, $axios, store }, inject) => {
         config.params = {
           ...config.params,
           filter_customers_list: customersList,
-          user_type: user && user.user_type,
+          //user_type: user && user.user_type,
         };
       }
     }
-
-    // config.params = {
-    //   ...config.params,
-
-    //   user_type: user && user.user_type,
-    // };
 
     return config; // Return the modified config
   });

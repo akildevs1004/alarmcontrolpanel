@@ -248,14 +248,17 @@
               </div>
             </template>
             <template v-slot:item.customer="{ item }">
-              <div :class="item.is_read ? '' : 'bold'" v-if="item.customer">
+              <div
+                :class="item.is_customer_read ? '' : 'bold'"
+                v-if="item.customer"
+              >
                 Customer
                 <div class="secondary-value">
                   {{ item.customer.building_name }}
                 </div>
               </div>
               <div
-                :class="item.is_read ? '' : 'bold'"
+                :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-else-if="item.security"
               >
                 Operator
@@ -264,7 +267,7 @@
                 </div>
               </div>
               <div
-                :class="item.is_read ? '' : 'bold'"
+                :class="item.is_technician_read ? '' : 'bold'"
                 v-else-if="item.technician"
               >
                 Technician
@@ -278,7 +281,7 @@
               <div>{{ item.responses?.length || 0 }}</div>
             </template>
             <template v-slot:item.last_active_datetime="{ item }">
-              <div :class="item.is_read ? '' : 'bold'">
+              <div>
                 {{ $dateFormat.formatDateMonthYear(item.last_active_datetime) }}
               </div>
             </template>
@@ -433,6 +436,17 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    getIsReadStatus(item) {
+      if (this.$auth.user.user_type == "technician") {
+        return item.is_technician_read;
+      }
+      if (this.$auth.user.user_type == "security") {
+        return item.is_security_read;
+      }
+      if (this.$auth.user.user_type == "customer") {
+        return item.is_customer_read;
+      }
     },
     viewTicket(item) {
       this.editItem = item;

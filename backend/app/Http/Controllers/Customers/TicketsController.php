@@ -116,7 +116,10 @@ class TicketsController extends Controller
         $columns = ['company_id', 'customer_id', 'security_id', 'subject',  'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
-        $selected["is_read"] = false;
+        //$selected["is_read"] = false;
+        $selected["is_technician_read"] = false;
+        $selected["is_customer_read"] = true;
+        $selected["is_security_read"] = true;
 
 
         $model = Tickets::create($selected);
@@ -258,19 +261,17 @@ class TicketsController extends Controller
     }
     public function ticketsUnreadNotifications(Request $request)
     {
-        $model = Tickets::where("company_id", $request->company_id)
-
-            ->where("is_read", false);
+        $model = Tickets::where("company_id", $request->company_id);
 
         if ($request->filled("technician_id")) {
 
-            $model->orderBy("created_datetime", "desc");
+            $model->where("is_technician_read", false)->orderBy("created_datetime", "desc");
 
             return $model->get();
         }
         if ($request->filled("customer_id")) {
 
-            $model->where("customer_id", $request->customer_id);
+            $model->where("is_customer_read", false)->where("customer_id", $request->customer_id);
             $model->orderBy("created_datetime", "desc");
 
             return $model->get();
@@ -278,7 +279,7 @@ class TicketsController extends Controller
 
         if ($request->filled("security_id")) {
 
-            $model->where("security_id", $request->security_id);
+            $model->where("is_security_read", false)->where("security_id", $request->security_id);
             $model->orderBy("created_datetime", "desc");
 
             return $model->get();

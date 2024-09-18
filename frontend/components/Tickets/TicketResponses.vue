@@ -119,7 +119,7 @@ export default {
       let options = {
         params: {
           ticket_id: ticket.id,
-
+          user_type: this.$auth.user.user_type,
           is_read_status: true,
         },
       };
@@ -138,6 +138,7 @@ export default {
           ticket_id: item.ticket_id,
           ticket_response_id: item.id,
           is_read_status: true,
+          user_type: this.$auth.user.user_type,
         },
       };
 

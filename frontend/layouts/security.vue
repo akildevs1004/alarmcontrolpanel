@@ -1232,9 +1232,10 @@ export default {
     },
 
     loadHeaderNotificationTicketMenu() {
+      console.log("this.isBackendRequestOpen", this.isBackendRequestOpen);
       if (this.isBackendRequestOpen) return false;
 
-      if (!this.$auth.user?.customer?.id) return false;
+      if (!this.$auth.user?.security?.id) return false;
 
       this.isBackendRequestOpen = true;
       this.key = this.key + 1;
@@ -1259,9 +1260,9 @@ export default {
 
           data.forEach((element) => {
             let title = "  ";
-            if (element.customer) {
-              title = title + " Customer: " + element.customer.building_name;
-            }
+            // if (element.customer) {
+            //   title = title + " Customer: " + element.customer.building_name;
+            // }
             if (element.security) {
               title =
                 title +

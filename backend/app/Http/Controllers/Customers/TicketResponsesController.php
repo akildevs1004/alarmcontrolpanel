@@ -50,13 +50,33 @@ class TicketResponsesController extends Controller
         $columns = ['company_id', 'ticket_id',  'customer_id', 'technician_id', 'security_id', 'technician_id', 'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
-        $selected["is_read"] = false;
-        $model = TicketResponses::create($selected);
+        //$selected["is_read"] = false;
 
+        $ticketRead["is_technician_read"] = true;
+        $ticketRead["is_security_read"] = true;
+        $ticketRead["is_customer_read"] = true;
+
+
+
+        if ($request->filled("security_id")) {
+            $ticketRead["is_technician_read"] = false;
+        } else if ($request->filled("customer_id")) {
+            $ticketRead["is_technician_read"] = false;
+        } else if ($request->filled("technician_id")) {
+            $ticketRead["is_security_read"] = false;
+            $ticketRead["is_customer_read"] = false;
+        }
+
+        $selected["is_read"] = false;
+
+
+
+        $model = TicketResponses::create($selected);
+        //closed status 
         if ($request->status == 0) {
             Tickets::where("id", $request->ticket_id)->update(["status" => 0, "updated_datetime" => date("Y-m-d H:i:s")]);
         }
-        Tickets::where("id", $request->ticket_id)->update(["is_read" => false]);
+        Tickets::where("id", $request->ticket_id)->update($ticketRead);
 
 
         $insertedId = $model->id;
@@ -154,12 +174,36 @@ class TicketResponsesController extends Controller
     {
 
 
-        if ($request->filled("ticket_response_id")) {
+
+
+        // if ($request->filled("ticket_response_id")) {
+        // }
+        // if ($request->filled("ticket_id")) {
+        //     TicketResponses::where("ticket_id", $request->ticket_id)->update(["is_read" => true]);
+        //     Tickets::where("id", $request->ticket_id)->update(["is_read" => true]);
+        // }
+
+
+        TicketResponses::where("ticket_id", $request->ticket_id)->update(["is_read" => true]);
+        if ($request->filled("user_type")) {
+            $ticketRead = [];
+            // $ticketRead["is_technician_read"] = true;
+            // $ticketRead["is_security_read"] = true;
+            // $ticketRead["is_customer_read"] = true;
+            // Tickets::where("id", $request->ticket_id)->update($ticketRead);
+            if ($request->user_type == "security") {
+                Tickets::where("id", $request->ticket_id)->update(["is_security_read" => true]);
+            }
+            if ($request->user_type == "customer") {
+                Tickets::where("id", $request->ticket_id)->update(["is_customer_read" => true]);
+            }
+            if ($request->user_type == "technician") {
+                Tickets::where("id", $request->ticket_id)->update(["is_technician_read" => true]);
+            }
         }
-        if ($request->filled("ticket_id")) {
-            TicketResponses::where("ticket_id", $request->ticket_id)->update(["is_read" => true]);
-            Tickets::where("id", $request->ticket_id)->update(["is_read" => true]);
-        }
+
+
+
 
 
         return $this->response("Updated Ticket Details", null, true);

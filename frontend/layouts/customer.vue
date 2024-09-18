@@ -1252,9 +1252,9 @@ export default {
 
           data.forEach((element) => {
             let title = "  ";
-            if (element.customer) {
-              title = title + " Customer: " + element.customer.building_name;
-            }
+            // if (element.customer) {
+            //   title = title + " Customer: " + element.customer.building_name;
+            // }
             if (element.security) {
               title =
                 title +
