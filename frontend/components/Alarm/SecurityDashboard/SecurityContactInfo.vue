@@ -7,10 +7,10 @@
     </div>
     <v-dialog v-model="dialogNotes" max-width="700px">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense>Notes</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Notes</span>
           <v-spacer></v-spacer>
-          <v-icon @click="dialogNotes = false" outlined>
+          <v-icon style="color: black" @click="dialogNotes = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

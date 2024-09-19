@@ -31,6 +31,7 @@ use App\Models\Device;
 use App\Models\DeviceActivesettings;
 use App\Models\Employee;
 use App\Models\ReportNotification;
+use App\Models\SecurityCustomers;
 use App\Models\Shift;
 
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log as Logger;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Document\Security;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
@@ -50,6 +52,9 @@ use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 // });
 
 Route::get("updatearmedCompanyIds", function (Request $request) {
+
+
+
     (new ApiAlarmDeviceSensorLogsController())->updateArmedTableCompanyLogs();
 
     (new ApiAlarmDeviceSensorLogsController())->updateDisarmTableCompanyLogs();

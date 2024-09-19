@@ -7,7 +7,7 @@
 <script>
 import CustomersAlarmMap from "../../components/Alarm/Map/CustomersAlarmMap.vue";
 export default {
-  layout: "technician",
+  layout: "default",
   components: { CustomersAlarmMap },
 };
 </script>

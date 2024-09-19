@@ -753,6 +753,15 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_customersmap: {
+          elevation: 0,
+          selected: "",
+        },
+        alarm_allevents: {
+          elevation: 0,
+          selected: "",
+        },
+
         alarm_alarms: {
           elevation: 0,
           selected: "",
@@ -774,6 +783,10 @@ export default {
           selected: "",
         },
         alarm_armed_reports: {
+          elevation: 0,
+          selected: "",
+        },
+        alarm_devices: {
           elevation: 0,
           selected: "",
         },
@@ -1031,6 +1044,12 @@ export default {
     setTopmenuHilighter() {
       const routeMap = {
         "alarm-map": { name: "alarm_map", path: "/alarm/map" },
+
+        "alarm-customersmap": {
+          name: "alarm_customersmap",
+          path: "/alarm/customersmap",
+        },
+
         "alarm-allevents": {
           name: "alarm_allevents",
           path: "/alarm/allevents",
@@ -1056,6 +1075,10 @@ export default {
         "alarm-armedreports": {
           name: "alarm_armed_reports",
           path: "/alarm/armedreports",
+        },
+        "alarm-devices": {
+          name: "alarm_devices",
+          path: "/alarm/devices",
         },
 
         settings: {

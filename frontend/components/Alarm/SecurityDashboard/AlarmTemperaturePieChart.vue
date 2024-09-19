@@ -2,10 +2,14 @@
   <div style="padding: 0px; width: 100%; height: auto">
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense>Temperature Events</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Temperature Events</span>
           <v-spacer></v-spacer>
-          <v-icon @click="dialogEventsList = false" outlined>
+          <v-icon
+            style="color: black"
+            @click="dialogEventsList = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

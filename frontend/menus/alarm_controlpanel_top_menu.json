@@ -9,15 +9,15 @@
   {
     "icon": "mdi-clipboard-text-clock",
     "title": "Map",
-    "to": "/alarm/map",
-    "menu": "alarm_map",
+    "to": "/alarm/customersmap",
+    "menu": "alarm_customersmap",
     "module": "topmenu"
   },
   {
     "icon": "mdi-clock-outline",
     "title": "Alarms",
     "to": "/alarm/allevents",
-    "menu": "alarm_alarms",
+    "menu": "alarm_allevents",
     "module": "topmenu"
   },
   {
@@ -46,6 +46,13 @@
     "title": "Armed",
     "to": "/alarm/armedreports",
     "menu": "alarm_armed_reports",
+    "module": "topmenu"
+  },
+  {
+    "icon": "mdi mdi-calendar-star-four-points",
+    "title": "Devices",
+    "to": "/alarm/devices",
+    "menu": "alarm_devices",
     "module": "topmenu"
   },
   {

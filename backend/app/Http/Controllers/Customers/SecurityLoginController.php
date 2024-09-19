@@ -19,7 +19,7 @@ class SecurityLoginController extends Controller
      */
     public function index(Request $request)
     {
-        $model = SecurityLogin::with(["user"])->where("company_id", $request->company_id);
+        $model = SecurityLogin::with(["user", "customersAssigned"])->where("company_id", $request->company_id);
 
         $model->when($request->filled("common_search"), function ($q) use ($request) {
 
@@ -34,6 +34,15 @@ class SecurityLoginController extends Controller
             });
         });
         return $model->orderByDesc('id')->paginate($request->perPage);;
+    }
+
+    public function securityDropdownlist(Request $request)
+    {
+
+        $model = SecurityLogin::where("company_id", $request->company_id);
+        $model->orderBy("first_name", "ASC");
+
+        return $model->get();
     }
 
     /**

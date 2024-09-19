@@ -1,7 +1,7 @@
 <template>
   <div v-if="can(`change_request`)">
     <div class="text-center ma-2">
-      <v-snackbar v-model="snackbar" top="top" color="purple" elevation="24">
+      <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
       </v-snackbar>
     </div>
@@ -52,7 +52,52 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
+    <v-dialog
+      v-model="dialogAssignSecurity"
+      width="300px"
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"> Assign Operator</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              dialogAssignSecurity = false;
+              closeCustomerDialog();
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <v-select
+            v-model="security_id"
+            label="Select Operator"
+            height="20"
+            class="employee-schedule-search-box pt-8"
+            outlined
+            dense
+            :items="securityList"
+            item-text="full_name"
+            item-value="id"
+            clearable
+          >
+          </v-select>
+          <v-col cols="12" class="text-center pt-0"
+            ><v-btn
+              dense
+              class="primary"
+              @click="updateCustomerSecurityId()"
+              small
+              >Submit</v-btn
+            ></v-col
+          >
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col>
         <v-card elevation="0" class="mt-2">
@@ -80,6 +125,25 @@
             </v-btn>
 
             <v-spacer></v-spacer>
+            <span
+              style="padding-top: 26px; padding-right: 14px; max-width: 250px"
+            >
+              <v-select
+                v-model="filterSecuritymapped"
+                label="Operators"
+                height="20"
+                class="employee-schedule-search-box"
+                style="padding-top: 7px"
+                outlined
+                dense
+                :items="[{ full_name: 'All', id: '' }, ...securityList]"
+                item-text="full_name"
+                item-value="id"
+                @change="getDataFromApi()"
+                clearable
+              >
+              </v-select>
+            </span>
             <span style="width: 180px"
               ><v-text-field
                 style="padding-top: 7px"
@@ -202,6 +266,7 @@
                 {{ $dateFormat.format_date_month_name_year(item.start_date) }}
               </small>
             </template>
+
             <template v-slot:item.building_type="{ item }">
               <div>
                 {{ getBuildingTypeName(item.building_type_id) }}
@@ -209,6 +274,14 @@
               <small style="font-size: 12px; color: #6c7184">
                 {{ item.landmark }}
               </small>
+            </template>
+
+            <template v-slot:item.security="{ item }">
+              <div v-if="item.mappedsecurity">
+                {{ item.mappedsecurity.security_info.first_name }}
+                {{ item.mappedsecurity.security_info.last_name }}
+              </div>
+              <div v-else>---</div>
             </template>
 
             <template v-slot:item.burglary="{ item }">
@@ -310,7 +383,15 @@
                       View
                     </v-list-item-title>
                   </v-list-item> -->
-
+                  <v-list-item
+                    v-if="can('device_notification_contnet_view')"
+                    @click="changeSecurity(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small>mdi-account-tie </v-icon>
+                      Operator
+                    </v-list-item-title>
+                  </v-list-item>
                   <v-list-item
                     v-if="can('device_notification_contnet_delete')"
                     @click="deleteItem(item)"
@@ -343,6 +424,9 @@ export default {
     AlarmCustomerView,
   },
   data: () => ({
+    security_id: null,
+    dialogAssignSecurity: false,
+    filterSecuritymapped: "",
     key: 1,
     viewCustomerId: null,
     commonSearch: "",
@@ -418,6 +502,10 @@ export default {
         value: "building_name",
       },
       {
+        text: "Operator",
+        value: "security",
+      },
+      {
         text: "Type",
         value: "building_type",
       },
@@ -486,19 +574,21 @@ export default {
     buildingTypes: [],
     _id: null,
     isBackendRequestOpen: false,
+    securityList: [],
   }),
   computed: {},
-  mounted() {
+  async mounted() {
     this.tableHeight = window.innerHeight - 270;
     window.addEventListener("resize", () => {
       this.tableHeight = window.innerHeight - 270;
     });
     this.getDataFromApi();
-    this.getBuildingTypes();
   },
-  created() {
-    this._id = 4; //this.$route.params.id;
+  async created() {
     this.loading = true;
+
+    this.getSecurityList();
+    this.getBuildingTypes();
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -515,6 +605,12 @@ export default {
     },
   },
   methods: {
+    getSecurityList() {
+      let options = { params: { company_id: this.$auth.user.company_id } };
+      this.$axios.get("security-dropdownlist", options).then(({ data }) => {
+        this.securityList = data;
+      });
+    },
     getBuildingTypeName(id) {
       let filter = this.buildingTypes.filter(
         (buildingType) => buildingType.id == id
@@ -564,7 +660,31 @@ export default {
     viewItem2(item) {
       this.$router.push("/alarm/view-customer/" + item.id);
     },
+    updateCustomerSecurityId() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          security_id: this.security_id,
+          customer_id: this.selectedCustomer.id,
+        },
+      };
 
+      this.$axios
+        .post("security_customers_single_update", options.params)
+        .then((data) => {
+          this.getDataFromApi();
+          this.dialogAssignSecurity = false;
+          this.snackbar = true;
+          this.response = "Customer Details are updated successfully";
+        });
+    },
+    changeSecurity(customer) {
+      this.security_id = null;
+      if (customer.mappedsecurity)
+        this.security_id = customer.mappedsecurity.security_id;
+      this.selectedCustomer = customer;
+      this.dialogAssignSecurity = true;
+    },
     can(per) {
       return this.$pagePermission.can(per, this);
     },
@@ -590,6 +710,7 @@ export default {
           company_id: this.$auth.user.company_id,
           common_search: this.commonSearch,
           eventFilter: this.eventFilter,
+          filterSecuritymapped: this.filterSecuritymapped,
           // branch_id: this.branch_id,
           ...this.payload,
         },

@@ -33,7 +33,7 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Customers::with(["buildingtype", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             ->where("company_id", $request->company_id);
 
         $model->when($request->filled("customer_id"), function ($q) use ($request) {
@@ -43,6 +43,12 @@ class CustomersController extends Controller
             $q->where("end_date", "<", date("Y-m-d"));
         });
 
+        $model->when($request->filled("filterSecuritymapped"), function ($q) use ($request) {
+            $q->whereHas("mappedsecurity", function ($qq) use ($request) {
+
+                $qq->where("security_id", $request->filterSecuritymapped);
+            });
+        });
 
 
         $model->when($request->filled("common_search"), function ($q) use ($request) {
@@ -779,6 +785,24 @@ class CustomersController extends Controller
         }
         return $this->response('Customer Details are updated', null, true);
     }
+    public function SecurityCustomersSingleUpdate(Request $request)
+    {
+        if ($request->security_id == null) {
+            SecurityCustomers::where("customer_id", $request->customer_id)->delete();
+        } else   if ($request->filled("security_id") && $request->filled("customer_id")) {
+            SecurityCustomers::where("customer_id", $request->customer_id)->delete();
+
+
+            $data = [
+                "company_id" => $request->company_id,
+                "security_id" => $request->security_id,
+                "customer_id" => $request->customer_id
+            ];
+
+            SecurityCustomers::create($data);
+        }
+        return $this->response('Customer Details are updated', null, true);
+    }
     public function resetCustomerPin(Request $request)
     {
 
@@ -950,11 +974,11 @@ class CustomersController extends Controller
             ->where("company_id", $request->company_id);
         $model->withCount("alarm_events");
         $model->withCount("devicesOffline");
-        $model->when($request->filled("commonSearch"), function ($query) use ($request) {
+        $model->when($request->filled("common_search"), function ($query) use ($request) {
 
-            return $query->where("building_name", "ILIKE", "$request->commonSearch%")
-                ->orWhere("house_number", "ILIKE", "$request->commonSearch%")
-                ->orWhere("area", "ILIKE", "$request->commonSearch%");
+            return $query->where("building_name", "ILIKE", "$request->common_search%")
+                ->orWhere("house_number", "ILIKE", "$request->common_search%")
+                ->orWhere("area", "ILIKE", "$request->common_search%");
         });
 
         $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {

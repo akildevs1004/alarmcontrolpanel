@@ -5,6 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <CompAlarmDashboardStatistics />
 
     <AllEvents name="AllEvents1" :showFilters="true" />
   </div>
@@ -14,9 +15,20 @@
 import AllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 // import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
+import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
+import AlarmMedicalPieChart from "../../components/Alarm/SecurityDashboard/AlarmMedicalPieChart.vue";
+import AlarmTemperaturePieChart from "../../components/Alarm/SecurityDashboard/AlarmTemperaturePieChart.vue";
+
+import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFirePieChart.vue";
+
+import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
+import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
+import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashboardStatistics.vue";
+
 export default {
   components: {
     AllEvents,
+    CompAlarmDashboardStatistics,
   },
 
   data() {
@@ -28,7 +40,7 @@ export default {
       customer_id: null,
       snackbar: false,
       response: "",
-      key: "",
+      key: 1,
       eventId: "",
       dialogAddCustomerNotes: false,
       dialogNotesList: false,
@@ -67,6 +79,13 @@ export default {
         // { text: "Options", value: "options", sortable: false },
       ],
       items: [],
+      // onlineStats: {
+      //   Burglary: { online: 0, offline: 0 },
+      //   Water: { online: 0, offline: 0 },
+      //   Fire: { online: 0, offline: 0 },
+      //   Temperature: { online: 0, offline: 0 },
+      //   Medical: { online: 0, offline: 0 },
+      // },
     };
   },
   watch: {
@@ -84,6 +103,12 @@ export default {
     // },
   },
   created() {
+    // setInterval(() => {
+    //   if (this.$route.name == "alarm-allevents") {
+    //     this.key = this.key + 1;
+    //     this.getDatafromApi();
+    //   }
+    // }, 1000 * 30);
     // let today = new Date();
     // let monthObj = this.$dateFormat.monthStartEnd(today);
     // this.date_from = monthObj.first;
@@ -101,6 +126,19 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    // getDatafromApi() {
+    //   let options = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+    //     },
+    //   };
+
+    //   this.$axios
+    //     .get(`/security_device_live_stats_groupby`, options)
+    //     .then(({ data }) => {
+    //       this.onlineStats = data;
+    //     });
+    // },
     // viewNotes(item) {
     //   this.key = this.key + 1;
     //   this.eventId = item.id;

@@ -5,6 +5,7 @@ namespace App\Models\Customers;
 use App\Models\AlarmEvents;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Device;
+use App\Models\SecurityCustomers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,12 @@ class Customers extends Model
 
     protected $guarded = [];
     protected $with = ['devices', 'buildingtype',  'primary_contact', 'secondary_contact', "profilePictures"];
+
+    public function mappedsecurity()
+    {
+        return $this->hasOne(SecurityCustomers::class, "customer_id", "id");
+        //return $this->hasOne(SecurityCustomers::class);
+    }
 
 
     public function devices()

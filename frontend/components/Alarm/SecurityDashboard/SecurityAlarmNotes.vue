@@ -7,12 +7,12 @@
     </div>
     <v-dialog v-model="dialogNotes" max-width="700px" :key="key">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"
             >Alarm Notes - ID: {{ selectedItem?.alarm_id || "---" }}</span
           >
           <v-spacer></v-spacer>
-          <v-icon @click="dialogNotes = false" outlined>
+          <v-icon style="color: black" @click="dialogNotes = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

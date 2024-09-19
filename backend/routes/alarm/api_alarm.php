@@ -27,6 +27,7 @@ use App\Http\Controllers\DeviceZonesController;
 use App\Http\Controllers\PlottingController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
+use App\Models\Customers\SecurityLogin;
 use App\Models\DeviceArmedLogs;
 use App\Models\MapKey;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,10 @@ Route::get('customer_device_types', [CustomersController::class, 'customerDevice
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
 Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
 Route::post("security_customers_update", [CustomersController::class, "SecurityCustomersListUpdate"]);
+Route::post("security_customers_single_update", [CustomersController::class, "SecurityCustomersSingleUpdate"]);
+
+
+
 // Route::get('get_master_device_serial_numbers', [CustomersController::class, 'getMasterDeviceSerialNumbers']);
 Route::get('get_customer_new_serial_numbers', [CustomersController::class, 'getCustomerNewSerialNumbers']);
 
@@ -161,6 +166,8 @@ Route::post('plotting', [PlottingController::class, "store"]);
 //security 
 
 Route::apiResource('security', SecurityLoginController::class);
+Route::get("security-dropdownlist", [SecurityLoginController::class, "securityDropdownlist"]);
+
 
 
 
