@@ -160,6 +160,8 @@ class DeviceController extends Controller
             }
         });
 
+        $model->orderBy(request('sortBy') ?? "status_id", request('sort_by_desc') ? "desc" : "asc");
+        $model->orderBy(request('sortBy') ?? "armed_status", request('sort_by_desc') ? "asc" : "asc");
 
 
         if (!$request->sortBy)

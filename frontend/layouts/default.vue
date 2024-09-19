@@ -899,6 +899,7 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
+      if (!this.$route.name.includes("alarm")) return false;
       //this.loadHeaderNotificationMenu();
 
       //console.log("wait5Minutes", this.wait5Minutes);
