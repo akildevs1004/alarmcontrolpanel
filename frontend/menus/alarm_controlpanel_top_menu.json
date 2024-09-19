@@ -27,27 +27,7 @@
     "menu": "alarm_customers",
     "module": "topmenu"
   },
-  {
-    "icon": "mdi mdi-calendar-account",
-    "title": "Operators",
-    "to": "/alarm/security",
-    "menu": "alarm_security",
-    "module": "topmenu"
-  },
-  {
-    "icon": "mdi mdi-calendar-account",
-    "title": "Technicians",
-    "to": "/alarm/technicians",
-    "menu": "alarm_technicians",
-    "module": "topmenu"
-  },
-  {
-    "icon": "mdi mdi-calendar-star-four-points",
-    "title": "Armed",
-    "to": "/alarm/armedreports",
-    "menu": "alarm_armed_reports",
-    "module": "topmenu"
-  },
+
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Devices",

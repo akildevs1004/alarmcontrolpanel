@@ -373,12 +373,35 @@
   {
     "icon": "mdi-cellphone-text",
     "title": "Devices",
-    "to": "/devices",
+    "to": "/alarm/devices",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "settings"
   },
-
+  {
+    "icon": "mdi-account-tie",
+    "title": "Operators",
+    "to": "/alarm/security",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-briefcase-account",
+    "title": "Technicians",
+    "to": "/alarm/technicians",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-text-box-outline",
+    "title": "Armed Logs",
+    "to": "alarm/armedreports",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
   {
     "icon": "mdi-web-box",
     "title": "Web Logs",
