@@ -98,6 +98,14 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-card elevation="0">
+      <CompCustomersDashboardStatistics
+        name="CompCustomersDashboardStatistics1"
+        :key="222"
+        style="max-width: 99%"
+      />
+    </v-card>
     <v-row>
       <v-col>
         <v-card elevation="0" class="mt-2">
@@ -271,9 +279,9 @@
               <div>
                 {{ getBuildingTypeName(item.building_type_id) }}
               </div>
-              <small style="font-size: 12px; color: #6c7184">
+              <!-- <small style="font-size: 12px; color: #6c7184">
                 {{ item.landmark }}
-              </small>
+              </small> -->
             </template>
 
             <template v-slot:item.security="{ item }">
@@ -416,12 +424,13 @@
 import AlarmNewCustomer from "../../components/Alarm/NewCustomer.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
-
+import CompCustomersDashboardStatistics from "./CustomersTestCharts.vue";
 export default {
-  props: ["eventFilter"],
+  props: ["eventFilter", "graphs"],
   components: {
     AlarmNewCustomer,
     AlarmCustomerView,
+    CompCustomersDashboardStatistics,
   },
   data: () => ({
     security_id: null,
@@ -502,6 +511,10 @@ export default {
         value: "building_name",
       },
       {
+        text: "Building Type",
+        value: "building_type",
+      },
+      {
         text: "Operator",
         value: "security",
       },
@@ -515,7 +528,7 @@ export default {
       //   value: "area",
       // },
       {
-        text: "Member Since",
+        text: "Account Expiry",
         value: "created_date",
       },
       {
@@ -605,6 +618,11 @@ export default {
     },
   },
   methods: {
+    isDisplayGraphs() {
+      if (this.graphs) {
+        return this.graphs;
+      } else return true;
+    },
     getSecurityList() {
       let options = { params: { company_id: this.$auth.user.company_id } };
       this.$axios.get("security-dropdownlist", options).then(({ data }) => {

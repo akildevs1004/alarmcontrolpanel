@@ -397,10 +397,10 @@
   {
     "icon": "mdi-text-box-outline",
     "title": "Armed Logs",
-    "to": "alarm/armedreports",
+    "to": "/alarm/armedreports",
     "menu": "device_access",
     "module": "settings",
-    "top_menu_name": "settings"
+    "top_menu_name": "alarm_reports"
   },
   {
     "icon": "mdi-web-box",

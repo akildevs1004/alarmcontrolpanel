@@ -414,7 +414,7 @@ export default {
       //   value: "area",
       // },
       {
-        text: "Member Since",
+        text: "Account Expiry",
         value: "created_date",
       },
       {

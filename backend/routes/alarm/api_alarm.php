@@ -98,6 +98,10 @@ Route::get('security_device_alarm_medical_stats', [AlarmDashboardController::cla
 Route::get('security_device_alarm_water_stats', [AlarmDashboardController::class, 'alarmEventWaterStatistics']);
 Route::get('security_device_alarm_temperature_stats', [AlarmDashboardController::class, 'alarmEventTemperatureStatistics']);
 Route::get('security_device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
+Route::get('buildingtype_customer_stats', [AlarmDashboardController::class, 'buildingtypeCustomerStats']);
+Route::get('customers_accounts_expire_stats', [AlarmDashboardController::class, 'customersAccountsExpireStats']);
+
+
 
 
 //dashboard
@@ -116,6 +120,11 @@ Route::get('alarm_customer_statistics', [AlarmDashboardController::class, "alarm
 
 Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
 Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
+
+Route::get('customer_contract_expin30days_stats', [CustomersController::class, "customerContractExpin30daysStats"]);
+Route::get('customer_devices_types_stats', [CustomersController::class, "customerDevicesStats"]);
+
+
 
 
 

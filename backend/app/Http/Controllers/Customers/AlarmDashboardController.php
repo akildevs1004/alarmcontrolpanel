@@ -8,6 +8,7 @@ use App\Http\Requests\Customer\StoreRequest;
 use App\Models\AlarmEvents;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
+use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\User;
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+
+use function Aws\filter;
 
 class AlarmDashboardController extends Controller
 {
@@ -192,6 +195,44 @@ class AlarmDashboardController extends Controller
         });
         return ["active" => $events->clone()->where("alarm_status", 1)->count(), "closed" => $events->clone()->where("alarm_status", 0)->count()];
     }
+    public function buildingtypeCustomerStats(Request $request)
+    {
+
+        $BuildingTypes = CustomersBuildingTypes::all();
+
+        $groupCount = Customers::where('company_id', $request->company_id)
+            ->select('building_type_id', DB::raw('COUNT(id) as total_count'))
+            ->groupBy('building_type_id')
+            ->pluck('total_count', 'building_type_id'); // Pluck total_count with building_type_id as the key
+
+        $groupResults = [];
+
+        foreach ($BuildingTypes as $buildingType) {
+            $groupResults[] = ["name" => $buildingType->name, "count" => $groupCount->get($buildingType->id, 0)];
+        }
+
+        return $groupResults;
+    }
+
+    public function customersAccountsExpireStats(Request $request)
+    {
+
+        $businessTypes = CustomersBuildingTypes::all();
+
+        $groupCount = Customers::where('company_id', $request->company_id)
+            ->select('building_type_id', DB::raw('COUNT(id) as total_count'))
+            ->groupBy('building_type_id')
+            ->pluck('total_count', 'building_type_id'); // Pluck total_count with building_type_id as the key
+
+        $groupResults = [];
+
+        foreach ($businessTypes as $buildingType) {
+            $groupResults[] = ["name" => $buildingType->name, "count" => $groupCount->get($buildingType->id, 0)];
+        }
+
+        return $groupResults;
+    }
+
     public function alarmEventMedicalStatistics(Request $request)
     {
         $events = AlarmEvents::with(["category"])->where('company_id', $request['company_id'])
@@ -238,21 +279,21 @@ class AlarmDashboardController extends Controller
     public function getDeviceSensorStatistics(Request $request)
     {
 
-        // Fetch distinct device types
+
         $deviceTypes = Device::where('company_id', $request->company_id)
 
             ->distinct()
             ->pluck('device_type');
 
-        // Fetch sensor names
+
         $sensorNames = DeviceZones::whereHas('device', function ($query) use ($request) {
             $query->where('company_id', $request->company_id);
         })->pluck('sensor_name');
 
-        // Merge the two collections and get distinct values
+
         $mergedCollection = $deviceTypes->merge($sensorNames);
 
-        // Convert to array if needed
+
         $distinctValues = $mergedCollection->toArray();
         $item_counts = array();
 

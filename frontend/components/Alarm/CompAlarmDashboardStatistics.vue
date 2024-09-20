@@ -61,7 +61,11 @@
               style="pointer-events: none"
               rounded
               v-model="onlineStats.Burglary.percentage"
-              background-color="red"
+              :background-color="
+                onlineStats.Burglary.online + onlineStats.Burglary.offline == 0
+                  ? '#969696'
+                  : 'red'
+              "
               color="green"
               height="12"
             >
@@ -104,7 +108,11 @@
               style="pointer-events: none"
               rounded
               v-model="onlineStats.Medical.percentage"
-              background-color="red"
+              :background-color="
+                onlineStats.Medical.online + onlineStats.Medical.offline == 0
+                  ? '#969696'
+                  : 'red'
+              "
               color="green"
               height="12"
             >
@@ -147,7 +155,11 @@
               style="pointer-events: none"
               rounded
               v-model="onlineStats.Water.percentage"
-              background-color="red"
+              :background-color="
+                onlineStats.Water.online + onlineStats.Water.offline == 0
+                  ? '#969696'
+                  : 'red'
+              "
               color="green"
               height="12"
             >
@@ -190,7 +202,11 @@
               style="pointer-events: none"
               rounded
               v-model="onlineStats.Fire.percentage"
-              background-color="red"
+              :background-color="
+                onlineStats.Fire.online + onlineStats.Fire.offline == 0
+                  ? '#969696'
+                  : 'red'
+              "
               color="green"
               height="12"
             >
@@ -233,7 +249,13 @@
               style="pointer-events: none"
               rounded
               v-model="onlineStats.Temperature.percentage"
-              background-color="red"
+              :background-color="
+                onlineStats.Temperature.online +
+                  onlineStats.Temperature.offline ==
+                0
+                  ? '#969696'
+                  : 'red'
+              "
               color="#FFF"
               height="12"
             >
@@ -290,7 +312,6 @@ import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLiv
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
-  layout: "security",
   components: {
     AlarmBurglaryPieChart,
     AlarmTemperaturePieChart,
@@ -333,7 +354,10 @@ export default {
   },
   async created() {
     setInterval(() => {
-      if (this.$route.name == "security-dashboard") {
+      if (
+        this.$route.name == "security-dashboard" ||
+        this.$route.name == "alarm-allevents"
+      ) {
         this.key = this.key + 1;
         this.getDatafromApi();
       }

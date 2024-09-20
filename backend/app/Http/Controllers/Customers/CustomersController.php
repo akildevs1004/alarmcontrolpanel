@@ -19,6 +19,7 @@ use App\Models\SecurityCustomers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -1093,5 +1094,58 @@ class CustomersController extends Controller
             ->where("serial_number", "!=", null)
 
             ->get();
+    }
+    public function customerDevicesStats(Request $request)
+    {
+        $AlarmSensorTypes = AlarmSensorTypes::all();
+        //$AlarmSensorTypes = AlarmSensorTypes::limit(3)->get();
+
+        $groupCount = Device::where('company_id', $request->company_id)
+            ->select('device_type', DB::raw('COUNT(id) as total_count'))
+            ->groupBy('device_type')
+            ->pluck('total_count', 'device_type'); // Pluck total_count with building_type_id as the key
+
+        $groupResults = [];
+
+        foreach ($AlarmSensorTypes as $buildingType) {
+            $groupResults[] = ["name" => $buildingType->name, "count" => $groupCount->get($buildingType->name, 0)];
+        }
+
+        return $groupResults;
+
+        // return  $groupCount = Device::where('company_id', $request->company_id)
+
+
+        //     ->select('device_type', DB::raw('COUNT(id) as total_count'))
+        //     ->groupBy('device_type')
+        //     ->whereIn('device_type', ['Burglary', 'Medical', 'Temperature', 'Fire', 'Water'])
+        //     ->pluck('total_count', 'device_type');
+    }
+    public function customerContractExpin30daysStats(Request $request)
+    {
+
+        $today = now();
+        $thirtyDaysFromNow = now()->addDays(30);
+
+
+
+
+
+        $businessTypes = CustomersBuildingTypes::all();
+
+        $groupCount = Customers::where('company_id', $request->company_id)
+
+            ->whereBetween("end_date", [$today, $thirtyDaysFromNow])
+            ->select('building_type_id', DB::raw('COUNT(id) as total_count'))
+            ->groupBy('building_type_id')
+            ->pluck('total_count', 'building_type_id'); // Pluck total_count with building_type_id as the key
+
+        $groupResults = [];
+
+        foreach ($businessTypes as $buildingType) {
+            $groupResults[] = ["name" => $buildingType->name, "count" => $groupCount->get($buildingType->id, 0)];
+        }
+
+        return $groupResults;
     }
 }
