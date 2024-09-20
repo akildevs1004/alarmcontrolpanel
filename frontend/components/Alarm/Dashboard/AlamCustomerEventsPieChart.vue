@@ -41,7 +41,7 @@
         <v-row>
           <v-col cols="8"
             ><v-icon color="#7B1FA2">mdi mdi-square-medium</v-icon
-            >Burglary</v-col
+            >Intruder</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
             categories ? categories.burglary : 0
           }}</v-col>
@@ -58,10 +58,9 @@
         <v-divider color="#dddddd" />
         <v-row>
           <v-col cols="8"
-            ><v-icon color="#F57C00">mdi mdi-square-medium</v-icon
-            >Temperature</v-col
+            ><v-icon color="red">mdi mdi-square-medium</v-icon>Fire</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
-            categories ? categories.temperature : 0
+            categories ? categories.fire : 0
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
@@ -73,11 +72,13 @@
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />
+
         <v-row>
           <v-col cols="8"
-            ><v-icon color="#RED">mdi mdi-square-medium</v-icon>Fire</v-col
+            ><v-icon color="#F57C00">mdi mdi-square-medium</v-icon
+            >Temperature</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
-            categories ? categories.fire : 0
+            categories ? categories.temperature : 0
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" />

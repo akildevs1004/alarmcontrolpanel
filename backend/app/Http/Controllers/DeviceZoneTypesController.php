@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customers\AlarmSensorTypes;
+use App\Models\Customers\DeviceZoneTypes;
 use Illuminate\Http\Request;
 
-class AlarmSensorTypesController extends Controller
+class DeviceZoneTypesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,11 @@ class AlarmSensorTypesController extends Controller
      */
     public function index()
     {
-        return AlarmSensorTypes::orderBy('id', 'asc')->paginate($this->per_page ?? 10);
+        return DeviceZoneTypes::orderBy('id', 'asc')->paginate($this->per_page ?? 10);
+    }
+    public function zonetypesList()
+    {
+        return DeviceZoneTypes::orderBy('id', 'asc')->get();
     }
 
     /**
@@ -30,17 +34,17 @@ class AlarmSensorTypesController extends Controller
         //     $data["company_id"] = $request->company_id;
         // }
 
-        $verifyDuplicate = AlarmSensorTypes::where("name", $request->name);
+        $verifyDuplicate = DeviceZoneTypes::where("name", $request->name);
         if ($verifyDuplicate->count() == 0) {
-            $record = AlarmSensorTypes::create($data);
+            $record = DeviceZoneTypes::create($data);
 
             if ($record) {
-                return $this->response('New Sensor Type is  successfully added.', $record, true);
+                return $this->response('New Zone Type is  successfully added.', $record, true);
             } else {
-                return $this->response('New Sensor cannot add.', null, false);
+                return $this->response('New Zone Type cannot add.', null, false);
             }
         } else {
-            return $this->response('New Sensor is already Exist', null, false);
+            return $this->response('  Zone Type is already Exist', null, false);
         }
     }
 
@@ -58,10 +62,10 @@ class AlarmSensorTypesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
+     * @param  \App\Models\Customers\DeviceZoneTypes  $DeviceZoneTypes
      * @return \Illuminate\Http\Response
      */
-    public function show(AlarmSensorTypes $alarmSensorTypes)
+    public function show(DeviceZoneTypes $DeviceZoneTypes)
     {
         //
     }
@@ -69,10 +73,10 @@ class AlarmSensorTypesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
+     * @param  \App\Models\Customers\DeviceZoneTypes  $DeviceZoneTypes
      * @return \Illuminate\Http\Response
      */
-    public function edit(AlarmSensorTypes $alarmSensorTypes)
+    public function edit(DeviceZoneTypes $DeviceZoneTypes)
     {
         //
     }
@@ -81,7 +85,7 @@ class AlarmSensorTypesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
+     * @param  \App\Models\Customers\DeviceZoneTypes  $DeviceZoneTypes
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -92,25 +96,25 @@ class AlarmSensorTypesController extends Controller
 
 
 
-        $verifyDuplicate = AlarmSensorTypes::where("name", "=", $request->name)->where("id", "!=", $request->id);
+        $verifyDuplicate = DeviceZoneTypes::where("name", "=", $request->name)->where("id", "!=", $request->id);
 
         if ($verifyDuplicate->count() == 0) {
-            $record = AlarmSensorTypes::where("id", $request->id)->update(["name" => $request->name]);
+            $record = DeviceZoneTypes::where("id", $request->id)->update(["name" => $request->name]);
 
             if ($record) {
-                return $this->response('Sensor Type successfully updated.', null, true);
+                return $this->response('Zone Type successfully updated.', null, true);
             } else {
-                return $this->response('Sensor Type cannot updated.', null, false);
+                return $this->response('Zone Type cannot updated.', null, false);
             }
         } else {
-            return $this->response('Sensor Type Already Exist', null, false);
+            return $this->response('Zone Type Already Exist', null, false);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customers\AlarmSensorTypes  $alarmSensorTypes
+     * @param  \App\Models\Customers\DeviceZoneTypes  $DeviceZoneTypes
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -118,10 +122,10 @@ class AlarmSensorTypesController extends Controller
 
 
         if ($request->filled('id')) {
-            AlarmSensorTypes::where("id", $request->id)->delete();
+            DeviceZoneTypes::where("id", $request->id)->delete();
         }
 
-        $this->response("Sensor name Deleted Successfully", null, true);
+        $this->response("Zone Type name Deleted Successfully", null, true);
 
         //
     }

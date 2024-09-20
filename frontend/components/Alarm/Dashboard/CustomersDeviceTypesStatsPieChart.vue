@@ -61,20 +61,26 @@
         "
       >
         <v-row
+          style="height: 25px"
           :key="'buildingtype' + index"
           v-for="(item, index) in chartOptions.labels"
         >
-          <v-col cols="12" style="padding: 0px; margin: 0px">
+          <v-col
+            cols="12"
+            style="padding: 0px; margin: 0px; vertical-align: middle"
+          >
             <v-row style="padding: 0px; margin: 0px">
               <v-col style="padding: 0px; margin: 0px" cols="8"
-                ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>
+                ><v-icon :color="chartOptions.colors[index]" size="30px"
+                  >mdi mdi-square-medium</v-icon
+                >
                 {{ chartOptions.labels[index] }}</v-col
               ><v-col style="padding: 0px; margin: 0px" cols="4">
                 {{ chartOptions.series[index] }}
               </v-col>
             </v-row>
             <v-divider
-              style="width: 90%"
+              style="width: 90%; margin-top: -3px"
               v-if="index < chartOptions.labels.length - 1"
               color="#dddddd"
             />
@@ -112,7 +118,18 @@ export default {
           margin: 0,
         },
 
-        colors: ["#92d050", "#ffc000", "#ff0000"],
+        colors: [
+          "#033F9B",
+          "#D35400",
+          "#3E0079",
+          "#DE3AFF",
+          "#797D7F",
+          "#7B1FA2",
+          "#8BC34A",
+          "#F57C00",
+          "#4A90E2",
+          "red",
+        ],
 
         series: [],
         chart: {

@@ -37,7 +37,7 @@
             cols="4"
             class="text-center"
             style="color: #fff; font-size: 20px"
-            >Building Type: {{ building_type_name ?? "---" }} </v-col
+            >Customer Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
             <v-btn @click="gotoCustomers()" color="primary" dense x-small>

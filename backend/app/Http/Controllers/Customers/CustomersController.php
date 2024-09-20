@@ -747,7 +747,7 @@ class CustomersController extends Controller
             ->where(function ($query) {
                 $query->where("device_type", "Temperature")
                     ->orWhere(function ($query) {
-                        $query->where("device_type", "Control Panel")
+                        $query->where("device_type", "Intruder")
                             ->whereHas('sensorzones', function ($query) {
                                 $query->where('sensor_name', 'Temperature');
                             });
@@ -855,17 +855,17 @@ class CustomersController extends Controller
     public function deviceTypes()
     {
         $data = [
-            ["name" => "Control Panel", "id" => "Control Panel"],
+            ["name" => "Intruder", "id" => "Intruder"],
             ["name" => "Burglary", "id" => "Burglary"],
             ["name" => "Medical", "id" => "Medical"],
             ["name" => "Temperature", "id" => "Temperature"],
             ["name" => "Water", "id" => "Water"],
-            ["name" => "Humidity", "id" => "Humidity"],
+            //["name" => "Humidity", "id" => "Humidity"],
             ["name" => "Fire", "id" => "Fire"],
 
-            ["name" => "All(Attendance and Access)", "id" => "all"],
-            ["name" => "Attendance", "id" => "Attendance"],
-            ["name" => "Access Control", "id" => "Access Control"],
+            // ["name" => "All(Attendance and Access)", "id" => "all"],
+            // ["name" => "Attendance", "id" => "Attendance"],
+            // ["name" => "Access Control", "id" => "Access Control"],
 
         ];
         return $data;
@@ -1097,11 +1097,12 @@ class CustomersController extends Controller
     }
     public function customerDevicesStats(Request $request)
     {
-        $AlarmSensorTypes = AlarmSensorTypes::all();
+        $AlarmSensorTypes = AlarmSensorTypes::orderBy('id', 'asc')->get();
         //$AlarmSensorTypes = AlarmSensorTypes::limit(3)->get();
 
         $groupCount = Device::where('company_id', $request->company_id)
             ->select('device_type', DB::raw('COUNT(id) as total_count'))
+
             ->groupBy('device_type')
             ->pluck('total_count', 'device_type'); // Pluck total_count with building_type_id as the key
 

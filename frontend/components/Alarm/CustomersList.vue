@@ -57,7 +57,7 @@
       width="300px"
       style="overflow: visible"
     >
-      <v-card>
+      <v-card :key="key">
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"> Assign Operator</span>
           <v-spacer></v-spacer>
@@ -77,16 +77,29 @@
             v-model="security_id"
             label="Select Operator"
             height="20"
-            class="employee-schedule-search-box pt-8"
+            class="employee-schedule-search-box11111111 pt-8"
             outlined
             dense
             :items="securityList"
             item-text="full_name"
             item-value="id"
             clearable
+            @change="showCustomerOTPbox()"
           >
           </v-select>
-          <v-col cols="12" class="text-center pt-0"
+
+          <v-text-field
+            v-if="showCustomerOTP"
+            label="Customer PIN number"
+            dense
+            small
+            outlined
+            type="number"
+            v-model="customerContactPIN"
+            hide-details
+          ></v-text-field>
+          <div style="color: red">{{ error_messages }}</div>
+          <v-col cols="12" class="text-center pt-5"
             ><v-btn
               dense
               class="primary"
@@ -433,6 +446,9 @@ export default {
     CompCustomersDashboardStatistics,
   },
   data: () => ({
+    error_messages: "",
+    showCustomerOTP: false,
+    customerContactPIN: "",
     security_id: null,
     dialogAssignSecurity: false,
     filterSecuritymapped: "",
@@ -511,7 +527,7 @@ export default {
         value: "building_name",
       },
       {
-        text: "Building Type",
+        text: "Customer Type",
         value: "building_type",
       },
       {
@@ -646,6 +662,15 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+
+    showCustomerOTPbox() {
+      this.error_messages = "";
+      if (this.security_id == 1) {
+        this.showCustomerOTP = true;
+      } else {
+        this.showCustomerOTP = false;
+      }
+    },
     getExpiryDatesCountColor(date) {
       const today = new Date();
 
@@ -679,6 +704,27 @@ export default {
       this.$router.push("/alarm/view-customer/" + item.id);
     },
     updateCustomerSecurityId() {
+      if (this.showCustomerOTP) {
+        this.error_messages = "";
+        if (this.customerContactPIN == "") {
+          this.error_messages = "Customer Verification is required";
+          return false;
+        } else {
+          if (
+            this.selectedCustomer.primary_contact.alarm_stop_pin ==
+              this.customerContactPIN ||
+            this.selectedCustomer.secondary_contact.alarm_stop_pin ==
+              this.customerContactPIN
+          ) {
+            this.error_messages = "";
+          } else {
+            this.error_messages = "PIN number is not a valid";
+
+            return false;
+          }
+        }
+      }
+
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
@@ -701,6 +747,9 @@ export default {
       if (customer.mappedsecurity)
         this.security_id = customer.mappedsecurity.security_id;
       this.selectedCustomer = customer;
+      this.customerContactPIN = "";
+      this.error_messages = "";
+      this.key += 1;
       this.dialogAssignSecurity = true;
     },
     can(per) {

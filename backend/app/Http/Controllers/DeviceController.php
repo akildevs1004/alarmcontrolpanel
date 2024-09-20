@@ -51,7 +51,7 @@ class DeviceController extends Controller
     {
         $result1 = DeviceZones::whereIn('device_id', request('device_ids', []))->get(["id", "sensor_name as label", "device_id"])->toArray();
 
-        $result2 = Device::whereIn('id', request('device_ids', []))->where("device_type", "!=", "Control Panel")->get(["id", "device_type as label", "id as device_id"])->toArray();
+        $result2 = Device::whereIn('id', request('device_ids', []))->where("device_type", "!=", "Intruder")->get(["id", "device_type as label", "id as device_id"])->toArray();
 
         return array_merge(($result1), ($result2));
     }

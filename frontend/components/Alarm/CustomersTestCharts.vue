@@ -4,20 +4,20 @@
       <v-col cols="3" class="pr-0" style="max-width: 25%">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>
-            <CustomersTypePieChart
+            <CustomersDeviceStatsPieChart
               v-if="key"
               :key="key"
-              :name="'CustomersTypePieChart'"
+              :name="'CustomersDeviceStatsPieChart'"
           /></v-card-text>
         </v-card>
       </v-col>
       <v-col cols="3" class="pr-0" style="max-width: 25%">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>
-            <CustomersExpirein30daysPieChart
+            <CustomersTypePieChart
               v-if="key"
               :key="key"
-              :name="'CustomersExpirein30daysPieChart'"
+              :name="'CustomersTypePieChart'"
             />
           </v-card-text>
         </v-card>
@@ -25,10 +25,10 @@
       <v-col cols="3" class="pr-0">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>
-            <CustomersDeviceStatsPieChart
+            <CustomersExpirein30daysPieChart
               v-if="key"
               :key="key"
-              :name="'CustomersDeviceStatsPieChart'"
+              :name="'CustomersExpirein30daysPieChart'"
             />
           </v-card-text>
         </v-card>

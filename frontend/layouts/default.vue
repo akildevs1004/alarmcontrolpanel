@@ -865,6 +865,8 @@ export default {
     this.getDeviceTypes();
     this.getSensorTypes();
 
+    this.getZoneTypes();
+
     this.getDeviceModels();
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
@@ -1139,6 +1141,19 @@ export default {
         });
 
         this.$store.commit("storeAlarmControlPanel/SensorTypes", data);
+      }
+    },
+    async getZoneTypes() {
+      if (!this.$store.state.storeAlarmControlPanel?.ZoneTypes) {
+        const { data } = await this.$axios.get("device_zone_types_dropdown", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        });
+
+        this.$store.commit("storeAlarmControlPanel/ZoneTypes", data);
+
+         
       }
     },
     async getDeviceTypes() {

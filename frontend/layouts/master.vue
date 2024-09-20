@@ -221,6 +221,12 @@ export default {
           permission: this.can("master"),
         },
         {
+          icon: "mdi-cellphone-text",
+          title: "Zone Types",
+          to: "/master/zone_types",
+          permission: this.can("master"),
+        },
+        {
           icon: "mdi-login-variant",
           title: "Web Logs",
           to: "/master/web_login_logs",

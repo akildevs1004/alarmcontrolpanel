@@ -12,7 +12,7 @@
           <v-col md="4" cols="12" sm="12" dense>
             <v-select
               :readonly="isReadableonly"
-              label="Building Type"
+              label="Customer Type"
               :items="buildingTypes"
               item-text="name"
               item-value="id"

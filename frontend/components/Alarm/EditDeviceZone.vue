@@ -49,7 +49,7 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-select
-                    :items="SensorTypes"
+                    :items="ZoneTypes"
                     item-value="id"
                     item-text="name"
                     label="Zone Type"
@@ -68,7 +68,7 @@
                   >
                 </v-col>
                 <v-col cols="12" dense>
-                  <v-text-field
+                  <!-- <v-text-field
                     label="Area (Ex:  01, 02)"
                     dense
                     small
@@ -79,13 +79,37 @@
                     hide-details
                     :readonly="!editable"
                     :filled="!editable"
-                  ></v-text-field>
+                  ></v-text-field> -->
+                  <v-select
+                    :items="areaList"
+                    item-value="id"
+                    item-text="name"
+                    label="Area"
+                    dense
+                    small
+                    outlined
+                    v-model="payload_security.area_code"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-select>
                   <span
                     v-if="primary_errors && primary_errors.area_code"
                     class="text-danger mt-2"
                     >{{ primary_errors.area_code[0] }}</span
                   >
                 </v-col>
+                <v-col cols="12">
+                  <v-select
+                    class="pb-0"
+                    hide-details
+                    v-model="payload_security.wired"
+                    outlined
+                    dense
+                    label="Wired/Wireless"
+                    :items="['Wired', 'Wireless']"
+                  ></v-select
+                ></v-col>
                 <v-col cols="12" dense>
                   <v-select
                     label="Is 24 Hour?"
@@ -137,7 +161,20 @@ export default {
   props: ["customer_id", "editId", "editable", "item", "deviceId"],
   data: () => ({
     show1: false,
-    SensorTypes: [],
+    areaList: [
+      { id: "01", name: "Area 1" },
+      { id: "02", name: "Area 2" },
+      { id: "03", name: "Area 3" },
+      { id: "04", name: "Area 4" },
+      { id: "05", name: "Area 5" },
+      { id: "06", name: "Area 6" },
+      { id: "07", name: "Area 7" },
+      { id: "08", name: "Area 8" },
+
+      { id: "09", name: "Area 9" },
+      { id: "10", name: "Area 10" },
+    ],
+    ZoneTypes: [],
     contactTypes: [],
     branchesList: [],
     startDateMenuOpen: "",
@@ -177,8 +214,8 @@ export default {
   }),
   created() {
     this.payload_security = {};
-    if (this.$store.state.storeAlarmControlPanel?.SensorTypes) {
-      this.SensorTypes = this.$store.state.storeAlarmControlPanel.SensorTypes;
+    if (this.$store.state.storeAlarmControlPanel?.ZoneTypes) {
+      this.ZoneTypes = this.$store.state.storeAlarmControlPanel.ZoneTypes;
     }
     // setTimeout(() => {
     //console.log(this.editAddressType);

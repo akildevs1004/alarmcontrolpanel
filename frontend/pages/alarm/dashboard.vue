@@ -5,9 +5,11 @@
         <v-card class="elevation-2" style="height: 200px">
           <!-- <v-card-title>Armed </v-card-title> -->
           <v-card-text>
-            <AlamDeviceCountPieChart
+            <AlamCustomerEventsPieChart
               :key="key"
-              :name="'AlamDeviceCountPieChart'"
+              :name="'AlamCustomerEventsPieChart'"
+              :date_from="date_from"
+              :date_to="date_to"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -37,11 +39,9 @@
         <v-card class="elevation-2" style="height: 200px">
           <!-- <v-card-title>Alarms</v-card-title> -->
           <v-card-text class="p-0">
-            <AlamCustomerEventsPieChart
+            <AlamDeviceCountPieChart
               :key="key"
-              :name="'AlamCustomerEventsPieChart'"
-              :date_from="date_from"
-              :date_to="date_to"
+              :name="'AlamDeviceCountPieChart'"
             />
           </v-card-text>
         </v-card>

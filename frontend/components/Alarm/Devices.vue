@@ -42,7 +42,7 @@
     <v-dialog v-model="dialogZones" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Control Panel - Sensors </span>
+          <span style="color: black">Intruder - Sensors </span>
           <v-spacer></v-spacer>
           <v-icon style="color: black" @click="dialogZones = false" outlined>
             mdi mdi-close-circle
@@ -181,7 +181,7 @@
           <div v-if="item.device_type">
             <v-img
               :title="item.device_type"
-              v-if="item.device_type == 'Control Panel'"
+              v-if="item.device_type == 'Intent'"
               style="width: 30px"
               src="/alarm-icons/device_type_access_control.png"
             >
@@ -304,7 +304,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can(`device_edit`) && item.device_type == 'Control Panel'"
+                v-if="can(`device_edit`) && item.device_type == 'Intent'"
                 @click="editZones(item)"
               >
                 <v-list-item-title style="cursor: pointer">

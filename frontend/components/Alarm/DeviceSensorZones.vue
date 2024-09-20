@@ -270,7 +270,10 @@ export default {
         text: "Area",
         value: "area_code",
       },
-
+      {
+        text: "Wired/Wireless",
+        value: "wired",
+      },
       {
         text: "24 Hours",
         value: "hours24",

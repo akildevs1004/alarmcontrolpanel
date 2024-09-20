@@ -24,6 +24,7 @@ use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\DeviceZonesController;
+use App\Http\Controllers\DeviceZoneTypesController;
 use App\Http\Controllers\PlottingController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
@@ -83,7 +84,17 @@ Route::post('create_device_zone', [CustomersController::class, 'createDeviceZone
 Route::delete('delete_device_zone', [CustomersController::class, 'deleteDeviceZoneIndividual']);
 
 Route::apiResource('alarm_sensor_types',  AlarmSensorTypesController::class);
+Route::get('device_zone_types_dropdown',  [DeviceZoneTypesController::class, "zonetypesList"]);
 
+
+
+
+Route::apiResource('device_zone_types', DeviceZoneTypesController::class);
+
+
+Route::post('update_zone_type', [DeviceZoneTypesController::class, 'update']);
+Route::post('create_zone_type', [DeviceZoneTypesController::class, 'create']);
+Route::delete('delete_zone_type', [DeviceZoneTypesController::class, 'destroy']);
 
 Route::post('update_sensor_type', [AlarmSensorTypesController::class, 'update']);
 Route::post('create_sensor_type', [AlarmSensorTypesController::class, 'create']);
