@@ -333,8 +333,8 @@ class CustomersController extends Controller
             'location' => 'required',
 
             'sensor_name' => 'required',
-            'area_code' => 'required',
-            'hours24' => 'required',
+            'area_code' => 'nullable',
+            'hours24' => 'nullable',
 
 
             'device_id' => 'required',
@@ -375,8 +375,8 @@ class CustomersController extends Controller
             'location' => 'required',
 
             'sensor_name' => 'required',
-            'area_code' => 'required',
-            'hours24' => 'required',
+            'area_code' => 'nullable',
+            'hours24' => 'nullable',
 
             'device_zone_id' => 'required',
             'device_id' => 'required',
@@ -442,7 +442,7 @@ class CustomersController extends Controller
                         "device_id" => $device_id,
                         "company_id" => $company_id,
                         "delay" =>  $value["delay"],
-                        "hours24" => $value["hours24"],
+                        "hours24" => $value["hours24"] ?? '',
                     ];
                     DeviceZones::create($data);
                 }

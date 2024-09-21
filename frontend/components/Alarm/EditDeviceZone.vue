@@ -81,7 +81,7 @@
                     :filled="!editable"
                   ></v-text-field> -->
                   <v-select
-                    :items="areaList"
+                    :items="[{ id: null, name: 'Default' }, ...areaList]"
                     item-value="id"
                     item-text="name"
                     label="Area"
@@ -110,7 +110,7 @@
                     :items="['Wired', 'Wireless']"
                   ></v-select
                 ></v-col>
-                <v-col cols="12" dense>
+                <!-- <v-col cols="12" dense>
                   <v-select
                     label="Is 24 Hour?"
                     dense
@@ -132,7 +132,7 @@
                     class="text-danger mt-2"
                     >{{ errors.hours24[0] }}</span
                   >
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-col>
           </v-row>

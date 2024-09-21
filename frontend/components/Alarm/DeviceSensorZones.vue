@@ -272,10 +272,10 @@ export default {
         text: "Wired/Wireless",
         value: "wired",
       },
-      {
-        text: "24 Hours",
-        value: "hours24",
-      },
+      // {
+      //   text: "24 Hours",
+      //   value: "hours24",
+      // },
       {
         text: "Options",
         value: "options",
