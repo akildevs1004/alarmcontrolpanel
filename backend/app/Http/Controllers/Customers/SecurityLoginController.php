@@ -33,7 +33,7 @@ class SecurityLoginController extends Controller
                 $qwhere->orWhereHas("user",  fn(Builder $query) => $query->where("email", "ILIKE", "%$request->common_search%"));
             });
         });
-        return $model->orderByDesc('id')->paginate($request->perPage);;
+        return $model->orderBy('id', 'ASC')->paginate($request->perPage);;
     }
 
     public function securityDropdownlist(Request $request)

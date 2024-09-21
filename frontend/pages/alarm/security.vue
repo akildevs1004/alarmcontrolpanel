@@ -7,10 +7,10 @@
     </div>
     <v-dialog v-model="dialogSecurityCustomers" max-width="800px">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense> Add Customers Access</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"> Add Customers Access</span>
           <v-spacer></v-spacer>
-          <v-icon @click="closeSecurityDialog()" outlined>
+          <v-icon style="color: black" @click="closeSecurityDialog()" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -223,7 +223,9 @@
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
+                    v-if="
+                      can('device_notification_contnet_delete') && item.id != 1
+                    "
                     @click="deleteItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">

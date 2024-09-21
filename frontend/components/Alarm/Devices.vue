@@ -465,7 +465,7 @@ export default {
       // { text: "Location", value: "location" },
       { text: "Building/Customer Name", value: "customer", sortable: false },
       // { text: "Delay(Min)", value: "delay" },
-      { text: "24 Hrs", value: "hrs_24", sortable: false },
+      //{ text: "24 Hrs", value: "hrs_24", sortable: false },
       // { text: "Sensor", value: "sensor", align: "center" },
       // { text: "Temperature", value: "threshold_temperature" },
       { text: "Online", value: "status", sortable: false },

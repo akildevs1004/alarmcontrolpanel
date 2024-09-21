@@ -333,7 +333,7 @@ export default {
       { text: "Alarm Type", value: "alarm_type" },
 
       { text: "Delay(Min)", value: "delay" },
-      { text: "24 Hrs", value: "hrs_24" },
+      // { text: "24 Hrs", value: "hrs_24" },
       { text: "Temperature", value: "threshold_temperature" },
 
       { text: "Status", value: "status" },

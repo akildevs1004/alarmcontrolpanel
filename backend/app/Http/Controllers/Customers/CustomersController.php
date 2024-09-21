@@ -43,6 +43,13 @@ class CustomersController extends Controller
         $model->when($request->filled("eventFilter"), function ($q) use ($request) {
             $q->where("end_date", "<", date("Y-m-d"));
         });
+        $model->when($request->filled("fileter_customers_assigned"), function ($q) use ($request) {
+            $q->whereIn("id", $request->fileter_customers_assigned);
+        });
+
+
+
+
 
         $model->when($request->filled("filterSecuritymapped"), function ($q) use ($request) {
             $q->whereHas("mappedsecurity", function ($qq) use ($request) {

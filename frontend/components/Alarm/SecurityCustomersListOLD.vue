@@ -112,6 +112,7 @@
             <v-data-table
               dense
               color="primary"
+              show-select
               :headers="headers"
               :items="data"
               :loading="loading"
@@ -168,11 +169,10 @@
                   >
                     <v-img
                       style="
-                        border-radius: 50%;
-                        height: 45px;
-                        min-height: 45px;
-                        width: 45px;
-                        max-width: 45px;
+                        border-radius: 10%;
+                        height: auto;
+                        width: 50px;
+                        max-width: 50px;
                       "
                       :src="
                         item.profile_picture
@@ -183,6 +183,7 @@
                     </v-img>
                   </v-col>
                   <v-col style="padding: 10px">
+                    {{ item.id }}
                     <div style="font-size: 13px">
                       {{ item.building_name || "" }}
                     </div>
@@ -437,7 +438,7 @@ export default {
         text: "Type",
         value: "building_type",
       },
-      // { text: "", value: "data-table-select" },
+      { text: "", value: "data-table-select" },
       // {
       //   text: "Location",
       //   value: "area",
@@ -499,7 +500,6 @@ export default {
     buildingTypes: [],
     _id: null,
     isBackendRequestOpen: false,
-    FilterassginedSelectedCustomers: [],
   }),
   computed: {},
   mounted() {
@@ -518,14 +518,9 @@ export default {
       this.securityCustomers = this.security.customers_assigned;
       //this.selectedCustomers = [{ id: 7 }, { id: 8 }];
       this.modelSelectedCustomers = [];
-
-      this.FilterassginedSelectedCustomers = [];
       this.security.customers_assigned.forEach((element) => {
         this.modelSelectedCustomers.push({ id: element.customer_id });
-        this.FilterassginedSelectedCustomers.push(element.customer_id);
       });
-
-      console.log(this.FilterassginedSelectedCustomers);
 
       // // this.selectedCustomers = this.security.customers_assigned.map(
       // //   (e) => e.customer_id
@@ -640,10 +635,6 @@ export default {
           eventFilter: this.eventFilter,
           // branch_id: this.branch_id,
           ...this.payload,
-          fileter_customers_assigned:
-            this.FilterassginedSelectedCustomers.length > 0
-              ? this.FilterassginedSelectedCustomers
-              : [0],
         },
       };
       if (filter_column != "")

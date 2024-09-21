@@ -88,7 +88,7 @@ export default {
         { text: "Alarm Type", value: "alarm_type" },
 
         { text: "Delay(Min)", value: "delay" },
-        { text: "24 Hrs", value: "hrs_24" },
+        //{ text: "24 Hrs", value: "hrs_24" },
         { text: "Status", value: "status" },
         { text: "Alarm", value: "alarm" },
         { text: "Options", value: "options" },
