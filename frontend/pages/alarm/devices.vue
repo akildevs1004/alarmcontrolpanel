@@ -1,5 +1,5 @@
 <template>
   <div>
-    <AlarmDevices />
+    <AlarmDevices :isEditable="true" />
   </div>
 </template>
