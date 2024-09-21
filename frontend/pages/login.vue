@@ -139,8 +139,11 @@
               autocomplete="off"
             >
               <div class="form-outline">
-                <label style="font-size: 12px">EMAIL ADDRESS</label>
+                <label style="font-size: 12px; padding-bottom: 15px"
+                  >EMAIL ADDRESS</label
+                >
                 <v-text-field
+                  class="login-input-box"
                   v-model="credentials.email"
                   hide-details
                   id="form2Example11"
@@ -152,12 +155,12 @@
                   autocomplete="off"
                   clearable
                   color="white"
-                  style="background-color: #fff"
+                  style="background-color: #fff; margin-top: 5px"
                 ></v-text-field>
               </div>
 
               <div class="form-outline pt-5">
-                <label style="font-size: 12px">PASSWORD</label>
+                <label style="font-size: 12px" class="pb-2">PASSWORD</label>
                 <v-text-field
                   hide-details
                   role="presentation"
@@ -166,9 +169,9 @@
                   autocomplete="off"
                   :type="show_password ? 'text' : 'password'"
                   v-model="credentials.password"
-                  class="input-group--focused"
+                  class="input-group--focused login-input-box"
                   @click:append="show_password = !show_password"
-                  style="background-color: #fff"
+                  style="background-color: #fff; margin-top: 5px"
                 ></v-text-field>
               </div>
 
@@ -376,6 +379,15 @@ p {
 } */
 </style>
 <style>
+.login-input-box .v-input__slot {
+  min-height: 30px !important;
+}
+.login-input-box .v-label {
+  line-height: 11px !important;
+}
+.login-input-box .v-input__icon {
+  height: 17px !important;
+}
 body,
 html {
   height: 100%;
