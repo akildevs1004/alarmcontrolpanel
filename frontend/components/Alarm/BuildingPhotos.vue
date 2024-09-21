@@ -77,7 +77,7 @@
 
     <v-row>
       <v-col
-        v-if="!isReadableonly"
+        v-if="!isMapviewOnly && isEditable"
         cols="12"
         class="text-right"
         style="padding-top: 0px"
@@ -89,7 +89,7 @@
           dense
           x-small
         >
-          Add
+          + Photo
         </v-btn>
       </v-col>
 
@@ -102,7 +102,7 @@
             v-for="(item, index) in building_photos"
             :key="'photo' + item.id"
             :href="'#tab' + item.id"
-            >{{ caps(item.title) }}</v-tab
+            ><v-icon size="18">mdi-image</v-icon>{{ caps(item.title) }}</v-tab
           >
           <v-tabs-items v-model="tab">
             <v-tab-item
@@ -116,7 +116,7 @@
                       <!-- <h3>{{ caps(item.title) }}</h3> -->
                     </v-col>
                     <v-col cols="4" class="text-right"
-                      ><v-menu bottom left v-if="!isReadableonly">
+                      ><v-menu bottom left v-if="!isMapviewOnly && isEditable">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
                             dark-2
@@ -126,7 +126,7 @@
                             style="
                               position: absolute;
                               color: black;
-                              right: 5px;
+                              right: -7px;
                               z-index: 9999;
                             "
                           >
@@ -170,7 +170,7 @@
                     >
                   </v-row>
 
-                  <div>
+                  <div style="border: 1px solid #ddd; padding: 20px">
                     <v-img
                       :src="
                         item.picture ? item.picture : '/no-business_profile.png'
@@ -212,7 +212,8 @@
                 :customer_id="customer_id"
                 :customer="customer"
                 @closeDialog="closeDialog"
-                :isReadableonly="isReadableonly"
+                :isMapviewOnly="isMapviewOnly"
+                :isEditable="isEditable"
             /></v-tab-item>
           </v-tabs-items>
         </v-tabs>
@@ -310,7 +311,7 @@ import EditCustomerBuildingPhotos from "./EditCustomerBuildingPhotos.vue";
 import NewCustomerPhotopage from "../../components/Alarm/NewCustomer.vue";
 export default {
   components: { EditCustomerBuildingPhotos, NewCustomerPhotopage },
-  props: ["customer_id", "customer", "isReadableonly"],
+  props: ["customer_id", "customer", "isMapviewOnly", "isEditable"],
   data: () => ({
     tab: 0,
     editItem: null,

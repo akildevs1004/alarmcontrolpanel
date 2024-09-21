@@ -303,7 +303,7 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item @click="addReply(item)">
+                  <v-list-item @click="addReply(item)" v-if="verifyCanReply()">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-reply</v-icon>
                       Reply
@@ -355,6 +355,7 @@ export default {
     ViewTicket,
   },
   props: [
+    "canReply",
     "customer_id",
     "security_id",
     "technician_id",
@@ -432,6 +433,12 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    verifyCanReply() {
+      if (this.canReply != null) {
+        return this.canReply;
+      }
+      return true;
     },
     getIsReadStatus(item) {
       if (this.$auth.user.user_type == "technician") {

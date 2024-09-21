@@ -8,7 +8,7 @@
     <v-dialog v-model="dialogSecurityCustomers" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Add Customers Access</span>
+          <span dense style="color: black"> Customers List</span>
           <v-spacer></v-spacer>
           <v-icon style="color: black" @click="closeSecurityDialog()" outlined>
             mdi mdi-close-circle

@@ -77,6 +77,7 @@
                 class="text-left"
               >
                 <v-btn
+                  v-if="isEditable"
                   small
                   dense
                   color="primary"
@@ -157,16 +158,13 @@
                 </v-btn>
               </template>
               <v-list width="120" dense>
-                <v-list-item v-if="can('branch_edit')" @click="editItem(item)">
+                <v-list-item v-if="isEditable" @click="editItem(item)">
                   <v-list-item-title style="cursor: pointer">
                     <v-icon color="secondary" small> mdi-pencil </v-icon>
                     Edit
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item
-                  v-if="can('branch_edit')"
-                  @click="deleteItem(item.id)"
-                >
+                <v-list-item v-if="isEditable" @click="deleteItem(item.id)">
                   <v-list-item-title style="cursor: pointer">
                     <v-icon color="red" small> mdi-delete </v-icon>
                     Delete
@@ -186,7 +184,7 @@ import AlarmEditAutomation from "../../components/Alarm/EditAutomation.vue";
 
 export default {
   components: { AlarmEditAutomation },
-  props: ["customer_id"],
+  props: ["customer_id", "isEditable"],
   data() {
     return {
       snackbar: false,

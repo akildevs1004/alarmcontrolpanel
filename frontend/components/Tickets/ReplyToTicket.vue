@@ -15,8 +15,18 @@
                 <v-col>
                   <h3>Subject: {{ payload_ticket.subject }}</h3>
                 </v-col>
-                <v-col cols="12" dense style-="height:600px">
-                  <ClientOnly style-="height:600px">
+                <v-col cols="12" dense>
+                  <v-textarea
+                    style="width: 100%"
+                    label="Description"
+                    dense
+                    outlined
+                    type="text"
+                    v-model="payload_ticket.description"
+                    hide-details
+                    rows="8"
+                  ></v-textarea>
+                  <!-- <ClientOnly style-="height:600px">
                     <tiptap-vuetify
                       class="tiptap-icon"
                       v-model="payload_ticket.description"
@@ -27,7 +37,7 @@
                       }"
                     />
                     <template #placeholder> Loading... </template>
-                  </ClientOnly>
+                  </ClientOnly> -->
                 </v-col>
               </v-row>
               <span
@@ -138,24 +148,27 @@
 </template>
 
 <script>
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Blockquote,
-  History,
-} from "tiptap-vuetify";
+// import {
+//   TiptapVuetify,
+//   Heading,
+//   Bold,
+//   Italic,
+//   Strike,
+//   Underline,
+//   Paragraph,
+//   BulletList,
+//   OrderedList,
+//   ListItem,
+//   Blockquote,
+//   History,
+// } from "tiptap-vuetify";
 import TicketResponses from "./TicketResponses.vue";
 export default {
   props: ["editItem", "editId"],
-  components: { TiptapVuetify, TicketResponses },
+  components: {
+    // TiptapVuetify,
+    TicketResponses,
+  },
   data: () => ({
     TitleRules: [(v) => !!v || "Title is required"],
     extensions: [

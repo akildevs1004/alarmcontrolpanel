@@ -244,7 +244,7 @@
             :key="key"
             :_id="customerInfo.id"
             :isPopup="true"
-            :isReadableonly="true"
+            :isMapviewOnly="true"
             :alarmId="eventId"
         /></v-card-text>
       </v-card>
@@ -797,8 +797,11 @@ export default {
           });
 
           let alarmHtmlLink = "";
+          let customerHtmlLink = "";
           if (item.latest_alarm_event)
             alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+
+          customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
           let profile_picture =
             "https://alarm.xtremeguard.org/no-business_profile.png";
@@ -824,7 +827,7 @@ export default {
   <td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
     </td>
     <td style="text-align:right">
-  ${alarmHtmlLink}
+   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink} 
       </td>
         </tr>
     </table>`;
@@ -853,6 +856,16 @@ export default {
             if (btnObject)
               btnObject.addEventListener("click", () => {
                 this.viewAlarmInformation(item.latest_alarm_event);
+              });
+
+            btnObject = document.getElementById(
+              "customerInfowindow-btn-" + item.id
+            );
+            if (btnObject)
+              btnObject.addEventListener("click", () => {
+                this.dialog = true;
+                this.key += 1;
+                this.customerInfo = item;
               });
 
             const infowindowContent = document.getElementById(

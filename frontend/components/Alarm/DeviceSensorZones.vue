@@ -74,6 +74,7 @@
             </span>
 
             <v-btn
+              v-if="isEditable"
               title="Change Request"
               x-small
               :ripple="false"
@@ -181,16 +182,13 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item @click="editItem(item)">
+                  <v-list-item @click="editItem(item)" v-if="isEditable">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
                       Edit
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
-                    @click="deleteItem(item)"
-                  >
+                  <v-list-item v-if="isEditable" @click="deleteItem(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="error" small> mdi-delete </v-icon>
                       Delete
@@ -213,7 +211,7 @@ import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
 
 export default {
-  props: ["employeeId", "editDevice"],
+  props: ["employeeId", "editDevice", "isEditable"],
   components: {
     EditDeviceZone,
     AlarmCustomerView,

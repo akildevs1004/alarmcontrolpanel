@@ -35,14 +35,14 @@
             Sensors
             <v-icon>mdi-shield-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" v-if="!isReadableonly">
+          <v-tab class="customer-tab" v-if="!isMapviewOnly">
             Automation
             <v-icon>mdi-car-emergency</v-icon> </v-tab
-          ><v-tab class="customer-tab" v-if="!isReadableonly">
+          ><v-tab class="customer-tab" v-if="!isMapviewOnly">
             Subscription
             <v-icon>mdi-medical-bag</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" v-if="!isReadableonly">
+          <v-tab class="customer-tab" v-if="!isMapviewOnly">
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
           </v-tab>
@@ -70,7 +70,8 @@
                   @closeDialog="closeDialog"
                   :customer_id="_id"
                   :customer="data"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card>
@@ -84,7 +85,8 @@
                   :customer_contacts="customer_contacts"
                   :customer="data"
                   @closeDialog="closeDialog"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -98,7 +100,8 @@
                   :customer_contacts="customer_contacts"
                   :customer="data"
                   :key="keyEmergencyy"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card>
@@ -111,7 +114,8 @@
                   :customer_id="_id"
                   @closeDialog="closeDialog"
                   :key="keyDevices"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -123,7 +127,8 @@
                   :key="keyPhotos"
                   @closeDialog="closeDialog"
                   :customer_id="_id"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -134,7 +139,8 @@
                   v-if="_id"
                   :key="keyAutomation"
                   :customer_id="_id"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -146,7 +152,8 @@
                   :customer="data"
                   :key="keyPayments"
                   :customer_id="_id"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -159,7 +166,8 @@
                   :key="keySettings"
                   :customer_id="_id"
                   :customer="customer"
-                  :isReadableonly="isReadableonly"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card>
@@ -203,7 +211,7 @@ export default {
     AlarmEditContact,
     BuildingPhotos,
   },
-  props: ["_id", "isPopup", "isReadableonly"],
+  props: ["_id", "isPopup", "isMapviewOnly", "isEditable"],
   data: () => ({
     dialogEditBuilding: false,
     messages: [],

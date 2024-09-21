@@ -31,7 +31,7 @@
                   :error-messages="errors && errors.email ? errors.email : ''"
                 ></v-text-field> -->
               </v-col>
-              <v-col md="12" sm="12" cols="12" dense>
+              <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                 <!-- <label class="col-form-label"
                           >Password <span class="text-danger">*</span></label
                         > -->
@@ -51,7 +51,7 @@
                   "
                 ></v-text-field>
               </v-col>
-              <v-col md="12" sm="12" cols="12" dense>
+              <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                 <!-- <label class="col-form-label"
                           >Password <span class="text-danger">*</span></label
                         > -->
@@ -82,7 +82,7 @@
             </v-form>
           </v-col>
         </v-row>
-        <v-row class="pl-5">
+        <v-row class="pl-5" v-if="isEditable">
           <v-col class="pt-5" style="max-width: 100px">Login </v-col>
 
           <v-col class="pl-0 pt-1" style="max-width: 80px">
@@ -215,7 +215,7 @@
       </v-col>
 
       <v-col cols="6">
-        <v-row>
+        <v-row v-if="isEditable">
           <v-col cols="12" class="text-right"
             ><v-btn
               v-if="can('setting_company_change_password_access')"
@@ -236,7 +236,7 @@
 
 <script>
 export default {
-  props: ["customer"],
+  props: ["customer", "isEditable"],
   data() {
     return {
       snackbar: false,

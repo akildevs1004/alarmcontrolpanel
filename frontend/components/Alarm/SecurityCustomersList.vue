@@ -50,8 +50,8 @@
             flat
           >
             <v-toolbar-title>
-              <span style="color: black"> Customers </span></v-toolbar-title
-            >
+              <!-- <span style="color: black"> Customers </span> -->
+            </v-toolbar-title>
 
             <!-- <v-btn
               title="Reload"
@@ -82,7 +82,7 @@
                 hide-details
               ></v-text-field
             ></span>
-            <v-btn
+            <!-- <v-btn
               class="ma-3 mt-5"
               fill
               dense
@@ -92,7 +92,7 @@
               @click="saveCustomersList()"
             >
               Save
-            </v-btn>
+            </v-btn> -->
             <!-- <v-btn
               v-if="!eventFilter"
               title="Change Request"

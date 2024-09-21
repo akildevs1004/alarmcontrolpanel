@@ -71,20 +71,29 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <div v-if="building_pictures.length == 0" class="text-center">
+    <div
+      v-if="building_pictures.length == 0"
+      class="text-center"
+      style="height: 28px"
+    >
       No Photos Available
     </div>
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col
+        cols="12"
+        class="text-right"
+        style="padding-top: 0px"
+        v-if="isEditable"
+      >
         <v-btn
-          v-if="!isReadableonly"
+          v-if="!isMapviewOnly"
           :loading="loading"
           color="primary"
           @click="newPhoto()"
           dense
           x-small
         >
-          Add
+          + Photo
         </v-btn>
       </v-col>
 
@@ -97,91 +106,84 @@
           >
 
           <v-tab-item
+            style="border: 1px solid #ddd; padding: 25px"
             v-for="(item, index) in building_pictures"
             :key="'sensorpicture' + item.id"
           >
-            <v-card class="elevation-1 pl-1">
-              <v-row>
-                <v-col cols="12" class="text-center">
-                  <v-row>
-                    <v-col cols="10"> </v-col>
-                    <v-col cols="2" class="text-right"
-                      ><v-menu v-if="!isReadableonly" bottom left>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                          </v-btn>
-                        </template>
-                        <v-list width="150" dense>
-                          <v-list-item
-                            v-if="can('device_notification_contnet_view')"
-                            @click="viewPhoto(item)"
-                          >
-                            <v-list-item-title style="cursor: pointer">
-                              <v-icon color="secondary" small> mdi-eye </v-icon>
-                              View
-                            </v-list-item-title>
-                          </v-list-item>
-
-                          <v-list-item
-                            v-if="can('device_notification_contnet_view')"
-                            @click="editPhoto(item)"
-                          >
-                            <v-list-item-title style="cursor: pointer">
-                              <v-icon color="secondary" small>
-                                mdi-pencil
-                              </v-icon>
-                              Edit
-                            </v-list-item-title>
-                          </v-list-item>
-
-                          <v-list-item
-                            v-if="can('device_notification_contnet_view')"
-                          >
-                            <v-list-item-title style="cursor: pointer">
-                              <AlarmSensorPlotting :key="key" :item="item" />
-                            </v-list-item-title>
-                          </v-list-item>
-
-                          <v-list-item
-                            v-if="can('device_notification_contnet_delete')"
-                            @click="deletePhoto(item.id)"
-                          >
-                            <v-list-item-title style="cursor: pointer">
-                              <v-icon color="error" small> mdi-delete </v-icon>
-                              Delete
-                            </v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu></v-col
+            <v-row style="padding: 0px">
+              <v-col cols="12" style="padding: 0px">
+                <v-img
+                  @dblclick="viewPhoto(item)"
+                  :src="
+                    item.picture ? item.picture : '/no-business_profile.png'
+                  "
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                  style="max-width: 100%; margin: auto; max-height: 600px"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
                     >
-                  </v-row>
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+            <v-row
+              style="position: absolute; right: -9px; top: -30px"
+              v-if="isEditable"
+            >
+              <v-col cols="12" class="text-right"
+                ><v-menu v-if="!isMapviewOnly" bottom left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list width="150" dense>
+                    <v-list-item
+                      v-if="can('device_notification_contnet_view')"
+                      @click="viewPhoto(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-eye </v-icon>
+                        View
+                      </v-list-item-title>
+                    </v-list-item>
 
-                  <v-img
-                    @dblclick="viewPhoto(item)"
-                    :src="
-                      item.picture ? item.picture : '/no-business_profile.png'
-                    "
-                    aspect-ratio="1"
-                    class="grey lighten-2"
-                    style="max-width: 100%; margin: auto; max-height: 600px"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-col>
-              </v-row>
-            </v-card>
+                    <v-list-item @click="editPhoto(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-pencil </v-icon>
+                        Edit
+                      </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item>
+                      <v-list-item-title style="cursor: pointer">
+                        <AlarmSensorPlotting :key="key" :item="item" />
+                      </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item
+                      v-if="isEditable"
+                      @click="deletePhoto(item.id)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="error" small> mdi-delete </v-icon>
+                        Delete
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu></v-col
+              >
+            </v-row>
           </v-tab-item>
         </v-tabs>
       </v-col>
@@ -282,7 +284,7 @@ import AlarmEditPhotos from "../../components/Alarm/EditPhotos.vue";
 
 export default {
   components: { AlarmEditPhotos },
-  props: ["customer_id", "isReadableonly"],
+  props: ["customer_id", "isMapviewOnly", "isEditable"],
   data: () => ({
     editItem: null,
     key: 1,

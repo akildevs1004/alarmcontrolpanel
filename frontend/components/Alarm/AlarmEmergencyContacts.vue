@@ -39,10 +39,7 @@
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
-            @click="
-              closeDialog();
-              dialogEditEmergency = false;
-            "
+            @click="dialogEditEmergency = false"
             outlined
           >
             mdi mdi-close-circle
@@ -64,6 +61,7 @@
       </v-card>
     </v-dialog>
     <div
+      style="height: 28px"
       v-if="!customer_contacts || customer_contacts.length == 0"
       class="text-center"
     >
@@ -71,7 +69,12 @@
     </div>
 
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col
+        v-if="isEditable"
+        cols="12"
+        class="text-right"
+        style="padding-top: 0px"
+      >
         <v-btn
           color="primary"
           @click="
@@ -105,7 +108,7 @@
                   </v-col>
 
                   <v-col cols="2" class="text-right">
-                    <v-menu bottom left v-if="!isReadableonly">
+                    <v-menu bottom left v-if="!isMapviewOnly && isEditable">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn dark-2 icon v-bind="attrs" v-on="on">
                           <v-icon>mdi-dots-vertical</v-icon>
@@ -491,7 +494,13 @@ import AlarmEditEmergencyContact from "../../components/Alarm/EditEmergencyConta
 
 export default {
   components: { AlarmEditEmergencyContact },
-  props: ["customer", "customer_id", "customer_contacts", "isReadableonly"],
+  props: [
+    "customer",
+    "customer_id",
+    "customer_contacts",
+    "isMapviewOnly",
+    "isEditable",
+  ],
   data: () => ({
     slider: [
       "red",

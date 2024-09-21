@@ -786,6 +786,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_tickets: {
+          elevation: 0,
+          selected: "",
+        },
         alarm_devices: {
           elevation: 0,
           selected: "",
@@ -1058,6 +1062,8 @@ export default {
           path: "/alarm/allevents",
         },
         "alarm-reports": { name: "alarm_reports", path: "/alarm/reports" },
+        "alarm-tickets": { name: "alarm_tickets", path: "/alarm/tickets" },
+
         "alarm-customers": {
           name: "alarm_customers",
           path: "/alarm/customers",
@@ -1152,8 +1158,6 @@ export default {
         });
 
         this.$store.commit("storeAlarmControlPanel/ZoneTypes", data);
-
-         
       }
     },
     async getDeviceTypes() {

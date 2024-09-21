@@ -5,6 +5,44 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewPhotos" width="60%">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">
+            {{ editItem ? editItem.title : "---" }}</span
+          >
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewPhotos = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <v-img
+              :src="
+                editItem ? editItem.profile_picture : '/no-business_profile.png'
+              "
+              aspect-ratio="1"
+              class="grey lighten-2"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12">
         <v-tabs right>
@@ -24,10 +62,11 @@
                         border-radius: 50%;
                         margin: 0 auto;
                       "
+                      @dblclick="viewPhoto(payload_primary)"
                       :src="primary_previewImage || '/no-business_profile.png'"
                     ></v-img>
                     <v-btn
-                      v-if="!isReadableonly"
+                      v-if="!isMapviewOnly && isEditable"
                       class="mt-2"
                       style="width: 50%"
                       small
@@ -58,7 +97,7 @@
                   ><v-row>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="First Name"
                         dense
                         small
@@ -66,11 +105,12 @@
                         type="text"
                         v-model="payload_primary.first_name"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Last Name"
                         dense
                         small
@@ -78,11 +118,12 @@
                         type="text"
                         v-model="payload_primary.last_name"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Phone 1"
                         dense
                         small
@@ -90,6 +131,7 @@
                         type="text"
                         v-model="payload_primary.phone1"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.phone1"
@@ -99,7 +141,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Phone 2"
                         dense
                         small
@@ -107,6 +149,7 @@
                         type="text"
                         v-model="payload_primary.phone2"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.phone2"
@@ -116,7 +159,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Office Phone"
                         dense
                         small
@@ -124,6 +167,7 @@
                         type="text"
                         v-model="payload_primary.office_phone"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.office_phone"
@@ -133,7 +177,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Email"
                         dense
                         small
@@ -141,6 +185,7 @@
                         type="email"
                         v-model="payload_primary.email"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.email"
@@ -150,7 +195,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Whatsapp"
                         dense
                         small
@@ -158,6 +203,7 @@
                         type="whatsapp"
                         v-model="payload_primary.whatsapp"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.whatsapp"
@@ -167,7 +213,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Alarm STOP Pin"
                         dense
                         small
@@ -176,6 +222,7 @@
                         max-length="6"
                         v-model="payload_primary.alarm_stop_pin"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="primary_errors && primary_errors.alarm_stop_pin"
@@ -190,7 +237,7 @@
                 <v-col cols="12" class="text-right">
                   <v-btn
                     small
-                    v-if="!isReadableonly"
+                    v-if="!isMapviewOnly && isEditable"
                     :loading="loading"
                     color="primary"
                     @click="submit_primary"
@@ -215,12 +262,13 @@
                         border-radius: 50%;
                         margin: 0 auto;
                       "
+                      @dblclick="viewPhoto(payload_secondary)"
                       :src="
                         secondary_previewImage || '/no-business_profile.png'
                       "
                     ></v-img>
                     <v-btn
-                      v-if="!isReadableonly"
+                      v-if="!isMapviewOnly && isEditable"
                       class="mt-2"
                       style="width: 50%"
                       small
@@ -251,7 +299,7 @@
                   ><v-row>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="First Name"
                         dense
                         small
@@ -259,11 +307,12 @@
                         type="text"
                         v-model="payload_secondary.first_name"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Last Name"
                         dense
                         small
@@ -271,11 +320,12 @@
                         type="text"
                         v-model="payload_secondary.last_name"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Phone 1"
                         dense
                         small
@@ -283,6 +333,7 @@
                         type="text"
                         v-model="payload_secondary.phone1"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="secondary_errors && secondary_errors.phone1"
@@ -292,7 +343,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Phone 2"
                         dense
                         small
@@ -300,6 +351,7 @@
                         type="text"
                         v-model="payload_secondary.phone2"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="secondary_errors && secondary_errors.phone2"
@@ -309,7 +361,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Office Phone"
                         dense
                         small
@@ -317,6 +369,7 @@
                         type="text"
                         v-model="payload_secondary.office_phone"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="secondary_errors && secondary_errors.office_phone"
@@ -326,7 +379,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Email"
                         dense
                         small
@@ -334,6 +387,7 @@
                         type="email"
                         v-model="payload_secondary.email"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="secondary_errors && secondary_errors.email"
@@ -343,7 +397,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Whatsapp"
                         dense
                         small
@@ -351,6 +405,7 @@
                         type="whatsapp"
                         v-model="payload_secondary.whatsapp"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="secondary_errors && secondary_errors.whatsapp"
@@ -360,7 +415,7 @@
                     </v-col>
                     <v-col cols="6" dense>
                       <v-text-field
-                        :readonly="isReadableonly"
+                        :readonly="isMapviewOnly"
                         label="Alarm STOP Pin"
                         dense
                         small
@@ -369,6 +424,7 @@
                         max-length="6"
                         v-model="payload_secondary.alarm_stop_pin"
                         hide-details
+                        :disabled="!isEditable"
                       ></v-text-field>
                       <span
                         v-if="
@@ -384,7 +440,7 @@
               <v-row>
                 <v-col cols="12" class="text-right">
                   <v-btn
-                    v-if="!isReadableonly"
+                    v-if="!isMapviewOnly && isEditable"
                     small
                     :loading="loading"
                     color="primary"
@@ -545,8 +601,16 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer_contacts", "customer", "isReadableonly"],
+  props: [
+    "customer_id",
+    "customer_contacts",
+    "customer",
+    "isMapviewOnly",
+    "isEditable",
+  ],
   data: () => ({
+    editItem: null,
+    dialogViewPhotos: false,
     show1: false,
     buildingTypes: [],
     branchesList: [],
@@ -704,6 +768,10 @@ export default {
         reader.readAsDataURL(file[0]);
         this.$emit("input", file[0]);
       }
+    },
+    viewPhoto(item) {
+      this.editItem = item;
+      this.dialogViewPhotos = true;
     },
     async submit_primary() {
       let customer = new FormData();

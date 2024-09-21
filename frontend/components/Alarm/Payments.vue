@@ -91,6 +91,7 @@
                 class="text-left"
               >
                 <v-btn
+                  v-if="isEditable"
                   small
                   dense
                   color="primary"
@@ -137,7 +138,7 @@
           </template>
 
           <template v-slot:item.options="{ item }">
-            <v-menu bottom left>
+            <v-menu bottom left v-if="isEditable">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn dark-2 icon v-bind="attrs" v-on="on">
                   <v-icon>mdi-dots-vertical</v-icon>
@@ -173,7 +174,7 @@ import AlarmEditPayments from "../../components/Alarm/EditPayments.vue";
 
 export default {
   components: { AlarmEditPayments },
-  props: ["customer_id", "customer"],
+  props: ["customer_id", "customer", "isEditable"],
   data() {
     return {
       snackbar: false,

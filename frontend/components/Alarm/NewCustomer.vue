@@ -11,7 +11,7 @@
         <v-row class="pt-5">
           <v-col md="4" cols="12" sm="12" dense>
             <v-select
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Customer Type"
               :items="buildingTypes"
               item-text="name"
@@ -20,6 +20,7 @@
               dense
               outlined
               hide-details
+              :disabled="!isEditable"
             ></v-select>
             <span
               v-if="errors && errors.building_type_id"
@@ -29,13 +30,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Building Name"
               dense
               outlined
               type="text"
               v-model="customer_payload.building_name"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span
               v-if="errors && errors.building_name"
@@ -45,13 +47,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="House Number"
               dense
               outlined
               type="text"
               v-model="customer_payload.house_number"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span
               v-if="errors && errors.house_number"
@@ -61,13 +64,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Street Number"
               dense
               outlined
               type="text"
               v-model="customer_payload.street_number"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span
               v-if="errors && errors.street_number"
@@ -77,13 +81,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Area"
               dense
               outlined
               type="text"
               v-model="customer_payload.area"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.area" class="text-danger mt-2">{{
               errors.area[0]
@@ -91,13 +96,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="City"
               dense
               outlined
               type="text"
               v-model="customer_payload.city"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.city" class="text-danger mt-2">{{
               errors.city[0]
@@ -105,13 +111,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="State"
               dense
               outlined
               type="text"
               v-model="customer_payload.state"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.state" class="text-danger mt-2">{{
               errors.state[0]
@@ -119,13 +126,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Country"
               dense
               outlined
               type="text"
               v-model="customer_payload.country"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.country" class="text-danger mt-2">{{
               errors.country[0]
@@ -133,13 +141,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Landmark"
               dense
               outlined
               type="text"
               v-model="customer_payload.landmark"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.landmark" class="text-danger mt-2">{{
               errors.landmark[0]
@@ -149,13 +158,14 @@
         <v-row>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Latitude"
               dense
               outlined
               type="text"
               v-model="customer_payload.latitude"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.latitude" class="text-danger mt-2">{{
               errors.latitude[0]
@@ -163,13 +173,14 @@
           </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Longitude"
               dense
               outlined
               type="text"
               v-model="customer_payload.longitude"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.longitude" class="text-danger mt-2">{{
               errors.longitude[0]
@@ -182,13 +193,14 @@
         <v-row v-if="!customer_id">
           <v-col md="4" cols="2" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Login Email"
               dense
               outlined
               type="email"
               v-model="customer_payload.email"
               hide-details
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.email" class="text-danger mt-2">{{
               errors.email[0]
@@ -196,7 +208,7 @@
           </v-col>
           <v-col v-if="!customer_id" md="4" cols="2" sm="12" dense>
             <v-text-field
-              :readonly="isReadableonly"
+              :readonly="isMapviewOnly"
               label="Login Password"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
@@ -205,6 +217,7 @@
               v-model="customer_payload.password"
               hide-details
               @click:append="show1 = !show1"
+              :disabled="!isEditable"
             ></v-text-field>
             <span v-if="errors && errors.password" class="text-danger mt-2">{{
               errors.password[0]
@@ -226,7 +239,7 @@
             >
           </v-col> -->
         </v-row>
-        <v-row v-if="!isReadableonly">
+        <v-row v-if="!isMapviewOnly">
           <v-col md="4" sm="12" cols="12">
             <v-menu
               v-model="startDateMenuOpen"
@@ -248,6 +261,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :disabled="!isEditable"
                 ></v-text-field>
                 <span
                   v-if="errors && errors.start_date"
@@ -284,6 +298,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
+                  :disabled="!isEditable"
                 ></v-text-field>
                 <span
                   v-if="errors && errors.end_date"
@@ -302,7 +317,7 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="!isReadableonly">
+        <v-row v-if="!isMapviewOnly && isEditable">
           <v-col cols="12" class="text-right">
             <v-btn small :loading="loading" color="primary" @click="submit">
               {{ !customer_id ? "Submit" : "Update" }}
@@ -316,7 +331,7 @@
 
 <script>
 export default {
-  props: ["customer_id", "customer", "isReadableonly"],
+  props: ["customer_id", "customer", "isMapviewOnly", "isEditable"],
   data: () => ({
     response: "",
     snackbar: false,

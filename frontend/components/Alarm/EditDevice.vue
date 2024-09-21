@@ -49,6 +49,7 @@
             item-value="id"
             item-text="building_name"
             clearable
+            :disabled="checkDisable()"
           ></v-autocomplete>
           <span v-if="errors && errors.customer_id" class="error--text"
             >{{ errors.customer_id[0] }}
@@ -466,6 +467,12 @@ export default {
         this.payload.device_type = device.device_type;
         this.payload.model_number = device.model_number;
       }
+    },
+    checkDisable() {
+      if (this.$auth.user.user_type == "company") {
+        return false;
+      }
+      return false;
     },
     store_device() {
       this.errors = [];

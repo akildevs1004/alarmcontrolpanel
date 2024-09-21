@@ -12,7 +12,7 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Customer Information</span>
+          <span dense style="color: black">View Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -31,6 +31,37 @@
             @closeCustomerDialog="closeCustomerDialog"
             :_id="viewCustomerId"
             :isPopup="true"
+            :isEditable="false"
+        /></v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="dialogEditCustomer"
+      width="1000px"
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Update Customer Information</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              dialogEditCustomer = false;
+              closeCustomerDialog();
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding: 0px"
+          ><AlarmCustomerTabsView
+            :key="key"
+            @closeCustomerDialog="closeCustomerDialog"
+            :_id="viewCustomerId"
+            :isPopup="true"
+            :isEditable="true"
         /></v-card-text>
       </v-card>
     </v-dialog>
@@ -117,6 +148,7 @@
         name="CompCustomersDashboardStatistics1"
         :key="222"
         style="max-width: 99%"
+        :setIntervalLoopstatus="setIntervalLoopstatus"
       />
     </v-card>
     <v-row>
@@ -393,6 +425,14 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
+                    </v-list-item-title> </v-list-item
+                  ><v-list-item
+                    v-if="can('device_notification_contnet_view')"
+                    @click="editItem(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-pencil </v-icon>
+                      Edit
                     </v-list-item-title>
                   </v-list-item>
                   <!-- <v-list-item
@@ -446,6 +486,7 @@ export default {
     CompCustomersDashboardStatistics,
   },
   data: () => ({
+    setIntervalLoopstatus: true,
     error_messages: "",
     showCustomerOTP: false,
     customerContactPIN: "",
@@ -465,6 +506,8 @@ export default {
 
     newCustomerDialog: false,
     dialogViewCustomer: false,
+    dialogEditCustomer: false,
+
     totalRowsCount: 0,
 
     snack: false,
@@ -687,6 +730,8 @@ export default {
     },
     closeCustomerDialog() {
       this.dialogViewCustomer = false;
+      this.dialogEditCustomer = false;
+      this.setIntervalLoopstatus = true;
       this.getDataFromApi();
     },
     getBuildingTypes() {
@@ -695,7 +740,14 @@ export default {
           this.$store.state.storeAlarmControlPanel.BuildingTypes;
       }
     },
+    editItem(item) {
+      this.setIntervalLoopstatus = false;
+      this.viewCustomerId = item.id;
+      this.key += 1;
+      this.dialogEditCustomer = true;
+    },
     viewItem(item) {
+      this.setIntervalLoopstatus = false;
       this.viewCustomerId = item.id;
       this.key += 1;
       this.dialogViewCustomer = true;

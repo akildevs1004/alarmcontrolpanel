@@ -57,6 +57,7 @@
               @closeDialog="closeDialog"
               :editId="editId"
               :editDevice="editDevice"
+              :isEditable="isEditable"
             />
           </v-container>
         </v-card-text>
@@ -288,7 +289,7 @@
         </template>
 
         <template v-slot:item.options="{ item }">
-          <v-menu bottom left v-if="!isReadableonly">
+          <v-menu bottom left v-if="!isMapviewOnly">
             <template v-slot:activator="{ on, attrs }">
               <div class="text-center">
                 <v-btn dark-2 icon v-bind="attrs" v-on="on">
@@ -314,7 +315,10 @@
                   Zones
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="can(`device_edit`)" @click="editItem(item)">
+              <v-list-item
+                v-if="can(`device_edit`) && isEditable"
+                @click="editItem(item)"
+              >
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small> mdi-pencil </v-icon>
                   Edit
@@ -368,7 +372,7 @@ import DeviceSensorZones from "../../components/Alarm/DeviceSensorZones.vue";
 
 export default {
   components: { AlarmEditDevice, DeviceSensorZones },
-  props: ["customer_id", "eventFilter", "isReadableonly"],
+  props: ["customer_id", "eventFilter", "isMapviewOnly", "isEditable"],
   data: () => ({
     commonSearch: "",
     filterCustomersMapped: "",

@@ -61,6 +61,7 @@ import CustomersDeviceStatsPieChart from "./Dashboard/CustomersDeviceTypesStatsP
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
+  props: ["setIntervalLoopstatus"],
   layout: "security",
   components: {
     CustomersTypePieChart,
@@ -104,8 +105,10 @@ export default {
   async created() {
     setInterval(() => {
       if (this.$route.name == "alarm-customers") {
-        this.key = this.key + 1;
-        this.getDatafromApi();
+        if (this.setIntervalLoopstatus) {
+          this.key = this.key + 1;
+          this.getDatafromApi();
+        }
       }
     }, 1000 * 30);
     // this._id = this.$route.params.id;

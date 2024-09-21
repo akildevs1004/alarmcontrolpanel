@@ -282,7 +282,7 @@ export default {
     "customer_contacts",
     "customer",
     "editId",
-    "isReadableonly",
+    "isMapviewOnly",
   ],
   data: () => ({
     show1: false,
