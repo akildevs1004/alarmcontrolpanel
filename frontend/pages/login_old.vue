@@ -16,7 +16,7 @@
         <v-card-text>
           <div class="row g-0">
             <div class="col-lg-12">
-              <div class="login-body p-md-5 mx-md-4">
+              <div class="card-body p-md-5 mx-md-4">
                 <v-row class="pb-5">
                   <v-col md="12" cols="12" class="text-center">
                     <h2>MyTime2Cloud</h2>
@@ -97,41 +97,36 @@
     </v-snackbar>
 
     <v-row class="" style="height: 100%">
-      <v-col style="padding: 0px; margin: auto" class="parent-login-body">
+      <v-col xs="12" sm="12" md="12" lg="5" style="padding: 0px">
         <div
-          class="login-body p-md-5 mx-md111111-4"
+          class="card-body p-md-5 mx-md111111-4"
           style="
-            display: none1;
-            padding: 20px !important;
-            max-width: 80%;
-            width: 300px;
+            padding: 3rem !important;
+            max-width: 500px;
+            margin: auto;
             text-align: center;
-            background-color: transparent transparent;
-            border: 1px solid #fff;
-            border-radius: 10px;
           "
         >
           <div style="min-height: 100px">
-            <div style="width: 100%" class="text-center">
+            <div style="width: 100%; height: 150px" class="text-center">
               <v-img
                 class="text-center"
                 style="
-                  width: 180px;
+                  width: 200px;
                   padding: 0px;
                   margin: auto;
                   text-align: center;
                 "
-                src="/login/login-logo.png"
+                src="/logo22.png"
               ></v-img>
             </div>
-            <!-- <h3 class="pb-5 pt-0" style="font-size: 14px">
+            <h3 class="pb-7 pt-15">
               Welcome To
-              <span style="font-size: 14px"> Alarm Control Panel </span>
-            </h3> -->
+              <span style="font-size: 20px"> Alarm Control Panel </span>
+            </h3>
           </div>
-          <div style="color: #fff; text-align: left" class="pt-10">
+          <div>
             <v-form
-              style="padding: 20px"
               ref="form"
               method="post"
               v-model="valid"
@@ -139,87 +134,80 @@
               autocomplete="off"
             >
               <div class="form-outline">
-                <label style="font-size: 12px">EMAIL ADDRESS</label>
                 <v-text-field
+                  role="presentation"
+                  label="Email"
                   v-model="credentials.email"
-                  hide-details
+                  :hide-details="false"
                   id="form2Example11"
                   autofill="false"
                   required
                   dense
                   outlined
                   type="email"
+                  prepend-inner-icon="mdi-account"
+                  append-icon="mdi-at"
                   autocomplete="off"
-                  clearable
-                  color="white"
-                  style="background-color: #fff"
+                  aria-autocomplete="none"
                 ></v-text-field>
               </div>
 
-              <div class="form-outline pt-5">
-                <label style="font-size: 12px">PASSWORD</label>
+              <div class="form-outline">
                 <v-text-field
-                  hide-details
                   role="presentation"
+                  label="Password"
                   dense
                   outlined
                   autocomplete="off"
+                  prepend-inner-icon="mdi-lock  "
+                  :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="show_password ? 'text' : 'password'"
                   v-model="credentials.password"
                   class="input-group--focused"
                   @click:append="show_password = !show_password"
-                  style="background-color: #fff"
                 ></v-text-field>
               </div>
 
-              <div class="text-center pt-1 pt-10">
+              <v-row>
+                <v-col md="6">
+                  <!-- <v-checkbox value="red" disabled>
+                    <template v-slot:label>
+                      <label style="">Remember&nbsp;Password</label>
+                    </template>
+                  </v-checkbox> -->
+                </v-col>
+                <v-col md="6" class="text-right pt-6">
+                  <!-- <nuxt-link to="/reset-password"
+                                  >Forgot password?</nuxt-link
+                                > -->
+                  <v-btn
+                    text
+                    @click="openForgotPassword"
+                    style="font-weight: normal"
+                    >Forgot password?</v-btn
+                  >
+                </v-col>
+              </v-row>
+
+              <div class="text-center pt-1 mb-5 pb-1">
                 <span v-if="msg" class="error--text111" style="color: #ff9f87">
                   {{ msg }}
                 </span>
                 <v-btn
-                  text
                   :loading="loading"
                   @click="login()"
-                  style="
-                    width: 100%;
-                    height: 48px;
-                    color: #88c1dc;
-                    border: 1px solid #fff;
-                    font-weight: bold;
-                    font-size: 17px;
-                  "
+                  class="btn primary btn-black btn-block mt-1 mb-3 p-4 btntext"
+                  style="width: 100%; height: 48px"
                 >
                   Login
                 </v-btn>
               </div>
             </v-form>
-
-            <v-row>
-              <v-col md="12" class="text-center pt-10">
-                <!-- <nuxt-link to="/reset-password"
-                                  >Forgot password?</nuxt-link
-                                > -->
-
-                <div
-                  @click="openForgotPassword"
-                  style="color: #88c1dc; font-size: 12px"
-                >
-                  Forgot password
-                </div>
-                <!-- <v-btn
-                  color="#FFF"
-                  text
-                  @click="openForgotPassword"
-                  style="font-weight: normal"
-                  >Forgot password?</v-btn
-                > -->
-              </v-col>
-            </v-row>
           </div>
-          <!-- <div class="text-center">Don't Have an Account? Contact Admin</div> -->
+          <div class="text-center">Don't Have an Account? Contact Admin</div>
 
-          <!-- <v-row class="text-center" style="font-size: 13px">
-            <v-col class="pa-3">
+          <v-row class="text-center" style="font-size: 13px">
+            <v-col class="pa-5">
               For Technical Support :
               <a
                 target="_blank"
@@ -232,16 +220,73 @@
                 >+971 52 904 8025</a
               ></v-col
             >
-          </v-row> -->
-          <!-- <v-row class="text-center" style="font-size: 13px">
-            <v-col class="pa-2">
+          </v-row>
+          <v-row class="text-center" style="font-size: 13px">
+            <v-col class="pa-5">
               <a
                 style="text-decoration: none; color: black"
                 href="mailto:support@xtremeguard.org"
                 >support@xtremeguard.org</a
               ></v-col
             >
-          </v-row> -->
+          </v-row>
+        </div>
+      </v-col>
+      <v-col
+        xs="12"
+        sm="12"
+        md="12"
+        lg="7"
+        style=""
+        class="hide-on-mobile d-none d-lg-flex"
+      >
+        <div class="about-content">
+          <h3>About Alarm Control Panel</h3>
+          <div style="font-weight: 300">
+            An Alarm Control Panel (ACP) is a central component in security
+            systems designed to monitor and control alarms for various
+            emergencies, including burglary, fire, smoke, medical issues, and
+            temperature-related incidents. Here's a brief overview of each
+            component and its function within the system.
+          </div>
+          <h3 class="pt-10">Features</h3>
+          <ul style="font-weight: 300">
+            <li>Alarm Control Panel</li>
+
+            <li>Burglary Alarm</li>
+            <li>Fire Alarm</li>
+            <li>Smoke Alarm</li>
+            <li>Medical Alarm</li>
+            <li>Temperature Sensor Alarm</li>
+            <li>24/7 Monitoring System</li>
+            <li>Integration and Automation</li>
+
+            <li>Email and Whatsapp Notifications</li>
+          </ul>
+          <v-row class="text-left pt-10">
+            <v-col class="pa-5">
+              <h3>Technical Support</h3>
+
+              <a
+                style="font-weight: 300"
+                target="_blank"
+                href="https://wa.me/971529048025?text=Hello MyTime2Cloud. I need your support."
+                ><v-icon color="white">mdi-whatsapp</v-icon></a
+              >
+
+              <a
+                style="color: #fff; text-decoration: none; font-weight: 300"
+                href="tel:+971529048025"
+                >+971 52 904 8025</a
+              >
+              <br />
+              <a
+                style="text-decoration: none; color: #fff; font-weight: 300"
+                href="mailto:support@xtremeguard.org"
+                >support@xtremeguard.org</a
+              >
+            </v-col>
+          </v-row>
         </div>
       </v-col>
     </v-row>
@@ -347,42 +392,11 @@ export default {
 };
 </script>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
-/* html {
-  background: url("../static/login/bgimage3.png") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-} */
-
-/* #page-wrap {
-  width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background: white;
-  -moz-box-shadow: 0 0 20px black;
-  -webkit-box-shadow: 0 0 20px black;
-  box-shadow: 0 0 20px black;
-}
-p {
-  font: 15px/2 Georgia, Serif;
-  margin: 0 0 30px 0;
-  text-indent: 40px;
-} */
-</style>
-<style>
 body,
 html {
   height: 100%;
 }
-.bg-body {
-  background-image: url("../static/login/bgimage5.png") !important;
-}
+
 .bg-body {
   padding-top: 5%;
 
@@ -407,49 +421,13 @@ html {
   font-weight: bold;
   font-size: 22px;
 }
-.login-body {
-  margin-right: 15%;
-  float: right;
-}
-@media (max-width: 1200px) {
-  .login-body {
-    margin-right: 10% !important;
-  }
-  .parent-login-body {
-    margin: initial !important;
-    margin-top: 3% !important;
-  }
-}
-@media (max-width: 780px) {
-  .login-body {
-    margin-right: 3% !important;
-  }
-}
-
-@media (max-width: 450px) {
-  .login-body {
-    margin: auto !important;
-    float: none !important;
-  }
-  .parent-login-body {
-    margin: auto !important;
-  }
-}
-/* .parent-login-body {
-  margin: auto;
-} */
-/*
 @media (max-width: 1200px) {
   .hide-on-mobile {
     display: none;
   }
 }
-
 @media (min-width: 1300px) {
   .bg-body {
-    background-image: url("../static/login/bgimage3.png") !important;
-  }
-  body {
     background-image: url("../static/login/bgimage3.png") !important;
   }
   .gradient-form {
@@ -485,5 +463,5 @@ html {
     max-width: 100%;
     background-color: #6946dd;
   }
-} */
+}
 </style>

@@ -182,7 +182,7 @@
           <div v-if="item.device_type">
             <v-img
               :title="item.device_type"
-              v-if="item.device_type == 'Intent'"
+              v-if="item.device_type == 'Intruder'"
               style="width: 30px"
               src="/alarm-icons/device_type_access_control.png"
             >
@@ -305,7 +305,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can(`device_edit`) && item.device_type == 'Intent'"
+                v-if="can(`device_edit`) && item.device_type == 'Intruder'"
                 @click="editZones(item)"
               >
                 <v-list-item-title style="cursor: pointer">
