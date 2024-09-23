@@ -26,11 +26,11 @@
     </style>
 
     @php
-    $event_backgroundcolor="#00A4BD";
+    $event_backgroundcolor="red";
     if($alarm["alarm_category_id"]==2) {
     $event_backgroundcolor="orange";
     } else if($alarm["alarm_category_id"]==3) {
-    $event_backgroundcolor="red";
+    $event_backgroundcolor="#00A4BD";
     }
     @endphp
 

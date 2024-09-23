@@ -50,7 +50,7 @@
                 <v-col cols="12" dense>
                   <v-select
                     :items="ZoneTypes"
-                    item-value="id"
+                    item-value="name"
                     item-text="name"
                     label="Zone Type"
                     dense
@@ -80,6 +80,7 @@
                     :readonly="!editable"
                     :filled="!editable"
                   ></v-text-field> -->
+
                   <v-select
                     :items="[{ id: null, name: 'Default' }, ...areaList]"
                     item-value="id"
@@ -226,6 +227,7 @@ export default {
       this.payload_security.sensor_name = this.item.sensor_name;
       this.payload_security.area_code = this.item.area_code;
       this.payload_security.hours24 = this.item.hours24;
+      this.payload_security.wired = this.item.wired;
     }
   },
   methods: {

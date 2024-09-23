@@ -158,7 +158,13 @@
               {{ item.contact_number }}
             </template>
             <template v-slot:item.email="{ item }">
-              {{ item.user?.email || "---" }}
+              {{ item.user?.email || "---" }} </template
+            ><template v-slot:item.area_code="{ item }">
+              {{
+                item.area_code == ""
+                  ? "Default"
+                  : getAreaName(item.area_code) ?? "Default"
+              }}
             </template>
             <template v-slot:item.hours24="{ item }">
               <img
@@ -281,6 +287,19 @@ export default {
         value: "options",
       },
     ],
+    areaList: [
+      { id: "01", name: "Area 1" },
+      { id: "02", name: "Area 2" },
+      { id: "03", name: "Area 3" },
+      { id: "04", name: "Area 4" },
+      { id: "05", name: "Area 5" },
+      { id: "06", name: "Area 6" },
+      { id: "07", name: "Area 7" },
+      { id: "08", name: "Area 8" },
+
+      { id: "09", name: "Area 9" },
+      { id: "10", name: "Area 10" },
+    ],
     ids: [],
 
     data: [],
@@ -339,6 +358,12 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    getAreaName(area_code) {
+      return (
+        this.areaList.find((areaName) => areaName.id == area_code)?.name ||
+        "---"
+      );
     },
     viewCustomers(item) {
       this.security_id = item.id;
