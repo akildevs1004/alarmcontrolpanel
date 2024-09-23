@@ -36,7 +36,13 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-        $devicesList = Device::where("serial_number", "!=", null)->get();
+        $devicesList = Device::where("serial_number", "!=", null)
+            ->where("device_type", "!=", "Manual")
+            ->where("serial_number", "!=", "Manual")
+            ->where("serial_number", "!=", "Mobile")
+            ->where("serial_number", "!=", "mobile")
+            ->where("serial_number", "=", "W12345")
+            ->where("serial_number", "!=", null)->get();
 
         // (new AlarmLogsController)->updateCompanyIds();
 
@@ -281,11 +287,14 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                         $deviceZone =  DeviceZones::where("device_id", $device['id'])
-                            ->where("area_code", $logs['zone'])
-                            ->where("zone_code", $logs['area']);
+                            ->where("area_code", $logs['area'])
+                            ->where("zone_code", $logs['zone']);
 
                         $sensor_name = (clone $deviceZone)->pluck('sensor_name');
+                        $sensor_name = $sensor_name[0] ?? null;
+
                         $sensor_zone_id = (clone $deviceZone)->pluck('id');
+                        $sensor_zone_id = $sensor_zone_id[0] ?? null;
                         $alarm_catgory = $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
                         $data = [
