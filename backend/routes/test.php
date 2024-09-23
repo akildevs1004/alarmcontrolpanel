@@ -62,6 +62,11 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
 Route::get("sync_alarm_logs", function (Request $request) {
     (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 });
+Route::get("get_test_alarm", function (Request $request) {
+
+
+    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+});
 Route::get("create_test_alarm", function (Request $request) {
 
 

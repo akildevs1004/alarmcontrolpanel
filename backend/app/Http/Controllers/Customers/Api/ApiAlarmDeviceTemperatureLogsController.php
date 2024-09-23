@@ -285,6 +285,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             ->where("zone_code", $logs['area']);
 
                         $sensor_name = (clone $deviceZone)->pluck('sensor_name');
+                        $sensor_zone_id = (clone $deviceZone)->pluck('id');
                         $alarm_catgory = $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
                         $data = [
@@ -295,8 +296,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             "zone" => $logs['zone'],
                             "area" => $logs['area'],
                             "alarm_type" => $logs['alarm_type'],
-                            "alarm_category" => $alarm_catgory
-
+                            "alarm_category" => $alarm_catgory,
+                            "sensor_zone_id" => $sensor_zone_id
                         ];
 
 
@@ -342,7 +343,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 "device.customer.primary_contact",
                 "device.customer.secondary_contact",
                 "notes",
-                "category"
+                "category",
+                "zoneData"
             ])->where('company_id', $companyId)->where('alarm_status', 1);
 
 

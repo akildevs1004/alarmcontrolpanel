@@ -247,7 +247,11 @@
                           {{ item.alarm_type }}
                         </div>
                         <div class="secondary-value">
-                          {{ item.device?.location }}
+                          <!-- {{ item.device?.location }} -->
+                          <div v-if="item.zone_data">
+                            {{ item.zone_data.sensor_name }}
+                          </div>
+                          <div v-else>{{ item.device?.location }}</div>
                         </div>
 
                         <!-- <div class="secondary-value">{{ item.type }}</div> -->
