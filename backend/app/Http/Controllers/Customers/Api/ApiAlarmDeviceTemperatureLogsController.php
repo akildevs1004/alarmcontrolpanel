@@ -76,26 +76,26 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     $currentLog = $data[$i];
                     //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : date("Y-m-d H:i:0", strtotime("-10 minutes"));
                     //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : false;
-                    $previousLogTime = false; {
-                        $fisrtRecord = AlarmLogs::where("serial_number", $device['serial_number'])
+                    $previousLogTime = false;
+                    $fisrtRecord = AlarmLogs::where("serial_number", $device['serial_number'])
+                        ->where("company_id", '>', 0)
+                        ->orderBy("log_time", "ASC")
+                        ->first();
+                    $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
+                    if ($fisrtRecord["id"] == $currentLog["id"]) {
+                        $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
+                    } else {
+
+                        $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
                             ->where("company_id", '>', 0)
-                            ->orderBy("log_time", "ASC")
+                            ->where("alarm_type",    $currentLog["alarm_type"])
+                            ->where("log_time", "<", $currentLog["log_time"])
+                            ->orderBy("log_time", "DESC")
                             ->first();
-
-                        if ($fisrtRecord["id"] == $currentLog["id"]) {
-                            $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
-                        } else {
-
-                            $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
-                                ->where("company_id", '>', 0)
-                                ->where("alarm_type",    $currentLog["alarm_type"])
-                                ->where("log_time", "<", $currentLog["log_time"])
-                                ->orderBy("log_time", "DESC")
-                                ->first();
-                            if (isset($previousRecord["log_time"]))
-                                $previousLogTime = $previousRecord["log_time"];
-                        }
+                        if (isset($previousRecord["log_time"]))
+                            $previousLogTime = $previousRecord["log_time"];
                     }
+
 
 
                     if ($previousLogTime) {

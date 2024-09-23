@@ -195,6 +195,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         $alarm_type = 'Tampered';
                     }
 
+
                     //$area =   $devices->area_code ?? '';
                     if ($alarm_type != '') {
 

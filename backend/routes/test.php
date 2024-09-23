@@ -67,6 +67,30 @@ Route::get("get_test_alarm", function (Request $request) {
 
     return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 });
+Route::get("create_test_tampred_alarm", function (Request $request) {
+
+
+    //return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+
+    $date = date("d-m-Y");
+    $csvPath = "alarm-sensors/sensor-logs-$date.csv";
+
+    $area = '';
+    $zone = '';
+    if ($request->filled("area"))
+        $area  =   $request->area;
+
+    if ($request->filled("area"))
+        $zone  =   $request->zone;
+
+    $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+
+
+
+    Storage::append($csvPath,  $content);
+
+    return $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+});
 Route::get("create_test_alarm", function (Request $request) {
 
 
