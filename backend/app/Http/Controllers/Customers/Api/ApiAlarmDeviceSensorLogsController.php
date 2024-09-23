@@ -188,6 +188,13 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $devices = Device::where('serial_number', $serial_number)->first();;
 
                     $alarm_type = $devices->device_type ?? '';
+
+
+
+                    if ($event == '1137') {
+                        $alarm_type = 'Tampered';
+                    }
+
                     //$area =   $devices->area_code ?? '';
                     if ($alarm_type != '') {
 

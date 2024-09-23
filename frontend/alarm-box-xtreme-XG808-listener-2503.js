@@ -84,7 +84,6 @@ async function parseMessage(message) {
   if (matchEvent || matchHeartbeat) {
     const match = matchEvent || matchHeartbeat;
 
-    console.log(match);
     const isHeartbeat = !!matchHeartbeat;
 
     const recordNumber = isHeartbeat ? match[3] : match[3];
@@ -95,8 +94,11 @@ async function parseMessage(message) {
 
     const logEntry = `${deviceId},${eventCode},${getTime()},${recordNumber},${area},${zone}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
-    console.log(logEntry);
 
+    if (!isHeartbeat) {
+      console.log(match);
+      console.log(logEntry);
+    }
     await sendToBackend(getTime());
   } else {
     console.log("Pattern not found");
