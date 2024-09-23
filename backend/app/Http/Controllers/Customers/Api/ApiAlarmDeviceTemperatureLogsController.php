@@ -41,7 +41,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             ->where("serial_number", "!=", "Manual")
             ->where("serial_number", "!=", "Mobile")
             ->where("serial_number", "!=", "mobile")
-            ->where("serial_number", "=", "W12345")
+
             ->where("serial_number", "!=", null)->get();
 
         // (new AlarmLogsController)->updateCompanyIds();
