@@ -712,14 +712,7 @@ export default {
       key: 1,
       snackbar: false,
       response: "",
-      alarm_icons: {
-        Temperature: "temperature.png",
-        Burglary: "burglary.png",
-        Medical: "medical.png",
-        Water: "water.png",
-        Fire: "fire.png",
-        Humidity: "humidity.png",
-      },
+      alarm_icons: [],
 
       wait5Minutes: false,
       globalSearchPopupWidth: "500px",
@@ -847,6 +840,7 @@ export default {
     //   this.$router.push("/logout");
     //   return;
     // }
+    this.loadAlarmNotificationIcons();
     this.getBuildingTypes();
     this.getAddressTypes();
     this.getDeviceTypes();
@@ -1031,6 +1025,16 @@ export default {
       const routeConfig = routeMap[this.$route.name] || defaultRoute;
 
       this.setSubLeftMenuItems(routeConfig.name, routeConfig.path, false);
+    },
+    loadAlarmNotificationIcons() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`alarm_notification_icons`, options).then(({ data }) => {
+        this.alarm_icons = data;
+      });
     },
     async getBuildingTypes() {
       if (!this.$store.state.storeAlarmControlPanel?.BuildingTypes) {

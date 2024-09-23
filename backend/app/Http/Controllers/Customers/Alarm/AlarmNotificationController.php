@@ -16,6 +16,19 @@ use Illuminate\Support\Facades\Mail;
 
 class AlarmNotificationController extends Controller
 {
+
+    public function getAlarmNotificationIcons()
+    {
+        return   [
+            "Temperature" => "temperature.png",
+            "Burglary" => "burglary.png",
+            "Medical" => "medical.png",
+            "Water" => "water.png",
+            "Fire" => "fire.png",
+            "Humidity" => "humidity.png",
+            "Intruder" => "intruder.png",
+        ];
+    }
     public function sendAlarmForwardNotification(Request $request)
     {
 

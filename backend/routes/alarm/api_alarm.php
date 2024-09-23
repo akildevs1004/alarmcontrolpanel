@@ -212,3 +212,4 @@ Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_page
 //notifications 
 
 Route::post("alarm_forward_notification", [AlarmNotificationController::class, "sendAlarmForwardNotification"]);
+Route::get("alarm_notification_icons", [AlarmNotificationController::class, "getAlarmNotificationIcons"]);

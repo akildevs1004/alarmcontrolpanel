@@ -176,7 +176,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
 
-                    $devices = DeviceZones::with(['device'])
+                    /*$devices = DeviceZones::with(['device'])
                         ->whereHas('device', function ($query) use ($serial_number) {
                             $query->where('serial_number', $serial_number);
                         })
@@ -184,7 +184,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         ->where("area_code", $area)
                         ->first();
 
-                    $alarm_type = $devices->sensor_name ?? '';
+                    $alarm_type = $devices->sensor_name ?? '';*/
+                    $devices = Device::where('serial_number', $serial_number)->first();;
+
+                    $alarm_type = $devices->device_type ?? '';
                     //$area =   $devices->area_code ?? '';
                     if ($alarm_type != '') {
 

@@ -711,14 +711,7 @@ export default {
       key: 1,
       snackbar: false,
       response: "",
-      alarm_icons: {
-        Temperature: "temperature.png",
-        Burglary: "burglary.png",
-        Medical: "medical.png",
-        Water: "water.png",
-        Fire: "fire.png",
-        Humidity: "humidity.png",
-      },
+      alarm_icons: {},
 
       wait5Minutes: false,
       globalSearchPopupWidth: "500px",
@@ -806,7 +799,7 @@ export default {
 
       return false;
     }
-
+    this.loadAlarmNotificationIcons();
     this.getBuildingTypes();
     this.getAddressTypes();
     this.getDeviceTypes();
@@ -1208,7 +1201,16 @@ export default {
           //this.pendingNotificationsCount = this.notificationsMenuItems.length;
         });
     },
-
+    loadAlarmNotificationIcons() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`alarm_notification_icons`, options).then(({ data }) => {
+        this.alarm_icons = data;
+      });
+    },
     async loadHeaderNotificationTicketMenu() {
       if (this.isBackendRequestOpen) return false;
 
