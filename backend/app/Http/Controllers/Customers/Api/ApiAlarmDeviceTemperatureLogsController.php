@@ -297,6 +297,17 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $sensor_zone_id = $sensor_zone_id[0] ?? null;
                         $alarm_catgory = $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
+
+                        //verify if OLD alram active count 
+
+                        $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                            ->whereDate("alarm_start_datetime", date("Y-m-d"))
+                            ->where("alarm_status", 1)->count();
+
+                        if ($activeAlarmCount >= 3) {
+                            $alarm_catgory = 1;
+                        }
+
                         $data = [
                             "company_id" => $logs['company_id'],
                             "serial_number" => $logs['serial_number'],
