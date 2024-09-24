@@ -604,7 +604,8 @@ class CustomerAlarmEventsController extends Controller
             "device.customer.secondary_contact",
             "notes",
             "category",
-            "device.customer.buildingtype"
+            "device.customer.buildingtype",
+            "zoneData"
         ])->where('company_id', $request->company_id)
 
             // ->when($request->filled("common_search"), function ($query) use ($request) {

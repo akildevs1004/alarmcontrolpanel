@@ -157,6 +157,12 @@
                   {{ item.device?.serial_number }}
                 </div>
               </template>
+              <template v-slot:item.alarm_source="{ item }">
+                <div>{{ item.alarm_source ?? "---" }}</div>
+                <div class="secondary-value">
+                  {{ item.zone_data?.wired ?? "---" }}
+                </div>
+              </template>
               <template v-slot:item.sensor="{ item }">
                 <div>
                   {{ item.alarm_type }}

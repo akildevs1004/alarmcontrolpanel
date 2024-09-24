@@ -445,6 +445,12 @@
                             <div>{{ item.zone }}</div>
                             <div class="secondary-value">{{ item.area }}</div>
                           </template>
+                          <template v-slot:item.alarm_source="{ item }">
+                            <div>{{ item.alarm_source ?? "---" }}</div>
+                            <div class="secondary-value">
+                              {{ item.zone_data?.wired ?? "---" }}
+                            </div>
+                          </template>
                           <template v-slot:item.start_date="{ item }">
                             <div>
                               {{
