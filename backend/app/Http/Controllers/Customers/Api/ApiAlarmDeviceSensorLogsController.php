@@ -205,8 +205,11 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         if ($event == '1120') {
                             $alarm_type = 'SOS';
                         }
-                        // if ($event == '1133') {
-                        //     $alarm_type = 'Tampered';
+                        if ($event == '1133') {
+                            $alarm_type = '24Hours';
+                        }
+                        // if ($event == '1132') {
+                        //     $alarm_type = 'Regular Alarm';
                         // }
                         if ($event == '1137') {
                             $alarm_type = 'Tampered';
