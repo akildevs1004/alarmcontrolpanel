@@ -233,7 +233,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                                 "area" => $area,
                                 "zone" => $zone,
                                 "alarm_source" => $alarm_source,
-
+                                "event_code" => $event,
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);

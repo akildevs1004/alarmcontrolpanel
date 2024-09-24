@@ -110,8 +110,8 @@
                       dense
                       :items="[
                         { id: null, name: 'All Events' },
-                        { id: 1, name: 'Alarm ON' },
-                        { id: 0, name: 'Alarm OFF' },
+                        { id: 1, name: 'Open' },
+                        { id: 0, name: 'Closed' },
                       ]"
                       item-text="name"
                       item-value="id"

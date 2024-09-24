@@ -8,7 +8,7 @@
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm - Note Logs #{{ eventId }}</span>
+          <span style="color: black">Operator Logs #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -275,8 +275,8 @@
                       dense
                       :items="[
                         { id: null, name: 'All Events' },
-                        { id: 1, name: 'Alarm ON' },
-                        { id: 0, name: 'Alarm OFF' },
+                        { id: 1, name: 'Open' },
+                        { id: 0, name: 'Closed' },
                       ]"
                       item-text="name"
                       item-value="id"
@@ -563,7 +563,7 @@
                                     <v-icon color="secondary" small>
                                       mdi-format-list-numbered
                                     </v-icon>
-                                    Logs
+                                    Operator
                                   </v-list-item-title>
                                 </v-list-item>
                               </v-list>
