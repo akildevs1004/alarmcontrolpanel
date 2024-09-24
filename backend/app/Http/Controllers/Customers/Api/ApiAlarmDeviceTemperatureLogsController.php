@@ -276,7 +276,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     ->where("alarm_status", 1)
 
                     ->where("verified", false)
-                    ->where("time_duration_seconds", '>=', 10)
+                    ->where("time_duration_seconds", '>=', 30)
 
                     ->orderBy("log_time", "ASC")->get();
 
