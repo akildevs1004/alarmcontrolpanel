@@ -289,7 +289,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $deviceZone =  DeviceZones::where("device_id", $device['id']);
 
                         if ($logs['area'] != '') {
-                            $deviceZone->where("area_code", $logs['area']);
+                            if ($logs['area'] == '00') {
+                                $deviceZone->where("area_code", null);
+                            } else
+                                $deviceZone->where("area_code", $logs['area']);
                         }
 
                         $deviceZone->where("zone_code", $logs['zone']);
