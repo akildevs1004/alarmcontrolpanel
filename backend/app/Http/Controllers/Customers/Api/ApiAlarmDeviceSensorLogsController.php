@@ -189,12 +189,32 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $devices = Device::where('serial_number', $serial_number)->first();;
 
                     $alarm_type = $devices->device_type ?? '';
+                    $device_model = $devices->model_number ?? '';
 
+                    if ($device_model == 'H700-TAB') //H700 Tab
+                    {
+                        if ($event == '1100') {
+                            $alarm_type = 'SOS';
+                        }
 
-
-                    if ($event == '1137') {
-                        $alarm_type = 'Tampered';
+                        if ($event == '1130') {
+                            $alarm_type = 'Tampered';
+                        }
+                    } else  if ($device_model == 'XG-808') //XTream Box
+                    {
+                        if ($event == '1120') {
+                            $alarm_type = 'SOS';
+                        }
+                        // if ($event == '1133') {
+                        //     $alarm_type = 'Tampered';
+                        // }
+                        if ($event == '1137') {
+                            $alarm_type = 'Tampered';
+                        }
                     }
+
+
+
 
 
                     //$area =   $devices->area_code ?? '';

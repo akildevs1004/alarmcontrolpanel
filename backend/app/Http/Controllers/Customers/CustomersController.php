@@ -771,6 +771,8 @@ class CustomersController extends Controller
             "OX-966",
             "OX-900",
             "XT-CPANEL",
+            "H700-TAB",
+            "XG-808",
             "XT-FIRE",
             "XT-WATER"
         ];
@@ -863,7 +865,7 @@ class CustomersController extends Controller
     {
         $data = [
             ["name" => "Intruder", "id" => "Intruder"],
-            ["name" => "Burglary", "id" => "Burglary"],
+            //["name" => "Burglary", "id" => "Burglary"],
             ["name" => "Medical", "id" => "Medical"],
             ["name" => "Temperature", "id" => "Temperature"],
             ["name" => "Water", "id" => "Water"],
