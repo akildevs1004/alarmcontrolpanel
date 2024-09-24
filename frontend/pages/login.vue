@@ -143,7 +143,7 @@
                   >EMAIL ADDRESS</label
                 >
                 <v-text-field
-                  class="login-input-box"
+                  class="login-input-box emailtext-field"
                   v-model="credentials.email"
                   hide-details
                   id="form2Example11"
@@ -167,9 +167,10 @@
                   dense
                   outlined
                   autocomplete="off"
+                  :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="show_password ? 'text' : 'password'"
                   v-model="credentials.password"
-                  class="input-group--focused login-input-box"
+                  class="input-group--focused login-input-box emailtext-field"
                   @click:append="show_password = !show_password"
                   style="background-color: #fff; margin-top: 5px"
                 ></v-text-field>
@@ -354,7 +355,9 @@ export default {
   margin: 0;
   padding: 0;
 }
-
+.emailtext-field .v-input__slot {
+  padding: 0 2px !important;
+}
 /* html {
   background: url("../static/login/bgimage3.png") no-repeat center center fixed;
   -webkit-background-size: cover;

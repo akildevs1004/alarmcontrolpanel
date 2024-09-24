@@ -246,7 +246,7 @@ class CustomerAlarmEventsController extends Controller
             'title' => 'nullable',
 
             'call_status' => 'required',
-            'response' => 'required',
+            'response' => 'nullable',
             'event_status' => 'required',
             'security_id' => 'nullable',
 

@@ -317,7 +317,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             "area" => $logs['area'],
                             "alarm_type" => $logs['alarm_type'],
                             "alarm_category" => $alarm_catgory,
-                            "sensor_zone_id" => $sensor_zone_id
+                            "sensor_zone_id" => $sensor_zone_id,
+                            "alarm_source" => $logs['alarm_source'],
                         ];
 
 

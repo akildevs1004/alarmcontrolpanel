@@ -137,6 +137,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                 $alarm_type = '';
+                $alarm_source = 'Sensor';
 
                 //3401 00 000 / HOME 
 
@@ -208,6 +209,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                                 "alarm_type" => $alarm_type,
                                 "area" => $area,
                                 "zone" => $zone,
+                                "alarm_source" => $alarm_source,
+
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
@@ -231,6 +234,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                                 "log_time" => $log_time,
                                 "alarm_status" => 1,
                                 "alarm_type" => $alarm_type,
+                                "alarm_source" => $alarm_source,
 
                             ];
 

@@ -340,7 +340,7 @@
             <template v-slot:item.burglary="{ item }">
               <div
                 v-if="
-                  $dateFormat.verifyDeviceSensorName('Burglary', item.devices)
+                  $dateFormat.verifyDeviceSensorName('Intruder', item.devices)
                 "
               >
                 <img

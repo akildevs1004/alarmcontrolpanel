@@ -612,7 +612,7 @@ export default {
       dialogTabViewCustomer: false,
       viewCustomerId: null,
       popupEventText: "",
-      filterAlarmStatus: null,
+      filterAlarmStatus: 1,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -720,7 +720,7 @@ export default {
           (this.$route.name == "alarm-dashboard" ||
             this.$route.name == "alarm-allevents" ||
             this.$route.name == "alarm-alarm-events") &&
-          this.filterAlarmStatus == "1"
+          this.filterAlarmStatus == 1
         )
           this.getDataFromApi(0);
       }, 1000 * 20 * 1);

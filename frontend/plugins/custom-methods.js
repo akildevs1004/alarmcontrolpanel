@@ -241,14 +241,14 @@ export default ({ app }, inject) => {
           return true;
         }
 
-        if (device.sensorzones) {
-          let filter = device.sensorzones.filter(
-            (e) => e.sensor_name == sensorName
-          );
-          if (filter.length > 0) {
-            return true;
-          }
-        }
+        // if (device.sensorzones) {
+        //   let filter = device.sensorzones.filter(
+        //     (e) => e.sensor_name == sensorName
+        //   );
+        //   if (filter.length > 0) {
+        //     return true;
+        //   }
+        // }
       }
 
       return false;
