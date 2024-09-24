@@ -138,10 +138,18 @@
               class="customer-building-tabs-left-line"
             >
               <v-tabs-slider color="blue"></v-tabs-slider>
-              <v-tab>Business Photo</v-tab>
-              <v-tab>Google Map</v-tab>
-              <v-tab>Device Map</v-tab>
 
+              <v-tab>Google Map</v-tab>
+              <v-tab>Business Photo</v-tab>
+              <v-tab>Device Map</v-tab>
+              <v-tab-item>
+                <v-card elevation="13" outlined>
+                  <SecurityGoogleMap
+                    class="rounded-lg"
+                    :customer="customer"
+                    style="padding: 20px"
+                  /> </v-card
+              ></v-tab-item>
               <v-tab-item>
                 <v-card elevation="13" outlined>
                   <img
@@ -156,13 +164,6 @@
                 </v-card>
               </v-tab-item>
               <v-tab-item>
-                <v-card elevation="13" outlined>
-                  <SecurityGoogleMap
-                    class="rounded-lg"
-                    :customer="customer"
-                    style="padding: 20px"
-                  /> </v-card></v-tab-item
-              ><v-tab-item>
                 <v-card elevation="13" outlined>
                   <SecurityBuildingPhotos
                     class="rounded-lg"

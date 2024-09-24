@@ -301,7 +301,7 @@ export default {
         { text: "Address", value: "address", sortable: false },
         // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false },
-
+        { text: "Source", value: "alarm_source", sortable: false },
         //{ text: "Zone/Area", value: "zone", sortable: false },
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
         { text: "Event Time", value: "start_date", sortable: false },

@@ -646,6 +646,7 @@ export default {
 
         // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false },
+        { text: "Source", value: "alarm_source", sortable: false },
 
         // { text: "Zone", value: "zone", sortable: false },
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
