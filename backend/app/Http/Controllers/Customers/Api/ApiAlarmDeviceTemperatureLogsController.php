@@ -427,6 +427,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             AlarmEvents::where("id", $alarmData['id'])
                                 ->update([
                                     "alarm_end_datetime" => $datetimeC,
+                                    "alarm_status" => 0,
                                     "response_minutes" => $minutesDifference
                                 ]);
                         }
