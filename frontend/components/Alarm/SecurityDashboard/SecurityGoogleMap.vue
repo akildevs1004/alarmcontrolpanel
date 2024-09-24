@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- <v-dialog v-model="dialog" max-width="200px">TTTTTTTTTTT</v-dialog> -->
-    <div id="map" style="height: 550px; width: 100%"></div>
+    <div
+      :id="'mapCustomer' + customer_id"
+      style="height: 550px; width: 100%"
+    ></div>
 
     <!-- <v-btn
       class="text-right"
@@ -18,7 +21,7 @@
 
 <script>
 export default {
-  props: ["customer"],
+  props: ["customer", "customer_id"],
   data: () => ({
     map: null,
     mapKey: null,
@@ -78,28 +81,31 @@ export default {
       document.head.appendChild(script);
     },
     initMap() {
-      this.map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 12,
-        center: { lat: 25.276987, lng: 55.296249 },
-        styles: [
-          {
-            featureType: "administrative",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "administrative",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "landscape",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "poi",
-            stylers: [{ visibility: "off" }],
-          },
-        ],
-      });
+      this.map = new google.maps.Map(
+        document.getElementById("mapCustomer" + this.customer_id),
+        {
+          zoom: 12,
+          center: { lat: 25.276987, lng: 55.296249 },
+          styles: [
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "poi",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
+        }
+      );
       this.geocoder = new google.maps.Geocoder();
       this.infowindow = new google.maps.InfoWindow();
       this.plotLocations();

@@ -273,7 +273,8 @@
             :alarmId="eventId"
             :customer="customer"
             :isPopup="true"
-        /></v-card-text>
+          />
+        </v-card-text>
       </v-card>
     </v-dialog>
     <v-row>
@@ -858,11 +859,11 @@ export default {
                 this.viewAlarmInformation(item.latest_alarm_event);
               });
 
-            btnObject = document.getElementById(
+            let btnObject2 = document.getElementById(
               "customerInfowindow-btn-" + item.id
             );
-            if (btnObject)
-              btnObject.addEventListener("click", () => {
+            if (btnObject2)
+              btnObject2.addEventListener("click", () => {
                 this.dialog = true;
                 this.key += 1;
                 this.customerInfo = item;

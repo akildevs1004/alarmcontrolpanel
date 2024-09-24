@@ -147,7 +147,9 @@
                   <SecurityGoogleMap
                     class="rounded-lg"
                     :customer="customer"
+                    :customer_id="customer.id"
                     style="padding: 20px"
+                    name="gogole_map"
                   /> </v-card
               ></v-tab-item>
               <v-tab-item>
