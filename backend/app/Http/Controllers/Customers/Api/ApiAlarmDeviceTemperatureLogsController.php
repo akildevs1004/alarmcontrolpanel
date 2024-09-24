@@ -286,9 +286,13 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     if (isset($logs['log_time'])) {
 
 
-                        $deviceZone =  DeviceZones::where("device_id", $device['id'])
-                            ->where("area_code", $logs['area'])
-                            ->where("zone_code", $logs['zone']);
+                        $deviceZone =  DeviceZones::where("device_id", $device['id']);
+
+                        if ($logs['area'] != '') {
+                            $deviceZone->where("area_code", $logs['area']);
+                        }
+
+                        $deviceZone->where("zone_code", $logs['zone']);
 
                         $sensor_name = (clone $deviceZone)->pluck('sensor_name');
                         $sensor_name = $sensor_name[0] ?? null;
