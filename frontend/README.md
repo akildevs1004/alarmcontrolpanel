@@ -175,3 +175,11 @@ try {
   },
 
 ---------------------------------------------------------------------
+
+https://www.npmjs.com/package/@vue-leaflet/vue-leaflet
+
+npm install leaflet vue2-leaflet
+
+npm install leaflet@latest
+
+import 'leaflet/dist/leaflet.css';

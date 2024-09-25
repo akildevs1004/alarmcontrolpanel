@@ -20,6 +20,12 @@ class DeviceZoneTypesController extends Controller
     {
         return DeviceZoneTypes::orderBy('id', 'asc')->get();
     }
+    public function sensorTypesList()
+    {
+        return  ["Motion Sensor", "Vibration Sensor"];
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

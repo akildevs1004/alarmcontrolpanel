@@ -1149,13 +1149,20 @@ export default {
       //location.href = process.env.APP_URL + "/dashboard2";
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
-    async loadHeaderNotificationMenu() {
-      if (this.isBackendRequestOpen) return false;
+    loadHeaderNotificationMenu() {
+      if (this.isBackendRequestOpen) {
+        // Cancel the previous request if it's still pending
+        if (this.cancelRequest) {
+          this.cancelRequest(); // This triggers the cancellation
+        }
+      }
 
       this.isBackendRequestOpen = true;
       this.key = this.key + 1;
+
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
+        this.isBackendRequestOpen = false;
         return false;
       }
 
@@ -1164,41 +1171,45 @@ export default {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
         },
+        cancelToken: new this.$axios.CancelToken((cancel) => {
+          this.cancelRequest = cancel; // Store the cancel function
+        }),
       };
 
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
-
-          this.notificationsMenuItemsUpdated = [];
-          this.notificationAlarmDevices = data;
-
+          this.notificationsMenuItems = [];
+          this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
+          this.key += 1;
 
           data.forEach((element) => {
-            let title = "";
-            if (element.device.customer)
-              title = element.device?.customer?.building_name
+            let notification = {
+              title: element.device?.customer?.building_name
                 ? element.device.customer.building_name +
                   " - " +
                   element.alarm_type
-                : "---";
-            let notificaiton = {
-              title: title,
+                : "---",
               date_from: element.alarm_start_datetime,
               click: "/alarm/allevents",
               icon: this.alarm_icons[element.alarm_type] ?? "---",
               key: "leaves",
             };
 
-            this.notificationsMenuItemsUpdated.push(notificaiton);
+            this.notificationsMenuItems.push(notification);
           });
 
-          this.notificationsMenuItems = this.notificationsMenuItemsUpdated;
-
-          this.loadHeaderNotificationTicketMenu();
-          //this.pendingNotificationsCount = this.notificationsMenuItems.length;
+          this.pendingNotificationsCount = data.length;
+        })
+        .catch((error) => {
+          if (this.$axios.isCancel(error)) {
+            console.log("Previous request canceled");
+          } else {
+            console.error("Error loading notifications:", error);
+          }
+          this.isBackendRequestOpen = false;
         });
     },
     loadAlarmNotificationIcons() {

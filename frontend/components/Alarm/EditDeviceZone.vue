@@ -31,7 +31,7 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-text-field
-                    label="Zone Name"
+                    label="Zone Name(ex: Kitchen, Hall, etc)"
                     dense
                     small
                     outlined
@@ -48,7 +48,25 @@
                   >
                 </v-col>
                 <v-col cols="12" dense>
-                  <v-select
+                  <v-combobox
+                    label="Sensor Type "
+                    :items="sensorTypes"
+                    dense
+                    small
+                    outlined
+                    v-model="payload_security.sensor_type"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-combobox>
+                  <span
+                    v-if="primary_errors && primary_errors.sensor_type"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.sensor_type[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="12" dense>
+                  <v-combobox
                     :items="ZoneTypes"
                     item-value="name"
                     item-text="name"
@@ -60,7 +78,7 @@
                     hide-details
                     :readonly="!editable"
                     :filled="!editable"
-                  ></v-select>
+                  ></v-combobox>
                   <span
                     v-if="primary_errors && primary_errors.sensor_name"
                     class="text-danger mt-2"
@@ -176,6 +194,7 @@ export default {
       { id: "10", name: "Area 10" },
     ],
     ZoneTypes: [],
+    sensorTypes: [],
     contactTypes: [],
     branchesList: [],
     startDateMenuOpen: "",
@@ -218,6 +237,16 @@ export default {
     if (this.$store.state.storeAlarmControlPanel?.ZoneTypes) {
       this.ZoneTypes = this.$store.state.storeAlarmControlPanel.ZoneTypes;
     }
+
+    this.$axios
+      .get("device_sensor_types_dropdown", {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      })
+      .then(({ data }) => {
+        this.sensorTypes = data;
+      });
     // setTimeout(() => {
     //console.log(this.editAddressType);
     if (this.editId != "" && this.item) {
@@ -228,6 +257,7 @@ export default {
       this.payload_security.area_code = this.item.area_code;
       this.payload_security.hours24 = this.item.hours24;
       this.payload_security.wired = this.item.wired;
+      this.payload_security.sensor_type = this.item.sensor_type;
     }
   },
   methods: {

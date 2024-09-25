@@ -271,6 +271,10 @@ export default {
         value: "sensor_name",
       },
       {
+        text: "Sensor Type",
+        value: "sensor_type",
+      },
+      {
         text: "Area",
         value: "area_code",
       },

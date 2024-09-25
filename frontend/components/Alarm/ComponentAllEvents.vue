@@ -210,7 +210,7 @@
                 style="width: 600px"
               >
                 <v-row>
-                  <v-col cols="6">
+                  <v-col cols="7">
                     <v-icon
                       loading="true"
                       @click="getDataFromApi(0)"
@@ -219,13 +219,13 @@
                     >
 
                     <v-text-field
-                      style="padding-top: 7px; float: right; width: 350px"
+                      style="padding-top: 7px; float: right; width: 300px"
                       height="20"
                       class="employee-schedule-search-box"
                       @input="getDataFromApi(0)"
                       v-model="commonSearch"
                       label="Common Search(All Content)"
-                      placeholder="ID,Name,location,Type, Priority, location etc..."
+                      placeholder="ID,Name,location etc..."
                       dense
                       outlined
                       type="text"
@@ -259,8 +259,8 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-                  <v-col cols="2"
-                    ><v-select
+                  <v-col cols="2">
+                    <v-select
                       class="employee-schedule-search-box"
                       style="
                         padding-top: 7px;
@@ -291,7 +291,7 @@
                       :defaultFilterType="1"
                       :height="'30px'"
                   /></v-col>
-                  <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
+                  <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>
                       <template v-slot:activator="{ on, attrs }">
                         <span v-bind="attrs" v-on="on">
@@ -359,7 +359,7 @@
                         </v-list-item>
                       </v-list>
                     </v-menu>
-                  </v-col>
+                  </v-col> -->
                 </v-row>
               </v-col>
             </v-row>
@@ -426,14 +426,20 @@
                           </template>
                           <template v-slot:item.address="{ item }">
                             <div>{{ item.device?.customer?.area }}</div>
+                            <div class="secondary-value">
+                              {{ item.device?.customer?.city }}
+                            </div>
                           </template>
-                          <template v-slot:item.city="{ item }">
-                            <div>{{ item.device?.customer?.city }}</div>
-                          </template>
+                          <template v-slot:item.city="{ item }"> </template>
 
                           <template v-slot:item.sensor="{ item }">
                             <div>
                               {{ item.alarm_type }}
+                            </div>
+                            <div class="secondary-value">
+                              <div class="secondary-value">
+                                {{ item.zone_data?.location ?? "---" }}
+                              </div>
                             </div>
                           </template>
                           <template v-slot:item.property="{ item }">
@@ -451,6 +457,16 @@
                               {{ item.zone_data?.wired ?? "---" }}
                             </div>
                           </template>
+                          <template v-slot:item.zonedata="{ item }">
+                            <div>
+                              {{ item.zone_data?.sensor_type ?? "---" }}
+                            </div>
+
+                            <div class="secondary-value">
+                              {{ item.zone_data?.sensor_name ?? "---" }}
+                            </div>
+                          </template>
+
                           <template v-slot:item.start_date="{ item }">
                             <div>
                               {{
@@ -648,10 +664,11 @@ export default {
         { text: "Property", value: "property", sortable: false },
         { text: "Address", value: "address", sortable: false },
 
-        { text: "City", value: "city", sortable: false },
+        // { text: "City", value: "city", sortable: false },
 
         // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false },
+        { text: "Zone", value: "zonedata", sortable: false },
         { text: "Source", value: "alarm_source", sortable: false },
 
         // { text: "Zone", value: "zone", sortable: false },

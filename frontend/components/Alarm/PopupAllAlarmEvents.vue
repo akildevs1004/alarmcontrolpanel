@@ -157,12 +157,12 @@
                   {{ item.device?.serial_number }}
                 </div>
               </template>
-              <template v-slot:item.alarm_source="{ item }">
+              <!-- <template v-slot:item.alarm_source="{ item }">
                 <div>{{ item.alarm_source ?? "---" }}</div>
                 <div class="secondary-value">
                   {{ item.zone_data?.wired ?? "---" }}
                 </div>
-              </template>
+              </template> -->
               <template v-slot:item.sensor="{ item }">
                 <div>
                   {{ item.alarm_type }}
@@ -182,6 +182,21 @@
               <template v-slot:item.zone="{ item }">
                 <div>{{ item.zone }}</div>
                 <div class="secondary-value">{{ item.area }}</div>
+              </template>
+              <template v-slot:item.alarm_source="{ item }">
+                <div>{{ item.alarm_source ?? "---" }}</div>
+                <div class="secondary-value">
+                  {{ item.zone_data?.wired ?? "---" }}
+                </div>
+              </template>
+              <template v-slot:item.zonedata="{ item }">
+                <div>
+                  {{ item.zone_data?.sensor_type ?? "---" }}
+                </div>
+
+                <div class="secondary-value">
+                  {{ item.zone_data?.sensor_name ?? "---" }}
+                </div>
               </template>
               <template v-slot:item.start_date="{ item }">
                 <div>
@@ -307,7 +322,9 @@ export default {
         { text: "Address", value: "address", sortable: false },
         // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false },
+        { text: "Zone", value: "zonedata", sortable: false },
         { text: "Source", value: "alarm_source", sortable: false },
+
         //{ text: "Zone/Area", value: "zone", sortable: false },
         // { text: "Alarm Type", value: "alarm_type" , sortable: false },
         { text: "Event Time", value: "start_date", sortable: false },

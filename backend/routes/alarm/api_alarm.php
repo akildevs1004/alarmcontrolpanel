@@ -85,6 +85,7 @@ Route::delete('delete_device_zone', [CustomersController::class, 'deleteDeviceZo
 
 Route::apiResource('alarm_sensor_types',  AlarmSensorTypesController::class);
 Route::get('device_zone_types_dropdown',  [DeviceZoneTypesController::class, "zonetypesList"]);
+Route::get('device_sensor_types_dropdown',  [DeviceZoneTypesController::class, "sensorTypesList"]);
 
 
 

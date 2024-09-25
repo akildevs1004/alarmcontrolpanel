@@ -339,7 +339,7 @@ class CustomersController extends Controller
 
             'device_id' => 'required',
 
-
+            'sensor_type' => 'nullable',
 
 
         ]);
@@ -380,7 +380,7 @@ class CustomersController extends Controller
 
             'device_zone_id' => 'required',
             'device_id' => 'required',
-
+            'sensor_type' => 'nullable',
 
 
 

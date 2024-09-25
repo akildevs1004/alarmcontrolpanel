@@ -1267,13 +1267,19 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
-      // console.log(this.isBackendRequestOpen);
-      if (this.isBackendRequestOpen) return false;
+      if (this.isBackendRequestOpen) {
+        // Cancel the previous request if it's still pending
+        if (this.cancelRequest) {
+          this.cancelRequest(); // This triggers the cancellation
+        }
+      }
 
       this.isBackendRequestOpen = true;
       this.key = this.key + 1;
+
       let company_id = this.$auth.user?.company?.id || 0;
       if (company_id == 0) {
+        this.isBackendRequestOpen = false;
         return false;
       }
 
@@ -1282,6 +1288,9 @@ export default {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
         },
+        cancelToken: new this.$axios.CancelToken((cancel) => {
+          this.cancelRequest = cancel; // Store the cancel function
+        }),
       };
 
       this.$axios
@@ -1292,14 +1301,9 @@ export default {
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
           this.key += 1;
-          // if (data.length > 0) {
-          //   this.dialogAlarmPopupNotificationStatus = true;
-          // } else {
-          //   this.dialogAlarmPopupNotificationStatus = false;
-          // }
 
           data.forEach((element) => {
-            let notificaiton = {
+            let notification = {
               title: element.device?.customer?.building_name
                 ? element.device.customer.building_name +
                   " - " +
@@ -1311,12 +1315,18 @@ export default {
               key: "leaves",
             };
 
-            this.notificationsMenuItems.push(notificaiton);
-
-            this.pendingNotificationsCount = this.notificationsMenuItems.length;
+            this.notificationsMenuItems.push(notification);
           });
 
           this.pendingNotificationsCount = data.length;
+        })
+        .catch((error) => {
+          if (this.$axios.isCancel(error)) {
+            console.log("Previous request canceled");
+          } else {
+            console.error("Error loading notifications:", error);
+          }
+          this.isBackendRequestOpen = false;
         });
     },
 

@@ -138,10 +138,20 @@
               class="customer-building-tabs-left-line"
             >
               <v-tabs-slider color="blue"></v-tabs-slider>
-
+              <!-- <v-tab>Map</v-tab> -->
               <v-tab>Google Map</v-tab>
               <v-tab>Business Photo</v-tab>
               <v-tab>Device Map</v-tab>
+              <!-- <v-tab-item>
+                <v-card elevation="13" outlined>
+                  <SecurityLeafletMap
+                    class="rounded-lg"
+                    :customer="customer"
+                    :customer_id="customer.id"
+                    style="padding: 20px"
+                    name="gogole_map"
+                  /> </v-card
+              ></v-tab-item> -->
               <v-tab-item>
                 <v-card elevation="13" outlined>
                   <SecurityGoogleMap
@@ -183,9 +193,11 @@
 
 <script>
 import SecurityGoogleMap from "../../Alarm/SecurityDashboard/SecurityGoogleMap.vue";
+import SecurityLeafletMap from "../../Alarm/SecurityDashboard/SecurityLeafletMap.vue";
+
 import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 export default {
-  components: { SecurityGoogleMap, SecurityBuildingPhotos },
+  components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityLeafletMap },
   props: ["_id", "isPopup", "customer"],
   data: () => ({
     tab: "",

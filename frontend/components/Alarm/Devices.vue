@@ -39,7 +39,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogZones" width="800px">
+    <v-dialog v-model="dialogZones" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Intruder - Sensors </span>
