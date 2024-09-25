@@ -366,21 +366,23 @@ class ApiAlarmDeviceSensorLogsController extends Controller
         foreach ($logs as $key => $log) {
 
             $device = Device::where("serial_number", $log->serial_number)->first();
+            if ($device) {
 
-            $disarm_datetime = new DateTime($log->disarm_datetime);
-            $disarm_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
+                $disarm_datetime = new DateTime($log->disarm_datetime);
+                $disarm_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
 
 
-            $datetime1 = new DateTime($log->armed_datetime);
-            $datetime2 = $disarm_datetime;
-            $interval = $datetime1->diff($datetime2);
-            $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes 
+                $datetime1 = new DateTime($log->armed_datetime);
+                $datetime2 = $disarm_datetime;
+                $interval = $datetime1->diff($datetime2);
+                $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes 
 
-            $data = [
-                "duration_in_minutes" => $minutesDifference,
-                "disarm_datetime" => $disarm_datetime->format('Y-m-d H:i:s')
-            ];
-            DeviceArmedLogs::where("id",  $log->id)->update($data);
+                $data = [
+                    "duration_in_minutes" => $minutesDifference,
+                    "disarm_datetime" => $disarm_datetime->format('Y-m-d H:i:s')
+                ];
+                DeviceArmedLogs::where("id",  $log->id)->update($data);
+            }
         }
     }
     public function updateCompanyIds($insertedRecord, $serial_number, $log_time)
