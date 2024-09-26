@@ -187,33 +187,26 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row class="p-0" style="padding-top: 0px">
-      <v-col
-        cols="12"
-        class="text-right"
-        style="padding-top: 0px; z-index: 9; padding-right: 0px"
-      >
+    <v-row style="padding-top: 0px">
+      <v-col cols="12" class="text-right" style="padding-top: 15px; z-index: 9">
         <v-row class="mt-0" v-if="!eventFilter">
-          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
+          <v-col v-if="sensorItems.length > 1" class="text-left mt-1">
             <h3>Customer Alarm Events</h3></v-col
           >
 
-          <v-col
-            :cols="sensorItems.length > 1 ? 8 : 12"
-            class="text-right"
-            style="width: 600px"
-          >
+          <v-col class="text-right">
             <v-row>
-              <v-col cols="7">
+              <v-col>
                 <v-icon
                   loading="true"
                   @click="getDataFromApi(0)"
                   class="mt-2 mr-2"
                   >mdi-reload</v-icon
                 >
-
+              </v-col>
+              <v-col>
                 <v-text-field
-                  style="padding-top: 7px; float: right; width: 300px"
+                  style="padding-top: 7px; float: right"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi(0)"
@@ -226,8 +219,8 @@
                   append-icon="mdi-magnify"
                   clearable
                   hide-details
-                ></v-text-field
-              ></v-col>
+                ></v-text-field>
+              </v-col>
               <!-- <v-col cols="3"
                     ><v-select
                       class="employee-schedule-search-box"
@@ -253,7 +246,7 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-              <v-col cols="2" style="min-width: 100px; padding-right: 0px">
+              <v-col style="padding-right: 0px">
                 <v-select
                   class="employee-schedule-search-box"
                   style="
@@ -276,7 +269,7 @@
                   item-value="id"
                 ></v-select>
               </v-col>
-              <v-col cols="2">
+              <v-col>
                 <CustomFilter
                   style="float: left; padding-top: 5px; z-index: 999"
                   @filter-attr="filterAttr"

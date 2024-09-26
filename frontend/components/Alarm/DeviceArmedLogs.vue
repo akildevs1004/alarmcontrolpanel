@@ -17,7 +17,7 @@
               </v-col>
               <v-col style=""
                 ><v-text-field
-                  style="padding-top: 7px"
+                  style="padding-top: 7px; width: 200px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
