@@ -311,7 +311,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             ->whereDate("area", $logs['area'])
                             ->where("alarm_status", 1)->count();
 
-                        if ($activeAlarmZoneCount == 0) {
+                        // if ($activeAlarmZoneCount == 0) 
+                        {
 
 
 
