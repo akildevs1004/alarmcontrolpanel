@@ -68,8 +68,6 @@
                 <v-col cols="12" dense>
                   <v-combobox
                     :items="ZoneTypes"
-                    item-value="name"
-                    item-text="name"
                     label="Zone Type"
                     dense
                     small
@@ -236,6 +234,8 @@ export default {
     this.payload_security = {};
     if (this.$store.state.storeAlarmControlPanel?.ZoneTypes) {
       this.ZoneTypes = this.$store.state.storeAlarmControlPanel.ZoneTypes;
+
+      this.ZoneTypes = this.ZoneTypes.map((item) => item.name);
     }
 
     this.$axios

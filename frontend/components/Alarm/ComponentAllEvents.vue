@@ -974,6 +974,10 @@ export default {
 
           this.showTable = true;
           this.loading = false;
+
+          // if (page == 1 && this.items[0]) {
+          //   this.date_from = this.items[0].alarm_start_datetime;
+          // }
         });
       } catch (e) {}
     },
