@@ -274,7 +274,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
                     ->where("alarm_status", 1)
-                    ->where("serial_number", "SNF179")
+
                     ->where("verified", false)
                     ->where("time_duration_seconds", '>=', 5)
 
@@ -285,8 +285,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                 foreach ($logsArray  as   $logs) {
-                    Logger::info($logs['id']);
-                    Logger::info($logs['log_time']);
+
                     if (isset($logs['log_time'])) {
 
 
@@ -310,13 +309,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                         // //verify Device , ZOne and Area - Is any alarm already active 
-                        // $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
-                        //     ->whereDate("zone", $logs['zone'])
-                        //     ->whereDate("area", $logs['area'])
-                        //     ->where("alarm_status", 1)->count();
-                        // Logger::info($activeAlarmZoneCount);
-                        // if ($activeAlarmZoneCount == 0) 
-                        {
+                        $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                            ->where("zone", $logs['zone'])
+                            ->where("area", $logs['area'])
+                            ->where("alarm_status", 1)->count();
+
+                        if ($activeAlarmZoneCount == 0) {
 
 
 
@@ -368,6 +366,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             if ($device['alarm_status'] == 1) {
                                 $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
                             }
+                        } else {
+                            Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
                         }
                     }
                 }
