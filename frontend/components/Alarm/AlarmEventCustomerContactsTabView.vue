@@ -3,7 +3,7 @@
     <v-row>
       <v-col style="max-width: 115px">
         <v-tabs
-          style="max-width: 90px"
+          style="max-width: 90px; min-height: 500px"
           icons-and-text
           v-model="tab"
           vertical
