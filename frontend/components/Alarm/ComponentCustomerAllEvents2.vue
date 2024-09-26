@@ -195,7 +195,7 @@
       >
         <v-row class="mt-0" v-if="!eventFilter">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
-            <h3>Alarm Events</h3></v-col
+            <h3>Customer Alarm Events</h3></v-col
           >
 
           <v-col
