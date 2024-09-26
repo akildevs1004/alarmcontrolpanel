@@ -280,6 +280,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                     ->orderBy("log_time", "ASC")->get();
 
+
+                Logger::info(json_encode($logsArray));
+
+
                 foreach ($logsArray  as   $logs) {
 
 
