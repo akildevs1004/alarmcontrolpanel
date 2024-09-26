@@ -367,7 +367,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
                             }
                         } else {
-                            Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
+                            //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
                         }
                     }
                 }
