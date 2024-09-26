@@ -358,7 +358,11 @@
                 <v-card-text>
                   <!-- <CustomerAlarmEvents :key="keyEvents" :customer_id="_id" /> -->
 
-                  <AlamAllEvents :filter_customer_id="_id" :key="keyEvents" />
+                  <AlamAllEvents
+                    :filter_customer_id="_id"
+                    :key="keyEvents"
+                    name="viewcustomer"
+                  />
                 </v-card-text>
               </v-card> </v-tab-item
             ><v-tab-item value="tab-7">

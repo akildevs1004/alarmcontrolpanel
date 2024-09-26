@@ -385,7 +385,7 @@ export default {
             this.data = data.data[0] || null;
             this.customer = this.data;
 
-            console.log("customer", this.customer);
+            //console.log("customer", this.customer);
 
             if (this.data) {
               this.customer_contacts = this.data.contacts;

@@ -370,8 +370,8 @@ export default {
       totalRowsCount: 0,
       headers: [
         { text: "#", value: "sno", sortable: false },
-        { text: "Building", value: "building", sortable: false },
-        { text: "Customer", value: "customer", sortable: false },
+        // { text: "Building", value: "building", sortable: false },
+        // { text: "Customer", value: "customer", sortable: false },
         { text: "Device", value: "device", sortable: false },
         { text: "Sensor", value: "sensor", sortable: false },
 

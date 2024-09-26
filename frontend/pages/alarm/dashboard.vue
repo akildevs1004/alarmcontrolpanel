@@ -49,7 +49,12 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12"><AlamAllEvents /></v-col>
+      <v-col cols="12">
+        <v-card class="elevation-2">
+          <v-card-text class="mt-5">
+            <AlamAllEventsDashboard name="dashboardPieChart" /> </v-card-text
+        ></v-card>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -60,7 +65,7 @@ import AlamDeviceLiveCountPieChart from "../../components/Alarm/Dashboard/AlamDe
 import AlamCustomerContractPieChart from "../../components/Alarm/Dashboard/AlamCustomerContractPieChart.vue";
 import AlamCustomerSensorPieChart from "../../components/Alarm/Dashboard/AlamCustomerSensorPieChart.vue";
 
-import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
+import AlamAllEventsDashboard from "../../components/Alarm/ComponentAllEvents.vue";
 import AlamCustomerEventsPieChart from "../../components/Alarm/Dashboard/AlamCustomerEventsPieChart.vue";
 
 export default {
@@ -69,7 +74,7 @@ export default {
     AlamDeviceLiveCountPieChart,
     AlamCustomerContractPieChart,
     AlamCustomerSensorPieChart,
-    AlamAllEvents,
+    AlamAllEventsDashboard,
     AlamCustomerEventsPieChart,
   },
   data: () => ({

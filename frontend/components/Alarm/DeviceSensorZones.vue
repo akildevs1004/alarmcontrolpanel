@@ -151,22 +151,26 @@
                 </v-col>
               </v-row>
             </template>
-            <template v-slot:item.customers="{ item }">
+            <!-- <template v-slot:item.customers="{ item }">
               {{ item.customers_assigned?.length || "0" }}
             </template>
             <template v-slot:item.contact_number="{ item }">
               {{ item.contact_number }}
+            </template> -->
+            <template v-slot:item.sensor_type="{ item }">
+              {{ item.sensor_type || "---" }}
             </template>
-            <template v-slot:item.email="{ item }">
+            <!-- <template v-slot:item.email="{ item }">
               {{ item.user?.email || "---" }} </template
-            ><template v-slot:item.area_code="{ item }">
+            > -->
+            <template v-slot:item.area_code="{ item }">
               {{
                 item.area_code == ""
                   ? "Default"
                   : getAreaName(item.area_code) ?? "Default"
               }}
             </template>
-            <template v-slot:item.hours24="{ item }">
+            <!-- <template v-slot:item.hours24="{ item }">
               <img
                 v-if="item.hours24 == 1"
                 title="Active"
@@ -179,7 +183,7 @@
                 style="width: 30px"
                 src="/off.png"
               />
-            </template>
+            </template> -->
             <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">

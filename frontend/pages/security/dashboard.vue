@@ -5,7 +5,14 @@
         ><v-col><v-divider color="#DDD" /></v-col>
       </v-row> -->
     <v-row class="mt-5">
-      <v-col cols="12" style="padding-right: 25px"><AlamAllEvents /></v-col>
+      <v-col cols="12" style="padding-right: 25px">
+        <v-card class="elevation-2">
+          <v-card-text class="mt-5">
+            <AlamAllEventsDashboardsecurity
+              name="securitydashboard"
+            /> </v-card-text
+        ></v-card>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -19,7 +26,7 @@
 
 // import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
 // import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
-import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
+import AlamAllEventsDashboardsecurity from "../../components/Alarm/ComponentAllEvents.vue";
 import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashboardStatistics.vue";
 
 export default {
@@ -31,7 +38,7 @@ export default {
     // AlarmFirePieChart,
     // AlarmWaterPieChart,
     // AlarmLivePieChart,
-    AlamAllEvents,
+    AlamAllEventsDashboardsecurity,
     CompAlarmDashboardStatistics,
   },
   data: () => ({

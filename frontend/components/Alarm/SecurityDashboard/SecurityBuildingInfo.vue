@@ -36,6 +36,18 @@
                   :value="customer.account_status == 1 ? 'Active' : 'Disabled'"
                   hide-details
                 >
+                </v-text-field> </v-col
+              ><v-col cols="12">
+                <v-text-field
+                  readonly
+                  class=""
+                  label="Name"
+                  dense
+                  outlined
+                  flat
+                  v-model="customer.building_name"
+                  hide-details
+                >
                 </v-text-field>
               </v-col>
               <v-col cols="12">

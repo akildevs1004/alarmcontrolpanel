@@ -310,7 +310,7 @@ class CustomersController extends Controller
         $data["office_phone"] = $data1["office_phone"];
         $data["email"] = $data1["email"];
         $data["whatsapp"] = $data1["whatsapp"];
-        $data["display_order"] = 0;
+        $data["display_order"] = 2;
         return   $this->updateContactPrimary($data, $request, "secondary");
     }
     public function deleteDeviceZoneIndividual(Request $request)
@@ -545,7 +545,7 @@ class CustomersController extends Controller
         $data["email"] = $data1["email"] ?? '---';;
         $data["whatsapp"] = $data1["whatsapp"] ?? '---';;
         $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
-        $data["display_order"] = 0;
+        $data["display_order"] = 1;
 
         return   $this->updateContactPrimary($data, $request, "primary");
     }

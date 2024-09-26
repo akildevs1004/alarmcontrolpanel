@@ -6,13 +6,18 @@
       </v-snackbar>
     </div>
     <CompAlarmDashboardStatistics />
-
-    <AllEvents name="AllEvents1" :showFilters="true" />
+    <v-card class="elevation-2">
+      <v-card-text class="mt-5">
+        <AllEventsDashboard2
+          name="AllEvents1"
+          :showFilters="true"
+        /> </v-card-text
+    ></v-card>
   </div>
 </template>
 
 <script>
-import AllEvents from "../../components/Alarm/ComponentAllEvents.vue";
+import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
 // import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
 import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
@@ -27,7 +32,7 @@ import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashbo
 
 export default {
   components: {
-    AllEvents,
+    AllEventsDashboard2,
     CompAlarmDashboardStatistics,
   },
 

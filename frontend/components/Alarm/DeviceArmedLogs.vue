@@ -9,16 +9,15 @@
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
-          <v-col cols="6"></v-col>
-          <v-col cols="6" class="text-right" style="max-width: 660px">
+          <v-col></v-col>
+          <v-col class="text-right">
             <v-row>
-              <v-col cols="1" class="mt-2">
+              <v-col class="mt-2">
                 <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
               </v-col>
-              <v-col cols="5"
+              <v-col style=""
                 ><v-text-field
                   style="padding-top: 7px"
-                  width="200px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
@@ -32,7 +31,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="4">
+              <v-col style="">
                 <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
@@ -41,7 +40,7 @@
                   :defaultFilterType="1"
                   :height="'40px'"
               /></v-col>
-              <v-col cols="2" style="width: 100px; margin-top: 10px">
+              <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
                 <v-menu bottom right>
                   <template v-slot:activator="{ on, attrs }">
                     <span v-bind="attrs" v-on="on">
@@ -109,7 +108,7 @@
                     </v-list-item>
                   </v-list>
                 </v-menu>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-col>
         </v-row>

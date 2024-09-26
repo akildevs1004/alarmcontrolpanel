@@ -483,7 +483,7 @@
                 :items="notificationAlarmDevicesContent"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
                 @callReset5Minutes="Reset5Minutes"
-                :key="key"
+                :key="popupKey"
                 :alarm_icons="alarm_icons"
               />
               <!-- <v-row
@@ -709,6 +709,7 @@ export default {
   },
   data() {
     return {
+      popupKey: 1,
       key: 1,
       snackbar: false,
       response: "",
@@ -859,7 +860,10 @@ export default {
           if (this.wait5Minutes == false) {
             if (this.notificationAlarmDevicesContent) {
               if (this.notificationAlarmDevicesContent.length > 0) {
-                this.dialogAlarmPopupNotificationStatus = true;
+                if (!this.dialogAlarmPopupNotificationStatus) {
+                  this.popupKey += 1;
+                  this.dialogAlarmPopupNotificationStatus = true;
+                }
               } else {
                 this.dialogAlarmPopupNotificationStatus = false;
               }
@@ -1317,7 +1321,10 @@ export default {
 
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
-      this.dialogAlarmPopupNotificationStatus = true;
+      if (!this.dialogAlarmPopupNotificationStatus) {
+        this.popupKey += 1;
+        this.dialogAlarmPopupNotificationStatus = true;
+      }
       // this.verifyPopupAlarmStatus();
     },
     verifyPopupAlarmStatus() {
@@ -1339,7 +1346,10 @@ export default {
           if (data.length > 0) {
             this.notificationAlarmDevices = data;
 
-            this.dialogAlarmPopupNotificationStatus = true;
+            if (!this.dialogAlarmPopupNotificationStatus) {
+              this.popupKey += 1;
+              this.dialogAlarmPopupNotificationStatus = true;
+            }
           } else {
             this.dialogAlarmPopupNotificationStatus = false;
           }

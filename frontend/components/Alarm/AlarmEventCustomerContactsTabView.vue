@@ -1,7 +1,7 @@
 <template>
   <div max-width="100%">
     <v-row>
-      <v-col cols="2" style="max-width: 115px">
+      <v-col style="max-width: 115px">
         <v-tabs
           style="max-width: 90px"
           icons-and-text
@@ -14,9 +14,24 @@
         >
           <v-tab href="#Customer" class="customer-tab">
             Customer
-            <v-icon>mdi-card-account-details</v-icon>
+            <v-icon>mdi-card-account-details</v-icon> </v-tab
+          ><v-tab class="customer-tab">
+            All Contacts
+            <v-icon>mdi-account-tie</v-icon>
           </v-tab>
           <v-tab class="customer-tab">
+            Discussions
+            <v-icon>mdi-text-box-outline</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Old Events
+            <v-icon>mdi-text-box-outline</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
+            Armed Report
+            <v-icon>mdi-text-box-outline</v-icon>
+          </v-tab>
+          <!-- <v-tab class="customer-tab">
             Primary
             <v-icon>mdi-account-tie</v-icon>
           </v-tab>
@@ -39,23 +54,64 @@
             <v-icon>mdi-fire</v-icon> </v-tab
           ><v-tab class="customer-tab">
             Technician
-            <v-icon>mdi mdi-briefcase-account</v-icon> </v-tab
-          ><v-tab class="customer-tab">
-            Logs
-            <v-icon>mdi-text-box-outline</v-icon>
-          </v-tab>
+            <v-icon>mdi mdi-briefcase-account</v-icon>
+          </v-tab> -->
         </v-tabs></v-col
       >
-      <v-col cols="10" style="width: 108%">
+      <v-col style="padding-left: 0px">
         <v-tabs-items v-model="tab" style="overflow: visible">
           <v-tab-item value="Customer">
             <v-card flat>
-              <v-card-text style="width: 108%">
+              <v-card-text>
                 <SecurityBuildingInfo v-if="customer" :customer="customer" />
               </v-card-text>
             </v-card>
           </v-tab-item>
+
           <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <AlarmEventAllEmergencyContacts
+                  v-if="customer"
+                  :alarmId="alarmId"
+                  :customer_id="customer.id"
+                  :customer_contacts="customer.contacts"
+                  :customer="customer"
+                  :key="keyAllContacts"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <SecurityAlarmNotes
+                  :alarmId="alarmId"
+                  v-if="customer"
+                  :customer="customer"
+                  :key="keyLogs"
+              /></v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <AlamAllEventsPopup
+              v-if="customer"
+              :filter_customer_id="customer.id"
+              name="PopupAlarmEventsCustoemrInfoAlamAllEventsPopup"
+            />
+          </v-tab-item>
+          <v-tab-item>
+            <v-card elevation="0">
+              <v-card-text>
+                <DeviceArmedLogs
+                  style="margin-top: 10px"
+                  v-if="customer"
+                  :customer_id="customer.id"
+                  name="PopupAlarmEventsCustoemrInfoDeviceArmedLogs"
+              /></v-card-text>
+            </v-card>
+          </v-tab-item>
+          <!-- <v-tab-item>
             <v-card flat>
               <v-card-text style="width: 108%">
                 <SecurityContactInfo
@@ -65,7 +121,8 @@
                   :contact_type="'primary'"
                   :key="keyPrimary"
                   :key1="keyPrimary"
-              /></v-card-text>
+                />
+              </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item>
@@ -139,19 +196,9 @@
                   :key="keyTechnician"
               /></v-card-text>
             </v-card>
-          </v-tab-item>
-          <v-tab-item>
-            <v-card flat>
-              <v-card-text style="width: 108%">
-                <SecurityAlarmNotes
-                  :alarmId="alarmId"
-                  v-if="customer"
-                  :customer="customer"
-                  :key="keyLogs"
-              /></v-card-text>
-            </v-card>
-          </v-tab-item> </v-tabs-items
-      ></v-col>
+          </v-tab-item> -->
+        </v-tabs-items></v-col
+      >
     </v-row>
   </div>
 </template>
@@ -160,18 +207,24 @@
 import SecurityBuildingInfo from "../../components/Alarm/SecurityDashboard/SecurityBuildingInfo.vue";
 import SecurityContactInfo from "../../components/Alarm/SecurityDashboard/SecurityContactInfo.vue";
 import SecurityAlarmNotes from "../../components/Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
-
+import AlarmEventAllEmergencyContacts from "./AlarmEventAllEmergencyContacts.vue";
+import AlamAllEventsPopup from "./ComponentCustomerAllEvents2.vue";
+import DeviceArmedLogs from "./DeviceArmedLogs.vue";
 export default {
   components: {
     SecurityBuildingInfo,
     SecurityContactInfo,
     SecurityAlarmNotes,
+    AlarmEventAllEmergencyContacts,
+    AlamAllEventsPopup,
+    DeviceArmedLogs,
   },
   props: ["_customerID", "alarmId"],
   data: () => ({
     tab: "",
     customer: null,
     key: 1,
+    keyAllContacts: 0,
     keyPrimary: 0,
     keySecondary: 0,
     keySecurity: 0,
@@ -190,14 +243,17 @@ export default {
   watch: {
     tab: {
       handler(value) {
-        if (value == 1) this.keyPrimary += 1;
-        else if (value == 2) this.keySecondary += 1;
-        else if (value == 3) this.keySecurity += 1;
-        else if (value == 4) this.keyPolice += 1;
-        else if (value == 5) this.keyMedical += 1;
-        else if (value == 6) this.keyFire += 1;
-        else if (value == 7) this.keyTechnician += 1;
-        else if (value == 8) this.keyLogs += 1;
+        console.log(value);
+
+        if (value == 1) this.keyAllContacts += 1;
+        else if (value == 2) this.keyPrimary += 1;
+        else if (value == 3) this.keySecondary += 1;
+        else if (value == 4) this.keySecurity += 1;
+        else if (value == 5) this.keyPolice += 1;
+        else if (value == 6) this.keyMedical += 1;
+        else if (value == 7) this.keyFire += 1;
+        else if (value == 8) this.keyTechnician += 1;
+        else if (value == 9) this.keyLogs += 1;
       },
       deep: true,
     },
@@ -216,6 +272,7 @@ export default {
             .get(`customerinfo`, this.payloadOptions)
             .then(({ data }) => {
               this.customer = data;
+
               // if (this.data) {
               //   this.customer_contacts = this.data.contacts;
               // }
@@ -226,7 +283,7 @@ export default {
   },
 };
 </script>
-<style>
+<!-- <style>
 .customer-tabs-right-line .v-tabs-slider-wrapper {
   left: auto !important;
   right: 0 !important;
@@ -241,4 +298,4 @@ export default {
   font-size: 9px !important;
   min-width: 75px !important;
 }
-</style>
+</style> -->

@@ -73,7 +73,35 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogTabViewCustomer" width="80%">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm : {{ popupEventText }}</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              closeDialog();
+              dialogTabViewCustomer = false;
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
 
+        <v-card-text style="padding: 0px; overflow: hidden">
+          <AlarmEventCustomerContactsTabView
+            @closeCustomerDialog="closeCustomerDialog()"
+            :key="key"
+            :_customerID="viewCustomerId"
+            :alarmId="eventId"
+            :customer="customer"
+            :isPopup="true"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <!-- <v-row v-if="sensorItems.length == 0" class="text-center">
       <v-col cols="12" class="text-center"> No Data is available</v-col>
     </v-row> -->
@@ -267,6 +295,48 @@
                   </div>
                 </div> -->
               </template>
+              <template v-slot:item.options="{ item }">
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list width="120" dense>
+                    <v-list-item
+                      v-if="can('branch_view')"
+                      @click="viewCustomerinfo(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-eye </v-icon>
+                        Customer
+                      </v-list-item-title>
+                    </v-list-item>
+                    <!-- <v-list-item
+                      v-if="can('branch_view')"
+                      @click="eventForward(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small>
+                          mdi mdi-share-all
+                        </v-icon>
+                        Forward
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="can('branch_view')"
+                      @click="viewLogs(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small>
+                          mdi-format-list-numbered
+                        </v-icon>
+                        Operator
+                      </v-list-item-title>
+                    </v-list-item> -->
+                  </v-list>
+                </v-menu>
+              </template>
             </v-data-table>
           </v-card-text>
         </v-card>
@@ -280,16 +350,25 @@
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import AlramCloseNotes from "../../components/Alarm/AlramCloseNotes.vue";
+import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
+
+import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 export default {
   components: {
     // EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
     AlarmCustomerView,
     AlramCloseNotes,
+    AlarmEventCustomerContactsTabView,
+
+    AlarmForwardEvent,
   },
   props: ["showFilters", "alarm_icons", "items"],
   data() {
     return {
+      customer: null,
+      popupEventText: "",
+      dialogTabViewCustomer: false,
       dialogCloseAlarm: false,
       dialogViewCustomer: false,
       viewCustomerId: null,
@@ -343,7 +422,7 @@ export default {
         //   align: "center",
         // },
 
-        // { text: "Options", value: "options", sortable: false },
+        { text: "Options", value: "options", sortable: false },
       ],
       // items: [],
       isBackendRequestOpen: false,
@@ -418,6 +497,29 @@ export default {
       // this.viewCustomerId = item.customer_id;
       // this.dialogViewCustomer = true;
     },
+
+    closeCustomerDialog() {
+      this.dialogTabViewCustomer = false;
+    },
+    viewCustomerinfo(item) {
+      if (item.device) {
+        this.popupEventText =
+          "#" +
+          item.id +
+          " -    " +
+          item.alarm_type +
+          " ,  " +
+          "   Time " +
+          item.alarm_start_datetime +
+          " -  Priority " +
+          item.category.name;
+        this.key += 1;
+        this.viewCustomerId = item.customer_id;
+        this.eventId = item.id;
+        this.dialogTabViewCustomer = true;
+      }
+    },
+
     viewNotes(item) {
       this.key = this.key + 1;
       this.eventId = item.id;

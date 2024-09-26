@@ -483,7 +483,7 @@
               <AlarmPopupAllAlarmEvents
                 :items="notificationAlarmDevices"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
-                :key="key"
+                :key="popupKey"
                 :alarm_icons="alarm_icons"
               />
               <!-- <v-row
@@ -709,6 +709,7 @@ export default {
   },
   data() {
     return {
+      popupKey: 1,
       key: 1,
       snackbar: false,
       response: "",

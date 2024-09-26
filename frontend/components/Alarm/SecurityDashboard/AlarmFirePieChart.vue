@@ -14,12 +14,15 @@
           </v-icon>
         </v-card-title>
         <v-card-text style="padding: 20px; padding-left: 0px">
-          <AlamAllEvents
-            style="padding: 0px; padding-top: 0px"
-            :key="key"
-            :popup="true"
-            :eventFilter="'Fire'"
-          />
+          <v-card class="elevation-2">
+            <v-card-text class="mt-5">
+              <AlamAllEvents
+                name="firePieChart"
+                style="padding: 0px; padding-top: 0px"
+                :key="key"
+                :popup="true"
+                :eventFilter="'Fire'" /></v-card-text
+          ></v-card>
         </v-card-text>
       </v-card>
     </v-dialog>

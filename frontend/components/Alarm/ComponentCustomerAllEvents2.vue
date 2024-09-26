@@ -543,7 +543,7 @@
                                 <v-icon color="secondary" small>
                                   mdi-eye
                                 </v-icon>
-                                Customer
+                                Contacts
                               </v-list-item-title>
                             </v-list-item>
                             <v-list-item
@@ -644,9 +644,9 @@ export default {
         { text: "Event Id", value: "sno", sortable: false },
         // { text: "Building", value: "building", sortable: false },
 
-        { text: "Customer", value: "customer", sortable: false },
-        { text: "Property", value: "property", sortable: false },
-        { text: "Address", value: "address", sortable: false },
+        // { text: "Customer", value: "customer", sortable: false },
+        // { text: "Property", value: "property", sortable: false },
+        // { text: "Address", value: "address", sortable: false },
 
         // { text: "City", value: "city", sortable: false },
 
