@@ -324,6 +324,12 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     "response_minutes" => $minutesDifference,
                     "alarm_status" => 0
                 ]);
+
+            AlarmLogs::where("serial_number", $serial_number)
+                ->update([
+
+                    "alarm_status" => 0
+                ]);
         }
 
         //turnoff device alarm status 

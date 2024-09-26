@@ -276,7 +276,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     ->where("alarm_status", 1)
 
                     ->where("verified", false)
-                    ->where("time_duration_seconds", '>=', 30)
+                    ->where("time_duration_seconds", '>=', 15)
 
                     ->orderBy("log_time", "ASC")->get();
 
@@ -305,53 +305,64 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $alarm_catgory = $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
 
-                        //verify if OLD alram active count 
-
-                        $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
-                            ->whereDate("alarm_start_datetime", date("Y-m-d"))
+                        //verify Device , ZOne and Area - Is any alarm already active 
+                        $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                            ->whereDate("zone", $logs['zone'])
+                            ->whereDate("area", $logs['area'])
                             ->where("alarm_status", 1)->count();
 
-                        if ($activeAlarmCount >= 3) {
-                            $alarm_catgory = 1;
-                        }
-
-                        $data = [
-                            "company_id" => $logs['company_id'],
-                            "serial_number" => $logs['serial_number'],
-                            "alarm_start_datetime" => $logs['log_time'],
-                            "customer_id" => $logs['customer_id'],
-                            "zone" => $logs['zone'],
-                            "area" => $logs['area'],
-                            "alarm_type" => $logs['alarm_type'],
-                            "alarm_category" => $alarm_catgory,
-                            "sensor_zone_id" => $sensor_zone_id,
-                            "alarm_source" => $logs['alarm_source'],
-                        ];
+                        if ($activeAlarmZoneCount == 0) {
 
 
-                        //create json file for each company  json file 
 
-                        AlarmEvents::create($data);
-                        $this->createAlarmEventsJsonFile($logs['company_id']);
+                            //verify if OLD alram active count 
 
-                        AlarmLogs::where("id",   $logs["id"])
+                            $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                                ->whereDate("alarm_start_datetime", date("Y-m-d"))
+                                ->where("alarm_status", 1)->count();
 
-                            ->where("verified", false)->update(["verified" => true]);
-                        $data = [
-                            "alarm_status" => 1,
-                            "alarm_start_datetime" => $logs['log_time'],
-                            "alarm_end_datetime" => null
-                        ];
-                        Device::where("serial_number", $logs['serial_number'])->update($data);
-                        // DeviceZones::where("device_id", $device['id'])
-                        //     ->where("area_code", $logs['zone'])
-                        //     ->where("zone_code", $logs['area'])
-                        //     ->update($data);
+                            if ($activeAlarmCount >= 3) {
+                                $alarm_catgory = 1;
+                            }
 
-                        (clone  $deviceZone)->update($data);
+                            $data = [
+                                "company_id" => $logs['company_id'],
+                                "serial_number" => $logs['serial_number'],
+                                "alarm_start_datetime" => $logs['log_time'],
+                                "customer_id" => $logs['customer_id'],
+                                "zone" => $logs['zone'],
+                                "area" => $logs['area'],
+                                "alarm_type" => $logs['alarm_type'],
+                                "alarm_category" => $alarm_catgory,
+                                "sensor_zone_id" => $sensor_zone_id,
+                                "alarm_source" => $logs['alarm_source'],
+                            ];
 
-                        if ($device['alarm_status'] == 1) {
-                            $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+
+                            //create json file for each company  json file 
+
+                            AlarmEvents::create($data);
+                            $this->createAlarmEventsJsonFile($logs['company_id']);
+
+                            AlarmLogs::where("id",   $logs["id"])
+
+                                ->where("verified", false)->update(["verified" => true]);
+                            $data = [
+                                "alarm_status" => 1,
+                                "alarm_start_datetime" => $logs['log_time'],
+                                "alarm_end_datetime" => null
+                            ];
+                            Device::where("serial_number", $logs['serial_number'])->update($data);
+                            // DeviceZones::where("device_id", $device['id'])
+                            //     ->where("area_code", $logs['zone'])
+                            //     ->where("zone_code", $logs['area'])
+                            //     ->update($data);
+
+                            (clone  $deviceZone)->update($data);
+
+                            if ($device['alarm_status'] == 1) {
+                                $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+                            }
                         }
                     }
                 }
@@ -436,6 +447,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                     "alarm_end_datetime" => $datetimeC,
                                     "alarm_status" => 0,
                                     "response_minutes" => $minutesDifference
+                                ]);
+
+                            AlarmLogs::where("serial_number", $device['serial_number'])
+                                ->update([
+                                    "alarm_status" => 0
                                 ]);
                         }
                         Device::where("serial_number", $device['serial_number'])->update(["alarm_status" => 0, "alarm_end_datetime" => $datetimeC]);
