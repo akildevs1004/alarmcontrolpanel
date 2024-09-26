@@ -274,19 +274,19 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
                     ->where("alarm_status", 1)
-
+                    ->where("serial_number", "SNF179")
                     ->where("verified", false)
                     ->where("time_duration_seconds", '>=', 5)
 
                     ->orderBy("log_time", "ASC")->get();
 
 
-                Logger::info(json_encode($logsArray));
+
 
 
                 foreach ($logsArray  as   $logs) {
-
-
+                    Logger::info($logs['id']);
+                    Logger::info($logs['log_time']);
                     if (isset($logs['log_time'])) {
 
 
@@ -314,7 +314,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             ->whereDate("zone", $logs['zone'])
                             ->whereDate("area", $logs['area'])
                             ->where("alarm_status", 1)->count();
-
+                        Logger::info($activeAlarmZoneCount);
                         // if ($activeAlarmZoneCount == 0) 
                         {
 
