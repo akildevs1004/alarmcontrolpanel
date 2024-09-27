@@ -79,6 +79,7 @@
             name="AlarmNewCustomerCustomersList"
             :key="key"
             @closeDialog="getDataFromApi()"
+            :isEditable="true"
           />
         </v-card-text>
       </v-card>
