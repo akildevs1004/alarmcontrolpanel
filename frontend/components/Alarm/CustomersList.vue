@@ -67,10 +67,14 @@
     </v-dialog>
     <v-dialog v-model="newCustomerDialog" max-width="900px">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense> New Customer</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"> New Customer</span>
           <v-spacer></v-spacer>
-          <v-icon @click="newCustomerDialog = false" outlined>
+          <v-icon
+            style="color: black"
+            @click="newCustomerDialog = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
