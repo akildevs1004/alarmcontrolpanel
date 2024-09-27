@@ -572,7 +572,12 @@ class CustomersController extends Controller
         $data["email"] = $data1["email"] ?? null;
         $data["whatsapp"] = $data1["whatsapp"] ?? null;
         if (isset($data1["alarm_stop_pin"]))
-            $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
+            if ($data1["alarm_stop_pin"] == 'null') {
+                $data["alarm_stop_pin"] = null;
+            } else {
+                $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
+            }
+
 
 
         //$data["display_order"] = 1;
