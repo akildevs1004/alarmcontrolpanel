@@ -44,7 +44,7 @@
     <v-dialog v-model="dialogEditPhotos" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Add Photo </span>
+          <span style="color: black"> Photo </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -74,7 +74,7 @@
     <div
       v-if="building_pictures.length == 0"
       class="text-center"
-      style="height: 28px"
+      style="height: 50px"
     >
       No Photos Available
     </div>
@@ -98,7 +98,7 @@
       </v-col>
 
       <v-col cols="12" style="margin-top: -20px">
-        <v-tabs right>
+        <v-tabs right class="customerEmergencyContactTabs" show-arrows>
           <v-tab
             v-for="(item, index) in building_pictures"
             :key="'sensor' + item.id"

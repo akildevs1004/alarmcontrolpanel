@@ -514,6 +514,100 @@ class CustomersController extends Controller
 
         return $this->response('Customer Setting Updated Successfully', null, true);
     }
+    public function deleteCustomerContact(Request $request)
+    {
+
+
+
+        if ($request->filled('contact_id')) {
+
+            $contact = CustomerContacts::where("id", $request->contact_id)->first();;
+            if ($contact) {
+
+
+
+                if ($contact->picture_raw) {
+                    if (file_exists(public_path('/customers/contacts') . '/' . $contact->picture_raw))
+                        unlink(public_path('/customers/contacts') . '/' . $contact->picture_raw);
+                }
+                if ($contact->delete()) {
+
+                    return $this->response('Contact Details are Deleted', null, true);
+                } else
+                    return $this->response('Contact Details are not Deleted', null, false);
+                //
+            }
+        }
+        return $this->response("Contact Delated Successfully", null, true);
+    }
+    public function updateComponentContactsUpdate(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'company_id' => 'required',
+            'customer_id' => 'required',
+            'address_type' => 'required',
+            'phone2' => 'nullable',
+            'office_phone' => 'nullable',
+            'whatsapp' => 'nullable',
+
+            'phone1' => 'required',
+            'mobile_number' => 'nullable',
+            'email' => 'nullable',
+            'alarm_stop_pin' => 'nullable',
+
+
+        ]);
+        $data1 = $request->all();
+        $data = [];
+        $data["first_name"] = $data1["first_name"];
+        $data["last_name"] = $data1["last_name"];
+        $data["company_id"] = $data1["company_id"];
+        $data["customer_id"] = $data1["customer_id"];
+        $data["address_type"] = $data1["address_type"];
+        $data["phone1"] = $data1["phone1"] ?? null;
+        $data["phone2"] = $data1["phone2"] ?? null;
+        $data["office_phone"] = $data1["office_phone"] ?? null;
+        $data["email"] = $data1["email"] ?? null;
+        $data["whatsapp"] = $data1["whatsapp"] ?? null;
+        if (isset($data1["alarm_stop_pin"]))
+            $data["alarm_stop_pin"] = $data1["alarm_stop_pin"];
+
+
+        //$data["display_order"] = 1;
+        $data["address"] = $data1["address"] ?? null;
+
+        $data["latitude"] = $data1["latitude"] ?? null;
+        $data["longitude"] =  $data1["longitude"] ?? null;
+        $data["working_hours"] =  $data1["working_hours"] ?? null;
+        $data["distance"] =  $data1["phondistancee2"] ?? null;
+        $data["notes"] =  $data1["notes"] ?? null;
+
+
+        if (strtolower($data["address_type"]) == 'primary') {
+            $data["address_type"] = 'primary';
+            $data["display_order"] = 1;
+        }
+        if (strtolower($data["address_type"]) == 'secondary') {
+            $data["address_type"] = 'secondary';
+            $data["display_order"] = 2;
+        }
+
+
+        $addressTypes = $this->addressTypes($request);
+
+
+        if (!$request->filled("editId") && !isset($data["display_order"])) {
+            if (!is_array($addressTypes)) {
+                $addressTypes = $addressTypes->toArray();
+            }
+            $displayOrders = array_column($addressTypes, 'display_order');
+            $data["display_order"] = max($displayOrders) + 1;
+        }
+
+        return   $this->updateContact($data, $request, $data["address_type"]);
+    }
     public function updatePrimaryContacts(Request $request)
     {
         $data = $request->validate([
@@ -695,39 +789,55 @@ class CustomersController extends Controller
     public function updateContact($data, $request, $type)
     {
 
+
+
         if ((int)$request->customer_id <= 0 || (int)$request->company_id <= 0) {
             return $this->response('Customer Id and Company Ids are not exist', null, false);
         }
         try {
             //$data = $request->all();
+            if (isset($request->profile_picture) && $request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                $ext = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $ext;
+
+                $request->file('profile_picture')->move(public_path('/customers/contacts'), $fileName);
+                $data['profile_picture'] = $fileName;
+            }
+
+
             if ($request->filled("editId")) {
-                $record = CustomerContacts::where('company_id',   $request->company_id)
-                    ->where('customer_id',   $request->customer_id)
-                    ->where('id',   $request->editId)->update($data);
-                return $this->response('Customer ' . $type . ' Contacts Updated.3333', $record, true);
+                $record = CustomerContacts::where('id',   $request->editId)->update($data);
+                return $this->response('Customer ' . $type . ' Contacts Updated', $record, true);
             } else {
 
-                $customerPrimaryContact = CustomerContacts::where('company_id',   $request->company_id)
-                    ->where('customer_id',   $request->customer_id)
-                    ->where('address_type',  $type);
-
-                if ($customerPrimaryContact->count() == 0) {
-
-                    $data['company_id'] =  $request->company_id;
-                    $data['customer_id'] = $request->customer_id;
-                    $data['address_type'] = $type;
-                    $record = CustomerContacts::create($data);
+                // $customerPrimaryContact = CustomerContacts::where('company_id',   $request->company_id)
+                //     ->where('customer_id',   $request->customer_id)
+                //     ->where('address_type',  $type)->first();
 
 
 
-                    if ($record) {
-                        return $this->response('  ' . $type . ' Contacts Created .', $record, true);
-                    } else {
-                        return $this->response('  ' . $type . ' Contacts Not Created', null, false);
-                    }
+
+                // if (!$customerPrimaryContact) {
+
+                $data['company_id'] =  $request->company_id;
+                $data['customer_id'] = $request->customer_id;
+                $data['address_type'] = $type;
+                $record = CustomerContacts::create($data);
+
+
+
+                if ($record) {
+                    return $this->response('  ' . $type . ' Contacts Created .', $record, true);
                 } else {
-                    return $this->response('  ' . $type . ' Contacts is already Exist', null, false);
+                    return $this->response('  ' . $type . ' Contacts Not Created', null, false);
                 }
+                // } else {
+
+
+                //     $record = CustomerContacts::where("id", $customerPrimaryContact->id)->update($data);
+                //     return $this->response('  ' . $type . ' Contacts is Updated', null, true);
+                // }
             }
         } catch (\Throwable $th) {
             throw $th;

@@ -25,7 +25,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px"
+        <v-card-text style="padding: 0px; overflow: hidden"
           ><AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
@@ -37,7 +37,9 @@
     </v-dialog>
     <v-dialog
       v-model="dialogEditCustomer"
-      width="1000px"
+      min-width="1100px"
+      width="80%"
+      max-width="1200px"
       style="overflow: visible"
     >
       <v-card>
@@ -55,7 +57,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px"
+        <v-card-text style="padding: 0px; overflow: hidden"
           ><AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"

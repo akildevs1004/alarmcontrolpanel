@@ -1,8 +1,9 @@
 <template>
   <div max-width="100%">
     <v-row>
-      <v-col cols="2" style="max-width: 115px">
+      <v-col style="max-width: 115px">
         <v-tabs
+          style="max-width: 90px; min-height: 100%"
           icons-and-text
           v-model="tab"
           vertical
@@ -19,12 +20,12 @@
             Address
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <!-- <v-tab class="customer-tab">
             Contacts
             <v-icon>mdi-card-account-details</v-icon>
-          </v-tab>
+          </v-tab> -->
           <v-tab class="customer-tab">
-            Emergency
+            Contacts
             <v-icon>mdi-account-tie</v-icon>
           </v-tab>
           <v-tab class="customer-tab">
@@ -48,7 +49,7 @@
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col cols="10" style="width: 108%">
+      <v-col style="padding-left: 0px">
         <v-tabs-items v-model="tab" style="overflow: visible">
           <!-- <v-tab-item>
         <v-card flat>
@@ -76,7 +77,7 @@
               </v-card-text>
             </v-card>
           </v-tab-item>
-          <v-tab-item>
+          <!-- <v-tab-item>
             <v-card flat>
               <v-card-text>
                 <AlarmEditContact
@@ -89,8 +90,10 @@
                   :isEditable="isEditable"
                 />
               </v-card-text>
-            </v-card> </v-tab-item
-          ><v-tab-item>
+            </v-card>
+          </v-tab-item> -->
+
+          <v-tab-item>
             <v-card flat>
               <v-card-text>
                 <AlramEmergencyContacts
@@ -102,13 +105,14 @@
                   :key="keyEmergencyy"
                   :isMapviewOnly="isMapviewOnly"
                   :isEditable="isEditable"
+                  @callrefreshData="updateContactsData()"
                 />
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text style="width: 110%; margin-left: -20px">
+              <v-card-text>
                 <AlarmDevices
                   v-if="_id"
                   :customer_id="_id"
@@ -134,7 +138,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text style="width: 107%; margin-left: -20px">
+              <v-card-text>
                 <AlarmAutomation
                   v-if="_id"
                   :key="keyAutomation"
@@ -261,6 +265,12 @@ export default {
   },
   watch: {},
   methods: {
+    async updateContactsData() {
+      console.log("reloadContent");
+      await this.getDataFromApi();
+
+      this.keyEmergencyy++;
+    },
     gotoCustomers() {
       this.$router.push("/alarm/customers");
       return;

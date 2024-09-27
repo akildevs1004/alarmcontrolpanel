@@ -10,11 +10,18 @@ class CustomerContacts extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $appends = ['picture_raw'];
     public function getProfilePictureAttribute($value)
     {
         if (!$value) {
             return null;
         }
         return asset('customers/contacts/' . $value);
+    }
+
+    public function getPictureRawAttribute($value)
+    {
+        $arr = explode('customers/contacts/', $this->profile_picture);
+        return    $arr[1] ?? '';
     }
 }

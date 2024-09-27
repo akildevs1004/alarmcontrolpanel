@@ -44,7 +44,7 @@
     <v-dialog v-model="dialogEditPhotos" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Add Photo </span>
+          <span style="color: black"> Photo </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -94,7 +94,7 @@
       </v-col>
 
       <v-col cols="12" style="padding-top: 0px; margin-top: 7px">
-        <v-tabs v-model="tab" right>
+        <v-tabs v-model="tab" right show-arrows class="tabswidthalignment">
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tabAddress">Address</v-tab>
@@ -172,10 +172,11 @@
 
                   <div style="border: 1px solid #ddd; padding: 20px">
                     <v-img
+                      @dblclick="viewPhoto(item)"
                       :src="
                         item.picture ? item.picture : '/no-business_profile.png'
                       "
-                      style="max-width: 100%; height: auto"
+                      style="width: 100%; height: 500px"
                     />
                     <!-- <v-img
                       @dblclick="viewPhoto(item)"

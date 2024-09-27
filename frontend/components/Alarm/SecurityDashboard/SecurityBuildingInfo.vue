@@ -153,7 +153,7 @@
               <!-- <v-tab>Map</v-tab> -->
               <v-tab>Google Map</v-tab>
               <v-tab>Business Photo</v-tab>
-              <v-tab>Device Map</v-tab>
+              <v-tab>Sensor Alarm Map</v-tab>
               <!-- <v-tab-item>
                 <v-card elevation="13" outlined>
                   <SecurityLeafletMap
@@ -180,7 +180,7 @@
                     :src="customer.profile_picture"
                     style="
                       width: 100%;
-                      max-height: 550px;
+                      height: 500px;
                       height: auto;
                       padding: 20px;
                     "

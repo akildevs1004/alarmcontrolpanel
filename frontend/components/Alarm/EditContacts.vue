@@ -45,7 +45,7 @@
     </v-dialog>
     <v-row>
       <v-col cols="12">
-        <v-tabs right>
+        <v-tabs right class="customerEmergencyContactTabs" show-arrows>
           <v-tab>Primary Contact</v-tab>
           <v-tab>Secondary Contact</v-tab>
 

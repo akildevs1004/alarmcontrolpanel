@@ -32,7 +32,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialogEditEmergency" width="600px">
+    <v-dialog v-model="dialogEditEmergency" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Contacts </span>
@@ -48,20 +48,29 @@
 
         <v-card-text>
           <v-container style="min-height: 100px">
-            <AlarmEditEmergencyContact
+            <!-- <AlarmEditEmergencyContact
               :key="key"
               :customer_id="customer_id"
               :customer_contacts="customer_contacts"
               :customer="customer"
               @closeDialog="closeDialog"
               :editId="editId"
+            /> -->
+
+            <CompCustomersEditContact
+              @callrefreshData="reloadContent()"
+              :customer_id="customer_id"
+              :customer="customer"
+              :isMapviewOnly="isMapviewOnly"
+              :isEditable="isEditable"
+              :key="key"
             />
           </v-container>
         </v-card-text>
       </v-card>
     </v-dialog>
     <div
-      style="height: 28px"
+      style="height: 50px"
       v-if="!customer_contacts || customer_contacts.length == 0"
       class="text-center"
     >
@@ -86,13 +95,13 @@
           dense
           x-small
         >
-          Add
+          + Add
         </v-btn>
       </v-col>
 
       <v-row>
         <v-col cols="12">
-          <v-tabs right>
+          <v-tabs right show-arrows class="tabswidthalignment">
             <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
               {{ item.address_type }}</v-tab
             >
@@ -102,9 +111,18 @@
               name="index+50"
             >
               <v-card class="elevation-1">
-                <v-row>
+                <CompCustomersEditContact
+                  @callrefreshData="reloadContent()"
+                  :customer_id="item.customer_id"
+                  :contact="item"
+                  :customer="customer"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
+                  :key="item.id"
+                />
+                <!-- <v-row>
                   <v-col cols="10">
-                    <!-- <h3 style="">{{ item.address_type }}</h3> -->
+                    <h3 style="">{{ item.address_type }}</h3>
                   </v-col>
 
                   <v-col cols="2" class="text-right">
@@ -299,201 +317,22 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                </v-row>
+                </v-row> -->
               </v-card>
             </v-tab-item>
           </v-tabs>
         </v-col>
       </v-row>
-
-      <v-col
-        v-if="1 == 8"
-        v-for="(item, index) in customer_contacts"
-        :key="item.id"
-        cols="4"
-        class="mt-3"
-        style="line-height: 35px; border-right: #ddd 0px solid"
-      >
-        <v-card class="elevation-1 pl-1">
-          <v-row>
-            <v-col cols="10"
-              ><h3 style="">{{ item.address_type }}</h3></v-col
-            >
-
-            <v-col cols="2" class="text-right">
-              <!-- <v-icon v-if="item.address_type == 'Police Station'" color="red"
-                >mdi mdi-car-emergency</v-icon
-              >
-              <v-icon
-                v-else-if="item.address_type == 'Fire/Civil Department'"
-                color="red"
-                >mdi mdi-fire-truck</v-icon
-              >
-              <v-icon v-else-if="item.address_type == 'Hopsital'" color="red"
-                >mdi mdi-hospital-building</v-icon
-              >
-              <v-icon
-                v-else-if="item.address_type == 'Building Security'"
-                color="red"
-                >mdi mdi-security</v-icon
-              >
-              <v-icon
-                v-else-if="item.address_type == 'Community Security'"
-                color="red"
-                >mdi mdi-server-security</v-icon
-              > -->
-
-              <v-menu bottom left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list width="120" dense>
-                  <v-list-item
-                    v-if="can('device_notification_contnet_view')"
-                    @click="editContactDetails(item.id)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-eye </v-icon>
-                      Edit
-                    </v-list-item-title>
-                  </v-list-item>
-
-                  <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
-                    @click="deleteContactDetails(item.id)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="error" small> mdi-delete </v-icon>
-                      Delete
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4">Address</v-col>
-            <v-col cols="8" class="bold">
-              {{ item.address }}
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4">Contact Person</v-col>
-            <v-col cols="8" class="bold">
-              {{ item.first_name }} {{ item.last_name }}
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4">
-              <!-- <v-icon color="primary" size="18" style="line-height: 2px"
-              >mdi mdi-phone-classic</v-icon
-            > -->
-              Office</v-col
-            >
-            <v-col cols="8" class="bold">{{ item.office_phone }}</v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4">
-              <!-- <v-icon color="primary" style="line-height: 2px"
-              >mdi mdi-cellphone-basic</v-icon
-            > -->
-              Phone 1
-            </v-col>
-            <v-col cols="8" class="bold">{{ item.phone1 }} </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4">
-              <!-- <v-icon color="primary" style="line-height: 2px"
-              >mdi mdi-cellphone-basic</v-icon
-            > -->
-              Phone 2</v-col
-            >
-            <v-col cols="8" class="bold"> {{ item.phone2 }}</v-col>
-          </v-row>
-
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4" class="p1-0">
-              <!-- <v-icon color="primary" size="18" style="line-height: 2px"
-              >mdi mdi-at</v-icon
-            > -->
-              Email</v-col
-            >
-            <v-col cols="8" class="bold"> {{ item.email }}</v-col>
-          </v-row>
-          <v-divider></v-divider>
-
-          <v-row>
-            <v-col cols="4" class="p1-0">
-              <!-- <v-icon color="primary" size="18" style="line-height: 2px"
-              >mdi mdi-whatsapp</v-icon
-            > -->
-              Whatsapp</v-col
-            >
-            <v-col cols="8" class="bold"> {{ item.whatsapp }} </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4" class="p1-0"> Distance </v-col>
-            <v-col cols="8" class="bold"> {{ item.distance }}</v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col cols="4" class="p1-0">Map Positions</v-col>
-            <v-col cols="8" class="bold pr-0">
-              {{ item?.latitude }} <br />
-              {{ item?.longitude }}</v-col
-            >
-          </v-row>
-          <!-- <v-row>
-            <v-col cols="4" class="p1-0">Google Map Link</v-col>
-            <v-col cols="3" class="bold pr-0">
-              <v-btn
-                @click="dialogGoogleMap = true"
-                text
-                outlined
-                color="primary"
-                dense
-                small
-              >
-                Popup</v-btn
-              >
-            </v-col>
-            <v-col cols="5" class="bold text-left pl-0">
-              <a
-                style="text-decoration: none"
-                :href="
-                  'http://maps.google.com/?q=' + item
-                    ? item?.latitude + ',' + item?.longitude
-                    : '-'
-                "
-                target="_blank"
-              >
-                <img
-                  src="/google_map.jpg"
-                  style="width: 30px; padding-top: 5px"
-                />
-              </a>
-            </v-col>
-          </v-row> -->
-        </v-card>
-      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
 import AlarmEditEmergencyContact from "../../components/Alarm/EditEmergencyContact.vue";
+import CompCustomersEditContact from "./CompCustomersEditContact.vue";
 
 export default {
-  components: { AlarmEditEmergencyContact },
+  components: { AlarmEditEmergencyContact, CompCustomersEditContact },
   props: [
     "customer",
     "customer_id",
@@ -591,7 +430,11 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-
+    reloadContent() {
+      console.log("reloadContent");
+      this.dialogEditEmergency = false;
+      this.$emit("callrefreshData");
+    },
     deleteContactDetails(id) {
       if (confirm("Are you sure you wish to delete ?")) {
         this.$axios

@@ -38,7 +38,7 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <v-col cols="12" class="text-right" style="">
         <v-row>
           <v-col cols="8"></v-col>
           <v-col cols="4" class="text-right" style="width: 450px">
@@ -55,7 +55,6 @@
               </v-col>
               <v-col cols="6"
                 ><v-text-field
-                  style="padding-top: 7px"
                   width="200px"
                   height="20"
                   class="employee-schedule-search-box"

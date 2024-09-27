@@ -64,7 +64,7 @@
       </v-card>
     </v-dialog>
 
-    <v-card elevation="0" class="pa-0">
+    <v-card elevation="0">
       <v-toolbar class="rounded-md" dense flat v-if="!eventFilter">
         <v-row
           ><v-col cols="8"></v-col>
@@ -131,7 +131,7 @@
         :footer-props="{
           itemsPerPageOptions: [50, 100, 500, 1000],
         }"
-        class="elevation-1 pt-0"
+        class="elevation-0 pt-0"
         :options.sync="options"
         :server-items-length="totalRowsCount"
       >
@@ -268,14 +268,25 @@
           </div>
           <div v-else>
             <v-img width="30px" src="/icons/device_status_close.png"> </v-img>
+          </div> </template
+        ><template v-slot:item.building_type="{ item }">
+          <div>
+            {{ item.customer?.buildingtype?.name }}
           </div>
         </template>
         <template v-slot:item.armed="{ item }">
           <div v-if="item.armed_status == 1">
             <v-icon title="Armed" color="green">mdi mdi-shield-sun</v-icon>
           </div>
-          <div v-else-if="item.armed_status == 0">
-            <v-icon title="DisArmed" color="#757575">mdi mdi-shield-sun</v-icon>
+          <div v-else>
+            <v-icon title="DisArmed" color="red">mdi mdi-shield-sun</v-icon>
+          </div> </template
+        ><template v-slot:item.disarm="{ item }">
+          <div v-if="item.armed_status == 0">
+            <v-icon title="Armed" color="green">mdi mdi-shield-sun</v-icon>
+          </div>
+          <div v-else>
+            <v-icon title="DisArmed" color="red">mdi mdi-shield-sun</v-icon>
           </div>
           <div v-else>---</div>
         </template>
@@ -461,20 +472,21 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno", sortable: false },
-
+      { text: "Building  Name", value: "customer", sortable: false },
+      { text: "Building Type", value: "building_type", sortable: false },
       { text: "Device Category", value: "device_type", sortable: false },
       { text: "Device Model", value: "model_number", sortable: false },
       // { text: "Zones", value: "zones", align: "left" },
       { text: "Serial Number", value: "device", sortable: false },
       // { text: "Location", value: "location" },
-      { text: "Building/Customer Name", value: "customer", sortable: false },
+
       // { text: "Delay(Min)", value: "delay" },
       //{ text: "24 Hrs", value: "hrs_24", sortable: false },
       // { text: "Sensor", value: "sensor", align: "center" },
       // { text: "Temperature", value: "threshold_temperature" },
       { text: "Online", value: "status", sortable: false },
       { text: "Armed", value: "armed", align: "center", sortable: false },
-
+      { text: "Disarm", value: "disarm", align: "center", sortable: false },
       // { text: "Alarm", value: "alarm" },
       { text: "Options", value: "options", align: "center", sortable: false },
     ],

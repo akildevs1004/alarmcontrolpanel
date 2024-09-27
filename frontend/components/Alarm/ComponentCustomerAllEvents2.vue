@@ -190,11 +190,11 @@
     <v-row style="padding-top: 0px">
       <v-col cols="12" class="text-right" style="padding-top: 15px; z-index: 9">
         <v-row class="mt-0" v-if="!eventFilter">
-          <v-col v-if="sensorItems.length > 1" class="text-left mt-1">
+          <!-- <v-col v-if="sensorItems.length > 1" class="text-left mt-1">
             <h3>Customer Alarm Events</h3></v-col
-          >
+          > -->
 
-          <v-col class="text-right">
+          <v-col class="text-right mt-1">
             <v-row>
               <v-col>
                 <v-icon

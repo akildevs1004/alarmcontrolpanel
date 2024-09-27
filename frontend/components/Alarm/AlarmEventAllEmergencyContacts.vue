@@ -7,7 +7,7 @@
     </div>
 
     <div
-      style="height: 28px"
+      style="height: 50px"
       v-if="!customer_contacts || customer_contacts.length == 0"
       class="text-center"
     >
@@ -38,7 +38,7 @@
 
       <v-row>
         <v-col cols="12">
-          <v-tabs right>
+          <v-tabs right class="customerEmergencyContactTabs" show-arrows>
             <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
               {{ item.address_type }}</v-tab
             >

@@ -73,7 +73,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogTabViewCustomer" width="80%">
+    <v-dialog v-model="dialogTabViewCustomer" width="1000px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Alarm : {{ popupEventText }}</span>
@@ -196,13 +196,10 @@
                   {{ item.alarm_type }}
                 </div>
                 <div class="secondary-value">
-                  <div v-if="item.zone_data">
-                    {{ item.zone_data.sensor_name }}
+                  <div class="secondary-value">
+                    {{ item.zone_data?.location ?? "---" }}
                   </div>
-                  <div v-else>{{ item.device?.location }}</div>
                 </div>
-
-                <!-- <div class="secondary-value">{{ item.type }}</div> -->
               </template>
               <!-- <template v-slot:item.location="{ item }">
                     {{ item.device.location }}
@@ -211,6 +208,7 @@
                 <div>{{ item.zone }}</div>
                 <div class="secondary-value">{{ item.area }}</div>
               </template>
+
               <template v-slot:item.alarm_source="{ item }">
                 <div>{{ item.alarm_source ?? "---" }}</div>
                 <div class="secondary-value">

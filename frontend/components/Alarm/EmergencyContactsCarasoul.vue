@@ -64,7 +64,7 @@
       </v-card>
     </v-dialog>
     <div
-      style="height: 28px"
+      style="height: 50px"
       v-if="!customer_contacts || customer_contacts.length == 0"
       class="text-center"
     >

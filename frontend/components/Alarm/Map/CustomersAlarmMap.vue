@@ -256,7 +256,9 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Map Alarm Information </span>
+          <span dense style="color: black">
+            Map Alarm {{ popupEventText }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -266,7 +268,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px">
+        <v-card-text style="padding: 0px; overflow: hidden">
           <AlarmEventCustomerContactsTabView
             :key="key"
             :_customerID="viewCustomerId"
@@ -456,6 +458,7 @@ export default {
   components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
 
   data: () => ({
+    popupEventText: "",
     dialogAlarmEventCustomerContactsTabView: false,
     dialog: false,
     dialogContent: "",
@@ -580,6 +583,17 @@ export default {
       }
     },
     viewAlarmInformation(alarm) {
+      this.popupEventText =
+        "#" +
+        alarm.id +
+        " -    " +
+        alarm.alarm_type +
+        " ,  " +
+        "   Time " +
+        alarm.alarm_start_datetime +
+        " -  Priority " +
+        alarm.category.name;
+
       this.key += 1;
       this.viewCustomerId = alarm.customer_id;
       this.eventId = alarm.id;

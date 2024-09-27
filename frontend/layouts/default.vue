@@ -2428,3 +2428,9 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
   min-width: 75px !important;
 }
 </style>
+
+<style>
+.customerEmergencyContactTabs .v-slide-group__content {
+  max-width: 100% !important;
+}
+</style>

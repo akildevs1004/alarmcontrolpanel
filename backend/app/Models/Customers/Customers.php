@@ -69,7 +69,7 @@ class Customers extends Model
 
     public function profilePictures()
     {
-        return $this->hasMany(CustomerBuildingPhotos::class, "customer_id", 'id');
+        return $this->hasMany(CustomerBuildingPhotos::class, "customer_id", 'id')->orderBy("display_order", "ASC");
     }
     public function getProfilePictureAttribute()
     {

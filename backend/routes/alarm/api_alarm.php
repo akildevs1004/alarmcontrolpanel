@@ -47,6 +47,11 @@ Route::get('customers-all', [CustomersController::class, "customersAll"]);
 //customer
 
 Route::post('customers_primary_contact_update', [CustomersController::class, 'updatePrimaryContacts']);
+Route::post('customers_component_contact_update', [CustomersController::class, 'updateComponentContactsUpdate']);
+Route::delete('delete_customer_contact', [CustomersController::class, 'deleteCustomerContact']);
+
+
+
 Route::post('customers_secondary_contact_update', [CustomersController::class, 'updateSecondaryContacts']);
 Route::post('customers_building_contact_update', [CustomersController::class, 'updatebuildingContacts']);
 Route::post('customer-update', [CustomersController::class, 'updateCustomer']);
