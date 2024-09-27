@@ -47,9 +47,11 @@ use PhpOffice\PhpSpreadsheet\Document\Security;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
-// Route::get("CloesAlarmEvents", function () {
-//     return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber("SNF179", date("Y-m-d H:i:s"));
-// });
+Route::get("closealarm", function (Request $request) {
+    if ($request->filled('serial_number')) {
+        return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+    }
+});
 
 Route::get("updatearmedCompanyIds", function (Request $request) {
 
