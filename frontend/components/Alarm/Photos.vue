@@ -119,7 +119,7 @@
                   "
                   aspect-ratio="1"
                   class="grey lighten-2"
-                  style="max-width: 100%; margin: auto; max-height: 600px"
+                  style="max-width: 100%; margin: auto; height: 500px"
                 >
                   <template v-slot:placeholder>
                     <v-row

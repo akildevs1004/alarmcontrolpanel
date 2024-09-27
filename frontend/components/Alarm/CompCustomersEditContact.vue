@@ -48,7 +48,7 @@
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <v-row class="pt-5">
             <v-col cols="4" dense>
-              <div class="text-center mt-0" style="height: 264px">
+              <div class="text-center mt-0" style="height: 220px">
                 <v-img
                   style="
                     height: auto;
@@ -85,17 +85,17 @@
                   >{{ primary_errors.logo[0] }}</span
                 >
               </div>
+
               <div>
-                <v-textarea
-                  outlined
-                  class="mt-1"
-                  name="input-7-4"
-                  label="Important Notes"
-                  value=""
-                  rows="3"
-                  hide-details
-                  v-model="payload_primary.notes"
-                ></v-textarea>
+                <CompGoogleMapLatLan
+                  v-if="payload_primary"
+                  :latitude="payload_primary.latitude"
+                  :longitude="payload_primary.longitude"
+                  :title="
+                    payload_primary.first_name + ' ' + payload_primary.last_name
+                  "
+                  :contact_id="payload_primary.id"
+                />
               </div>
             </v-col>
             <v-col cols="8"
@@ -311,6 +311,27 @@
                     :disabled="!isEditable"
                     :readonly="isMapviewOnly"
                   ></v-text-field>
+                </v-col>
+
+                <v-col
+                  :cols="
+                    contact?.address_type == 'primary' ||
+                    contact?.address_type == 'secondary'
+                      ? 6
+                      : 12
+                  "
+                >
+                  <v-text-field
+                    outlined
+                    label="Important Notes"
+                    value=""
+                    dense
+                    small
+                    hide-details
+                    v-model="payload_primary.notes"
+                    :disabled="!isEditable"
+                    :readonly="isMapviewOnly"
+                  ></v-text-field>
                 </v-col> </v-row
             ></v-col>
           </v-row>
@@ -344,7 +365,10 @@
 </template>
 
 <script>
+import CompGoogleMapLatLan from "./CompGoogleMapLatLan.vue";
+
 export default {
+  components: { CompGoogleMapLatLan },
   props: [
     "customer_id",
     "customer_contacts",
