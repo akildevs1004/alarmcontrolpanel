@@ -584,10 +584,10 @@ export default {
         text: "Operator",
         value: "security",
       },
-      {
-        text: "Type",
-        value: "building_type",
-      },
+      // {
+      //   text: "Type",
+      //   value: "building_type",
+      // },
 
       // {
       //   text: "Location",
