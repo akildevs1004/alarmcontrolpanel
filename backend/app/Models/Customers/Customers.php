@@ -15,7 +15,7 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $with = ['devices', 'buildingtype',  'primary_contact', 'secondary_contact', "profilePictures"];
+    protected $with = ['devices', 'buildingtype',  'primary_contact', "contacts", 'secondary_contact', "profilePictures"];
 
     public function mappedsecurity()
     {

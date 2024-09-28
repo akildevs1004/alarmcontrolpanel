@@ -59,6 +59,7 @@
               name="AlramCloseNotes"
               :key="key"
               :customer_id="customer_id"
+              :customer="customer"
               @closeDialog="closeDialog"
               :alarm_id="eventId"
               :popupEventText="popupEventText"
@@ -789,6 +790,7 @@ export default {
       this.key += 1;
       this.viewCustomerId = item.customer_id;
       this.eventId = item.id;
+      this.customer = item.device.customer;
       this.dialogForwardEventDetails = true;
     },
     viewLogs(item) {

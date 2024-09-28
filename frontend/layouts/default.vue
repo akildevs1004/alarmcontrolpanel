@@ -909,7 +909,10 @@ export default {
         if (this.$route.name != "login") {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
-          if (this.wait5Minutes == false) {
+          if (
+            this.wait5Minutes == false &&
+            this.$route.name == "alarm-dashboard"
+          ) {
             if (this.notificationAlarmDevicesContent) {
               if (this.notificationAlarmDevicesContent.length > 0) {
                 if (!this.dialogAlarmPopupNotificationStatus) {

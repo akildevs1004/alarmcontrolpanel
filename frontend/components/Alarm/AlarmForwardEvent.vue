@@ -33,14 +33,38 @@
       </v-col>
       <v-col cols="3" style="min-width: 60px; padding: 4px">
         <v-text-field
+          style="display: none"
           label="Name"
           hide-details
           outlined
           dense
           v-model="d.name"
         />
+        <v-combobox
+          v-model="d.address_type"
+          label="Name"
+          :items="customerContactList"
+          item-value="address_type"
+          item-text="address_type"
+          dense
+          outlined
+          :hide-details="true"
+          @change="onAddressTypeChange(d)"
+        />
       </v-col>
       <v-col cols="4" style="min-width: 50px; padding: 4px">
+        <!-- <v-combobox
+          v-model="d.email_code"
+          label="Email"
+          :items="customerContactList"
+          item-value="email"
+          item-text="full_name"
+          :return-object="false"
+          dense
+          outlined
+          :hide-details="true"
+          @change="setEmailCode(d, d.email_code)"
+        ></v-combobox> -->
         <v-text-field
           type="email"
           label="Email"
@@ -93,9 +117,10 @@
 
 <script>
 export default {
-  props: ["alarm_id"],
+  props: ["alarm_id", "customer"],
   data() {
     return {
+      customerContactList: [],
       forwardTypes: [],
       SensorTypes: [],
       displayEditform: false,
@@ -125,9 +150,48 @@ export default {
     // }
     this.addItem();
     //this.getInfo();
+
+    if (this.customer) this.customerContactList = this.customer.contacts;
   },
   computed: {},
   methods: {
+    onAddressTypeChange(d) {
+      const selectedAddressType = this.customerContactList.find(
+        (item) => item.address_type === d.address_type.address_type
+      );
+
+      if (selectedAddressType) {
+        d.email = selectedAddressType.email || "";
+        d.whatsapp_number = selectedAddressType.whatsapp || "";
+        d.name = selectedAddressType.address_type || "";
+      } else {
+        d.email = "";
+        d.whatsapp_number = "";
+      }
+    },
+    // getEmailCode(email_code) {
+    //   const code = this.customerContactList.find(
+    //     (item) => item.email === email_code
+    //   );
+    //   return code || email_code;
+    // },
+    // setEmailCode(contact, value) {
+    //   contact.email_code = value;
+    //   this.updateWhatsAppNumber(contact);
+    // },
+    // updateWhatsAppNumber(contact) {
+    //   // Find the selected contact's details in the customerContactList
+    //   const selectedContact = this.customerContactList.find(
+    //     (item) => item.email === contact.email_code
+    //   );
+
+    //   if (selectedContact) {
+    //     contact.whatsapp_number = selectedContact.whatsapp || "";
+    //     contact.name = selectedContact.full_name;
+    //   } else {
+    //     contact.whatsapp_number = "";
+    //   }
+    // },
     displayEdit() {
       this.displayEditform = true;
     },
