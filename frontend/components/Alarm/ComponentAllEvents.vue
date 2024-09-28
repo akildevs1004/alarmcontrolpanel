@@ -497,13 +497,10 @@
 
                       <template v-slot:item.status="{ item }">
                         <div v-if="item.alarm_status == 1">
-                          <v-icon
-                            class="alarm"
-                            @click="UpdateAlarmStatus(item, 0)"
-                            title="Click to Turn OFF Alarm "
+                          <v-icon class="alarm1111111"
                             >mdi mdi-alarm-light</v-icon
                           >
-                          <br />
+                          <!-- <br />
                           <v-btn
                             class="text--red"
                             color="red"
@@ -513,7 +510,7 @@
                             x-small
                             dense
                             >Stop</v-btn
-                          >
+                          > -->
                         </div>
                         <div v-else-if="item.alarm_status == 0">
                           <v-icon title="Now Alaram is OFF"
@@ -521,9 +518,7 @@
                           >
                           <div class="secondary-value">
                             {{
-                              item.alarm_end_manually == 1
-                                ? "Closed Manually"
-                                : "Auto Closed"
+                              item.alarm_end_manually == 1 ? "Manually" : "Auto"
                             }}
                           </div>
                         </div>
@@ -676,12 +671,12 @@ export default {
         // { text: "Category", value: "category", sortable: false },
 
         // { text: "Notes", value: "notes", sortable: false },
-        // {
-        //   text: "Status",
-        //   value: "status",
-        //   sortable: false,
-        //   align: "center",
-        // },
+        {
+          text: "Status",
+          value: "status",
+          sortable: false,
+          align: "center",
+        },
 
         { text: "Options", value: "options", sortable: false },
       ],
