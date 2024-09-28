@@ -497,7 +497,7 @@
 
                       <template v-slot:item.status="{ item }">
                         <div v-if="item.alarm_status == 1">
-                          <v-icon class="alarm1111111"
+                          <v-icon class="alarm1111111" style="color: red"
                             >mdi mdi-alarm-light</v-icon
                           >
                           <!-- <br />
