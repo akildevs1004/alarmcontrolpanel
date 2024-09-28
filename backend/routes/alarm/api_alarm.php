@@ -188,6 +188,14 @@ Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);
 
 Route::get('plotting', [PlottingController::class, "index"]);
 Route::post('plotting', [PlottingController::class, "store"]);
+Route::post('reset_plotting', [PlottingController::class, "resetPlotting"]);
+Route::post('reset_plotting_all', [PlottingController::class, "resetPlottingAll"]);
+
+
+
+
+
+
 
 //security 
 

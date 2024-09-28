@@ -1,10 +1,16 @@
 <template>
-  <div class="text-centers">
+  <div>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" top="top" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-row>
       <v-col cols="8" class="pt-8 pb-0 pl-10 text-left" dense hide-details
-        >Total
-        {{ plottings ? checkIsSensorAddedAnyPhoto() : "--" }} Sensor(s)</v-col
-      >
+        >Total {{ plottings ? checkIsSensorAddedAnyPhoto() : "--" }} Mapping(s)
+
+        <span style="color: red"> {{ this.response }}</span>
+      </v-col>
       <v-col cols="4" class="pt-6 pb-0" style="float: right">
         <v-select
           outlined
@@ -18,42 +24,38 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" style="position: relative">
+    <v-row style="margin: auto">
+      <v-col cols="12" style="position: relative" v-if="item">
+        <img
+          style="margin: auto; width: 100%"
+          :src="item.picture"
+          :width="IMG_PLOTTING_WIDTH"
+          :height="IMG_PLOTTING_HEIGHT"
+        />
+        <span v-if="!loading">
+          <div
+            v-for="(plotting, index) in plottings"
+            :key="index"
+            style="position: absolute; text-align: center"
+            :style="{ top: plotting.top, left: plotting.left }"
+          >
+            <v-icon
+              v-if="plotting.alarm_event?.length"
+              class="alarm-red-to-green"
+              :title="plotting.alarm_event[0].alarm_type + ' Aalrm ON'"
+              size="40"
+              >mdi-circle</v-icon
+            ><v-icon v-else color="green" size="40" title="Aalrm OFF"
+              >mdi-circle</v-icon
+            >
+            <div style="background: black; color: #fff">
+              {{ plotting.label }}
+            </div>
+          </div>
+        </span>
+
         <div>
-          <div v-if="item">
-            <img
-              style="margin: auto"
-              :src="item.picture"
-              :width="IMG_PLOTTING_WIDTH"
-              :height="IMG_PLOTTING_HEIGHT"
-            />
-            <span v-if="!loading">
-              <div
-                v-for="(plotting, index) in plottings"
-                :key="index"
-                style="position: absolute; text-align: center"
-                :style="{ top: plotting.top, left: plotting.left }"
-              >
-                <v-icon
-                  v-if="plotting.alarm_event?.length"
-                  class="alarm-red-to-green"
-                  :title="plotting.alarm_event[0].alarm_type + ' Aalrm ON'"
-                  size="40"
-                  >mdi-circle</v-icon
-                ><v-icon v-else color="green" size="40" title="Aalrm OFF"
-                  >mdi-circle</v-icon
-                >
-                <div style="background: black; color: #fff">
-                  {{ plotting.label }}
-                </div>
-              </div>
-            </span>
-          </div>
-          <div>
-            Note: Check Customers Photo Mapping page incase any sensor is
-            missing
-          </div>
+          Note: Check Customers Photo Mapping page incase any sensor is missing
         </div>
       </v-col>
     </v-row>
@@ -64,6 +66,8 @@ export default {
   props: ["photos"],
   data() {
     return {
+      snackbar: false,
+      response: "",
       dialog: false,
       loading: false,
       device_ids: [],
@@ -94,7 +98,9 @@ export default {
   },
   methods: {
     changePhoto() {
+      this.response = "";
       this.item = this.photos.filter((e) => e.id == this.selectedPhotoId)[0];
+
       this.getExistingPlottings();
     },
     getDeviceName(device_id) {
@@ -130,6 +136,17 @@ export default {
         this.plottings = data.plottings;
       }
 
+      let alarmEvents = this.plottings.filter(
+        (plott) => plott.top != "-500px" && plott.alarm_event.length > 0
+      );
+
+      if (alarmEvents.length == 0) {
+        this.snackbar = true;
+        this.response = "No Alarm Found";
+      } else {
+        this.response = "";
+      }
+
       this.loading = false;
     },
 
@@ -144,70 +161,62 @@ export default {
 
       return matchCount;
     },
-    async getSensors(device_ids) {
-      await this.getExistingPlottings();
+    // async getSensors(device_ids) {
+    //   await this.getExistingPlottings();
 
-      let config = {
-        params: { device_ids },
-      };
-      let { data: sensors } = await this.$axios.get("sensor-list", config);
+    //   let config = {
+    //     params: { device_ids },
+    //   };
+    //   let { data: sensors } = await this.$axios.get("sensor-list", config);
 
-      this.plottings = sensors.map((sensor) => {
-        let plotting = this.existingPlottings.find(
-          (e) => e.sensor_id == sensor.id
-        );
-        return (
-          plotting || {
-            sensor_id: sensor.id,
-            device_id: sensor.device_id,
-            label: sensor.label,
-            top: "-500px",
-            left: "-500px",
-          }
-        );
-      });
-    },
-    dragStart(event, index) {
-      this.draggingIndex = index;
-    },
-    allowDrop(event) {
-      event.preventDefault();
-    },
-    async onDrop(event) {
-      const dropZoneRect = event.currentTarget.getBoundingClientRect();
-      const offsetX = event.clientX - dropZoneRect.left;
-      const offsetY = event.clientY - dropZoneRect.top;
+    //   this.plottings = sensors.map((sensor) => {
+    //     let plotting = this.existingPlottings.find(
+    //       (e) => e.sensor_id == sensor.id
+    //     );
+    //     return (
+    //       plotting || {
+    //         sensor_id: sensor.id,
+    //         device_id: sensor.device_id,
+    //         label: sensor.label,
+    //         top: "-500px",
+    //         left: "-500px",
+    //       }
+    //     );
+    //   });
+    // },
+    // dragStart(event, index) {
+    //   this.draggingIndex = index;
+    // },
+    // allowDrop(event) {
+    //   event.preventDefault();
+    // },
+    // async onDrop(event) {
+    //   const dropZoneRect = event.currentTarget.getBoundingClientRect();
+    //   const offsetX = event.clientX - dropZoneRect.left;
+    //   const offsetY = event.clientY - dropZoneRect.top;
 
-      this.plottings[this.draggingIndex].left = `${offsetX}px`;
-      this.plottings[this.draggingIndex].top = `${offsetY}px`;
+    //   this.plottings[this.draggingIndex].left = `${offsetX}px`;
+    //   this.plottings[this.draggingIndex].top = `${offsetY}px`;
 
-      this.draggingIndex = null;
+    //   this.draggingIndex = null;
 
-      await this.submit();
-    },
+    //   await this.submit();
+    // },
 
-    async submit() {
-      try {
-        let { data } = await this.$axios.post(`plotting`, {
-          customer_building_picture_id: this.item.id,
-          plottings: this.plottings,
-        });
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async submit() {
+    //   try {
+    //     let { data } = await this.$axios.post(`plotting`, {
+    //       customer_building_picture_id: this.item.id,
+    //       plottings: this.plottings,
+    //     });
+    //     console.log(data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
     getRelaventImage(label) {
-      let relaventImage = {
-        Burglary: "/alarm-icons/burglary.png",
-        Medical: "/alarm-icons/medical.png",
-        Fire: "/alarm-icons/fire.png",
-        Water: "/alarm-icons/water.png",
-        Temperature: "/alarm-icons/temperature.png",
-        Humidity: "/alarm-icons/humidity.png",
-      };
-      return relaventImage[label] ?? "Unknown";
+      return this.$utils.getRelaventImage(label);
     },
   },
 };

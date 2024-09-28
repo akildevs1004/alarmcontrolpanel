@@ -2391,11 +2391,14 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
   border-radius: 100px;
   height: 130px;
   width: 130px;
-  padding-top: 23px;
+  padding-top: 8px;
   padding-left: 2px;
   font-size: 18px;
   margin: auto;
-  line-height: 30px;
+  line-height: 42px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #373d3f;
 }
 
 /* .employee-schedule-search-box .v-input__append-inner {

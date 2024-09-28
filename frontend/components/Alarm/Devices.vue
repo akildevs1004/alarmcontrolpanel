@@ -180,7 +180,12 @@
         </template>
         <template v-slot:item.sensor="{ item }">
           <div v-if="item.device_type">
-            <v-img
+            <img
+              :title="item.device_type"
+              style="width: 15px; float: left"
+              :src="$utils.getRelaventImage(item.device_type)"
+            />
+            <!-- <v-img
               :title="item.device_type"
               v-if="item.device_type == 'Intruder'"
               style="width: 30px"
@@ -239,7 +244,7 @@
               style="width: 30px"
               src="/alarm-icons/device_type_access_control.png"
             >
-            </v-img>
+            </v-img> -->
           </div>
         </template>
 

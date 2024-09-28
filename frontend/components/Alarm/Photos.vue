@@ -89,6 +89,16 @@
           v-if="!isMapviewOnly"
           :loading="loading"
           color="primary"
+          @click="resetAllSensors()"
+          dense
+          x-small
+        >
+          Reset Mapping
+        </v-btn>
+        <v-btn
+          v-if="!isMapviewOnly"
+          :loading="loading"
+          color="primary"
           @click="newPhoto()"
           dense
           x-small
@@ -98,8 +108,14 @@
       </v-col>
 
       <v-col cols="12" style="margin-top: -20px">
-        <v-tabs right class="customerEmergencyContactTabs" show-arrows>
+        <v-tabs
+          :key="tabkey"
+          right
+          class="customerEmergencyContactTabs"
+          show-arrows
+        >
           <v-tab
+            @click="reloadTab()"
             v-for="(item, index) in building_pictures"
             :key="'sensor' + item.id"
             >{{ caps(item.title) }}</v-tab
@@ -112,7 +128,12 @@
           >
             <v-row style="padding: 0px">
               <v-col cols="12" style="padding: 0px">
-                <v-img
+                <CompSensorPlotting
+                  :name="'sensorPlotting' + item.id"
+                  :key="keytabitem"
+                  :item="item"
+                />
+                <!-- <v-img
                   @dblclick="viewPhoto(item)"
                   :src="
                     item.picture ? item.picture : '/no-business_profile.png'
@@ -133,7 +154,7 @@
                       ></v-progress-circular>
                     </v-row>
                   </template>
-                </v-img>
+                </v-img> -->
               </v-col>
             </v-row>
             <v-row
@@ -281,11 +302,14 @@
 
 <script>
 import AlarmEditPhotos from "../../components/Alarm/EditPhotos.vue";
+import CompSensorPlotting from "./CompSensorPlotting.vue";
 
 export default {
-  components: { AlarmEditPhotos },
+  components: { AlarmEditPhotos, CompSensorPlotting },
   props: ["customer_id", "isMapviewOnly", "isEditable"],
   data: () => ({
+    keytabitem: 1,
+    tabkey: 1,
     editItem: null,
     key: 1,
     building_pictures: [],
@@ -349,6 +373,30 @@ export default {
     },
     caps(str) {
       return str.replace(/\b\w/g, (c) => c.toUpperCase());
+    },
+    reloadTab() {
+      this.keytabitem++;
+    },
+    async resetAllSensors() {
+      if (confirm("Are you sure you want to reset")) {
+        this.loading = true;
+        let config = {
+          params: {
+            company_id: this.$auth.user.company_id,
+
+            customer_building_picture_id: this.building_pictures.map(
+              (item) => item.id
+            ),
+          },
+        };
+        let { data } = await this.$axios.post(
+          `reset_plotting_all`,
+          config.params
+        );
+        this.getDatafromapi();
+        this.tabkey++;
+        this.loading = false;
+      }
     },
     newPhoto() {
       this.editId = "";

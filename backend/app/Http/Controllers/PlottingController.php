@@ -117,4 +117,22 @@ class PlottingController extends Controller
             ], 500);
         }
     }
+    public function resetPlotting(REquest $request)
+    {
+        if ($request->filled('customer_building_picture_id')) {
+
+            Plotting::where("customer_building_picture_id", $request->customer_building_picture_id)->delete();
+        }
+
+        return $this->response("Deleted Successfully", null, true);
+    }
+    public function resetPlottingAll(REquest $request)
+    {
+        if ($request->filled('customer_building_picture_id')) {
+
+            Plotting::whereIn("customer_building_picture_id", $request->customer_building_picture_id)->delete();
+        }
+
+        return $this->response("Deleted Successfully", null, true);
+    }
 }

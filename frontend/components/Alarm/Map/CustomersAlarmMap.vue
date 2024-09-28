@@ -368,6 +368,11 @@
                           "
                         >
                           <img
+                            :title="alarm.alarm_type"
+                            style="width: 15px; float: left"
+                            :src="$utils.getRelaventImage(alarm.alarm_type)"
+                          />
+                          <!-- <img
                             v-if="alarm.alarm_type == 'Burglary'"
                             title="Burglary"
                             style="width: 15px; float: left"
@@ -406,7 +411,7 @@
                             title="Water"
                             style="width: 15px; float: left"
                             src="/alarm-icons/humidity.png"
-                          />
+                          />-->
                         </v-col>
 
                         <v-col cols="7">

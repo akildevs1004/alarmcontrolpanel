@@ -290,7 +290,13 @@
                         cols="1"
                         style="max-width: 20px; padding-top: 16px"
                       >
+                        {{ alarm.alarm_type }}
                         <img
+                          :title="alarm.alarm_type"
+                          style="width: 15px; float: left"
+                          :src="$utils.getRelaventImage(alarm.alarm_type)"
+                        />
+                        <!-- <img
                           v-if="alarm.alarm_type == 'Burglary'"
                           title="Burglary"
                           style="width: 15px; float: left"
@@ -323,7 +329,7 @@
                           title="Water"
                           style="width: 15px; float: left"
                           src="/device-icons/water.png"
-                        />
+                        /> -->
                       </v-col>
 
                       <v-col cols="7">

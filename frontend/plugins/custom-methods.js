@@ -284,6 +284,7 @@ export default ({ app }, inject) => {
     },
     getRelaventMarkers(alarm) {
       let relaventImage = {
+        Intruder: "/alarm-icons/burglary.png",
         Burglary: "/alarm-icons/burglary.png",
         Medical: "/alarm-icons/medical.png",
         Fire: "/alarm-icons/fire.png",
@@ -307,6 +308,7 @@ export default ({ app }, inject) => {
 
     getRelaventImage(alarm) {
       let relaventImage = {
+        Intruder: "/alarm-icons/burglary.png",
         Burglary: "/alarm-icons/burglary.png",
         Medical: "/alarm-icons/medical.png",
         Fire: "/alarm-icons/fire.png",
