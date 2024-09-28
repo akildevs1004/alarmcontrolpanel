@@ -2439,4 +2439,13 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
 .customerEmergencyContactTabs .v-slide-group__content {
   max-width: 100% !important;
 }
+.radiogroup {
+  color: black;
+}
+.radiogroup label {
+  color: black !important;
+}
+.v-radio--is-disabled label {
+  color: #ddd !important;
+}
 </style>

@@ -19,6 +19,37 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogForwardEventDetails" width="800px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black"
+            >Alarm - Forward Details #{{ eventId }}</span
+          >
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogForwardEventDetails = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <AlarmForwardEvent
+              name="AlramCloseNotes"
+              :key="key"
+              :customer_id="customer_id"
+              :customer="customer"
+              @closeDialog="closeDialog()"
+              :alarm_id="eventId"
+              :popupEventText="'Test'"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-card flat>
       <v-card-text style="padding: 0px">
         <v-row v-if="globalContactDetails">
@@ -145,7 +176,13 @@
                 >
                   <label class="div-border-label">Call Status</label>
 
-                  <v-radio-group v-model="event_payload.call_status">
+                  <v-radio-group
+                    class="radiogroup"
+                    style="color: black"
+                    v-model="event_payload.call_status"
+                    @change="updateCallStatus()"
+                    @click="updateCallStatus()"
+                  >
                     <v-radio
                       label="Answered"
                       value="Answered"
@@ -173,15 +210,31 @@
                 >
                   <label class="div-border-label">Response</label>
 
-                  <v-radio-group v-model="event_payload.response">
+                  <v-radio-group
+                    v-model="event_payload.response"
+                    class="radiogroup"
+                  >
                     <v-radio
+                      :disabled="!displayResponse"
                       label="False alarm"
                       value="False alarm"
                       style="font-size: 10px"
                     ></v-radio>
-                    <v-radio label="True alarm" value="True alarm"></v-radio>
-                    <v-radio label="Not aware " value="Not aware"></v-radio>
-                    <v-radio label="Not in Town" value="Not in Town"></v-radio>
+                    <v-radio
+                      :disabled="!displayResponse"
+                      label="True alarm"
+                      value="True alarm"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="!displayResponse"
+                      label="Not aware "
+                      value="Not aware"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="!displayResponse"
+                      label="Not in Town"
+                      value="Not in Town"
+                    ></v-radio>
                   </v-radio-group>
                 </div>
               </v-col>
@@ -197,20 +250,25 @@
                 >
                   <label class="div-border-label">Event satus</label>
 
-                  <v-radio-group v-model="event_payload.event_status">
+                  <v-radio-group
+                    v-model="event_payload.event_status"
+                    class="radiogroup"
+                  >
                     <v-radio
+                      @click="displayForwardForm()"
                       label="Forwaded"
                       value="Forwaded"
                       style="font-size: 10px"
                     ></v-radio>
-                    <v-radio label="Flase Alarm" value="Flase Alarm"></v-radio>
+
                     <v-radio label="Pending" value="Pending"></v-radio>
+                    <!-- <v-radio
+                      :disabled="!displayFalseAlarm"
+                      label="Flase Alarm"
+                      value="Flase Alarm"
+                    ></v-radio> -->
                     <v-radio
-                      v-if="
-                        (contact_type == 'primary' ||
-                          contact_type == 'secondary') &&
-                        event_payload.call_status == 'Answered'
-                      "
+                      :disabled="!displayCloseAlarm"
                       label="Closed"
                       value="Closed"
                     ></v-radio>
@@ -415,11 +473,18 @@
 import SecurityGoogleMap from "../../Alarm/SecurityDashboard/SecurityGoogleMap.vue";
 import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 import SecurityAlarmNotes from "../../Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
+import AlarmForwardEvent from "../AlarmForwardEvent.vue";
 
 export default {
   components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityAlarmNotes },
   props: ["alarmId", "customer", "contact_type"],
   data: () => ({
+    dialogForwardEventDetails: false,
+    eventId: null,
+    customer_id: null,
+    displayCloseAlarm: false,
+    displayFalseAlarm: true,
+    displayResponse: true,
     snackbar: false,
     key: 1,
     dialogNotes: false,
@@ -487,6 +552,26 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    closeDialog() {
+      this.key++;
+    },
+    updateCallStatus() {
+      this.displayResponse = true;
+      this.displayFalseAlarm = true;
+      this.displayFalseAlarm = true;
+      this.displayCloseAlarm = true;
+
+      if (this.event_payload.call_status != "Answered") {
+        this.event_payload.response = null;
+        this.event_payload.event_status = null;
+
+        this.displayFalseAlarm = false;
+        this.displayCloseAlarm = false;
+
+        this.displayResponse = false;
+        this.displayFalseAlarm = false;
+      }
+    },
     getUserType() {
       if (this.$auth.user) {
         const user = this.$auth.user;
@@ -499,6 +584,11 @@ export default {
     displayNotes(item) {
       this.selectedItem = item;
       this.dialogNotes = true;
+    },
+    displayForwardForm() {
+      this.eventId = this.alarmId;
+      this.customer_id = this.customer.id;
+      this.dialogForwardEventDetails = true;
     },
     // getDataFromApi() {
     //   let { sortBy, sortDesc, page, itemsPerPage } = this.options;

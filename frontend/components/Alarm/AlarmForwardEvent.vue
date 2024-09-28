@@ -45,7 +45,7 @@
           label="Name"
           :items="customerContactList"
           item-value="address_type"
-          item-text="address_type"
+          :item-text="displayAddressType"
           dense
           outlined
           :hide-details="true"
@@ -155,6 +155,13 @@ export default {
   },
   computed: {},
   methods: {
+    displayAddressType(item) {
+      if (!item || !item.address_type) return "";
+      return (
+        item.address_type.charAt(0).toUpperCase() +
+        item.address_type.slice(1).toLowerCase()
+      );
+    },
     onAddressTypeChange(d) {
       const selectedAddressType = this.customerContactList.find(
         (item) => item.address_type === d.address_type.address_type
