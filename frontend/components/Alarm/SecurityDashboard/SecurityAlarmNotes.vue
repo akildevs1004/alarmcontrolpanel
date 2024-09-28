@@ -163,13 +163,13 @@
         <v-row>
           <v-col cols="12" class="text-right" style="padding-top: 0px">
             <v-row>
-              <v-col cols="6"></v-col>
-              <v-col cols="5" class="text-right" style="width: 550px">
+              <v-col></v-col>
+              <v-col class="text-right">
                 <v-row>
-                  <v-col cols="1" class="mt-2">
+                  <v-col class="mt-2">
                     <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
                   </v-col>
-                  <v-col cols="5"
+                  <v-col
                     ><v-text-field
                       style="padding-top: 7px"
                       width="150px"
@@ -186,7 +186,7 @@
                       hide-details
                     ></v-text-field
                   ></v-col>
-                  <v-col cols="6">
+                  <v-col>
                     <CustomFilter
                       style="float: right; padding-top: 5px; z-index: 9999"
                       @filter-attr="filterAttr"
@@ -197,8 +197,8 @@
                   /></v-col>
                 </v-row>
               </v-col>
-              <v-col cols="1" class="text-left pt-5 pl-0"
-                ><v-menu bottom right>
+              <!--<v-col cols="1" class="text-left pt-5 pl-0">
+                <v-menu bottom right>
                   <template v-slot:activator="{ on, attrs }">
                     <span v-bind="attrs" v-on="on" style="font-size: 16px">
                       <v-icon dark-2 icon color="violet"
@@ -264,8 +264,8 @@
                       </v-list-item-title>
                     </v-list-item>
                   </v-list>
-                </v-menu>
-              </v-col>
+                </v-menu> 
+              </v-col>-->
             </v-row>
           </v-col>
         </v-row>
@@ -319,7 +319,24 @@
               <template v-slot:item.phone="{ item, index }">
                 {{ item.contact ? item.contact.phone1 : "---" }}
               </template>
-
+              <template v-slot:item.response="{ item, index }">
+                {{
+                  item.response != "null" &&
+                  item.response != "" &&
+                  item.response != null
+                    ? item.response
+                    : "---"
+                }}
+              </template>
+              <template v-slot:item.call_status="{ item, index }">
+                {{
+                  item.call_status != "null" &&
+                  item.call_status != "" &&
+                  item.call_status != null
+                    ? item.call_status
+                    : "---"
+                }}
+              </template>
               <template v-slot:item.notes="{ item, index }">
                 <span
                   class="d-inline-block text-truncate"
@@ -373,16 +390,15 @@ export default {
     totalRowsCount: 0,
     headers: [
       { text: "#", value: "sno", sortable: false },
-
-      { text: "Security", value: "security", sortable: false },
-      { text: "Customer", value: "customer", sortable: false },
-      { text: "Phone", value: "phone", sortable: false },
+      { text: "Event Status", value: "event_status", sortable: false },
       { text: "Call satus", value: "call_status", sortable: false },
 
       { text: "Response", value: "response", sortable: false },
 
       { text: "Notes", value: "notes", sortable: false },
-      { text: "Event Status", value: "event_status", sortable: false },
+      { text: "Operator ID", value: "security", sortable: false },
+      { text: "Contacted", value: "customer", sortable: false },
+      { text: "Phone", value: "phone", sortable: false },
       { text: "Actions", value: "action", sortable: false },
       { text: "Date", value: "date", sortable: false },
       // { text: "Status", value: "status", sortable: false },
@@ -463,7 +479,7 @@ export default {
           pagination: true,
           company_id: this.$auth.user.company_id,
           customer_id: this.customer.customer_id,
-          contact_id: this.contact_id,
+          //contact_id: this.contact_id,
           alarm_id: this.alarmId,
           date_from: this.date_from,
           date_to: this.date_to,
