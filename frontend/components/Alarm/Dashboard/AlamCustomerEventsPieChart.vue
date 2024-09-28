@@ -81,7 +81,7 @@
             categories ? categories.temperature : 0
           }}</v-col>
         </v-row>
-        <v-divider color="#dddddd" />
+        <!-- <v-divider color="#dddddd" /> -->
       </v-col>
     </v-row>
 

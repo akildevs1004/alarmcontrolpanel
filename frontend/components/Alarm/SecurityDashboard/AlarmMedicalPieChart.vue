@@ -17,6 +17,7 @@
           <v-card class="elevation-2">
             <v-card-text class="mt-5">
               <AlamAllEvents
+                :compFilterAlarmStatus="1"
                 name="medicalPieChart"
                 style="padding: 0px; padding-top: 0px"
                 :key="key"

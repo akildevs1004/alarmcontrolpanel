@@ -2,10 +2,14 @@
   <div style="padding: 0px; width: 100%; height: auto">
     <v-dialog v-model="dialogDevicesList" max-width="80%">
       <v-card>
-        <v-card-title dark class="popup_background">
-          <span dense>Offline Devices</span>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Offline Devices</span>
           <v-spacer></v-spacer>
-          <v-icon @click="dialogDevicesList = false" outlined>
+          <v-icon
+            style="color: black"
+            @click="dialogDevicesList = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

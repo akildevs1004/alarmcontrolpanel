@@ -3,7 +3,7 @@
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Burglary Events</span>
+          <span style="color: black" dense>Intruder Events</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -17,6 +17,7 @@
           <v-card class="elevation-2">
             <v-card-text class="mt-5">
               <AlamAllEvents
+                :compFilterAlarmStatus="1"
                 name="buildingtypePieChart"
                 style="padding: 0px; padding-top: 0px"
                 :key="key"

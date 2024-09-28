@@ -599,7 +599,12 @@ export default {
     AlarmForwardEvent,
     SecurityAlarmNotes,
   },
-  props: ["showFilters", "eventFilter", "filter_customer_id"],
+  props: [
+    "showFilters",
+    "eventFilter",
+    "filter_customer_id",
+    "compFilterAlarmStatus",
+  ],
   data() {
     return {
       customer: null,
@@ -611,7 +616,7 @@ export default {
       dialogTabViewCustomer: false,
       viewCustomerId: null,
       popupEventText: "",
-      filterAlarmStatus: 1,
+      filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -700,7 +705,9 @@ export default {
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
-
+    if (this.compFilterAlarmStatus) {
+      this.filterAlarmStatus = this.compFilterAlarmStatus;
+    }
     setTimeout(() => {
       if (this.sensorItems.length == 0) {
         this.$axios

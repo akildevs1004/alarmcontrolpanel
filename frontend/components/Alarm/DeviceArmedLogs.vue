@@ -10,7 +10,7 @@
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
           <v-col></v-col>
-          <v-col class="text-right">
+          <v-col class="text-right" style="min-width: 500px">
             <v-row>
               <v-col class="mt-2">
                 <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>

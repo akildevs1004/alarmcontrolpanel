@@ -279,14 +279,14 @@
             <v-icon title="Armed" color="green">mdi mdi-shield-sun</v-icon>
           </div>
           <div v-else>
-            <v-icon title="DisArmed" color="red">mdi mdi-shield-sun</v-icon>
+            <v-icon title="DisArmed" color="#585858">mdi mdi-shield-sun</v-icon>
           </div> </template
         ><template v-slot:item.disarm="{ item }">
           <div v-if="item.armed_status == 0">
             <v-icon title="Armed" color="green">mdi mdi-shield-sun</v-icon>
           </div>
           <div v-else>
-            <v-icon title="DisArmed" color="red">mdi mdi-shield-sun</v-icon>
+            <v-icon title="DisArmed" color="#585858">mdi mdi-shield-sun</v-icon>
           </div>
           <div v-else>---</div>
         </template>

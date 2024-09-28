@@ -52,7 +52,10 @@
       <v-col cols="12">
         <v-card class="elevation-2">
           <v-card-text class="mt-5">
-            <AlamAllEventsDashboard name="dashboardPieChart" /> </v-card-text
+            <AlamAllEventsDashboard
+              :compFilterAlarmStatus="1"
+              name="dashboardPieChart"
+            /> </v-card-text
         ></v-card>
       </v-col>
     </v-row>

@@ -9,6 +9,7 @@
         <v-card class="elevation-2">
           <v-card-text class="mt-5">
             <AlamAllEventsDashboardsecurity
+              :compFilterAlarmStatus="1"
               name="securitydashboard"
             /> </v-card-text
         ></v-card>

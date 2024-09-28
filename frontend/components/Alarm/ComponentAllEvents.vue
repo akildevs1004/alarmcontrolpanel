@@ -606,7 +606,12 @@ export default {
     AlarmForwardEvent,
     SecurityAlarmNotes,
   },
-  props: ["showFilters", "eventFilter", "filter_customer_id"],
+  props: [
+    "showFilters",
+    "eventFilter",
+    "filter_customer_id",
+    "compFilterAlarmStatus",
+  ],
   data() {
     return {
       customer: null,
@@ -618,7 +623,7 @@ export default {
       dialogTabViewCustomer: false,
       viewCustomerId: null,
       popupEventText: "",
-      filterAlarmStatus: 1,
+      filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
       tab: 0,
@@ -704,6 +709,12 @@ export default {
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
 
+    // if (this.$route.name == "alarm-dashboard") {
+    //   this.filterAlarmStatus = 1;
+    // }
+    if (this.compFilterAlarmStatus) {
+      this.filterAlarmStatus = this.compFilterAlarmStatus;
+    }
     setTimeout(() => {
       this.getSensorsList();
     }, 2000);
@@ -725,9 +736,7 @@ export default {
     setTimeout(() => {
       setInterval(() => {
         if (
-          (this.$route.name == "alarm-dashboard" ||
-            this.$route.name == "alarm-allevents" ||
-            this.$route.name == "alarm-alarm-events") &&
+          this.$route.name == "alarm-dashboard" &&
           this.filterAlarmStatus == 1
         )
           this.getDataFromApi(0);
