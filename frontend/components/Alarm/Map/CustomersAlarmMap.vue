@@ -354,11 +354,11 @@
                   }}
                 </v-col>
                 <v-col style="padding-left: 0px">
-                  <v-icon
+                  <!-- <v-icon
                     :title="getCustomerColorObject(item).text"
                     :color="getCustomerColorObject(item).color"
                     >mdi mdi-square-medium</v-icon
-                  >
+                  > -->
                   <span
                     @click="setCustomerLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
