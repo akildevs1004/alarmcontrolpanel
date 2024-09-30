@@ -14,6 +14,16 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="1"></v-col>
+      <v-col cols="3" style="padding-left: 5px">
+        <v-text-field
+          type="email"
+          label="CC Email"
+          hide-details
+          outlined
+          dense
+          v-model="external_cc_email"
+      /></v-col>
       <v-col class="text-right">
         <v-btn x-small title="New" color="primary" @click="addItem()"
           >Add
@@ -118,6 +128,7 @@ export default {
   props: ["alarm_id", "customer"],
   data() {
     return {
+      external_cc_email: "",
       customerContactList: [],
       forwardTypes: [],
       SensorTypes: [],
@@ -258,6 +269,7 @@ export default {
 
         company_id: this.$auth?.user?.company?.id,
         alarm_id: this.alarm_id,
+        external_cc_email: this.external_cc_email,
       };
       this.response = "";
 

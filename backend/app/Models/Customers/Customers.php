@@ -46,11 +46,11 @@ class Customers extends Model
     }
     public function primary_contact()
     {
-        return $this->hasOne(CustomerContacts::class, "customer_id", "id")->where("address_type", "primary");
+        return $this->hasOne(CustomerContacts::class, "customer_id", "id")->whereRaw("LOWER(address_type) = ?", ['primary']);;
     }
     public function secondary_contact()
     {
-        return $this->hasOne(CustomerContacts::class, "customer_id", "id")->where("address_type", "secondary");
+        return $this->hasOne(CustomerContacts::class, "customer_id", "id")->whereRaw("LOWER(address_type) = ?", ['secondary']);
     }
 
     public function alarm_events()

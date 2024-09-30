@@ -35,6 +35,7 @@ class AlarmNotificationController extends Controller
         $response = '';
         $alarm_id = $request->get('alarm_id');
         $contacts = $request->get('contacts');
+        $external_cc_email = $request->get('external_cc_email');
         if ($alarm_id > 0) {
 
             $alarm = AlarmEvents::with(["device.customer", "device.company"])->whereId($alarm_id)->first();
@@ -54,9 +55,9 @@ class AlarmNotificationController extends Controller
                         try {
 
 
-                            $this->sendMail($name, $alarm, $email, $alarm_id);
+                            $response = $response . $this->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
                         } catch (\Exception $e) {
-                            $response = $response . $email . ' - Email  Not sent ';
+                            $response = $response . $email . ' - Email  Not sent ' . $e;
                         }
                     }
 
@@ -82,8 +83,20 @@ class AlarmNotificationController extends Controller
             return $this->response($response, null, false);
         }
     }
-    public function sendMail($name, $alarm, $email, $alarm_id)
+    public function sendMail($name, $alarm, $email, $alarm_id, $external_cc_email)
     {
+
+
+        $cc_emails =  [];
+
+        if ($external_cc_email != '') {
+            $emailTesting = explode('@', $external_cc_email);
+            if (count($emailTesting) > 1) {
+                $cc_emails[] = $external_cc_email;
+            }
+        }
+
+
         $company_id = $alarm['company_id'];
         $customer_id = $alarm['customer_id'];
         $building_name = $alarm['device']['customer']['building_name'];
@@ -98,8 +111,32 @@ class AlarmNotificationController extends Controller
         $company_name = $alarm['device']['company']['name'];
 
         $primary_contact = 'User';
-        if ($alarm['device']['customer']['primary_contact'])
+        $primary_contact = 'User';
+        if ($alarm['device']['customer']['primary_contact']) {
+
+
             $primary_contact = $alarm['device']['customer']['primary_contact']["first_name"] . ' ' . $alarm['device']['customer']['primary_contact']["flast_name"];;;;
+
+
+
+            if ($alarm['device']['customer']['primary_contact']['email']) {
+                $emailTesting = explode('@', $alarm['device']['customer']['primary_contact']['email']);
+                if (count($emailTesting) > 1) {
+                    $cc_emails[] = $alarm['device']['customer']['primary_contact']['email'];
+                }
+            }
+        }
+        if ($alarm['device']['customer']['secondary_contact']) {
+            $primary_contact = $alarm['device']['customer']['secondary_contact']["first_name"] . ' ' . $alarm['device']['customer']['secondary_contact']["flast_name"];;;;
+            if ($alarm['device']['customer']['secondary_contact']['email']) {
+                $emailTesting = explode('@', $alarm['device']['customer']['secondary_contact']['email']);
+                if (count($emailTesting) > 1) {
+                    $cc_emails[] = $alarm['device']['customer']['secondary_contact']['email'];
+                }
+            }
+        }
+
+
 
         $body_content1 = "Hello, <strong> {$name}</strong> <br/>";
         $body_content1 .= "Company:  {$company_name}<br/><br/>";
@@ -114,7 +151,7 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
         $body_content1 .= "Phone1: {$alarm['device']['customer']['primary_contact']}<br/>";
         $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
-        $body_content1 .= "Primary Contact: {$primary_contact}<br/>";
+
         $body_content1 .= "Property: {$property_type}<br/>";
         $body_content1 .= "Address: {$address}<br/>";
         $body_content1 .= "City: {$city}<br/><br/> ";
@@ -135,6 +172,8 @@ class AlarmNotificationController extends Controller
 
         $body_content1 = new EmailAlarmForwardMail($data); {
             Mail::to($email)
+                ->cc($cc_emails)
+
                 ->send($body_content1);
             $data = [
                 "company_id" => $company_id,

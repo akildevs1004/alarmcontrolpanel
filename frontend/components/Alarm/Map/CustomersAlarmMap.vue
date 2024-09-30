@@ -464,8 +464,10 @@
                 style="width: 20px"
                 :src="getImageicon(value)"
               /> -->
-              <br />
-              {{ caps(name) }}
+
+              <div style="font-size: 13px">
+                {{ caps(name) }}
+              </div>
             </v-col>
           </v-row>
         </v-card>
