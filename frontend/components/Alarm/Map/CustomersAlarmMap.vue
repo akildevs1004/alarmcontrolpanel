@@ -446,8 +446,33 @@
               </v-row>
             </template>
           </v-data-table>
+          <div style="width: 100%">
+            <v-btn-toggle
+              style="width: 100%"
+              tile
+              color="deep-purple accent-3"
+              group
+            >
+              <v-btn
+                @click="getCustomers(value.text)"
+                style="width: 25%"
+                v-for="(value, name, index) in colorcodes"
+                :value="value"
+              >
+                <v-icon :color="value.color">{{ value.icon }} </v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </div>
+          <!-- <v-btn-toggle tile color="deep-purple accent-3" group>
+            <v-btn style value="left"> Left </v-btn>
 
-          <v-row>
+            <v-btn value="center"> Center </v-btn>
+
+            <v-btn value="right"> Right </v-btn>
+
+            <v-btn value="justify"> Justify </v-btn>
+          </v-btn-toggle> -->
+          <!--<v-row>
             <v-col
               @click="getCustomers(value.text)"
               class="pl-5"
@@ -459,17 +484,17 @@
             >
               <v-icon :color="value.color">{{ value.icon }}</v-icon>
 
-              <!-- <img
+               <img
                 v-if="getImageicon(value)"
                 style="width: 20px"
                 :src="getImageicon(value)"
-              /> -->
+              /> 
 
               <div style="font-size: 13px">
                 {{ caps(name) }}
               </div>
             </v-col>
-          </v-row>
+          </v-row>-->
         </v-card>
       </v-col>
     </v-row>
