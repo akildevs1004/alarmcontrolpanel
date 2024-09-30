@@ -905,26 +905,28 @@ export default {
 
       //console.log("wait5Minutes", this.wait5Minutes);
       //if (this.wait5Minutes == false)
-      {
-        if (this.$route.name != "login") {
-          this.resetTimer();
-          this.loadHeaderNotificationMenu();
-          if (
-            this.wait5Minutes == false &&
-            this.$route.name == "alarm-dashboard"
-          ) {
-            if (this.notificationAlarmDevicesContent) {
-              if (this.notificationAlarmDevicesContent.length > 0) {
-                if (!this.dialogAlarmPopupNotificationStatus) {
-                  this.popupKey += 1;
-                  this.dialogAlarmPopupNotificationStatus = true;
-                }
-              } else {
-                this.dialogAlarmPopupNotificationStatus = false;
+      if (this.$route.name !== "login") {
+        this.resetTimer();
+        this.loadHeaderNotificationMenu();
+
+        if (this.$route.name === "alarm-dashboard" && !this.wait5Minutes) {
+          const notificationContent = this.notificationAlarmDevicesContent;
+
+          if (notificationContent && notificationContent.length > 0) {
+            let criticalList = notificationContent.filter(
+              (notification) => notification.alarm_category == 1
+            );
+            if (criticalList.length > 0) {
+              if (!this.dialogAlarmPopupNotificationStatus) {
+                this.popupKey += 1;
+                this.dialogAlarmPopupNotificationStatus = true;
               }
+            } else {
+              //this.dialogAlarmPopupNotificationStatus = false;
             }
+          } else {
+            this.dialogAlarmPopupNotificationStatus = false;
           }
-          //this.verifyPopupAlarmStatus();
         }
       }
     }, 1000 * 5 * 1);

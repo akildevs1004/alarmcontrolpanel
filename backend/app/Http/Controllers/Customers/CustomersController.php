@@ -1094,11 +1094,14 @@ class CustomersController extends Controller
     }
     public function customersForMap(Request $request)
     {
-        $model = Customers::with(["alarm_events", "devicesOffline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
         $model->withCount("alarm_events");
+        // $model->has("alarm_events", '>', 0);
+
         $model->withCount("devicesOffline");
+        $model->withCount("devicesOnline");
         $model->when($request->filled("common_search"), function ($query) use ($request) {
 
             return $query->where("building_name", "ILIKE", "$request->common_search%")
@@ -1110,6 +1113,41 @@ class CustomersController extends Controller
             $model->whereIn('id', $request->filter_customers_list);
         });
         $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
+        $model->when(
+            $request->filled("filter_text"),
+            function ($q) use ($request) {
+                if ($request->filter_text == 'Alarm') {
+                    $q->has("alarm_events", '>', 0);
+                }
+                if ($request->filter_text == 'Online') {
+                    $q->wherehas("devices", function ($q) use ($request) {
+                        $q->where("status_id", 1);
+                    });
+                }
+                if ($request->filter_text == 'Offline') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("status_id", 2);
+                    });
+                }
+                if ($request->filter_text == 'Armed') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("armed_status", 1);
+                    });
+                }
+                if ($request->filter_text == 'Disarm') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("armed_status", 0);
+                    });
+                }
+            }
+
+
+
+        );
+
+
+
+
         $model->orderBy('alarm_events_count', 'desc')->orderBy('devices_offline_count', 'desc');
 
         return $model->get();

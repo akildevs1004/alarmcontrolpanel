@@ -212,6 +212,8 @@ class CustomerAlarmEventsController extends Controller
             $data['created_datetime'] = date("Y-m-d H:i:s");
             $record = CustomerAlarmNotes::create($data);
 
+            AlarmEvents::where("id", $request->event_id)->update(["forwarded" => false]);
+
 
 
             //udapte json file 
@@ -284,6 +286,9 @@ class CustomerAlarmEventsController extends Controller
             $data['contact_id'] = $request->contact_id;
             $data['created_datetime'] = date("Y-m-d H:i:s");
 
+            AlarmEvents::where("id", $request->alarm_id)->update(["forwarded" => false]);
+
+
             if ($request->filled("notes_id")) {
 
                 $record = CustomerAlarmNotes::where("id", $request->notes_id)->update($data);
@@ -291,6 +296,7 @@ class CustomerAlarmEventsController extends Controller
 
                 if ($request->event_status != "Closed") {
                     $record = CustomerAlarmNotes::create($data);
+
 
                     $alarmModel = AlarmEvents::where("id", $request->alarm_id);
                     $data2 = [];
@@ -605,13 +611,33 @@ class CustomerAlarmEventsController extends Controller
             "notes",
             "category",
             "device.customer.buildingtype",
-            "zoneData"
+            "zoneData",
+
         ])->where('company_id', $request->company_id)
 
-            // ->when($request->filled("common_search"), function ($query) use ($request) {
-            //     $query->where("customer_id", $request->common_search);
-            // })
-            ->when($request->filled("alarm_status"), fn($q) => $q->where("alarm_status", $request->alarm_status))
+            ->when($request->filled("alarm_status"), function ($q) use ($request) {
+
+
+                if ($request->alarm_status == 3) {
+
+                    $q->where("forwarded", true);
+
+                    // $q->wherehas('notes', function ($qq) use ($request) {
+
+
+                    //     $qq->where("event_status", 'Forwaded');
+                    // });
+                } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
+                    $q->where("alarm_status", $request->alarm_status);
+                    $q->where("forwarded", false);
+
+                    // $q->wherehas('notes', function ($qq) use ($request) {
+
+
+                    //     $qq->where("event_status", 'Forwaded');
+                    // });
+                }
+            })
             ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
                 if ((int) $request->filterResponseInMinutes == 0)
                     $query->where("response_minutes", '>', 10);

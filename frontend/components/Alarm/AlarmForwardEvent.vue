@@ -106,9 +106,7 @@
         </div>
       </v-col>
       <v-col cols="2" class="text-right">
-        <v-btn class="primary" small @click="save_forward_info"
-          >Click to Send</v-btn
-        >
+        <v-btn class="primary" small @click="save_forward_info"> Submit</v-btn>
       </v-col>
       <v-col cols="1" class="text-left"> </v-col>
     </v-row>

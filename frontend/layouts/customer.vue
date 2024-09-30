@@ -856,18 +856,31 @@ export default {
 
     setInterval(() => {
       if (!this.$route.name.includes("customer")) return false;
-      if (this.wait5Minutes == false) {
-        if (this.$route.name != "login") {
+      //if (this.wait5Minutes == false)
+      {
+        if (this.$route.name !== "login") {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
-          if (this.notificationAlarmDevices) {
-            if (this.notificationAlarmDevices.length > 0) {
-              this.alarmPopupNotificationStatus = true;
+
+          if (this.$route.name === "customer-dashboard" && !this.wait5Minutes) {
+            const notificationContent = this.notificationAlarmDevicesContent;
+
+            if (notificationContent && notificationContent.length > 0) {
+              let criticalList = notificationContent.filter(
+                (notification) => notification.alarm_category == 1
+              );
+              if (criticalList.length > 0) {
+                if (!this.dialogAlarmPopupNotificationStatus) {
+                  this.popupKey += 1;
+                  this.dialogAlarmPopupNotificationStatus = true;
+                }
+              } else {
+                //this.dialogAlarmPopupNotificationStatus = false;
+              }
             } else {
-              this.alarmPopupNotificationStatus = false;
+              this.dialogAlarmPopupNotificationStatus = false;
             }
           }
-          //this.verifyPopupAlarmStatus();
         }
       }
     }, 1000 * 5 * 1);

@@ -49,20 +49,23 @@ class AlarmNotificationController extends Controller
                     $email = $contact['email'];
                     $name = $contact['name'];
                     $whatsapp_number = $contact['whatsapp_number'];
-
+                    AlarmEvents::where("id", $alarm_id)->update(["forwarded" => true]);
                     if ($email != '') {
                         try {
+
+
                             $this->sendMail($name, $alarm, $email, $alarm_id);
                         } catch (\Exception $e) {
-                            $response = $response . $email . ' - Error. ' . $e;
+                            $response = $response . $email . ' - Email  Not sent ';
                         }
                     }
 
                     if ($whatsapp_number != '') {
                         try {
+
                             $this->sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id);
                         } catch (\Exception $e) {
-                            $response = $response . $whatsapp_number . ' - Whatsapp Error. ';
+                            $response = $response . $whatsapp_number . ' - Whatsapp  Not sent  ';
                         }
                     }
                 }

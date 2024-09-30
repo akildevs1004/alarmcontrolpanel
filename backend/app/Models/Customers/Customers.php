@@ -32,6 +32,10 @@ class Customers extends Model
     {
         return $this->hasMany(Device::class, "customer_id", "id")->where("status_id", 2);
     }
+    public function devicesOnline()
+    {
+        return $this->hasMany(Device::class, "customer_id", "id")->where("status_id", 1);
+    }
     public function buildingtype()
     {
         return $this->belongsTo(CustomersBuildingTypes::class, "building_type_id", "id");

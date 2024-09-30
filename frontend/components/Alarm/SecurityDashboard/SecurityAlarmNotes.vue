@@ -303,7 +303,7 @@
                 {{
                   item.security
                     ? item.security.first_name + " " + item.security.last_name
-                    : "---"
+                    : "Admin"
                 }}
               </template>
               <template v-slot:item.customer="{ item, index }">

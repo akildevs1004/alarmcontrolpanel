@@ -281,7 +281,7 @@
     </v-dialog>
     <v-row>
       <v-col cols="9">
-        <div id="map" style="height: 600px"></div>
+        <div :key="mapkeycount" id="map" style="height: 600px"></div>
       </v-col>
       <v-col cols="3" style="padding: 0px; padding-top: 10px">
         <v-card elevation="2" style="height: 600px">
@@ -304,20 +304,37 @@
             <template v-slot:top>
               <v-container>
                 <v-row>
-                  <v-col cols="5">Customers List</v-col>
+                  <v-col cols="5" style="font-size: 12px; padding-top: 17px"
+                    >Customers List
+                    <span v-if="filterText != ''"
+                      >({{ caps(filterText) }})</span
+                    >
+                  </v-col>
                   <v-col>
-                    <v-text-field
-                      class="small-custom-textbox"
-                      @input="getCustomers()"
-                      v-model="commonSearch"
-                      label="Search..."
-                      dense
-                      outlined
-                      type="text"
-                      append-icon="mdi-magnify"
-                      clearable
-                      hide-details
-                    ></v-text-field>
+                    <v-row>
+                      <v-col cols="2">
+                        <v-icon
+                          @click="getCustomers()"
+                          title="Display All Customers"
+                          >mdi-reload</v-icon
+                        >
+                      </v-col>
+
+                      <v-col cols="10">
+                        <v-text-field
+                          class="small-custom-textbox"
+                          @input="getCustomers()"
+                          v-model="commonSearch"
+                          label="Search..."
+                          dense
+                          outlined
+                          type="text"
+                          append-icon="mdi-magnify"
+                          clearable
+                          hide-details
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
                 <v-divider class="mt-3" color="#DDD"></v-divider>
@@ -432,6 +449,7 @@
 
           <v-row>
             <v-col
+              @click="getCustomers(value.text)"
               class="pl-5"
               style="min-width: 50px; text-align: center"
               v-for="(value, name, index) in colorcodes"
@@ -439,13 +457,13 @@
               :key="index"
               :name="index"
             >
-              <!-- <v-icon :color="value.color">mdi mdi-square-medium</v-icon><br /> -->
+              <v-icon :color="value.color">{{ value.icon }}</v-icon>
 
-              <img
+              <!-- <img
                 v-if="getImageicon(value)"
                 style="width: 20px"
                 :src="getImageicon(value)"
-              />
+              /> -->
               <br />
               {{ caps(name) }}
             </v-col>
@@ -463,6 +481,7 @@ export default {
   components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
 
   data: () => ({
+    mapkeycount: 1,
     popupEventText: "",
     dialogAlarmEventCustomerContactsTabView: false,
     dialog: false,
@@ -490,26 +509,36 @@ export default {
     totalRowsCount: 0,
 
     colorcodes: {
-      online: {
-        color: "#28a745",
-        text: "Online",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_online.png",
-      },
+      // online: {
+      //   color: "#28a745",
+      //   text: "Online",
+      //   image: process.env.BACKEND_URL2 + "/google_map_icons/google_online.png",
+      //   icon: "<i color='green'> mdi-download-network-outline</i>",
+      // },
       alarm: {
-        color: "#dc3545",
+        color: "#ff0000",
         text: "Alarm",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+        icon: "mdi-alarm",
       },
       offline: {
-        color: "#6c757d",
+        color: "#626262",
         text: "Offline",
         image:
           process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+        icon: "mdi-download-network-outline",
       },
       armed: {
-        color: "#fd7e14",
+        color: "#00930b",
         text: "Armed",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
+        icon: "mdi-lock",
+      },
+      disarm: {
+        color: "#ff0000",
+        text: "Disarm",
+        image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
+        icon: "mdi-lock-open",
       },
     },
     snack: false,
@@ -550,6 +579,7 @@ export default {
 
     mapMarkersList: [],
     mapInfowindowsList: [],
+    filterText: "",
   }),
   computed: {},
   async mounted() {
@@ -565,9 +595,13 @@ export default {
     }
 
     this.getCustomers();
-    setInterval(() => {
-      if (this.$route.name == "security-customersmap") this.getCustomers();
-    }, 1000 * 10);
+    // setInterval(() => {
+    //   if (
+    //     this.$route.name == "security-customersmap" ||
+    //     this.$route.name == "alarm-customersmap"
+    //   )
+    //     this.getCustomers();
+    // }, 1000 * 10);
     ///this.getBuildingTypes();
   },
   watch: {
@@ -632,7 +666,8 @@ export default {
       }
     },
 
-    getCustomers() {
+    getCustomers(filterText = "") {
+      this.filterText = filterText;
       // if (this.loading == true) return false;
       this.loading = true;
 
@@ -655,6 +690,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
+          filter_text: filterText,
         },
       };
 
@@ -664,6 +700,18 @@ export default {
 
           //  this.totalRowsCount = data.total;
           this.loading = false;
+          //this.mapkeycount++;
+
+          this.mapMarkersList.forEach((marker) => {
+            if (marker) {
+              marker.setMap(null);
+            }
+          });
+          this.mapMarkersList = [];
+
+          // // Call plotLocations to replot markers
+          // this.plotLocations();
+
           this.getMapKey();
         });
       } catch (e) {}
@@ -700,9 +748,11 @@ export default {
       }
       if (this.findAnyDeviceisOffline(item.devices) > 0) {
         return this.colorcodes.offline;
-      } else if (this.findallDeviceisOnline(item.devices)) {
-        return this.colorcodes.online;
-      } else return this.colorcodes.offline;
+      } else if (this.findanyDisamrDevice(item.devices)) {
+        return this.colorcodes.disarm;
+      }
+
+      return this.colorcodes.offline;
     },
     findAnyDeviceisOffline(devices) {
       let offlineArray = devices.filter((device) => device.status_id == 2);
@@ -722,6 +772,11 @@ export default {
     },
     findanyArmedDevice(devices) {
       let armedArray = devices.filter((device) => device.armed_status == 1);
+
+      return armedArray ? armedArray.length : 0;
+    },
+    findanyDisamrDevice(devices) {
+      let armedArray = devices.filter((device) => device.armed_status == 0);
 
       return armedArray ? armedArray.length : 0;
     },
@@ -833,13 +888,13 @@ export default {
         <td style="width:100px; vertical-align: top;">
           <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
           <br />
-  
+
         </td>
         <td style="width:150px; vertical-align: top;">
           ${item.building_name} <br/> ${item.city}
           <div>Landmark: ${item.landmark}</div>
           <div style="text-align: right; width: 100%;">
-  
+
           </div>
         </td>
       </tr>
@@ -847,7 +902,7 @@ export default {
   <td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
     </td>
     <td style="text-align:right">
-   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink} 
+   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
       </td>
         </tr>
     </table>`;

@@ -13,8 +13,8 @@ class AlarmEvents extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
-    protected $with = ["category"];
+    protected $appends = ["alarm_forwarded",];
+    protected $with = ["category",];
 
 
     public function customer()
@@ -45,5 +45,17 @@ class AlarmEvents extends Model
 
             //->where("area_code", $this->area_code)
         ;
+    }
+    // public function  forwarded()
+    // {
+
+    //     //return CustomerAlarmNotes::where("alarm_id", $this->id)->get();
+    //     return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwaded");
+    // }
+    public function getAlarmForwardedAttribute()
+    {
+
+        //return CustomerAlarmNotes::where("alarm_id", $this->id)->get();
+        return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwaded")->get();;
     }
 }

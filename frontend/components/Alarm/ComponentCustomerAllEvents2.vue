@@ -488,14 +488,15 @@
                       </template>
 
                       <template v-slot:item.status="{ item }">
-                        <div v-if="item.alarm_status == 1">
-                          <v-icon
-                            class="alarm"
-                            @click="UpdateAlarmStatus(item, 0)"
-                            title="Click to Turn OFF Alarm "
+                        <div v-if="item.alarm_forwarded.length > 0">
+                          Forwarded
+                        </div>
+                        <div v-else-if="item.alarm_status == 1">
+                          Open
+                          <!-- <v-icon class="alarm1111111" style="color: red"
                             >mdi mdi-alarm-light</v-icon
-                          >
-                          <br />
+                          > -->
+                          <!-- <br />
                           <v-btn
                             class="text--red"
                             color="red"
@@ -505,19 +506,18 @@
                             x-small
                             dense
                             >Stop</v-btn
-                          >
+                          > -->
                         </div>
                         <div v-else-if="item.alarm_status == 0">
-                          <v-icon title="Now Alaram is OFF"
+                          Closed
+                          <!-- <v-icon title="Now Alaram is OFF"
                             >mdi mdi-alarm-light-outline</v-icon
                           >
                           <div class="secondary-value">
                             {{
-                              item.alarm_end_manually == 1
-                                ? "Closed Manually"
-                                : "Auto Closed"
+                              item.alarm_end_manually == 1 ? "Manually" : "Auto"
                             }}
-                          </div>
+                          </div> -->
                         </div>
                       </template>
                       <template v-slot:item.options="{ item }">

@@ -270,8 +270,11 @@
                   dense
                   :items="[
                     { id: null, name: 'All Events' },
+
                     { id: 1, name: 'Open' },
+
                     { id: 0, name: 'Closed' },
+                    { id: 3, name: 'Forwarded' },
                   ]"
                   item-text="name"
                   item-value="id"
@@ -496,10 +499,12 @@
                       </template>
 
                       <template v-slot:item.status="{ item }">
-                        <div v-if="item.alarm_status == 1">
-                          <v-icon class="alarm1111111" style="color: red"
+                        <div v-if="item.forwarded === true">Forwarded</div>
+                        <div v-else-if="item.alarm_status == 1">
+                          Open
+                          <!-- <v-icon class="alarm1111111" style="color: red"
                             >mdi mdi-alarm-light</v-icon
-                          >
+                          > -->
                           <!-- <br />
                           <v-btn
                             class="text--red"
@@ -513,14 +518,15 @@
                           > -->
                         </div>
                         <div v-else-if="item.alarm_status == 0">
-                          <v-icon title="Now Alaram is OFF"
+                          Closed
+                          <!-- <v-icon title="Now Alaram is OFF"
                             >mdi mdi-alarm-light-outline</v-icon
                           >
                           <div class="secondary-value">
                             {{
                               item.alarm_end_manually == 1 ? "Manually" : "Auto"
                             }}
-                          </div>
+                          </div> -->
                         </div>
                       </template>
                       <template v-slot:item.options="{ item }">
