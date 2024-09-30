@@ -118,7 +118,7 @@
                             </table>
                         </td>
                         <td>
-                            <img src="{{ getcwd() . '/' . $alarm['customer']['profile_picture'] }}" style="margin:auto; max-width:100%;" alt="Building Image">
+                            <img src="{{  $alarm['customer']['profile_picture'] }}" style="margin:auto; max-width:100%;" alt="Building Image">
                         </td>
                     </tr>
                 </table>
