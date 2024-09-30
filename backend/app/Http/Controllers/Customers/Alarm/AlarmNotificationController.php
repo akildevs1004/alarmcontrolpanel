@@ -187,7 +187,7 @@ class AlarmNotificationController extends Controller
 
             CustomerAlarmNotes::create($data);
         }
-        //return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
+        // return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
     }
 
     public function sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id)
