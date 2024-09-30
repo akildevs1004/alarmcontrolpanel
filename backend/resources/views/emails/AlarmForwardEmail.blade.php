@@ -87,7 +87,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="padding: 5px;">
+                        <td style="padding: 5px;text-align:center">
                             <img src="{{ $alarm['customer']['profile_picture'] }}" style="margin:auto;width:100%; max-width:300px;" alt="Building Image">
                         </td>
                     </tr>
