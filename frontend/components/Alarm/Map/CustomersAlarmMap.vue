@@ -454,6 +454,7 @@
               group
             >
               <v-btn
+                :title="caps(name)"
                 @click="getCustomers(value.text)"
                 style="width: 25%"
                 v-for="(value, name, index) in colorcodes"
