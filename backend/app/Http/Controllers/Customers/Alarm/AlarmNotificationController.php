@@ -226,6 +226,10 @@ class AlarmNotificationController extends Controller
         $body_content1 .= "Thanks *Xtreme Guard*";
         (new WhatsappController())->sendWhatsappNotification($alarm['company'], $body_content1, $whatsapp_number, []);
 
+        if ($alarm['device']['customer']['primary_contact']['whatsapp'] != '') (new WhatsappController())->sendWhatsappNotification($alarm['company'], '--------Copy Message--------\n' . $body_content1, $alarm['device']['customer']['primary_contact']['whatsapp'], []);
+
+        if ($alarm['device']['customer']['secondary_contact']['whatsapp'] != '') (new WhatsappController())->sendWhatsappNotification($alarm['company'], '--------Copy Message--------\n' . $body_content1, $alarm['device']['customer']['secondary_contact']['whatsapp'], []);
+
         $data = [
             "company_id" => $company_id,
             "customer_id" => $customer_id,
