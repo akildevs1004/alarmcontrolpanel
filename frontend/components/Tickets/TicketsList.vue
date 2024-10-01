@@ -76,13 +76,12 @@
             >
             <v-col cols="7" class="text-right" style="max-width: 100%">
               <v-row>
-                <v-col cols="1" class="mt-2" style="max-width: 50px">
+                <v-co class="mt-2">
                   <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-                </v-col>
-                <v-col cols="4" style="max-width: 250px; padding-right: 25px"
+                </v-co>
+                <v-col style="max-width: 250px; padding-right: 25px"
                   ><v-text-field
                     style="padding-top: 7px"
-                    width="200px"
                     height="20"
                     class="employee-schedule-search-box"
                     @input="getDataFromApi()"
@@ -96,7 +95,7 @@
                     hide-details
                   ></v-text-field
                 ></v-col>
-                <v-col cols="3" style="max-width: 200px">
+                <v-col>
                   <CustomFilter
                     v-if="displayDateFilter"
                     style="float: right; padding-top: 5px; z-index: 9"
@@ -105,12 +104,7 @@
                     :default_date_to="date_to"
                     :defaultFilterType="1"
                     :height="'40px'" /></v-col
-                ><v-col
-                  cols="1"
-                  v-if="technician_id == null"
-                  class="pt-5"
-                  style="max-width: 100px"
-                >
+                ><v-col v-if="technician_id == null" class="pt-5">
                   <v-btn
                     title="Add Ticket"
                     x-small
@@ -121,12 +115,7 @@
                     <v-icon class="">mdi mdi-plus-circle</v-icon>
                   </v-btn>
                 </v-col>
-                <v-col
-                  cols="2"
-                  v-if="technician_id != null"
-                  class="pt-5"
-                  style="max-width: 160px"
-                >
+                <v-col v-if="technician_id != null" style="max-width: 160px">
                   <v-select
                     @change="getDataFromApi()"
                     :items="[
@@ -142,8 +131,8 @@
                   >
                   </v-select>
                 </v-col>
-                <v-col cols="2" style="max-width: 80px; margin-top: 10px">
-                  <!-- <v-menu bottom right>
+                <!--<v-col style="margin-top: 10px">
+                  <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
                         <v-icon dark-2 icon color="violet" small
@@ -209,8 +198,8 @@
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
-                  </v-menu> -->
-                </v-col>
+                  </v-menu> 
+                </v-col>-->
               </v-row>
             </v-col>
           </v-row>

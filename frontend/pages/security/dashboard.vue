@@ -70,7 +70,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.key = 1;
-      this.getDatafromApi();
+      //this.getDatafromApi();
     }, 2000);
   },
   async created() {

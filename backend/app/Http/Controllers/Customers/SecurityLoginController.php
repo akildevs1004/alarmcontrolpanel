@@ -40,7 +40,7 @@ class SecurityLoginController extends Controller
     {
 
         $model = SecurityLogin::where("company_id", $request->company_id);
-        $model->orderBy("first_name", "ASC");
+        $model->orderBy("id", "ASC");
 
         return $model->get();
     }

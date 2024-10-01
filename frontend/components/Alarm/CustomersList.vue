@@ -769,6 +769,8 @@ export default {
           this.error_messages = "Customer Verification is required";
           return false;
         } else {
+          console.log(this.selectedCustomer.primary_contact.alarm_stop_pin);
+
           if (
             this.selectedCustomer.primary_contact.alarm_stop_pin ==
               this.customerContactPIN ||
