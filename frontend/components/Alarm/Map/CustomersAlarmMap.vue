@@ -394,7 +394,7 @@
                   >
                     {{ item.building_name || "" }} ,{{ item.city }}
                   </span>
-                  <div style="height: 10px">&nbsp;</div>
+
                   <v-row
                     :key="index1 + 11"
                     v-for="(alarm, index1) in item.alarm_events"
@@ -408,7 +408,7 @@
                           style="
                             max-width: 20px;
                             margin: auto;
-                            padding-top: 7px;
+                            padding-top: 14px;
                           "
                         >
                           <img
@@ -657,9 +657,13 @@ export default {
     google_map_style_regular,
   }),
   computed: {},
-  async mounted() {
-    await this.getMapKey();
+  mounted() {
+    // setTimeout(() => {
+    //   this.getCustomers("alarm");
+    // }, 1000 * 2);
+    // await this.getMapKey();
   },
+
   created() {
     //////this._id = 4; //this.$route.params.id;
 
@@ -669,7 +673,7 @@ export default {
       return;
     }
     // this.getGoogleicons();
-    this.getCustomers();
+
     // setInterval(() => {
     //   if (
     //     this.$route.name == "security-customersmap" ||
@@ -704,6 +708,7 @@ export default {
       this.map.setOptions({ styles: newStyle });
     },
     viewAlarmInformation(alarm) {
+      this.setCustomerLocationOnMap(alarm);
       this.popupEventText =
         "#" +
         alarm.id +
@@ -750,6 +755,9 @@ export default {
 
     getCustomers(filterText = "") {
       this.filterText = filterText;
+
+      //console.log(this.filterText);
+
       // if (this.loading == true) return false;
       this.loading = true;
 
@@ -772,7 +780,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          filter_text: filterText,
+          filter_text: filterText == "" ? "alarm" : filterText,
         },
       };
 
@@ -961,7 +969,7 @@ export default {
 
           const icon = {
             url: iconURL + "?1=1",
-            scaledSize: new google.maps.Size(35, 43),
+            scaledSize: new google.maps.Size(28, 34),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(25, 25),
           };

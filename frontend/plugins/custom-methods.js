@@ -316,6 +316,7 @@ export default ({ app }, inject) => {
         Temperature: "/device-icons/temperature.png",
         //Humidity: "/device-icons/humidity.png",
         Offline: "/device-icons/offline.png",
+        Tampered: "/device-icons/burglary.png",
       };
       // Get the image URL based on the alarm key, if exists
       let selectedImage = relaventImage[alarm];

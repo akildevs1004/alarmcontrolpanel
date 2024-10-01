@@ -1116,25 +1116,25 @@ class CustomersController extends Controller
         $model->when(
             $request->filled("filter_text"),
             function ($q) use ($request) {
-                if ($request->filter_text == 'Alarm') {
+                if (strtolower($request->filter_text) == 'alarm') {
                     $q->has("alarm_events", '>', 0);
                 }
-                if ($request->filter_text == 'Online') {
+                if (strtolower($request->filter_text) == 'online') {
                     $q->wherehas("devices", function ($q) use ($request) {
                         $q->where("status_id", 1);
                     });
                 }
-                if ($request->filter_text == 'Offline') {
+                if (strtolower($request->filter_text) == 'offline') {
                     $q->wherehas("devices", function ($qq) use ($request) {
                         $qq->where("status_id", 2);
                     });
                 }
-                if ($request->filter_text == 'Armed') {
+                if (strtolower($request->filter_text) == 'armed') {
                     $q->wherehas("devices", function ($qq) use ($request) {
                         $qq->where("armed_status", 1);
                     });
                 }
-                if ($request->filter_text == 'Disarm') {
+                if (strtolower($request->filter_text) == 'disarm') {
                     $q->wherehas("devices", function ($qq) use ($request) {
                         $qq->where("armed_status", 0);
                     });

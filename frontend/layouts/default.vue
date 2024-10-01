@@ -284,7 +284,7 @@
           >
             <v-list-item-content @click="showPopupAlarmStatus()">
               <v-list-item-title class="black--text align-left text-left">
-                <v-row>
+                <v-row style="">
                   <v-col cols="2" class="align-right text-right pr-1"
                     ><img
                       :src="'/device-icons/' + item.icon"
@@ -563,7 +563,7 @@
       </v-container>
     </v-main>
 
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="rightDrawer"
       :clipped="true"
       :right="right"
@@ -688,7 +688,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
   </v-app>
 </template>
 

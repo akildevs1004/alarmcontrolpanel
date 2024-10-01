@@ -1241,7 +1241,7 @@ export default {
                 : "---",
               date_from: element.alarm_start_datetime,
               click: "/alarm/allevents",
-              icon: this.alarm_icons[element.alarm_type] ?? "---",
+              icon: this.alarm_icons[element.alarm_type] ?? "burglary.png",
               key: "leaves",
             };
 

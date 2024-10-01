@@ -102,6 +102,7 @@ class AlarmNotificationController extends Controller
             "Humidity" => "humidity.png",
             "Intruder" => "intruder.png",
             "Offline" => "offline.png",
+            "Tampered" => "burglary.png",
         ];
     }
     public function sendAlarmForwardNotification(Request $request)
