@@ -655,19 +655,19 @@ class CustomerAlarmEventsController extends Controller
                     $query->where("response_minutes", '>=', 5)->where("response_minutes", '<=', 10);
             })
             ->when($request->filled("customer_id"), fn($q) => $q->where("customer_id", $request->customer_id));
-        if ($request->filled("date_from")) {
+        if ($request->filled("date_from") && $request->date_from != '') {
             $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
         }
-        $model->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+        $model->when($request->filled("filter_customers_list") && $request->filter_customers_list != '', function ($query) use ($request) {
             $query->whereIn('customer_id', $request->filter_customers_list);
         });
 
-        $model->when($request->filled('filterSensorname'), function ($q) use ($request) {
+        $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
 
             $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
         });
 
-        $model->when($request->filled('common_search'), function ($q) use ($request) {
+        $model->when($request->filled('common_search') && $request->common_search != '', function ($q) use ($request) {
             $q->where(function ($q) use ($request) {
 
                 //$q->Where('serial_number', 'ILIKE', "$request->common_search%");

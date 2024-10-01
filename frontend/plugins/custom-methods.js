@@ -308,13 +308,14 @@ export default ({ app }, inject) => {
 
     getRelaventImage(alarm) {
       let relaventImage = {
-        Intruder: "/alarm-icons/burglary.png",
-        Burglary: "/alarm-icons/burglary.png",
-        Medical: "/alarm-icons/medical.png",
-        Fire: "/alarm-icons/fire.png",
-        Water: "/alarm-icons/water.png",
-        Temperature: "/alarm-icons/temperature.png",
-        Humidity: "/alarm-icons/humidity.png",
+        Intruder: "/device-icons/burglary.png",
+        Burglary: "/device-icons/burglary.png",
+        Medical: "/device-icons/medical.png",
+        Fire: "/device-icons/fire.png",
+        Water: "/device-icons/water.png",
+        Temperature: "/device-icons/temperature.png",
+        //Humidity: "/device-icons/humidity.png",
+        Offline: "/device-icons/offline.png",
       };
       // Get the image URL based on the alarm key, if exists
       let selectedImage = relaventImage[alarm];

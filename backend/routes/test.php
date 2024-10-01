@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Alarm\DeviceSensorLogsController;
 use App\Http\Controllers\AlarmLogsController;
+use App\Http\Controllers\AlramEventsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\CameraController;
@@ -46,6 +47,14 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Document\Security;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
+
+
+Route::get("testOfflineDevices", function (Request $request) {
+    (new AlramEventsController)->verifyOfflineDevices();
+
+    //return (new ApiAlarmDeviceSensorLogsController())->closeOfflineAlarmsBySerialNumber('M014200892110002626');
+});
+
 
 Route::get("closealarm", function (Request $request) {
     if ($request->filled('serial_number')) {

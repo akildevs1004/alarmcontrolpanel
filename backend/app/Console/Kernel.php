@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\AlramEventsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\SDKController;
@@ -32,10 +33,10 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor-logs-csv.log")); // 
 
-        $schedule
-            ->command('task:alarm_device_sensor_check_hearbeat_minutes')
-            ->everyThirtyMinutes()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor--heartbeat-logs-csv.log")); // 
+        // $schedule
+        //     ->command('task:alarm_device_sensor_check_hearbeat_minutes')
+        //     ->everyThirtyMinutes()
+        //     ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor--heartbeat-logs-csv.log")); // 
 
         // $schedule
         //     ->command('task:sync_alarm_logs_update_start_end_time')
@@ -52,14 +53,20 @@ class Kernel extends ConsoleKernel
             ->appendOutputTo(storage_path("kernal_logs/$monthYear-delete-old-logs.log"))
             ->runInBackground(); //->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));  
 
-        $schedule->call(function () {
-            $count = Company::where("is_offline_device_notificaiton_sent", true)->update(["is_offline_device_notificaiton_sent" => false, "offline_notification_last_sent_at" => date('Y-m-d H:i:s')]);
-            info($count . "companies has been updated");
-        })->dailyAt('00:00');
+        // $schedule->call(function () {
+        //     $count = Company::where("is_offline_device_notificaiton_sent", true)->update(["is_offline_device_notificaiton_sent" => false, "offline_notification_last_sent_at" => date('Y-m-d H:i:s')]);
+        //     info($count . "companies has been updated");
+        // })->dailyAt('00:00');
 
         $schedule->call(function () {
             //udapte json file 
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+            //info("companies  json file has been updated");
+        })->everyMinute();
+
+        $schedule->call(function () {
+            //udapte json file 
+            (new AlramEventsController)->verifyOfflineDevices();
             //info("companies  json file has been updated");
         })->everyMinute();
 

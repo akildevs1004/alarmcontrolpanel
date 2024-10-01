@@ -22,6 +22,7 @@ use App\Models\DeviceNotificationsManagers;
 use App\Models\ReportNotification;
 use App\Models\ReportNotificationLogs;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,18 +34,18 @@ use PhpOffice\PhpSpreadsheet\Calculation\TextData\Replace;
 class ApiAlarmDeviceSensorLogsController extends Controller
 {
 
-    public function verifyHeartbeat()
-    {
-        $datetime = date("Y-m-d H:i:s", strtotime("-60 minutes"));
-        $query1 = Device::query()
+    // public function verifyHeartbeat()
+    // {
+    //     $datetime = date("Y-m-d H:i:s", strtotime("-60 minutes"));
+    //     $query1 = Device::query()
 
-            ->where(function ($query) use ($datetime) {
+    //         ->where(function ($query) use ($datetime) {
 
-                $query->where('last_live_datetime', '<=', $datetime);
-                $query->orWhere('last_live_datetime',    null);
-            })
-            ->update(["status_id" => 2]);
-    }
+    //             $query->where('last_live_datetime', '<=', $datetime);
+    //             $query->orWhere('last_live_datetime',    null);
+    //         })
+    //         ->update(["status_id" => 2]);
+    // }
     public function getCSVFileLines($date)
     {
 
@@ -148,6 +149,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     Device::where("serial_number", $serial_number)->update(
                         ["status_id" => 1, "last_live_datetime" => $log_time]
                     );
+
+                    $this->closeOfflineAlarmsBySerialNumber($serial_number);
+
                     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
                 } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
                 {
@@ -332,7 +336,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             if ($alarm_event_active_count == 0) {
                 $device_Data = [];
                 $device_Data["alarm_status"] = 0;
-                $device_Data["alarm_end_datetime"] = date('Y-m-d H:i:s');
+                $device_Data["alarm_end_datetime"] = $log_end_datetime;
 
                 Device::where("serial_number", $serial_number)->update($device_Data);
             }
@@ -411,5 +415,28 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
             return $this->response('Alarm Logs are created', null, true);
         }
+    }
+
+    public function  closeOfflineAlarmsBySerialNumber($serial_number)
+    {
+        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->get();
+
+        foreach ($alarmEvents as $alarm) {
+
+            $timeZone = $alarm->device->utc_time_zone ?: 'Asia/Dubai';
+            $nowInTimeZone = Carbon::now($timeZone);
+            $alarmStartDatetime = Carbon::parse($alarm->alarm_start_datetime);
+            $minutesDifference = $alarmStartDatetime->diffInMinutes($nowInTimeZone);
+
+            if ($alarm->alarm_type == "Offline") {
+                $alarm->update([
+                    "alarm_end_datetime" => $nowInTimeZone,
+                    "response_minutes" => $minutesDifference,
+                    "alarm_status" => 0
+                ]);
+            }
+        }
+
+        (new ApiAlarmDeviceTemperatureLogsController())->createAlarmEventsJsonFile();
     }
 }

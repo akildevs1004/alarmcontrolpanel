@@ -286,13 +286,14 @@
         <div style="position: absolute; top: 14px; left: 140px">
           <v-btn-toggle
             v-model="mapStyle"
+            height="20"
             tile
-            color="deep-purple accent-3"
+            color="black white "
             group
           >
             <v-btn
-              height="20"
-              width="50"
+              height="22"
+              width="60"
               value="bw"
               small
               dense
@@ -300,8 +301,8 @@
               >B & W</v-btn
             >
             <v-btn
-              height="20"
-              width="50"
+              height="22"
+              width="60"
               value="map"
               small
               dense
@@ -400,12 +401,10 @@
                   >
                     <v-col
                       @click="viewAlarmInformation(alarm)"
-                      cols="12"
                       style="color: red"
                     >
-                      <v-row>
+                      <v-row style="font-size: 12px">
                         <v-col
-                          cols="1"
                           style="
                             max-width: 20px;
                             margin: auto;
@@ -417,56 +416,17 @@
                             style="width: 15px; float: left"
                             :src="$utils.getRelaventImage(alarm.alarm_type)"
                           />
-                          <!-- <img
-                            v-if="alarm.alarm_type == 'Burglary'"
-                            title="Burglary"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/burglary.png"
-                          />
-
-                          <img
-                            v-else-if="alarm.alarm_type == 'Temperature'"
-                            title="Temperature"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/temperature.png"
-                          />
-
-                          <img
-                            v-else-if="alarm.alarm_type == 'Medical'"
-                            title="Medical"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/medical.png"
-                          />
-
-                          <img
-                            v-else-if="alarm.alarm_type == 'Fire'"
-                            title="Fire"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/fire.png"
-                          />
-
-                          <img
-                            v-else-if="alarm.alarm_type == 'Water'"
-                            title="Water"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/water.png"
-                          />
-                          <img
-                            v-else-if="alarm.alarm_type == 'Humidity'"
-                            title="Water"
-                            style="width: 15px; float: left"
-                            src="/alarm-icons/humidity.png"
-                          />-->
                         </v-col>
 
-                        <v-col cols="7">
+                        <v-col>
                           {{
                             $dateFormat.formatDateMonthYear(
                               alarm.alarm_start_datetime
                             )
                           }}
                         </v-col>
-                        <v-col cols="4"> {{ alarm.alarm_type }}</v-col>
+                        <v-col cols="3"> {{ alarm.alarm_type }}</v-col>
+                        <v-col cols="3"> {{ alarm.category.name }}</v-col>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -482,12 +442,25 @@
               group
             >
               <v-btn
+                v-if="
+                  name == 'alarm' ||
+                  name == 'armed' ||
+                  name == 'offline' ||
+                  name == 'disarm'
+                "
+                :key="index + 25"
                 :title="caps(name)"
                 @click="getCustomers(value.text)"
                 style="width: 25%"
                 v-for="(value, name, index) in colorcodes"
                 :value="value"
               >
+                <!-- <img
+                  :src="value.image + '?2=2'"
+                  style="width: 35px; height: 45px"
+                /> -->
+                <!-- <div>{{ value.name }}</div> -->
+
                 <v-icon :color="value.color">{{ value.icon }} </v-icon>
               </v-btn>
             </v-btn-toggle>
@@ -531,6 +504,9 @@
 </template>
 
 <script>
+import google_map_style_bandw from "../../../google/google_style_blackandwhite.json";
+import google_map_style_regular from "../../../google/google_style_regular.json";
+
 import AlarmCustomerTabsView from "../../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmEventCustomerContactsTabView from "../../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 export default {
@@ -566,16 +542,54 @@ export default {
     totalRowsCount: 0,
 
     colorcodes: {
-      // online: {
-      //   color: "#28a745",
-      //   text: "Online",
-      //   image: process.env.BACKEND_URL2 + "/google_map_icons/google_online.png",
-      //   icon: "<i color='green'> mdi-download-network-outline</i>",
-      // },
       alarm: {
         color: "#ff0000",
         text: "Alarm",
         image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+        icon: "mdi-alarm",
+      },
+      temperature: {
+        color: "#ff0000",
+        text: "Fire Alarm",
+        image:
+          process.env.BACKEND_URL2 +
+          "/google_map_icons/google_temperature_alarm.png",
+        icon: "mdi-alarm",
+      },
+      fire: {
+        color: "#ff0000",
+        text: "Fire Alarm",
+        image:
+          process.env.BACKEND_URL2 + "/google_map_icons/google_fire_alarm.png",
+        icon: "mdi-alarm",
+      },
+      water: {
+        color: "#ff0000",
+        text: "Fire Alarm",
+        image:
+          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
+        icon: "mdi-alarm",
+      },
+      water: {
+        color: "#ff0000",
+        text: "Fire Alarm",
+        image:
+          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
+        icon: "mdi-alarm",
+      },
+      sos: {
+        color: "#ff0000",
+        text: "SOS Alarm",
+        image:
+          process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
+        icon: "mdi-alarm",
+      },
+      medical: {
+        color: "#ff0000",
+        text: "Fire Alarm",
+        image:
+          process.env.BACKEND_URL2 +
+          "/google_map_icons/google_medical_alarm.png",
         icon: "mdi-alarm",
       },
       offline: {
@@ -594,7 +608,7 @@ export default {
       disarm: {
         color: "#ff0000",
         text: "Disarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
+        image: process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
         icon: "mdi-lock-open",
       },
     },
@@ -637,376 +651,10 @@ export default {
     mapMarkersList: [],
     mapInfowindowsList: [],
     filterText: "",
-    stylesbandw: [
-      {
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#f5f5f5",
-          },
-        ],
-      },
-      {
-        elementType: "labels.icon",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161",
-          },
-        ],
-      },
-      {
-        elementType: "labels.text.stroke",
-        stylers: [
-          {
-            color: "#f5f5f5",
-          },
-        ],
-      },
-      {
-        featureType: "administrative",
-        elementType: "geometry",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.land_parcel",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.land_parcel",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#bdbdbd",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.neighborhood",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "labels.text",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575",
-          },
-        ],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5",
-          },
-        ],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#ffffff",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "labels.icon",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.arterial",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.arterial",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#dadada",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161",
-          },
-        ],
-      },
-      {
-        featureType: "road.local",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.local",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-      {
-        featureType: "transit",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "transit.line",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5",
-          },
-        ],
-      },
-      {
-        featureType: "transit.station",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#c9c9c9",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-    ],
 
-    stylesroad: [
-      {
-        featureType: "administrative",
-        elementType: "geometry",
+    google_map_style_bandw,
 
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.land_parcel",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.neighborhood",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "labels.text",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "labels.icon",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.arterial",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.local",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "transit",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-    ],
+    google_map_style_regular,
   }),
   computed: {},
   async mounted() {
@@ -1020,7 +668,7 @@ export default {
       this.isCompany = false;
       return;
     }
-
+    // this.getGoogleicons();
     this.getCustomers();
     // setInterval(() => {
     //   if (
@@ -1049,9 +697,9 @@ export default {
       }
     },
     changeGoogleMapColor(type) {
-      let newStyle = this.stylesroad;
-      if (type == "bw") newStyle = this.stylesbandw;
-      if (type == "map") newStyle = this.stylesroad;
+      let newStyle = this.google_map_style_regular;
+      if (type == "bw") newStyle = this.google_map_style_bandw;
+      if (type == "map") newStyle = this.google_map_style_regular;
 
       this.map.setOptions({ styles: newStyle });
     },
@@ -1165,6 +813,19 @@ export default {
       // this.loading = false;
       // this.totalRowsCount = data.total;
     },
+
+    // async getGoogleicons() {
+    //   let config = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+    //     },
+    //   };
+    //   let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+    //   console.log(this.options);
+    //   if (page) this.currentPage = page - 1;
+    //   let { data } = await this.$axios.get(`get_google_icons`, config);
+    //   this.colorcodes = data;
+    // },
     getImageicon(value) {
       if (process) return value.image;
       else return false;
@@ -1259,7 +920,7 @@ export default {
           controlSize: 20,
           zoom: 12,
           center: { lat: 25.2516474, lng: 55.3567738 },
-          styles: this.stylesbandw,
+          styles: this.google_map_style_bandw,
           // styles: [
           //   {
           //     featureType: "administrative",
@@ -1299,10 +960,10 @@ export default {
           if (colorObject) iconURL = colorObject.image;
 
           const icon = {
-            url: iconURL,
-            scaledSize: new google.maps.Size(25, 35), // Adjust the size as needed
+            url: iconURL + "?1=1",
+            scaledSize: new google.maps.Size(35, 43),
             origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
+            anchor: new google.maps.Point(25, 25),
           };
 
           const marker = new google.maps.Marker({

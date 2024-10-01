@@ -1320,7 +1320,8 @@ export default {
                 : "---",
               date_from: element.alarm_start_datetime,
               click: "/alarm/allevents",
-              icon: this.alarm_icons[element.alarm_type] ?? "---",
+              icon:
+                this.alarm_icons[element.alarm_type] ?? element.alarm_type.png,
               key: "leaves",
             };
 

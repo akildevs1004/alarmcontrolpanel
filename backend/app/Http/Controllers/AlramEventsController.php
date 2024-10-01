@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
+use App\Models\AlarmEvents;
 use App\Models\AlramEvents;
+use App\Models\Device;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AlramEventsController extends Controller
@@ -81,5 +85,52 @@ class AlramEventsController extends Controller
     public function destroy(AlramEvents $alramEvents)
     {
         //
+    }
+
+    public function verifyOfflineDevices()
+    {
+        $devices = Device::where("serial_number", "!=", null)
+            ->where("customer_id", "!=", null)
+            ->where("status_id", 1)
+            ->get();
+
+        $offlineDevices = [];
+
+        foreach ($devices as $device) {
+            $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+            $nowInTimeZone = Carbon::now($timeZone);
+
+
+            if ($device->last_live_datetime) {
+                $timeDifference = Carbon::parse($device->last_live_datetime)->diffInSeconds($nowInTimeZone);
+
+                if ($timeDifference > 60) {
+
+                    if ($device->status_id == 1) {
+
+
+                        Device::where("id", $device->id)->update(["status_id" => 2]);
+
+                        $data = [
+                            "company_id" => $device['company_id'],
+                            "serial_number" => $device['serial_number'],
+                            "alarm_start_datetime" => $device->last_live_datetime,
+                            "customer_id" => $device['customer_id'],
+                            "zone" => null,
+                            "area" =>  null,
+                            "alarm_type" => "Offline",
+                            "alarm_category" => 3,
+                            "sensor_zone_id" => null,
+                            "alarm_source" => null,
+                        ];
+                        $offlineDevices[] = $data;
+                        AlarmEvents::create($data);
+                    }
+                }
+            }
+        }
+        (new ApiAlarmDeviceTemperatureLogsController())->createAlarmEventsJsonFile();
+
+        return $offlineDevices;
     }
 }

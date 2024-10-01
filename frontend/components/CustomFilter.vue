@@ -93,21 +93,22 @@ export default {
     if (this.defaultFilterType) {
       this.filterType = this.defaultFilterType;
     }
+    if (this.default_date_from) {
+      const today = new Date();
 
-    const today = new Date();
+      if (!this.default_date_from) {
+        this.from_date = today.toISOString().slice(0, 10);
+      }
 
-    if (!this.default_date_from) {
-      this.from_date = today.toISOString().slice(0, 10);
-    }
+      if (!this.default_date_to) {
+        this.to_date = today.toISOString().slice(0, 10);
+      }
 
-    if (!this.default_date_to) {
-      this.to_date = today.toISOString().slice(0, 10);
-    }
+      if (this.default_date_from && this.default_date_to) {
+        this.from_date = this.default_date_from;
 
-    if (this.default_date_from && this.default_date_to) {
-      this.from_date = this.default_date_from;
-
-      this.to_date = this.default_date_to;
+        this.to_date = this.default_date_to;
+      }
     }
 
     this.time3 = [this.from_date, this.to_date];

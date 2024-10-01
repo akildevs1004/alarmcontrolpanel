@@ -16,7 +16,81 @@ use Illuminate\Support\Facades\Mail;
 
 class AlarmNotificationController extends Controller
 {
-
+    // public function getGoogleIcons()
+    // {
+    //     return
+    //         '{
+    //             alarm: {
+    //               color: "#ff0000",
+    //               text: "Alarm",
+    //               image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             temperature: {
+    //               color: "#ff0000",
+    //               text: "Fire Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 +
+    //                 "/google_map_icons/google_temperature_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             fire: {
+    //               color: "#ff0000",
+    //               text: "Fire Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 + "/google_map_icons/google_fire_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             water: {
+    //               color: "#ff0000",
+    //               text: "Fire Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             water: {
+    //               color: "#ff0000",
+    //               text: "Fire Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             sos: {
+    //               color: "#ff0000",
+    //               text: "SOS Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             medical: {
+    //               color: "#ff0000",
+    //               text: "Fire Alarm",
+    //               image:
+    //                 process.env.BACKEND_URL2 +
+    //                 "/google_map_icons/google_medical_alarm.png",
+    //               icon: "mdi-alarm",
+    //             },
+    //             offline: {
+    //               color: "#626262",
+    //               text: "Offline",
+    //               image:
+    //                 process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+    //               icon: "mdi-download-network-outline",
+    //             },
+    //             armed: {
+    //               color: "#00930b",
+    //               text: "Armed",
+    //               image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
+    //               icon: "mdi-lock",
+    //             },
+    //             disarm: {
+    //               color: "#ff0000",
+    //               text: "Disarm",
+    //               image: process.env.BACKEND_URL2 + "/google_map_icons/google_disam.png",
+    //               icon: "mdi-lock-open",
+    //             },
+    //           }';
+    // }
     public function getAlarmNotificationIcons()
     {
         return   [
@@ -27,6 +101,7 @@ class AlarmNotificationController extends Controller
             "Fire" => "fire.png",
             "Humidity" => "humidity.png",
             "Intruder" => "intruder.png",
+            "Offline" => "offline.png",
         ];
     }
     public function sendAlarmForwardNotification(Request $request)
