@@ -713,7 +713,7 @@ export default {
       snackbar: false,
       response: "",
       alarm_icons: {},
-
+      cancelRequest: null,
       wait5Minutes: false,
       globalSearchPopupWidth: "500px",
       globalsearch: "",

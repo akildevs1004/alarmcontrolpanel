@@ -609,7 +609,7 @@ export default {
     return {
       customer: null,
       dialogViewLogs: false,
-
+      cancelTokenSource: null,
       dialogForwardEventDetails: false,
       dialogCloseAlarm: false,
       filterResponseInMinutes: null,
@@ -697,10 +697,10 @@ export default {
     // },
   },
   created() {
-    let today = new Date();
-    let monthObj = this.$dateFormat.monthStartEnd(today);
-    this.date_from = monthObj.first;
-    this.date_to = monthObj.last;
+    // let today = new Date();
+    // let monthObj = this.$dateFormat.monthStartEnd(today);
+    // this.date_from = monthObj.first;
+    // this.date_to = monthObj.last;
 
     setTimeout(() => {
       this.getSensorsList();
@@ -899,17 +899,17 @@ export default {
       }
       window.open(url, "_blank");
     },
-    getDataFromApi(custompage = 1) {
+    async getDataFromApi(custompage = 1) {
+      // Check for existing request and cancel it
+      if (this.cancelTokenSource) {
+        this.cancelTokenSource.cancel("Operation canceled due to new request.");
+      }
+
+      // Create a new cancel token for this request
+      this.cancelTokenSource = this.$axios.CancelToken.source();
+
+      // Check loading and commonSearch conditions
       if (this.loading == true && this.commonSearch == null) return false;
-      // console.log(
-      //   "this.$route.query.alarm_status",
-      //   this.$route.query.alarm_status
-      // );
-      // if (this.$route.query.alarm_status) {
-      //   this.filterAlarmStatus = parseInt(this.$route.query.alarm_status);
-      //   this.date_from = null;
-      //   this.date_to = null;
-      // }
 
       if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
@@ -932,18 +932,13 @@ export default {
       let options = {
         params: {
           page: page,
-          //sortBy: sortedBy,
-          //sortDesc: sortedDesc,
           perPage: itemsPerPage,
           pagination: true,
           company_id: this.$auth.user.company_id,
-          //customer_id: this.customer_id,
           date_from: this.date_from,
           date_to: this.date_to,
           common_search: this.commonSearch,
-
           customer_id: this.filter_customer_id,
-
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
           filterSensorname: filterSensorname,
@@ -951,22 +946,24 @@ export default {
           sortBy: "alarm_start_datetime",
           sortDesc: "DESC",
         },
+        cancelToken: this.cancelTokenSource.token, // Add the cancel token here
       };
 
       try {
-        this.$axios.get(`get_alarm_events`, options).then(({ data }) => {
-          this.items = data.data;
-
-          this.totalRowsCount = data.total;
-
-          this.showTable = true;
-          this.loading = false;
-
-          // if (page == 1 && this.items[0]) {
-          //   this.date_from = this.items[0].alarm_start_datetime;
-          // }
-        });
-      } catch (e) {}
+        const { data } = await this.$axios.get("get_alarm_events", options);
+        this.items = data.data;
+        this.totalRowsCount = data.total;
+        this.showTable = true;
+      } catch (error) {
+        if (this.$axios.isCancel(error)) {
+          console.log("Request canceled", error.message);
+        } else {
+          console.error(error);
+        }
+      } finally {
+        this.loading = false;
+        this.cancelTokenSource = null; // Reset the cancel token
+      }
     },
   },
 };

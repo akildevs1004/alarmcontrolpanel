@@ -618,7 +618,7 @@ export default {
     return {
       customer: null,
       dialogViewLogs: false,
-
+      cancelTokenSource: null,
       dialogForwardEventDetails: false,
       dialogCloseAlarm: false,
       filterResponseInMinutes: null,
@@ -912,51 +912,49 @@ export default {
       }
       window.open(url, "_blank");
     },
-    getDataFromApi(custompage = 1) {
-      if (this.loading == true && this.commonSearch == null) return false;
-      // console.log(
-      //   "this.$route.query.alarm_status",
-      //   this.$route.query.alarm_status
-      // );
-      // if (this.$route.query.alarm_status) {
-      //   this.filterAlarmStatus = parseInt(this.$route.query.alarm_status);
-      //   this.date_from = null;
-      //   this.date_to = null;
-      // }
+    async getDataFromApi(custompage = 1) {
+      // Prevent request if loading or no search criteria
+      if (this.loading && this.commonSearch == null) return false;
 
+      // Reset pagination if custompage is 0
       if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
       let sortedBy = sortBy ? sortBy[0] : "";
       let sortedDesc = sortDesc ? sortDesc[0] : "";
+
       this.perPage = itemsPerPage;
       this.currentPage = page;
 
-      if (!page > 0) return false;
+      // Prevent invalid page request
+      if (!(page > 0)) return false;
+
       this.loading = true;
 
+      // Prepare filter data
       let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
-
       if (this.eventFilter) {
         filterSensorname = this.eventFilter;
       }
 
+      // Cancel previous request if it exists
+      if (this.cancelTokenSource) {
+        this.cancelTokenSource.cancel("Operation canceled due to new request.");
+      }
+
+      // Create a new cancel token for this request
+      this.cancelTokenSource = this.$axios.CancelToken.source();
+
       let options = {
         params: {
           page: page,
-          //sortBy: sortedBy,
-          //sortDesc: sortedDesc,
           perPage: itemsPerPage,
           pagination: true,
           company_id: this.$auth.user.company_id,
-          //customer_id: this.customer_id,
           date_from: this.date_from,
           date_to: this.date_to,
           common_search: this.commonSearch,
-
           customer_id: this.filter_customer_id,
-
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
           filterSensorname: filterSensorname,
@@ -964,22 +962,25 @@ export default {
           sortBy: "alarm_start_datetime",
           sortDesc: "DESC",
         },
+        cancelToken: this.cancelTokenSource.token, // Assign the cancel token
       };
 
       try {
-        this.$axios.get(`get_alarm_events`, options).then(({ data }) => {
-          this.items = data.data;
+        const { data } = await this.$axios.get(`get_alarm_events`, options);
 
-          this.totalRowsCount = data.total;
-
-          this.showTable = true;
+        // Process the response
+        this.items = data.data;
+        this.totalRowsCount = data.total;
+        this.showTable = true;
+        this.loading = false;
+      } catch (error) {
+        if (this.$axios.isCancel(error)) {
+          console.log("Request canceled:", error.message);
+        } else {
+          console.error("Error fetching data:", error);
           this.loading = false;
-
-          // if (page == 1 && this.items[0]) {
-          //   this.date_from = this.items[0].alarm_start_datetime;
-          // }
-        });
-      } catch (e) {}
+        }
+      }
     },
   },
 };
