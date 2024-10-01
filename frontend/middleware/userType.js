@@ -2,8 +2,10 @@ const data = async ({ $auth, redirect }) => {
   let userType = {
     company: "/alarm/dashboard",
     customer: "/customer/dashboard",
-    security: "/security/dashboard",
+    //security: "/security/dashboard",
+    security: "/operator/dashboard",
     technician: "/technician/dashboard",
+    //operator: "/technician/dashboard",
   };
 
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
@@ -17,6 +19,7 @@ const data = async ({ $auth, redirect }) => {
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
     return redirect("/master");
   }
+  console.log(userType[$auth.user.user_type]);
 
   redirect(userType[$auth.user.user_type] || "/master");
 };
