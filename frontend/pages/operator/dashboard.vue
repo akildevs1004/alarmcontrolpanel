@@ -302,7 +302,7 @@ export default {
     filterAlarmType: null,
     filterAlarmStatus: 1,
     fullscreen: false,
-    windowHeight: 600,
+    windowHeight: 1000,
     windowWidth: 600,
     mapStyle: "bw",
     mapkeycount: 1,
