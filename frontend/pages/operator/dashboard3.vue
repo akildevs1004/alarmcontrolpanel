@@ -52,7 +52,7 @@
     </v-dialog>
 
     <v-row>
-      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 5px">
+      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 10px">
         <v-card elevation="10" outlined>
           <div
             :key="mapkeycount"
@@ -108,7 +108,7 @@
           </div>
         </v-card>
       </v-col>
-      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 6px">
+      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 10px">
         <v-card
           elevation="10"
           outlined
@@ -160,7 +160,7 @@
                   outlined
                   dense
                   height="20px"
-                  v-model="filterAlarmStatus"
+                  v-model="filterEventType"
                   :items="[
                     { id: null, name: 'All Events' },
 
@@ -178,99 +178,188 @@
             <v-row v-if="data.length == 0" class="text-center">
               <v-col> No data available </v-col>
             </v-row>
-
-            <v-card
-              v-if="alarm.device?.customer"
-              :key="index + 55"
-              v-for="(alarm, index) in data"
-              elevation="4"
-              style="
-                border-color: black;
-                margin-top: 5px;
-                border: 1px solid #a5a5a5;
-                border-radius: 10px;
-              "
-            >
-              <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 300px; height: 106px; width: 100%">
-                  <v-col
-                    style="
-                      max-width: 80px;
-                      padding: 0px;
-                      margin: auto;
-                      text-align: center;
-                    "
-                  >
-                    <img
-                      :src="alarm.device.customer.profile_picture"
+            <div v-for="(customer, index) in data">
+              <v-card
+                v-if="filterEventType != 0"
+                v-for="(alarm, index) in customer.alarm_events"
+                elevation="4"
+                style="
+                  border-color: black;
+                  margin-top: 5px;
+                  border: 1px solid #a5a5a5;
+                  border-radius: 10px;
+                "
+              >
+                <v-card-text style="padding-right: 0px">
+                  {{ alarm.id }} {{ alarm.alarm_status }} {{ filterEventType }}
+                  <v-row style="min-width: 300px; height: 106px; width: 100%">
+                    <v-col
                       style="
-                        width: 100%;
-                        border-radius: 6px;
-                        height: 90px;
-                        vertical-align: bottom;
+                        max-width: 80px;
+                        padding: 0px;
+                        margin: auto;
+                        text-align: center;
                       "
-                    />
-                  </v-col>
-                  <v-col
-                    style="padding: 0px; font-size: 12px; padding-left: 10px"
-                  >
-                    <div style="height: 89px; overflow: hidden">
-                      {{
-                        alarm.device.customer.primary_contact
-                          ? alarm.device.customer.primary_contact.first_name +
-                            " " +
-                            alarm.device.customer.primary_contact.last_name
-                          : "---"
-                      }}
-                      <br />
-                      {{ alarm.device.customer.building_name || "---" }} <br />
-                      {{ alarm.device.customer.city }}
-                      <br />
-                      {{
-                        alarm.device.customer.primary_contact?.phone1 || "---"
-                      }}
-                    </div>
-                    <div style="color: #0064ff">
-                      {{
-                        alarm.device.customer.buildingtype
-                          ? alarm.device.customer.buildingtype.name
-                          : "---"
-                      }}
-                      <v-icon
-                        style="
-                          float: right;
-                          padding-right: 17px;
-                          text-align: right;
-                        "
-                        size="20"
-                        color="#0064ff"
-                        >{{
-                          alarm.alarm_status == 1
-                            ? "mdi-folder-open"
-                            : "mdi-folder"
-                        }}</v-icon
-                      >
-                    </div>
-                  </v-col>
-                  <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
-                    <div style="margin: auto; text-align: center; height: 85px">
+                    >
                       <img
-                        :title="getAlarmColorObject(alarm).text"
-                        style="width: 40px; padding-top: 20%"
-                        :src="getAlarmColorObject(alarm).image + '?3=3'"
+                        :src="customer.profile_picture"
+                        style="
+                          width: 100%;
+                          border-radius: 6px;
+                          height: 90px;
+                          vertical-align: bottom;
+                        "
                       />
-                    </div>
-                    <div style="color: red">
-                      {{
-                        $dateFormat.formatDateMonthYear(
-                          alarm.alarm_start_datetime
-                        )
-                      }}
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
+                    </v-col>
+                    <v-col
+                      style="padding: 0px; font-size: 12px; padding-left: 10px"
+                    >
+                      <div style="height: 89px; overflow: hidden">
+                        {{
+                          customer.primary_contact
+                            ? customer.primary_contact.first_name +
+                              " " +
+                              customer.primary_contact.last_name
+                            : "---"
+                        }}
+                        <br />
+                        {{ customer.building_name || "---" }} <br />
+                        {{ customer.city }}
+                        <br />
+                        {{ customer.primary_contact?.phone1 || "---" }}
+                      </div>
+                      <div style="color: #0064ff">
+                        {{
+                          customer.buildingtype
+                            ? customer.buildingtype.name
+                            : "---"
+                        }}
+                        <v-icon
+                          style="
+                            float: right;
+                            padding-right: 17px;
+                            text-align: right;
+                          "
+                          size="20"
+                          color="#0064ff"
+                          >mdi-folder-open</v-icon
+                        >
+                      </div>
+                    </v-col>
+                    <v-col
+                      style="max-width: 90px; padding: 2px; font-size: 11px"
+                    >
+                      <div
+                        style="margin: auto; text-align: center; height: 85px"
+                      >
+                        <img
+                          :title="getCustomerColorObject(customer).text"
+                          style="width: 40px; padding-top: 20%"
+                          :src="getCustomerColorObject(customer).image + '?3=3'"
+                        />
+                      </div>
+                      <div style="color: red">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            alarm?.alarm_start_datetime
+                          )
+                        }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+              <v-card
+                v-if="filterEventType == 0 || filterEventType == null"
+                v-for="(alarm, index) in customer.all_alarm_events"
+                elevation="4"
+                style="
+                  border-color: black;
+                  margin-top: 5px;
+                  border: 1px solid #a5a5a5;
+                  border-radius: 10px;
+                "
+              >
+                <v-card-text style="padding-right: 0px">
+                  {{ alarm.id }} {{ alarm.alarm_status }}
+                  <v-row style="min-width: 300px; height: 106px; width: 100%">
+                    <v-col
+                      style="
+                        max-width: 80px;
+                        padding: 0px;
+                        margin: auto;
+                        text-align: center;
+                      "
+                    >
+                      <img
+                        :src="customer.profile_picture"
+                        style="
+                          width: 100%;
+                          border-radius: 6px;
+                          height: 90px;
+                          vertical-align: bottom;
+                        "
+                      />
+                    </v-col>
+                    <v-col
+                      style="padding: 0px; font-size: 12px; padding-left: 10px"
+                    >
+                      <div style="height: 89px; overflow: hidden">
+                        {{
+                          customer.primary_contact
+                            ? customer.primary_contact.first_name +
+                              " " +
+                              customer.primary_contact.last_name
+                            : "---"
+                        }}
+                        <br />
+                        {{ customer.building_name || "---" }} <br />
+                        {{ customer.city }}
+                        <br />
+                        {{ customer.primary_contact?.phone1 || "---" }}
+                      </div>
+                      <div style="color: #0064ff">
+                        {{
+                          customer.buildingtype
+                            ? customer.buildingtype.name
+                            : "---"
+                        }}
+                        <v-icon
+                          style="
+                            float: right;
+                            padding-right: 17px;
+                            text-align: right;
+                          "
+                          size="20"
+                          color="#0064ff"
+                          >mdi-folder-open</v-icon
+                        >
+                      </div>
+                    </v-col>
+                    <v-col
+                      style="max-width: 90px; padding: 2px; font-size: 11px"
+                    >
+                      <div
+                        style="margin: auto; text-align: center; height: 85px"
+                      >
+                        <img
+                          :title="getCustomerColorObject(customer).text"
+                          style="width: 40px; padding-top: 20%"
+                          :src="getCustomerColorObject(customer).image + '?3=3'"
+                        />
+                      </div>
+                      <div style="color: red">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            alarm?.alarm_start_datetime
+                          )
+                        }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -296,7 +385,7 @@ export default {
   data: () => ({
     filterBuildingType: null,
     filterAlarmType: null,
-    filterAlarmStatus: 1,
+    filterEventType: 1,
     fullscreen: false,
     windowHeight: 600,
     windowWidth: 600,
@@ -382,13 +471,6 @@ export default {
       offline: {
         color: "#626262",
         text: "Offline",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      closed: {
-        color: "#626262",
-        text: "Closed",
         image:
           process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
         icon: "mdi-download-network-outline",
@@ -510,7 +592,7 @@ export default {
     },
     onResize() {
       this.windowWidth = window.innerWidth;
-      this.windowHeight = window.innerHeight - 20;
+      this.windowHeight = window.innerHeight;
     },
     toggleFullscreen() {
       let newStyle = "fullscreen";
@@ -546,11 +628,7 @@ export default {
       this.map.setOptions({ styles: newStyle });
     },
     viewAlarmInformation(alarm) {
-      try {
-        this.setCustomerLocationOnMap(alarm.device.customer);
-      } catch (e) {
-        console.error(e);
-      }
+      this.setCustomerLocationOnMap(alarm);
       this.popupEventText =
         "#" +
           alarm.id +
@@ -562,9 +640,9 @@ export default {
         "" + " -  Priority " + alarm.category.name;
 
       this.key += 1;
-      this.viewCustomerId = alarm.device.customer_id;
+      this.viewCustomerId = alarm.customer_id;
       this.eventId = alarm.id;
-      this.customer = alarm.device.customer;
+      this.customer = alarm.customer;
       this.dialogAlarmEventCustomerContactsTabView = true;
     },
     closeCustomerDialog() {
@@ -603,27 +681,29 @@ export default {
           common_search: this.commonSearch,
           //filter_text: filterText == "" ? "alarm" : filterText,
           filterBuildingType: this.filterBuildingType,
-          filterAlarmStatus: this.filterAlarmStatus,
+          filterEventType: this.filterEventType,
 
           filterAlarmType: this.filterAlarmType,
         },
       };
 
       try {
-        this.$axios.get(`get_alarm_events_map`, options).then(({ data }) => {
-          this.data = data; //data.data;
+        this.$axios
+          .get(`customers_for_map_operator`, options)
+          .then(({ data }) => {
+            this.data = data; //data.data;
 
-          this.loading = false;
+            this.loading = false;
 
-          this.mapMarkersList.forEach((marker) => {
-            if (marker) {
-              marker.setMap(null);
-            }
+            this.mapMarkersList.forEach((marker) => {
+              if (marker) {
+                marker.setMap(null);
+              }
+            });
+            this.mapMarkersList = [];
+
+            this.getMapKey();
           });
-          this.mapMarkersList = [];
-
-          this.getMapKey();
-        });
       } catch (e) {}
     },
 
@@ -642,35 +722,6 @@ export default {
     getImageicon(value) {
       if (process) return value.image;
       else return false;
-    },
-    getAlarmColorObject(alarm) {
-      // console.log(
-      //   "findAnyDeviceisOffline",
-      //   this.findAnyDeviceisOffline(item.devices)
-      // );
-      // console.log(alarm.alarm_status);
-      if (alarm.alarm_status == 1) {
-        return this.colorcodes.alarm;
-      } else if (alarm.alarm_status == 0) {
-        return this.colorcodes.closed;
-      } else if (
-        alarm.customer &&
-        this.findanyArmedDevice(alarm.customer.devices)
-      ) {
-        return this.colorcodes.armed;
-      }
-      if (
-        this.findAnyDeviceisOffline(alarm.customer && alarm.customer.devices) >
-        0
-      ) {
-        return this.colorcodes.offline;
-      } else if (
-        this.findanyDisamrDevice(alarm.customer && alarm.customer.devices)
-      ) {
-        return this.colorcodes.disarm;
-      }
-
-      return this.colorcodes.offline;
     },
     getCustomerColorObject(customer) {
       // console.log(
@@ -734,14 +785,12 @@ export default {
       document.head.appendChild(script);
     },
 
-    setCustomerLocationOnMap(customer) {
-      console.log(customer);
-
+    setCustomerLocationOnMap(item) {
       try {
-        if (customer.latitude && customer.longitude) {
+        if (item.latitude && item.longitude) {
           const position = {
-            lat: parseFloat(customer.latitude),
-            lng: parseFloat(customer.longitude),
+            lat: parseFloat(item.latitude),
+            lng: parseFloat(item.longitude),
           };
 
           this.mapInfowindowsList.forEach((infowindow) => {
@@ -751,8 +800,8 @@ export default {
           this.map.panTo(position);
           this.map.setZoom(14);
 
-          let infowindow = this.mapInfowindowsList[customer.id];
-          let marker = this.mapMarkersList[customer.id];
+          let infowindow = this.mapInfowindowsList[item.id];
+          let marker = this.mapMarkersList[item.id];
           if (infowindow) infowindow.open(this.map, marker);
         }
       } catch (e) {}
@@ -795,48 +844,44 @@ export default {
     },
     plotLocations() {
       this.data.forEach((item) => {
-        if (item.device?.customer) {
-          try {
-            const position = {
-              lat: parseFloat(item.device.customer.latitude),
-              lng: parseFloat(item.device.customer.longitude),
-            };
+        try {
+          const position = {
+            lat: parseFloat(item.latitude),
+            lng: parseFloat(item.longitude),
+          };
 
-            let iconURL =
-              process.env.BACKEND_APP_URL +
-              "/google_map_icons/google_online.png";
+          let iconURL =
+            process.env.BACKEND_APP_URL + "/google_map_icons/google_online.png";
 
-            // let colorObject = this.getCustomerColorObject(item.device.customer);
-            let colorObject = this.getAlarmColorObject(item);
-            if (colorObject) iconURL = colorObject.image;
+          let colorObject = this.getCustomerColorObject(item);
+          if (colorObject) iconURL = colorObject.image;
 
-            const icon = {
-              url: iconURL + "?1=1",
-              scaledSize: new google.maps.Size(28, 34),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(25, 25),
-            };
+          const icon = {
+            url: iconURL + "?1=1",
+            scaledSize: new google.maps.Size(28, 34),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(25, 25),
+          };
 
-            const marker = new google.maps.Marker({
-              position,
-              map: this.map,
-              title: item.device.customer.name,
-              icon: icon,
-            });
+          const marker = new google.maps.Marker({
+            position,
+            map: this.map,
+            title: item.name,
+            icon: icon,
+          });
 
-            let alarmHtmlLink = "";
-            let customerHtmlLink = "";
-            if (item.alarm_start_datetime)
-              alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+          let alarmHtmlLink = "";
+          let customerHtmlLink = "";
+          if (item.latest_alarm_event)
+            alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+          customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-            let profile_picture =
-              "https://alarm.xtremeguard.org/no-business_profile.png";
-            if (item.device.customer.profile_picture)
-              profile_picture = item.device.customer.profile_picture;
+          let profile_picture =
+            "https://alarm.xtremeguard.org/no-business_profile.png";
+          if (item.profile_picture) profile_picture = item.profile_picture;
 
-            let html = `
+          let html = `
     <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
       <tr>
         <td style="width:100px; vertical-align: top;">
@@ -845,15 +890,15 @@ export default {
 
         </td>
         <td style="width:150px; vertical-align: top;">
-          ${item.device.customer.building_name} <br/> ${item.device.customer.city}
-          <div>Landmark: ${item.device.customer.landmark}</div>
+          ${item.building_name} <br/> ${item.city}
+          <div>Landmark: ${item.landmark}</div>
           <div style="text-align: right; width: 100%;">
 
           </div>
         </td>
       </tr>
       <tr>
-  <td> <a target="_blank" href="https://www.google.com/maps?q=${item.device.customer.latitude},${item.device.customer.longitude}">Google Directions</a>
+  <td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
     </td>
     <td style="text-align:right">
    ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
@@ -861,65 +906,64 @@ export default {
         </tr>
     </table>`;
 
-            const infowindow = new google.maps.InfoWindow({
-              content: html,
-              map: this.map,
-              position: position,
+          const infowindow = new google.maps.InfoWindow({
+            content: html,
+            map: this.map,
+            position: position,
+          });
+          infowindow.close();
+
+          this.mapInfowindowsList[item.id] = infowindow;
+          this.mapMarkersList[item.id] = marker;
+          if (item.latest_alarm_event)
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+
+          marker.addListener("mouseover", () => {
+            this.mapInfowindowsList.forEach((oldinfowindow) => {
+              oldinfowindow.close();
             });
-            infowindow.close();
+            infowindow.open(this.map, marker);
+          });
 
-            this.mapInfowindowsList[item.id] = infowindow;
-            this.mapMarkersList[item.id] = marker;
-            if (item.alarm_start_datetime)
-              marker.setAnimation(google.maps.Animation.BOUNCE);
-
-            marker.addListener("mouseover", () => {
-              this.mapInfowindowsList.forEach((oldinfowindow) => {
-                oldinfowindow.close();
+          google.maps.event.addListener(infowindow, "domready", () => {
+            let btnObject = document.getElementById(
+              "alarmInfowindow-btn-" + item.id
+            );
+            if (btnObject)
+              btnObject.addEventListener("click", () => {
+                this.viewAlarmInformation(item.latest_alarm_event);
               });
-              infowindow.open(this.map, marker);
-            });
 
-            google.maps.event.addListener(infowindow, "domready", () => {
-              let btnObject = document.getElementById(
-                "alarmInfowindow-btn-" + item.id
-              );
-              if (btnObject)
-                btnObject.addEventListener("click", () => {
-                  this.viewAlarmInformation(item.alarm_start_datetime);
-                });
-
-              let btnObject2 = document.getElementById(
-                "customerInfowindow-btn-" + item.id
-              );
-              if (btnObject2)
-                btnObject2.addEventListener("click", () => {
-                  this.dialog = true;
-                  this.key += 1;
-                  this.customerInfo = item.device.customer;
-                });
-
-              const infowindowContent = document.getElementById(
-                "infowindow-content-" + item.id
-              );
-
-              infowindowContent.addEventListener("mouseout", (e) => {
-                // Close only if the mouse has left the entire infowindow div (and not just a child element)
-                if (!infowindowContent.contains(e.relatedTarget)) {
-                  infowindow.close();
-                }
+            let btnObject2 = document.getElementById(
+              "customerInfowindow-btn-" + item.id
+            );
+            if (btnObject2)
+              btnObject2.addEventListener("click", () => {
+                this.dialog = true;
+                this.key += 1;
+                this.customerInfo = item;
               });
-            });
 
-            // Open Vue dialog on marker click
-            marker.addListener("click", () => {
-              this.dialog = true;
-              this.key += 1;
-              this.customerInfo = item.device.customer;
+            const infowindowContent = document.getElementById(
+              "infowindow-content-" + item.id
+            );
+
+            infowindowContent.addEventListener("mouseout", (e) => {
+              // Close only if the mouse has left the entire infowindow div (and not just a child element)
+              if (!infowindowContent.contains(e.relatedTarget)) {
+                infowindow.close();
+              }
             });
-          } catch (e) {
-            console.error(e);
-          }
+          });
+
+          // Open Vue dialog on marker click
+          marker.addListener("click", () => {
+            this.dialog = true;
+            this.key += 1;
+            this.customerInfo = item;
+          });
+        } catch (e) {
+          console.log(e);
         }
       });
     },

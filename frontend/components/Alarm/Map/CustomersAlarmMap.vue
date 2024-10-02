@@ -343,7 +343,7 @@
                     <v-row>
                       <v-col cols="2">
                         <v-icon
-                          @click="getCustomers()"
+                          @click="getCustomers('all')"
                           title="Display All Customers"
                           >mdi-reload</v-icon
                         >
@@ -780,7 +780,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          filter_text: filterText == "" ? "alarm" : filterText,
+          filter_text: filterText == "all" ? "" : filterText,
         },
       };
 

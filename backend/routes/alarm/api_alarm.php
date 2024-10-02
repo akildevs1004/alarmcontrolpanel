@@ -40,6 +40,9 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('customers', CustomersController::class);
 Route::get('customerinfo', [CustomersController::class, "customerinfo"]);
 Route::get('customers-for-map', [CustomersController::class, "customersForMap"]);
+Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
+Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
+
 Route::get('alarm_customers__for_map', [CustomersController::class, "alarmCustomersForMap"]);
 
 Route::get('customers-all', [CustomersController::class, "customersAll"]);
@@ -166,6 +169,8 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
+Route::get('get_alarm_events_map', [CustomerAlarmEventsController::class, 'getAlarmEventsMap']);
+
 
 Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);
 

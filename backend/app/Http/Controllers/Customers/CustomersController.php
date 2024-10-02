@@ -1112,6 +1112,92 @@ class CustomersController extends Controller
 
         return $model->orderByDesc('id')->paginate($request->perPage);
     }
+    public function customersForMapOperator(Request $request)
+    {
+        $model = Customers::with(["alarm_events", "all_alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+            //->whereHas("alarm_events")
+            ->where("company_id", $request->company_id);
+        $model->withCount("all_alarm_events");
+        // $model->has("alarm_events", '>', 0);
+
+        $model->withCount("devicesOffline");
+        $model->withCount("devicesOnline");
+        $model->when($request->filled("common_search"), function ($query) use ($request) {
+
+            return $query->where("building_name", "ILIKE", "$request->common_search%")
+                ->orWhere("house_number", "ILIKE", "$request->common_search%")
+                ->orWhere("area", "ILIKE", "$request->common_search%");
+        });
+
+        $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('id', $request->filter_customers_list);
+        });
+        $model->when($request->filled("customer_id"), fn($q) => $q->where("id", $request->customer_id));
+        $model->when(
+            $request->filled("filter_text"),
+            function ($q) use ($request) {
+                if (strtolower($request->filter_text) == 'alarm') {
+                    $q->has("all_alarm_events", '>', 0);
+                }
+                if (strtolower($request->filter_text) == 'online') {
+                    $q->wherehas("devices", function ($q) use ($request) {
+                        $q->where("status_id", 1);
+                    });
+                }
+                if (strtolower($request->filter_text) == 'offline') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("status_id", 2);
+                    });
+                }
+                if (strtolower($request->filter_text) == 'armed') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("armed_status", 1);
+                    });
+                }
+                if (strtolower($request->filter_text) == 'disarm') {
+                    $q->wherehas("devices", function ($qq) use ($request) {
+                        $qq->where("armed_status", 0);
+                    });
+                }
+            }
+
+
+
+        );
+
+
+        $model->when(
+            $request->filled("filterBuildingType"),
+            function ($q) use ($request) {
+                $q->where("building_type_id", $request->filterBuildingType);
+            }
+        );
+
+        $model->when(
+            $request->filled('filterEventType'), // Check if filterEventType is present in the request
+            function ($q) use ($request) {
+                $q->whereHas('all_alarm_events', function ($query) use ($request) {
+                    $query->where('alarm_status', $request->filterEventType);
+                });
+            }
+        );
+
+        $model->when(
+            $request->filled("filterAlarmType"),
+            function ($q) use ($request) {
+                $q->whereHas("all_alarm_events",  function ($event) use ($request) {
+                    $event->where("alarm_type", $request->filterAlarmType);
+                });
+            }
+        );
+
+
+
+        $model->orderBy('all_alarm_events.alarm_start_datetime', 'desc')->orderBy('devices_offline_count', 'desc');
+
+        return $model->get();
+        // return $model->paginate($request->perPage ?? 10);
+    }
     public function customersForMap(Request $request)
     {
         $model = Customers::with(["alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])

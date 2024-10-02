@@ -524,6 +524,49 @@ class CustomerAlarmEventsController extends Controller
         $model->orderBy("alarm_start_datetime", "DESC");
         return  $events = $model->get();
     }
+    public function getAlarmEventsMap(Request $request)
+    {
+        $model = AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "device.customer.latest_alarm_event",
+
+            "device.customer.buildingtype",
+
+
+        ])->where('company_id', $request->company_id)
+
+            ->when($request->filled("alarm_status"), function ($q) use ($request) {
+                if ($request->alarm_status == 3) {
+                    $q->where("forwarded", true);
+                } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
+                    $q->where("alarm_status", $request->alarm_status);
+                    $q->where("forwarded", false);
+                }
+            })
+            ->when($request->filled("filterAlarmStatus"), function ($q) use ($request) {
+                if ($request->filterAlarmStatus == 3) {
+                    $q->where("forwarded", true);
+                } else if ($request->filterAlarmStatus == 0 || $request->filterAlarmStatus == 1) {
+                    $q->where("alarm_status", $request->filterAlarmStatus);
+                    $q->where("forwarded", false);
+                }
+            })
+
+            ->when($request->filled("customer_id"), fn($q) => $q->where("customer_id", $request->customer_id));
+
+        $model->when($request->filled("filter_customers_list") && $request->filter_customers_list != '', function ($query) use ($request) {
+            $query->whereIn('customer_id', $request->filter_customers_list);
+        });
+
+
+
+
+
+        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
+
+        return $model->get();;
+    }
     public function getAlarmEvents(Request $request)
     {
         $model = $this->filter($request);

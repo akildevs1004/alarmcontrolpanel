@@ -15,7 +15,7 @@ class Customers extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $with = ['devices', 'buildingtype',  'primary_contact', "contacts", 'secondary_contact', "profilePictures"];
+    protected $with = ['devices', 'all_alarm_events', 'buildingtype',  'primary_contact', "contacts", 'secondary_contact', "profilePictures"];
 
     public function mappedsecurity()
     {
@@ -56,6 +56,10 @@ class Customers extends Model
     public function alarm_events()
     {
         return $this->hasMany(AlarmEvents::class, 'customer_id', 'id')->where("alarm_status", 1);
+    }
+    public function all_alarm_events()
+    {
+        return $this->hasMany(AlarmEvents::class, 'customer_id', 'id');
     }
 
     public function latest_alarm_event()
