@@ -99,7 +99,11 @@
                 value="map"
                 small
                 dense
-                style="margin-top: 1px"
+                style="
+                  margin-top: 1px;
+                  background-color: #545353 !important;
+                  color: #fff;
+                "
                 @click="toggleFullscreen"
               >
                 {{ fullscreen ? "Exit Fullscreen" : "Go Fullscreen" }}
