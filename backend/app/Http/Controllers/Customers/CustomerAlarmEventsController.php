@@ -575,7 +575,7 @@ class CustomerAlarmEventsController extends Controller
 
         $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
-        return   $model->paginate($request->perPage ?? 100);;
+        return   $model->paginate($request->perPage ?? 20);;
     }
     public function getAlarmEvents(Request $request)
     {
