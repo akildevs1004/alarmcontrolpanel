@@ -96,7 +96,7 @@
               >
               <v-btn
                 height="22"
-                value="map"
+                value="fullacreen"
                 small
                 dense
                 style="
