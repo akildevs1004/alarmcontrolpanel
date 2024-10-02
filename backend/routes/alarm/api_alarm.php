@@ -75,6 +75,8 @@ Route::get('get_customer_new_serial_numbers', [CustomersController::class, 'getC
 
 //Devices
 Route::get('building_types', [CustomersController::class, 'buildingTypes']);
+Route::get('alarm_types', [CustomersController::class, 'alarmTypes']);
+
 Route::get('address_types', [CustomersController::class, 'addressTypes']);
 Route::get('device_models', [CustomersController::class, 'deviceModels']);
 Route::get('device_types', [CustomersController::class, 'deviceTypes']);

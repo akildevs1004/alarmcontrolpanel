@@ -52,7 +52,7 @@
     </v-dialog>
 
     <v-row>
-      <v-col cols="9" style="padding: 4px; padding-top: 10px">
+      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 10px">
         <v-card elevation="10" outlined>
           <div
             :key="mapkeycount"
@@ -108,7 +108,7 @@
           </div>
         </v-card>
       </v-col>
-      <v-col cols="3" style="padding: 0px; padding-top: 10px">
+      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 10px">
         <v-card
           elevation="10"
           outlined
@@ -117,14 +117,75 @@
           "
         >
           <v-card-text style="padding: 10px">
-            <operatorTopmenu />
+            <Topmenu />
+            <v-row style="margin-top: 10px">
+              <v-col cols="4" style="padding: 4px">
+                <v-select
+                  @change="getDatafromApi()"
+                  style="width: 100%"
+                  label="Property Type"
+                  class="selectfilter"
+                  outlined
+                  dense
+                  height="20px"
+                  v-model="filterBuildingType"
+                  :items="[{ id: null, name: 'All' }, ...buildingTypes]"
+                  item-text="name"
+                  item-value="id"
+                >
+                </v-select>
+              </v-col>
+              <v-col cols="4" style="padding: 4px">
+                <v-select
+                  @change="getDatafromApi()"
+                  style="width: 100%"
+                  label="Alarm Type"
+                  class="selectfilter"
+                  outlined
+                  dense
+                  height="20px"
+                  v-model="filterAlarmType"
+                  :items="[{ id: null, name: 'All' }, ...alarmTypes]"
+                  item-text="name"
+                  item-value="id"
+                >
+                </v-select>
+              </v-col>
+              <v-col cols="4" style="padding: 4px">
+                <v-select
+                  @change="getDatafromApi()"
+                  style="width: 100%"
+                  label="Event Status"
+                  class="selectfilter"
+                  outlined
+                  dense
+                  height="20px"
+                  v-model="filterEventType"
+                  :items="[
+                    { id: null, name: 'All Events' },
+
+                    { id: 1, name: 'Open' },
+
+                    { id: 0, name: 'Closed' },
+                    { id: 3, name: 'Forwarded' },
+                  ]"
+                  item-text="name"
+                  item-value="id"
+                >
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-row v-if="data.length == 0" class="text-center">
+              <v-col> No data available </v-col>
+            </v-row>
+
             <v-card
               :key="index + 55"
               v-for="(customer, index) in data"
               elevation="4"
               style="
                 border-color: black;
-                margin-top: 10px;
+                margin-top: 5px;
                 border: 1px solid #a5a5a5;
                 border-radius: 10px;
               "
@@ -195,7 +256,7 @@
                     <div style="color: red">
                       {{
                         $dateFormat.formatDateMonthYear(
-                          customer.latest_alarm_event.alarm_start_datetime
+                          customer.latest_alarm_event?.alarm_start_datetime
                         )
                       }}
                     </div>
@@ -204,126 +265,6 @@
               </v-card-text>
             </v-card>
           </v-card-text>
-          <v-data-table
-            dense
-            :headers="headers"
-            :items="data"
-            :loading="loading"
-            :options.sync="options"
-            :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
-              'disable-items-per-page': true,
-              'items-per-page-text': ' ',
-            }"
-            fixed-header
-            hide-default-header
-            height="100%"
-            :style="'height:' + (windowHeight - 100) + 'px'"
-          >
-            <template v-slot:top>
-              <v-container>
-                <v-row>
-                  <v-col cols="5" style="font-size: 12px; padding-top: 17px"
-                    >Customers List
-                    <span v-if="filterText != ''"
-                      >({{ caps(filterText) }})</span
-                    >
-                  </v-col>
-                  <v-col>
-                    <v-row>
-                      <v-col cols="2">
-                        <v-icon
-                          @click="getCustomers()"
-                          title="Display All Customers"
-                          >mdi-reload</v-icon
-                        >
-                      </v-col>
-
-                      <v-col cols="10">
-                        <v-text-field
-                          class="small-custom-textbox"
-                          @input="getCustomers()"
-                          v-model="commonSearch"
-                          label="Search..."
-                          dense
-                          outlined
-                          type="text"
-                          append-icon="mdi-magnify"
-                          clearable
-                          hide-details
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-divider class="mt-3" color="#DDD"></v-divider>
-              </v-container>
-            </template>
-            <template v-slot:item.building_name="{ item, index }">
-              <v-row style="border-bottom: 0px solid #ddd">
-                <v-col
-                  cols="1"
-                  style="padding-left: 0px; padding-right: 0px; max-width: 20px"
-                >
-                  {{
-                    currentPage
-                      ? (currentPage - 1) * options.itemsPerPage +
-                        (cumulativeIndex + data.indexOf(item))
-                      : "-"
-                  }}
-                </v-col>
-                <v-col style="padding-left: 0px">
-                  <!-- <v-icon
-                    :title="getCustomerColorObject(item).text"
-                    :color="getCustomerColorObject(item).color"
-                    >mdi mdi-square-medium</v-icon
-                  > -->
-                  <span
-                    @click="setCustomerLocationOnMap(item)"
-                    style="font-size: 13px; margin-bottom: 15px"
-                  >
-                    {{ item.building_name || "" }} ,{{ item.city }}
-                  </span>
-
-                  <v-row
-                    :key="index1 + 11"
-                    v-for="(alarm, index1) in item.alarm_events"
-                  >
-                    <v-col
-                      @click="viewAlarmInformation(alarm)"
-                      style="color: red"
-                    >
-                      <v-row style="font-size: 12px">
-                        <v-col
-                          style="
-                            max-width: 20px;
-                            margin: auto;
-                            padding-top: 14px;
-                          "
-                        >
-                          <img
-                            :title="alarm.alarm_type"
-                            style="width: 15px; float: left"
-                            :src="$utils.getRelaventImage(alarm.alarm_type)"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          {{
-                            $dateFormat.formatDateMonthYear(
-                              alarm.alarm_start_datetime
-                            )
-                          }}
-                        </v-col>
-                        <v-col cols="3"> {{ alarm.alarm_type }}</v-col>
-                        <v-col cols="3"> {{ alarm.category.name }}</v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </template>
-          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -336,11 +277,19 @@ import google_map_style_regular from "../../google/google_style_regular.json";
 
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
+import Topmenu from "../../components/Operator/topmenu.vue";
 export default {
   layout: "operator",
-  components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
+  components: {
+    AlarmCustomerTabsView,
+    AlarmEventCustomerContactsTabView,
+    Topmenu,
+  },
 
   data: () => ({
+    filterBuildingType: null,
+    filterAlarmType: null,
+    filterEventType: 1,
     fullscreen: false,
     windowHeight: 600,
     windowWidth: 600,
@@ -477,6 +426,8 @@ export default {
     responseStatusColor: "",
     response: "",
     buildingTypes: [],
+    alarmTypes: [],
+
     _id: null,
 
     mapMarkersList: [],
@@ -500,38 +451,22 @@ export default {
     //   this.windowWidth = window.innerWidth;
     // }
     // setTimeout(() => {
-    //   this.getCustomers("alarm");
+    //   this.getDatafromApi("alarm");
     // }, 1000 * 2);
     // await this.getMapKey();
   },
 
   created() {
-    //////this._id = 4; //this.$route.params.id;
-
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
       this.isCompany = false;
       return;
     }
-    // this.getGoogleicons();
-
-    // setInterval(() => {
-    //   if (
-    //     this.$route.name == "security-customersmap" ||
-    //     this.$route.name == "alarm-customersmap"
-    //   )
-    //     this.getCustomers();
-    // }, 1000 * 10);
-    ///this.getBuildingTypes();
+    this.getDatafromApi();
+    this.getBuildingTypes();
+    this.getAlarmTypes();
   },
-  watch: {
-    options: {
-      handler() {
-        this.getCustomers();
-      },
-      deep: true,
-    },
-  },
+  watch: {},
   methods: {
     caps(str) {
       if (str == "" || str == null) {
@@ -540,6 +475,24 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    async getAlarmTypes() {
+      const { data } = await this.$axios.get("alarm_types", {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      });
+
+      this.alarmTypes = data;
+    },
+    async getBuildingTypes() {
+      const { data } = await this.$axios.get("building_types", {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      });
+
+      this.buildingTypes = data;
     },
     onResize() {
       this.windowWidth = window.innerWidth;
@@ -582,14 +535,13 @@ export default {
       this.setCustomerLocationOnMap(alarm);
       this.popupEventText =
         "#" +
-        alarm.id +
-        " -    " +
-        alarm.alarm_type +
-        " ,  " +
-        "   Time " +
-        alarm.alarm_start_datetime +
-        " -  Priority " +
-        alarm.category.name;
+          alarm.id +
+          " -    " +
+          alarm.alarm_type +
+          " ,  " +
+          "   Time " +
+          alarm?.alarm_start_datetime ||
+        "" + " -  Priority " + alarm.category.name;
 
       this.key += 1;
       this.viewCustomerId = alarm.customer_id;
@@ -600,12 +552,7 @@ export default {
     closeCustomerDialog() {
       this.dialogViewCustomer = false;
     },
-    getBuildingTypes() {
-      if (this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
-        this.buildingTypes =
-          this.$store.state.storeAlarmControlPanel.BuildingTypes;
-      }
-    },
+
     viewItem(item) {
       this.viewCustomerId = item.id;
       this.dialogViewCustomer = true;
@@ -624,34 +571,23 @@ export default {
       }
     },
 
-    getCustomers(filterText = "") {
+    getDatafromApi(filterText = "") {
       this.filterText = filterText;
 
-      //console.log(this.filterText);
-
-      // if (this.loading == true) return false;
       this.loading = true;
 
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
-      this.perPage = itemsPerPage;
-      if (page > 1) this.currentPage = page - 1;
-      if (!page > 0) return false;
       let options = {
         params: {
-          page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
-          perPage: itemsPerPage,
-          pagination: true,
           company_id: this.$auth.user.company_id,
           customer_id: this.customer_id,
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          filter_text: filterText == "" ? "alarm" : filterText,
+          //filter_text: filterText == "" ? "alarm" : filterText,
+          filterBuildingType: this.filterBuildingType,
+          filterEventType: this.filterEventType,
+
+          filterAlarmType: this.filterAlarmType,
         },
       };
 
@@ -956,3 +892,33 @@ export default {
   },
 };
 </script>
+
+<style>
+.main-leftcontent {
+}
+.main-rightcontent {
+  min-width: 360px;
+  max-width: 360px;
+}
+
+.selectfilter .v-label--active {
+  padding: 0 12px !important;
+}
+
+.selectfilter .v-label {
+  font-size: 14px !important;
+}
+.selectfilter .v-select__selections {
+  font-size: 12px !important;
+}
+.selectfilter .v-input__slot {
+  min-height: 33px !important;
+  padding: 0 5px !important;
+}
+.selectfilter .v-label {
+  line-height: 15px !important;
+}
+.selectfilter .v-input__icon {
+  height: 20px !important;
+}
+</style>

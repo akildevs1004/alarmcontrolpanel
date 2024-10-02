@@ -976,6 +976,26 @@ class CustomersController extends Controller
 
         return $model->orderByDesc('building_name')->get();;
     }
+    public function alarmTypes()
+    {
+        $data = [
+            ["name" => "Intruder", "id" => "Intruder"],
+            ["name" => "SOS", "id" => "SOS"],
+            ["name" => "Offline", "id" => "Offline"],
+            //["name" => "Burglary", "id" => "Burglary"],
+            ["name" => "Medical", "id" => "Medical"],
+            ["name" => "Temperature", "id" => "Temperature"],
+            ["name" => "Water", "id" => "Water"],
+            //["name" => "Humidity", "id" => "Humidity"],
+            ["name" => "Fire", "id" => "Fire"],
+
+            // ["name" => "All(Attendance and Access)", "id" => "all"],
+            // ["name" => "Attendance", "id" => "Attendance"],
+            // ["name" => "Access Control", "id" => "Access Control"],
+
+        ];
+        return $data;
+    }
     public function deviceTypes()
     {
         $data = [
@@ -1145,6 +1165,31 @@ class CustomersController extends Controller
 
         );
 
+
+        $model->when(
+            $request->filled("filterBuildingType"),
+            function ($q) use ($request) {
+                $q->where("building_type_id", $request->filterBuildingType);
+            }
+        );
+
+        $model->when(
+            $request->filled("filterEventType"),
+            function ($q) use ($request) {
+                $q->whereHas("alarm_events",  function ($event) use ($request) {
+                    $event->where("alarm_status", $request->filterEventType);
+                });
+            }
+        );
+
+        $model->when(
+            $request->filled("filterAlarmType"),
+            function ($q) use ($request) {
+                $q->whereHas("alarm_events",  function ($event) use ($request) {
+                    $event->where("alarm_type", $request->filterAlarmType);
+                });
+            }
+        );
 
 
 
