@@ -874,7 +874,7 @@ export default {
 
             this.mapInfowindowsList[item.id] = infowindow;
             this.mapMarkersList[item.id] = marker;
-            if (item.alarm_start_datetime)
+            if (item.alarm_status == 1)
               marker.setAnimation(google.maps.Animation.BOUNCE);
 
             marker.addListener("mouseover", () => {

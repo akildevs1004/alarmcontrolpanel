@@ -78,7 +78,16 @@
                   >
                 </v-list-item-content>
               </v-list-item> -->
-
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="black--text">{{
+                    displayName
+                  }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item @click="logout">
                 <v-list-item-icon>
                   <v-icon>mdi-logout</v-icon>
@@ -170,6 +179,7 @@
 export default {
   data() {
     return {
+      displayName: "",
       popupKey: 1,
       key: 1,
       snackbar: false,
@@ -226,6 +236,10 @@ export default {
     }, 1000 * 5 * 1);
   },
   created() {
+    this.displayName =
+      this.$auth.user.security.first_name +
+      " " +
+      this.$auth.user.security.last_name;
     this.loadAlarmNotificationIcons();
   },
   methods: {
