@@ -50,22 +50,29 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
     <v-row>
-      <v-col cols="9">
-        <v-card elevation="8" outlined>
+      <v-col cols="9" style="padding: 4px; padding-top: 10px">
+        <v-card elevation="10" outlined>
           <div
             :key="mapkeycount"
             id="map"
             :style="'height:' + windowHeight + 'px'"
           ></div>
 
-          <div style="position: absolute; top: 14px; left: 140px">
+          <div style="position: absolute; top: 0px; left: 140px">
             <v-btn-toggle
               v-model="mapStyle"
               height="20"
               tile
               color="black white "
               group
+              style="
+                background: #fff;
+                border-radius: 4px;
+                height: 24px;
+                top: 4px;
+              "
             >
               <v-btn
                 height="22"
@@ -73,6 +80,7 @@
                 value="bw"
                 small
                 dense
+                style="margin-top: 1px"
                 @click="changeGoogleMapColor('bw')"
                 >B & W</v-btn
               >
@@ -82,9 +90,20 @@
                 value="map"
                 small
                 dense
+                style="margin-top: 1px"
                 @click="changeGoogleMapColor('map')"
                 >Regular</v-btn
               >
+              <v-btn
+                height="22"
+                value="map"
+                small
+                dense
+                style="margin-top: 1px"
+                @click="toggleFullscreen"
+              >
+                {{ fullscreen ? "Exit Fullscreen" : "Go Fullscreen" }}
+              </v-btn>
             </v-btn-toggle>
           </div>
         </v-card>
@@ -93,8 +112,98 @@
         <v-card
           elevation="10"
           outlined
-          :style="'padding:0px;height:' + windowHeight + 'px'"
+          :style="
+            ' height:' + windowHeight + 'px;overflow-y: auto;overflow-x: hidden'
+          "
         >
+          <v-card-text style="padding: 10px">
+            <operatorTopmenu />
+            <v-card
+              :key="index + 55"
+              v-for="(customer, index) in data"
+              elevation="4"
+              style="
+                border-color: black;
+                margin-top: 10px;
+                border: 1px solid #a5a5a5;
+                border-radius: 10px;
+              "
+            >
+              <v-card-text style="padding-right: 0px">
+                <v-row style="min-width: 300px; height: 106px; width: 100%">
+                  <v-col
+                    style="
+                      max-width: 80px;
+                      padding: 0px;
+                      margin: auto;
+                      text-align: center;
+                    "
+                  >
+                    <img
+                      :src="customer.profile_picture"
+                      style="
+                        width: 100%;
+                        border-radius: 6px;
+                        height: 90px;
+                        vertical-align: bottom;
+                      "
+                    />
+                  </v-col>
+                  <v-col
+                    style="padding: 0px; font-size: 12px; padding-left: 10px"
+                  >
+                    <div style="height: 89px; overflow: hidden">
+                      {{
+                        customer.primary_contact
+                          ? customer.primary_contact.first_name +
+                            " " +
+                            customer.primary_contact.last_name
+                          : "---"
+                      }}
+                      <br />
+                      {{ customer.building_name || "---" }} <br />
+                      {{ customer.city }}
+                      <br />
+                      {{ customer.primary_contact?.phone1 || "---" }}
+                    </div>
+                    <div style="color: #0064ff">
+                      {{
+                        customer.buildingtype
+                          ? customer.buildingtype.name
+                          : "---"
+                      }}
+                      <v-icon
+                        style="
+                          float: right;
+                          padding-right: 17px;
+                          text-align: right;
+                        "
+                        size="20"
+                        color="#0064ff"
+                        >mdi-folder-open</v-icon
+                      >
+                    </div>
+                  </v-col>
+                  <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
+                    <div style="margin: auto; text-align: center; height: 85px">
+                      <img
+                        :title="getCustomerColorObject(customer).text"
+                        style="width: 40px; padding-top: 20%"
+                        :src="getCustomerColorObject(customer).image + '?3=3'"
+                      />
+                    </div>
+                    <div style="color: red">
+                      {{
+                        $dateFormat.formatDateMonthYear(
+                          customer.latest_alarm_event.alarm_start_datetime
+                        )
+                      }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-card-text>
           <v-data-table
             dense
             :headers="headers"
@@ -109,6 +218,7 @@
             fixed-header
             hide-default-header
             height="100%"
+            :style="'height:' + (windowHeight - 100) + 'px'"
           >
             <template v-slot:top>
               <v-container>
@@ -214,69 +324,6 @@
               </v-row>
             </template>
           </v-data-table>
-          <div style="width: 100%">
-            <v-btn-toggle
-              style="width: 100%"
-              tile
-              color="deep-purple accent-3"
-              group
-            >
-              <v-btn
-                v-if="
-                  name == 'alarm' ||
-                  name == 'armed' ||
-                  name == 'offline' ||
-                  name == 'disarm'
-                "
-                :key="index + 25"
-                :title="caps(name)"
-                @click="getCustomers(value.text)"
-                style="width: 25%"
-                v-for="(value, name, index) in colorcodes"
-                :value="value"
-              >
-                <!-- <img
-                  :src="value.image + '?2=2'"
-                  style="width: 35px; height: 45px"
-                /> -->
-                <!-- <div>{{ value.name }}</div> -->
-
-                <v-icon :color="value.color">{{ value.icon }} </v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </div>
-          <!-- <v-btn-toggle tile color="deep-purple accent-3" group>
-            <v-btn style value="left"> Left </v-btn>
-
-            <v-btn value="center"> Center </v-btn>
-
-            <v-btn value="right"> Right </v-btn>
-
-            <v-btn value="justify"> Justify </v-btn>
-          </v-btn-toggle> -->
-          <!--<v-row>
-            <v-col
-              @click="getCustomers(value.text)"
-              class="pl-5"
-              style="min-width: 50px; text-align: center"
-              v-for="(value, name, index) in colorcodes"
-              :id="index"
-              :key="index"
-              :name="index"
-            >
-              <v-icon :color="value.color">{{ value.icon }}</v-icon>
-
-               <img
-                v-if="getImageicon(value)"
-                style="width: 20px"
-                :src="getImageicon(value)"
-              /> 
-
-              <div style="font-size: 13px">
-                {{ caps(name) }}
-              </div>
-            </v-col>
-          </v-row>-->
         </v-card>
       </v-col>
     </v-row>
@@ -294,6 +341,7 @@ export default {
   components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
 
   data: () => ({
+    fullscreen: false,
     windowHeight: 600,
     windowWidth: 600,
     mapStyle: "bw",
@@ -440,11 +488,17 @@ export default {
     google_map_style_regular,
   }),
   computed: {},
+
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResize);
+  },
   mounted() {
-    if (window) {
-      this.windowHeight = window.innerHeight - 20;
-      this.windowWidth = window.innerWidth;
-    }
+    this.onResize();
+    window.addEventListener("resize", this.onResize);
+    // if (window) {
+    //   this.windowHeight = window.innerHeight - 20;
+    //   this.windowWidth = window.innerWidth;
+    // }
     // setTimeout(() => {
     //   this.getCustomers("alarm");
     // }, 1000 * 2);
@@ -485,6 +539,36 @@ export default {
       } else {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
+      }
+    },
+    onResize() {
+      this.windowWidth = window.innerWidth;
+      this.windowHeight = window.innerHeight;
+    },
+    toggleFullscreen() {
+      let newStyle = "fullscreen";
+      if (!document.fullscreenElement) {
+        document.documentElement
+          .requestFullscreen()
+          .then(() => {
+            this.fullscreen = true;
+          })
+          .catch((err) => {
+            console.error(
+              `Error attempting to enable fullscreen mode: ${err.message}`
+            );
+          });
+      } else {
+        document
+          .exitFullscreen()
+          .then(() => {
+            this.fullscreen = false;
+          })
+          .catch((err) => {
+            console.error(
+              `Error attempting to exit fullscreen mode: ${err.message}`
+            );
+          });
       }
     },
     changeGoogleMapColor(type) {
@@ -625,32 +709,34 @@ export default {
       if (process) return value.image;
       else return false;
     },
-    getCustomerColorObject(item) {
+    getCustomerColorObject(customer) {
       // console.log(
       //   "findAnyDeviceisOffline",
       //   this.findAnyDeviceisOffline(item.devices)
       // );
 
-      if (item.latest_alarm_event) {
+      if (customer.latest_alarm_event) {
         return this.colorcodes.alarm;
-      } else if (this.findanyArmedDevice(item.devices)) {
+      } else if (this.findanyArmedDevice(customer.devices)) {
         return this.colorcodes.armed;
       }
-      if (this.findAnyDeviceisOffline(item.devices) > 0) {
+      if (this.findAnyDeviceisOffline(customer.devices) > 0) {
         return this.colorcodes.offline;
-      } else if (this.findanyDisamrDevice(item.devices)) {
+      } else if (this.findanyDisamrDevice(customer.devices)) {
         return this.colorcodes.disarm;
       }
 
       return this.colorcodes.offline;
     },
     findAnyDeviceisOffline(devices) {
+      if (!devices) return 0;
       let offlineArray = devices.filter((device) => device.status_id == 2);
       // console.log("offlineArray", offlineArray);
       // console.log("offlineArray", offlineArray.length);
       return offlineArray ? offlineArray.length : 0;
     },
     findallDeviceisOnline(devices) {
+      if (!devices) return 0;
       let onlineArray = devices.filter((device) => device.status_id == 1);
 
       // console.log("offlineArray", offlineArray.length);
@@ -661,11 +747,13 @@ export default {
         : 0;
     },
     findanyArmedDevice(devices) {
+      if (!devices) return 0;
       let armedArray = devices.filter((device) => device.armed_status == 1);
 
       return armedArray ? armedArray.length : 0;
     },
     findanyDisamrDevice(devices) {
+      if (!devices) return 0;
       let armedArray = devices.filter((device) => device.armed_status == 0);
 
       return armedArray ? armedArray.length : 0;
@@ -714,7 +802,7 @@ export default {
           // },
           controlSize: 20,
           zoom: 12,
-          center: { lat: 25.2516474, lng: 55.3567738 },
+          center: { lat: 25.2265191, lng: 55.395225 },
           styles: this.google_map_style_bandw,
           // styles: [
           //   {
@@ -813,6 +901,8 @@ export default {
 
           this.mapInfowindowsList[item.id] = infowindow;
           this.mapMarkersList[item.id] = marker;
+          if (item.latest_alarm_event)
+            marker.setAnimation(google.maps.Animation.BOUNCE);
 
           marker.addListener("mouseover", () => {
             this.mapInfowindowsList.forEach((oldinfowindow) => {
