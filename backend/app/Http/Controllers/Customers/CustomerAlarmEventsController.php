@@ -535,7 +535,11 @@ class CustomerAlarmEventsController extends Controller
 
 
         ])->where('company_id', $request->company_id)
+            ->when($request->filled("filterAlarmType"), function ($q) use ($request) {
 
+
+                $q->where("alarm_type", $request->filterAlarmType);
+            })
             ->when($request->filled("alarm_status"), function ($q) use ($request) {
                 if ($request->alarm_status == 3) {
                     $q->where("forwarded", true);
@@ -543,6 +547,10 @@ class CustomerAlarmEventsController extends Controller
                     $q->where("alarm_status", $request->alarm_status);
                     $q->where("forwarded", false);
                 }
+            })->when($request->filled("filterBuildingType"), function ($q) use ($request) {
+                $q->whereHas("device.customer", function ($q) use ($request) {
+                    $q->where("building_type_id", $request->filterBuildingType);
+                });
             })
             ->when($request->filled("filterAlarmStatus"), function ($q) use ($request) {
                 if ($request->filterAlarmStatus == 3) {
@@ -563,9 +571,11 @@ class CustomerAlarmEventsController extends Controller
 
 
 
+
+
         $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
-        return $model->get();;
+        return   $model->paginate($request->perPage ?? 100);;
     }
     public function getAlarmEvents(Request $request)
     {

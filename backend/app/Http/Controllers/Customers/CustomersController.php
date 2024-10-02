@@ -982,6 +982,7 @@ class CustomersController extends Controller
             ["name" => "Intruder", "id" => "Intruder"],
             ["name" => "SOS", "id" => "SOS"],
             ["name" => "Offline", "id" => "Offline"],
+            ["name" => "Tampered", "id" => "Tampered"],
             //["name" => "Burglary", "id" => "Burglary"],
             ["name" => "Medical", "id" => "Medical"],
             ["name" => "Temperature", "id" => "Temperature"],

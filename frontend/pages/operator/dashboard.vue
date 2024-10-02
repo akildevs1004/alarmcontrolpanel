@@ -255,7 +255,7 @@
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
                     <div style="margin: auto; text-align: center; height: 85px">
                       <img
-                        :title="getAlarmColorObject(alarm).text"
+                        :title="alarm.alarm_type"
                         style="width: 40px; padding-top: 20%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
                       />
@@ -611,7 +611,7 @@ export default {
 
       try {
         this.$axios.get(`get_alarm_events_map`, options).then(({ data }) => {
-          this.data = data; //data.data;
+          this.data = data.data; //data.data;
 
           this.loading = false;
 
