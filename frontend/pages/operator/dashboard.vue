@@ -316,6 +316,7 @@
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
                     <div style="margin: auto; text-align: center; height: 75px">
                       <img
+                        @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
                         style="width: 30px; padding-top: 20%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
@@ -334,9 +335,64 @@
                   appear
                   v-if="selectedAlarm && selectedAlarm.id == alarm.id"
                 > -->
+                <!-- <v-divider style="border: 1px solid #ddd" /> -->
+                <v-row
+                  style="width: 100%"
+                  v-if="
+                    showAlarmEventNotes &&
+                    selectedAlarm &&
+                    selectedAlarm.id == alarm.id
+                  "
+                >
+                  <v-col style="padding: 0px">
+                    <v-tabs
+                      height="25"
+                      center-active
+                      right
+                      class="customerEmergencyContactTabs"
+                    >
+                      <v-tab
+                        v-if="
+                          item.address_type.toLowerCase() == 'primary' ||
+                          item.address_type.toLowerCase() == 'secondary' ||
+                          item.address_type.toLowerCase() == 'security'
+                        "
+                        v-for="(item, index) in alarm.device.customer.contacts"
+                        :key="item.id"
+                      >
+                        {{ item.address_type }}</v-tab
+                      >
+                      <v-tab-item
+                        v-if="
+                          contact.address_type.toLowerCase() == 'primary' ||
+                          contact.address_type.toLowerCase() == 'secondary' ||
+                          contact.address_type.toLowerCase() == 'security'
+                        "
+                        v-for="(contact, index) in alarm.device.customer
+                          .contacts"
+                        :key="contact.id + 50"
+                        name="index+50"
+                      >
+                        <v-card class="elevation-1">
+                          <OperatorCustomerContacts
+                            :alarmId="alarm.id"
+                            v-if="contact"
+                            :customer="alarm.device.customer"
+                            :contact_type="contact.address_type"
+                            :key="contact.address_type"
+                          />
+                        </v-card>
+                      </v-tab-item>
+                    </v-tabs>
+                  </v-col>
+                </v-row>
                 <v-row
                   transition="slide-x-transition"
-                  v-if="selectedAlarm && selectedAlarm.id == alarm.id"
+                  v-if="
+                    showMappingSection &&
+                    selectedAlarm &&
+                    selectedAlarm.id == alarm.id
+                  "
                 >
                   <v-col style="padding: 15px; padding-left: 0px">
                     <OperatorGoogleMap
@@ -355,11 +411,6 @@
                       :name="'OperatorSensorPhotos' + alarm.id"
                       class="rounded-lg"
                       :customer_id="alarm.device.customer.id"
-                      :photos="alarm.device.customer.photos"
-                      v-if="
-                        alarm.device.customer &&
-                        alarm.device.customer.photos.length > 0
-                      "
                     />
                   </v-col>
                 </v-row>
@@ -384,6 +435,7 @@ import MapFooterContent from "../../components/Operator/MapFooterContent.vue";
 import Clock from "../../components/Operator/Clock.vue";
 import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
 import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
+import OperatorCustomerContacts from "../../components/Operator/OperatorCustomerContacts.vue";
 export default {
   layout: "operator",
   components: {
@@ -394,9 +446,12 @@ export default {
     Clock,
     OperatorGoogleMap,
     OperatorSensorPhotos,
+    OperatorCustomerContacts,
   },
   // alarm_event_operator_statistics
   data: () => ({
+    showMappingSection: false,
+    showAlarmEventNotes: false,
     displayAlarmMap: [],
     displayAlarmMapId: null,
     OperatorGoogleMapKey: 1,
@@ -620,13 +675,26 @@ export default {
     },
     closeMap() {
       this.selectedAlarm = null;
+      this.showMappingSection = false;
     },
     showMap(alarm) {
+      this.showMappingSection = true;
       this.OperatorGoogleMapKey++;
-      // this.displayAlarmMap = [];
-
-      // this.displayAlarmMap[alarm.id] = true;
       this.selectedAlarm = alarm;
+    },
+    closeAlarmEventNotes() {
+      this.selectedAlarm = null;
+      this.showAlarmEventNotes = false;
+    },
+    showNotes(alarm) {
+      if (this.showAlarmEventNotes) {
+        this.selectedAlarm = null;
+        this.showAlarmEventNotes = false;
+      } else {
+        this.showAlarmEventNotes = true;
+        this.OperatorGoogleMapKey++;
+        this.selectedAlarm = alarm;
+      }
     },
     async getBuildingTypes() {
       const { data } = await this.$axios.get("building_types", {

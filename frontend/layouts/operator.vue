@@ -151,10 +151,43 @@ export default {
 .main-leftcontent {
 }
 .main-rightcontent {
-  min-width: 360px !important;
-  max-width: 360px !important;
+  min-width: 450px !important;
+  max-width: 450px !important;
+}
+.radiogroup .v-icon {
+  font-size: 15px;
+}
+.radiogroup {
+  color: black;
+  font-size: 12px;
+  margin-top: 0px !important;
+}
+.radiogroup label {
+  color: black !important;
+  font-size: 12px;
+}
+.v-radio--is-disabled label {
+  color: #ddd !important;
+}
+.radio-group {
+  font-size: 12px;
+}
+.radio-group label {
+  font-size: 12px !important;
+}
+.input-small-fieldset1 fieldset {
+  height: 35px;
+}
+.input-small-fieldset1 fieldset input {
+  margin-top: -15px;
+}
+.input-small-fieldset1 .v-input__append-inner {
+  margin-top: -2px;
 }
 
+.input-small-fieldset1 .v-label {
+  top: 3px !important;
+}
 .selectfilter .v-label--active {
   padding: 0 12px !important;
 }

@@ -7,6 +7,14 @@
     </div>
 
     <div v-if="loading">Loading Sensor mapping....</div>
+
+    <div
+      v-if="!loading && photoPlottings.length == 0"
+      style="padding-top: 15px"
+    >
+      No Sensor Mapping available
+    </div>
+
     <v-row
       style="margin: auto; padding-top: 10px"
       :key="'operatorsensorphotos' + index + 20"
