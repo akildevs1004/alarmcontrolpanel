@@ -15,13 +15,11 @@ class PlottingController extends Controller
     {
         $customerBuildingPictureId = request("customer_building_picture_id");
 
-        // Retrieve the model
         $model = Plotting::with(["photos"])->where("customer_building_picture_id", $customerBuildingPictureId)->first();
 
         if (!$model || !isset($model->plottings)) {
             return $model;
         }
-        // Decode the plottings JSON field
         $plottings = $model->plottings;
 
 
@@ -51,6 +49,40 @@ class PlottingController extends Controller
         if ($request->filled('customer_id'))
             $buildingPhotosPlottings = CustomerBuildingPictures::with("photoPlottings")->where("customer_id", $request->customer_id)->get();
         $model->buildingPhotosPlottings = $buildingPhotosPlottings;
+        return $model;
+    }
+    public function plottingWithCustomerId(Request $request)
+    {
+        $customer_id = request("customer_id");
+        $array = CustomerBuildingPictures::where("customer_id", $request->customer_id)->pluck("id");
+
+        $model = Plotting::with(["photos"])->whereIn("customer_building_picture_id", $array)->get();
+
+        // if (!$model || !isset($model->plottings)) {
+        //     return $model;
+        // }
+        $finalArray = [];
+        foreach ($model as $key => $value) {
+            $plottings = $value->plottings;
+
+
+            $plottings =  $this->updatePlottingWithalarm_event($plottings);
+
+
+
+            //  return CustomerBuildingPictures::with("photoPlottings")->where("customer_id", $request->customer_id)->get();
+
+            $value->plottings = $plottings;
+            $buildingPhotosPlottings = [];
+            //get customer all photos plottings
+            if ($request->filled('customer_id'))
+                $buildingPhotosPlottings = CustomerBuildingPictures::with("photoPlottings")->where("customer_id", $request->customer_id)->get();
+            $value->buildingPhotosPlottings = $buildingPhotosPlottings;
+
+            $finalArray[] = $value;
+        }
+
+
         return $model;
     }
 

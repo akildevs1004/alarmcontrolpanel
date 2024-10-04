@@ -144,7 +144,7 @@ export default {
         this.snackbar = true;
         this.response = "No Alarm Found";
       } else {
-        this.response = "";
+        this.response = alarmEvents.length + " Alarms";
       }
 
       this.loading = false;

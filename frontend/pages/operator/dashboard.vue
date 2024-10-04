@@ -53,12 +53,16 @@
 
     <v-row>
       <v-col class="main-leftcontent" style="padding: 4px; padding-top: 5px">
-        <v-card elevation="10" outlined>
+        <v-card elevation="10" outlined :loading="loading">
           <div
             :key="mapkeycount"
             id="map"
             :style="'height:' + windowHeight + 'px'"
           ></div>
+
+          <div style="position: absolute; top: 50px; left: 10px">
+            <Clock></Clock>
+          </div>
 
           <div style="position: absolute; top: 0px; left: 140px">
             <v-btn-toggle
@@ -110,10 +114,15 @@
               </v-btn>
             </v-btn-toggle>
           </div>
+
+          <div style="position: absolute; bottom: 20px; left: 250px">
+            <MapFooterContent :colorcodes="colorcodes" />
+          </div>
         </v-card>
       </v-col>
       <v-col class="main-rightcontent" style="padding: 0px; padding-top: 6px">
         <v-card
+          :loading="loading"
           elevation="10"
           outlined
           :style="
@@ -183,6 +192,30 @@
               <v-col> No data available </v-col>
             </v-row>
 
+            <!--<v-card :key="selectedAlarm?.id" v-if="displayAlarmMap">
+              <v-card-text style="padding: 0px">
+                <OperatorGoogleMap
+                  :key="OperatorGoogleMapKey"
+                  style="padding: 0px"
+                  class="rounded-lg"
+                  :customer="selectedAlarm.device.customer"
+                  :customer_id="selectedAlarm.device.customer.id"
+                  :name="
+                    'OperatorGoogleMapCustomer' +
+                    selectedAlarm.device.customer.id
+                  "
+                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?3=3'"
+                />
+
+                 <SensorPhotos
+                  class="rounded-lg"
+                  :customer_id="selectedAlarm.device.customer.id"
+                  :photos="selectedAlarm.device.customer.photos"
+                  v-if="selectedAlarm.device.customer"
+                />
+              </v-card-text>
+            </v-card> -->
+
             <v-card
               v-if="alarm.device?.customer"
               :key="index + 55"
@@ -196,7 +229,7 @@
               "
             >
               <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 300px; height: 106px; width: 100%">
+                <v-row style="min-width: 300px; height: 95px; width: 100%">
                   <v-col
                     style="
                       max-width: 80px;
@@ -218,7 +251,7 @@
                   <v-col
                     style="padding: 0px; font-size: 12px; padding-left: 10px"
                   >
-                    <div style="height: 89px; overflow: hidden">
+                    <div style="height: 79px; overflow: hidden">
                       {{
                         alarm.device.customer.primary_contact
                           ? alarm.device.customer.primary_contact.first_name +
@@ -240,6 +273,30 @@
                           ? alarm.device.customer.buildingtype.name
                           : "---"
                       }}
+
+                      <v-icon
+                        v-if="
+                          selectedAlarm == null ||
+                          (selectedAlarm && selectedAlarm.id != alarm.id)
+                        "
+                        title="Show Map"
+                        @click="showMap(alarm)"
+                        size="20"
+                        color="black"
+                        style="padding-bottom: 5px"
+                        >mdi-map-outline</v-icon
+                      >
+                      <v-icon
+                        v-else-if="
+                          selectedAlarm && selectedAlarm.id == alarm.id
+                        "
+                        title="Show Map"
+                        @click="closeMap()"
+                        size="20"
+                        color="green"
+                        style="padding-bottom: 5px"
+                        >mdi-map-outline</v-icon
+                      >
                       <v-icon
                         style="
                           float: right;
@@ -257,10 +314,10 @@
                     </div>
                   </v-col>
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
-                    <div style="margin: auto; text-align: center; height: 85px">
+                    <div style="margin: auto; text-align: center; height: 75px">
                       <img
                         :title="alarm.alarm_type"
-                        style="width: 40px; padding-top: 20%"
+                        style="width: 30px; padding-top: 20%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
                       />
                     </div>
@@ -273,6 +330,40 @@
                     </div>
                   </v-col>
                 </v-row>
+                <!-- <v-fab-transition
+                  appear
+                  v-if="selectedAlarm && selectedAlarm.id == alarm.id"
+                > -->
+                <v-row
+                  transition="slide-x-transition"
+                  v-if="selectedAlarm && selectedAlarm.id == alarm.id"
+                >
+                  <v-col style="padding: 15px; padding-left: 0px">
+                    <OperatorGoogleMap
+                      style="width: 95%; text-align: center; margin: auto"
+                      :key="OperatorGoogleMapKey"
+                      class="rounded-lg"
+                      :customer="alarm.device.customer"
+                      :customer_id="alarm.device.customer.id"
+                      :name="'OperatorGoogleMapCustomer' + alarm.id"
+                      :mapimage="getAlarmColorObject(alarm).image + '?3=3'"
+                    />
+
+                    <OperatorSensorPhotos
+                      style="width: 95%; text-align: center; margin: auto"
+                      :key="OperatorGoogleMapKey + 100"
+                      :name="'OperatorSensorPhotos' + alarm.id"
+                      class="rounded-lg"
+                      :customer_id="alarm.device.customer.id"
+                      :photos="alarm.device.customer.photos"
+                      v-if="
+                        alarm.device.customer &&
+                        alarm.device.customer.photos.length > 0
+                      "
+                    />
+                  </v-col>
+                </v-row>
+                <!-- </v-fab-transition> -->
               </v-card-text>
             </v-card>
           </v-card-text>
@@ -289,15 +380,29 @@ import google_map_style_regular from "../../google/google_style_regular.json";
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 import Topmenu from "../../components/Operator/topmenu.vue";
+import MapFooterContent from "../../components/Operator/MapFooterContent.vue";
+import Clock from "../../components/Operator/Clock.vue";
+import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
+import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
 export default {
   layout: "operator",
   components: {
     AlarmCustomerTabsView,
     AlarmEventCustomerContactsTabView,
     Topmenu,
+    MapFooterContent,
+    Clock,
+    OperatorGoogleMap,
+    OperatorSensorPhotos,
   },
-
+  // alarm_event_operator_statistics
   data: () => ({
+    displayAlarmMap: [],
+    displayAlarmMapId: null,
+    OperatorGoogleMapKey: 1,
+    selectedAlarm: null,
+    //displayAlarmMap: false,
+    loading: true,
     filterBuildingType: null,
     filterAlarmType: null,
     filterAlarmStatus: 1,
@@ -455,15 +560,20 @@ export default {
     google_map_style_bandw,
 
     google_map_style_regular,
+    cancelGetdatafromAPITokenSource: null, // Keep track of the cancel token
   }),
   computed: {},
 
   beforeDestroy() {
-    window.removeEventListener("resize", this.onResize);
+    if (window) window.removeEventListener("resize", this.onResize);
   },
   mounted() {
-    this.onResize();
-    window.addEventListener("resize", this.onResize);
+    setTimeout(() => {
+      this.onResize();
+    }, 1000 * 5);
+
+    if (window) window.addEventListener("resize", this.onResize);
+
     // if (window) {
     //   this.windowHeight = window.innerHeight - 20;
     //   this.windowWidth = window.innerWidth;
@@ -472,15 +582,20 @@ export default {
     //   this.getDatafromApi("alarm");
     // }, 1000 * 2);
     // await this.getMapKey();
+
+    setInterval(() => {
+      this.getDatafromApi();
+    }, 1000 * 60);
   },
 
-  created() {
+  async created() {
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
       this.isCompany = false;
       return;
     }
-    this.getDatafromApi();
+    await this.getMapKey();
+    await this.getDatafromApi();
     this.getBuildingTypes();
     this.getAlarmTypes();
   },
@@ -503,6 +618,16 @@ export default {
 
       this.alarmTypes = data;
     },
+    closeMap() {
+      this.selectedAlarm = null;
+    },
+    showMap(alarm) {
+      this.OperatorGoogleMapKey++;
+      // this.displayAlarmMap = [];
+
+      // this.displayAlarmMap[alarm.id] = true;
+      this.selectedAlarm = alarm;
+    },
     async getBuildingTypes() {
       const { data } = await this.$axios.get("building_types", {
         params: {
@@ -513,8 +638,10 @@ export default {
       this.buildingTypes = data;
     },
     onResize() {
-      this.windowWidth = window.innerWidth;
-      this.windowHeight = window.innerHeight - 20;
+      if (window) {
+        this.windowWidth = window.innerWidth;
+        this.windowHeight = window.innerHeight - 20;
+      }
     },
     toggleFullscreen() {
       let newStyle = "fullscreen";
@@ -588,12 +715,18 @@ export default {
     async getMapKey() {
       let { data } = await this.$axios.get(`get-map-key`);
       this.mapKey = data;
-      if (this.mapKey && this.loading == false) {
+      if (this.mapKey && this.loading == false && window) {
         this.loadGoogleMapsScript(this.initMap);
       }
     },
 
-    getDatafromApi(filterText = "") {
+    async getDatafromApi(filterText = "") {
+      if (this.cancelGetdatafromAPITokenSource) {
+        this.cancelGetdatafromAPITokenSource.cancel(
+          "Operation canceled due to new request."
+        );
+      }
+      this.cancelGetdatafromAPITokenSource = this.$axios.CancelToken.source();
       this.filterText = filterText;
 
       this.loading = true;
@@ -611,23 +744,26 @@ export default {
 
           filterAlarmType: this.filterAlarmType,
         },
+        cancelToken: this.cancelGetdatafromAPITokenSource.token,
       };
 
       try {
-        this.$axios.get(`get_alarm_events_map`, options).then(({ data }) => {
-          this.data = data.data; //data.data;
+        this.$axios
+          .get(`get_alarm_events_map_operator`, options)
+          .then(({ data }) => {
+            this.data = data.data; //data.data;
 
-          this.loading = false;
+            this.loading = false;
 
-          this.mapMarkersList.forEach((marker) => {
-            if (marker) {
-              marker.setMap(null);
-            }
+            this.mapMarkersList.forEach((marker) => {
+              if (marker) {
+                marker.setMap(null);
+              }
+            });
+            this.mapMarkersList = [];
+
+            this.plotLocations();
           });
-          this.mapMarkersList = [];
-
-          this.getMapKey();
-        });
       } catch (e) {}
     },
 
@@ -739,8 +875,6 @@ export default {
     },
 
     setCustomerLocationOnMap(customer) {
-      console.log(customer);
-
       try {
         if (customer.latitude && customer.longitude) {
           const position = {
@@ -795,134 +929,167 @@ export default {
       }
       this.geocoder = new google.maps.Geocoder();
       // this.infowindow = new google.maps.InfoWindow();
-      this.plotLocations();
     },
     plotLocations() {
+      //set default one customer
+
+      console.log(this.data[0].device.utc_time_zone);
+
+      if (
+        this.data &&
+        this.data[0] &&
+        this.data[0].device.utc_time_zone != "Asia/Dubai" &&
+        this.data[0].device.customer.latitude != "" &&
+        this.data[0].device.customer.longitude != ""
+      ) {
+        const position = {
+          lat: parseFloat(this.data[0].device.customer.latitude),
+          lng: parseFloat(this.data[0].device.customer.longitude),
+        };
+        this.map.panTo(position);
+      }
+
       this.data.forEach((item) => {
         if (item.device?.customer) {
-          try {
-            const position = {
-              lat: parseFloat(item.device.customer.latitude),
-              lng: parseFloat(item.device.customer.longitude),
-            };
+          const customerId = item.device.customer.id;
 
-            let iconURL =
-              process.env.BACKEND_APP_URL +
-              "/google_map_icons/google_online.png";
+          // Check if a marker already exists for this customer
+          if (this.mapMarkersList[customerId]) {
+            // Skip if marker already exists with alarm_status = 1 (high priority)
+            if (
+              item.alarm_status == 1 &&
+              this.mapMarkersList[customerId].alarm_status != "1"
+            )
+              this.mapMarkersList[customerId].setMap(null);
+          }
 
-            // let colorObject = this.getCustomerColorObject(item.device.customer);
-            let colorObject = this.getAlarmColorObject(item);
-            if (colorObject) iconURL = colorObject.image;
+          // Determine if we should load a marker for this customer
+          let loadMarker =
+            item.alarm_status == "1" || !this.mapMarkersList[customerId];
 
-            const icon = {
-              url: iconURL + "?1=1",
-              scaledSize: new google.maps.Size(28, 34),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(25, 25),
-            };
+          if (loadMarker) {
+            try {
+              const position = {
+                lat: parseFloat(item.device.customer.latitude),
+                lng: parseFloat(item.device.customer.longitude),
+              };
 
-            const marker = new google.maps.Marker({
-              position,
-              map: this.map,
-              title: item.device.customer.name,
-              icon: icon,
-            });
+              // Determine icon based on alarm or other conditions
+              let iconURL =
+                process.env.BACKEND_APP_URL +
+                "/google_map_icons/google_online.png";
+              const colorObject = this.getAlarmColorObject(item);
+              if (colorObject) iconURL = colorObject.image;
 
-            let alarmHtmlLink = "";
-            let customerHtmlLink = "";
-            if (item.alarm_start_datetime)
-              alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+              const icon = {
+                url: iconURL + "?1=1",
+                scaledSize: new google.maps.Size(28, 34),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+              };
 
-            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
-
-            let profile_picture =
-              "https://alarm.xtremeguard.org/no-business_profile.png";
-            if (item.device.customer.profile_picture)
-              profile_picture = item.device.customer.profile_picture;
-
-            let html = `
-    <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
-      <tr>
-        <td style="width:100px; vertical-align: top;">
-          <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
-          <br />
-
-        </td>
-        <td style="width:150px; vertical-align: top;">
-          ${item.device.customer.building_name} <br/> ${item.device.customer.city}
-          <div>Landmark: ${item.device.customer.landmark}</div>
-          <div style="text-align: right; width: 100%;">
-
-          </div>
-        </td>
-      </tr>
-      <tr>
-  <td> <a target="_blank" href="https://www.google.com/maps?q=${item.device.customer.latitude},${item.device.customer.longitude}">Google Directions</a>
-    </td>
-    <td style="text-align:right">
-   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
-      </td>
-        </tr>
-    </table>`;
-
-            const infowindow = new google.maps.InfoWindow({
-              content: html,
-              map: this.map,
-              position: position,
-            });
-            infowindow.close();
-
-            this.mapInfowindowsList[item.id] = infowindow;
-            this.mapMarkersList[item.id] = marker;
-            if (item.alarm_status == 1)
-              marker.setAnimation(google.maps.Animation.BOUNCE);
-
-            marker.addListener("mouseover", () => {
-              this.mapInfowindowsList.forEach((oldinfowindow) => {
-                oldinfowindow.close();
+              const marker = new google.maps.Marker({
+                position,
+                map: this.map,
+                title: item.device.customer.name,
+                icon: icon,
+                alarm_status: item.alarm_status,
               });
-              infowindow.open(this.map, marker);
-            });
 
-            google.maps.event.addListener(infowindow, "domready", () => {
-              let btnObject = document.getElementById(
-                "alarmInfowindow-btn-" + item.id
-              );
-              if (btnObject)
-                btnObject.addEventListener("click", () => {
-                  this.viewAlarmInformation(item.alarm_start_datetime);
-                });
+              // Create content for the infowindow
+              let alarmHtmlLink = "";
+              let customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-              let btnObject2 = document.getElementById(
-                "customerInfowindow-btn-" + item.id
-              );
-              if (btnObject2)
-                btnObject2.addEventListener("click", () => {
-                  this.dialog = true;
-                  this.key += 1;
-                  this.customerInfo = item.device.customer;
-                });
+              if (item.alarm_start_datetime)
+                alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-              const infowindowContent = document.getElementById(
-                "infowindow-content-" + item.id
-              );
+              let profile_picture =
+                item.device.customer.profile_picture ||
+                "https://alarm.xtremeguard.org/no-business_profile.png";
 
-              infowindowContent.addEventListener("mouseout", (e) => {
-                // Close only if the mouse has left the entire infowindow div (and not just a child element)
-                if (!infowindowContent.contains(e.relatedTarget)) {
-                  infowindow.close();
-                }
+              let html = `
+            <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
+              <tr>
+                <td style="width:100px; vertical-align: top;">
+                  <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
+                  <br />
+                </td>
+                <td style="width:150px; vertical-align: top;">
+                  ${item.device.customer.building_name} <br/> ${item.device.customer.city}
+                  <div>Landmark: ${item.device.customer.landmark}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a target="_blank" href="https://www.google.com/maps?q=${item.device.customer.latitude},${item.device.customer.longitude}">Google Directions</a>
+                </td>
+                <td style="text-align:right">
+                  ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
+                </td>
+              </tr>
+            </table>`;
+
+              const infowindow = new google.maps.InfoWindow({
+                content: html,
+                map: this.map,
+                position: position,
               });
-            });
+              infowindow.close();
 
-            // Open Vue dialog on marker click
-            marker.addListener("click", () => {
-              this.dialog = true;
-              this.key += 1;
-              this.customerInfo = item.device.customer;
-            });
-          } catch (e) {
-            console.error(e);
+              // Store marker and infowindow references
+              this.mapInfowindowsList[customerId] = infowindow;
+              this.mapMarkersList[customerId] = marker;
+
+              // Add bounce animation if alarm is active
+              if (item.alarm_status == 1)
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+
+              // Marker event listeners
+              marker.addListener("mouseover", () => {
+                this.mapInfowindowsList.forEach((oldinfowindow) =>
+                  oldinfowindow.close()
+                );
+                infowindow.open(this.map, marker);
+              });
+
+              google.maps.event.addListener(infowindow, "domready", () => {
+                const alarmBtn = document.getElementById(
+                  `alarmInfowindow-btn-${item.id}`
+                );
+                const customerBtn = document.getElementById(
+                  `customerInfowindow-btn-${item.id}`
+                );
+
+                if (alarmBtn)
+                  alarmBtn.addEventListener("click", () =>
+                    this.viewAlarmInformation(item.alarm_start_datetime)
+                  );
+                if (customerBtn)
+                  customerBtn.addEventListener("click", () => {
+                    this.dialog = true;
+                    this.key += 1;
+                    this.customerInfo = item.device.customer;
+                  });
+
+                const infowindowContent = document.getElementById(
+                  `infowindow-content-${item.id}`
+                );
+                infowindowContent.addEventListener("mouseout", (e) => {
+                  if (!infowindowContent.contains(e.relatedTarget)) {
+                    infowindow.close();
+                  }
+                });
+              });
+
+              // Open Vue dialog on marker click
+              marker.addListener("click", () => {
+                this.dialog = true;
+                this.key += 1;
+                this.customerInfo = item.device.customer;
+              });
+            } catch (e) {
+              console.error(e);
+            }
           }
         }
       });
@@ -930,33 +1097,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.main-leftcontent {
-}
-.main-rightcontent {
-  min-width: 360px;
-  max-width: 360px;
-}
-
-.selectfilter .v-label--active {
-  padding: 0 12px !important;
-}
-
-.selectfilter .v-label {
-  font-size: 14px !important;
-}
-.selectfilter .v-select__selections {
-  font-size: 12px !important;
-}
-.selectfilter .v-input__slot {
-  min-height: 33px !important;
-  padding: 0 5px !important;
-}
-.selectfilter .v-label {
-  line-height: 15px !important;
-}
-.selectfilter .v-input__icon {
-  height: 20px !important;
-}
-</style>

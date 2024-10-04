@@ -146,6 +146,36 @@ export default {
   methods: {},
 };
 </script>
+
+<style>
+.main-leftcontent {
+}
+.main-rightcontent {
+  min-width: 360px !important;
+  max-width: 360px !important;
+}
+
+.selectfilter .v-label--active {
+  padding: 0 12px !important;
+}
+
+.selectfilter .v-label {
+  font-size: 14px !important;
+}
+.selectfilter .v-select__selections {
+  font-size: 12px !important;
+}
+.selectfilter .v-input__slot {
+  min-height: 33px !important;
+  padding: 0 5px !important;
+}
+.selectfilter .v-label {
+  line-height: 15px !important;
+}
+.selectfilter .v-input__icon {
+  height: 20px !important;
+}
+</style>
 <style scoped>
 .btn-text-size {
   font-size: 15px !important;

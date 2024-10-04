@@ -524,13 +524,13 @@ class CustomerAlarmEventsController extends Controller
         $model->orderBy("alarm_start_datetime", "DESC");
         return  $events = $model->get();
     }
-    public function getAlarmEventsMap(Request $request)
+    public function getAlarmEventsMapOperator(Request $request)
     {
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
             "device.customer.latest_alarm_event",
-
+            "device.customer.photos",
             "device.customer.buildingtype",
 
 
@@ -661,6 +661,7 @@ class CustomerAlarmEventsController extends Controller
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
+
             "notes",
             "category",
             "device.customer.buildingtype",

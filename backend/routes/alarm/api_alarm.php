@@ -40,8 +40,7 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('customers', CustomersController::class);
 Route::get('customerinfo', [CustomersController::class, "customerinfo"]);
 Route::get('customers-for-map', [CustomersController::class, "customersForMap"]);
-Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
-Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
+
 
 Route::get('alarm_customers__for_map', [CustomersController::class, "alarmCustomersForMap"]);
 
@@ -143,6 +142,8 @@ Route::get('alarm_customer_statistics', [AlarmDashboardController::class, "alarm
 Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
 Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
 
+
+
 Route::get('customer_contract_expin30days_stats', [CustomersController::class, "customerContractExpin30daysStats"]);
 Route::get('customer_devices_types_stats', [CustomersController::class, "customerDevicesStats"]);
 
@@ -169,7 +170,7 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
-Route::get('get_alarm_events_map', [CustomerAlarmEventsController::class, 'getAlarmEventsMap']);
+
 
 
 Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);
@@ -197,6 +198,10 @@ Route::get('plotting', [PlottingController::class, "index"]);
 Route::post('plotting', [PlottingController::class, "store"]);
 Route::post('reset_plotting', [PlottingController::class, "resetPlotting"]);
 Route::post('reset_plotting_all', [PlottingController::class, "resetPlottingAll"]);
+Route::get('plotting_with_customer_id', [PlottingController::class, "plottingWithCustomerId"]);
+
+
+
 
 
 
@@ -235,3 +240,10 @@ Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_page
 Route::post("alarm_forward_notification", [AlarmNotificationController::class, "sendAlarmForwardNotification"]);
 Route::get("alarm_notification_icons", [AlarmNotificationController::class, "getAlarmNotificationIcons"]);
 Route::get("get_google_icons", [AlarmNotificationController::class, "getGoogleIcons"]);
+
+
+//operator 
+Route::get('get_alarm_events_map_operator', [CustomerAlarmEventsController::class, 'getAlarmEventsMapOperator']);
+Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
+Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
+Route::get('alarm_event_operator_statistics', [AlarmDashboardController::class, "alarmEventOperatorStatistics"]);

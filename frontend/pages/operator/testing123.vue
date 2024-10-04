@@ -1,371 +1,8 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Map Customer Information</span>
-          <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialog = false" outlined>
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text style="padding: 0px">
-          <AlarmCustomerTabsView
-            v-if="customerInfo"
-            :key="key"
-            :_id="customerInfo.id"
-            :isPopup="true"
-            :isMapviewOnly="true"
-            :alarmId="eventId"
-        /></v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="dialogAlarmEventCustomerContactsTabView"
-      width="1000px"
-      style="overflow: visible"
-    >
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
-            Map Alarm {{ popupEventText }}</span
-          >
-          <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogAlarmEventCustomerContactsTabView = false"
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text style="padding: 0px; overflow: hidden">
-          <AlarmEventCustomerContactsTabView
-            :key="key"
-            :_customerID="viewCustomerId"
-            :alarmId="eventId"
-            :customer="customer"
-            :isPopup="true"
-          />
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-row>
-      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 10px">
-        <v-card elevation="10" outlined>
-          <div
-            :key="mapkeycount"
-            id="map"
-            :style="'height:' + windowHeight + 'px'"
-          ></div>
-
-          <div style="position: absolute; top: 0px; left: 140px">
-            <v-btn-toggle
-              v-model="mapStyle"
-              height="20"
-              tile
-              color="black white "
-              group
-              style="
-                background: #fff;
-                border-radius: 4px;
-                height: 24px;
-                top: 4px;
-              "
-            >
-              <v-btn
-                height="22"
-                width="60"
-                value="bw"
-                small
-                dense
-                style="margin-top: 1px"
-                @click="changeGoogleMapColor('bw')"
-                >B & W</v-btn
-              >
-              <v-btn
-                height="22"
-                width="60"
-                value="map"
-                small
-                dense
-                style="margin-top: 1px"
-                @click="changeGoogleMapColor('map')"
-                >Regular</v-btn
-              >
-              <v-btn
-                height="22"
-                value="map"
-                small
-                dense
-                style="margin-top: 1px"
-                @click="toggleFullscreen"
-              >
-                {{ fullscreen ? "Exit Fullscreen" : "Go Fullscreen" }}
-              </v-btn>
-            </v-btn-toggle>
-          </div>
-        </v-card>
-      </v-col>
-      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 10px">
-        <v-card
-          elevation="10"
-          outlined
-          :style="
-            ' height:' + windowHeight + 'px;overflow-y: auto;overflow-x: hidden'
-          "
-        >
-          <v-card-text style="padding: 10px">
-            <Topmenu />
-            <v-row style="margin-top: 10px">
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Property Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterBuildingType"
-                  :items="[{ id: null, name: 'All' }, ...buildingTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Alarm Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterAlarmType"
-                  :items="[{ id: null, name: 'All' }, ...alarmTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Event Status"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterEventType"
-                  :items="[
-                    { id: null, name: 'All Events' },
-
-                    { id: 1, name: 'Open' },
-
-                    { id: 0, name: 'Closed' },
-                    { id: 3, name: 'Forwarded' },
-                  ]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row v-if="data.length == 0" class="text-center">
-              <v-col> No data available </v-col>
-            </v-row>
-            <div v-for="(customer, index) in data">
-              <v-card
-                :key="index + 60"
-                v-if="filterEventType != 0"
-                v-for="(alarm, index) in customer.alarm_events"
-                elevation="4"
-                style="
-                  border-color: black;
-                  margin-top: 5px;
-                  border: 1px solid #a5a5a5;
-                  border-radius: 10px;
-                "
-              >
-                <v-card-text style="padding-right: 0px">
-                  {{ alarm.id }} {{ alarm.alarm_status }} {{ filterEventType }}
-                  <v-row style="min-width: 300px; height: 106px; width: 100%">
-                    <v-col
-                      style="
-                        max-width: 80px;
-                        padding: 0px;
-                        margin: auto;
-                        text-align: center;
-                      "
-                    >
-                      <img
-                        :src="customer.profile_picture"
-                        style="
-                          width: 100%;
-                          border-radius: 6px;
-                          height: 90px;
-                          vertical-align: bottom;
-                        "
-                      />
-                    </v-col>
-                    <v-col
-                      style="padding: 0px; font-size: 12px; padding-left: 10px"
-                    >
-                      <div style="height: 89px; overflow: hidden">
-                        {{
-                          customer.primary_contact
-                            ? customer.primary_contact.first_name +
-                              " " +
-                              customer.primary_contact.last_name
-                            : "---"
-                        }}
-                        <br />
-                        {{ customer.building_name || "---" }} <br />
-                        {{ customer.city }}
-                        <br />
-                        {{ customer.primary_contact?.phone1 || "---" }}
-                      </div>
-                      <div style="color: #0064ff">
-                        {{
-                          customer.buildingtype
-                            ? customer.buildingtype.name
-                            : "---"
-                        }}
-                        <v-icon
-                          style="
-                            float: right;
-                            padding-right: 17px;
-                            text-align: right;
-                          "
-                          size="20"
-                          color="#0064ff"
-                          >mdi-folder-open</v-icon
-                        >
-                      </div>
-                    </v-col>
-                    <v-col
-                      style="max-width: 90px; padding: 2px; font-size: 11px"
-                    >
-                      <div
-                        style="margin: auto; text-align: center; height: 85px"
-                      >
-                        <img
-                          :title="getCustomerColorObject(customer).text"
-                          style="width: 40px; padding-top: 20%"
-                          :src="getCustomerColorObject(customer).image + '?3=3'"
-                        />
-                      </div>
-                      <div style="color: red">
-                        {{
-                          $dateFormat.formatDateMonthYear(
-                            alarm?.alarm_start_datetime
-                          )
-                        }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-              <v-card
-                :key="index + 55"
-                v-if="filterEventType == 0 || filterEventType == null"
-                v-for="(alarm, index) in customer.all_alarm_events"
-                elevation="4"
-                style="
-                  border-color: black;
-                  margin-top: 5px;
-                  border: 1px solid #a5a5a5;
-                  border-radius: 10px;
-                "
-              >
-                <v-card-text style="padding-right: 0px">
-                  {{ alarm.id }} {{ alarm.alarm_status }}
-                  <v-row style="min-width: 300px; height: 106px; width: 100%">
-                    <v-col
-                      style="
-                        max-width: 80px;
-                        padding: 0px;
-                        margin: auto;
-                        text-align: center;
-                      "
-                    >
-                      <img
-                        :src="customer.profile_picture"
-                        style="
-                          width: 100%;
-                          border-radius: 6px;
-                          height: 90px;
-                          vertical-align: bottom;
-                        "
-                      />
-                    </v-col>
-                    <v-col
-                      style="padding: 0px; font-size: 12px; padding-left: 10px"
-                    >
-                      <div style="height: 89px; overflow: hidden">
-                        {{
-                          customer.primary_contact
-                            ? customer.primary_contact.first_name +
-                              " " +
-                              customer.primary_contact.last_name
-                            : "---"
-                        }}
-                        <br />
-                        {{ customer.building_name || "---" }} <br />
-                        {{ customer.city }}
-                        <br />
-                        {{ customer.primary_contact?.phone1 || "---" }}
-                      </div>
-                      <div style="color: #0064ff">
-                        {{
-                          customer.buildingtype
-                            ? customer.buildingtype.name
-                            : "---"
-                        }}
-                        <v-icon
-                          style="
-                            float: right;
-                            padding-right: 17px;
-                            text-align: right;
-                          "
-                          size="20"
-                          color="#0064ff"
-                          >mdi-folder-open</v-icon
-                        >
-                      </div>
-                    </v-col>
-                    <v-col
-                      style="max-width: 90px; padding: 2px; font-size: 11px"
-                    >
-                      <div
-                        style="margin: auto; text-align: center; height: 85px"
-                      >
-                        <img
-                          :title="getCustomerColorObject(customer).text"
-                          style="width: 40px; padding-top: 20%"
-                          :src="getCustomerColorObject(customer).image + '?3=3'"
-                        />
-                      </div>
-                      <div style="color: red">
-                        {{
-                          $dateFormat.formatDateMonthYear(
-                            alarm?.alarm_start_datetime
-                          )
-                        }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-btn @click="openSecondScreen" color="primary">
+      Open in Second Screen
+    </v-btn>
   </div>
 </template>
 
@@ -566,6 +203,25 @@ export default {
   },
   watch: {},
   methods: {
+    openSecondScreen() {
+      const url = "http://localhost:3000/operator/dashboard";
+      // Open the URL in the second screen using custom positioning
+      this.openInSecondScreen(url);
+    },
+    openInSecondScreen(url) {
+      // Get screen dimensions
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+
+      console.log(screenWidth);
+
+      // Open the new window and position it on the second monitor (assuming it's placed on the right)
+      window.open(
+        "http://www.google.com/",
+        "name",
+        "width=5000,height=320,toolbar=no,scrollbars=yes,resizable=yes,top=0,left=2000,right:2000"
+      );
+    },
     caps(str) {
       if (str == "" || str == null) {
         return "---";
@@ -884,29 +540,29 @@ export default {
           if (item.profile_picture) profile_picture = item.profile_picture;
 
           let html = `
-    <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
-      <tr>
-        <td style="width:100px; vertical-align: top;">
-          <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
-          <br />
+      <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
+        <tr>
+          <td style="width:100px; vertical-align: top;">
+            <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
+            <br />
 
-        </td>
-        <td style="width:150px; vertical-align: top;">
-          ${item.building_name} <br/> ${item.city}
-          <div>Landmark: ${item.landmark}</div>
-          <div style="text-align: right; width: 100%;">
+          </td>
+          <td style="width:150px; vertical-align: top;">
+            ${item.building_name} <br/> ${item.city}
+            <div>Landmark: ${item.landmark}</div>
+            <div style="text-align: right; width: 100%;">
 
-          </div>
-        </td>
-      </tr>
-      <tr>
-  <td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
-    </td>
-    <td style="text-align:right">
-   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
-      </td>
+            </div>
+          </td>
         </tr>
-    </table>`;
+        <tr>
+    <td> <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
+      </td>
+      <td style="text-align:right">
+     ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
+        </td>
+          </tr>
+      </table>`;
 
           const infowindow = new google.maps.InfoWindow({
             content: html,

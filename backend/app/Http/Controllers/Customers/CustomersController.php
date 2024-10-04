@@ -1115,7 +1115,20 @@ class CustomersController extends Controller
     }
     public function customersForMapOperator(Request $request)
     {
-        $model = Customers::with(["alarm_events", "all_alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(
+            [
+                "alarm_events",
+                "all_alarm_events",
+                "devicesOffline",
+                "devicesOnline",
+                "latest_alarm_event",
+                "device.customer.photos",
+                "devices.sensorzones",
+                "contacts",
+                "primary_contact",
+                "secondary_contact"
+            ]
+        )
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
         $model->withCount("all_alarm_events");

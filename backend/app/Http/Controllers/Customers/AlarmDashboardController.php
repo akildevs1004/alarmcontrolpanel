@@ -153,7 +153,40 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1 ELSE 0 END), 0) AS temperature,
             COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 ELSE 0 END), 0) AS water,
             COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 ELSE 0 END), 0) AS fire
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1 ELSE 0 END), 0) AS sos
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1 ELSE 0 END), 0) AS critical
+            COALESCE(SUM(CASE WHEN alarm_category = \'Offline\' THEN 1 ELSE 0 END), 0) AS offline
+
+
         ')
+            ->first();
+
+        return response()->json($statistics);
+    }
+    public function alarmEventOperatorStatistics(Request $request)
+    {
+        $statistics = DB::table('alarm_events')
+            ->where('company_id', $request['company_id'])
+            ->when($request->filled("filter_customers_list") && $request->filter_customers_list != '', function ($query) use ($request) {
+                $query->whereIn('customer_id', $request->filter_customers_list);
+            })
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+
+            ->selectRaw('
+            COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' and alarm_status=1 THEN 1 ELSE 0 END), 0) AS intruder,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS burglary,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS medical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS temperature,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Water\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS fire,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS critical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Offline\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS offline,
+            (SELECT count(*) FROM tickets WHERE is_security_read = false) AS tickets
+        ')
+
             ->first();
 
         return response()->json($statistics);

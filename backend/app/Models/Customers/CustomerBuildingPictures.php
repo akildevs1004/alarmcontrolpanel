@@ -12,6 +12,7 @@ class CustomerBuildingPictures extends Model
 
     protected $guarded = [];
     protected $appends = ['picture_raw'];
+    protected $with = ["photoPlottings"];
     public function getPictureAttribute($value)
     {
         if (!$value) {
