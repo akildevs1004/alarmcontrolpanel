@@ -337,7 +337,7 @@
                 > -->
                 <!-- <v-divider style="border: 1px solid #ddd" /> -->
                 <v-row
-                  style="width: 100%"
+                  style="width: 100%; margin-top: 20px"
                   v-if="
                     showAlarmEventNotes &&
                     selectedAlarm &&
@@ -676,8 +676,10 @@ export default {
     closeMap() {
       this.selectedAlarm = null;
       this.showMappingSection = false;
+      this.showAlarmEventNotes = false;
     },
     showMap(alarm) {
+      this.showAlarmEventNotes = false;
       this.showMappingSection = true;
       this.OperatorGoogleMapKey++;
       this.selectedAlarm = alarm;
