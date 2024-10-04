@@ -392,8 +392,8 @@
                     style="display: inline-grid !important"
                   >
                     <v-btn
-                      style="margin-top: 5px"
                       small
+                      style="margin-top: 5px"
                       dense
                       color="blue"
                       :value="contact.id"

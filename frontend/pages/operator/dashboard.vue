@@ -687,6 +687,7 @@ export default {
     closeAlarmEventNotes() {
       this.selectedAlarm = null;
       this.showAlarmEventNotes = false;
+      this.showMappingSection = false;
     },
     showNotes(alarm) {
       if (this.showAlarmEventNotes) {
@@ -697,6 +698,7 @@ export default {
         this.OperatorGoogleMapKey++;
         this.selectedAlarm = alarm;
       }
+      this.showMappingSection = false;
     },
     async getBuildingTypes() {
       const { data } = await this.$axios.get("building_types", {
