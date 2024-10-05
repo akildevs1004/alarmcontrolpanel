@@ -113,7 +113,7 @@ export default {
       this.plotLocations();
     },
     async plotLocations() {
-      if (this.latitude) {
+      if (!isNaN(this.latitude) && !isNaN(this.longitude)) {
         const position = {
           lat: parseFloat(this.latitude),
           lng: parseFloat(this.longitude),

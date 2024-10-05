@@ -51,16 +51,11 @@
       </v-card>
     </v-dialog>
     <v-card flat>
-      <v-card-text style="padding: 0px; margin-top: 25px">
+      <v-card-text style="margin-top: 25px">
         <v-row>
-          <v-col cols="2" style="padding: 0px; margin: auto">
+          <v-col style="margin: auto; max-width: 80px">
             <v-img
-              style="
-                width: 100%;
-
-                border-radius: 50%;
-                border: 1px solid #ddd;
-              "
+              style="width: 80px; border-radius: 50%; border: 1px solid #ddd"
               :src="
                 globalContactDetails?.profile_picture
                   ? globalContactDetails.profile_picture
@@ -68,10 +63,7 @@
               "
             ></v-img>
           </v-col>
-          <v-col
-            cols="5"
-            style="font-size: 12px; padding: 0px; overflow: hidden"
-          >
+          <v-col style="font-size: 12px; padding: 0px; overflow: hidden">
             <div style="font-weight: bold">
               <v-icon size="15" style="border: 1px solid #ddd"
                 >mdi-account</v-icon
@@ -157,7 +149,7 @@
               </label>
 
               <v-radio-group
-                class="radiogroup"
+                class="radiogroup radiogroup-small"
                 style="color: black; padding-top: 10px"
                 v-model="event_payload.call_status"
                 @change="updateCallStatus()"
@@ -201,7 +193,7 @@
 
               <v-radio-group
                 v-model="event_payload.response"
-                class="radiogroup"
+                class="radiogroup radiogroup-small"
               >
                 <v-radio
                   :disabled="!displayResponse"
@@ -250,10 +242,9 @@
 
               <v-radio-group
                 v-model="event_payload.event_status"
-                class="radiogroup"
+                class="radiogroup radiogroup-small"
               >
                 <v-radio
-                  @click="displayForwardForm()"
                   label="Forwaded"
                   value="Forwaded"
                   style="font-size: 10px; padding-top: 10px"
@@ -289,11 +280,12 @@
                   background: #fff;
                   padding: 0px 5px;
                 "
-                >Event Forwarded</label
-              >
-              <v-row style="padding-top: 10px">
+                >Select to Event Forward
+              </label>
+              <v-row style="margin-top: 10px; padding-bottom: 10px">
                 <v-col
                   cols="3"
+                  style="padding-bottom: 0px; padding-top: 0px"
                   v-if="
                     contact.address_type.toLowerCase() != 'primary' &&
                     contact.address_type.toLowerCase() != 'secondary' &&
@@ -302,7 +294,7 @@
                   v-for="contact in customer.contacts"
                 >
                   <v-checkbox
-                    class="radiogroup"
+                    class="radiogroup radiogroup-small"
                     style="font-size: 12px"
                     v-model="contact.forwarded"
                     :label="contact.address_type"
@@ -323,7 +315,7 @@
               "
             >
               <v-row
-                style="height: 200px; overflow-y: auto; overflow-x: hidden"
+                style="height: 160px; overflow-y: auto; overflow-x: hidden"
               >
                 <v-col cols="8" style="padding: 30px">
                   <v-row
@@ -387,15 +379,22 @@
                 >
                 <v-col cols="4">
                   <v-btn-toggle
+                    class="buttongroup-small"
                     v-model="selectContactButton"
                     vertical
                     style="display: inline-grid !important"
                   >
                     <v-btn
+                      height="20px"
+                      plain
                       small
-                      style="margin-top: 5px"
+                      style="
+                        margin-top: 5px;
+                        border: 0px;
+                        border-bottom: 1px solid #ddd;
+                      "
                       dense
-                      color="blue"
+                      color="black"
                       :value="contact.id"
                       @click="displayContactInfoById(contact.id)"
                       v-if="
@@ -404,7 +403,6 @@
                         contact.address_type.toLowerCase() != 'security'
                       "
                       v-for="contact in customer.contacts"
-                      text
                     >
                       {{ contact.address_type }}
                     </v-btn>
@@ -520,7 +518,11 @@ export default {
     selectedItem: null,
     loading: false,
     tab: "",
-    event_payload: {},
+    event_payload: {
+      event_status: null,
+      call_status: null,
+      response: null,
+    },
     error_message: "",
     errors: [],
     response: "",
@@ -674,9 +676,17 @@ export default {
       let customer = new FormData();
 
       for (const key in this.event_payload) {
-        if (this.event_payload[key] != "")
+        if (this.event_payload[key] != "" && this.event_payload[key] != null)
           customer.append(key, this.event_payload[key]);
       }
+      let filterEventForwardSelected = this.customer.contacts.filter(
+        (event) => event.forwarded == true
+      );
+
+      let selectedForwardContactIds = filterEventForwardSelected.map(
+        (event) => event.id
+      );
+
       if (this.$auth.user.security?.id)
         customer.append("security_id", this.$auth.user.security.id);
       customer.append("company_id", this.$auth.user.company_id);
@@ -684,6 +694,9 @@ export default {
       customer.append("contact_id", this.globalContactDetails.id);
       customer.append("alarm_id", this.alarmId);
       customer.append("contact_type", this.contact_type);
+      selectedForwardContactIds.forEach((element) => {
+        customer.append("selected_forward_contact_ids[]", element);
+      });
 
       if (this.customer.id) {
         this.$axios

@@ -76,24 +76,26 @@ export default {
       document.head.appendChild(script);
     },
     initMap() {
-      console.log(this.customer.latitude);
-      console.log(this.customer.longitude);
+      try {
+        console.log("Operator Google Map", this.customer.latitude);
+        console.log(this.customer.longitude);
 
-      this.map = new google.maps.Map(
-        document.getElementById("mapCustomer" + this.customer_id),
-        {
-          controlSize: 20,
-          zoom: 12,
-          center: {
-            lat: parseFloat(this.customer.latitude),
-            lng: parseFloat(this.customer.longitude),
-          },
-          styles: this.google_map_style_bandw,
-        }
-      );
-      this.geocoder = new google.maps.Geocoder();
-      this.infowindow = new google.maps.InfoWindow();
-      this.plotLocations();
+        this.map = new google.maps.Map(
+          document.getElementById("mapCustomer" + this.customer_id),
+          {
+            controlSize: 20,
+            zoom: 12,
+            center: {
+              lat: parseFloat(this.customer.latitude),
+              lng: parseFloat(this.customer.longitude),
+            },
+            styles: this.google_map_style_bandw,
+          }
+        );
+        this.geocoder = new google.maps.Geocoder();
+        this.infowindow = new google.maps.InfoWindow();
+        this.plotLocations();
+      } catch (e) {}
     },
     async plotLocations() {
       if (this.customer) {

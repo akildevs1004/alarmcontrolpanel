@@ -267,8 +267,9 @@ export default {
   methods: {
     async updateContactsData() {
       console.log("reloadContent");
-      await this.getDataFromApi();
-
+      try {
+        await this.getDataFromApi();
+      } catch (e) {}
       this.keyEmergencyy++;
     },
     gotoCustomers() {

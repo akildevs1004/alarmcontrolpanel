@@ -276,6 +276,7 @@
 
                       <v-icon
                         v-if="
+                          !showMappingSection ||
                           selectedAlarm == null ||
                           (selectedAlarm && selectedAlarm.id != alarm.id)
                         "
@@ -288,7 +289,9 @@
                       >
                       <v-icon
                         v-else-if="
-                          selectedAlarm && selectedAlarm.id == alarm.id
+                          showMappingSection &&
+                          selectedAlarm &&
+                          selectedAlarm.id == alarm.id
                         "
                         title="Show Map"
                         @click="closeMap()"
@@ -948,7 +951,12 @@ export default {
 
     setCustomerLocationOnMap(customer) {
       try {
-        if (customer.latitude && customer.longitude) {
+        if (
+          customer.latitude &&
+          customer.longitude &&
+          !isNaN(customer.latitude) &&
+          !isNaN(customer.longitude)
+        ) {
           const position = {
             lat: parseFloat(customer.latitude),
             lng: parseFloat(customer.longitude),
@@ -1012,7 +1020,9 @@ export default {
         this.data[0] &&
         this.data[0].device.utc_time_zone != "Asia/Dubai" &&
         this.data[0].device.customer.latitude != "" &&
-        this.data[0].device.customer.longitude != ""
+        this.data[0].device.customer.longitude != "" &&
+        !isNaN(this.data[0].device.customer.latitude) &&
+        !isNaN(this.data[0].device.customer.longitude)
       ) {
         const position = {
           lat: parseFloat(this.data[0].device.customer.latitude),

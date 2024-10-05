@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Exports\AlarmEventNotesExport;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
@@ -236,8 +237,32 @@ class CustomerAlarmEventsController extends Controller
             return $this->response('Alarm Details are not available', null, false);
         }
     }
+
+    // public function forwardAlarmEventNotificationByContact($alarm_id,$contactId)
+    // {
+    //     if ($email != '') {
+    //         try {
+
+
+    //             $response = $response . $this->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
+    //         } catch (\Exception $e) {
+    //             $response = $response . $email . ' - Email  Not sent ' . $e;
+    //         }
+    //     }
+
+    //     if ($whatsapp_number != '') {
+    //         try {
+
+    //             $this->sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id);
+    //         } catch (\Exception $e) {
+    //             $response = $response . $whatsapp_number . ' - Whatsapp  Not sent  ';
+    //         }
+    //     }
+    // }
     public function createEventNotes(Request $request)
     {
+
+
         $request->validate([
 
             'company_id' => 'required|integer',
@@ -286,7 +311,22 @@ class CustomerAlarmEventsController extends Controller
             $data['contact_id'] = $request->contact_id;
             $data['created_datetime'] = date("Y-m-d H:i:s");
 
-            AlarmEvents::where("id", $request->alarm_id)->update(["forwarded" => false]);
+
+            if ($request->filled("selected_forward_contact_ids")) {
+                try {
+                    if (count($request->selected_forward_contact_ids)) {
+                        AlarmEvents::where("id", $request->alarm_id)->update(["forwarded" => true]);
+                        $contacts = CustomerContacts::whereIn('id', $request->selected_forward_contact_ids)->get();
+                        (new AlarmNotificationController())->forwardAlarmEventToContactsList($request->alarm_id,  $contacts);
+                    } else {
+                        AlarmEvents::where("id", $request->alarm_id)->update(["forwarded" => false]);
+                    }
+                } catch (\Exception) {
+                }
+            } else {
+
+                AlarmEvents::where("id", $request->alarm_id)->update(["forwarded" => false]);
+            }
 
 
             if ($request->filled("notes_id")) {

@@ -154,6 +154,31 @@ export default {
   min-width: 450px !important;
   max-width: 450px !important;
 }
+
+.radiogroup-small .v-input--selection-controls__ripple {
+  height: 14px !important;
+  width: 14px !important;
+  left: -5px !important;
+  margin: 10px !important;
+  top: calc(50% - 18px) !important;
+}
+.radiogroup-small .v-icon {
+  font-size: 14px !important;
+}
+
+.buttongroup-small .v-btn.v-btn--active {
+  color: blue !important;
+}
+.buttongroup-small .v-btn__content {
+  opacity: 1 !important;
+  text-transform: capitalize !important;
+}
+.buttongroup-small .v-btn.v-btn {
+  opacity: 1 !important;
+}
+.radiogroup-small .v-input--selection-controls__input {
+  margin-right: 0px !important;
+}
 .radiogroup .v-icon {
   font-size: 15px;
 }
@@ -190,6 +215,9 @@ export default {
 }
 .selectfilter .v-label--active {
   padding: 0 12px !important;
+}
+.selectfilter .v-text-field input {
+  padding-top: 0px !important;
 }
 
 .selectfilter .v-label {

@@ -105,13 +105,10 @@ class AlarmNotificationController extends Controller
             "Tampered" => "burglary.png",
         ];
     }
-    public function sendAlarmForwardNotification(Request $request)
-    {
 
+    public function forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email = '')
+    {
         $response = '';
-        $alarm_id = $request->get('alarm_id');
-        $contacts = $request->get('contacts');
-        $external_cc_email = $request->get('external_cc_email');
         if ($alarm_id > 0) {
 
             $alarm = AlarmEvents::with(["device.customer", "device.company"])->whereId($alarm_id)->first();
@@ -119,7 +116,7 @@ class AlarmNotificationController extends Controller
             if ($alarm) {
 
                 foreach ($contacts as   $contact) {
-                    //return $contact;
+
 
                     //$contact = json_decode($contact, true);
 
@@ -158,6 +155,17 @@ class AlarmNotificationController extends Controller
         } else {
             return $this->response($response, null, false);
         }
+    }
+    public function sendAlarmForwardNotification(Request $request)
+    {
+
+        $response = '';
+        $alarm_id = $request->get('alarm_id');
+        $contacts = $request->get('contacts');
+        $external_cc_email = $request->get('external_cc_email');
+
+
+        return  $this->forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email);
     }
     public function sendMail($name, $alarm, $email, $alarm_id, $external_cc_email)
     {
