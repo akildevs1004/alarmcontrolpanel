@@ -152,10 +152,10 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1 ELSE 0 END), 0) AS medical,
             COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1 ELSE 0 END), 0) AS temperature,
             COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 ELSE 0 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 ELSE 0 END), 0) AS fire
-            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1 ELSE 0 END), 0) AS sos
-            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1 ELSE 0 END), 0) AS critical
-            COALESCE(SUM(CASE WHEN alarm_category = \'Offline\' THEN 1 ELSE 0 END), 0) AS offline
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 ELSE 0 END), 0) AS fire,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1 ELSE 0 END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1 ELSE 0 END), 0) AS critical 
+            
 
 
         ')
