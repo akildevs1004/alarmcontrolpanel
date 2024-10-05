@@ -268,51 +268,56 @@
                       }}
                     </div>
                     <div style="color: #0064ff">
-                      {{
-                        alarm.device.customer.buildingtype
-                          ? alarm.device.customer.buildingtype.name
-                          : "---"
-                      }}
-
-                      <v-icon
-                        v-if="
-                          !showMappingSection ||
-                          selectedAlarm == null ||
-                          (selectedAlarm && selectedAlarm.id != alarm.id)
-                        "
-                        title="Show Map"
-                        @click="showMap(alarm)"
-                        size="20"
-                        color="black"
-                        style="padding-bottom: 5px"
-                        >mdi-map-outline</v-icon
-                      >
-                      <v-icon
-                        v-else-if="
-                          showMappingSection &&
-                          selectedAlarm &&
-                          selectedAlarm.id == alarm.id
-                        "
-                        title="Show Map"
-                        @click="closeMap()"
-                        size="20"
-                        color="green"
-                        style="padding-bottom: 5px"
-                        >mdi-map-outline</v-icon
-                      >
-                      <v-icon
-                        style="
-                          float: right;
-                          padding-right: 17px;
-                          text-align: right;
-                        "
-                        size="20"
-                        color="#0064ff"
-                        >{{
-                          alarm.alarm_status == 1
-                            ? "mdi-folder-open"
-                            : "mdi-folder"
-                        }}</v-icon
+                      <v-row
+                        ><v-col>
+                          {{
+                            alarm.device.customer.buildingtype
+                              ? alarm.device.customer.buildingtype.name
+                              : "---"
+                          }}</v-col
+                        ><v-col>
+                          <v-icon
+                            v-if="
+                              !showMappingSection ||
+                              selectedAlarm == null ||
+                              (selectedAlarm && selectedAlarm.id != alarm.id)
+                            "
+                            title="Show Map"
+                            @click="showMap(alarm)"
+                            size="20"
+                            color="black"
+                            style="padding-bottom: 5px"
+                            >mdi-map-outline</v-icon
+                          >
+                          <v-icon
+                            v-else-if="
+                              showMappingSection &&
+                              selectedAlarm &&
+                              selectedAlarm.id == alarm.id
+                            "
+                            title="Show Map"
+                            @click="closeMap()"
+                            size="20"
+                            color="green"
+                            style="padding-bottom: 5px"
+                            >mdi-map-outline</v-icon
+                          ></v-col
+                        ><v-col
+                          ><v-icon
+                            style="
+                              float: right;
+                              padding-right: 17px;
+                              text-align: right;
+                            "
+                            size="20"
+                            color="#0064ff"
+                            >{{
+                              alarm.alarm_status == 1
+                                ? "mdi-folder-open"
+                                : "mdi-folder"
+                            }}</v-icon
+                          ></v-col
+                        ></v-row
                       >
                     </div>
                   </v-col>
