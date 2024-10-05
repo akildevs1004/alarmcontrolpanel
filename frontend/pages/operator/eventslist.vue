@@ -1,126 +1,7 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Map Customer Information</span>
-          <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialog = false" outlined>
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text style="padding: 0px">
-          <AlarmCustomerTabsView
-            v-if="customerInfo"
-            :key="key"
-            :_id="customerInfo.id"
-            :isPopup="true"
-            :isMapviewOnly="true"
-            :alarmId="eventId"
-        /></v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="dialogAlarmEventCustomerContactsTabView"
-      width="1000px"
-      style="overflow: visible"
-    >
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
-            Map Alarm {{ popupEventText }}</span
-          >
-          <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogAlarmEventCustomerContactsTabView = false"
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text style="padding: 0px; overflow: hidden">
-          <AlarmEventCustomerContactsTabView
-            :key="key"
-            :_customerID="viewCustomerId"
-            :alarmId="eventId"
-            :customer="customer"
-            :isPopup="true"
-          />
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
     <v-row>
-      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 5px">
-        <v-card elevation="10" outlined :loading="loading">
-          <div
-            :key="mapkeycount"
-            id="map"
-            :style="'height:' + windowHeight + 'px'"
-          ></div>
-
-          <div style="position: absolute; top: 50px; left: 10px">
-            <Clock></Clock>
-          </div>
-
-          <div style="position: absolute; top: 0px; left: 140px">
-            <v-btn-toggle
-              v-model="mapStyle"
-              height="20"
-              tile
-              color="black white "
-              group
-              style="
-                background: #fff;
-                border-radius: 4px;
-                height: 24px;
-                top: 4px;
-              "
-            >
-              <v-btn
-                height="22"
-                width="60"
-                value="bw"
-                small
-                dense
-                style="margin-top: 1px"
-                @click="changeGoogleMapColor('bw')"
-                >B & W</v-btn
-              >
-              <v-btn
-                height="22"
-                width="60"
-                value="map"
-                small
-                dense
-                style="margin-top: 1px"
-                @click="changeGoogleMapColor('map')"
-                >Regular</v-btn
-              >
-              <v-btn
-                height="22"
-                value="fullacreen"
-                small
-                dense
-                style="
-                  margin-top: 1px;
-                  background-color: #545353 !important;
-                  color: #fff;
-                "
-                @click="toggleFullscreen"
-              >
-                {{ fullscreen ? "Exit Fullscreen" : "Go Fullscreen" }}
-              </v-btn>
-            </v-btn-toggle>
-          </div>
-
-          <div style="position: absolute; bottom: 20px; left: 250px">
-            <MapFooterContent :colorcodes="colorcodes" />
-          </div>
-        </v-card>
-      </v-col>
-      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 6px">
+      <v-col style="padding: 0px; padding-top: 6px; max-width: 350px">
         <v-card
           :loading="loading"
           elevation="10"
@@ -192,30 +73,6 @@
               <v-col> No data available </v-col>
             </v-row>
 
-            <!--<v-card :key="selectedAlarm?.id" v-if="displayAlarmMap">
-              <v-card-text style="padding: 0px">
-                <OperatorGoogleMap
-                  :key="OperatorGoogleMapKey"
-                  style="padding: 0px"
-                  class="rounded-lg"
-                  :customer="selectedAlarm.device.customer"
-                  :customer_id="selectedAlarm.device.customer.id"
-                  :name="
-                    'OperatorGoogleMapCustomer' +
-                    selectedAlarm.device.customer.id
-                  "
-                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?3=3'"
-                />
-
-                 <SensorPhotos
-                  class="rounded-lg"
-                  :customer_id="selectedAlarm.device.customer.id"
-                  :photos="selectedAlarm.device.customer.photos"
-                  v-if="selectedAlarm.device.customer"
-                />
-              </v-card-text>
-            </v-card> -->
-
             <v-card
               v-if="alarm.device?.customer"
               :key="index + 55"
@@ -229,7 +86,7 @@
               "
             >
               <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 300px; height: 95px; width: 100%">
+                <v-row style="min-width: 300px; height: auto; width: 100%">
                   <v-col
                     style="
                       max-width: 60px;
@@ -256,16 +113,19 @@
                       line-height: 16px;
                     "
                   >
-                    <div style="height: 79px; overflow: hidden">
-                      {{
-                        alarm.device.customer.primary_contact
-                          ? alarm.device.customer.primary_contact.first_name +
-                            " " +
-                            alarm.device.customer.primary_contact.last_name
-                          : "---"
-                      }}
-                      <br />
-                      {{ alarm.device.customer.building_name || "---" }} <br />
+                    <div style="overflow: hidden">
+                      <div>
+                        {{
+                          alarm.device.customer.primary_contact
+                            ? alarm.device.customer.primary_contact.first_name +
+                              " " +
+                              alarm.device.customer.primary_contact.last_name
+                            : "---"
+                        }}
+                      </div>
+                      <div style="font-weight: bold">
+                        {{ alarm.device.customer.building_name || "---" }}
+                      </div>
                       {{ alarm.device.customer.city }}
                       <br />
                       {{
@@ -274,13 +134,14 @@
                     </div>
                     <div style="color: #0064ff">
                       <v-row
-                        ><v-col>
+                        ><v-col style="max-width: 100px">
                           {{
                             alarm.device.customer.buildingtype
                               ? alarm.device.customer.buildingtype.name
                               : "---"
                           }}</v-col
-                        ><v-col>
+                        >
+                        <!-- <v-col class="pl-0 pr-0">
                           <v-icon
                             v-if="
                               !showMappingSection ||
@@ -307,7 +168,9 @@
                             style="padding-bottom: 5px"
                             >mdi-map-outline</v-icon
                           ></v-col
-                        ><v-col
+                        > -->
+
+                        <v-col class="pl-0 pr-0"
                           ><v-icon
                             style="
                               float: right;
@@ -327,7 +190,7 @@
                     </div>
                   </v-col>
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
-                    <div style="margin: auto; text-align: center; height: 75px">
+                    <div style="margin: auto; text-align: center">
                       <img
                         @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
@@ -344,94 +207,54 @@
                     </div>
                   </v-col>
                 </v-row>
-                <!-- <v-fab-transition
-                  appear
-                  v-if="selectedAlarm && selectedAlarm.id == alarm.id"
-                > -->
-                <!-- <v-divider style="border: 1px solid #ddd" /> -->
-                <v-row
-                  style="width: 100%; margin-top: 20px"
-                  v-if="
-                    showAlarmEventNotes &&
-                    selectedAlarm &&
-                    selectedAlarm.id == alarm.id
-                  "
-                >
-                  <v-col style="padding: 0px">
-                    <v-tabs
-                      height="25"
-                      center-active
-                      right
-                      class="customerEmergencyContactTabs"
-                    >
-                      <v-tab
-                        v-if="
-                          item.address_type.toLowerCase() == 'primary' ||
-                          item.address_type.toLowerCase() == 'secondary' ||
-                          item.address_type.toLowerCase() == 'security'
-                        "
-                        v-for="(item, index) in alarm.device.customer.contacts"
-                        :key="item.id"
-                      >
-                        {{ item.address_type }}</v-tab
-                      >
-                      <v-tab-item
-                        v-if="
-                          contact.address_type.toLowerCase() == 'primary' ||
-                          contact.address_type.toLowerCase() == 'secondary' ||
-                          contact.address_type.toLowerCase() == 'security'
-                        "
-                        v-for="(contact, index) in alarm.device.customer
-                          .contacts"
-                        :key="contact.id + 50"
-                        name="index+50"
-                      >
-                        <v-card class="elevation-1">
-                          <OperatorCustomerContacts
-                            :alarmId="alarm.id"
-                            v-if="contact"
-                            :customer="alarm.device.customer"
-                            :contact_type="contact.address_type"
-                            :key="contact.address_type"
-                          />
-                        </v-card>
-                      </v-tab-item>
-                    </v-tabs>
-                  </v-col>
-                </v-row>
-                <v-row
-                  transition="slide-x-transition"
-                  v-if="
-                    showMappingSection &&
-                    selectedAlarm &&
-                    selectedAlarm.id == alarm.id
-                  "
-                >
-                  <v-col style="padding: 15px; padding-left: 0px">
-                    <OperatorGoogleMap
-                      style="width: 95%; text-align: center; margin: auto"
-                      :key="OperatorGoogleMapKey"
-                      class="rounded-lg"
-                      :customer="alarm.device.customer"
-                      :customer_id="alarm.device.customer.id"
-                      :name="'OperatorGoogleMapCustomer' + alarm.id"
-                      :mapimage="getAlarmColorObject(alarm).image + '?3=3'"
-                    />
-
-                    <OperatorSensorPhotos
-                      style="width: 95%; text-align: center; margin: auto"
-                      :key="OperatorGoogleMapKey + 100"
-                      :name="'OperatorSensorPhotos' + alarm.id"
-                      class="rounded-lg"
-                      :customer_id="alarm.device.customer.id"
-                    />
-                  </v-col>
-                </v-row>
-                <!-- </v-fab-transition> -->
               </v-card-text>
             </v-card>
           </v-card-text>
         </v-card>
+      </v-col>
+
+      <v-col style="padding: 8px; padding-top: 6px">
+        <v-row>
+          <v-col>
+            <v-card :loading="loading" elevation="3">
+              <v-card-text>
+                <EventCustomerinfo
+                  v-if="selectedAlarm"
+                  :colorcodes="colorcodes"
+                  :customer="selectedAlarm.device.customer"
+                  :alarm="selectedAlarm"
+              /></v-card-text>
+            </v-card>
+          </v-col>
+          <v-col style="max-width: 400px; height: 80%">
+            <v-card elevation="3">
+              <div v-if="selectedAlarm">
+                <!-- <OperatorGoogleMap
+                  style="width: 95%; text-align: center; margin: auto"
+                  :key="OperatorGoogleMapKey"
+                  class="rounded-lg"
+                  :customer="selectedAlarm.device.customer"
+                  :customer_id="selectedAlarm.device.customer.id"
+                  :name="'OperatorGoogleMapCustomer' + selectedAlarm.id"
+                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?3=3'"
+                />
+
+                <OperatorSensorPhotos
+                  style="width: 95%; text-align: center; margin: auto"
+                  :key="OperatorGoogleMapKey + 100"
+                  :name="'OperatorSensorPhotos' + selectedAlarm.id"
+                  class="rounded-lg"
+                  :customer_id="selectedAlarm.device.customer.id"
+                /> -->
+              </div>
+            </v-card></v-col
+          >
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card elevation="3"> </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -441,25 +264,23 @@
 import google_map_style_bandw from "../../google/google_style_blackandwhite.json";
 import google_map_style_regular from "../../google/google_style_regular.json";
 
-import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
-import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 import Topmenu from "../../components/Operator/topmenu.vue";
 import MapFooterContent from "../../components/Operator/MapFooterContent.vue";
 import Clock from "../../components/Operator/Clock.vue";
 import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
 import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
 import OperatorCustomerContacts from "../../components/Operator/OperatorCustomerContacts.vue";
+import EventCustomerinfo from "../../components/Operator/EventCustomerinfo.vue";
 export default {
   layout: "operator",
   components: {
-    AlarmCustomerTabsView,
-    AlarmEventCustomerContactsTabView,
     Topmenu,
     MapFooterContent,
     Clock,
     OperatorGoogleMap,
     OperatorSensorPhotos,
     OperatorCustomerContacts,
+    EventCustomerinfo,
   },
   // alarm_event_operator_statistics
   data: () => ({
@@ -840,6 +661,7 @@ export default {
             this.data = data.data; //data.data;
 
             this.loading = false;
+            this.selectedAlarm = this.data[0];
 
             this.mapMarkersList.forEach((marker, index) => {
               if (marker) {
@@ -850,9 +672,8 @@ export default {
               }
             });
             this.mapMarkersList = [];
-            setTimeout(() => {
-              this.plotLocations();
-            }, 1000 * 5);
+
+            this.plotLocations();
           });
       } catch (e) {}
     },
@@ -967,6 +788,7 @@ export default {
     setCustomerLocationOnMap(customer) {
       try {
         if (
+          this.map &&
           customer.latitude &&
           customer.longitude &&
           !isNaN(customer.latitude) &&
@@ -991,7 +813,7 @@ export default {
       } catch (e) {}
     },
     initMap() {
-      if (!this.map) {
+      if (!this.map && document.getElementById("map")) {
         this.map = new google.maps.Map(document.getElementById("map"), {
           // mapTypeControl: true, // Enables satellite/roadmap controls
           // mapTypeControlOptions: {
@@ -1031,6 +853,7 @@ export default {
       console.log(this.data[0].device.utc_time_zone);
 
       if (
+        this.map &&
         this.data &&
         this.data[0] &&
         this.data[0].device.utc_time_zone != "Asia/Dubai" &&
@@ -1053,12 +876,11 @@ export default {
           // Check if a marker already exists for this customer
           if (this.mapMarkersList[customerId]) {
             // Skip if marker already exists with alarm_status = 1 (high priority)
-            // if (
-            //   item.alarm_status == 1 &&
-            //   this.mapMarkersList[customerId].alarm_status != "1"
-            // )
-            this.mapMarkersList[customerId].visible = false;
-            this.mapMarkersList[customerId].setMap(null);
+            if (
+              item.alarm_status == 1 &&
+              this.mapMarkersList[customerId].alarm_status != "1"
+            )
+              this.mapMarkersList[customerId].setMap(null);
           }
 
           // Determine if we should load a marker for this customer

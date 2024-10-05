@@ -104,6 +104,9 @@
       </v-col>
 
       <v-col class="text-right">
+        <v-icon class="mr-5" color="red" @click="openWindow"
+          >mdi-overscan</v-icon
+        >
         <v-menu
           style="z-index: 9999 !important"
           bottom
@@ -243,6 +246,15 @@ export default {
     this.loadAlarmNotificationIcons();
   },
   methods: {
+    openWindow() {
+      const width = window.screen.width;
+      const height = window.screen.height;
+      window.open(
+        process.env.APP_URL + "/operator/eventslist",
+        "_blank",
+        `width=${width},height=${height},toolbar=yes, location=yes,resizable=yes,scrollbars=yes`
+      );
+    },
     resetTimer() {
       // Time in milliseconds after which the user is considered inactive
       const INACTIVITY_TIME = 1000 * 60 * 5; //30 minutes
@@ -303,6 +315,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
+          pageSource: "topmenu",
         },
         cancelToken: new this.$axios.CancelToken((cancel) => {
           this.cancelRequest = cancel; // Store the cancel function

@@ -128,7 +128,7 @@
 
           <v-text-field
             v-if="showCustomerOTP"
-            label="Customer PIN number"
+            label="Customer Secret Code"
             dense
             small
             outlined
@@ -779,7 +779,7 @@ export default {
           ) {
             this.error_messages = "";
           } else {
-            this.error_messages = "PIN number is not a valid";
+            this.error_messages = "Secret Code is not a valid";
 
             return false;
           }

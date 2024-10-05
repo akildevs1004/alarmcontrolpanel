@@ -572,7 +572,7 @@ class CustomerAlarmEventsController extends Controller
             "device.customer.latest_alarm_event",
             "device.customer.photos",
             "device.customer.buildingtype",
-
+            "zoneData"
 
         ])->where('company_id', $request->company_id)
             ->when($request->filled("filterAlarmType"), function ($q) use ($request) {

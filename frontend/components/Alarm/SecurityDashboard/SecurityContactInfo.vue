@@ -304,7 +304,7 @@
                       min="0"
                       max="10"
                       class=""
-                      label="PIN Number"
+                      label="Secret Code"
                       dense
                       outlined
                       flat

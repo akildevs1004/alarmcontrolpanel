@@ -1235,6 +1235,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
+          pageSource: "layoutsecurity",
         },
         cancelToken: new this.$axios.CancelToken((cancel) => {
           this.cancelRequest = cancel; // Store the cancel function
@@ -1359,6 +1360,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          pageSource: "layoutsecurity2",
         },
       };
       this.$axios

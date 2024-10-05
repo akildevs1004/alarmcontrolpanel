@@ -656,6 +656,7 @@ export default {
           tab: this.tab,
           alarm_status: 1,
           filterSensorname: this.tab > 0 ? this.sensorItems[this.tab] : null,
+          pageSource: "PopupAlarmEvents",
         },
       };
 

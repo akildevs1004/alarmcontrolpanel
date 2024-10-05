@@ -42,11 +42,11 @@
       </v-col> -->
 
       <v-col cols="12" dense>
-        <p>Enter any one of PIN Number (Primary or Secondary Contact)</p>
+        <p>Enter any one of Secret Code (Primary or Secondary Contact)</p>
         <v-row>
           <v-col cols="6" dense>
             <v-text-field
-              label="Primary Contact PIN number"
+              label="Primary Contact Secret Code"
               dense
               outlined
               type="number"
@@ -61,7 +61,7 @@
           </v-col>
           <v-col cols="6" dense>
             <v-text-field
-              label="Secondary Contact PIN number"
+              label="Secondary Contact Secret Code"
               dense
               outlined
               type="number"

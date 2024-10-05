@@ -154,8 +154,10 @@ export default {
   min-width: 450px !important;
   max-width: 450px !important;
 }
-
-.radiogroup-small .v-input--selection-controls__ripple {
+.radioheight .v-radio {
+  margin-bottom: -3px !important;
+}
+.events-leftcontent .radiogroup-small .v-input--selection-controls__ripple {
   height: 14px !important;
   width: 14px !important;
   left: -5px !important;
@@ -201,7 +203,7 @@ export default {
   font-size: 12px !important;
 }
 .input-small-fieldset1 fieldset {
-  height: 35px;
+  height: 33px;
 }
 .input-small-fieldset1 fieldset input {
   margin-top: -15px;

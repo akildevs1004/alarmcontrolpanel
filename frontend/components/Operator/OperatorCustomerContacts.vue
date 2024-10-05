@@ -65,7 +65,7 @@
           </v-col>
           <v-col style="font-size: 12px; padding: 0px; overflow: hidden">
             <div style="font-weight: bold">
-              <v-icon size="15" style="border: 1px solid #ddd"
+              <v-icon size="13" style="border: 0px solid #ddd"
                 >mdi-account</v-icon
               >
               {{
@@ -77,24 +77,26 @@
               }}
             </div>
             <div>
-              <v-icon style="border: 1px solid #ddd" size="15"
+              <v-icon style="border: 0px solid #ddd" size="13"
                 >mdi-phone</v-icon
               >
               {{ globalContactDetails.phone1 }}
             </div>
             <div>
-              <v-icon style="border: 1px solid #ddd" size="15"
+              <v-icon style="border: 0px solid #ddd" size="13"
                 >mdi-phone-classic</v-icon
-              >{{ globalContactDetails.phone2 }}
+              >
+              {{ globalContactDetails.phone2 }}
             </div>
             <div>
-              <v-icon style="border: 1px solid #ddd" size="15"
+              <v-icon style="border: 0px solid #ddd" size="13"
                 >mdi-cellphone-basic</v-icon
-              >{{ globalContactDetails.whatsapp }}
+              >
+              {{ globalContactDetails.whatsapp }}
             </div>
             <div>
-              <v-icon style="border: 1px solid #ddd" size="15">mdi-at</v-icon
-              >{{ globalContactDetails.email }}
+              <v-icon style="border: 0px solid #ddd" size="13">mdi-at</v-icon>
+              {{ globalContactDetails.email }}
             </div>
           </v-col>
           <v-col cols="4" style="padding-left: 0px; padding-top: 0px">
@@ -115,6 +117,7 @@
                   margin-left: 12px;
                   background: #fff;
                   padding: 0px 5px;
+                  font-size: 12px;
                 "
                 >Customer Notes</label
               >
@@ -284,6 +287,7 @@
               </label>
               <v-row style="margin-top: 10px; padding-bottom: 10px">
                 <v-col
+                  :key="'customercontacts' + index + 20"
                   cols="3"
                   style="padding-bottom: 0px; padding-top: 0px"
                   v-if="
@@ -291,7 +295,7 @@
                     contact.address_type.toLowerCase() != 'secondary' &&
                     contact.address_type.toLowerCase() != 'security'
                   "
-                  v-for="contact in customer.contacts"
+                  v-for="(contact, index) in customer.contacts"
                 >
                   <v-checkbox
                     class="radiogroup radiogroup-small"
@@ -322,7 +326,7 @@
                     v-if="filteredContactInfo"
                     :key="filteredContactInfo.id"
                   >
-                    <v-col cols="5" style="margin: auto">
+                    <!-- <v-col cols="5" style="margin: auto">
                       <v-img
                         style="
                           width: 100%;
@@ -336,13 +340,13 @@
                             : '/no-profile-image.jpg'
                         "
                       ></v-img>
-                    </v-col>
+                    </v-col> -->
                     <v-col
-                      cols="7"
+                      cols="12"
                       style="font-size: 12px; padding: 0px; overflow: hidden"
                     >
                       <div style="font-weight: bold">
-                        <v-icon size="15" style="border: 1px solid #ddd"
+                        <v-icon size="13" style="border: 0px solid #ddd"
                           >mdi-account</v-icon
                         >
                         {{
@@ -354,30 +358,33 @@
                         }}
                       </div>
                       <div>
-                        <v-icon style="border: 1px solid #ddd" size="15"
+                        <v-icon style="border: 0px solid #ddd" size="13"
                           >mdi-phone</v-icon
                         >
                         {{ filteredContactInfo.phone1 }}
                       </div>
                       <div>
-                        <v-icon style="border: 1px solid #ddd" size="15"
+                        <v-icon style="border: 0px solid #ddd" size="13"
                           >mdi-phone-classic</v-icon
-                        >{{ filteredContactInfo.phone2 }}
+                        >
+                        {{ filteredContactInfo.phone2 }}
                       </div>
                       <div>
-                        <v-icon style="border: 1px solid #ddd" size="15"
+                        <v-icon style="border: 0px solid #ddd" size="13"
                           >mdi-cellphone-basic</v-icon
-                        >{{ filteredContactInfo.whatsapp }}
+                        >
+                        {{ filteredContactInfo.whatsapp }}
                       </div>
                       <div>
-                        <v-icon style="border: 1px solid #ddd" size="15"
+                        <v-icon style="border: 0px solid #ddd" size="13"
                           >mdi-at</v-icon
-                        >{{ filteredContactInfo.email }}
+                        >
+                        {{ filteredContactInfo.email }}
                       </div>
                     </v-col>
-                  </v-row></v-col
-                >
-                <v-col cols="4">
+                  </v-row>
+                </v-col>
+                <v-col cols="4" style="text-align: right">
                   <v-btn-toggle
                     class="buttongroup-small"
                     v-model="selectContactButton"
@@ -435,7 +442,7 @@
               min="0"
               max="10"
               class="input-small-fieldset1 mt-1"
-              label="PIN Number"
+              label="Secret Code"
               dense
               outlined
               flat
