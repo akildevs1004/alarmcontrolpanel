@@ -648,7 +648,7 @@ export default {
 
     setInterval(() => {
       this.getDatafromApi();
-    }, 1000 * 60);
+    }, 1000 * 20);
   },
 
   async created() {
@@ -803,7 +803,7 @@ export default {
     async getDatafromApi(filterText = "") {
       if (this.cancelGetdatafromAPITokenSource) {
         this.cancelGetdatafromAPITokenSource.cancel(
-          "Operation canceled due to new request."
+          "request canceled due to new request."
         );
       }
       this.cancelGetdatafromAPITokenSource = this.$axios.CancelToken.source();
@@ -831,13 +831,17 @@ export default {
         this.$axios
           .get(`get_alarm_events_map_operator`, options)
           .then(({ data }) => {
+            //this.mapkeycount++;
             this.data = data.data; //data.data;
 
             this.loading = false;
 
-            this.mapMarkersList.forEach((marker) => {
+            this.mapMarkersList.forEach((marker, index) => {
               if (marker) {
+                marker.visible = false;
                 marker.setMap(null);
+                marker = null;
+                this.mapMarkersList[index] = null;
               }
             });
             this.mapMarkersList = [];

@@ -599,7 +599,10 @@ export default {
 
           this.mapMarkersList.forEach((marker) => {
             if (marker) {
+              marker.visible = false;
               marker.setMap(null);
+              marker = null;
+              this.mapMarkersList[index] = null;
             }
           });
           this.mapMarkersList = [];
