@@ -770,6 +770,8 @@ export default {
               this.event_payload = {};
               // this.$emit("closeDialog");
               this.key += 1;
+
+              this.$emit("emitreloadEventNotesStep1");
             }
           })
           .catch((e) => {

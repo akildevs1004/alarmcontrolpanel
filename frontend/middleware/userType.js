@@ -3,7 +3,7 @@ const data = async ({ $auth, redirect }) => {
     company: "/alarm/dashboard",
     customer: "/customer/dashboard",
     //security: "/security/dashboard",
-    security: "/operator/dashboard",
+    security: "/operator/eventslist",
     technician: "/technician/dashboard",
     //operator: "/technician/dashboard",
   };

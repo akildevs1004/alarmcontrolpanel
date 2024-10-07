@@ -77,8 +77,8 @@ export default {
     },
     initMap() {
       try {
-        console.log("Operator Google Map", this.customer.latitude);
-        console.log(this.customer.longitude);
+        // console.log("Operator Google Map", this.customer.latitude);
+        // console.log(this.customer.longitude);
 
         this.map = new google.maps.Map(
           document.getElementById("mapCustomer" + this.customer_id),

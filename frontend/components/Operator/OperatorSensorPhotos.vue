@@ -27,7 +27,7 @@
         ></v-divider> -->
         <v-row>
           <v-col class="text-left">
-            <h3>{{ index + 1 }}) {{ photo.photos.title }}</h3>
+            <h4>{{ index + 1 }}) {{ photo.photos.title }}</h4>
           </v-col>
           <v-col class="text-right">
             Total

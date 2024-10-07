@@ -18,19 +18,6 @@
         </v-card-title>
         <v-card-text>
           <v-row v-if="selectedItem" class="mt-2">
-            <!-- <v-col cols="6">
-              <v-text-field
-                readonly
-                class=""
-                label="Event ID"
-                dense
-                outlined
-                flat
-                :value="selectedItem.alarm_id"
-                hide-details
-              >
-              </v-text-field>
-            </v-col> -->
             <v-col cols="6">
               <v-text-field
                 readonly
@@ -160,7 +147,7 @@
     </v-dialog>
     <v-card flat>
       <v-card-text style="padding: 0px">
-        <v-row>
+        <!-- <v-row>
           <v-col cols="12" class="text-right" style="padding-top: 0px">
             <v-row>
               <v-col></v-col>
@@ -197,78 +184,9 @@
                   /></v-col>
                 </v-row>
               </v-col>
-              <!--<v-col cols="1" class="text-left pt-5 pl-0">
-                <v-menu bottom right>
-                  <template v-slot:activator="{ on, attrs }">
-                    <span v-bind="attrs" v-on="on" style="font-size: 16px">
-                      <v-icon dark-2 icon color="violet"
-                        >mdi-printer-outline</v-icon
-                      >
-                      Print
-                    </span>
-                  </template>
-                  <v-list width="100" dense>
-                    <v-list-item @click="downloadOptions(`print`)">
-                      <v-list-item-title style="cursor: pointer">
-                        <v-row>
-                          <v-col cols="5"
-                            ><img
-                              style="padding-top: 5px"
-                              src="/icons/icon_print.png"
-                              class="iconsize"
-                          /></v-col>
-                          <v-col
-                            cols="7"
-                            style="padding-left: 0px; padding-top: 19px"
-                          >
-                            Print
-                          </v-col>
-                        </v-row>
-                      </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="downloadOptions('download')">
-                      <v-list-item-title style="cursor: pointer">
-                        <v-row>
-                          <v-col cols="5"
-                            ><img
-                              style="padding-top: 5px"
-                              src="/icons/icon_pdf.png"
-                              class="iconsize"
-                          /></v-col>
-                          <v-col
-                            cols="7"
-                            style="padding-left: 0px; padding-top: 19px"
-                          >
-                            PDF
-                          </v-col>
-                        </v-row>
-                      </v-list-item-title>
-                    </v-list-item>
-
-                    <v-list-item @click="downloadOptions('excel')">
-                      <v-list-item-title style="cursor: pointer">
-                        <v-row>
-                          <v-col cols="5"
-                            ><img
-                              style="padding-top: 5px"
-                              src="/icons/icon_excel.png"
-                              class="iconsize"
-                          /></v-col>
-                          <v-col
-                            cols="7"
-                            style="padding-left: 0px; padding-top: 19px"
-                          >
-                            EXCEL
-                          </v-col>
-                        </v-row>
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu> 
-              </v-col>-->
             </v-row>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <v-col>
             <v-data-table
@@ -353,11 +271,30 @@
                   {{ item.event_status }}
                 </div>
               </template>
-              <template v-slot:item.action="{ item, index }">
+              <template v-slot:item.action="{ item }">
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list dense width="120">
+                    <v-list-item @click="displayNotes(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small>
+                          mdi mdi-information-slab-circle
+                        </v-icon>
+                        View
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </template>
+              <!-- <template v-slot:item.action="{ item, index }">
                 <v-icon @click="displayNotes(item)" color="black"
                   >mdi mdi-information-slab-circle</v-icon
                 >
-              </template>
+              </template> -->
             </v-data-table>
           </v-col>
         </v-row>
@@ -393,12 +330,13 @@ export default {
 
       { text: "Response", value: "response", sortable: false },
 
-      { text: "Notes", value: "notes", sortable: false },
+      // { text: "Notes", value: "notes", sortable: false },
       { text: "Operator ID", value: "security", sortable: false },
       { text: "Contacted", value: "customer", sortable: false },
       { text: "Phone", value: "phone", sortable: false },
-      { text: "Actions", value: "action", sortable: false },
+
       { text: "Date", value: "date", sortable: false },
+      { text: "Actions", value: "action", sortable: false },
       // { text: "Status", value: "status", sortable: false },
     ],
     items: [],

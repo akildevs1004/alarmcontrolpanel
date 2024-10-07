@@ -88,6 +88,16 @@
                   }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item @click="gotoDashboard()">
+                <v-list-item-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="black--text"
+                    >Dashboard</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item @click="logout">
                 <v-list-item-icon>
                   <v-icon>mdi-logout</v-icon>
@@ -104,7 +114,11 @@
       </v-col>
 
       <v-col class="text-right">
-        <v-icon class="mr-5" color="red" @click="openWindow"
+        <v-icon
+          v-if="displayFullScreenButton()"
+          class="mr-5"
+          color="red"
+          @click="openWindow"
           >mdi-overscan</v-icon
         >
         <v-menu
@@ -246,6 +260,12 @@ export default {
     this.loadAlarmNotificationIcons();
   },
   methods: {
+    gotoDashboard() {
+      this.$router.push("/operator/dashboard");
+    },
+    displayFullScreenButton() {
+      return this.$route.name == "operator-dashboard" ?? false;
+    },
     openWindow() {
       const width = window.screen.width;
       const height = window.screen.height;

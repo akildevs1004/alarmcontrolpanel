@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <div style="min-width: 900px; padding-bottom: 0px">
     <v-row>
-      <v-col style="padding: 0px; padding-top: 6px; max-width: 350px">
+      <v-col style="padding-top: 5px; max-width: 350px; padding-right: 0px">
         <v-card
           :loading="loading"
           elevation="10"
           outlined
-          :style="
-            ' height:' + windowHeight + 'px;overflow-y: auto;overflow-x: hidden'
-          "
+          :style="' height:99%;;overflow-y: auto;overflow-x: hidden'"
         >
-          <v-card-text style="padding: 10px">
+          <v-card-text style="padding: 5px">
             <Topmenu />
-            <v-row style="margin-top: 10px">
-              <v-col cols="4" style="padding: 4px">
+            <v-row
+              style="margin-top: 10px; padding-left: 10px; padding-right: 10px"
+            >
+              <v-col cols="4" style="padding: 2px">
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
@@ -29,7 +29,7 @@
                 >
                 </v-select>
               </v-col>
-              <v-col cols="4" style="padding: 4px">
+              <v-col cols="4" style="padding: 2px">
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
@@ -45,7 +45,7 @@
                 >
                 </v-select>
               </v-col>
-              <v-col cols="4" style="padding: 4px">
+              <v-col cols="4" style="padding: 2px">
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
@@ -74,6 +74,7 @@
             </v-row>
 
             <v-card
+              @click="selectAlarmEvent(alarm)"
               v-if="alarm.device?.customer"
               :key="index + 55"
               v-for="(alarm, index) in data"
@@ -83,6 +84,7 @@
                 margin-top: 5px;
                 border: 1px solid #a5a5a5;
                 border-radius: 10px;
+                width: 98%;
               "
             >
               <v-card-text style="padding-right: 0px">
@@ -146,7 +148,7 @@
                             v-if="
                               !showMappingSection ||
                               selectedAlarm == null ||
-                              (selectedAlarm && selectedAlarm.id != alarm.id)
+                              (selectedAlarm && selectedAlarm?.id != alarm.id)
                             "
                             title="Show Map"
                             @click="showMap(alarm)"
@@ -159,7 +161,7 @@
                             v-else-if="
                               showMappingSection &&
                               selectedAlarm &&
-                              selectedAlarm.id == alarm.id
+                              selectedAlarm?.id == alarm.id
                             "
                             title="Show Map"
                             @click="closeMap()"
@@ -208,51 +210,87 @@
                   </v-col>
                 </v-row>
               </v-card-text>
+              <img
+                v-if="selectedAlarm.id == alarm.id"
+                src="/right-arrow.png"
+                style="
+                  width: 50px;
+                  position: absolute;
+                  width: 11px;
+                  right: -13px;
+                  top: 34%;
+                  vertical-align: middle;
+                "
+              />
             </v-card>
           </v-card-text>
         </v-card>
       </v-col>
 
-      <v-col style="padding: 8px; padding-top: 6px">
+      <v-col style="padding: 8px; padding-top: 6px; padding-bottom: 0px">
         <v-row>
-          <v-col>
+          <v-col style="padding-right: 0px">
             <v-card :loading="loading" elevation="3">
-              <v-card-text>
+              <v-card-text style="height: 660px">
                 <EventCustomerinfo
+                  :key="selectedAlarm.id"
                   v-if="selectedAlarm"
                   :colorcodes="colorcodes"
-                  :customer="selectedAlarm.device.customer"
+                  :customer="selectedAlarm?.device.customer"
                   :alarm="selectedAlarm"
+                  @emitreloadEventNotes3="reloadEventNotes4()"
               /></v-card-text>
             </v-card>
           </v-col>
-          <v-col style="max-width: 400px; height: 80%">
-            <v-card elevation="3">
-              <div v-if="selectedAlarm">
-                <!-- <OperatorGoogleMap
-                  style="width: 95%; text-align: center; margin: auto"
-                  :key="OperatorGoogleMapKey"
-                  class="rounded-lg"
-                  :customer="selectedAlarm.device.customer"
-                  :customer_id="selectedAlarm.device.customer.id"
-                  :name="'OperatorGoogleMapCustomer' + selectedAlarm.id"
-                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?3=3'"
-                />
-
+          <v-col style="max-width: 400px; height: 80%; padding-left: 8px">
+            <v-card elevation="4">
+              <div
+                v-if="selectedAlarm"
+                style="height: 660px; overflow-x: hidden; overflow-y: auto"
+              >
+                <v-card elevation="1"
+                  ><v-card-text>
+                    <OperatorGoogleMap
+                      style="width: 100%; text-align: center; margin: auto"
+                      :key="selectedAlarm.id"
+                      class="rounded-lg"
+                      :customer="selectedAlarm?.device.customer"
+                      :customer_id="selectedAlarm?.device.customer.id"
+                      :name="'OperatorGoogleMapCustomer' + selectedAlarm?.id"
+                      :mapimage="
+                        getAlarmColorObject(selectedAlarm).image + '?3=3'
+                      "
+                    /> </v-card-text
+                ></v-card>
                 <OperatorSensorPhotos
-                  style="width: 95%; text-align: center; margin: auto"
-                  :key="OperatorGoogleMapKey + 100"
-                  :name="'OperatorSensorPhotos' + selectedAlarm.id"
+                  style="
+                    width: 95%;
+                    text-align: center;
+                    margin: auto;
+                    font-size: 12px;
+                  "
+                  :key="selectedAlarm.id"
+                  :name="'OperatorSensorPhotos' + selectedAlarm?.id"
                   class="rounded-lg"
-                  :customer_id="selectedAlarm.device.customer.id"
-                /> -->
-              </div>
-            </v-card></v-col
-          >
+                  :customer_id="selectedAlarm?.device.customer.id"
+                />
+              </div> </v-card
+          ></v-col>
         </v-row>
-        <v-row>
+        <v-row style="margin-top: 0px">
           <v-col>
-            <v-card elevation="3"> </v-card>
+            <v-card
+              elevation="4"
+              style="height: 200px; overflow-x: hidden; overflow-y: auto"
+            >
+              <EventAlarmNotes
+                :name="selectedAlarm.id"
+                :alarmId="selectedAlarm?.id"
+                v-if="selectedAlarm?.device?.customer"
+                :customer="selectedAlarm?.device?.customer"
+                :key="keyLogs"
+              />
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -271,6 +309,8 @@ import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
 import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
 import OperatorCustomerContacts from "../../components/Operator/OperatorCustomerContacts.vue";
 import EventCustomerinfo from "../../components/Operator/EventCustomerinfo.vue";
+import EventAlarmNotes from "../../components/Operator/EventAlarmNotes.vue";
+
 export default {
   layout: "operator",
   components: {
@@ -281,9 +321,11 @@ export default {
     OperatorSensorPhotos,
     OperatorCustomerContacts,
     EventCustomerinfo,
+    EventAlarmNotes,
   },
   // alarm_event_operator_statistics
   data: () => ({
+    keyLogs: 1,
     showMappingSection: false,
     showAlarmEventNotes: false,
     displayAlarmMap: [],
@@ -459,14 +501,14 @@ export default {
   async mounted() {
     setTimeout(() => {
       this.onResize();
-    }, 1000 * 5);
+    }, 1000 * 20);
 
     if (window) window.addEventListener("resize", this.onResize);
 
-    // if (window) {
-    //   this.windowHeight = window.innerHeight - 20;
-    //   this.windowWidth = window.innerWidth;
-    // }
+    if (window) {
+      this.windowHeight = window.innerHeight - 20;
+      // this.windowWidth = window.innerWidth;
+    }
     // setTimeout(() => {
     //   this.getDatafromApi("alarm");
     // }, 1000 * 2);
@@ -497,6 +539,12 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    reloadEventNotes4() {
+      this.keyLogs++;
+      setTimeout(() => {
+        this.onResize();
+      }, 1000 * 5);
     },
     async getAlarmTypes() {
       const { data } = await this.$axios.get("alarm_types", {
@@ -545,8 +593,9 @@ export default {
     },
     onResize() {
       if (window) {
-        this.windowWidth = window.innerWidth;
+        //this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight - 20;
+        console.log(this.windowHeight);
       }
     },
     toggleFullscreen() {
@@ -603,6 +652,12 @@ export default {
       this.eventId = alarm.id;
       this.customer = alarm.device.customer;
       this.dialogAlarmEventCustomerContactsTabView = true;
+    },
+    selectAlarmEvent(alarm) {
+      this.loading = true;
+      this.selectedAlarm = alarm;
+      this.keyLogs++;
+      this.loading = false;
     },
     closeCustomerDialog() {
       this.dialogViewCustomer = false;
