@@ -1,12 +1,19 @@
 <template>
   <div style="min-width: 900px; padding-bottom: 0px">
     <v-row>
-      <v-col style="padding-top: 5px; max-width: 350px; padding-right: 0px">
+      <v-col
+        style="
+          padding-top: 5px;
+          max-width: 350px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+        "
+      >
         <v-card
           :loading="loading"
           elevation="10"
           outlined
-          :style="' height:99%;;overflow-y: auto;overflow-x: hidden'"
+          :style="' height:100%;;overflow-y: auto;overflow-x: hidden'"
         >
           <v-card-text style="padding: 5px">
             <Topmenu />
@@ -281,7 +288,11 @@
           <v-col>
             <v-card
               elevation="4"
-              style="height: 200px; overflow-x: hidden; overflow-y: auto"
+              :style="
+                'height:' +
+                (windowHeight - 690) +
+                'px; overflow-x: hidden; overflow-y: auto'
+              "
             >
               <EventAlarmNotes
                 :name="selectedAlarm.id"
@@ -506,7 +517,7 @@ export default {
     if (window) window.addEventListener("resize", this.onResize);
 
     if (window) {
-      this.windowHeight = window.innerHeight - 20;
+      this.windowHeight = window.innerHeight;
       // this.windowWidth = window.innerWidth;
     }
     // setTimeout(() => {
@@ -514,9 +525,9 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
 
-    setInterval(() => {
-      this.getDatafromApi();
-    }, 1000 * 30);
+    // setInterval(() => {
+    //   this.getDatafromApi();
+    // }, 1000 * 30);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -594,7 +605,7 @@ export default {
     onResize() {
       if (window) {
         //this.windowWidth = window.innerWidth;
-        this.windowHeight = window.innerHeight - 20;
+        this.windowHeight = window.innerHeight;
         console.log(this.windowHeight);
       }
     },

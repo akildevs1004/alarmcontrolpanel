@@ -75,11 +75,14 @@
                 :src="getAlarmColorObject(alarm).image + '?3=3'"
               />
               <div style="color: blue">
-                {{ alarm.zone_data?.location ?? "---" }}
+                {{ alarm.zone_data?.location ?? "---" }},{{
+                  alarm.zone_data?.sensor_type ?? "---"
+                }}
               </div>
               <div style="color: red">
-                {{ alarm.zone_data?.sensor_type ?? "---" }} ,
-                {{ alarm.zone ?? "---" }},{{ alarm.area ?? "---" }}
+                {{ alarm.zone ?? "---" }},{{ alarm.area ?? "---" }},{{
+                  alarm.zone_data?.sensor_name ?? "---"
+                }}
               </div>
             </v-col>
 

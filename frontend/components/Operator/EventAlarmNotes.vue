@@ -190,11 +190,6 @@
         <v-row>
           <v-col>
             <v-data-table
-              :style="
-                contact_id
-                  ? 'height: 300px; overflow: auto'
-                  : 'height: 600px; overflow: auto'
-              "
               :headers="headers"
               :items="items"
               :server-items-length="totalRowsCount"
