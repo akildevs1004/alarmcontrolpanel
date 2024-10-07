@@ -655,7 +655,7 @@ export default {
     // await this.getMapKey();
 
     setInterval(() => {
-      // this.getDatafromApi();
+      this.getDatafromApi();
       this.getCustomersDatafromApi();
     }, 1000 * 10);
 
