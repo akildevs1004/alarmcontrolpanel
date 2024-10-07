@@ -230,7 +230,7 @@ export default {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
 
-        if (this.$route.name === "alarm-dashboard" && !this.wait5Minutes) {
+        if (!this.wait5Minutes) {
           const notificationContent = this.notificationAlarmDevicesContent;
 
           if (notificationContent && notificationContent.length > 0) {
@@ -315,6 +315,8 @@ export default {
       }
     },
     loadHeaderNotificationMenu() {
+      console.log("loadHeaderNotificationMenu");
+
       if (this.isBackendRequestOpen) {
         // Cancel the previous request if it's still pending
         if (this.cancelRequest) {
