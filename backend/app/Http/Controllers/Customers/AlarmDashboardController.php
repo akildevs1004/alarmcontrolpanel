@@ -183,7 +183,7 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Fire\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS fire,
             COALESCE(SUM(CASE WHEN alarm_type = \'SOS\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS sos,
             COALESCE(SUM(CASE WHEN alarm_category = \'1\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS critical,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Offline\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS offline,
+             (SELECT count(*) FROM devices where status_id=2) AS offline,
             (SELECT count(*) FROM tickets WHERE is_security_read = false) AS tickets
         ')
 
