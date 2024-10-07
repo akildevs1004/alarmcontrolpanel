@@ -128,16 +128,18 @@ export default {
   mounted() {
     setInterval(() => {
       this.getOperatorStatistics();
-    }, 1000 * 10);
+    }, 1000 * 30);
   },
   created() {
     this.getOperatorStatistics();
   },
   methods: {
     getOperatorStatistics() {
+      console.log(this.cancelgetOperatorStatisticsTokenSource);
+
       if (this.cancelgetOperatorStatisticsTokenSource) {
         this.cancelgetOperatorStatisticsTokenSource.cancel(
-          "Operation canceled due to new request."
+          "Operation cancelgetOperatorStatisticsTokenSource canceled due to new request."
         );
       }
       this.cancelgetOperatorStatisticsTokenSource =

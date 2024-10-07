@@ -14,7 +14,7 @@ class AlarmEvents extends Model
     use HasFactory;
     protected $guarded = [];
     protected $appends = ["alarm_forwarded",];
-    protected $with = ["category",];
+    protected $with = ["category", "device"];
 
 
     public function customer()

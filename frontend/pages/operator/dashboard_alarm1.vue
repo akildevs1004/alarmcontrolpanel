@@ -116,7 +116,7 @@
           </div>
 
           <div style="position: absolute; bottom: 20px; left: 250px">
-            <MapFooterContent v-if="loadStatistics" :colorcodes="colorcodes" />
+            <MapFooterContent :colorcodes="colorcodes" />
           </div>
         </v-card>
       </v-col>
@@ -415,9 +415,7 @@
                       :customer="alarm.device.customer"
                       :customer_id="alarm.device.customer.id"
                       :name="'OperatorGoogleMapCustomer' + alarm.id"
-                      :mapimage="
-                        getAlarmColorObject(alarm, customer).image + '?3=3'
-                      "
+                      :mapimage="getAlarmColorObject(alarm).image + '?3=3'"
                     />
 
                     <OperatorSensorPhotos
@@ -465,7 +463,6 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
-    loadStatistics: false,
     showMappingSection: false,
     showAlarmEventNotes: false,
     displayAlarmMap: [],
@@ -601,7 +598,7 @@ export default {
       },
     ],
     ids: [],
-    customersData: [],
+
     data: [],
     devices: [],
     total: 0,
@@ -656,7 +653,6 @@ export default {
 
     setInterval(() => {
       this.getDatafromApi();
-      this.getCustomersDatafromApi();
     }, 1000 * 30);
 
     if (this.$auth.user.branch_id) {
@@ -665,14 +661,9 @@ export default {
       return;
     }
     await this.getMapKey();
-
-    await this.getCustomersDatafromApi();
     await this.getDatafromApi();
-    await this.getBuildingTypes();
-    await this.getAlarmTypes();
-    setTimeout(() => {
-      this.loadStatistics = true;
-    }, 1000 * 5);
+    this.getBuildingTypes();
+    this.getAlarmTypes();
   },
 
   async created() {},
@@ -848,59 +839,8 @@ export default {
             //this.mapkeycount++;
             this.data = data.data; //data.data;
 
-            // this.loading = false;
+            this.loading = false;
 
-            // this.mapMarkersList.forEach((marker, index) => {
-            //   if (marker) {
-            //     marker.visible = false;
-            //     marker.setMap(null);
-            //     marker = null;
-            //     this.mapMarkersList[index] = null;
-            //   }
-            // });
-            // this.mapMarkersList = [];
-            // setTimeout(() => {
-            //   this.plotLocations();
-            // }, 1000 * 5);
-          });
-      } catch (e) {}
-    },
-    async getCustomersDatafromApi(filterText = "") {
-      if (this.cancelgetCustomersDatafromApiTokenSource) {
-        this.cancelgetCustomersDatafromApiTokenSource.cancel(
-          "request canceled due to new request."
-        );
-      }
-      this.cancelgetCustomersDatafromApiTokenSource =
-        this.$axios.CancelToken.source();
-      this.filterText = filterText;
-
-      this.loading = true;
-
-      let options = {
-        params: {
-          company_id: this.$auth.user.company_id,
-          // customer_id: this.customer_id,
-          // // date_from: this.date_from,
-          // // date_to: this.date_to,
-          // common_search: this.commonSearch,
-          // //filter_text: filterText == "" ? "alarm" : filterText,
-          // filterBuildingType: this.filterBuildingType,
-          // filterAlarmStatus: this.filterAlarmStatus,
-
-          // filterAlarmType: this.filterAlarmType,
-        },
-        cancelToken: this.cancelgetCustomersDatafromApiTokenSource.token,
-      };
-
-      try {
-        this.$axios.get(`customers-for-map`, options).then(({ data }) => {
-          //this.mapkeycount++;
-          this.customersData = data; //data.data;
-
-          this.loading = false;
-
-          setTimeout(() => {
             this.mapMarkersList.forEach((marker, index) => {
               if (marker) {
                 marker.visible = false;
@@ -909,11 +849,14 @@ export default {
                 this.mapMarkersList[index] = null;
               }
             });
-            this.plotLocations();
-          }, 1000 * 5);
-        });
+            this.mapMarkersList = [];
+            setTimeout(() => {
+              this.plotLocations();
+            }, 1000 * 5);
+          });
       } catch (e) {}
     },
+
     // async getGoogleicons() {
     //   let config = {
     //     params: {
@@ -930,35 +873,32 @@ export default {
       if (process) return value.image;
       else return false;
     },
-    getAlarmColorObject(alarm, customer = null) {
-      if (alarm) {
-        if (alarm.alarm_status == 1) {
-          return this.colorcodes.alarm;
-        }
-      }
-      // else if (alarm.alarm_status == 0) {
-      //   return this.colorcodes.closed;
-      // }
-      //if (
-      //   alarm.customer &&
-      //   this.findanyArmedDevice(alarm.customer.devices)
-      // ) {
-      //   return this.colorcodes.armed;
-      // }
-      else if (customer) {
-        if (this.findAnyDeviceisOffline(customer && customer.devices) > 0) {
-          return this.colorcodes.offline;
-        } else if (customer && this.findanyArmedDevice(customer.devices)) {
-          return this.colorcodes.armed;
-        } else if (this.findanyDisamrDevice(customer && customer.devices) > 0) {
-          return this.colorcodes.disarm;
-        }
-      }
+    getAlarmColorObject(alarm) {
       // console.log(
       //   "findAnyDeviceisOffline",
       //   this.findAnyDeviceisOffline(item.devices)
       // );
       // console.log(alarm.alarm_status);
+      if (alarm.alarm_status == 1) {
+        return this.colorcodes.alarm;
+      } else if (alarm.alarm_status == 0) {
+        return this.colorcodes.closed;
+      } else if (
+        alarm.customer &&
+        this.findanyArmedDevice(alarm.customer.devices)
+      ) {
+        return this.colorcodes.armed;
+      }
+      if (
+        this.findAnyDeviceisOffline(alarm.customer && alarm.customer.devices) >
+        0
+      ) {
+        return this.colorcodes.offline;
+      } else if (
+        this.findanyDisamrDevice(alarm.customer && alarm.customer.devices)
+      ) {
+        return this.colorcodes.disarm;
+      }
 
       return this.colorcodes.offline;
     },
@@ -1087,33 +1027,28 @@ export default {
     },
     plotLocations() {
       //set default one customer
-      // console.log(this.customersData);
-      // console.log(
-      //   this.customersData[0].latest_alarm_event.device.utc_time_zone
-      // );
 
-      // if (
-      //   this.customersData &&
-      //   this.customersData[0] &&
-      //   this.customersData[0].devices &&
-      //   this.customersData[0].devices?.length > 0 &&
-      //   this.customersData[0].devices[0]?.utc_time_zone != "Asia/Dubai" &&
-      //   this.customersData[0].latitude != "" &&
-      //   this.customersData[0].longitude != "" &&
-      //   !isNaN(this.customersData[0].latitude) &&
-      //   !isNaN(this.customersData[0].longitude)
-      // ) {
-      //   const position = {
-      //     lat: parseFloat(this.customersData[0].latitude),
-      //     lng: parseFloat(this.customersData[0].longitude),
-      //   };
-      //   this.map.panTo(position);
-      // }
-      this.mapMarkersList = [];
-      let mapMarkersListUpdated = [];
-      this.customersData.forEach((item) => {
-        if (item) {
-          const customerId = item.id;
+      console.log(this.data[0].device.utc_time_zone);
+
+      if (
+        this.data &&
+        this.data[0] &&
+        this.data[0].device.utc_time_zone != "Asia/Dubai" &&
+        this.data[0].device.customer.latitude != "" &&
+        this.data[0].device.customer.longitude != "" &&
+        !isNaN(this.data[0].device.customer.latitude) &&
+        !isNaN(this.data[0].device.customer.longitude)
+      ) {
+        const position = {
+          lat: parseFloat(this.data[0].device.customer.latitude),
+          lng: parseFloat(this.data[0].device.customer.longitude),
+        };
+        this.map.panTo(position);
+      }
+
+      this.data.forEach((item) => {
+        if (item.device?.customer) {
+          const customerId = item.device.customer.id;
 
           // Check if a marker already exists for this customer
           if (this.mapMarkersList[customerId]) {
@@ -1127,24 +1062,21 @@ export default {
           }
 
           // Determine if we should load a marker for this customer
-          let loadMarker = true;
-          //item.alarm_status == "1" || !this.mapMarkersList[customerId];
+          let loadMarker =
+            item.alarm_status == "1" || !this.mapMarkersList[customerId];
 
           if (loadMarker) {
             try {
               const position = {
-                lat: parseFloat(item.latitude),
-                lng: parseFloat(item.longitude),
+                lat: parseFloat(item.device.customer.latitude),
+                lng: parseFloat(item.device.customer.longitude),
               };
 
               // Determine icon based on alarm or other conditions
               let iconURL =
-                process.env.BACKEND_URL2 +
-                "/google_map_icons/google_offline.png";
-              const colorObject = this.getAlarmColorObject(
-                item.latest_alarm_event,
-                item
-              );
+                process.env.BACKEND_APP_URL +
+                "/google_map_icons/google_online.png";
+              const colorObject = this.getAlarmColorObject(item);
               if (colorObject) iconURL = colorObject.image;
 
               const icon = {
@@ -1157,20 +1089,20 @@ export default {
               const marker = new google.maps.Marker({
                 position,
                 map: this.map,
-                title: item.name,
+                title: item.device.customer.name,
                 icon: icon,
-                alarm_status: item.latest_alarm_event?.alarm_status,
+                alarm_status: item.alarm_status,
               });
-              let alarmId = item.latest_alarm_event?.id;
+
               // Create content for the infowindow
               let alarmHtmlLink = "";
               let customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-              if (item.latest_alarm_event?.alarm_start_datetime)
+              if (item.alarm_start_datetime)
                 alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
               let profile_picture =
-                item.profile_picture ||
+                item.device.customer.profile_picture ||
                 "https://alarm.xtremeguard.org/no-business_profile.png";
 
               let html = `
@@ -1181,13 +1113,13 @@ export default {
                   <br />
                 </td>
                 <td style="width:150px; vertical-align: top;">
-                  ${item.building_name} <br/> ${item.city}
-                  <div>Landmark: ${item.landmark}</div>
+                  ${item.device.customer.building_name} <br/> ${item.device.customer.city}
+                  <div>Landmark: ${item.device.customer.landmark}</div>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
+                  <a target="_blank" href="https://www.google.com/maps?q=${item.device.customer.latitude},${item.device.customer.longitude}">Google Directions</a>
                 </td>
                 <td style="text-align:right">
                   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
@@ -1207,7 +1139,7 @@ export default {
               this.mapMarkersList[customerId] = marker;
 
               // Add bounce animation if alarm is active
-              if (item.latest_alarm_event?.alarm_status == 1)
+              if (item.alarm_status == 1)
                 marker.setAnimation(google.maps.Animation.BOUNCE);
 
               // Marker event listeners
@@ -1219,26 +1151,22 @@ export default {
               });
 
               google.maps.event.addListener(infowindow, "domready", () => {
-                if (item.latest_alarm_event) {
-                  const alarmBtn = document.getElementById(
-                    `alarmInfowindow-btn-${item.id}`
-                  );
-                  if (alarmBtn)
-                    alarmBtn.addEventListener("click", () =>
-                      this.viewAlarmInformation(
-                        item.latest_alarm_event.alarm_start_datetime
-                      )
-                    );
-                }
+                const alarmBtn = document.getElementById(
+                  `alarmInfowindow-btn-${item.id}`
+                );
                 const customerBtn = document.getElementById(
                   `customerInfowindow-btn-${item.id}`
                 );
 
+                if (alarmBtn)
+                  alarmBtn.addEventListener("click", () =>
+                    this.viewAlarmInformation(item.alarm_start_datetime)
+                  );
                 if (customerBtn)
                   customerBtn.addEventListener("click", () => {
                     this.dialog = true;
                     this.key += 1;
-                    this.customerInfo = item;
+                    this.customerInfo = item.device.customer;
                   });
 
                 const infowindowContent = document.getElementById(
@@ -1255,7 +1183,7 @@ export default {
               marker.addListener("click", () => {
                 this.dialog = true;
                 this.key += 1;
-                this.customerInfo = item;
+                this.customerInfo = item.device.customer;
               });
             } catch (e) {
               console.error(e);
