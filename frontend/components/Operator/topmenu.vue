@@ -240,7 +240,8 @@ export default {
             if (criticalList.length > 0) {
               if (!this.dialogAlarmPopupNotificationStatus) {
                 this.popupKey += 1;
-                this.dialogAlarmPopupNotificationStatus = true;
+                if (this.$route.name !== "operator-eventslist")
+                  this.dialogAlarmPopupNotificationStatus = true;
               }
             } else {
               //this.dialogAlarmPopupNotificationStatus = false;

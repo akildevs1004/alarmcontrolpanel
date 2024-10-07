@@ -655,8 +655,8 @@ export default {
     // await this.getMapKey();
 
     setInterval(() => {
-      this.getDatafromApi();
       this.getCustomersDatafromApi();
+      this.getDatafromApi();
     }, 1000 * 10);
 
     if (this.$auth.user.branch_id) {
