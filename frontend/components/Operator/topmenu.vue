@@ -317,21 +317,21 @@ export default {
     loadHeaderNotificationMenu() {
       console.log("loadHeaderNotificationMenu");
 
-      if (this.isBackendRequestOpen) {
-        // Cancel the previous request if it's still pending
-        if (this.cancelRequest) {
-          this.cancelRequest(); // This triggers the cancellation
-        }
-      }
+      // if (this.isBackendRequestOpen) {
+      //   // Cancel the previous request if it's still pending
+      //   if (this.cancelRequest) {
+      //     this.cancelRequest(); // This triggers the cancellation
+      //   }
+      // }
 
-      this.isBackendRequestOpen = true;
-      this.key = this.key + 1;
+      // this.isBackendRequestOpen = true;
+      // this.key = this.key + 1;
 
-      let company_id = this.$auth.user?.company?.id || 0;
-      if (company_id == 0) {
-        this.isBackendRequestOpen = false;
-        return false;
-      }
+      // let company_id = this.$auth.user?.company?.id || 0;
+      // if (company_id == 0) {
+      //   this.isBackendRequestOpen = false;
+      //   return false;
+      // }
 
       let options = {
         params: {
