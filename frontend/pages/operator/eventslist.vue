@@ -2,6 +2,7 @@
   <div style="min-width: 900px; padding-bottom: 0px">
     <v-row>
       <v-col
+        class="google-map-right-hand-content"
         style="
           padding-top: 5px;
           max-width: 350px;
@@ -234,9 +235,15 @@
         </v-card>
       </v-col>
 
-      <v-col style="padding: 8px; padding-top: 6px; padding-bottom: 0px">
+      <v-col
+        class="google-map-right-hand-content"
+        style="padding: 8px; padding-top: 6px; padding-bottom: 0px"
+      >
         <v-row>
-          <v-col style="padding-right: 0px">
+          <v-col
+            style="padding-right: 0px"
+            class="google-map-right-hand-content"
+          >
             <v-card :loading="loading" elevation="3">
               <v-card-text style="height: 660px">
                 <EventCustomerinfo
@@ -249,7 +256,15 @@
               /></v-card-text>
             </v-card>
           </v-col>
-          <v-col style="max-width: 400px; height: 80%; padding-left: 8px">
+          <v-col
+            class="google-map-right-hand-content"
+            style="
+              min-width: auto;
+              max-width: 400px;
+              height: 80%;
+              padding-left: 8px;
+            "
+          >
             <v-card elevation="4">
               <div
                 v-if="selectedAlarm"

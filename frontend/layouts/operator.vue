@@ -148,6 +148,13 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1500px) {
+  .google-map-right-hand-content {
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
 .main-leftcontent {
 }
 .main-rightcontent {
