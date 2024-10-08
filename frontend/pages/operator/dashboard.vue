@@ -657,7 +657,7 @@ export default {
     setInterval(async () => {
       await this.getDatafromApi();
 
-      //  await this.getCustomersDatafromApi();
+      await this.getCustomersDatafromApi();
     }, 1000 * 15);
 
     if (this.$auth.user.branch_id) {
