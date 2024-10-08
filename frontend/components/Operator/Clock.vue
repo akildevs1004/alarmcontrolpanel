@@ -1,7 +1,7 @@
 <template>
   <div v-if="currentTime" style="line-height: 20px; text-align: center">
-    <div style="font-size: 22px; color: #898989">{{ currentTime }}</div>
-    <div style="font-size: 10px; color: #898989">
+    <div style="font-size: 22px; color: #fff">{{ currentTime }}</div>
+    <div style="font-size: 10px; color: #fff">
       {{ currentDate }}
     </div>
 

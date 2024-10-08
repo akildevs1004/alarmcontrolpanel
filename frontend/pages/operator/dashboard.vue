@@ -948,11 +948,11 @@ export default {
       //   return this.colorcodes.armed;
       // }
       else if (customer) {
-        if (this.findAnyDeviceisOffline(customer && customer.devices) > 0) {
+        if (this.findAnyDeviceisOffline(customer.devices) > 0) {
           return this.colorcodes.offline;
-        } else if (customer && this.findanyArmedDevice(customer.devices)) {
+        } else if (this.findanyArmedDevice(customer.devices)) {
           return this.colorcodes.armed;
-        } else if (this.findanyDisamrDevice(customer && customer.devices) > 0) {
+        } else if (this.findanyDisamrDevice(customer.devices) > 0) {
           return this.colorcodes.disarm;
         }
       }
@@ -993,13 +993,13 @@ export default {
     findallDeviceisOnline(devices) {
       if (!devices) return 0;
       let onlineArray = devices.filter((device) => device.status_id == 1);
-
+      return onlineArray ? onlineArray.length : 0;
       // console.log("offlineArray", offlineArray.length);
-      return onlineArray
-        ? onlineArray.length == devices.length
-          ? true
-          : false
-        : 0;
+      // return onlineArray
+      //   ? onlineArray.length == devices.length
+      //     ? true
+      //     : false
+      //   : 0;
     },
     findanyArmedDevice(devices) {
       if (!devices) return 0;
