@@ -244,7 +244,7 @@ export default {
             let criticalList = notificationContent.filter(
               (notification) => notification.alarm_category == 1
             );
-            if (criticalList.length > 0) {
+            if (criticalList.length > 0 || 1 == 1) {
               if (!this.dialogAlarmPopupNotificationStatus) {
                 this.popupKey += 1;
                 if (this.$route.name !== "operator-eventslist")
