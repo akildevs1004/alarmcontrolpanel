@@ -1017,7 +1017,7 @@ export default {
     findCustomerInAlarmList(customerId) {
       let CustomerLatestAlarmEvent = [];
       CustomerLatestAlarmEvent = this.data.find(
-        (event) => event.customer_id == customerId
+        (event) => event.customer_id == customerId && event.alarm_status == 1
       );
 
       return CustomerLatestAlarmEvent;
