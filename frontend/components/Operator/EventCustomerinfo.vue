@@ -72,7 +72,7 @@
               <img
                 :title="alarm.alarm_type"
                 style="width: 30px"
-                :src="getAlarmColorObject(alarm).image + '?3=3'"
+                :src="getAlarmColorObject(alarm, customer).image + '?3=3'"
               />
               <div style="color: blue">
                 {{ alarm.alarm_type ?? "---" }},{{
@@ -221,27 +221,37 @@ export default {
     emitreloadEventNotes2() {
       this.$emit("emitreloadEventNotes3");
     },
-    getAlarmColorObject(alarm) {
-      if (alarm.alarm_status == 1) {
-        return this.colorcodes.alarm;
-      } else if (alarm.alarm_status == 0) {
-        return this.colorcodes.closed;
-      } else if (
-        alarm.customer &&
-        this.findanyArmedDevice(alarm.customer.devices)
-      ) {
-        return this.colorcodes.armed;
+    getAlarmColorObject(alarm, customer = null) {
+      if (alarm) {
+        if (this.colorcodes[alarm.alarm_type.toLowerCase()])
+          return this.colorcodes[alarm.alarm_type.toLowerCase()];
+        if (alarm.alarm_status == 1) {
+          return this.colorcodes.alarm;
+        }
       }
-      if (
-        this.findAnyDeviceisOffline(alarm.customer && alarm.customer.devices) >
-        0
-      ) {
-        return this.colorcodes.offline;
-      } else if (
-        this.findanyDisamrDevice(alarm.customer && alarm.customer.devices)
-      ) {
-        return this.colorcodes.disarm;
+      // else if (alarm.alarm_status == 0) {
+      //   return this.colorcodes.closed;
+      // }
+      //if (
+      //   alarm.customer &&
+      //   this.findanyArmedDevice(alarm.customer.devices)
+      // ) {
+      //   return this.colorcodes.armed;
+      // }
+      else if (customer) {
+        if (this.findAnyDeviceisOffline(customer.devices) > 0) {
+          return this.colorcodes.offline;
+        } else if (this.findanyArmedDevice(customer.devices)) {
+          return this.colorcodes.armed;
+        } else if (this.findanyDisamrDevice(customer.devices) > 0) {
+          return this.colorcodes.disarm;
+        }
       }
+      // console.log(
+      //   "findAnyDeviceisOffline",
+      //   this.findAnyDeviceisOffline(item.devices)
+      // );
+      // console.log(alarm.alarm_status);
 
       return this.colorcodes.offline;
     },

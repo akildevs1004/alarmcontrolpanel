@@ -282,9 +282,110 @@ export default ({ app }, inject) => {
       };
       return relaventImage[id] ?? "Unknwon";
     },
+
+    getAlarmIcons() {
+      return {
+        intruder: {
+          color: "#ff0000",
+          text: "Alarm",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+          icon: "mdi-alarm",
+        },
+        intruder: {
+          color: "#ff0000",
+          text: "Alarm",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+          icon: "mdi-alarm",
+        },
+        alarm: {
+          color: "#ff0000",
+          text: "Alarm",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
+          icon: "mdi-alarm",
+        },
+        temperature: {
+          color: "#ff0000",
+          text: "Fire Alarm",
+          image:
+            process.env.BACKEND_URL2 +
+            "/google_map_icons/google_temperature_alarm.png",
+          icon: "mdi-alarm",
+        },
+        fire: {
+          color: "#ff0000",
+          text: "Fire Alarm",
+          image:
+            process.env.BACKEND_URL2 +
+            "/google_map_icons/google_fire_alarm.png",
+          icon: "mdi-alarm",
+        },
+        water: {
+          color: "#ff0000",
+          text: "Water Alarm",
+          image:
+            process.env.BACKEND_URL2 +
+            "/google_map_icons/google_water_alarm.png",
+          icon: "mdi-alarm",
+        },
+
+        sos: {
+          color: "#ff0000",
+          text: "SOS Alarm",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
+          icon: "mdi-alarm",
+        },
+        medical: {
+          color: "#ff0000",
+          text: "Medical Alarm",
+          image:
+            process.env.BACKEND_URL2 +
+            "/google_map_icons/google_medical_alarm.png",
+          icon: "mdi-alarm",
+        },
+        offline: {
+          color: "#626262",
+          text: "Offline",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+          icon: "mdi-download-network-outline",
+        },
+        closed: {
+          color: "#626262",
+          text: "Closed",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+          icon: "mdi-download-network-outline",
+        },
+        armed: {
+          color: "#00930b",
+          text: "Armed",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
+          icon: "mdi-lock",
+        },
+        disarm: {
+          color: "#ff0000",
+          text: "Disarm",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
+          icon: "mdi-lock-open",
+        },
+        power_loss: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+          icon: "mdi-lock-open",
+        },
+      };
+    },
     getRelaventMarkers(alarm) {
       let relaventImage = {
-        Intruder: "/alarm-icons/burglary.png",
+        Intruder: "/alarm-icons/intruder.png",
         Burglary: "/alarm-icons/burglary.png",
         Medical: "/alarm-icons/medical.png",
         Fire: "/alarm-icons/fire.png",
@@ -292,7 +393,9 @@ export default ({ app }, inject) => {
         Temperature: "/alarm-icons/temperature.png",
         Humidity: "/alarm-icons/humidity.png",
       };
-
+      if (relaventImage[alarm.alarm_type])
+        return relaventImage[alarm.alarm_type];
+      else return null;
       // Get the image URL based on the alarm key, if exists
       let selectedImage = relaventImage[alarm];
 

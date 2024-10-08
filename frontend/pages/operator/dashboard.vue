@@ -508,84 +508,7 @@ export default {
     dialogViewCustomer: false,
     totalRowsCount: 0,
 
-    colorcodes: {
-      alarm: {
-        color: "#ff0000",
-        text: "Alarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
-        icon: "mdi-alarm",
-      },
-      temperature: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_temperature_alarm.png",
-        icon: "mdi-alarm",
-      },
-      fire: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_fire_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      sos: {
-        color: "#ff0000",
-        text: "SOS Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
-        icon: "mdi-alarm",
-      },
-      medical: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_medical_alarm.png",
-        icon: "mdi-alarm",
-      },
-      offline: {
-        color: "#626262",
-        text: "Offline",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      closed: {
-        color: "#626262",
-        text: "Closed",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      armed: {
-        color: "#00930b",
-        text: "Armed",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
-        icon: "mdi-lock",
-      },
-      disarm: {
-        color: "#ff0000",
-        text: "Disarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
-        icon: "mdi-lock-open",
-      },
-    },
+    colorcodes: [],
     snack: false,
     snackColor: "",
     snackText: "",
@@ -657,7 +580,7 @@ export default {
     setInterval(async () => {
       await this.getDatafromApi();
       await this.getCustomersDatafromApi();
-    }, 1000 * 6);
+    }, 1000 * 10);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -675,7 +598,9 @@ export default {
     }, 1000 * 5);
   },
 
-  async created() {},
+  async created() {
+    this.colorcodes = this.$utils.getAlarmIcons();
+  },
   watch: {},
   methods: {
     caps(str) {
@@ -934,6 +859,8 @@ export default {
     },
     getAlarmColorObject(alarm, customer = null) {
       if (alarm) {
+        if (this.colorcodes[alarm.alarm_type.toLowerCase()])
+          return this.colorcodes[alarm.alarm_type.toLowerCase()];
         if (alarm.alarm_status == 1) {
           return this.colorcodes.alarm;
         }

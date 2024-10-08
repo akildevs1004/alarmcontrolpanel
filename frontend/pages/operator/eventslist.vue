@@ -281,7 +281,10 @@
                       :customer_id="selectedAlarm?.device.customer.id"
                       :name="'OperatorGoogleMapCustomer' + selectedAlarm?.id"
                       :mapimage="
-                        getAlarmColorObject(selectedAlarm).image + '?3=3'
+                        getAlarmColorObject(
+                          selectedAlarm,
+                          selectedAlarm?.device.customer
+                        ).image + '?3=3'
                       "
                     /> </v-card-text
                 ></v-card>
@@ -395,84 +398,7 @@ export default {
     dialogViewCustomer: false,
     totalRowsCount: 0,
 
-    colorcodes: {
-      alarm: {
-        color: "#ff0000",
-        text: "Alarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
-        icon: "mdi-alarm",
-      },
-      temperature: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_temperature_alarm.png",
-        icon: "mdi-alarm",
-      },
-      fire: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_fire_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      sos: {
-        color: "#ff0000",
-        text: "SOS Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
-        icon: "mdi-alarm",
-      },
-      medical: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_medical_alarm.png",
-        icon: "mdi-alarm",
-      },
-      offline: {
-        color: "#626262",
-        text: "Offline",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      closed: {
-        color: "#626262",
-        text: "Closed",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      armed: {
-        color: "#00930b",
-        text: "Armed",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
-        icon: "mdi-lock",
-      },
-      disarm: {
-        color: "#ff0000",
-        text: "Disarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
-        icon: "mdi-lock-open",
-      },
-    },
+    colorcodes: null,
     snack: false,
     snackColor: "",
     snackText: "",
@@ -556,7 +482,9 @@ export default {
     this.getAlarmTypes();
   },
 
-  async created() {},
+  async created() {
+    this.colorcodes = this.$utils.getAlarmIcons();
+  },
   watch: {},
   methods: {
     caps(str) {
@@ -775,32 +703,37 @@ export default {
       if (process) return value.image;
       else return false;
     },
-    getAlarmColorObject(alarm) {
+    getAlarmColorObject(alarm, customer = null) {
+      if (alarm) {
+        if (this.colorcodes[alarm.alarm_type.toLowerCase()])
+          return this.colorcodes[alarm.alarm_type.toLowerCase()];
+        if (alarm.alarm_status == 1) {
+          return this.colorcodes.alarm;
+        }
+      }
+      // else if (alarm.alarm_status == 0) {
+      //   return this.colorcodes.closed;
+      // }
+      //if (
+      //   alarm.customer &&
+      //   this.findanyArmedDevice(alarm.customer.devices)
+      // ) {
+      //   return this.colorcodes.armed;
+      // }
+      else if (customer) {
+        if (this.findAnyDeviceisOffline(customer.devices) > 0) {
+          return this.colorcodes.offline;
+        } else if (this.findanyArmedDevice(customer.devices)) {
+          return this.colorcodes.armed;
+        } else if (this.findanyDisamrDevice(customer.devices) > 0) {
+          return this.colorcodes.disarm;
+        }
+      }
       // console.log(
       //   "findAnyDeviceisOffline",
       //   this.findAnyDeviceisOffline(item.devices)
       // );
       // console.log(alarm.alarm_status);
-      if (alarm.alarm_status == 1) {
-        return this.colorcodes.alarm;
-      } else if (alarm.alarm_status == 0) {
-        return this.colorcodes.closed;
-      } else if (
-        alarm.customer &&
-        this.findanyArmedDevice(alarm.customer.devices)
-      ) {
-        return this.colorcodes.armed;
-      }
-      if (
-        this.findAnyDeviceisOffline(alarm.customer && alarm.customer.devices) >
-        0
-      ) {
-        return this.colorcodes.offline;
-      } else if (
-        this.findanyDisamrDevice(alarm.customer && alarm.customer.devices)
-      ) {
-        return this.colorcodes.disarm;
-      }
 
       return this.colorcodes.offline;
     },
