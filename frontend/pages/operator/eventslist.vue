@@ -205,20 +205,32 @@
                     </div>
                   </v-col>
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
+                    <div style="text-align: right">#{{ alarm.id }}</div>
                     <div style="margin: auto; text-align: center">
                       <img
                         @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
-                        style="width: 30px; padding-top: 20%"
+                        style="width: 30px; padding-top: 0%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
                       />
                     </div>
-                    <div style="color: red">
-                      {{
-                        $dateFormat.formatDateMonthYear(
-                          alarm.alarm_start_datetime
-                        )
-                      }}
+                    <div style="line-height: 0px">
+                      <div style="color: red; text-align: center; height: 14px">
+                        <div v-if="alarm.alarm_status == 0">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              alarm.alarm_end_datetime
+                            )
+                          }}
+                        </div>
+                      </div>
+                      <div style="color: red; text-align: center">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            alarm.alarm_start_datetime
+                          )
+                        }}
+                      </div>
                     </div>
                   </v-col>
                 </v-row>

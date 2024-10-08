@@ -328,16 +328,17 @@
                     </div>
                   </v-col>
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
-                    <div style="margin: auto; text-align: center; height: 50px">
+                    <div style="text-align: right">#{{ alarm.id }}</div>
+                    <div style="margin: auto; text-align: center; height: 40px">
                       <img
                         @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
-                        style="width: 30px; padding-top: 10%"
+                        style="width: 30px; padding-top: 0%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
                       />
                     </div>
                     <div style="">
-                      <div style="color: red; text-align: center; height: 24px">
+                      <div style="color: red; text-align: center; height: 14px">
                         <div v-if="alarm.alarm_status == 0">
                           {{
                             $dateFormat.formatDateMonthYear(
