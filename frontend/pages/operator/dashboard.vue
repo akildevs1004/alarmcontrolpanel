@@ -653,12 +653,12 @@ export default {
     //   this.getDatafromApi("alarm");
     // }, 1000 * 2);
     // await this.getMapKey();
-
+    setInterval(async () => {
+      await this.getCustomersDatafromApi();
+    }, 1000 * 8);
     setInterval(async () => {
       await this.getDatafromApi();
-
-      await this.getCustomersDatafromApi();
-    }, 1000 * 15);
+    }, 1000 * 6);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
