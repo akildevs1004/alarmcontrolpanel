@@ -75,7 +75,9 @@
                 :src="getAlarmColorObject(alarm).image + '?3=3'"
               />
               <div style="color: blue">
-                {{ alarm.zone_data?.location ?? "---" }}
+                {{ alarm.alarm_type ?? "---" }},{{
+                  alarm.zone_data?.location ?? "---"
+                }}
               </div>
               <div style="color: red">
                 <!-- {{ alarm.zone ?? "---" }} -->
