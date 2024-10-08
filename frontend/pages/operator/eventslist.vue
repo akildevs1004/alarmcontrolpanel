@@ -2,6 +2,7 @@
   <div style="min-width: 900px; padding-bottom: 0px">
     <v-row>
       <v-col
+        id="lefteventlist"
         class="google-map-right-hand-content"
         style="
           padding-top: 5px;
@@ -17,7 +18,10 @@
           :style="' height:100%;;overflow-y: auto;overflow-x: hidden'"
         >
           <v-card-text style="padding: 5px">
-            <Topmenu @refreshEventsList="getDatafromApi()" />
+            <Topmenu
+              @refreshEventsList="getDatafromApi()"
+              @applyGlobalSearch="getDatafromApi"
+            />
 
             <v-row
               style="margin-top: 10px; padding-left: 10px; padding-right: 10px"
@@ -309,7 +313,7 @@
               elevation="4"
               :style="
                 'height:' +
-                (windowHeight - 690) +
+                (windowHeight - 645) +
                 'px; overflow-x: hidden; overflow-y: auto'
               "
             >
@@ -355,6 +359,7 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    globalsearch: "",
     keyLogs: 1,
     showMappingSection: false,
     showAlarmEventNotes: false,
@@ -460,6 +465,12 @@ export default {
 
     if (window) {
       this.windowHeight = window.innerHeight;
+
+      const element = document.getElementById("lefteventlist");
+      if (element) {
+        this.windowHeight = element.getBoundingClientRect().height;
+      }
+
       // this.windowWidth = window.innerWidth;
     }
     // setTimeout(() => {
@@ -477,7 +488,7 @@ export default {
       return;
     }
     await this.getMapKey();
-    await this.getDatafromApi();
+    await this.getDatafromApi(this.filterText);
     this.getBuildingTypes();
     this.getAlarmTypes();
   },
@@ -548,8 +559,16 @@ export default {
     },
     onResize() {
       if (window) {
-        //this.windowWidth = window.innerWidth;
-        this.windowHeight = window.innerHeight;
+        if (window) {
+          this.windowHeight = window.innerHeight;
+
+          const element = document.getElementById("lefteventlist");
+          if (element) {
+            this.windowHeight = element.getBoundingClientRect().height;
+          }
+
+          // this.windowWidth = window.innerWidth;
+        }
       }
     },
     toggleFullscreen() {
@@ -653,7 +672,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          //filter_text: filterText == "" ? "alarm" : filterText,
+          eventID: this.filterText,
           filterBuildingType: this.filterBuildingType,
           filterAlarmStatus: this.filterAlarmStatus,
 
@@ -671,7 +690,7 @@ export default {
 
             this.loading = false;
             this.selectedAlarm = this.data[0];
-
+            this.onResize();
             // this.mapMarkersList.forEach((marker, index) => {
             //   if (marker) {
             //     marker.visible = false;

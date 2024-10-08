@@ -154,7 +154,24 @@ export default {
     min-width: 100% !important;
   }
 }
+.global-search-textbox fieldset,
+.global-search-textbox .v-label,
+.global-search-textbox .v-icon,
+.global-search-textbox .theme--dark.v-input textarea {
+  color: black !important;
+}
+.global-search-textbox.v-text-field--enclosed:not(.v-text-field--rounded)
+  > .v-input__control
+  > .v-input__slot {
+  padding: 0 4px;
+}
+.global-search-textbox.v-input input::placeholder {
+  color: black !important;
+}
 
+.global-search-textbox .v-input__slot {
+  padding: 0 3px !important;
+}
 .main-leftcontent {
 }
 .main-rightcontent {

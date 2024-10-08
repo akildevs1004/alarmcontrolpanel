@@ -113,17 +113,35 @@
         </v-menu>
       </v-col>
 
-      <v-col class="text-right">
+      <v-col class=text-right>
+        
+              <v-text-field
+              label="Event ID"
+          style="width: 150px;max-height: 30px !important;"
+          max-height="10px"
+          class="mt-1 custom-text-field-height   global-search-textbox111111"
+          
+          outlined
+          dense
+          height:="20px"
+           
+          append-icon="mdi-magnify"
+          v-model="globalsearch"
+        ></v-text-field>
+           
+      </v-col>
+
+      <v-col class="text-right" style="max-width: 85px;padding-left:0px">
         <v-icon
           v-if="displayFullScreenButton()"
-          class="mr-5"
+          class="mr-2"
           color="red"
           @click="openWindow"
           >mdi-overscan</v-icon
         >
 
         <v-icon
-          class="mr-2"
+          
           v-if="!displayFullScreenButton()"
           @click="refreshEventsList()"
           >mdi-refresh</v-icon
@@ -203,6 +221,7 @@
 export default {
   data() {
     return {
+      globalsearch:'',
       displayName: "",
       popupKey: 1,
       key: 1,
@@ -215,6 +234,12 @@ export default {
       notificationsMenuItems: [],
       notificationAlarmDevicesContent: {},
     };
+  },
+  watch:{
+    globalsearch()
+    {
+this.$emit("applyGlobalSearch",this.globalsearch);
+    }
   },
   mounted() {
     // if (!this.$auth.user) {

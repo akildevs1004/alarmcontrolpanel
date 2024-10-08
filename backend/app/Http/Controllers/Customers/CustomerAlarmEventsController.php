@@ -607,6 +607,12 @@ class CustomerAlarmEventsController extends Controller
             $query->whereIn('customer_id', $request->filter_customers_list);
         });
 
+        $model->when($request->filled("eventID"), function ($query) use ($request) {
+            $query->where('id', $request->eventID);
+        });
+
+
+
 
 
         $model->orderBy("alarm_start_datetime",  "desc");

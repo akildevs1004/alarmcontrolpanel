@@ -130,7 +130,7 @@
           "
         >
           <v-card-text style="padding: 10px">
-            <Topmenu />
+            <Topmenu @applyGlobalSearch="getDatafromApi" />
             <v-row style="margin-top: 10px">
               <v-col cols="4" style="padding: 4px">
                 <v-select
@@ -309,6 +309,7 @@
                           ></v-col
                         ><v-col
                           ><v-icon
+                            :title="alarm.alarm_status == 1 ? 'Open' : 'Close'"
                             style="
                               float: right;
                               padding-right: 17px;
@@ -327,20 +328,31 @@
                     </div>
                   </v-col>
                   <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
-                    <div style="margin: auto; text-align: center; height: 75px">
+                    <div style="margin: auto; text-align: center; height: 50px">
                       <img
                         @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
-                        style="width: 30px; padding-top: 20%"
+                        style="width: 30px; padding-top: 10%"
                         :src="getAlarmColorObject(alarm).image + '?3=3'"
                       />
                     </div>
-                    <div style="color: red">
-                      {{
-                        $dateFormat.formatDateMonthYear(
-                          alarm.alarm_start_datetime
-                        )
-                      }}
+                    <div style="">
+                      <div style="color: red; text-align: center; height: 24px">
+                        <div v-if="alarm.alarm_status == 0">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              alarm.alarm_end_datetime
+                            )
+                          }}
+                        </div>
+                      </div>
+                      <div style="color: red; text-align: center">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            alarm.alarm_start_datetime
+                          )
+                        }}
+                      </div>
                     </div>
                   </v-col>
                 </v-row>
@@ -578,7 +590,7 @@ export default {
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
     setInterval(async () => {
-      await this.getDatafromApi();
+      if (this.filterText != "") await this.getDatafromApi(this.filterText);
       await this.getCustomersDatafromApi();
     }, 1000 * 10);
 
@@ -759,7 +771,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          //filter_text: filterText == "" ? "alarm" : filterText,
+          eventID: this.filterText,
           filterBuildingType: this.filterBuildingType,
           filterAlarmStatus: this.filterAlarmStatus,
 

@@ -120,7 +120,7 @@
                 <div
                   style="
                     overflow: auto;
-                    height: 60px;
+                    height: 80px;
                     width: 100%;
                     border: 1px solid rgb(157, 157, 157);
                     border-radius: 5px;
@@ -149,10 +149,10 @@
               <v-col>
                 <v-textarea
                   outlined
-                  class="mt-1"
+                  class="mt-0"
                   label="Operator Comments"
                   value=""
-                  height="170px"
+                  height="200px"
                   hide-details
                   v-model="event_payload.notes"
                 ></v-textarea>
@@ -349,7 +349,7 @@
                     margin-top: 20px;
                     height: auto;
                     margin-block-end: 10px;
-                    min-height: 120px;
+                    min-height: 180px;
                   "
                 >
                   <label
@@ -460,7 +460,8 @@
                             contact.address_type.toLowerCase() != 'secondary' &&
                             contact.address_type.toLowerCase() != 'security'
                           "
-                          v-for="contact in customer.contacts"
+                          v-for="(contact, index) in customer.contacts"
+                          :key="'selectContactButtons' + index"
                         >
                           {{ contact.address_type }}
                         </v-btn>
