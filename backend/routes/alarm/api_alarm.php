@@ -243,7 +243,7 @@ Route::get("get_google_icons", [AlarmNotificationController::class, "getGoogleIc
 
 
 //operator 
-Route::get('get_alarm_events_map_operator', [CustomerAlarmEventsController::class, 'getAlarmEventsMapOperator']);
+Route::get('get_operator_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEventsMapOperator']);
 Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
 Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
 Route::get('alarm_event_operator_statistics', [AlarmDashboardController::class, "alarmEventOperatorStatistics"]);

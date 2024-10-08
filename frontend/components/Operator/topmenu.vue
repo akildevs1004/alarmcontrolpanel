@@ -121,6 +121,13 @@
           @click="openWindow"
           >mdi-overscan</v-icon
         >
+
+        <v-icon
+          class="mr-2"
+          v-if="!displayFullScreenButton()"
+          @click="refreshEventsList()"
+          >mdi-refresh</v-icon
+        >
         <v-menu
           style="z-index: 9999 !important"
           bottom
@@ -261,6 +268,9 @@ export default {
     this.loadAlarmNotificationIcons();
   },
   methods: {
+    refreshEventsList() {
+      this.$emit("refreshEventsList");
+    },
     gotoDashboard() {
       this.$router.push("/operator/dashboard");
     },
@@ -316,7 +326,7 @@ export default {
       }
     },
     loadHeaderNotificationMenu() {
-      console.log("loadHeaderNotificationMenu");
+      // console.log("loadHeaderNotificationMenu");
 
       // if (this.isBackendRequestOpen) {
       //   // Cancel the previous request if it's still pending

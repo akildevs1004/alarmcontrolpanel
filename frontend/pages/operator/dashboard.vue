@@ -654,10 +654,11 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
 
-    setInterval(() => {
-      this.getCustomersDatafromApi();
-      this.getDatafromApi();
-    }, 1000 * 10);
+    setInterval(async () => {
+      await this.getDatafromApi();
+
+      //  await this.getCustomersDatafromApi();
+    }, 1000 * 15);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -665,9 +666,9 @@ export default {
       return;
     }
     await this.getMapKey();
-
-    await this.getCustomersDatafromApi();
     await this.getDatafromApi();
+    await this.getCustomersDatafromApi();
+
     await this.getBuildingTypes();
     await this.getAlarmTypes();
     setTimeout(() => {
@@ -815,6 +816,8 @@ export default {
     },
 
     async getDatafromApi(filterText = "") {
+      // console.log(this.cancelGetdatafromAPITokenSource);
+
       if (this.cancelGetdatafromAPITokenSource) {
         this.cancelGetdatafromAPITokenSource.cancel(
           "request canceled due to new request."
@@ -843,13 +846,13 @@ export default {
 
       try {
         this.$axios
-          .get(`get_alarm_events_map_operator`, options)
+          .get(`get_operator_alarm_events`, options)
           .then(({ data }) => {
             //this.mapkeycount++;
             this.data = data.data; //data.data;
 
-            // this.loading = false;
-
+            this.loading = false;
+            if (this.customersData) this.plotLocations();
             // this.mapMarkersList.forEach((marker, index) => {
             //   if (marker) {
             //     marker.visible = false;
@@ -900,17 +903,17 @@ export default {
 
           this.loading = false;
 
-          setTimeout(() => {
-            this.mapMarkersList.forEach((marker, index) => {
-              if (marker) {
-                marker.visible = false;
-                marker.setMap(null);
-                marker = null;
-                this.mapMarkersList[index] = null;
-              }
-            });
-            this.plotLocations();
-          }, 1000 * 5);
+          // setTimeout(() => {
+          this.mapMarkersList.forEach((marker, index) => {
+            if (marker) {
+              marker.visible = false;
+              marker.setMap(null);
+              marker = null;
+              this.mapMarkersList[index] = null;
+            }
+          });
+          this.plotLocations();
+          //}, 1000 * 5);
         });
       } catch (e) {}
     },
@@ -1085,50 +1088,35 @@ export default {
       this.geocoder = new google.maps.Geocoder();
       // this.infowindow = new google.maps.InfoWindow();
     },
-    plotLocations() {
-      //set default one customer
-      // console.log(this.customersData);
-      // console.log(
-      //   this.customersData[0].latest_alarm_event.device.utc_time_zone
-      // );
+    findCustomerInAlarmList(customerId) {
+      let CustomerLatestAlarmEvent = [];
+      CustomerLatestAlarmEvent = this.data.find(
+        (event) => event.customer_id == customerId
+      );
 
-      // if (
-      //   this.customersData &&
-      //   this.customersData[0] &&
-      //   this.customersData[0].devices &&
-      //   this.customersData[0].devices?.length > 0 &&
-      //   this.customersData[0].devices[0]?.utc_time_zone != "Asia/Dubai" &&
-      //   this.customersData[0].latitude != "" &&
-      //   this.customersData[0].longitude != "" &&
-      //   !isNaN(this.customersData[0].latitude) &&
-      //   !isNaN(this.customersData[0].longitude)
-      // ) {
-      //   const position = {
-      //     lat: parseFloat(this.customersData[0].latitude),
-      //     lng: parseFloat(this.customersData[0].longitude),
-      //   };
-      //   this.map.panTo(position);
-      // }
-      this.mapMarkersList = [];
+      return CustomerLatestAlarmEvent;
+    },
+    plotLocations() {
+      //this.mapMarkersList = [];
       let mapMarkersListUpdated = [];
       this.customersData.forEach((item) => {
         if (item) {
           const customerId = item.id;
+          let loadMarker = true;
 
-          // Check if a marker already exists for this customer
           if (this.mapMarkersList[customerId]) {
-            // Skip if marker already exists with alarm_status = 1 (high priority)
-            // if (
-            //   item.alarm_status == 1 &&
-            //   this.mapMarkersList[customerId].alarm_status != "1"
-            // )
             this.mapMarkersList[customerId].visible = false;
             this.mapMarkersList[customerId].setMap(null);
+            this.mapMarkersList[customerId] = null;
           }
 
-          // Determine if we should load a marker for this customer
-          let loadMarker = true;
-          //item.alarm_status == "1" || !this.mapMarkersList[customerId];
+          let alarm = this.findCustomerInAlarmList(item.id);
+
+          item.latest_alarm_event = null;
+
+          if (alarm) {
+            item.latest_alarm_event = alarm;
+          }
 
           if (loadMarker) {
             try {

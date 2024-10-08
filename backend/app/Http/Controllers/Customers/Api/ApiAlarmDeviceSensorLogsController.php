@@ -199,28 +199,34 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     {
                         if ($event == '1100') {
                             $alarm_type = 'SOS';
-                        }
-
-                        if ($event == '1130') {
+                        } else if ($event == '1130') {
                             $alarm_type = 'Tampered';
                         }
                     } else  if ($device_model == 'XG-808') //XTream Box
                     {
                         if ($event == '1120') {
                             $alarm_type = 'SOS';
-                        }
-                        if ($event == '1133') {
+                        } else  if ($event == '1133') {
                             $alarm_type = '24Hours';
+                        } else  if ($event == '1137') {
+                            $alarm_type = 'Tampered';
+                        } else if ($event == '1301') {
+                            $alarm_type = 'AC Power Loss';
+                        } else if ($event == '1309') {
+                            $alarm_type = 'Battery Loss';
                         }
                         // if ($event == '1132') {
                         //     $alarm_type = 'Regular Alarm';
                         // }
-                        if ($event == '1137') {
-                            $alarm_type = 'Tampered';
-                        }
-                        if ($event == '1309') {
-                            $alarm_type = 'AC Power Loss';
-                        }
+                        //1301 - AC Loss 
+                        //1309 - Battery Loss
+                        //1321 - Restarted
+                        //1351 - Battery Loss
+                        //3301 - AC Recovery
+
+
+
+
                     }
 
 

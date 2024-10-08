@@ -609,11 +609,12 @@ class CustomerAlarmEventsController extends Controller
 
 
 
+        $model->orderBy("alarm_start_datetime",  "desc");
 
 
 
 
-        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
+        //$model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
 
         return   $model->paginate($request->perPage ?? 10);;
     }
@@ -622,7 +623,7 @@ class CustomerAlarmEventsController extends Controller
         $model = $this->filter($request);
 
 
-        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
+        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "desc");
 
         return $model->paginate($request->perPage ?? 10);;
 

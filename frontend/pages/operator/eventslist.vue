@@ -17,7 +17,8 @@
           :style="' height:100%;;overflow-y: auto;overflow-x: hidden'"
         >
           <v-card-text style="padding: 5px">
-            <Topmenu />
+            <Topmenu @refreshEventsList="getDatafromApi()" />
+
             <v-row
               style="margin-top: 10px; padding-left: 10px; padding-right: 10px"
             >
@@ -621,7 +622,6 @@ export default {
       if (window) {
         //this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
-        console.log(this.windowHeight);
       }
     },
     toggleFullscreen() {
@@ -736,7 +736,7 @@ export default {
 
       try {
         this.$axios
-          .get(`get_alarm_events_map_operator`, options)
+          .get(`get_operator_alarm_events`, options)
           .then(({ data }) => {
             //this.mapkeycount++;
             this.data = data.data; //data.data;
@@ -744,17 +744,17 @@ export default {
             this.loading = false;
             this.selectedAlarm = this.data[0];
 
-            this.mapMarkersList.forEach((marker, index) => {
-              if (marker) {
-                marker.visible = false;
-                marker.setMap(null);
-                marker = null;
-                this.mapMarkersList[index] = null;
-              }
-            });
-            this.mapMarkersList = [];
+            // this.mapMarkersList.forEach((marker, index) => {
+            //   if (marker) {
+            //     marker.visible = false;
+            //     marker.setMap(null);
+            //     marker = null;
+            //     this.mapMarkersList[index] = null;
+            //   }
+            // });
+            // this.mapMarkersList = [];
 
-            this.plotLocations();
+            // //this.plotLocations();
           });
       } catch (e) {}
     },
