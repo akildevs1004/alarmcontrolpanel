@@ -604,12 +604,7 @@ export default {
     }
     await this.getMapKey();
     await this.getDatafromApi();
-    await this.getCustomersDatafromApi();
-
-    console.log(this.customersData);
-
-    if (this.customersData.length > 0)
-      this.setCustomerLocationOnMap(this.customersData[0]);
+    await this.getCustomersDatafromApi("", true);
 
     await this.getBuildingTypes();
     await this.getAlarmTypes();
@@ -812,7 +807,7 @@ export default {
           });
       } catch (e) {}
     },
-    async getCustomersDatafromApi(filterText = "") {
+    async getCustomersDatafromApi(filterText = "", loadMap = false) {
       if (this.cancelgetCustomersDatafromApiTokenSource) {
         this.cancelgetCustomersDatafromApiTokenSource.cancel(
           "request canceled due to new request."
@@ -844,6 +839,10 @@ export default {
         this.$axios.get(`customers-for-map`, options).then(({ data }) => {
           //this.mapkeycount++;
           this.customersData = data; //data.data;
+
+          if (this.customersData.length > 0) {
+            this.setCustomerLocationOnMap(this.customersData[0]);
+          }
 
           this.loading = false;
 
