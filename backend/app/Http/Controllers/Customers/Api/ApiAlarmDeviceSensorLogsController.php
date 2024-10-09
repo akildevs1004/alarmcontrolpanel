@@ -101,6 +101,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     }
     public function readCSVLogFile()
     {
+
+        set_time_limit(30); // Timeout after 30 seconds
+
         $date = date("d-m-Y");
         $results = $this->getCSVFileLines($date);
 
