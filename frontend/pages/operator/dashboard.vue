@@ -595,7 +595,7 @@ export default {
         if (this.filterText == "") await this.getDatafromApi(this.filterText);
         await this.getCustomersDatafromApi();
       }
-    }, 1000 * 5);
+    }, 1000 * 10);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
