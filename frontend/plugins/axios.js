@@ -1,11 +1,19 @@
 export default ({ app, $axios, store }, inject) => {
+  const pendingRequests = [];
+  const MAX_PENDING_REQUESTS = 5;
+
+  // Helper function to cancel all pending requests
+  const cancelPendingRequests = () => {
+    pendingRequests.forEach(({ cancel }) => cancel("Request Canceled ......."));
+    pendingRequests.length = 0; // Clear the array
+  };
   $axios.onError((error) => {
     if (error.response && error.response.status === 401) {
       app.$auth.refreshTokens();
       app.$auth.reset();
     }
-
-    return Promise.reject(error);
+    pendingRequests.shift(); // Remove the oldest request from the queue
+    //return Promise.reject(error);
   });
   $axios.onRequest(async (config) => {
     if (!config) return config;
@@ -54,6 +62,23 @@ export default ({ app, $axios, store }, inject) => {
       }
     }
 
+    const source = $axios.CancelToken.source();
+    config.cancelToken = source.token;
+
+    pendingRequests.push({ cancel: source.cancel, url: config.url });
+
+    if (pendingRequests.length > MAX_PENDING_REQUESTS) {
+      cancelPendingRequests();
+    }
+
+    return config;
+
     return config; // Return the modified config
+  });
+
+  // Response interceptor to remove completed requests from the queue
+  $axios.onResponse((response) => {
+    pendingRequests.shift(); // Remove the oldest request from the queue
+    return response;
   });
 };
