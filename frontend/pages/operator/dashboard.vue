@@ -591,8 +591,10 @@ export default {
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
     setInterval(async () => {
-      if (this.filterText != "") await this.getDatafromApi(this.filterText);
-      await this.getCustomersDatafromApi();
+      if (this.$route.name == "operator-dashboard") {
+        if (this.filterText == "") await this.getDatafromApi(this.filterText);
+        await this.getCustomersDatafromApi();
+      }
     }, 1000 * 10);
 
     if (this.$auth.user.branch_id) {

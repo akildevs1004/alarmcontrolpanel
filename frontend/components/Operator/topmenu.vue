@@ -272,7 +272,7 @@ this.$emit("applyGlobalSearch",this.globalsearch);
             if (criticalList.length > 0 || 1 == 1) {
               if (!this.dialogAlarmPopupNotificationStatus) {
                 this.popupKey += 1;
-                if (this.$route.name !== "operator-eventslist")
+                if (this.$route.name == "operator-dashboard")
                   this.dialogAlarmPopupNotificationStatus = true;
               }
             } else {

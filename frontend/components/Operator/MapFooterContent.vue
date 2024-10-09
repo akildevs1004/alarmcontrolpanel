@@ -127,7 +127,8 @@ export default {
   },
   mounted() {
     setInterval(() => {
-      this.getOperatorStatistics();
+      if (this.$route.name == "operator-dashboard")
+        this.getOperatorStatistics();
     }, 1000 * 15);
   },
   created() {
