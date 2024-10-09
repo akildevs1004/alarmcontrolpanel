@@ -174,6 +174,10 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
 
+            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                $model->whereIn('customer_id', $request->filter_customers_list);
+            })
+
             ->selectRaw('
             COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' and alarm_status=1 THEN 1 ELSE 0 END), 0) AS intruder,
             COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS burglary,
