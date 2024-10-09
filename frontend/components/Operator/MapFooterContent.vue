@@ -77,9 +77,9 @@
               "
             >
               <div style="font-size: 36px; line-height: 37px; color: #0064ff">
-                {{ data.offline }}
+                {{ data.offline ?? 0 }}
               </div>
-              <div style="font-size: 11px">Offline</div></v-col
+              <div style="font-size: 11px">Technical</div></v-col
             >
           </v-row>
         </v-card>
@@ -104,9 +104,15 @@
               "
             >
               <div style="font-size: 36px; line-height: 37px; color: #0064ff">
-                {{ data.tickets }}
+                {{
+                  data.armed ??
+                  0 + data.disarm ??
+                  0 + data.ac_off ??
+                  0 + data.dc_off ??
+                  0
+                }}
               </div>
-              <div style="font-size: 11px">Tickets</div></v-col
+              <div style="font-size: 11px">Event</div></v-col
             >
           </v-row>
         </v-card>

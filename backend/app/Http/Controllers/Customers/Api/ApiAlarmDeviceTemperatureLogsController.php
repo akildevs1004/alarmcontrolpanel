@@ -393,19 +393,27 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
             $model = AlarmEvents::with([
                 "device.customer" => function ($query) {
-                    $query->without('all_alarm_events') // Exclude default all_alarm_events relation
+                    $query->without(['all_alarm_events', "devices", "contacts", "profile_pictures"]) // Exclude default all_alarm_events relation
                         ->with(['primary_contact', 'secondary_contact']);
                 },
                 "notes",
                 "category",
                 "zoneData"
-            ])->where('company_id', $companyId)
+            ])
+
+                ->where('company_id', $companyId)
                 ->where('alarm_status', 1);
 
 
 
             $model->orderBy("alarm_start_datetime", "DESC");
-            $events = $model->get();
+            $events = $model->get()->makeHidden(['alarm_forwarded']);
+
+            // foreach ($events as $event) {
+            //     if ($event->device && $event->device->customer) {
+            //         $event->device->customer->makeHidden(['profile_pictures']);
+            //     }
+            // }
 
             $jsonFilePath = 'alarm-sensors/' . $companyId . '_live_events.json';
 

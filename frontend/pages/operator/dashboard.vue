@@ -836,7 +836,7 @@ export default {
       };
 
       try {
-        this.$axios.get(`customers-for-map`, options).then(({ data }) => {
+        this.$axios.get(`customers_for_map`, options).then(({ data }) => {
           //this.mapkeycount++;
           this.customersData = data; //data.data;
 

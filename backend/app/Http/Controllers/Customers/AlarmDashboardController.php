@@ -174,21 +174,20 @@ class AlarmDashboardController extends Controller
                 $query->where('customer_id', $request->customer_id);
             })
 
-            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
-                $model->whereIn('customer_id', $request->filter_customers_list);
-            })
+
 
             ->selectRaw('
             COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS intruder,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS burglary,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS medical,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS temperature,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS fire,
+            
             COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_type = \'ac_off\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS ac_off,
             COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS critical,
-            (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
-            (SELECT COUNT(*) FROM tickets WHERE is_security_read = false AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS tickets
+           
+              (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
+
+              
+             (SELECT COUNT(*) FROM devices WHERE armed_status = 1 and status_id = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS armed,
+              (SELECT COUNT(*) FROM devices WHERE armed_status = 0 and status_id = 1  AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS disarm 
         ')
 
             ->first();

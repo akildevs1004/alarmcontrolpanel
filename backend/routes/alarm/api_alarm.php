@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('customers', CustomersController::class);
 Route::get('customerinfo', [CustomersController::class, "customerinfo"]);
-Route::get('customers-for-map', [CustomersController::class, "customersForMap"]);
+Route::get('customers_for_map', [CustomersController::class, "customersForMap"]);
 
 
 Route::get('alarm_customers__for_map', [CustomersController::class, "alarmCustomersForMap"]);

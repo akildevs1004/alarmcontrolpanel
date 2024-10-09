@@ -221,9 +221,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         } else  if ($event == '1137') {
                             $alarm_type = 'Tampered';
                         } else if ($event == '1301') {
-                            $alarm_type = 'AC Power Loss';
+                            $alarm_type = 'AC_off';
                         } else if ($event == '1309') {
-                            $alarm_type = 'Battery Loss';
+                            $alarm_type = 'DC_off';
                         }
                         // if ($event == '1132') {
                         //     $alarm_type = 'Regular Alarm';

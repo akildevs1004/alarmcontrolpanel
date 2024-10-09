@@ -789,7 +789,7 @@ export default {
       };
 
       try {
-        this.$axios.get(`customers-for-map`, options).then(({ data }) => {
+        this.$axios.get(`customers_for_map`, options).then(({ data }) => {
           this.data = data; //data.data;
 
           //  this.totalRowsCount = data.total;

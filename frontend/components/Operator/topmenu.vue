@@ -262,26 +262,26 @@ this.$emit("applyGlobalSearch",this.globalsearch);
         this.resetTimer();
         this.loadHeaderNotificationMenu();
 
-        if (!this.wait5Minutes) {
-          const notificationContent = this.notificationAlarmDevicesContent;
+        // if (!this.wait5Minutes) {
+        //   const notificationContent = this.notificationAlarmDevicesContent;
 
-          if (notificationContent && notificationContent.length > 0) {
-            let criticalList = notificationContent.filter(
-              (notification) => notification.alarm_category == 1
-            );
-            if (criticalList.length > 0 || 1 == 1) {
-              if (!this.dialogAlarmPopupNotificationStatus) {
-                this.popupKey += 1;
-                if (this.$route.name == "operator-dashboard")
-                  this.dialogAlarmPopupNotificationStatus = true;
-              }
-            } else {
-              //this.dialogAlarmPopupNotificationStatus = false;
-            }
-          } else {
-            this.dialogAlarmPopupNotificationStatus = false;
-          }
-        }
+        //   if (notificationContent && notificationContent.length > 0) {
+        //     let criticalList = notificationContent.filter(
+        //       (notification) => notification.alarm_category == 1
+        //     );
+        //     if (criticalList.length > 0 || 1 == 1) {
+        //       if (!this.dialogAlarmPopupNotificationStatus) {
+        //         this.popupKey += 1;
+        //         if (this.$route.name == "operator-dashboard")
+        //           this.dialogAlarmPopupNotificationStatus = true;
+        //       }
+        //     } else {
+        //       //this.dialogAlarmPopupNotificationStatus = false;
+        //     }
+        //   } else {
+        //     this.dialogAlarmPopupNotificationStatus = false;
+        //   }
+        // }
       }
     }, 1000 * 10 * 1);
   },
@@ -351,23 +351,7 @@ this.$emit("applyGlobalSearch",this.globalsearch);
       }
     },
     loadHeaderNotificationMenu() {
-      // console.log("loadHeaderNotificationMenu");
-
-      // if (this.isBackendRequestOpen) {
-      //   // Cancel the previous request if it's still pending
-      //   if (this.cancelRequest) {
-      //     this.cancelRequest(); // This triggers the cancellation
-      //   }
-      // }
-
-      // this.isBackendRequestOpen = true;
-      // this.key = this.key + 1;
-
-      // let company_id = this.$auth.user?.company?.id || 0;
-      // if (company_id == 0) {
-      //   this.isBackendRequestOpen = false;
-      //   return false;
-      // }
+      
 
       let options = {
         params: {
