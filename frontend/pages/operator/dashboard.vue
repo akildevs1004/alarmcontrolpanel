@@ -840,7 +840,7 @@ export default {
           //this.mapkeycount++;
           this.customersData = data; //data.data;
 
-          if (this.customersData.length > 0) {
+          if (this.customersData.length > 0 && loadMap) {
             this.setCustomerLocationOnMap(this.customersData[0]);
           }
 
@@ -990,7 +990,7 @@ export default {
           });
 
           this.map.panTo(position);
-          this.map.setZoom(14);
+          this.map.setZoom(12);
 
           let infowindow = this.mapInfowindowsList[customer.id];
           let marker = this.mapMarkersList[customer.id];
