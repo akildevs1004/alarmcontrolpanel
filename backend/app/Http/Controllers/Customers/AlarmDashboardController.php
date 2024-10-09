@@ -179,16 +179,16 @@ class AlarmDashboardController extends Controller
             })
 
             ->selectRaw('
-            COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' and alarm_status=1 THEN 1 ELSE 0 END), 0) AS intruder,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS burglary,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS medical,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS temperature,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Water\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS fire,
-            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS sos,
-            COALESCE(SUM(CASE WHEN alarm_category = \'1\'  and alarm_status=1 THEN 1 ELSE 0 END), 0) AS critical,
-             (SELECT count(*) FROM devices where status_id=2) AS offline,
-            (SELECT count(*) FROM tickets WHERE is_security_read = false) AS tickets
+            COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS intruder,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS burglary,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS medical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS temperature,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS fire,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS critical,
+            (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
+            (SELECT COUNT(*) FROM tickets WHERE is_security_read = false AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS tickets
         ')
 
             ->first();
