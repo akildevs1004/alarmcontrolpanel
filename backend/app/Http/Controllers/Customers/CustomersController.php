@@ -1305,9 +1305,9 @@ class CustomersController extends Controller
         return $model->get();
         // return $model->paginate($request->perPage ?? 10);
     }
-    public function customersAll()
+    public function customersAll(Request $request)
     {
-        $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"]);
+        $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where('company_id', $request->company_id);
 
         return $model->orderByDesc('id')->get();
     }

@@ -840,7 +840,13 @@ export default {
           //this.mapkeycount++;
           this.customersData = data; //data.data;
 
-          if (this.customersData.length > 0 && loadMap) {
+          console.log(this.customersData[0].devices[0].utc_time_zone);
+
+          if (
+            this.customersData.length > 0 &&
+            loadMap &&
+            this.customersData[0].devices[0]?.utc_time_zone != "Asia/Dubai"
+          ) {
             this.setCustomerLocationOnMap(this.customersData[0]);
           }
 
