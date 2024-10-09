@@ -158,7 +158,14 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
                 } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
                 {
-                    Device::where("serial_number", $serial_number)->update(["alarm_status" => 0, "alarm_end_datetime" => $log_time, "armed_status" => 0, "armed_datetime" => $log_time]);
+
+                    $data = [
+                        "alarm_status" => 0,
+                        "alarm_end_datetime" => $log_time,
+
+                        "armed_datetime" => $log_time
+                    ];
+                    Device::where("serial_number", $serial_number)->update($data);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
 
 
@@ -431,7 +438,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
     public function  closeOfflineAlarmsBySerialNumber($serial_number)
     {
-        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->get();
+        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_status", 1)->get();
 
         foreach ($alarmEvents as $alarm) {
 
@@ -444,7 +451,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $alarm->update([
                     "alarm_end_datetime" => $nowInTimeZone,
                     "response_minutes" => $minutesDifference,
-                    "alarm_status" => 0
+                    "alarm_status" => 4
                 ]);
             }
         }
