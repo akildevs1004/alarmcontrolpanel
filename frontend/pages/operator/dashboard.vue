@@ -606,6 +606,8 @@ export default {
     await this.getDatafromApi();
     await this.getCustomersDatafromApi();
 
+    console.log(this.customersData);
+
     if (this.customersData.length > 0)
       this.setCustomerLocationOnMap(this.customersData[0]);
 
