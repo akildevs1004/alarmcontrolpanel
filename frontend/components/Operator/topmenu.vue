@@ -283,7 +283,7 @@ this.$emit("applyGlobalSearch",this.globalsearch);
           }
         }
       }
-    }, 1000 * 5 * 1);
+    }, 1000 * 10 * 1);
   },
   created() {
     this.displayName =
