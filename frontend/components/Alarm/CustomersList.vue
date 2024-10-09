@@ -818,7 +818,7 @@ export default {
     },
 
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
-      if (this.isBackendRequestOpen) return false;
+      //if (this.isBackendRequestOpen) return false;
       this.isBackendRequestOpen = true;
 
       url = this.endpoint;

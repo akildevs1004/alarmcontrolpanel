@@ -937,7 +937,7 @@ export default {
           }
         }
       }
-    }, 1000 * 5 * 1);
+    }, 1000 * 20 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
