@@ -438,7 +438,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
     public function  closeOfflineAlarmsBySerialNumber($serial_number)
     {
-        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_status", 1)->get();
+        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_type", "Offline")->where("alarm_status", 1)->get();
 
         foreach ($alarmEvents as $alarm) {
 
