@@ -615,6 +615,9 @@ export default {
 
   async created() {
     this.colorcodes = this.$utils.getAlarmIcons();
+
+    if (this.customersData.length > 0)
+      this.setCustomerLocationOnMap(this.customersData[0]);
   },
   watch: {},
   methods: {
