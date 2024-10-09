@@ -451,7 +451,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $alarm->update([
                     "alarm_end_datetime" => $nowInTimeZone,
                     "response_minutes" => $minutesDifference,
-                    "alarm_status" => 4
+                    "alarm_status" => 0
                 ]);
             }
         }
