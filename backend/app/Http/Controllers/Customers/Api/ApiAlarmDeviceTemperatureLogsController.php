@@ -383,13 +383,24 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             return $query->where('id', $companyIdFilter);
         })->pluck('id');
         foreach ($companyIds as $companyId) {
+            // $model = AlarmEvents::with([
+            //     "device.customer.primary_contact",
+            //     "device.customer.secondary_contact",
+            //     "notes",
+            //     "category",
+            //     "zoneData"
+            // ])->where('company_id', $companyId)->where('alarm_status', 1);
+
             $model = AlarmEvents::with([
-                "device.customer.primary_contact",
-                "device.customer.secondary_contact",
+                "device.customer" => function ($query) {
+                    $query->without('all_alarm_events') // Exclude default all_alarm_events relation
+                        ->with(['primary_contact', 'secondary_contact']);
+                },
                 "notes",
                 "category",
                 "zoneData"
-            ])->where('company_id', $companyId)->where('alarm_status', 1);
+            ])->where('company_id', $companyId)
+                ->where('alarm_status', 1);
 
 
 
