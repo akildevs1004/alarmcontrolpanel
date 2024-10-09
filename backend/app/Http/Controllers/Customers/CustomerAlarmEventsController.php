@@ -532,15 +532,17 @@ class CustomerAlarmEventsController extends Controller
             if ($request->filled("filter_customers_list")) {
                 $data = json_decode($fileContent, true);
 
-                $filteredData = array_filter($data, function ($item) use ($request) {
-                    return in_array($item['customer_id'], $request->filter_customers_list);
-                });
-                $return = [];
-                foreach ($filteredData as $key => $value) {
-                    $return[] = $value;
-                }
+                if ($data) {
+                    $filteredData = array_filter($data, function ($item) use ($request) {
+                        return in_array($item['customer_id'], $request->filter_customers_list);
+                    });
+                    $return = [];
+                    foreach ($filteredData as $key => $value) {
+                        $return[] = $value;
+                    }
 
-                return $return;
+                    return $return;
+                }
             }
 
 
