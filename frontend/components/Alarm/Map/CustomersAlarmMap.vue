@@ -662,6 +662,10 @@ export default {
     //   this.getCustomers("alarm");
     // }, 1000 * 2);
     // await this.getMapKey();
+
+    setTimeout(() => {
+      this.plotLocations(true);
+    }, 1000 * 2);
   },
 
   created() {
@@ -912,7 +916,7 @@ export default {
           });
 
           this.map.panTo(position);
-          this.map.setZoom(14);
+          this.map.setZoom(12);
 
           let infowindow = this.mapInfowindowsList[item.id];
           let marker = this.mapMarkersList[item.id];
@@ -956,7 +960,14 @@ export default {
       // this.infowindow = new google.maps.InfoWindow();
       this.plotLocations();
     },
-    plotLocations() {
+    plotLocations(changeMap = false) {
+      if (
+        this.data.length > 0 &&
+        changeMap &&
+        this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
+      ) {
+        this.setCustomerLocationOnMap(this.data[0]);
+      }
       this.data.forEach((item) => {
         try {
           const position = {
