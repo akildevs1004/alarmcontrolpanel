@@ -25,7 +25,7 @@ class AlarmDashboardController extends Controller
     public function getDeviceArmedStatistics(Request $request)
     {
 
-        $model = Device::where("company_id", $request->company_id);
+        $model = Device::where("company_id", $request->company_id)->where("device_id", "!=", "Manual");
 
 
 
@@ -47,7 +47,7 @@ class AlarmDashboardController extends Controller
 
         foreach ($statuses as $type => $status) {
             $model = Device::with(['sensorzones'])
-                ->where('company_id', $request->company_id)
+                ->where('company_id', $request->company_id)->where("device_id", "!=", "Manual")
                 ->where(function ($query) use ($type) {
                     $query->where('device_type', 'ILIKE', $type)
                         ->orWhereHas('sensorzones', function ($query) use ($type) {
@@ -76,7 +76,7 @@ class AlarmDashboardController extends Controller
     public function getDeviceLiveStatistics(Request $request)
     {
 
-        $model = Device::where("company_id", $request->company_id);
+        $model = Device::where("company_id", $request->company_id)->where("device_id", "!=", "Manual");
         $totalCount = $model->count();
         $online = $model->where("status_id", 1)->count();
 

@@ -214,7 +214,7 @@ class CompanyController extends Controller
         $AnnouncementsCategories = AnnouncementsCategories::insert(defaultAnnouncementCategories($id));
         $MailContent = MailContent::insert(defaultMailContent($id));
 
-        $devices = Device::insert(defaultDeviceManual($id));
+        //$devices = Device::insert(defaultDeviceManual($id));
         $branches = CompanyBranch::create(defaultBranch($id));
         $department = Department::insert(defaultDepartments($id, $branches->id));
 
