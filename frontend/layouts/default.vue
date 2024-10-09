@@ -898,6 +898,14 @@ export default {
       this.loadHeaderNotificationMenu();
       //this.verifyPopupAlarmStatus();
     }, 1000 * 1);
+    this.getBuildingTypes();
+    this.getAddressTypes();
+    this.getDeviceTypes();
+    this.getSensorTypes();
+
+    this.getZoneTypes();
+
+    this.getDeviceModels();
 
     setInterval(() => {
       if (!this.$route.name.includes("alarm")) return false;
