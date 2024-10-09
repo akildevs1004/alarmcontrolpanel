@@ -138,7 +138,7 @@ export default {
           value: "employee.pic",
         },
         {
-          text: "Employee Name",
+          text: "Name",
           align: "left",
           sortable: false,
           filterable: true,

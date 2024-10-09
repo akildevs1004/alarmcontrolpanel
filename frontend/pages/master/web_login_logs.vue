@@ -253,7 +253,7 @@ export default {
           value: "user_type",
         },
         {
-          text: "Employee Name",
+          text: "Name",
           align: "left",
           sortable: false,
           filterable: true,
