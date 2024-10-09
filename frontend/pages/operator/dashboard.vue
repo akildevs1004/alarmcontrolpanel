@@ -606,6 +606,9 @@ export default {
     await this.getDatafromApi();
     await this.getCustomersDatafromApi();
 
+    if (this.customersData.length > 0)
+      this.setCustomerLocationOnMap(this.customersData[0]);
+
     await this.getBuildingTypes();
     await this.getAlarmTypes();
     setTimeout(() => {
@@ -615,9 +618,6 @@ export default {
 
   async created() {
     this.colorcodes = this.$utils.getAlarmIcons();
-
-    if (this.customersData.length > 0)
-      this.setCustomerLocationOnMap(this.customersData[0]);
   },
   watch: {},
   methods: {

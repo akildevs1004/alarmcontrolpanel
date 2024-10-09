@@ -859,14 +859,14 @@ export default {
       return false;
     }
     this.loadAlarmNotificationIcons();
-    this.getBuildingTypes();
-    this.getAddressTypes();
-    this.getDeviceTypes();
-    this.getSensorTypes();
+    /*// this.getBuildingTypes();
+    // this.getAddressTypes();
+    // this.getDeviceTypes();
+    // this.getSensorTypes();
 
-    this.getZoneTypes();
+    // this.getZoneTypes();
 
-    this.getDeviceModels();
+    // this.getDeviceModels();*/
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
