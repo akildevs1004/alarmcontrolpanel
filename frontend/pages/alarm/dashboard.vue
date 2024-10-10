@@ -51,7 +51,10 @@
     <v-row>
       <v-col cols="12">
         <v-card class="elevation-2">
-          <v-card-text class="mt-5">
+          <v-card-text
+            class="mt-0 pr-8"
+            :style="'height:' + windowHeight - 220 + 'px'"
+          >
             <AlamAllEventsDashboard
               :compFilterAlarmStatus="1"
               name="dashboardPieChart"
@@ -81,6 +84,7 @@ export default {
     AlamCustomerEventsPieChart,
   },
   data: () => ({
+    windowHeight: 1000,
     key: 1,
     profile_percentage: 60,
     tab: null,
@@ -90,7 +94,11 @@ export default {
     date_to: null,
   }),
   computed: {},
-  mounted() {},
+  mounted() {
+    setInterval(() => {
+      if (window) this.windowHeight = window.innerHeight;
+    }, 1000 * 5);
+  },
   created() {
     // this._id = this.$route.params.id;
     let today = new Date();

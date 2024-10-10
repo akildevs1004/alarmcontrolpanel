@@ -1,6 +1,13 @@
 [
   {
     "icon": "mdi-home",
+    "title": "Intruder",
+    "to": "/alarm/intruderdashboard",
+    "menu": "alarm_intruderdashboard",
+    "module": "topmenu"
+  },
+  {
+    "icon": "mdi-home",
     "title": "Dashboard",
     "to": "/alarm/dashboard",
     "menu": "alarm_dashboard",

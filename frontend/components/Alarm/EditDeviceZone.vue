@@ -14,7 +14,7 @@
               <v-row class="pt-0">
                 <v-col cols="12" dense>
                   <v-text-field
-                    label="Zone Number(Ex: 001,002)"
+                    label="Code / Zone Number(Ex: 001,002)"
                     dense
                     small
                     outlined
@@ -31,7 +31,7 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-text-field
-                    label="Zone Name(ex: Kitchen, Hall, etc)"
+                    label="Name(ex: Kitchen, Hall, etc)"
                     dense
                     small
                     outlined
@@ -211,9 +211,9 @@ export default {
     start_date: "",
     end_date: "",
     payload_security: {
-      attachment: "",
-      title: "",
-      display_order: "",
+      sensor_name: "Perimeter Zone",
+      area_code: null,
+      wired: "Wireless",
     },
 
     e1: 1,
@@ -231,7 +231,7 @@ export default {
     web_login_access: 1,
   }),
   created() {
-    this.payload_security = {};
+    // this.payload_security = {};
     if (this.$store.state.storeAlarmControlPanel?.ZoneTypes) {
       this.ZoneTypes = this.$store.state.storeAlarmControlPanel.ZoneTypes;
 

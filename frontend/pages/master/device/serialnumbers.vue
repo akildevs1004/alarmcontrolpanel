@@ -24,7 +24,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="newSerialNumberDialog" max-width="700px">
+    <v-dialog v-model="newSerialNumberDialog" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black">

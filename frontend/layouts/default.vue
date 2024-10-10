@@ -743,6 +743,11 @@ export default {
           elevation: 0,
           selected: "",
         },
+        alarm_intruderdashboard: {
+          elevation: 0,
+          selected: "",
+        },
+
         alarm_map: {
           elevation: 0,
           selected: "",
@@ -917,25 +922,25 @@ export default {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
 
-        if (this.$route.name === "alarm-dashboard" && !this.wait5Minutes) {
-          const notificationContent = this.notificationAlarmDevicesContent;
+        // if (this.$route.name === "alarm-dashboard" && !this.wait5Minutes) {
+        //   const notificationContent = this.notificationAlarmDevicesContent;
 
-          if (notificationContent && notificationContent.length > 0) {
-            let criticalList = notificationContent.filter(
-              (notification) => notification.alarm_category == 1
-            );
-            if (criticalList.length > 0) {
-              if (!this.dialogAlarmPopupNotificationStatus) {
-                this.popupKey += 1;
-                this.dialogAlarmPopupNotificationStatus = true;
-              }
-            } else {
-              //this.dialogAlarmPopupNotificationStatus = false;
-            }
-          } else {
-            this.dialogAlarmPopupNotificationStatus = false;
-          }
-        }
+        //   if (notificationContent && notificationContent.length > 0) {
+        //     let criticalList = notificationContent.filter(
+        //       (notification) => notification.alarm_category == 1
+        //     );
+        //     if (criticalList.length > 0) {
+        //       if (!this.dialogAlarmPopupNotificationStatus) {
+        //         this.popupKey += 1;
+        //         this.dialogAlarmPopupNotificationStatus = true;
+        //       }
+        //     } else {
+        //       //this.dialogAlarmPopupNotificationStatus = false;
+        //     }
+        //   } else {
+        //     this.dialogAlarmPopupNotificationStatus = false;
+        //   }
+        // }
       }
     }, 1000 * 20 * 1);
     // setInterval(() => {
@@ -1108,8 +1113,8 @@ export default {
       };
 
       const defaultRoute = {
-        name: "alarm_dashboard",
-        path: "/alarm/dashboard",
+        name: "alarm_intruderdashboard",
+        path: "/alarm/intruderdashboard",
       };
 
       const routeConfig = routeMap[this.$route.name] || defaultRoute;

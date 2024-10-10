@@ -87,11 +87,14 @@
                     outlined
                     clearable
                     autocomplete="off"
-                    v-model="payload_serial_number.serial_number"
+                    v-model="new_serial_number"
                     hide-details
                     :readonly="!editable"
                     :filled="!editable"
+                    append-icon=" mdi-refresh "
+                    @click:append="generateNewToken()"
                   ></v-text-field>
+
                   <span
                     v-if="primary_errors && primary_errors.serial_number"
                     class="text-danger mt-2"
@@ -191,6 +194,7 @@ export default {
       picture: "",
       company_id: 0,
     },
+    new_serial_number: "",
 
     e1: 1,
     primary_errors: [],
@@ -252,6 +256,19 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+
+    generateNewToken() {
+      let length = 10;
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let token = "XTG"; // Set the prefix here
+
+      for (let i = 0; i < length - 2; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        token += characters.charAt(randomIndex);
+      }
+      this.new_serial_number = token;
+      //this.payload_serial_number.serial_number = token;
+    },
     changeStatus(status) {
       if (this.editable) this.web_login_access = status;
     },
@@ -290,6 +307,7 @@ export default {
         if (this.payload_serial_number[key] != "")
           customer.append(key, this.payload_serial_number[key]);
       }
+      customer.append("new_serial_number", this.new_serial_number);
 
       if (this.primary_upload.name) {
         customer.append("attachment", this.primary_upload.name);

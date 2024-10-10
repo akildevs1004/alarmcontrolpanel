@@ -387,6 +387,7 @@
                 <v-card color="basil" flat>
                   <v-card-text style="padding: 0px">
                     <v-data-table
+                      style="height: auto"
                       :name="'table' + index"
                       v-if="showTable"
                       :headers="headers"

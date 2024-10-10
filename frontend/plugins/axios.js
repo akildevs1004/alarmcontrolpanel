@@ -1,6 +1,6 @@
 export default ({ app, $axios, store }, inject) => {
   const pendingRequests = [];
-  const MAX_PENDING_REQUESTS = 10;
+  const MAX_PENDING_REQUESTS = 15;
 
   // Helper function to cancel all pending requests
   const cancelPendingRequests = () => {

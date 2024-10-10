@@ -12,6 +12,7 @@ use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,86 @@ use function Aws\filter;
 class AlarmDashboardController extends Controller
 {
 
+    public function dashboardStatisctsCustomers(Request $request)
+    {
+        $totalCustomers = Customers::where("company_id", $request->company_id)->count();
+        $deviceCounts = Device::selectRaw("             
+        COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
+        COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
+        COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
+        COUNT(CASE WHEN status_id = 0 THEN 1 END) as offlineCount
+    ")->first();
+
+        $alarmCounts = AlarmEvents::selectRaw("             
+        COUNT(CASE WHEN alarm_status = 1 THEN 1  END) as openCount,
+        COUNT(CASE WHEN alarm_status = 0 THEN 1   END) as closedCount 
+        
+    ")
+            //->whereDate("alarm_start_datetime", $request->date)
+            ->first();
+
+
+        return  [
+            "customersCount" => $totalCustomers,
+            "armedCount" => $deviceCounts->armedcount,
+            "disarmCount" => $deviceCounts->disarmcount,
+            "onlineCount" => $deviceCounts->onlinecount,
+            "offlineCount" => $deviceCounts->offlinecount,
+
+
+            "openCount" => $alarmCounts->opencount,
+            "closedCount" => $alarmCounts->closedcount,
+        ];
+    }
+    public function dashboardStatisctsDateRange(Request $request)
+    {
+        $finalarray = [];
+        $dateStrings = [];
+        if ($request->has("date_from") && $request->has("date_to")) {
+            // Usage example:
+            $startDate = new DateTime($request->date_from);
+            $endDate = new DateTime($request->date_to);
+
+            $dateStrings = $this->createDateRangeArray($startDate, $endDate);
+        } else {
+            for ($i = 6; $i >= 0; $i--) {
+                $dateStrings[] = date('Y-m-d', strtotime(date('Y-m-d') . '-' . $i . ' days'));
+            }
+        }
+        foreach ($dateStrings as $key => $date) {
+
+            $counts = AlarmEvents::selectRaw("             
+            COUNT(CASE WHEN alarm_type = 'SOS' THEN 1 ELSE 0 END) as sosCount,
+            COUNT(CASE WHEN alarm_category = 1 THEN 1 ELSE 0 END) as crititalCount,
+            COUNT(CASE WHEN alarm_category = 2 THEN 1 ELSE 0 END) as mediumCount,
+            COUNT(CASE WHEN alarm_category = 3 THEN 1 ELSE 0 END) as lowCount
+        ")
+                ->whereDate("alarm_start_datetime", $date)
+                ->first();
+            $finalarray[] = [
+                "date" => $date,
+                "sosCount" => $counts->soscount,
+                "highCount" => $counts->crititalcount,
+                "mediumCount" => $counts->mediumcount,
+                "lowCount" => $counts->lowcount,
+            ];
+        }
+
+
+        return  $finalarray;
+    }
+    function createDateRangeArray($startDate, $endDate)
+    {
+        $dateStrings = [];
+        $currentDate = $startDate;
+
+        while ($currentDate <= $endDate) {
+            $dateStrings[] = $currentDate->format('Y-m-d'); // Change the format as needed
+            $currentDate->modify('+1 day');
+        }
+
+        return $dateStrings;
+    }
     public function getDeviceArmedStatistics(Request $request)
     {
 
