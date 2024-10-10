@@ -125,7 +125,7 @@ class AlramEventsController extends Controller
                         ];
                         $offlineDevices[] = $data;
 
-                        $latestAlarmEvent =  AlarmEvents::where("serial_number", $device['serial_number'])->where("alarm_status", "Offline")->orderBy("alarm_start_datetime", "desc")->first();
+                        $latestAlarmEvent =  AlarmEvents::where("serial_number", $device['serial_number'])->where("alarm_status", 0)->orderBy("alarm_start_datetime", "desc")->first();
                         if ($latestAlarmEvent &&  $latestAlarmEvent->alarm_status == 1) {
                             AlarmEvents::create($data);
                         } else if (!$latestAlarmEvent) {
