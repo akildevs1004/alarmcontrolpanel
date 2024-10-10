@@ -71,7 +71,7 @@ class AlarmDashboardController extends Controller
         }
         foreach ($dateStrings as $key => $date) {
 
-            $counts = AlarmEvents::selectRaw("             
+            $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
             COUNT(CASE WHEN alarm_type = 'SOS' THEN 1 ELSE 0 END) as sosCount,
             COUNT(CASE WHEN alarm_category = 1 THEN 1 ELSE 0 END) as crititalCount,
             COUNT(CASE WHEN alarm_category = 2 THEN 1 ELSE 0 END) as mediumCount,

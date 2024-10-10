@@ -167,7 +167,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     ];
                     Device::where("serial_number", $serial_number)->update($data);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-
+                    // Log::info(json_encode($data));
 
                     //update armed log 
                     $armedRow = ["disarm_datetime" => $log_time];

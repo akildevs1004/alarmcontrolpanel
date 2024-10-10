@@ -31,19 +31,19 @@ export default {
       date_to: "",
       series: [
         {
-          name: "Present",
+          name: "SOS",
           data: [],
         },
         {
-          name: "Absent",
+          name: "Critical",
           data: [],
         },
         {
-          name: "Missing",
+          name: "Medium",
           data: [],
         },
         {
-          name: "WeekOff",
+          name: "Low",
           data: [],
         },
       ],
