@@ -22,7 +22,27 @@ class DeviceZoneTypesController extends Controller
     }
     public function sensorTypesList()
     {
-        return  ["Motion Sensor", "Vibration Sensor"];
+        $sensorNames =  [
+            "Motion Sensor",
+            "Heat Sensor",
+            "Door Contact",
+            "Smoke Sensor",
+            "Glass Break",
+            "Motion sensor ",
+            "Panic Button ",
+            "Gas Sensor",
+            "Microwave Sensor",
+            "Beam Sensor",
+            "Temperature",
+            "Shutter Door",
+            "Flood Sensor",
+            "Curtain Sensor",
+
+        ];
+
+        sort($sensorNames);
+
+        return $sensorNames;
     }
 
 

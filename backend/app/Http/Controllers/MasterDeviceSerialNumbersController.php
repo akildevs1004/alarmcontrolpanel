@@ -97,6 +97,7 @@ class MasterDeviceSerialNumbersController extends Controller
             $data['picture'] = $fileName;
         }
         $data["device_id"] = $request->serial_number;
+        $data["status_id"] = 2;
         unset($data["attachment"]);
         unset($data["editId"]);
 

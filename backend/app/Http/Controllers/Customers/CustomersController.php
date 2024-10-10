@@ -348,7 +348,8 @@ class CustomersController extends Controller
 
 
         unset($data['editId']);
-
+        unset($data['sensor_name_other']);
+        unset($data['sensor_type_other']);
 
 
 

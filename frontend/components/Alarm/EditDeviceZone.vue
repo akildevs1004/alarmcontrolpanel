@@ -49,8 +49,8 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-combobox
-                    label="Sensor Type "
-                    :items="sensorTypes"
+                    label="Sensor Type"
+                    :items="[...sensorTypes, 'Other']"
                     dense
                     small
                     outlined
@@ -65,9 +65,26 @@
                     >{{ primary_errors.sensor_type[0] }}</span
                   >
                 </v-col>
+                <v-col
+                  cols="12"
+                  dense
+                  v-if="payload_security.sensor_type == 'Other'"
+                >
+                  <v-text-field
+                    label="Other Sensor Type"
+                    dense
+                    small
+                    outlined
+                    type="text"
+                    v-model="payload_security.sensor_type_other"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                </v-col>
                 <v-col cols="12" dense>
                   <v-combobox
-                    :items="ZoneTypes"
+                    :items="[...ZoneTypes, 'Other']"
                     label="Zone Type"
                     dense
                     small
@@ -82,6 +99,23 @@
                     class="text-danger mt-2"
                     >{{ primary_errors.sensor_name[0] }}</span
                   >
+                </v-col>
+                <v-col
+                  cols="12"
+                  dense
+                  v-if="payload_security.sensor_name == 'Other'"
+                >
+                  <v-text-field
+                    label="Other Zone Type"
+                    dense
+                    small
+                    outlined
+                    type="text"
+                    v-model="payload_security.sensor_name_other"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" dense>
                   <!-- <v-text-field
@@ -302,6 +336,15 @@ export default {
         if (this.payload_security[key] != "")
           if (this.payload_security[key] != null)
             customer.append(key, this.payload_security[key]);
+      }
+
+      if (this.payload_security.sensor_type.toLowerCase() == "other") {
+        this.payload_security.sensor_type =
+          this.payload_security.sensor_type_other;
+      }
+      if (this.payload_security.sensor_name.toLowerCase() == "other") {
+        this.payload_security.sensor_name =
+          this.payload_security.sensor_name_other;
       }
 
       customer.append("company_id", this.$auth.user.company_id);
