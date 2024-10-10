@@ -36,11 +36,12 @@
         <v-row>
           <v-col lg="12" md="12" sm="12" xs="12">
             <v-card class="py-2" style="height: 772px; overflow: hidden">
+              <AllEvents :filterDeviceType="'Intruder'" />
               <!-- <DashboardRealTimeLogTableview :branch_id="branch_id" /> -->
             </v-card>
           </v-col>
         </v-row>
-        <v-row class="d-xs-flex">
+        <!-- <v-row class="d-xs-flex">
           <v-col
             lg="6"
             md="6"
@@ -50,19 +51,13 @@
             style="flex: auto"
           >
             <v-card class="py-2 mt-2" style="height: 312px; overflow: hidden">
-              <!-- <DashboardAttendanceHourChart
-                :branch_id="branch_id"
-                :name="'AttendanceChart2'"
-                :height="'260'"
-              /> -->
             </v-card>
           </v-col>
           <v-col lg="6" md="6" sm="12" xs="12">
             <v-card class="py-2 mt-2" style="height: 312px; overflow: hidden">
-              <!-- <DashboardLoginActivities :branch_id="branch_id" /> -->
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
 
       <v-col lg="3" md="3" sm="12" xs="12">
@@ -71,20 +66,15 @@
         <v-row>
           <v-col lg="12" md="12" sm="12" xs="12">
             <v-card class="py-2 mt-2" style="height: 443px; overflow: hidden">
-              <!-- <DashboardAnnouncment :branch_id="branch_id" /> -->
             </v-card>
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col lg="12" md="12" sm="12" xs="12">
             <v-card class="py-2 mt-2" style="height: 312px; overflow: hidden">
-              <!-- <DashboardAttednaceDepartmentWise
-                :branch_id="branch_id"
-                name="AttendanceDepartmentWise"
-              /> -->
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
   </div>
@@ -94,11 +84,13 @@
 import AlarmCustomersStas from "../../components/Admin/AlarmCustomersStas.vue";
 import AlarmEventsDayWiseChart from "../../components/Admin/AlarmEventsDayWiseChart.vue";
 import AlarmEventsTodayStas from "../../components/Admin/AlarmEventsTodayStas.vue";
+import AllEvents from "../../components/Admin/AllEvents.vue";
 export default {
   components: {
     AlarmEventsDayWiseChart,
     AlarmEventsTodayStas,
     AlarmCustomersStas,
+    AllEvents,
   },
   data: () => ({}),
   computed: {},

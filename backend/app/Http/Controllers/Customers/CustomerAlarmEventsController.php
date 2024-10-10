@@ -634,76 +634,6 @@ class CustomerAlarmEventsController extends Controller
         $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "desc");
 
         return $model->paginate($request->perPage ?? 10);;
-
-
-        // $model = AlarmEvents::with([
-        //     "device.customer.primary_contact",
-        //     "device.customer.secondary_contact",
-        //     "notes",
-        //     "category",
-        //     "device.customer.buildingtype"
-        // ])->where('company_id', $request->company_id)
-
-        //     // ->when($request->filled("common_search"), function ($query) use ($request) {
-        //     //     $query->where("customer_id", $request->common_search);
-        //     // })
-        //     ->when($request->filled("alarm_status"), fn($q) => $q->where("alarm_status", $request->alarm_status))
-        //     ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
-        //         if ((int) $request->filterResponseInMinutes == 0)
-        //             $query->where("response_minutes", '>', 10);
-        //         else 
-        //         if ((int) $request->filterResponseInMinutes == 1)
-        //             $query->where("response_minutes", '<=', 1);
-        //         else
-        //         if ((int) $request->filterResponseInMinutes == 5)
-
-        //             $query->where("response_minutes", '>=', 1)->where("response_minutes", '<=', 5);
-
-        //         else
-        //             if ((int) $request->filterResponseInMinutes == 10)
-
-        //             $query->where("response_minutes", '>=', 5)->where("response_minutes", '<=', 10);
-        //     })
-        //     ->when($request->filled("customer_id"), fn($q) => $q->where("customer_id", $request->customer_id));
-        // if ($request->filled("date_from")) {
-        //     $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
-        // }
-
-
-        // $model->when($request->filled('filterSensorname'), function ($q) use ($request) {
-
-        //     $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
-        // });
-
-        // $model->when($request->filled('common_search'), function ($q) use ($request) {
-        //     $q->where(function ($q) use ($request) {
-        //         $q->Where('serial_number', 'ILIKE', "%$request->common_search%");
-        //         $q->orWhere('alarm_type', 'ILIKE', "%$request->common_search%");
-        //         $q->orWhere('alarm_category', 'ILIKE', "%$request->common_search%");
-        //         $q->orWhere('zone', 'ILIKE', "%$request->common_search%");
-        //         $q->orWhere('area', 'ILIKE', "%$request->common_search%");
-
-        //         $q->when(
-        //             !$request->filled("customer_id"),
-        //             function ($quqery) use ($request) {
-        //                 $quqery->orWhereHas('device.customer', fn(Builder $query) => $query->where('building_name', 'ILIKE', "$request->common_search%")
-        //                     ->orWhere('area', 'ILIKE', "$request->common_search%")
-        //                     ->orWhere('city', 'ILIKE', "$request->common_search%")
-
-        //                     ->where('company_id', $request->company_id));
-        //             }
-
-        //         );
-
-        //         $q->orWhereHas('device', fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-        //         $q->orWhereHas('device', fn(Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-        //         $q->orWhereHas('device', fn(Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-        //     });
-        // });
-        // $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "asc");
-        // return $model->paginate($request->perPage ?? 10);;
-        // //$model->orderBy("alarm_start_datetime", "asc");
-        // //return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
     public function filter($request)
     {
@@ -768,6 +698,12 @@ class CustomerAlarmEventsController extends Controller
         $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
 
             $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
+        });
+        $model->when($request->filled('filterDeviceType') && $request->filterDeviceType != '', function ($q) use ($request) {
+
+            $q->WhereHas('device',  function ($q) use ($request) {
+                $q->where('device_type', 'ILIKE', "%$request->filterDeviceType%");
+            });
         });
 
         $model->when($request->filled('common_search') && $request->common_search != '', function ($q) use ($request) {
