@@ -162,7 +162,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $data = [
                         "alarm_status" => 0,
                         "alarm_end_datetime" => $log_time,
-
+                        "armed_status" => 0,
                         "armed_datetime" => $log_time
                     ];
                     Device::where("serial_number", $serial_number)->update($data);
