@@ -197,7 +197,7 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.data = data.data[0];
+          if (data.data.length > 0) this.data = data.data[0];
         });
     },
   },
