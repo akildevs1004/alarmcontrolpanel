@@ -81,7 +81,7 @@ class AlarmDashboardController extends Controller
                 ->first();
             $finalarray[] = [
                 "date" => $date,
-                "sosCount" => 10, //$counts->soscount,
+                "sosCount" => $counts->soscount,
                 "highCount" => $counts->crititalcount,
                 "mediumCount" => $counts->mediumcount,
                 "lowCount" => $counts->lowcount,
