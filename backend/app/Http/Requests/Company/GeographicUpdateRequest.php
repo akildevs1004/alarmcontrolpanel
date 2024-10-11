@@ -29,6 +29,7 @@ class GeographicUpdateRequest extends FormRequest
             'lat' => ['nullable', 'min:3', 'max:100'],
             'lon' => ['nullable', 'min:3', 'max:100'],
             'location' => ['nullable', 'min:3', 'max:250'],
+            'utc_time_zone' => ['nullable', 'min:3', 'max:250'],
         ];
     }
 }

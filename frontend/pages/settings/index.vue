@@ -267,6 +267,7 @@
                                   dense
                                   outlined
                                   v-model="contact_payload.name"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.name"
@@ -285,6 +286,7 @@
                                   dense
                                   outlined
                                   v-model="contact_payload.number"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.number"
@@ -303,6 +305,7 @@
                                   dense
                                   outlined
                                   v-model="contact_payload.position"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.position"
@@ -321,6 +324,7 @@
                                   dense
                                   outlined
                                   v-model="contact_payload.whatsapp"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.whatsapp"
@@ -337,6 +341,7 @@
                                   dense
                                   outlined
                                   v-model="company_payload.mol_id"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.mol_id"
@@ -354,6 +359,7 @@
                                   dense
                                   outlined
                                   v-model="company_payload.p_o_box_no"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.p_o_box_no"
@@ -369,6 +375,7 @@
                                   dense
                                   outlined
                                   v-model="geographic_payload.lat"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.lat"
@@ -384,6 +391,7 @@
                                   dense
                                   outlined
                                   v-model="geographic_payload.lon"
+                                  hide-details
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.lon"
@@ -398,8 +406,9 @@
                                   label="Location"
                                   dense
                                   outlined
-                                  height="100px"
+                                  height="50px"
                                   v-model="geographic_payload.location"
+                                  hide-details
                                 >
                                 </v-textarea>
                                 <span
@@ -407,6 +416,19 @@
                                   class="text-danger mt-2"
                                   >{{ errors.location[0] }}</span
                                 >
+                              </v-col>
+                              <v-col>
+                                <v-autocomplete
+                                  class="pb-0"
+                                  hide-details
+                                  v-model="geographic_payload.utc_time_zone"
+                                  outlined
+                                  dense
+                                  label="Time Zone(Ex:UTC+)"
+                                  :items="getTimezones()"
+                                  item-value="key"
+                                  item-text="text"
+                                ></v-autocomplete>
                               </v-col>
                             </v-row>
                           </v-card-text>
@@ -554,8 +576,11 @@
 </template>
 
 <script>
+import timeZones from "../../defaults/utc_time_zones.json";
+
 export default {
   data: () => ({
+    timeZones,
     originalURL: process.env.APP_URL + "register/visitor/walkin/", //`https://mytime2cloud.com/register/visitor/walkin/`,
     fullCompanyLink: null,
     qrCompanyCodeDataURL: null,
@@ -664,7 +689,19 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-
+    getTimezones() {
+      return Object.keys(this.timeZones).map((key) => ({
+        offset: this.timeZones[key].offset,
+        time_zone: this.timeZones[key].time_zone,
+        key: key,
+        text:
+          this.timeZones[key].time_zone +
+          " - " +
+          key +
+          " - " +
+          this.timeZones[key].offset,
+      }));
+    },
     getDataFromApi() {
       this.id = this.$auth.user.company_id;
       this.$axios
@@ -688,6 +725,7 @@ export default {
             lat: this.company_payload.lat,
             lon: this.company_payload.lon,
             location: this.company_payload.location,
+            utc_time_zone: this.company_payload.utc_time_zone,
           };
           this.preloader = false;
         });

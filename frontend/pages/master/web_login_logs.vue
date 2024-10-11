@@ -135,18 +135,15 @@
           {{ (item.branch && item.name) || "---" }}
         </template>
         <template v-slot:item.employee.first_name="{ item, index }">
-          <div v-if="item.user.employee">
-            {{ item.user.employee.first_name }}
-            {{ item.user.employee.last_name }}
-            <div class="secondary-value">
-              {{
-                item.user.employee && item.user.employee.department
-                  ? caps(item.user.employee.department.name)
-                  : "---"
-              }}
-            </div>
-          </div>
-          <div v-else>
+          {{
+            item.user.security
+              ? item.user.security.first_name +
+                " " +
+                item.user.security.last_name
+              : ""
+          }}{{ item.user.customer ? item.user.customer.building_name : "" }}
+          {{ item.model_type == "company" ? "Admin" : "" }}
+          <div>
             {{ item.user.user_type == "master" ? "MASTER" : "ADMIN" }}
           </div>
         </template>

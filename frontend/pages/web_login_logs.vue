@@ -73,16 +73,14 @@
           {{ (item.branch && item.branch_name) || "---" }}
         </template>
         <template v-slot:item.employee.first_name="{ item, index }">
-          {{ item.user.employee ? item.user.employee.first_name : "Admin" }}
-          {{ item.user.employee ? item.user.employee.last_name : " " }}
-
-          <div>
-            {{
-              item.user.employee && item.user.employee.department
-                ? caps(item.user.employee.department.name)
-                : "---"
-            }}
-          </div>
+          {{
+            item.user.security
+              ? item.user.security.first_name +
+                " " +
+                item.user.security.last_name
+              : ""
+          }}{{ item.user.customer ? item.user.customer.building_name : "" }}
+          {{ item.model_type == "company" ? "Admin" : "" }}
         </template>
 
         <template v-slot:item.UserID="{ item }"> #{{ item.UserID }} </template>
@@ -138,6 +136,14 @@ export default {
           value: "employee.pic",
         },
         {
+          text: "User ",
+          align: "left",
+          sortable: false,
+          filterable: true,
+
+          value: "user.user_type",
+        },
+        {
           text: "Name",
           align: "left",
           sortable: false,
@@ -152,14 +158,6 @@ export default {
           filterable: true,
 
           value: "action",
-        },
-        {
-          text: "User ",
-          align: "left",
-          sortable: false,
-          filterable: true,
-
-          value: "user.user_type",
         },
 
         {

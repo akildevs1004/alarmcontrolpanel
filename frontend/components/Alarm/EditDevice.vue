@@ -292,7 +292,7 @@ export default {
     snack: false,
     snackColor: "",
     snackText: "",
-    timeZones: timeZones,
+    timeZones,
     payload: {
       name: "",
       device_type: "",
@@ -599,7 +599,12 @@ export default {
         offset: this.timeZones[key].offset,
         time_zone: this.timeZones[key].time_zone,
         key: key,
-        text: key + " - " + this.timeZones[key].offset,
+        text:
+          this.timeZones[key].time_zone +
+          " - " +
+          key +
+          " - " +
+          this.timeZones[key].offset,
       }));
     },
   },

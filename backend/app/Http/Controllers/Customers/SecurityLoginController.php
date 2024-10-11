@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Customers\SecurityLogin;
 use App\Models\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\Document\Security;
 
@@ -35,7 +39,45 @@ class SecurityLoginController extends Controller
         });
         return $model->orderBy('id', 'ASC')->paginate($request->perPage);;
     }
+    public function getOperatorLiveStatus(Request $request)
+    {
 
+        $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
+
+        return $model->get();
+
+        $currentDateTime = now(); // Get the current datetime
+
+        $company = Company::whereId($request->company_id)->first();
+        $company_time_zone = $company->utc_time_zone != null ? $company->utc_time_zone : "Asia/Dubai";
+
+        if ($company_time_zone)
+
+            $currentDateTime = new DateTime();
+        $currentDateTime->setTimezone(new DateTimeZone($company_time_zone));
+        $logtime = $currentDateTime->format('Y-m-d H:i:s');
+
+        $model = SecurityLogin::select('*', DB::raw("TIMESTAMPDIFF(MINUTE, last_active_datetime, '{$logtime}') AS minutes_difference"))
+            ->where("company_id", $request->company_id)
+            ->orderBy("last_active_datetime", "DESC")
+            ->get();
+
+        return $model;
+    }
+    public function updateLiveStatus(Request $request)
+    {
+
+        $company = Company::whereId($request->company_id)->first();
+        $company_time_zone = $company->utc_time_zone != null ? $company->utc_time_zone : "Asia/Dubai";
+
+        if ($company_time_zone)
+
+            $log_time = new DateTime();
+        $log_time->setTimezone(new DateTimeZone($company_time_zone));
+
+
+        $model = SecurityLogin::where("id", $request->security_id)->update(["last_active_datetime" => $log_time->format('Y-m-d H:i:s')]);
+    }
     public function securityDropdownlist(Request $request)
     {
 

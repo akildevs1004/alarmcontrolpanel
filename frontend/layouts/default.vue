@@ -893,7 +893,7 @@ export default {
     this.setTopmenuHilighter();
   },
 
-  mounted() {
+  async mounted() {
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -903,14 +903,14 @@ export default {
       this.loadHeaderNotificationMenu();
       //this.verifyPopupAlarmStatus();
     }, 1000 * 1);
-    this.getBuildingTypes();
-    this.getAddressTypes();
-    this.getDeviceTypes();
-    this.getSensorTypes();
+    await this.getBuildingTypes();
+    await this.getAddressTypes();
+    await this.getDeviceTypes();
+    await this.getSensorTypes();
 
-    this.getZoneTypes();
+    await this.getZoneTypes();
 
-    this.getDeviceModels();
+    await this.getDeviceModels();
 
     setInterval(() => {
       if (!this.$route.name.includes("alarm")) return false;

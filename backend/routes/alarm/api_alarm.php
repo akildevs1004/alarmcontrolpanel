@@ -142,6 +142,10 @@ Route::get('alarm_customer_statistics', [AlarmDashboardController::class, "alarm
 Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
 Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
 Route::get('dashboard_statistics_date_range', [AlarmDashboardController::class, "dashboardStatisctsDateRange"]);
+Route::get('dashboard_statistics_hourly_range', [AlarmDashboardController::class, "dashboardStatisctsHourlyRange"]);
+
+
+
 Route::get('dashboard_statistics_customers', [AlarmDashboardController::class, "dashboardStatisctsCustomers"]);
 
 // Route::get('dashboard_today_statistics', [AlarmDashboardController::class, "dashboardStatisctsToday"]);
@@ -257,3 +261,6 @@ Route::get('get_operator_alarm_events', [CustomerAlarmEventsController::class, '
 Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
 Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
 Route::get('alarm_event_operator_statistics', [AlarmDashboardController::class, "alarmEventOperatorStatistics"]);
+
+Route::post('operator_live_update', [SecurityLoginController::class, "updateLiveStatus"]);
+Route::get('operators_live_status', [SecurityLoginController::class, "getOperatorLiveStatus"]);

@@ -54,6 +54,38 @@ class AlarmDashboardController extends Controller
             "closedCount" => $alarmCounts->closedcount,
         ];
     }
+    public function dashboardStatisctsHourlyRange(Request $request)
+    {
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+
+        for ($i = 0; $i < 24; $i++) {
+
+            $j = $i;
+
+            $j = $i <= 9 ? "0" . $i : $i;
+
+
+            $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
+                COUNT(CASE WHEN alarm_type = 'SOS' THEN 1   END) as sosCount,
+                COUNT(CASE WHEN alarm_category = 1 THEN 1  END) as crititalCount,
+                COUNT(CASE WHEN alarm_category = 2 THEN 1   END) as mediumCount,
+                COUNT(CASE WHEN alarm_category = 3 THEN 1   END) as lowCount
+            ")->where('alarm_start_datetime', '>=', $date_from . ' ' . $j . ':00:00')
+                ->where('alarm_start_datetime', '<=', $date_to  . ' ' . $j . ':59:59')
+
+                ->first();
+            $finalarray[] = [
+                "hour" => $i,
+                "sosCount" => $counts->soscount,
+                "highCount" => $counts->crititalcount,
+                "mediumCount" => $counts->mediumcount,
+                "lowCount" => $counts->lowcount,
+            ];
+        }
+
+        return $finalarray;
+    }
     public function dashboardStatisctsDateRange(Request $request)
     {
         $finalarray = [];

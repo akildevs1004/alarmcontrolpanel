@@ -710,15 +710,15 @@ export default {
       }
     }, 5000);
 
-    setTimeout(() => {
-      setInterval(() => {
-        if (
-          this.$route.name == "alarm-dashboard" &&
-          this.filterAlarmStatus == 1
-        )
-          this.getDataFromApi(0);
-      }, 1000 * 20 * 1);
-    }, 1000 * 40);
+    // setTimeout(() => {
+    //   setInterval(() => {
+    //     if (
+    //       this.$route.name == "alarm-dashboard" &&
+    //       this.filterAlarmStatus == 1
+    //     )
+    //       this.getDataFromApi(0);
+    //   }, 1000 * 20 * 1);
+    // }, 1000 * 40);
   },
 
   methods: {
