@@ -72,10 +72,10 @@ class AlarmDashboardController extends Controller
         foreach ($dateStrings as $key => $date) {
 
             $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
-            COUNT(CASE WHEN alarm_type = 'SOS' THEN 1 ELSE 0 END) as sosCount,
-            COUNT(CASE WHEN alarm_category = 1 THEN 1 ELSE 0 END) as crititalCount,
-            COUNT(CASE WHEN alarm_category = 2 THEN 1 ELSE 0 END) as mediumCount,
-            COUNT(CASE WHEN alarm_category = 3 THEN 1 ELSE 0 END) as lowCount
+            COUNT(CASE WHEN alarm_type = 'SOS' THEN 1   END) as sosCount,
+            COUNT(CASE WHEN alarm_category = 1 THEN 1  END) as crititalCount,
+            COUNT(CASE WHEN alarm_category = 2 THEN 1   END) as mediumCount,
+            COUNT(CASE WHEN alarm_category = 3 THEN 1   END) as lowCount
         ")
                 ->whereDate("alarm_start_datetime", $date)
                 ->first();
@@ -187,10 +187,10 @@ class AlarmDashboardController extends Controller
             })
             ->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59'])
             ->selectRaw('
-        COALESCE(SUM(CASE WHEN response_minutes < 1 THEN 1 ELSE 0 END), 0) AS less_than_1_minute,
-        COALESCE(SUM(CASE WHEN response_minutes >= 1 AND response_minutes < 5 THEN 1 ELSE 0 END), 0) AS between_1_and_5_minutes,
-        COALESCE(SUM(CASE WHEN response_minutes >= 5 AND response_minutes < 10 THEN 1 ELSE 0 END), 0) AS between_5_and_10_minutes,
-        COALESCE(SUM(CASE WHEN response_minutes >= 10 THEN 1 ELSE 0 END), 0) AS more_than_10_minutes
+        COALESCE(SUM(CASE WHEN response_minutes < 1 THEN 1   END), 0) AS less_than_1_minute,
+        COALESCE(SUM(CASE WHEN response_minutes >= 1 AND response_minutes < 5 THEN 1   END), 0) AS between_1_and_5_minutes,
+        COALESCE(SUM(CASE WHEN response_minutes >= 5 AND response_minutes < 10 THEN 1   END), 0) AS between_5_and_10_minutes,
+        COALESCE(SUM(CASE WHEN response_minutes >= 10 THEN 1   END), 0) AS more_than_10_minutes
     ')
             ->first();
 
@@ -229,13 +229,13 @@ class AlarmDashboardController extends Controller
                 ]);
             })
             ->selectRaw('
-            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1 ELSE 0 END), 0) AS burglary,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1 ELSE 0 END), 0) AS medical,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1 ELSE 0 END), 0) AS temperature,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 ELSE 0 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 ELSE 0 END), 0) AS fire,
-            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1 ELSE 0 END), 0) AS sos,
-            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1 ELSE 0 END), 0) AS critical 
+            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1  END), 0) AS burglary,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1   END), 0) AS medical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1   END), 0) AS temperature,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 END), 0) AS fire,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1   END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1   END), 0) AS critical 
             
 
 
@@ -258,11 +258,11 @@ class AlarmDashboardController extends Controller
 
 
             ->selectRaw('
-            COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS intruder,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS intruder,
             
-            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS sos,
-            COALESCE(SUM(CASE WHEN alarm_type = \'ac_off\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS ac_off,
-            COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1 ELSE 0 END), 0) AS critical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_type = \'ac_off\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS ac_off,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS critical,
            
               (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
 
