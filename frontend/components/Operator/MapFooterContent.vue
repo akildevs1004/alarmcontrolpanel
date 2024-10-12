@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card elevation="1" class="rounded-xl"
+    <v-card elevation="1" class="rounded-lg"
       ><v-card-text style="padding-left: 35px">
         <v-row>
           <v-col style="padding-right: 0px; padding-left: 0px"
@@ -19,6 +19,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.sos.image + '?7=7'"
@@ -59,6 +60,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.medical.image + '?7=7'"
@@ -99,6 +101,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.alarm.image + '?7=7'"
@@ -139,6 +142,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.offline.image + '?7=7'"
@@ -180,6 +184,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.armed.image + '?7=7'"
@@ -220,6 +225,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.disarm.image + '?7=7'"
@@ -254,6 +260,7 @@
                     max-width: 50px;
                     padding-right: 0px;
                     padding-left: 0px;
+                    padding-bottom: 0px;
                   "
                   ><img
                     :src="colorcodes.ac_off.image + '?7=7'"

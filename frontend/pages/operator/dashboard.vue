@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" centered color="secondary" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -60,10 +65,10 @@
             :style="'height:' + windowHeight + 'px'"
           ></div>
           <div style="position: absolute; top: 0px; left: 50%">
-            <v-autocomplete
+            <!-- <v-autocomplete
               style="padding-top: 6px"
               @change="gotoCustomerLocationOnMap()"
-              class="reports-events-autocomplete"
+              class="reports-events-autocomplete bgwhite"
               v-model="filter_customer_id"
               :items="[
                 { id: null, building_name: 'All Customers' },
@@ -74,7 +79,19 @@
               item-value="id"
               item-text="building_name"
             >
-            </v-autocomplete>
+            </v-autocomplete> -->
+
+            <v-text-field
+              class="search-autocomplete bgwhite searchicon"
+              outlined
+              append-icon="mdi-magnify"
+              v-model="filter_customer_id"
+              @click:append="gotoCustomerLocationOnMap()"
+              @click:clear="clearCustomerPopup()"
+              dense
+              clearable
+            >
+            </v-text-field>
           </div>
           <div style="position: absolute; top: 50px; left: 10px">
             <Clock></Clock>
@@ -172,7 +189,7 @@
           <v-card-text style="padding: 10px">
             <Topmenu
               @applyGlobalSearch="getDatafromApi"
-              style="margin-bottom: 10px"
+              style="margin-bottom: 20px"
             />
 
             <!-- <v-row style="margin-top: 10px">
@@ -274,7 +291,7 @@
               "
             >
               <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 200px; height: 70px; width: 100%">
+                <v-row style="min-width: 200px; height: 57px; width: 100%">
                   <v-col style="max-width: 40px; padding-left: 5px">
                     <img
                       @click="openWindow(alarm)"
@@ -691,6 +708,8 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    snackbar: false,
+    response: "",
     filter_customer_id: null,
     customersList: [],
     displayRightcontant: true,
@@ -1230,13 +1249,23 @@ export default {
     gotoCustomerLocationOnMap() {
       if (this.filter_customer_id) {
         let customer = this.customersList.find(
-          (customer1) => customer1.id == this.filter_customer_id
+          (customer1) =>
+            customer1.building_name.toLowerCase() ==
+            this.filter_customer_id.toLowerCase()
         );
 
         if (customer) {
           this.setCustomerLocationOnMap(customer);
+        } else {
+          this.snackbar = true;
+          this.response = "No Customers found";
         }
       }
+    },
+    clearCustomerPopup() {
+      this.mapInfowindowsList.forEach((infowindow) => {
+        infowindow.close();
+      });
     },
     setCustomerLocationOnMap(customer) {
       try {

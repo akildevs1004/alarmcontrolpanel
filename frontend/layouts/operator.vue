@@ -148,6 +148,33 @@ export default {
 </script>
 
 <style>
+.searchicon .v-input__append-inner {
+  background: #8d8d8d !important;
+  padding: 0px !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  color: #fff !important;
+}
+
+.searchicon .v-input__slot {
+  padding-right: 0px !important;
+}
+.search-autocomplete .v-input__slot {
+  min-height: 33px !important;
+}
+.search-autocomplete .v-label {
+  line-height: 15px !important;
+}
+.search-autocomplete .v-input__icon {
+  height: 33px !important;
+}
+.searchicon .v-input__icon {
+  background: #8d8d8d !important;
+}
+
+.bgwhite .v-input__slot {
+  background-color: #fff !important;
+}
 #markerLayer img {
   animation: pulse 0.5s infinite alternate;
   -webkit-animation: pulse 0.5s infinite alternate;

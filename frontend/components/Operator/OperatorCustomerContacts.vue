@@ -392,6 +392,7 @@
                     style="display: inline-grid !important"
                   >
                     <v-btn
+                      :key="'address_type' + index + 20"
                       height="20px"
                       plain
                       small
@@ -409,7 +410,7 @@
                         contact.address_type.toLowerCase() != 'secondary' &&
                         contact.address_type.toLowerCase() != 'security'
                       "
-                      v-for="contact in customer.contacts"
+                      v-for="(contact, index) in customer.contacts"
                     >
                       {{ contact.address_type }}
                     </v-btn>
