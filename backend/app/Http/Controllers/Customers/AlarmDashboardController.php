@@ -293,6 +293,7 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS intruder,
             
             COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS medical,
             COALESCE(SUM(CASE WHEN alarm_type = \'ac_off\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS ac_off,
             COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS critical,
            

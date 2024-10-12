@@ -374,11 +374,18 @@ export default ({ app }, inject) => {
             process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
           icon: "mdi-lock-open",
         },
-        power_loss: {
+        ac_off: {
           color: "#ff0000",
           text: "Power Loss",
           image:
-            process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
+            process.env.BACKEND_URL2 + "/google_map_icons/google_ac_off.png",
+          icon: "mdi-lock-open",
+        },
+        battery: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_ac_off.png",
           icon: "mdi-lock-open",
         },
       };

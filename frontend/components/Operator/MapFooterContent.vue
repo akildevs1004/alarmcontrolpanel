@@ -7,7 +7,7 @@
             ><div
               style="
                 height: 50px;
-                width: 85px;
+                width: 90px;
                 overflow: hidden;
                 border-right: 1px solid #ddd;
               "
@@ -34,7 +34,7 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.sos }}00
+                    {{ data.sos }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     SOS
@@ -47,7 +47,7 @@
             ><div
               style="
                 height: 50px;
-                width: 85px;
+                width: 90px;
                 overflow: hidden;
                 border-right: 1px solid #ddd;
               "
@@ -61,7 +61,7 @@
                     padding-left: 0px;
                   "
                   ><img
-                    :src="colorcodes.sos.image + '?7=7'"
+                    :src="colorcodes.medical.image + '?7=7'"
                     style="width: 25px"
                 /></v-col>
 
@@ -74,7 +74,7 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.sos }}00
+                    {{ data.medical }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     Medical
@@ -87,7 +87,7 @@
             ><div
               style="
                 height: 50px;
-                width: 85px;
+                width: 90px;
                 overflow: hidden;
                 border-right: 1px solid #ddd;
               "
@@ -114,7 +114,7 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.critical }}00
+                    {{ data.critical }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     Critical
@@ -127,7 +127,7 @@
             ><div
               style="
                 height: 50px;
-                width: 85px;
+                width: 90px;
                 overflow: hidden;
                 border-right: 1px solid #ddd;
               "
@@ -154,10 +154,51 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.offline ?? 0 }}00
+                    {{ data.offline ?? 0 }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     Technical
+                  </div></v-col
+                >
+              </v-row>
+            </div>
+          </v-col>
+
+          <v-col style="padding-right: 0px; padding-left: 0px"
+            ><div
+              style="
+                height: 50px;
+                width: 90px;
+                overflow: hidden;
+                border-right: 1px solid #ddd;
+              "
+            >
+              <v-row>
+                <v-col
+                  style="
+                    text-align: right;
+                    max-width: 50px;
+                    padding-right: 0px;
+                    padding-left: 0px;
+                  "
+                  ><img
+                    :src="colorcodes.armed.image + '?7=7'"
+                    style="width: 25px"
+                /></v-col>
+
+                <v-col
+                  style="
+                    padding-left: 4px;
+                    padding-right: 26px;
+                    padding-top: 4px;
+                    text-align: center;
+                  "
+                >
+                  <div style="font-size: 20px; line-height: 37px; color: black">
+                    {{ data.armed ?? 0 }}
+                  </div>
+                  <div style="font-size: 11px; color: black; line-height: 10px">
+                    Armed
                   </div></v-col
                 >
               </v-row>
@@ -167,7 +208,7 @@
             ><div
               style="
                 height: 50px;
-                width: 85px;
+                width: 90px;
                 overflow: hidden;
                 border-right: 1px solid #ddd;
               "
@@ -194,7 +235,7 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.disarm ?? 0 }}00
+                    {{ data.disarm ?? 0 }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     Disarm
@@ -203,15 +244,9 @@
               </v-row>
             </div>
           </v-col>
+
           <v-col style="padding-right: 0px; padding-left: 0px"
-            ><div
-              style="
-                height: 50px;
-                width: 85px;
-                overflow: hidden;
-                border-right: 1px solid #ddd;
-              "
-            >
+            ><div style="height: 50px; width: 90px; overflow: hidden">
               <v-row>
                 <v-col
                   style="
@@ -221,7 +256,7 @@
                     padding-left: 0px;
                   "
                   ><img
-                    :src="colorcodes.disarm.image + '?7=7'"
+                    :src="colorcodes.ac_off.image + '?7=7'"
                     style="width: 25px"
                 /></v-col>
 
@@ -234,39 +269,7 @@
                   "
                 >
                   <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.armed ?? 0 }}00
-                  </div>
-                  <div style="font-size: 11px; color: black; line-height: 10px">
-                    Armed
-                  </div></v-col
-                >
-              </v-row>
-            </div> </v-col
-          ><v-col style="padding-right: 0px; padding-left: 0px"
-            ><div style="height: 50px; width: 85px; overflow: hidden">
-              <v-row>
-                <v-col
-                  style="
-                    text-align: right;
-                    max-width: 50px;
-                    padding-right: 0px;
-                    padding-left: 0px;
-                  "
-                  ><img
-                    :src="colorcodes.disarm.image + '?7=7'"
-                    style="width: 25px"
-                /></v-col>
-
-                <v-col
-                  style="
-                    padding-left: 4px;
-                    padding-right: 26px;
-                    padding-top: 4px;
-                    text-align: center;
-                  "
-                >
-                  <div style="font-size: 20px; line-height: 37px; color: black">
-                    {{ data.armed ?? 0 }}00
+                    {{ data.ac_off ?? 0 }}
                   </div>
                   <div style="font-size: 11px; color: black; line-height: 10px">
                     Battery

@@ -973,9 +973,11 @@ class CustomersController extends Controller
     {
         $model = Customers::where("company_id", $request->company_id);
 
+        $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('id', $request->filter_customers_list);
+        });
 
-
-        return $model->orderByDesc('building_name')->get();;
+        return $model->orderBy('building_name', "ASC")->get();;
     }
     public function alarmTypes()
     {

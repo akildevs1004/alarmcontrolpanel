@@ -59,7 +59,20 @@
             id="map"
             :style="'height:' + windowHeight + 'px'"
           ></div>
-
+          <div style="position: absolute; top: 10px; left: 50%">
+            <v-autocomplete
+              style="padding-top: 6px"
+              @change="gotoCustomerLocationOnMap()"
+              class="reports-events-autocomplete"
+              v-model="filter_customer_id"
+              :items="[{ id: null, building_name: 'All' }, ...customersList]"
+              dense
+              outlined
+              item-value="id"
+              item-text="building_name"
+            >
+            </v-autocomplete>
+          </div>
           <div style="position: absolute; top: 50px; left: 10px">
             <Clock></Clock>
           </div>
@@ -675,6 +688,8 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    filter_customer_id: null,
+    customersList: [],
     displayRightcontant: true,
     loadStatistics: false,
     showMappingSection: false,
@@ -812,13 +827,13 @@ export default {
 
     await this.getBuildingTypes();
     await this.getAlarmTypes();
-    setTimeout(() => {
-      this.loadStatistics = true;
-    }, 1000 * 5);
+    this.loadStatistics = true;
+    // setTimeout(() => {}, 1000 * 2);
   },
 
   async created() {
     this.colorcodes = this.$utils.getAlarmIcons();
+    this.loadCustomersList();
   },
   watch: {},
   methods: {
@@ -829,6 +844,16 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    loadCustomersList() {
+      this.customersList = [];
+      this.$axios
+        .get("customers_list", {
+          params: { company_id: this.$auth.user.company_id },
+        })
+        .then((data) => {
+          this.customersList = data.data;
+        });
     },
     changeRightContentDisplay() {
       this.displayRightcontant = !this.displayRightcontant;
@@ -1062,7 +1087,7 @@ export default {
           //this.mapkeycount++;
           this.customersData = data; //data.data;
 
-          console.log(this.customersData[0].devices[0].utc_time_zone);
+          //console.log(this.customersData[0].devices[0].utc_time_zone);
 
           if (
             this.customersData.length > 0 &&
@@ -1199,7 +1224,17 @@ export default {
       window.initMap = callback;
       document.head.appendChild(script);
     },
+    gotoCustomerLocationOnMap() {
+      if (this.filter_customer_id) {
+        let customer = this.customersList.find(
+          (customer1) => customer1.id == this.filter_customer_id
+        );
 
+        if (customer) {
+          this.setCustomerLocationOnMap(customer);
+        }
+      }
+    },
     setCustomerLocationOnMap(customer) {
       try {
         if (

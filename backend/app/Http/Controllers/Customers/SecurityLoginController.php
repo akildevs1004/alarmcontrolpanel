@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Customers\SecurityLogin;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,7 +45,7 @@ class SecurityLoginController extends Controller
 
         $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
 
-        $securies = $model->get();
+        return  $securies = $model->get();
 
         $currentDateTime = now(); // Get the current datetime
 
