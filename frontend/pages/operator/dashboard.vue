@@ -59,13 +59,16 @@
             id="map"
             :style="'height:' + windowHeight + 'px'"
           ></div>
-          <div style="position: absolute; top: 10px; left: 50%">
+          <div style="position: absolute; top: 0px; left: 50%">
             <v-autocomplete
               style="padding-top: 6px"
               @change="gotoCustomerLocationOnMap()"
               class="reports-events-autocomplete"
               v-model="filter_customer_id"
-              :items="[{ id: null, building_name: 'All' }, ...customersList]"
+              :items="[
+                { id: null, building_name: 'All Customers' },
+                ...customersList,
+              ]"
               dense
               outlined
               item-value="id"
