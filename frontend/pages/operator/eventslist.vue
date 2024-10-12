@@ -499,8 +499,9 @@ export default {
       this.isCompany = false;
       return;
     }
-    await this.getMapKey();
     await this.getDatafromApi(this.filterText);
+    await this.getMapKey();
+
     this.getBuildingTypes();
     this.getAlarmTypes();
   },
@@ -702,6 +703,16 @@ export default {
 
             this.loading = false;
             this.selectedAlarm = this.data[0];
+
+            if (this.$route.query.id) {
+              this.selectedAlarmFilter = this.data.find(
+                (x) => x.id == this.$route.query.id
+              );
+
+              if (this.selectedAlarmFilter)
+                this.selectedAlarm = this.selectedAlarmFilter;
+            }
+
             this.onResize();
             // this.mapMarkersList.forEach((marker, index) => {
             //   if (marker) {
@@ -894,8 +905,6 @@ export default {
     },
     plotLocations() {
       //set default one customer
-
-      console.log(this.data[0].device.utc_time_zone);
 
       if (
         this.map &&

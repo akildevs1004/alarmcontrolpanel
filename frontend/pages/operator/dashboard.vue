@@ -115,12 +115,36 @@
             </v-btn-toggle>
           </div>
 
-          <div style="position: absolute; bottom: 20px; left: 250px">
-            <MapFooterContent v-if="loadStatistics" :colorcodes="colorcodes" />
+          <div style="position: absolute; bottom: 20px; left: 0px; width: 100%">
+            <MapFooterContent
+              v-if="loadStatistics"
+              :colorcodes="colorcodes"
+              style="width: 850px; margin: auto"
+            />
+          </div>
+
+          <div style="position: absolute; top: 50%; right: 0">
+            <v-icon
+              style="background-color: #fff"
+              v-if="!displayRightcontant"
+              @click="changeRightContentDisplay()"
+              color="green"
+              >mdi-arrow-left-box</v-icon
+            ><v-icon
+              style="background-color: #fff"
+              v-if="displayRightcontant"
+              @click="changeRightContentDisplay()"
+              color="red"
+              >mdi-arrow-right-box</v-icon
+            >
           </div>
         </v-card>
       </v-col>
-      <v-col class="main-rightcontent" style="padding: 0px; padding-top: 6px">
+      <v-col
+        v-if="displayRightcontant"
+        class="main-rightcontent"
+        style="padding: 0px; padding-top: 6px"
+      >
         <v-card
           :loading="loading"
           elevation="10"
@@ -130,8 +154,12 @@
           "
         >
           <v-card-text style="padding: 10px">
-            <Topmenu @applyGlobalSearch="getDatafromApi" />
-            <v-row style="margin-top: 10px">
+            <Topmenu
+              @applyGlobalSearch="getDatafromApi"
+              style="margin-bottom: 10px"
+            />
+
+            <!-- <v-row style="margin-top: 10px">
               <v-col cols="4" style="padding: 4px">
                 <v-select
                   @change="getDatafromApi()"
@@ -187,7 +215,7 @@
                 >
                 </v-select>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row v-if="data.length == 0" class="text-center">
               <v-col> No data available </v-col>
             </v-row>
@@ -204,7 +232,7 @@
                     'OperatorGoogleMapCustomer' +
                     selectedAlarm.device.customer.id
                   "
-                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?3=3'"
+                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?5=5'"
                 />
 
                  <SensorPhotos
@@ -220,7 +248,8 @@
               v-if="alarm.device?.customer"
               :key="index + 55"
               v-for="(alarm, index) in data"
-              elevation="4"
+              elevation="0"
+              styl.e="border:1px solid #d9d9d9"
               style="
                 border-color: black;
                 margin-top: 5px;
@@ -229,7 +258,179 @@
               "
             >
               <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 300px; height: 95px; width: 100%">
+                <v-row style="min-width: 200px; height: 70px; width: 100%">
+                  <v-col style="max-width: 40px; padding-left: 5px">
+                    <img
+                      @click="openWindow(alarm)"
+                      :title="alarm.alarm_type"
+                      style="width: 25px; padding-top: 0%"
+                      :src="getAlarmColorObject(alarm).image + '?5=5'"
+                    />
+                  </v-col>
+                  <v-col
+                    style="
+                      padding: 0px;
+                      font-size: 10px;
+                      padding-left: 10px;
+                      line-height: 18px;
+                      padding-top: 5px;
+                    "
+                  >
+                    <div style="overflow: hidden">
+                      <!-- {{
+                        alarm.device.customer.primary_contact
+                          ? alarm.device.customer.primary_contact.first_name +
+                            " " +
+                            alarm.device.customer.primary_contact.last_name
+                          : "---"
+                      }}
+                      <br /> -->
+                      <div style="color: black; font-size: 14px">
+                        {{ alarm.device.customer.building_name || "---" }}
+                      </div>
+                      <div style="color: #bbb3b3">
+                        {{ alarm.device.customer.city }}
+                      </div>
+                      <!-- <div style="color: #bbb3b3">
+                        {{
+                          alarm.device.customer.primary_contact?.phone1 || "---"
+                        }}
+                      </div> -->
+
+                      <!-- <br />
+                      {{
+                        alarm.device.customer.primary_contact?.phone1 || "---"
+                      }} -->
+                    </div>
+                    <div style="font-size: 10px">
+                      <v-row
+                        ><v-col style="padding-left: 0px"
+                          ><div style="color: #0748ff; text-align: center">
+                            {{
+                              $dateFormat.formatDateMonthYear(
+                                alarm.alarm_start_datetime
+                              )
+                            }}
+                          </div></v-col
+                        >
+                        <!-- <v-col
+                          ><div style="color: red; text-align: center">
+                            <div v-if="alarm.alarm_status == 0">
+                              {{
+                                $dateFormat.formatDateMonthYear(
+                                  alarm.alarm_end_datetime
+                                )
+                              }}
+                            </div>
+                          </div>
+                        </v-col> -->
+                        <v-col class="text-right" style="color: #0748ff"
+                          >#{{ alarm.id }}</v-col
+                        >
+                      </v-row>
+                    </div>
+                    <div
+                      style="
+                        text-align: right;
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                      "
+                    >
+                      <v-icon color="red" size="18">mdi-lock-outline</v-icon>
+
+                      <!-- <img
+                        src="/alarm_icons/alarm_open.png"
+                        style="width: 30px"
+                      /> -->
+                    </div>
+
+                    <!-- <div style="color: #0064ff">
+                      <v-row>
+                        <v-col>
+                           {{
+                            alarm.device.customer.buildingtype
+                              ? alarm.device.customer.buildingtype.name
+                              : "---"
+                          }}   </v-col
+                        ><v-col>
+                          <v-icon
+                            v-if="
+                              !showMappingSection ||
+                              selectedAlarm == null ||
+                              (selectedAlarm && selectedAlarm.id != alarm.id)
+                            "
+                            title="Show Map"
+                            @click="showMap(alarm)"
+                            size="20"
+                            color="black"
+                            style="padding-bottom: 5px"
+                            >mdi-map-outline</v-icon
+                          >
+                          <v-icon
+                            v-else-if="
+                              showMappingSection &&
+                              selectedAlarm &&
+                              selectedAlarm.id == alarm.id
+                            "
+                            title="Show Map"
+                            @click="closeMap()"
+                            size="20"
+                            color="green"
+                            style="padding-bottom: 5px"
+                            >mdi-map-outline</v-icon
+                          ></v-col
+                        ><v-col
+                          ><v-icon
+                            :title="alarm.alarm_status == 1 ? 'Open' : 'Close'"
+                            style="
+                              float: right;
+                              padding-right: 17px;
+                              text-align: right;
+                            "
+                            size="20"
+                            color="#0064ff"
+                            >{{
+                              alarm.alarm_status == 1
+                                ? "mdi-folder-open"
+                                : "mdi-folder"
+                            }}</v-icon
+                          ></v-col
+                        ></v-row
+                      >
+                    </div> -->
+                  </v-col>
+                  <!-- <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
+                    <div style="text-align: right">#{{ alarm.id }}</div>
+                    <div style="margin: auto; text-align: center; height: 40px">
+                      <img
+                        @click="showNotes(alarm)"
+                        :title="alarm.alarm_type"
+                        style="width: 30px; padding-top: 0%"
+                        :src="getAlarmColorObject(alarm).image + '?5=5'"
+                      />
+                    </div>
+                    <div style="">
+                      <div style="color: red; text-align: center; height: 14px">
+                        <div v-if="alarm.alarm_status == 0">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              alarm.alarm_end_datetime
+                            )
+                          }}
+                        </div>
+                      </div>
+                      <div style="color: red; text-align: center">
+                        {{
+                          $dateFormat.formatDateMonthYear(
+                            alarm.alarm_start_datetime
+                          )
+                        }}
+                      </div>
+                    </div>
+                  </v-col> -->
+                </v-row>
+                <!-- <v-row style="min-width: 300px; height: 95px; width: 100%">
                   <v-col
                     style="
                       max-width: 60px;
@@ -334,7 +535,7 @@
                         @click="showNotes(alarm)"
                         :title="alarm.alarm_type"
                         style="width: 30px; padding-top: 0%"
-                        :src="getAlarmColorObject(alarm).image + '?3=3'"
+                        :src="getAlarmColorObject(alarm).image + '?5=5'"
                       />
                     </div>
                     <div style="">
@@ -356,12 +557,8 @@
                       </div>
                     </div>
                   </v-col>
-                </v-row>
-                <!-- <v-fab-transition
-                  appear
-                  v-if="selectedAlarm && selectedAlarm.id == alarm.id"
-                > -->
-                <!-- <v-divider style="border: 1px solid #ddd" /> -->
+                </v-row> -->
+
                 <v-row
                   style="width: 100%; margin-top: 20px"
                   v-if="
@@ -429,7 +626,7 @@
                       :customer_id="alarm.device.customer.id"
                       :name="'OperatorGoogleMapCustomer' + alarm.id"
                       :mapimage="
-                        getAlarmColorObject(alarm, customer).image + '?3=3'
+                        getAlarmColorObject(alarm, customer).image + '?5=5'
                       "
                     />
 
@@ -478,6 +675,7 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    displayRightcontant: true,
     loadStatistics: false,
     showMappingSection: false,
     showAlarmEventNotes: false,
@@ -590,18 +788,18 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
-    setInterval(async () => {
-      if (this.$route.name == "operator-dashboard") {
-        if (this.filterText == "") await this.getDatafromApi(this.filterText);
-        await this.getCustomersDatafromApi();
-      }
-    }, 1000 * 10);
+    // setInterval(async () => {
+    //   if (this.$route.name == "operator-dashboard") {
+    //     if (this.filterText == "") await this.getDatafromApi(this.filterText);
+    //     await this.getCustomersDatafromApi();
+    //   }
+    // }, 1000 * 10);
 
-    setInterval(() => {
-      if (this.$route.name == "operator-dashboard") {
-        this.updateOperatorLiveStatus();
-      }
-    }, 1000 * 60);
+    // setInterval(() => {
+    //   if (this.$route.name == "operator-dashboard") {
+    //     this.updateOperatorLiveStatus();
+    //   }
+    // }, 1000 * 60);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -632,7 +830,18 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-
+    changeRightContentDisplay() {
+      this.displayRightcontant = !this.displayRightcontant;
+    },
+    openWindow(item) {
+      const width = window.screen.width;
+      const height = window.screen.height;
+      window.open(
+        process.env.APP_URL + "/operator/eventslist?id=" + item.id,
+        "_blank",
+        `width=${width},height=${height},toolbar=yes, location=yes,resizable=yes,scrollbars=yes`
+      );
+    },
     updateOperatorLiveStatus() {
       this.$axios.post("operator_live_update", {
         company_id: this.$auth.user.company_id,
@@ -1028,7 +1237,7 @@ export default {
           controlSize: 20,
           zoom: 12,
           center: { lat: 25.2265191, lng: 55.395225 },
-          styles: this.google_map_style_bandw,
+          styles: this.google_map_style_regular,
           // styles: [
           //   {
           //     featureType: "administrative",
@@ -1063,6 +1272,17 @@ export default {
     plotLocations() {
       //this.mapMarkersList = [];
       let mapMarkersListUpdated = [];
+
+      // var myoverlay = new google.maps.OverlayView();
+      // myoverlay.draw = function () {
+      //   // Accessing the panes
+      //   const panes = this.getPanes();
+      //   if (panes) {
+      //     panes.markerLayer.id = "markerLayer"; // Assign an ID for custom styling
+      //   }
+      // };
+      // myoverlay.setMap(this.map); // Add overlay to the map
+
       this.customersData.forEach((item) => {
         if (item) {
           const customerId = item.id;
@@ -1100,7 +1320,7 @@ export default {
               if (colorObject) iconURL = colorObject.image;
 
               const icon = {
-                url: iconURL + "?1=1",
+                url: iconURL + "?5=5",
                 scaledSize: new google.maps.Size(28, 34),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),

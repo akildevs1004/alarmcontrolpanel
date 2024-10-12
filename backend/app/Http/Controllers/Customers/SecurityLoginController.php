@@ -44,25 +44,39 @@ class SecurityLoginController extends Controller
 
         $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
 
-        return $model->get();
+        $securies = $model->get();
 
         $currentDateTime = now(); // Get the current datetime
 
         $company = Company::whereId($request->company_id)->first();
         $company_time_zone = $company->utc_time_zone != null ? $company->utc_time_zone : "Asia/Dubai";
 
-        if ($company_time_zone)
+        // if ($company_time_zone)
 
-            $currentDateTime = new DateTime();
+        $currentDateTime = new DateTime();
         $currentDateTime->setTimezone(new DateTimeZone($company_time_zone));
         $logtime = $currentDateTime->format('Y-m-d H:i:s');
 
-        $model = SecurityLogin::select('*', DB::raw("TIMESTAMPDIFF(MINUTE, last_active_datetime, '{$logtime}') AS minutes_difference"))
-            ->where("company_id", $request->company_id)
-            ->orderBy("last_active_datetime", "DESC")
-            ->get();
+        // $model = SecurityLogin::select('*', DB::raw("TIMESTAMPDIFF(MINUTE, last_active_datetime, '{$logtime}') AS minutes_difference"))
+        //     ->where("company_id", $request->company_id)
+        //     ->orderBy("last_active_datetime", "DESC")
+        //     ->get();
 
-        return $model;
+
+
+        foreach ($securies as $key => $security) {
+
+            $date1 = '2024-10-11 14:30:00';
+            $date2 = '2024-10-11 15:45:00';
+
+            $carbonDate1 = Carbon::parse($date1);
+            $carbonDate2 = Carbon::parse($date2);
+
+            $diffInMinutes = $carbonDate1->diffInMinutes($carbonDate2);
+            $security["idle_time"] = 60;
+        }
+
+        return $security;
     }
     public function updateLiveStatus(Request $request)
     {

@@ -148,6 +148,12 @@ export default {
 </script>
 
 <style>
+#markerLayer img {
+  animation: pulse 0.5s infinite alternate;
+  -webkit-animation: pulse 0.5s infinite alternate;
+  transform-origin: center;
+  -webkit-transform-origin: center;
+}
 @media (max-width: 1000px) {
   .google-map-right-hand-content {
     max-width: 100% !important;
@@ -175,8 +181,11 @@ export default {
 .main-leftcontent {
 }
 .main-rightcontent {
+  min-width: 300px !important;
+  max-width: 300px !important;
+  /* 
   min-width: 450px !important;
-  max-width: 450px !important;
+  max-width: 450px !important; */
 }
 .radioheight .v-radio {
   margin-bottom: -3px !important;

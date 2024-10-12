@@ -113,9 +113,9 @@
         </v-menu>
       </v-col>
 
-      <v-col class=text-right>
-        
-              <v-text-field
+      <v-col class="text-center" style="min-width: 180px; margin: auto">
+        {{ displayName }}
+        <!-- <v-text-field
               label="Event ID"
           style="width: 150px;max-height: 30px !important;"
           max-height="10px"
@@ -127,11 +127,10 @@
            
           append-icon="mdi-magnify"
           v-model="globalsearch"
-        ></v-text-field>
-           
+        ></v-text-field> -->
       </v-col>
 
-      <v-col class="text-right" style="max-width: 85px;padding-left:0px">
+      <v-col class="text-right" style="max-width: 85px; padding-left: 0px">
         <v-icon
           v-if="displayFullScreenButton()"
           class="mr-2"
@@ -140,13 +139,10 @@
           >mdi-overscan</v-icon
         >
 
-        <v-icon
-          
-          v-if="!displayFullScreenButton()"
-          @click="refreshEventsList()"
+        <v-icon v-if="!displayFullScreenButton()" @click="refreshEventsList()"
           >mdi-refresh</v-icon
         >
-        <v-menu
+        <!-- <v-menu
           style="z-index: 9999 !important"
           bottom
           origin="center center"
@@ -211,7 +207,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-menu>
+        </v-menu> -->
       </v-col>
     </v-row>
   </div>
@@ -221,7 +217,7 @@
 export default {
   data() {
     return {
-      globalsearch:'',
+      globalsearch: "",
       displayName: "",
       popupKey: 1,
       key: 1,
@@ -235,11 +231,10 @@ export default {
       notificationAlarmDevicesContent: {},
     };
   },
-  watch:{
-    globalsearch()
-    {
-this.$emit("applyGlobalSearch",this.globalsearch);
-    }
+  watch: {
+    globalsearch() {
+      this.$emit("applyGlobalSearch", this.globalsearch);
+    },
   },
   mounted() {
     // if (!this.$auth.user) {
@@ -351,8 +346,6 @@ this.$emit("applyGlobalSearch",this.globalsearch);
       }
     },
     loadHeaderNotificationMenu() {
-      
-
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
