@@ -825,18 +825,18 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
-    // setInterval(async () => {
-    //   if (this.$route.name == "operator-dashboard") {
-    //     if (this.filterText == "") await this.getDatafromApi(this.filterText);
-    //     await this.getCustomersDatafromApi();
-    //   }
-    // }, 1000 * 10);
+    setInterval(async () => {
+      if (this.$route.name == "operator-dashboard") {
+        if (this.filterText == "") await this.getDatafromApi(this.filterText);
+        await this.getCustomersDatafromApi();
+      }
+    }, 1000 * 10);
 
-    // setInterval(() => {
-    //   if (this.$route.name == "operator-dashboard") {
-    //     this.updateOperatorLiveStatus();
-    //   }
-    // }, 1000 * 60);
+    setInterval(() => {
+      if (this.$route.name == "operator-dashboard") {
+        this.updateOperatorLiveStatus();
+      }
+    }, 1000 * 60);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
