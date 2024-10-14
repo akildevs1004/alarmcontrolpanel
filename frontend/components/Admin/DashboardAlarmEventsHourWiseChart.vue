@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%">
     <v-row>
-      <v-col md="6">
+      <v-col md="6" style="padding-left: 20px">
         <h4>{{ display_title }}</h4></v-col
       >
 

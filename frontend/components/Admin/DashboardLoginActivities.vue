@@ -34,7 +34,7 @@
       }"
       hide-default-header
     >
-      <template v-slot:item.employee.pic="{ item, index }">
+      <template v-slot:item.employee="{ item, index }">
         <v-row no-gutters>
           <v-col
             style="
@@ -53,7 +53,7 @@
               "
               :src="
                 item.user.security
-                  ? item.user.security.profile_picture
+                  ? item.user.security.picture
                   : '/no-profile-image.jpg'
               "
             >
@@ -72,11 +72,8 @@
             : ""
         }}{{ item.user.customer ? item.user.customer.building_name : "" }}
         {{ item.model_type == "company" ? "Admin" : "" }}
-
-        <div class="secondary-value">
-          {{ item.user.email }}
-        </div>
       </template>
+      <template v-slot:item.email="{ item }">{{ item.user.email }}</template>
       <template v-slot:item.LogTime="{ item }" style="color: green">
         <v-icon color="green" fill>mdi-clock-outline</v-icon>
         {{ item.date_time }}
@@ -111,7 +108,7 @@ export default {
           sortable: true,
           filterable: true,
 
-          value: "employee.pic",
+          value: "employee",
         },
         {
           text: "Employee Name",
@@ -121,7 +118,14 @@ export default {
 
           value: "employee.first_name",
         },
+        {
+          text: "Email",
+          align: "left",
+          sortable: true,
+          filterable: true,
 
+          value: "email",
+        },
         {
           text: "Time",
           align: "left",

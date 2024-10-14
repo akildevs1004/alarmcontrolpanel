@@ -23,12 +23,43 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="7" style="padding-right: 0px"
-        ><v-row align-self="center">
+    <v-row class="mt-0">
+      <v-col cols="12" style="padding-right: 0px; padding-top: 0px">
+        <v-row class="mt-0">
+          <v-col align-self="center" lg="2" md="2" sm="2" xs="2">
+            <v-avatar color="#FF0000" size="30">
+              <v-icon color="#FFF">mdi-account</v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col
+            lg="4"
+            md="4"
+            sm="4"
+            xs="4"
+            style="
+              font-size: 12px;
+              text-align: left;
+              padding-right: 0px;
+              padding-left: 20px;
+              color: #ff0000;
+            "
+            align-self="center"
+            >SOS</v-col
+          >
+          <v-col
+            lg="6"
+            md="6"
+            sm="6"
+            xs="6"
+            class="text-center laptop-padding1"
+            align-self="center"
+            style="font-size: 34px !important; color: #ff0000"
+            >{{ data ? data.sosCount : 0 }}
+          </v-col> </v-row
+        ><v-row class="mt-0" align-self="center">
           <v-col lg="2" md="2" sm="2" xs="2" align-self="center">
-            <v-avatar color="red" size="30">
-              <v-icon size="20">mdi-account</v-icon>
+            <v-avatar color="#894F24" size="30">
+              <v-icon color="#FFF" size="20">mdi-account</v-icon>
             </v-avatar>
           </v-col>
           <v-col
@@ -50,17 +81,17 @@
             md="6"
             sm="6"
             xs="6"
-            class="text-red red--text text-center laptop-padding1"
+            class="text-center laptop-padding1"
             align-self="center"
-            style="font-size: 34px !important"
+            style="font-size: 34px !important; color: #894f24"
           >
-            {{ data ? data.crititalCount : 0 }}
+            {{ data ? data.highCount : 0 }}
           </v-col>
         </v-row>
-        <v-row>
-          <v-col lg="2" md="2" sm="2" xs="2" class="pt-md-5">
-            <v-avatar color="orange" size="30">
-              <v-icon size="20"> mdi-account</v-icon>
+        <v-row class="mt-0">
+          <v-col align-self="center" lg="2" md="2" sm="2" xs="2">
+            <v-avatar color="#FFB600" size="30">
+              <v-icon color="#FFF" size="20"> mdi-account</v-icon>
             </v-avatar>
           </v-col>
           <v-col
@@ -73,6 +104,7 @@
               text-align: left;
               padding-right: 0px;
               padding-left: 20px;
+              color: #ffb600;
             "
             align-self="center"
             >Medium</v-col
@@ -84,14 +116,14 @@
             xs="6"
             class="text-red orange--text text-center laptop-padding1"
             align-self="center"
-            style="font-size: 34px !important"
+            style="font-size: 34px !important; color: #ffb600"
             >{{ data ? data.mediumCount : 0 }}
           </v-col>
         </v-row>
-        <v-row>
-          <v-col lg="2" md="2" sm="2" xs="2" class="pt-md-5">
-            <v-avatar color="blue" size="30">
-              <v-icon>mdi-account</v-icon>
+        <v-row class="mt-0">
+          <v-col align-self="center" lg="2" md="2" sm="2" xs="2">
+            <v-avatar color="#2196F3" size="30">
+              <v-icon color="#FFF">mdi-account</v-icon>
             </v-avatar>
           </v-col>
           <v-col
@@ -104,6 +136,7 @@
               text-align: left;
               padding-right: 0px;
               padding-left: 20px;
+              color: #2196f3;
             "
             align-self="center"
             >Low</v-col
@@ -113,13 +146,14 @@
             md="6"
             sm="6"
             xs="6"
-            class="text-red blue--text text-center laptop-padding1"
+            class="text-center laptop-padding1"
             align-self="center"
-            style="font-size: 34px !important"
-            >{{ data ? data.mediumCount : 0 }}
+            style="font-size: 34px !important; color: #2196f3"
+            >{{ data ? data.lowCount : 0 }}
           </v-col>
-        </v-row> </v-col
-      ><v-col
+        </v-row>
+      </v-col>
+      <!-- <v-col
         cols="5"
         style="
           margin: auto;
@@ -137,7 +171,7 @@
         >
           {{ data ? data.sosCount : 0 }}
         </div></v-col
-      >
+      > -->
     </v-row>
 
     <!-- <v-row>

@@ -33,11 +33,15 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="#E65100">
+                  <img
+                    src="/alarm_icons/google_alarm.png"
+                    style="width: 25px"
+                  />
+                  <!--<v-avatar color="#E65100">
                     <v-icon size="25" style="color: #fff"
                       >mdi-cellphone-information</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right">
@@ -75,11 +79,15 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="black">
+                  <!-- <v-avatar color="black">
                     <v-icon size="25" style="color: #fff"
                       >mdi-card-account-mail-outline</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
+                  <img
+                    src="/alarm_icons/google_closed_alarm.png"
+                    style="width: 25px"
+                  />
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right">
@@ -118,11 +126,15 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="green">
+                  <!-- <v-avatar color="green">
                     <v-icon size="25" style="color: #fff"
                       >mdi-account-outline</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
+                  <img
+                    src="/alarm_icons/google_armed.png"
+                    style="width: 25px"
+                  />
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right text-end">
@@ -160,11 +172,15 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="red">
+                  <!-- <v-avatar color="red">
                     <v-icon size="25" style="color: #fff"
                       >mdi-account-minus-outline</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
+                  <img
+                    src="/alarm_icons/google_disarm.png"
+                    style="width: 25px"
+                  />
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right text-end">
@@ -204,12 +220,16 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="blue">
+                  <!-- <v-avatar color="blue">
                     <v-icon size="25" style="color: #fff"
                       >mdi-airplane-takeoff</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
                   <!-- <v-icon color="blue" size="30" fill>mdi-airplane-takeoff</v-icon> -->
+                  <img
+                    src="/alarm_icons/google_online.png"
+                    style="width: 25px"
+                  />
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right">
@@ -246,11 +266,15 @@
             <v-row class="pa-2">
               <v-row class="pa-0 ma-0" style="width: 100%">
                 <v-col md="6">
-                  <v-avatar color="yellow">
+                  <!-- <v-avatar color="yellow">
                     <v-icon size="25" style="color: #fff"
                       >mdi-clock-time-eight-outline</v-icon
                     >
-                  </v-avatar>
+                  </v-avatar> -->
+                  <img
+                    src="/alarm_icons/google_offline.png"
+                    style="width: 25px"
+                  />
                 </v-col>
 
                 <v-col md="6" class="menu-icon-right">

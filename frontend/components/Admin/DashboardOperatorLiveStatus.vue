@@ -46,11 +46,7 @@
                 width: 30px;
                 max-width: 30px;
               "
-              :src="
-                item.profile_picture
-                  ? item.profile_picture
-                  : '/no-profile-image.jpg'
-              "
+              :src="item.picture ? item.picture : '/no-profile-image.jpg'"
             >
             </v-img>
           </v-col>
@@ -62,10 +58,28 @@
       </template> -->
       <template v-slot:item.employee.first_name="{ item }">
         {{ item.first_name + " " + item.last_name }}
+        <div calss="secondary-value" style="font-size: 10px">
+          {{ item.last_active_datetime || "---" }}
+        </div>
       </template>
       <template v-slot:item.LogTime="{ item }" style="color: green">
-        <v-icon color="green" fill>mdi-clock-outline</v-icon>
-        {{ item.last_active_datetime }}
+        <v-icon
+          :title="item.last_active_datetime"
+          v-if="item.idle_time <= 5"
+          color="green"
+          fill
+          >mdi-monitor-eye</v-icon
+        >
+        <v-icon
+          :title="item.last_active_datetime"
+          v-else-if="item.idle_time <= 60"
+          color="yellow"
+          fill
+          >mdi-monitor-eye</v-icon
+        >
+        <v-icon :title="item.last_active_datetime" v-else color="red" fill
+          >mdi-monitor-eye</v-icon
+        >
       </template>
     </v-data-table>
   </div>
@@ -127,6 +141,11 @@ export default {
   //     deep: true,
   //   },
   // },
+  mounted() {
+    setInterval(() => {
+      this.getRecords();
+    }, 1000 * 60);
+  },
   created() {
     this.getRecords();
   },

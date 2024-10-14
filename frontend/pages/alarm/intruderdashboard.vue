@@ -51,7 +51,10 @@
 
         <v-row>
           <v-col lg="12" md="12" sm="12" xs="12">
-            <v-card class="py-2 mt-2" style="height: 290px; overflow: hidden">
+            <v-card
+              class="py-2 mt-2"
+              style="height: 290px; overflow-x: hidden; overflow-y: auto"
+            >
               <DashboardOperatorLiveStatus />
             </v-card>
           </v-col>
@@ -66,7 +69,10 @@
     </v-row>
     <v-row class="d-xs-flex">
       <v-col lg="6" md="6" sm="12" xs="12" class="d-xs-flex" style="flex: auto">
-        <v-card class="py-2 mt-2" style="height: 312px; overflow: hidden">
+        <v-card
+          class="py-2 mt-2"
+          style="height: 312px; overflow-y: auto; overflow-x: hidden"
+        >
           <DashboardLoginActivities
             v-if="loadLoginActivites"
             :filter_user_type="'security'"

@@ -43,9 +43,9 @@ class SecurityLoginController extends Controller
     public function getOperatorLiveStatus(Request $request)
     {
 
-        $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
+        // $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
 
-        return  $securies = $model->get();
+        // return  $securies = $model->get();
 
         $currentDateTime = now(); // Get the current datetime
 
@@ -58,26 +58,34 @@ class SecurityLoginController extends Controller
         $currentDateTime->setTimezone(new DateTimeZone($company_time_zone));
         $logtime = $currentDateTime->format('Y-m-d H:i:s');
 
-        // $model = SecurityLogin::select('*', DB::raw("TIMESTAMPDIFF(MINUTE, last_active_datetime, '{$logtime}') AS minutes_difference"))
-        //     ->where("company_id", $request->company_id)
-        //     ->orderBy("last_active_datetime", "DESC")
-        //     ->get();
+        $securies = SecurityLogin::where("company_id", $request->company_id)
+            ->orderBy("last_active_datetime", "DESC")
+            ->get();
 
 
 
         foreach ($securies as $key => $security) {
+            if ($security->last_active_datetime != '') {
+                $date1 = $logtime;
+                $date2 = $security->last_active_datetime;
 
-            $date1 = '2024-10-11 14:30:00';
-            $date2 = '2024-10-11 15:45:00';
+                $carbonDate1 = Carbon::parse($date1);
+                $carbonDate2 = Carbon::parse($date2);
 
-            $carbonDate1 = Carbon::parse($date1);
-            $carbonDate2 = Carbon::parse($date2);
-
-            $diffInMinutes = $carbonDate1->diffInMinutes($carbonDate2);
-            $security["idle_time"] = 60;
+                $diffInMinutes = $carbonDate1->diffInMinutes($carbonDate2);
+                $security->idle_time = $diffInMinutes;
+            } else {
+                $security->idle_time = 1000;
+            }
         }
 
-        return $security;
+        // Convert objects to array and sort by idle_time
+        $securies = $securies->toArray(); // If it's a collection, convert it to an array
+        usort($securies, function ($a, $b) {
+            return $a['idle_time'] <=> $b['idle_time'];
+        });
+
+        return $securies;
     }
     public function updateLiveStatus(Request $request)
     {
