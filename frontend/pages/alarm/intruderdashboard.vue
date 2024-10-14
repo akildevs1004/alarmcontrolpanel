@@ -53,7 +53,7 @@
           <v-col lg="12" md="12" sm="12" xs="12">
             <v-card
               class="py-2 mt-2"
-              style="height: 290px; overflow-x: hidden; overflow-y: auto"
+              style="height: 320px; overflow-x: hidden; overflow-y: auto"
             >
               <DashboardOperatorLiveStatus />
             </v-card>
