@@ -278,7 +278,7 @@ export default {
         //   }
         // }
       }
-    }, 1000 * 10 * 1);
+    }, 1000 * 6 * 1);
   },
   created() {
     this.displayName =

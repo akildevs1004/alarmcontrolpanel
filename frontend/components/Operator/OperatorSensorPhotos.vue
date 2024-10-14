@@ -68,12 +68,28 @@
           >
             <div v-if="plotting.top != '-500px' && plotting.left != '-500px'">
               <v-icon
-                v-if="plotting.alarm_event?.length"
+                v-if="
+                  plotting.alarm_event?.length &&
+                  plotting.alarm_event.alarm_status == 1
+                "
                 class="alarm-red-to-green"
                 :title="plotting.alarm_event[0].alarm_type + ' Aalrm ON'"
                 size="20"
                 >mdi-circle</v-icon
-              ><v-icon v-else color="green" size="20" title="Aalrm OFF"
+              >
+
+              <v-icon
+                v-if="
+                  plotting.alarm_event?.length &&
+                  plotting.alarm_event.alarm_status == 0
+                "
+                class="red"
+                :title="plotting.alarm_event[0].alarm_type + ' Aalrm Off'"
+                size="20"
+                >mdi-circle</v-icon
+              >
+
+              <v-icon v-else color="green" size="20" title="Aalrm OFF"
                 >mdi-circle</v-icon
               >
               <div

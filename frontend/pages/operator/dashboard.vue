@@ -830,7 +830,7 @@ export default {
         if (this.filterText == "") await this.getDatafromApi(this.filterText);
         await this.getCustomersDatafromApi();
       }
-    }, 1000 * 10);
+    }, 1000 * 6);
 
     setInterval(() => {
       if (this.$route.name == "operator-dashboard") {
