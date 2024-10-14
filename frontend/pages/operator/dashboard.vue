@@ -828,7 +828,9 @@ export default {
     setInterval(async () => {
       if (this.$route.name == "operator-dashboard") {
         if (this.filterText == "") await this.getDatafromApi(this.filterText);
-        await this.getCustomersDatafromApi();
+        setTimeout(async () => {
+          await this.getCustomersDatafromApi();
+        }, 1000);
       }
     }, 1000 * 6);
 
