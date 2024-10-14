@@ -679,6 +679,13 @@ export default {
     //   deep: true,
     // },
   },
+  mounted() {
+    if (this.$route.page == "alarm-intruderdashboard") {
+      setInterval(() => {
+        this.getDataFromApi();
+      }, 1000 * 60);
+    }
+  },
   created() {
     // if (this.$route.name != "alarm-dashboard") {
     //   let today = new Date();

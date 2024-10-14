@@ -148,6 +148,13 @@ export default {
   created() {
     //this.getRecords();
   },
+  mounted() {
+    if (this.$route.page == "alarm-intruderdashboard") {
+      setInterval(() => {
+        this.getRecords();
+      }, 1000 * 60);
+    }
+  },
   computed: {
     employees() {
       return this.$store.state.employeeList.map((e) => ({

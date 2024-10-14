@@ -105,6 +105,12 @@ export default {
   },
   mounted() {
     this.getDataFromApi();
+
+    if (this.$route.page == "alarm-intruderdashboard") {
+      setInterval(() => {
+        this.getDataFromApi();
+      }, 1000 * 30);
+    }
   },
   async created() {
     // Get today's date

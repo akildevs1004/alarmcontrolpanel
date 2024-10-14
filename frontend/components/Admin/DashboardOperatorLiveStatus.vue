@@ -144,7 +144,7 @@ export default {
   mounted() {
     setInterval(() => {
       this.getRecords();
-    }, 1000 * 60);
+    }, 1000 * 45);
   },
   created() {
     this.getRecords();

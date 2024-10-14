@@ -212,7 +212,13 @@ export default {
       this.getDataFromApi();
     }, 1000 * 2);
   },
-
+  mounted() {
+    if (this.$route.page == "alarm-intruderdashboard") {
+      setInterval(() => {
+        this.getDataFromApi();
+      }, 1000 * 30);
+    }
+  },
   methods: {
     goToReports() {
       this.$router.push("/attendance_report");
