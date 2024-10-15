@@ -30,7 +30,7 @@ class AlarmDashboardController extends Controller
         COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
         COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
         COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
-        COUNT(CASE WHEN status_id = 0 THEN 1 END) as offlineCount
+        COUNT(CASE WHEN status_id = 2 THEN 1 END) as offlineCount
     ")->first();
 
         $alarmCounts = AlarmEvents::selectRaw("             
