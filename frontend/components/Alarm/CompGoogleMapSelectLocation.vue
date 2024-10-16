@@ -15,7 +15,8 @@
         >Close</v-btn
       >
       <v-btn dense color="primary" class="mr-5" small @click="getUserLocation()"
-        >Go to My Location</v-btn
+        ><v-icon size="15">mdi-image-filter-center-focus-strong</v-icon> My
+        Location</v-btn
       >
       <v-btn dense color="primary" small @click="updateAddress()"
         >Update Location</v-btn

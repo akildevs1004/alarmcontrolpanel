@@ -396,8 +396,16 @@
   },
   {
     "icon": "mdi-text-box-outline",
-    "title": "Armed Logs",
+    "title": "Armed",
     "to": "/alarm/armedreports",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
+  {
+    "icon": "mdi-text-box-outline",
+    "title": "Logs",
+    "to": "/alarm/armedlogs",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"

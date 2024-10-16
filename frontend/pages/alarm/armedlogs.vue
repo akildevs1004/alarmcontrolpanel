@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import DeviceArmedLogs from "../../components/Alarm/Reports/ArmedReports.vue";
+import DeviceArmedLogs from "../../components/Alarm/DeviceArmedLogs.vue";
 export default {
   components: {
     DeviceArmedLogs,

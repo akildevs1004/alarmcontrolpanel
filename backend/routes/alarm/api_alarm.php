@@ -264,3 +264,8 @@ Route::get('alarm_event_operator_statistics', [AlarmDashboardController::class, 
 
 Route::post('operator_live_update', [SecurityLoginController::class, "updateLiveStatus"]);
 Route::get('operators_live_status', [SecurityLoginController::class, "getOperatorLiveStatus"]);
+
+
+
+//reprots 
+Route::get('device_armed_reports', [DeviceArmedLogsController::class, "report"]);

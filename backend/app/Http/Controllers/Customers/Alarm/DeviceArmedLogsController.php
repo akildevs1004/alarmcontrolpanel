@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customers\Alarm;
 
 use App\Http\Controllers\Controller;
+use App\Models\AlarmEvents;
 use App\Models\DeviceArmedLogs;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DeviceArmedLogsController extends Controller
@@ -18,13 +20,103 @@ class DeviceArmedLogsController extends Controller
 
         $model = $this->filter($request);
 
-        $model->with([
+        $model->withCount([
             'alarm_events'
         ]);
+        $model->with([
+            'alarm_events',
+            'device.customer' => function ($query) {
+                $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures',]);
+            }
+        ]);
+        $model->whereHas('alarm_events', function ($query) {
+            $query->whereColumn('alarm_start_datetime', '>=', 'device_armed_logs.armed_datetime')
+                ->whereColumn('alarm_start_datetime', '<=', 'device_armed_logs.disarm_datetime');
+        });
 
         return $model->paginate($request->perPage ?? 10);;
     }
+    public function report(Request $request)
+    {
 
+
+
+        // Parse start and end dates
+        $startDate = Carbon::parse($request->input('date_from'))->startOfDay();
+        $endDate = Carbon::parse($request->input('date_to'))->endOfDay();
+
+
+
+        // Retrieve armed logs for the given company within the date range
+        $armedLogs = DeviceArmedLogs::with([
+            'device.customer' => function ($query) {
+                $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures']);
+            }
+        ])
+
+
+            ->when($request->filled("filter_customer_id"), function ($query) use ($request) {
+
+
+                $query->whereHas("device.customer", function ($query) use ($request) {
+                    $query->where('id', $request->filter_customer_id);
+                });
+            })
+            ->where("company_id", $request->company_id)
+            ->whereBetween('armed_datetime', [$startDate, $endDate])
+            ->orderBy('armed_datetime')
+            ->get();
+
+        // Calculate number of days in the date range
+        $daysInRange = $startDate->diffInDays($endDate) + 1;
+
+        // Group logs by date and customer
+        $armedLogsByDateAndCustomer = $armedLogs->groupBy(function ($log) {
+            return Carbon::parse($log->armed_datetime)->format('Y-m-d') . '_' . optional($log->device->customer)->id;
+        });
+
+        // Initialize the report array
+        $report = [];
+
+        // Generate report data
+        foreach (range(0, $daysInRange - 1) as $i) {
+            $currentDate = $startDate->copy()->addDays($i)->format('Y-m-d');
+            $customers = [];
+
+            foreach ($armedLogsByDateAndCustomer as $key => $logs) {
+                list($date, $customerId) = explode('_', $key);
+
+                if ($date === $currentDate) {
+                    if (!isset($customers[$customerId])) {
+                        $customers[$customerId] = [
+                            'customer' => $logs[0]["device"]["customer"]["building_name"],
+                            'city' => $logs[0]["device"]["customer"]["city"],
+                            'customer_id' => $customerId,
+                            'armed' => [],
+                            'events' => [] // Initialize events array if needed
+                        ];
+                    }
+
+                    foreach ($logs as $log) {
+                        $customers[$customerId]['armed'][] = [
+                            'armed_datetime' => Carbon::parse($log->armed_datetime)->format('H:i'),
+                            'disarm_datetime' => $log->disarm_datetime
+                                ? Carbon::parse($log->disarm_datetime)->format('H:i')
+                                : null,
+                        ];
+                    }
+                }
+            }
+
+            // Add the current date and its customers to the report
+            $report[] = [
+                'date' => $currentDate,
+                'customers' => array_values($customers),
+            ];
+        }
+
+        return $report;
+    }
     public function filter($request)
     {
         $model = DeviceArmedLogs::with(["device"])->where("company_id", $request->company_id);

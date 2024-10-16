@@ -164,7 +164,7 @@
             }}
           </template>
           <template v-slot:item.device="{ item }">
-            <div>{{ item.device?.name ?? "---" }}</div>
+            <div>{{ item.device?.customer?.building_name ?? "---" }}</div>
             <div class="secondary-value">
               {{ item.device?.serial_number ?? "---" }}
             </div>
@@ -241,7 +241,7 @@ export default {
       totalRowsCount: 0,
       headers: [
         { text: "#", value: "sno", sortable: false },
-        { text: "Device", value: "device", sortable: false },
+        { text: "Customer", value: "device", sortable: false },
         { text: "Armed Time", value: "armed_datetime", sortable: false },
         { text: "Disam Time", value: "disarm_datetime", sortable: false },
 
