@@ -186,6 +186,14 @@
                         item.armed[index - 1]?.armed_datetime
                       ) || "---"
                     }}
+
+                    <div class="secondary-value">
+                      {{
+                        $dateFormat.format2(
+                          item.armed[index - 1]?.armed_datetime
+                        ) || "---"
+                      }}
+                    </div>
                   </td>
                   <td
                     :title="item.armed[index - 1]?.disarm_datetime"
@@ -196,6 +204,13 @@
                         item.armed[index - 1]?.disarm_datetime
                       ) || "---"
                     }}
+                    <div class="secondary-value">
+                      {{
+                        $dateFormat.format2(
+                          item.armed[index - 1]?.disarm_datetime
+                        ) || "---"
+                      }}
+                    </div>
                   </td>
                 </template>
                 <td>{{ item.sos || "0" }}</td>
