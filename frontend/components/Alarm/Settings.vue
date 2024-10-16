@@ -6,7 +6,7 @@
       </v-snackbar>
     </div>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="4">
         <v-row>
           <v-col cols="12">
             <v-form autocomplete="off">
@@ -30,6 +30,40 @@
                   :error="errors.email"
                   :error-messages="errors && errors.email ? errors.email : ''"
                 ></v-text-field> -->
+              </v-col>
+              <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
+                <v-row>
+                  <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
+                    <v-select
+                      :items="timmingArray"
+                      label="Store Close Time"
+                      dense
+                      outlined
+                      hide-details
+                      v-model="payload.close_time"
+                      class="input-group--focused"
+                      :error="errors.close_time"
+                      :error-messages="
+                        errors && errors.close_time ? errors.close_time[0] : ''
+                      "
+                    ></v-select>
+                  </v-col>
+                  <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
+                    <v-select
+                      :items="timmingArray"
+                      label="Store Open Time"
+                      dense
+                      outlined
+                      hide-details
+                      v-model="payload.open_time"
+                      class="input-group--focused"
+                      :error="errors.open_time"
+                      :error-messages="
+                        errors && errors.open_time ? errors.open_time[0] : ''
+                      "
+                    ></v-select>
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                 <!-- <label class="col-form-label"
@@ -83,24 +117,24 @@
           </v-col>
         </v-row>
         <v-row class="pl-5" v-if="isEditable">
-          <v-col class="pt-5" style="max-width: 100px">Login </v-col>
+          <v-col class="pt-5" style="max-width: 100px">Login Status </v-col>
 
           <v-col class="pl-0 pt-1" style="max-width: 80px">
-            <div style="cursor: pointer" v-if="payload.login_status == 0">
+            <div style="cursor: pointer" v-if="web_login_access == 0">
               <v-img
                 class="ele1"
                 src="/off.png"
                 style="width: 60px"
-                @click="payload.login_status = 1"
+                @click="web_login_access = 1"
               >
               </v-img>
             </div>
-            <div style="cursor: pointer" v-if="payload.login_status == 1">
+            <div style="cursor: pointer" v-if="web_login_access == 1">
               <v-img
                 class="ele1"
                 src="/on.png"
                 style="width: 60px"
-                @click="payload.login_status = 0"
+                @click="web_login_access = 0"
               >
               </v-img>
             </div>
@@ -239,6 +273,7 @@ export default {
   props: ["customer", "isEditable"],
   data() {
     return {
+      timmingArray: null,
       snackbar: false,
       response: "",
       item: { is_over_time: true },
@@ -250,10 +285,10 @@ export default {
         password: "",
         password_confirmation: "",
       },
+      web_login_access: 0,
       payload: {
         email: "",
-        login_status: 1,
-        account_status: 1,
+
         company_id: "",
         customer_id: "",
       },
@@ -262,26 +297,49 @@ export default {
       errors: [],
     };
   },
-
-  created() {
+  mounted() {
     if (this.customer) {
       this.payload.email = this.customer.email;
-      this.payload.login_status = this.customer.login_status;
-      this.payload.account_status = this.customer.account_status;
+      //this.payload.web_login_access = this.customer.user.web_login_access;
+      this.web_login_access = this.customer.user.web_login_access;
+      //this.payload.account_status = this.customer.account_status;
       this.payload.password = "";
       this.payload.password_confirmation = "";
+
+      this.payload.close_time = this.customer.close_time ?? "00:00";
+      this.payload.open_time = this.customer.open_time ?? "00:00";
     }
+
+    this.timmingArray = this.generateTimingArray();
   },
+  created() {},
 
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    generateTimingArray() {
+      const times = [];
+      for (let h = 0; h < 24; h++) {
+        for (let m = 0; m < 60; m += 60) {
+          const hour = h.toString().padStart(2, "0");
+          const minute = m.toString().padStart(2, "0");
+          times.push(`${hour}:${minute}`);
+        }
+      }
+      return times;
+    },
     update_setting() {
       this.payload.company_id = this.$auth.user.company_id;
       this.payload.customer_id = this.customer.id;
+      this.payload.web_login_access = this.web_login_access;
       this.payload.user_id = this.customer.user_id;
       this.errors = [];
+
+      if (this.payload.password === "") delete this.payload.password;
+      if (this.payload.password_confirmation === "")
+        delete this.payload.password_confirmation;
+
       this.$axios
         .post("/update_customer_settings", this.payload)
         .then(({ data }) => {

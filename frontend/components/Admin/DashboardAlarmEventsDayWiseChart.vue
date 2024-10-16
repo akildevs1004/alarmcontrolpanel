@@ -104,7 +104,9 @@ export default {
     },
   },
   mounted() {
-    this.getDataFromApi();
+    setTimeout(() => {
+      this.getDataFromApi();
+    }, 1000 * 3);
 
     if (this.$route.page == "alarm-intruderdashboard") {
       setInterval(() => {

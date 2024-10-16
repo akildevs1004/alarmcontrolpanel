@@ -513,6 +513,7 @@ export default {
   components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
 
   data: () => ({
+    currentCustomer: null,
     mapStyle: "bw",
     mapkeycount: 1,
     popupEventText: "",
@@ -809,7 +810,15 @@ export default {
           // // Call plotLocations to replot markers
           // this.plotLocations();
 
-          this.getMapKey();
+          this.getMapKey().then(() => {
+            if (
+              this.data.length > 0 &&
+              loadMap &&
+              this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
+            ) {
+              this.setCustomerLocationOnMap(this.data[0]);
+            }
+          });
         });
       } catch (e) {}
 
@@ -934,8 +943,8 @@ export default {
           // },
           controlSize: 20,
           zoom: 12,
-          center: { lat: 25.2516474, lng: 55.3567738 },
-          styles: this.google_map_style_bandw,
+          center: { lat: 25.2265191, lng: 55.395225 },
+          styles: this.google_map_style_regular,
           // styles: [
           //   {
           //     featureType: "administrative",

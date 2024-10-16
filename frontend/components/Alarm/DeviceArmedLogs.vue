@@ -5,7 +5,35 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-dialog v-model="dialogEventsList" max-width="80%">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span style="color: black" dense>Intruder Events</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogEventsList = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding: 20px; padding-left: 0px">
+          <v-card class="elevation-2">
+            <v-card-text class="mt-5">
+              <AlamAllEvents
+                name="DeviceArmedLogs"
+                style="padding: 0px; padding-top: 0px"
+                :key="key"
+                :popup="true"
+                :compAlarmFilter="1"
+                :date_from="date_from"
+                :date_to="date_to"
+              /> </v-card-text
+          ></v-card>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-row>
@@ -164,6 +192,16 @@
               }}
             </div>
           </template>
+          <template v-slot:item.alarm_events_count="{ item }">
+            <div @click="showEvents(item)">
+              {{ item.alarm_events_count || 0 }}
+            </div>
+          </template>
+          <!-- <template v-slot:item.sos="{ item }">
+            <div @click="showEvents(item)">
+              {{ item.alarm_events_count }}
+            </div>
+          </template> -->
         </v-data-table>
       </v-col>
     </v-row>
@@ -173,15 +211,19 @@
 <script>
 import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
 import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
-
+import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 export default {
   components: {
     EditAlarmCustomerEventNotes,
     AlarmEventNotesListView,
+    AlamAllEvents,
   },
   props: ["customer_id"],
   data() {
     return {
+      date_from: null,
+      date_to: null,
+      dialogEventsList: false,
       snackbar: false,
       response: "",
       key: "",
@@ -204,6 +246,8 @@ export default {
         { text: "Disam Time", value: "disarm_datetime", sortable: false },
 
         { text: "Duration(HH:MM)", value: "duration", sortable: false },
+        { text: "Alarms", value: "alarm_events_count", sortable: false },
+        // { text: "SOS", value: "sos", sortable: false },
       ],
       items: [],
     };
@@ -236,6 +280,11 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    showEvents(item) {
+      this.dialogEventsList = true;
+      this.date_from = item.armed_datetime;
+      this.date_to = item.disarm_datetime;
     },
     viewNotes(item) {
       this.key = this.key + 1;

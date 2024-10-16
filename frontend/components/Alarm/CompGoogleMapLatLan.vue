@@ -86,7 +86,7 @@ export default {
         {
           mapTypeControl: false,
           streetViewControl: false,
-          zoom: 8,
+          zoom: 12,
           center: { lat: 25.276987, lng: 55.296249 },
           styles: [
             {

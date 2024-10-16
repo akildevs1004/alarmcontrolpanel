@@ -145,10 +145,12 @@ export default {
     setInterval(() => {
       this.getRecords();
     }, 1000 * 45);
+
+    setTimeout(() => {
+      this.getRecords();
+    }, 1000 * 8);
   },
-  created() {
-    this.getRecords();
-  },
+  created() {},
   computed: {
     employees() {
       return this.$store.state.employeeList.map((e) => ({

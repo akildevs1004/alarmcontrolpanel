@@ -327,15 +327,16 @@ export default {
   },
   watch: {},
   mounted() {
+    setTimeout(() => {
+      this.getDataFromApi();
+    }, 1000 * 3);
     if (this.$route.page == "alarm-intruderdashboard") {
       setInterval(() => {
         this.getDataFromApi();
       }, 1000 * 30);
     }
   },
-  created() {
-    this.getDataFromApi();
-  },
+  created() {},
 
   methods: {
     viewReports() {

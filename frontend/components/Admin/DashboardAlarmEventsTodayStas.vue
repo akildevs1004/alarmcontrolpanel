@@ -208,11 +208,11 @@ export default {
   created() {
     let today = new Date();
     this.date_from = today.toISOString().split("T")[0];
+  },
+  mounted() {
     setTimeout(() => {
       this.getDataFromApi();
     }, 1000 * 2);
-  },
-  mounted() {
     if (this.$route.page == "alarm-intruderdashboard") {
       setInterval(() => {
         this.getDataFromApi();

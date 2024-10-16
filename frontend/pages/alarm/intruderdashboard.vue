@@ -112,25 +112,25 @@ export default {
     DashboardOperatorLiveStatus,
   },
   data: () => ({
-    loadCustomerStats: false,
-    loadLoginActivites: false,
-    loadHourChart: false,
-    loadEvents: false,
+    loadCustomerStats: true,
+    loadLoginActivites: true,
+    loadHourChart: true,
+    loadEvents: true,
   }),
   computed: {},
   mounted() {
-    setTimeout(() => {
-      this.loadEvents = true;
-    }, 1000 * 3);
-    setTimeout(() => {
-      this.loadCustomerStats = true;
-    }, 1000 * 6);
-    setTimeout(() => {
-      this.loadLoginActivites = true;
-    }, 1000 * 9);
-    setTimeout(() => {
-      this.loadHourChart = true;
-    }, 1000 * 12);
+    // setTimeout(() => {
+    //   this.loadEvents = true;
+    // }, 1000 * 3);
+    // setTimeout(() => {
+    //   this.loadCustomerStats = true;
+    // }, 1000 * 6);
+    // setTimeout(() => {
+    //   this.loadLoginActivites = true;
+    // }, 1000 * 9);
+    // setTimeout(() => {
+    //   this.loadHourChart = true;
+    // }, 1000 * 12);
   },
   created() {},
   watch: {},

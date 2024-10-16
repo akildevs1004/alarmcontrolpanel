@@ -18,6 +18,9 @@ class DeviceArmedLogsController extends Controller
 
         $model = $this->filter($request);
 
+        $model->with([
+            'alarm_events'
+        ]);
 
         return $model->paginate($request->perPage ?? 10);;
     }
@@ -43,7 +46,13 @@ class DeviceArmedLogsController extends Controller
             );
         });
         if ($request->filled("date_from")) {
-            $model->whereBetween('armed_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+            // $model->whereBetween('armed_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+
+
+            $model->where(function ($query) use ($request) {
+                $query->whereBetween('armed_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59'])
+                    ->orWhereBetween('disarm_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+            });
         }
         return  $model->orderBy("armed_datetime", "DESC");
     }

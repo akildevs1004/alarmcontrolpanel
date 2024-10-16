@@ -15,4 +15,8 @@ class DeviceArmedLogs extends Model
     {
         return $this->belongsTo(Device::class, "serial_number", "serial_number");
     }
+    public function alarm_events()
+    {
+        return $this->belongsTo(Device::class, "serial_number", "serial_number");
+    }
 }

@@ -5,7 +5,30 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="showMap" width="800px">
+      <v-card>
+        <v-card-title
+          style="color: black"
+          dense
+          class="popup_background_noviolet"
+        >
+          <span style="">Move Marker to change Location </span>
+          <v-spacer></v-spacer>
+          <v-icon @click="showMap = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
 
+        <v-card-text style="padding-left: 0px; padding-right: 0px">
+          <CompGoogleMapSelectLocation
+            v-if="showMap"
+            @triggerAddress="updateMapAddressDetails"
+            @closePopup="showMap = false"
+            :customer_latitude="customer_payload?.latitude"
+            :customer_longitude="customer_payload?.longitude"
+        /></v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12" dense>
         <v-row class="pt-5">
@@ -155,41 +178,7 @@
             }}</span>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Latitude"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.latitude"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.latitude" class="text-danger mt-2">{{
-              errors.latitude[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Longitude"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.longitude"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.longitude" class="text-danger mt-2">{{
-              errors.longitude[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <!-- <LocationFinderDialogBox /> -->
-          </v-col>
-        </v-row>
+
         <v-row v-if="!customer_id">
           <v-col md="4" cols="2" sm="12" dense>
             <v-text-field
@@ -316,7 +305,48 @@
             </v-menu>
           </v-col>
         </v-row>
-
+        <v-row>
+          <v-col md="4" cols="12" sm="12" dense>
+            <v-text-field
+              :readonly="isMapviewOnly"
+              label="Latitude"
+              dense
+              outlined
+              type="text"
+              v-model="customer_payload.latitude"
+              hide-details
+              :disabled="!isEditable"
+            ></v-text-field>
+            <span v-if="errors && errors.latitude" class="text-danger mt-2">{{
+              errors.latitude[0]
+            }}</span>
+          </v-col>
+          <v-col md="4" cols="12" sm="12" dense>
+            <v-text-field
+              :readonly="isMapviewOnly"
+              label="Longitude"
+              dense
+              outlined
+              type="text"
+              v-model="customer_payload.longitude"
+              hide-details
+              :disabled="!isEditable"
+            ></v-text-field>
+            <span v-if="errors && errors.longitude" class="text-danger mt-2">{{
+              errors.longitude[0]
+            }}</span>
+          </v-col>
+          <v-col md="4" cols="12" sm="12" dense class="mt-2">
+            <!-- <LocationFinderDialogBox /> -->
+            <v-btn v-if="!showMap" dense outlined small @click="showMap = true"
+              ><v-icon dark> mdi-map-marker-radius-outline</v-icon>Change
+              Location
+            </v-btn>
+            <!-- <v-btn dense v-if="showMap" outlined small @click="showMap = false"
+              >Close Map</v-btn
+            > -->
+          </v-col>
+        </v-row>
         <v-row v-if="!isMapviewOnly && isEditable">
           <v-col cols="12" class="text-right">
             <v-btn small :loading="loading" color="primary" @click="submit">
@@ -330,9 +360,13 @@
 </template>
 
 <script>
+import CompGoogleMapSelectLocation from "./CompGoogleMapSelectLocation.vue";
+
 export default {
   props: ["customer_id", "customer", "isMapviewOnly", "isEditable"],
+  components: { CompGoogleMapSelectLocation },
   data: () => ({
+    showMap: false,
     response: "",
     snackbar: false,
     show1: false,
@@ -440,7 +474,11 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-
+    updateMapAddressDetails(latitude, longitude) {
+      this.customer_payload.latitude = latitude;
+      this.customer_payload.longitude = longitude;
+      this.showMap = false;
+    },
     getBranchesList() {
       this.$axios
         .get(`branches_list`, {

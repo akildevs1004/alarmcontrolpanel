@@ -478,17 +478,19 @@ class CustomersController extends Controller
     public function updateCustomerSettings(Request $request)
     {
 
+
+
         if ($request->filled("customer_id") && $request->filled("company_id")) {
 
-            $data = [];
-            $data["account_status"] = $request->account_status;
-            $data["login_status"] = $request->login_status;
-            if ($request->filled("password")) {
+            $user_data = [];
+            $customer_data = [];
+            $customer_data["close_time"] = $request->close_time;
+            $customer_data["open_time"] = $request->open_time;
 
-
-
+            $user_data["web_login_access"] = $request->web_login_access;
+            if ($request->filled("password") && $request->password != '') {
                 if ($request->password == $request->password_confirmation) {
-                    $data["password"] = Hash::make($request->password);
+                    $user_data["password"] = Hash::make($request->password);
                 } else {
 
                     return [
@@ -501,16 +503,11 @@ class CustomersController extends Controller
                     ];
                 }
             }
-
-
             User::where("id", $request->user_id)->update(
-                [
-                    "web_login_access" => $data["login_status"],
-                    "password" => $data["password"]
-                ]
+                $user_data
             );
 
-            Customers::where("company_id", $request->company_id)->where("id", $request->customer_id)->update($data);
+            Customers::where("id", $request->customer_id)->update($customer_data);
         }
 
         return $this->response('Customer Setting Updated Successfully', null, true);
