@@ -43,10 +43,35 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="showMap" width="800px">
+      <v-card>
+        <v-card-title
+          style="color: black"
+          dense
+          class="popup_background_noviolet"
+        >
+          <span style="">Move Marker to change Location </span>
+          <v-spacer></v-spacer>
+          <v-icon @click="showMap = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text style="padding-left: 0px; padding-right: 0px">
+          <CompGoogleMapSelectLocation
+            v-if="showMap"
+            @triggerAddress="updateMapAddressDetails"
+            @closePopup="showMap = false"
+            :customer_latitude="payload_primary?.latitude"
+            :customer_longitude="payload_primary?.longitude"
+        /></v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols="12">
         <v-card class="elevation-0 p-2" style="padding: 5px">
-          <v-row class="pt-5">
+          <v-row class="pt-0">
             <v-col cols="4" dense>
               <div class="text-center mt-0" style="height: 220px">
                 <v-img
@@ -95,7 +120,18 @@
                     payload_primary.first_name + ' ' + payload_primary.last_name
                   "
                   :contact_id="payload_primary.id"
+                  :key="mapkey"
                 />
+                <div class="text-center">
+                  <v-btn
+                    v-if="isEditable || isMapviewOnly"
+                    dense
+                    small
+                    color="primary"
+                    @click="changeAddresss()"
+                    >Update Address</v-btn
+                  >
+                </div>
               </div>
             </v-col>
             <v-col cols="8"
@@ -366,9 +402,10 @@
 
 <script>
 import CompGoogleMapLatLan from "./CompGoogleMapLatLan.vue";
+import CompGoogleMapSelectLocation from "./CompGoogleMapSelectLocation.vue";
 
 export default {
-  components: { CompGoogleMapLatLan },
+  components: { CompGoogleMapLatLan, CompGoogleMapSelectLocation },
   props: [
     "customer_id",
     "customer_contacts",
@@ -378,6 +415,8 @@ export default {
     "contact",
   ],
   data: () => ({
+    mapkey: 1,
+    showMap: false,
     editItem: null,
     dialogViewPhotos: false,
     show1: false,
@@ -487,7 +526,15 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-
+    changeAddresss() {
+      this.showMap = true;
+    },
+    updateMapAddressDetails(latitude, longitude) {
+      this.payload_primary.latitude = latitude;
+      this.payload_primary.longitude = longitude;
+      this.mapkey++;
+      this.showMap = false;
+    },
     deleteContact(contact) {
       if (confirm("Are you sure you wish to delete ?")) {
         if (contact.id > 0) {

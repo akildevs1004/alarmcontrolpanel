@@ -36,7 +36,7 @@
                   <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
                     <v-select
                       :items="timmingArray"
-                      label="Store Close Time"
+                      label="Close Time(Armed)"
                       dense
                       outlined
                       hide-details
@@ -51,7 +51,7 @@
                   <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
                     <v-select
                       :items="timmingArray"
-                      label="Store Open Time"
+                      label="Open Time(Disarm)"
                       dense
                       outlined
                       hide-details
