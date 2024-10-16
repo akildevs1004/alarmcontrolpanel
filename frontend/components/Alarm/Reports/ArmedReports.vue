@@ -180,7 +180,10 @@
                 <td>{{ item.customer }}</td>
                 <td>{{ item.city }}</td>
                 <template v-for="index in 5">
-                  <td :title="item.armed[index - 1]?.armed_datetime">
+                  <td
+                    :title="item.armed[index - 1]?.armed_datetime"
+                    style="color: red"
+                  >
                     {{
                       $dateFormat.format6(
                         item.armed[index - 1]?.armed_datetime
@@ -196,8 +199,8 @@
                     </div>
                   </td>
                   <td
+                    style="color: green"
                     :title="item.armed[index - 1]?.disarm_datetime"
-                    style="color: red"
                   >
                     {{
                       $dateFormat.format6(
