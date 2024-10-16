@@ -99,9 +99,9 @@ class DeviceArmedLogsController extends Controller
 
                     foreach ($logs as $log) {
                         $customers[$customerId]['armed'][] = [
-                            'armed_datetime' => Carbon::parse($log->armed_datetime)->format('H:i'),
+                            'armed_datetime' => Carbon::parse($log->armed_datetime)->format('Y-m-d H:i:s'),
                             'disarm_datetime' => $log->disarm_datetime
-                                ? Carbon::parse($log->disarm_datetime)->format('H:i')
+                                ? Carbon::parse($log->disarm_datetime)->format('Y-m-d H:i:s')
                                 : null,
                         ];
                     }

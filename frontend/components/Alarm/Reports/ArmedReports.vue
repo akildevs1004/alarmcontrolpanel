@@ -36,28 +36,30 @@
     </v-dialog>
     <v-row>
       <v-col cols="12" class="text-right" style="padding-top: 0px">
-        <v-row>
-          <v-col></v-col>
-          <v-col class="text-right" style="min-width: 500px">
-            <v-row>
-              <v-col class="mt-2">
-                <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-              </v-col>
-              <v-col style="">
-                <v-autocomplete
-                  style="padding-top: 6px"
-                  @change="getDataFromApi()"
-                  class="reports-events-autocomplete bgwhite"
-                  v-model="filter_customer_id"
-                  :items="customersList"
-                  dense
-                  placeholder="Select Building/Customer"
-                  outlined
-                  item-value="id"
-                  item-text="building_name"
-                >
-                </v-autocomplete>
-                <!-- <v-text-field
+        <v-card>
+          <v-row>
+            <v-col></v-col>
+            <v-col class="text-right" style="min-width: 500px">
+              <v-row>
+                <v-col class="mt-2">
+                  <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+                </v-col>
+                <v-col style="">
+                  <v-autocomplete
+                    clearable
+                    style="padding-top: 6px"
+                    @change="getDataFromApi()"
+                    class="reports-events-autocomplete bgwhite"
+                    v-model="filter_customer_id"
+                    :items="customersList"
+                    dense
+                    placeholder="All Customers"
+                    outlined
+                    item-value="id"
+                    item-text="building_name"
+                  >
+                  </v-autocomplete>
+                  <!-- <v-text-field
                   style="padding-top: 7px; width: 200px"
                   height="20"
                   class="employee-schedule-search-box"
@@ -71,17 +73,17 @@
                   clearable
                   hide-details
                 ></v-text-field> -->
-              </v-col>
-              <v-col style="">
-                <CustomFilter
-                  style="float: right; padding-top: 5px; z-index: 9999"
-                  @filter-attr="filterAttr"
-                  :default_date_from="date_from"
-                  :default_date_to="date_to"
-                  :defaultFilterType="1"
-                  :height="'40px'"
-              /></v-col>
-              <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
+                </v-col>
+                <v-col style="">
+                  <CustomFilter
+                    style="float: right; padding-top: 5px; z-index: 9999"
+                    @filter-attr="filterAttr"
+                    :default_date_from="date_from"
+                    :default_date_to="date_to"
+                    :defaultFilterType="1"
+                    :height="'40px'"
+                /></v-col>
+                <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
                   <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -150,9 +152,10 @@
                     </v-list>
                   </v-menu>
                 </v-col> -->
-            </v-row>
-          </v-col>
-        </v-row>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
     <v-row style="margin-top: -30px">
@@ -176,16 +179,25 @@
                 <td>{{ item.date }}</td>
                 <td>{{ item.customer }}</td>
                 <td>{{ item.city }}</td>
-                <td>{{ item.armed[0]?.armed_datetime || "---" }}</td>
-                <td>{{ item.armed[0]?.disarm_datetime || "---" }}</td>
-                <td>{{ item.armed[1]?.armed_datetime || "---" }}</td>
-                <td>{{ item.armed[1]?.disarm_datetime || "---" }}</td>
-                <td>{{ item.armed[2]?.armed_datetime || "---" }}</td>
-                <td>{{ item.armed[2]?.disarm_datetime || "---" }}</td>
-                <td>{{ item.armed[3]?.armed_datetime || "---" }}</td>
-                <td>{{ item.armed[3]?.disarm_datetime || "---" }}</td>
-                <td>{{ item.armed[4]?.armed_datetime || "---" }}</td>
-                <td>{{ item.armed[4]?.disarm_datetime || "---" }}</td>
+                <template v-for="index in 5">
+                  <td :title="item.armed[index - 1]?.armed_datetime">
+                    {{
+                      $dateFormat.format6(
+                        item.armed[index - 1]?.armed_datetime
+                      ) || "---"
+                    }}
+                  </td>
+                  <td
+                    :title="item.armed[index - 1]?.disarm_datetime"
+                    style="color: red"
+                  >
+                    {{
+                      $dateFormat.format6(
+                        item.armed[index - 1]?.disarm_datetime
+                      ) || "---"
+                    }}
+                  </td>
+                </template>
                 <td>{{ item.sos || "0" }}</td>
                 <td>
                   {{ item.events.length ? item.events.join(", ") : "0" }}
@@ -226,8 +238,12 @@ export default {
         { text: "Disarm4", value: "disarm4", sortable: false },
         { text: "Armed5", value: "armed5", sortable: false },
         { text: "Disarm5", value: "disarm5", sortable: false },
-        { text: "SOS", value: "sos", sortable: false },
-        { text: "Events", value: "events", sortable: false },
+        { text: "Armed Duration", value: "armed", sortable: false },
+
+        { text: "Disarm Duration", value: "disarm", sortable: false },
+
+        // { text: "SOS", value: "sos", sortable: false },
+        // { text: "Events", value: "events", sortable: false },
       ],
       date_from: null,
       date_to: null,
