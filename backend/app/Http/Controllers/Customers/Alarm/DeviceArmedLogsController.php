@@ -101,6 +101,8 @@ class DeviceArmedLogsController extends Controller
             $currentDate = $startDate->copy()->addDays($i)->format('Y-m-d');
             $customers = [];
 
+            $alarmEventCountTotal = 0;
+
             foreach (array_merge($armedLogsByDateAndCustomer->toArray(), $eventLogsByDateAndCustomer->toArray()) as $key => $logs) {
 
 
@@ -118,6 +120,10 @@ class DeviceArmedLogsController extends Controller
                             'sos_count' => $logs['sos_count'] ?? 0,
 
                         ];
+                        $total_events = $logs['total_events'] ?? 0;
+                        $sos_count = $logs['total_events'] ?? 0;
+
+                        $alarmEventCountTotal += $total_events + $sos_count;
 
                         // Add armed logs if they exist
                         if (isset($armedLogsByDateAndCustomer[$key])) {
@@ -140,10 +146,19 @@ class DeviceArmedLogsController extends Controller
             }
 
             // Add the current date and its customers to the report
-            $report[] = [
-                'date' => $currentDate,
-                'customers' => array_values($customers),
-            ];
+            if ($request->only_show_alarms == 'true') {
+                if ($alarmEventCountTotal > 0) {
+                    $report[] = [
+                        'date' => $currentDate,
+                        'customers' => array_values($customers),
+                    ];
+                }
+            } else {
+                $report[] = [
+                    'date' => $currentDate,
+                    'customers' => array_values($customers),
+                ];
+            }
         }
 
         return $report;

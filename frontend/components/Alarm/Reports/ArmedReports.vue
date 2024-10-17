@@ -48,6 +48,14 @@
                 <v-col class="mt-2">
                   <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
                 </v-col>
+                <v-col style="text-align: right; max-width: 100px">
+                  <v-checkbox
+                    style="margin-top: 8px"
+                    @change="getDataFromApi()"
+                    v-model="only_show_alarms"
+                    label="Alarms"
+                  ></v-checkbox>
+                </v-col>
                 <v-col style="">
                   <v-autocomplete
                     clearable
@@ -266,6 +274,7 @@ export default {
   props: ["customer_id"],
   data() {
     return {
+      only_show_alarms: false,
       filter_date: "",
       filter_customer_id: "",
       filter_alarm_type: "",
@@ -512,6 +521,7 @@ export default {
           date_from: this.date_from,
           date_to: this.date_to,
           filter_customer_id: this.filter_customer_id,
+          only_show_alarms: this.only_show_alarms,
         },
       };
 
