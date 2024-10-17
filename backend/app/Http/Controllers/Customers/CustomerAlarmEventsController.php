@@ -695,6 +695,20 @@ class CustomerAlarmEventsController extends Controller
             $query->whereIn('customer_id', $request->filter_customers_list);
         });
 
+        $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {
+            $query->whereDate('alarm_start_datetime', $request->filter_date);
+        });
+
+
+        $model->when($request->filled("filter_alarm_type") && $request->filter_alarm_type != '', function ($query) use ($request) {
+            if ($request->filter_alarm_type == 'non-sos')
+                $query->where('alarm_type', "!=", "SOS");
+
+            if ($request->filter_alarm_type == 'sos')
+                $query->where('alarm_type',   "SOS");
+        });
+
+
         $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
 
             $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");

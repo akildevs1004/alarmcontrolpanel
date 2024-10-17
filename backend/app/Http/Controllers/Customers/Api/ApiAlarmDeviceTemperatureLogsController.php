@@ -36,7 +36,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-        $devicesList = Device::where("serial_number", "!=", null)
+        $devicesList = Device::with(["customer.mappedsecurity"])->where("serial_number", "!=", null)
             ->where("device_type", "!=", "Manual")
             ->where("serial_number", "!=", "Manual")
             ->where("serial_number", "!=", "Mobile")
@@ -44,7 +44,6 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
             ->where("serial_number", "!=", null)->get();
 
-        // (new AlarmLogsController)->updateCompanyIds();
 
         //  $devicesList = Device::where("serial_number", "24000003")->get();
         $log[] = $this->updateDuration1($devicesList);
@@ -312,6 +311,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
                             ->where("zone", $logs['zone'])
                             ->where("area", $logs['area'])
+                            ->where("alarm_type", $logs['alarm_type'])
                             ->where("alarm_status", 1)->count();
 
                         if ($activeAlarmZoneCount == 0) {
@@ -328,6 +328,13 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 $alarm_catgory = 1;
                             }
 
+                            $security_name = null;
+                            $security_id = null;
+                            if ($device->customer->mappedsecurity->securityInfo) {
+                                $security_name = $device->customer->mappedsecurity->securityInfo->first_name . ' ' . $device->customer->mappedsecurity->securityInfo->last_name;
+                                $security_id =  $device->customer->mappedsecurity->securityInfo->id;
+                            }
+
                             $data = [
                                 "company_id" => $logs['company_id'],
                                 "serial_number" => $logs['serial_number'],
@@ -339,6 +346,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 "alarm_category" => $alarm_catgory,
                                 "sensor_zone_id" => $sensor_zone_id,
                                 "alarm_source" => $logs['alarm_source'],
+                                "security_name" => $security_name,
+                                "security_id" => $security_id,
                             ];
 
 
@@ -367,7 +376,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
                             }
                         } else {
-                            //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
+                            Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
                         }
                     }
                 }

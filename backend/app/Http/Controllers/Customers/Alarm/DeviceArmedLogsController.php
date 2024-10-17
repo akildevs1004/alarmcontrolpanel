@@ -7,6 +7,7 @@ use App\Models\AlarmEvents;
 use App\Models\DeviceArmedLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DeviceArmedLogsController extends Controller
 {
@@ -38,14 +39,9 @@ class DeviceArmedLogsController extends Controller
     }
     public function report(Request $request)
     {
-
-
-
         // Parse start and end dates
         $startDate = Carbon::parse($request->input('date_from'))->startOfDay();
         $endDate = Carbon::parse($request->input('date_to'))->endOfDay();
-
-
 
         // Retrieve armed logs for the given company within the date range
         $armedLogs = DeviceArmedLogs::with([
@@ -53,16 +49,12 @@ class DeviceArmedLogsController extends Controller
                 $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures']);
             }
         ])
-
-
+            ->where("company_id", $request->company_id)
             ->when($request->filled("filter_customer_id"), function ($query) use ($request) {
-
-
                 $query->whereHas("device.customer", function ($query) use ($request) {
                     $query->where('id', $request->filter_customer_id);
                 });
             })
-            ->where("company_id", $request->company_id)
             ->whereBetween('armed_datetime', [$startDate, $endDate])
             ->orderBy('armed_datetime')
             ->get();
@@ -70,9 +62,35 @@ class DeviceArmedLogsController extends Controller
         // Calculate number of days in the date range
         $daysInRange = $startDate->diffInDays($endDate) + 1;
 
-        // Group logs by date and customer
+        // Retrieve event logs for the given company within the date range
+        $eventLogs = AlarmEvents::with([
+            'device.customer' => function ($query) {
+                $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures']);
+            }
+        ])
+            ->where("company_id", $request->company_id)
+            ->when($request->filled("filter_customer_id"), function ($query) use ($request) {
+                $query->whereHas("device.customer", function ($query) use ($request) {
+                    $query->where('id', $request->filter_customer_id);
+                });
+            })
+            ->whereBetween('alarm_start_datetime', [$startDate, $endDate])
+            ->orderBy('alarm_start_datetime')
+            ->get();
+
+        // Group logs by date and customer, counting total and SOS events
         $armedLogsByDateAndCustomer = $armedLogs->groupBy(function ($log) {
             return Carbon::parse($log->armed_datetime)->format('Y-m-d') . '_' . optional($log->device->customer)->id;
+        });
+
+        $eventLogsByDateAndCustomer = $eventLogs->groupBy(function ($log) {
+            return Carbon::parse($log->alarm_start_datetime)->format('Y-m-d') . '_' . optional($log->device->customer)->id;
+        })->map(function ($logs) {
+            return [
+                'total_events' => $logs->where('alarm_type', '!=', 'SOS')->count(),
+                'sos_count' => $logs->where('alarm_type', 'SOS')->count(),
+                'customer' => $logs,
+            ];
         });
 
         // Initialize the report array
@@ -83,27 +101,40 @@ class DeviceArmedLogsController extends Controller
             $currentDate = $startDate->copy()->addDays($i)->format('Y-m-d');
             $customers = [];
 
-            foreach ($armedLogsByDateAndCustomer as $key => $logs) {
+            foreach (array_merge($armedLogsByDateAndCustomer->toArray(), $eventLogsByDateAndCustomer->toArray()) as $key => $logs) {
+
+
+
                 list($date, $customerId) = explode('_', $key);
 
                 if ($date === $currentDate) {
                     if (!isset($customers[$customerId])) {
-                        $customers[$customerId] = [
-                            'customer' => $logs[0]["device"]["customer"]["building_name"],
-                            'city' => $logs[0]["device"]["customer"]["city"],
+                        $customerData = [
+                            'customer' => $logs[0]["device"]["customer"]["building_name"] ?? $logs["customer"][0]["customer"]["building_name"],
+                            'city' => $logs[0]["device"]["customer"]["city"] ??   $logs["customer"][0]["customer"]["city"],
                             'customer_id' => $customerId,
                             'armed' => [],
-                            'events' => [] // Initialize events array if needed
-                        ];
-                    }
+                            'events_count' => $logs['total_events'] ?? 0,
+                            'sos_count' => $logs['sos_count'] ?? 0,
 
-                    foreach ($logs as $log) {
-                        $customers[$customerId]['armed'][] = [
-                            'armed_datetime' => Carbon::parse($log->armed_datetime)->format('Y-m-d H:i:s'),
-                            'disarm_datetime' => $log->disarm_datetime
-                                ? Carbon::parse($log->disarm_datetime)->format('Y-m-d H:i:s')
-                                : null,
                         ];
+
+                        // Add armed logs if they exist
+                        if (isset($armedLogsByDateAndCustomer[$key])) {
+                            foreach ($armedLogsByDateAndCustomer[$key] as $log) {
+                                $customerData['armed'][] = [
+                                    'armed_datetime' => Carbon::parse($log->armed_datetime)->format('Y-m-d H:i:s'),
+                                    'disarm_datetime' => $log->disarm_datetime
+                                        ? Carbon::parse($log->disarm_datetime)->format('Y-m-d H:i:s')
+                                        : null,
+
+                                    'events_count' =>   0,
+                                    'sos_count' =>  0,
+                                ];
+                            }
+                        }
+
+                        $customers[$customerId] = $customerData;
                     }
                 }
             }

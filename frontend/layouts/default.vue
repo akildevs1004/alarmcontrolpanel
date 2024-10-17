@@ -558,7 +558,7 @@
           : 'padding-left: 140px;'
       "
     >
-      <v-container style="max-width: 100%">
+      <v-container style="max-width: 100%; padding-left: 5px">
         <nuxt />
       </v-container>
     </v-main>
@@ -1633,6 +1633,11 @@ header,
 </style>
 
 <style>
+.table-td-padding-10 td,
+.table-td-padding-10 th {
+  padding: 5px !important;
+}
+
 .violet {
   background-color: #6946dd;
 }

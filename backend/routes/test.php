@@ -71,7 +71,7 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
     (new ApiAlarmDeviceSensorLogsController())->updateDisarmTableCompanyLogs();
 });
 Route::get("sync_alarm_logs", function (Request $request) {
-    (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+    return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 });
 Route::get("get_test_alarm", function (Request $request) {
 

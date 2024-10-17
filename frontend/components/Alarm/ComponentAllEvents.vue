@@ -194,7 +194,7 @@
         class="text-right"
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
-        <v-row class="mt-0" v-if="!eventFilter">
+        <v-row class="mt-0" v-if="showFilter">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
             <h3>Alarm Events</h3></v-col
           >
@@ -610,10 +610,17 @@ export default {
     SecurityAlarmNotes,
   },
   props: [
+    "popup",
     "showFilters",
+    "showTabs",
     "eventFilter",
     "filter_customer_id",
     "compFilterAlarmStatus",
+
+    "compFilterAlarmStatus",
+
+    "filter_date",
+    "filter_alarm_type",
   ],
   data() {
     return {
@@ -719,23 +726,26 @@ export default {
     if (this.compFilterAlarmStatus) {
       this.filterAlarmStatus = this.compFilterAlarmStatus;
     }
-    setTimeout(() => {
-      this.getSensorsList();
-    }, 2000);
-
-    setTimeout(() => {
-      if (this.sensorItems.length == 0) {
-        this.$axios
-          .get(`sensor_types`, {
-            params: {
-              company_id: this.$auth.user.company_id,
-            },
-          })
-          .then(({ data }) => {
-            this.sensorItems = ["All", ...data];
-          });
-      }
-    }, 5000);
+    // setTimeout(() => {
+    //   this.getSensorsList();
+    // }, 2000);
+    if (this.showTabs) {
+      setTimeout(() => {
+        if (this.sensorItems.length == 0) {
+          this.$axios
+            .get(`sensor_types`, {
+              params: {
+                company_id: this.$auth.user.company_id,
+              },
+            })
+            .then(({ data }) => {
+              this.sensorItems = ["All", ...data];
+            });
+        }
+      }, 5000);
+    } else {
+      this.sensorItems = ["All"];
+    }
 
     setTimeout(() => {
       setInterval(() => {
@@ -962,6 +972,9 @@ export default {
           filterResponseInMinutes: this.filterResponseInMinutes,
           sortBy: "alarm_start_datetime",
           sortDesc: "DESC",
+
+          filter_date: this.filter_date,
+          filter_alarm_type: this.filter_alarm_type,
         },
         cancelToken: this.cancelTokenSource.token, // Assign the cancel token
       };

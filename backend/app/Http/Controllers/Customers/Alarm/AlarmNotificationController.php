@@ -103,6 +103,7 @@ class AlarmNotificationController extends Controller
             "Intruder" => "intruder.png",
             "Offline" => "offline.png",
             "Tampered" => "burglary.png",
+            "SOS" => "burglary.png",
         ];
     }
 

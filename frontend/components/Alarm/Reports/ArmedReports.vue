@@ -5,10 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogEventsList" max-width="80%">
+    <v-dialog v-model="dialogEventsList" max-width="1200px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Intruder Events</span>
+          <span style="color: black" dense>Alarm Events</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -26,19 +26,23 @@
                 style="padding: 0px; padding-top: 0px"
                 :key="key"
                 :popup="true"
-                :compAlarmFilter="1"
-                :date_from="date_from"
-                :date_to="date_to"
+                :eventFilter="false"
+                :showFilter="false"
+                :showTabs="false"
+                :filter_date="filter_date"
+                :filter_customer_id="filter_customer_id"
+                :filter_alarm_type="filter_alarm_type"
               /> </v-card-text
           ></v-card>
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
-        <v-card>
+
+    <v-card>
+      <v-row>
+        <v-col cols="12" class="text-right" style="padding-top: 0px">
           <v-row>
-            <v-col></v-col>
+            <v-col class="text-left pa-5"><h4>Armed Report</h4></v-col>
             <v-col class="text-right" style="min-width: 500px">
               <v-row>
                 <v-col class="mt-2">
@@ -76,7 +80,12 @@
                 </v-col>
                 <v-col style="">
                   <CustomFilter
-                    style="float: right; padding-top: 5px; z-index: 9999"
+                    style="
+                      float: right;
+                      padding-top: 5px;
+                      z-index: 9999;
+                      padding-right: 15px;
+                    "
                     @filter-attr="filterAttr"
                     :default_date_from="date_from"
                     :default_date_to="date_to"
@@ -155,77 +164,92 @@
               </v-row>
             </v-col>
           </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row style="margin-top: -30px">
-      <v-col>
-        <div
-          class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
-        >
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            class="elevation-1"
-            :items-per-page="100"
+        </v-col>
+      </v-row>
+      <v-row style="margin-top: -30px">
+        <v-col style="">
+          <div
+            class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
           >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-toolbar-title>Armed Reports</v-toolbar-title>
-              </v-toolbar>
-            </template>
-            <template v-slot:item="{ item }">
-              <tr>
-                <td>{{ item.date }}</td>
-                <td>{{ item.customer }}</td>
-                <td>{{ item.city }}</td>
-                <template v-for="index in 5">
-                  <td
-                    :title="item.armed[index - 1]?.armed_datetime"
-                    style="color: red"
-                  >
-                    {{
-                      $dateFormat.format6(
-                        item.armed[index - 1]?.armed_datetime
-                      ) || "---"
-                    }}
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              class="elevation-0 table-td-padding-10"
+              :items-per-page="100"
+              :loading="loading"
+            >
+              <template v-slot:item="{ item }">
+                <tr>
+                  <td style="font-size: 13px">{{ item.date }}</td>
+                  <td>
+                    {{ item.customer }}
+                    <div class="secondary-value">{{ item.city }}</div>
+                  </td>
 
-                    <div class="secondary-value">
+                  <template v-for="index in 5">
+                    <td
+                      :title="item.armed[index - 1]?.armed_datetime"
+                      style="color: red"
+                    >
                       {{
-                        $dateFormat.format2(
+                        $dateFormat.format6(
                           item.armed[index - 1]?.armed_datetime
                         ) || "---"
                       }}
-                    </div>
-                  </td>
-                  <td
-                    style="color: green"
-                    :title="item.armed[index - 1]?.disarm_datetime"
-                  >
-                    {{
-                      $dateFormat.format6(
-                        item.armed[index - 1]?.disarm_datetime
-                      ) || "---"
-                    }}
-                    <div class="secondary-value">
+
+                      <div class="secondary-value">
+                        {{
+                          $dateFormat.format2(
+                            item.armed[index - 1]?.armed_datetime
+                          ) || "---"
+                        }}
+                      </div>
+                    </td>
+                    <td
+                      style="color: green"
+                      :title="item.armed[index - 1]?.disarm_datetime"
+                    >
                       {{
-                        $dateFormat.format2(
+                        $dateFormat.format6(
                           item.armed[index - 1]?.disarm_datetime
                         ) || "---"
                       }}
+                      <div class="secondary-value">
+                        {{
+                          $dateFormat.format2(
+                            item.armed[index - 1]?.disarm_datetime
+                          ) || "---"
+                        }}
+                      </div>
+                    </td>
+                  </template>
+                  <td>{{ getArmedTotalDuration(item.armed) }}</td>
+                  <td>{{ getDisarmTotalDuration(item.armed, item.date) }}</td>
+                  <td>
+                    <div v-if="item.events_count == 0">0</div>
+                    <div
+                      v-else
+                      @click="showAlarmEvents(item.date, item.customer_id)"
+                    >
+                      {{ item.events_count || "0" }}
                     </div>
                   </td>
-                </template>
-                <td>{{ item.sos || "0" }}</td>
-                <td>
-                  {{ item.events.length ? item.events.join(", ") : "0" }}
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </div>
-      </v-col>
-    </v-row>
+                  <td>
+                    <div v-if="item.sos_count == 0">0</div>
+                    <div
+                      v-else
+                      @click="showSOSEvents(item.date, item.customer_id)"
+                    >
+                      {{ item.sos_count || "0" }}
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </v-data-table>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
@@ -242,10 +266,13 @@ export default {
   props: ["customer_id"],
   data() {
     return {
+      filter_date: "",
+      filter_customer_id: "",
+      filter_alarm_type: "",
       headers: [
         { text: "Date", value: "date", sortable: false },
         { text: "Customer", value: "customer_id", sortable: false },
-        { text: "City", value: "city", sortable: false },
+
         { text: "Armed1", value: "armed1", sortable: false },
         { text: "Disarm1", value: "disarm1", sortable: false },
         { text: "Armed2", value: "armed2", sortable: false },
@@ -256,12 +283,11 @@ export default {
         { text: "Disarm4", value: "disarm4", sortable: false },
         { text: "Armed5", value: "armed5", sortable: false },
         { text: "Disarm5", value: "disarm5", sortable: false },
-        { text: "Armed Duration", value: "armed", sortable: false },
+        { text: "Armed (HH:MM)", value: "armed", sortable: false },
 
-        { text: "Disarm Duration", value: "disarm", sortable: false },
-
-        // { text: "SOS", value: "sos", sortable: false },
-        // { text: "Events", value: "events", sortable: false },
+        { text: "Disarm (HH:MM)", value: "disarm", sortable: false },
+        { text: "SOS", value: "sos", sortable: false },
+        { text: "Events", value: "events", sortable: false },
       ],
       date_from: null,
       date_to: null,
@@ -308,6 +334,71 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    getDisarmTotalDuration(array, date) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0); // Set to 12:00 AM
+      const endOfDay = new Date(startOfDay);
+      endOfDay.setHours(23, 59, 59, 999); // Set to 11:59 PM
+
+      let totalDurationInSeconds = 0;
+
+      for (let i = 0; i < array.length; i++) {
+        if (array[i]) {
+          let armedTime = new Date(array[i].armed_datetime);
+          let disarmedTime = new Date(array[i].disarm_datetime);
+
+          // // Adjust the armed and disarmed times to fit within the day's boundaries
+          // if (armedTime < startOfDay) armedTime = startOfDay;
+          // if (disarmedTime > endOfDay) disarmedTime = endOfDay;
+
+          const durationInSeconds = (disarmedTime - armedTime) / 1000;
+
+          // Only add positive durations within the day's boundaries
+          if (durationInSeconds > 0) {
+            totalDurationInSeconds += durationInSeconds;
+          }
+        }
+      }
+
+      if (isNaN(totalDurationInSeconds)) {
+        return "---";
+      }
+      totalDurationInSeconds = 24 * 60 * 60 - totalDurationInSeconds;
+
+      let totalHours = Math.floor(totalDurationInSeconds / 3600);
+      let totalMinutes = Math.floor((totalDurationInSeconds % 3600) / 60);
+
+      if (totalHours <= 9) totalHours = "0" + totalHours;
+      if (totalMinutes <= 9) totalMinutes = "0" + totalMinutes;
+
+      return `${totalHours}:${totalMinutes}`;
+    },
+    getArmedTotalDuration(array) {
+      let totalDurationInSeconds = 0;
+
+      for (let i = 0; i <= array.length; i++) {
+        if (array[i]) {
+          const armedTime = new Date(array[i].armed_datetime);
+          const disarmedTime = new Date(array[i].disarm_datetime);
+
+          const duration = (disarmedTime - armedTime) / 1000;
+          totalDurationInSeconds += duration;
+        }
+      }
+
+      if (isNaN(totalDurationInSeconds)) {
+        return "00:00";
+      }
+
+      let totalHours = Math.floor(totalDurationInSeconds / 3600);
+      let totalMinutes = Math.floor((totalDurationInSeconds % 3600) / 60);
+      let remainingSeconds = totalDurationInSeconds % 60;
+
+      if (totalHours <= 9) totalHours = "0" + totalHours;
+      if (totalMinutes <= 9) totalMinutes = "0" + totalMinutes;
+
+      return `${totalHours}:${totalMinutes}`;
+    },
     async getCustomersList() {
       let options = {
         params: {
@@ -342,12 +433,27 @@ export default {
             customer: customer.customer,
             city: customer.city,
             armed: customer.armed,
-            sos: customer.sos || "",
-            events: customer.events || [],
+            sos_count: customer.sos_count || 0,
+            events_count: customer.events_count || 0,
           });
         });
       });
       return result;
+    },
+    showSOSEvents(date, customer_id) {
+      this.key++;
+
+      this.dialogEventsList = true;
+      this.filter_date = date;
+      this.filter_customer_id = customer_id;
+      this.filter_alarm_type = "sos";
+    },
+    showAlarmEvents(date, customer_id) {
+      this.key++;
+      this.dialogEventsList = true;
+      this.filter_date = date;
+      this.filter_customer_id = customer_id;
+      this.filter_alarm_type = "non-sos";
     },
     showEvents(item) {
       this.dialogEventsList = true;

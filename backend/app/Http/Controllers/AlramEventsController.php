@@ -89,7 +89,7 @@ class AlramEventsController extends Controller
 
     public function verifyOfflineDevices()
     {
-        $devices = Device::where("serial_number", "!=", null)
+        $devices = Device::with(["customer.mappedsecurity"])->where("serial_number", "!=", null)
             ->where("customer_id", "!=", null)
             ->where("status_id", 1)
             ->get();
@@ -111,6 +111,16 @@ class AlramEventsController extends Controller
 
                         Device::where("id", $device->id)->update(["status_id" => 2]);
 
+
+                        $security_name = null;
+                        $security_id = null;
+                        if ($device->customer->mappedsecurity) {
+                            $security_name = $device->customer->mappedsecurity->securityInfo->first_name . ' ' . $device->customer->mappedsecurity->securityInfo->last_name;
+                            $security_id =  $device->customer->mappedsecurity->securityInfo->id;
+                        }
+
+
+
                         $data = [
                             "company_id" => $device['company_id'],
                             "serial_number" => $device['serial_number'],
@@ -122,6 +132,8 @@ class AlramEventsController extends Controller
                             "alarm_category" => 3,
                             "sensor_zone_id" => null,
                             "alarm_source" => null,
+                            "security_name" => $security_name,
+                            "security_id" => $security_id,
                         ];
                         $offlineDevices[] = $data;
 
