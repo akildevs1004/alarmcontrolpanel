@@ -46,7 +46,7 @@ class DeviceArmedLogsController extends Controller
         // Retrieve armed logs for the given company within the date range
         $armedLogs = DeviceArmedLogs::with([
             'device.customer' => function ($query) {
-                $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures']);
+                $query->without(["primary_contact", "secondary_contact", "profile_pictures", 'all_alarm_events', 'user', 'devices', 'contacts', 'profilePictures']);
             }
         ])
             ->where("company_id", $request->company_id)
@@ -65,7 +65,7 @@ class DeviceArmedLogsController extends Controller
         // Retrieve event logs for the given company within the date range
         $eventLogs = AlarmEvents::with([
             'device.customer' => function ($query) {
-                $query->without(['all_alarm_events', 'user', 'devices', 'contacts', 'profile_pictures']);
+                $query->without(["primary_contact", "secondary_contact", "profilePictures", 'all_alarm_events', 'user', 'devices', 'contacts', 'profilePictures']);
             }
         ])
             ->where("company_id", $request->company_id)
@@ -96,6 +96,9 @@ class DeviceArmedLogsController extends Controller
         // Initialize the report array
         $report = [];
 
+
+        $mergedArray = array_merge($armedLogsByDateAndCustomer->toArray(), $eventLogsByDateAndCustomer->toArray());
+
         // Generate report data
         foreach (range(0, $daysInRange - 1) as $i) {
             $currentDate = $startDate->copy()->addDays($i)->format('Y-m-d');
@@ -103,7 +106,8 @@ class DeviceArmedLogsController extends Controller
 
             $alarmEventCountTotal = 0;
 
-            foreach (array_merge($armedLogsByDateAndCustomer->toArray(), $eventLogsByDateAndCustomer->toArray()) as $key => $logs) {
+
+            foreach ($mergedArray as $key => $logs) {
 
 
 
