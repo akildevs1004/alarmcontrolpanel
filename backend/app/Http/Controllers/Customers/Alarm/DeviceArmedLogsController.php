@@ -111,6 +111,16 @@ class DeviceArmedLogsController extends Controller
 
                 if ($date === $currentDate) {
                     if (!isset($customers[$customerId])) {
+
+
+                        $total_events = $logs['total_events'] ?? 0;
+                        $sos_count = $logs['total_events'] ?? 0;
+
+                        $alarmEventCountTotal += $total_events + $sos_count;
+                        if ($alarmEventCountTotal == 0 && $request->only_show_alarms == 'true') continue;
+
+
+
                         $customerData = [
                             'customer' => $logs[0]["device"]["customer"]["building_name"] ?? $logs["customer"][0]["customer"]["building_name"],
                             'city' => $logs[0]["device"]["customer"]["city"] ??   $logs["customer"][0]["customer"]["city"],
@@ -120,10 +130,7 @@ class DeviceArmedLogsController extends Controller
                             'sos_count' => $logs['sos_count'] ?? 0,
 
                         ];
-                        $total_events = $logs['total_events'] ?? 0;
-                        $sos_count = $logs['total_events'] ?? 0;
 
-                        $alarmEventCountTotal += $total_events + $sos_count;
 
                         // Add armed logs if they exist
                         if (isset($armedLogsByDateAndCustomer[$key])) {
