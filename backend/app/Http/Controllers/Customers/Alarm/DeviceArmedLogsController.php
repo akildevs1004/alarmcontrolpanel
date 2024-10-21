@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers\Alarm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\CustomersController;
 use App\Models\AlarmEvents;
 use App\Models\DeviceArmedLogs;
 use Carbon\Carbon;
@@ -86,11 +87,21 @@ class DeviceArmedLogsController extends Controller
         $eventLogsByDateAndCustomer = $eventLogs->groupBy(function ($log) {
             return Carbon::parse($log->alarm_start_datetime)->format('Y-m-d') . '_' . optional($log->device->customer)->id;
         })->map(function ($logs) {
-            return [
-                'total_events' => $logs->where('alarm_type', '!=', 'SOS')->count(),
-                'sos_count' => $logs->where('alarm_type', 'SOS')->count(),
-                'customer' => $logs,
-            ];
+
+            // return [
+            //     'total_events' => $logs->where('alarm_type', '!=', 'SOS')->count(),
+            //     'sos_count' => $logs->where('alarm_type', 'SOS')->count(),
+            //     'customer' => $logs,
+            // ];
+            $countArray = [];
+            $countArray['total_events'] =  $logs->count();
+            $countArray['customer'] =    $logs;
+
+            foreach ((new CustomersController())->alarmTypes()  as  $value) {
+                $countArray[strtolower($value['name']) . '_count'] = $logs->where('alarm_type', $value['name'])->count();
+            }
+
+            return $countArray;
         });
 
         // Initialize the report array
@@ -117,10 +128,10 @@ class DeviceArmedLogsController extends Controller
                     if (!isset($customers[$customerId])) {
 
 
-                        $total_events = $logs['total_events'] ?? 0;
-                        $sos_count = $logs['total_events'] ?? 0;
+                        $alarmEventCountTotal = $logs['total_events'] ?? 0;
+                        //$sos_count = $logs['total_events'] ?? 0;
 
-                        $alarmEventCountTotal += $total_events + $sos_count;
+                        //$alarmEventCountTotal += $total_events + $sos_count;
                         if ($alarmEventCountTotal == 0 && $request->only_show_alarms == 'true') continue;
 
 
@@ -131,9 +142,13 @@ class DeviceArmedLogsController extends Controller
                             'customer_id' => $customerId,
                             'armed' => [],
                             'events_count' => $logs['total_events'] ?? 0,
-                            'sos_count' => $logs['sos_count'] ?? 0,
+                            // 'sos_count' => $logs['sos_count'] ?? 0,
 
                         ];
+
+                        foreach ((new CustomersController())->alarmTypes()  as  $value) {
+                            $customerData[strtolower($value['name']) . '_count'] = 0;
+                        }
 
 
                         // Add armed logs if they exist

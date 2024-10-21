@@ -292,13 +292,6 @@ export default ({ app }, inject) => {
             process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
           icon: "mdi-alarm",
         },
-        intruder: {
-          color: "#ff0000",
-          text: "Alarm",
-          image:
-            process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
-          icon: "mdi-alarm",
-        },
         alarm: {
           color: "#ff0000",
           text: "Alarm",
@@ -385,7 +378,7 @@ export default ({ app }, inject) => {
           color: "#ff0000",
           text: "Power Loss",
           image:
-            process.env.BACKEND_URL2 + "/google_map_icons/google_ac_off.png",
+            process.env.BACKEND_URL2 + "/google_map_icons/google_dc_off.png",
           icon: "mdi-lock-open",
         },
       };

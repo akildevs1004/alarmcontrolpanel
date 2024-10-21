@@ -43,9 +43,9 @@
         <v-col cols="12" class="text-right" style="padding-top: 0px">
           <v-row>
             <v-col class="text-left pa-5"><h4>Armed Report</h4></v-col>
-            <v-col class="text-right" style="min-width: 500px">
+            <v-col class="text-right" style="max-width: 750px">
               <v-row>
-                <v-col class="mt-2">
+                <v-col class="mt-3">
                   <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
                 </v-col>
                 <v-col style="text-align: right; max-width: 100px">
@@ -56,10 +56,10 @@
                     label="Alarms"
                   ></v-checkbox>
                 </v-col>
-                <v-col style="">
+                <v-col style="max-width: 300px">
                   <v-autocomplete
                     clearable
-                    style="padding-top: 6px"
+                    style="padding-top: 6px; max-width: 300px"
                     @change="getDataFromApi()"
                     class="reports-events-autocomplete bgwhite"
                     v-model="filter_customer_id"
@@ -234,15 +234,43 @@
                   <td>{{ getArmedTotalDuration(item.armed) }}</td>
                   <td>{{ getDisarmTotalDuration(item.armed, item.date) }}</td>
                   <td>
-                    <div v-if="item.events_count == 0">0</div>
+                    <!-- <div v-if="item.events_count == 0">0</div>
                     <div
                       v-else
                       @click="showAlarmEvents(item.date, item.customer_id)"
                     >
                       {{ item.events_count || "0" }}
-                    </div>
+                    </div> -->
+                    <!-- {{ item.events_count }} -->
+                    <v-menu>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          style="color: black"
+                          text
+                          dense
+                          small
+                          dark
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          {{ item.events_count || 0 }}
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item v-for="alarmType in alarmTypesList">
+                          <v-list-item-title>
+                            <div v-if="alarmType.name == 'SOS'">
+                              {{ item.sos_count || 0 }} - SOS
+                            </div>
+                            <div v-if="alarmType.name == 'Intruder'">
+                              {{ item.offline_count || 0 }}
+                            </div>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
                   </td>
-                  <td>
+                  <!-- <td>
                     <div v-if="item.sos_count == 0">0</div>
                     <div
                       v-else
@@ -250,7 +278,7 @@
                     >
                       {{ item.sos_count || "0" }}
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
               </template>
             </v-data-table>
@@ -295,7 +323,7 @@ export default {
         { text: "Armed (HH:MM)", value: "armed", sortable: false },
 
         { text: "Disarm (HH:MM)", value: "disarm", sortable: false },
-        { text: "SOS", value: "sos", sortable: false },
+
         { text: "Events", value: "events", sortable: false },
       ],
       date_from: null,
@@ -319,6 +347,7 @@ export default {
       customersList: [],
       items: [],
       filter_customer_id: null,
+      alarmTypesList: [],
     };
   },
   watch: {
@@ -337,11 +366,22 @@ export default {
 
     await this.getDataFromApi();
     await this.getCustomersList();
+
+    await this.getAlaramTypesList();
   },
 
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    async getAlaramTypesList() {
+      const { data } = await this.$axios.get("alarm_types", {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      });
+
+      this.alarmTypesList = data;
     },
     getDisarmTotalDuration(array, date) {
       const startOfDay = new Date(date);

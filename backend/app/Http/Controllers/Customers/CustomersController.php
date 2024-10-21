@@ -978,11 +978,16 @@ class CustomersController extends Controller
     }
     public function alarmTypes()
     {
+
+
         $data = [
             ["name" => "Intruder", "id" => "Intruder"],
             ["name" => "SOS", "id" => "SOS"],
             ["name" => "Offline", "id" => "Offline"],
             ["name" => "Tampered", "id" => "Tampered"],
+            ["name" => "AC Off", "id" => "AC_off"],
+            ["name" => "DC Off", "id" => "DC_off"],
+
             //["name" => "Burglary", "id" => "Burglary"],
             ["name" => "Medical", "id" => "Medical"],
             ["name" => "Temperature", "id" => "Temperature"],

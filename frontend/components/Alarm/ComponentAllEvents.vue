@@ -5,6 +5,27 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewAlarmForamt" width="80%">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Event #{{ eventId }}</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewAlarmForamt = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text style="padding: 0px">
+          <v-container style="min-height: 100px; padding-left: 0px">
+            <AlarmEventFormatView :alarm="alarm" :key="key" />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -194,7 +215,8 @@
         class="text-right"
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
-        <v-row class="mt-0" v-if="showFilter">
+        {{ sensorItems }}
+        <v-row class="mt-0" v-if="showFilters">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
             <h3>Alarm Events</h3></v-col
           >
@@ -202,7 +224,7 @@
           <v-col
             :cols="sensorItems.length > 1 ? 8 : 12"
             class="text-right"
-            style="width: 600px"
+            style="width: 600px; padding: 0px"
           >
             <v-row>
               <v-col cols="7">
@@ -362,8 +384,8 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="sensorItems.length > 0">
-          <v-col cols="12" style="padding: 0px; margin-top: -30px">
+        <v-row v-if="sensorItems.length > 0" style="margin-top: 0px">
+          <v-col cols="12" style="margin-top: 0px">
             <v-tabs
               v-if="sensorItems.length > 1"
               v-model="tab"
@@ -540,6 +562,17 @@
                           <v-list width="120" dense>
                             <v-list-item
                               v-if="can('branch_view')"
+                              @click="viewAlarminfo(item)"
+                            >
+                              <v-list-item-title style="cursor: pointer">
+                                <v-icon color="secondary" small>
+                                  mdi-info
+                                </v-icon>
+                                View
+                              </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item
+                              v-if="can('branch_view')"
                               @click="viewCustomerinfo(item)"
                             >
                               <v-list-item-title style="cursor: pointer">
@@ -599,6 +632,7 @@ import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEvent
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
+import AlarmEventFormatView from "./Reports/AlarmEventFormatView.vue";
 
 export default {
   components: {
@@ -608,6 +642,7 @@ export default {
     AlramCloseNotes,
     AlarmForwardEvent,
     SecurityAlarmNotes,
+    AlarmEventFormatView,
   },
   props: [
     "popup",
@@ -729,6 +764,7 @@ export default {
     // setTimeout(() => {
     //   this.getSensorsList();
     // }, 2000);
+
     if (this.showTabs) {
       setTimeout(() => {
         if (this.sensorItems.length == 0) {
@@ -770,6 +806,7 @@ export default {
     closeCustomerDialog() {
       this.dialogTabViewCustomer = false;
     },
+    viewAlarminfo() {},
     viewCustomerinfo(item) {
       if (item.device) {
         this.popupEventText =

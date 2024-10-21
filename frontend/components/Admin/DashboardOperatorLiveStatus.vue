@@ -64,20 +64,24 @@
       </template>
       <template v-slot:item.LogTime="{ item }" style="color: green">
         <v-icon
-          :title="item.last_active_datetime"
+          :title="item.last_active_datetime || '---'"
           v-if="item.idle_time <= 5"
           color="green"
           fill
           >mdi-monitor-eye</v-icon
         >
         <v-icon
-          :title="item.last_active_datetime"
+          :title="item.last_active_datetime || '---'"
           v-else-if="item.idle_time <= 60"
           color="yellow"
           fill
           >mdi-monitor-eye</v-icon
         >
-        <v-icon :title="item.last_active_datetime" v-else color="red" fill
+        <v-icon
+          :title="item.last_active_datetime || '---'"
+          v-else
+          color="red"
+          fill
           >mdi-monitor-eye</v-icon
         >
       </template>
