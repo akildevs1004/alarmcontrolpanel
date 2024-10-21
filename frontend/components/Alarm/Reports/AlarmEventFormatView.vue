@@ -5,6 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
+
+    <v-row>
+      <v-col> </v-col> <v-col> </v-col> <v-col> </v-col> <v-col> </v-col>
+    </v-row>
   </div>
 </template>
 

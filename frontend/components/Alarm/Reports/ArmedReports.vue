@@ -181,7 +181,7 @@
           >
             <v-data-table
               :headers="headers"
-              :items="items"
+              :items="formattedDataItems"
               class="elevation-0 table-td-padding-10"
               :items-per-page="100"
               :loading="loading"
@@ -257,13 +257,62 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <v-list-item v-for="alarmType in alarmTypesList">
-                          <v-list-item-title>
+                        <v-list-item
+                          @click="showAlarmEvents(item.date, item.customer_id)"
+                          style="
+                            min-height: 22px;
+                            border-bottom: 1px solid #ddd;
+                          "
+                        >
+                          <v-list-item-title style="font-size: 12px">
+                            {{ item.events_count || 0 }} - All
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item
+                          v-for="alarmType in alarmTypesList"
+                          style="
+                            min-height: 22px;
+                            border-bottom: 1px solid #ddd;
+                          "
+                          @click="
+                            showAlarmEvents(
+                              item.date,
+                              item.customer_id,
+                              alarmType.name
+                            )
+                          "
+                        >
+                          <v-list-item-title style="font-size: 12px">
                             <div v-if="alarmType.name == 'SOS'">
-                              {{ item.sos_count || 0 }} - SOS
+                              {{ item.SOS_count || 0 }} - SOS
                             </div>
-                            <div v-if="alarmType.name == 'Intruder'">
-                              {{ item.offline_count || 0 }}
+                            <div v-else-if="alarmType.name == 'Intruder'">
+                              {{ item.Intruder_count || 0 }} - Intruder
+                            </div>
+                            <div v-else-if="alarmType.name == 'Offline'">
+                              {{ item.Offline_count || 0 }} - Offline
+                            </div>
+                            <div v-else-if="alarmType.name == 'Tampered'">
+                              {{ item.Tampered_count || 0 }} - Offline
+                            </div>
+                            <div v-else-if="alarmType.name == 'AC Off'">
+                              {{ item.AC_off_count || 0 }} - AC Off
+                            </div>
+                            <div v-else-if="alarmType.name == 'DC Off'">
+                              {{ item.DC_off_count || 0 }} - DC Off
+                            </div>
+                            <div v-else-if="alarmType.name == 'Medical'">
+                              {{ item.Medical_count || 0 }} - Medical
+                            </div>
+                            <div v-else-if="alarmType.name == 'Temperature'">
+                              {{ item.Temperature_count || 0 }} - Temperature
+                            </div>
+                            <div v-else-if="alarmType.name == 'Water'">
+                              {{ item.Water_count || 0 }} - Water
+                            </div>
+                            <div v-else-if="alarmType.name == 'Fire'">
+                              {{ item.Fire_count || 0 }} - Fire
                             </div>
                           </v-list-item-title>
                         </v-list-item>
@@ -345,7 +394,7 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       customersList: [],
-      items: [],
+      formattedDataItems: [],
       filter_customer_id: null,
       alarmTypesList: [],
     };
@@ -478,12 +527,7 @@ export default {
         day.customers.forEach((customer) => {
           result.push({
             date: day.date,
-            customer_id: customer.customer_id,
-            customer: customer.customer,
-            city: customer.city,
-            armed: customer.armed,
-            sos_count: customer.sos_count || 0,
-            events_count: customer.events_count || 0,
+            ...customer,
           });
         });
       });
@@ -497,12 +541,12 @@ export default {
       this.filter_customer_id = customer_id;
       this.filter_alarm_type = "sos";
     },
-    showAlarmEvents(date, customer_id) {
+    showAlarmEvents(date, customer_id, alarm_type) {
       this.key++;
       this.dialogEventsList = true;
       this.filter_date = date;
       this.filter_customer_id = customer_id;
-      this.filter_alarm_type = "non-sos";
+      this.filter_alarm_type = alarm_type;
     },
     showEvents(item) {
       this.dialogEventsList = true;
@@ -568,7 +612,7 @@ export default {
       try {
         this.$axios.get(`device_armed_reports`, options).then(({ data }) => {
           //this.items = data;
-          this.items = this.formattedData(data);
+          this.formattedDataItems = this.formattedData(data);
           this.totalRowsCount = data.total;
           this.loading = false;
         });

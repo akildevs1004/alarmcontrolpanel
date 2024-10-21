@@ -701,11 +701,14 @@ class CustomerAlarmEventsController extends Controller
 
 
         $model->when($request->filled("filter_alarm_type") && $request->filter_alarm_type != '', function ($query) use ($request) {
-            if ($request->filter_alarm_type == 'non-sos')
-                $query->where('alarm_type', "!=", "SOS");
 
-            if ($request->filter_alarm_type == 'sos')
-                $query->where('alarm_type',   "SOS");
+
+            $query->where('alarm_type',   $request->filter_alarm_type);
+            // if ($request->filter_alarm_type == 'non-sos')
+            //     $query->where('alarm_type', "!=", "SOS");
+
+            // if ($request->filter_alarm_type == 'sos')
+            //     $query->where('alarm_type',   "SOS");
         });
 
 

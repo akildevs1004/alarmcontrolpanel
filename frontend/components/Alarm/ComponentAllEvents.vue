@@ -5,6 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
+
     <v-dialog v-model="dialogViewAlarmForamt" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -215,7 +216,6 @@
         class="text-right"
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
-        {{ sensorItems }}
         <v-row class="mt-0" v-if="showFilters">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
             <h3>Alarm Events</h3></v-col
@@ -566,7 +566,7 @@
                             >
                               <v-list-item-title style="cursor: pointer">
                                 <v-icon color="secondary" small>
-                                  mdi-info
+                                  mdi-file-tree
                                 </v-icon>
                                 View
                               </v-list-item-title>

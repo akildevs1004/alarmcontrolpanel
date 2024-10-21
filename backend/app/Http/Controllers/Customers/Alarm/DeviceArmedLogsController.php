@@ -98,7 +98,7 @@ class DeviceArmedLogsController extends Controller
             $countArray['customer'] =    $logs;
 
             foreach ((new CustomersController())->alarmTypes()  as  $value) {
-                $countArray[strtolower($value['name']) . '_count'] = $logs->where('alarm_type', $value['name'])->count();
+                $countArray[($value['id']) . '_count'] = $logs->where('alarm_type', $value['id'])->count();
             }
 
             return $countArray;
@@ -147,8 +147,15 @@ class DeviceArmedLogsController extends Controller
                         ];
 
                         foreach ((new CustomersController())->alarmTypes()  as  $value) {
-                            $customerData[strtolower($value['name']) . '_count'] = 0;
+                            if (isset($logs[$value['id']  . '_count']))
+                                $customerData[($value['id']) . '_count'] = $logs[$value['id']  . '_count'];
+                            else
+                                $customerData[($value['id']) . '_count'] = 0;
                         }
+
+                        // foreach ((new CustomersController())->alarmTypes()  as  $value) {
+                        //     $customerData[($value['name']) . '_count'] = $logs->where('alarm_type', $value['name'])->count();
+                        // }
 
 
                         // Add armed logs if they exist
