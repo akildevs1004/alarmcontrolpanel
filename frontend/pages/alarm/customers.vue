@@ -1,5 +1,5 @@
 <template>
-  <AlarmCustomersList name="AlarmCustomersListCustomers" />
+  <AlarmCustomersList :graphs="true" name="AlarmCustomersListCustomers" />
 </template>
 <script>
 import AlarmCustomersList from "../../components/Alarm/CustomersList.vue";

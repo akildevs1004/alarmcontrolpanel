@@ -26,8 +26,8 @@
                 max-width: 80px;
               "
               :src="
-                alarm.device.customer.profile_picture
-                  ? alarm.device.customer.profile_picture
+                alarm.device.customer?.profile_picture
+                  ? alarm.device.customer?.profile_picture
                   : '/no-business_profile.png'
               "
             >
@@ -42,8 +42,12 @@
             "
           >
             <div style="font-size: 13px; color: black; font-weight: bold">
-              {{ alarm.device.customer.building_name || "" }}
+              {{ alarm.device.customer.building_name || "---" }}
+              <span style="font-size: 10px"
+                >({{ alarm.device.customer.buildingtype.name || "---" }})</span
+              >
             </div>
+
             <div style="font-size: 12px; color: #6c7184">
               {{ alarm.device.customer.house_number || "---" }},
               {{ alarm.device.customer.street_number || "---" }},
@@ -136,7 +140,7 @@
               :src="
                 alarm.security?.picture
                   ? alarm.security.picture
-                  : '/no-business_profile.png'
+                  : '/no-profile-image.png'
               "
             >
             </v-img>
@@ -190,9 +194,7 @@
               <!-- {{ alarm.zone ?? "---" }} -->
               {{ alarm.zone_data?.sensor_type ?? "---" }}
 
-              ,{{ alarm.area ?? "---" }},{{
-                alarm.zone_data?.sensor_name ?? "---"
-              }}
+              , {{ alarm.zone_data?.sensor_name ?? "---" }}
             </div>
           </v-col>
 
@@ -220,9 +222,35 @@
                 <tr style="border-bottom: 1px solid #ddd">
                   <td style="padding: 0 10px">Status</td>
                   <td style="padding: 0 10px">
-                    <div v-if="alarm.alarm_status == 1">Open</div>
-                    <div v-if="alarm.alarm_status == 0">Closed</div>
-                    <div v-if="alarm.alarm_status == 3">Forwarded</div>
+                    <span
+                      v-if="alarm.forwarded == true && alarm.alarm_status == 1"
+                      >Forwarded</span
+                    >
+                    <span v-else-if="alarm.alarm_status == 1">Open</span>
+                    <span v-else-if="alarm.alarm_status == 0">Closed</span>
+                    <v-icon
+                      v-if="alarm.forwarded === true && alarm.alarm_status == 1"
+                      title="Forwarded"
+                      color="orange"
+                      style="color: red"
+                      >mdi-lock-open-variant-outline</v-icon
+                    >
+
+                    <v-icon
+                      v-else-if="alarm.alarm_status == 1"
+                      title="Open"
+                      colo="red"
+                      style="color: red"
+                      >mdi-lock-open-outline</v-icon
+                    >
+
+                    <v-icon
+                      v-else-if="alarm.alarm_status == 0"
+                      title="Closed"
+                      color="green"
+                      style="color: red"
+                      >mdi-lock-outline</v-icon
+                    >
                   </td>
                 </tr>
                 <tr style="border-bottom: 1px solid #ddd">
@@ -263,10 +291,17 @@
       </v-col>
     </v-row>
 
+    <div
+      style="text-align: center; padding: 7%"
+      v-if="alarm.notes.length == 0 && alarm.alarm_status == 1"
+    >
+      Operator Notes are not available
+    </div>
+
     <v-row>
       <v-col class="alarm-notes-timeline">
         <template>
-          <v-timeline>
+          <v-timeline v-if="alarm.notes.length > 0">
             <v-timeline-item
               fill-dot
               color="white"

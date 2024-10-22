@@ -268,6 +268,7 @@ export default {
         ...this.forward,
 
         company_id: this.$auth?.user?.company?.id,
+        customer_id: this.customer_id,
         alarm_id: this.alarm_id,
         external_cc_email: this.external_cc_email,
       };

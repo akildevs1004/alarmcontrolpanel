@@ -113,9 +113,15 @@
                   <tr style="border-bottom: 1px solid #ddd">
                     <td style="padding: 0 10px">Status</td>
                     <td style="padding: 0 10px">
-                      <div v-if="alarm.alarm_status == 1">Open</div>
-                      <div v-if="alarm.alarm_status == 0">Closed</div>
-                      <div v-if="alarm.alarm_status == 3">Forwarded</div>
+                      <div
+                        v-if="
+                          alarm.forwarded == true && alarm.alarm_status == 1
+                        "
+                      >
+                        Forwarded
+                      </div>
+                      <div v-else-if="alarm.alarm_status == 1">Open</div>
+                      <div v-else-if="alarm.alarm_status == 0">Closed</div>
                     </td>
                   </tr>
                   <tr style="border-bottom: 1px solid #ddd">

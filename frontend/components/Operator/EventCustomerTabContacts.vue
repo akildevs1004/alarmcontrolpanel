@@ -599,6 +599,7 @@ export default {
     ],
     items: [],
     globalContactDetails: null,
+    color: "",
   }),
   computed: {},
   mounted() {},

@@ -150,7 +150,7 @@
       </v-card>
     </v-dialog>
 
-    <v-card elevation="0">
+    <v-card elevation="0" v-if="graphs === true">
       <CompCustomersDashboardStatistics
         name="CompCustomersDashboardStatistics1"
         :key="222"

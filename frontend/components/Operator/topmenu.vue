@@ -243,7 +243,11 @@ export default {
     // }
 
     setTimeout(() => {
-      this.loadHeaderNotificationMenu();
+      if (
+        this.$route.name != "login" &&
+        this.$route.name != "operator-eventslist"
+      )
+        this.loadHeaderNotificationMenu();
       //this.verifyPopupAlarmStatus();
     }, 1000 * 5);
 
@@ -253,7 +257,10 @@ export default {
 
       //console.log("wait5Minutes", this.wait5Minutes);
       //if (this.wait5Minutes == false)
-      if (this.$route.name !== "login") {
+      if (
+        this.$route.name != "login" &&
+        this.$route.name != "operator-eventslist"
+      ) {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
 

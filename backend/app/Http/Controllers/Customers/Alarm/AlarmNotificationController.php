@@ -107,7 +107,7 @@ class AlarmNotificationController extends Controller
         ];
     }
 
-    public function forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email = '')
+    public function forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email = '', $request = null)
     {
         $response = '';
         if ($alarm_id > 0) {
@@ -119,8 +119,6 @@ class AlarmNotificationController extends Controller
             if ($alarm) {
 
                 foreach ($contacts as   $contact) {
-
-
                     //$contact = json_decode($contact, true);
 
                     $email = $contact['email'];
@@ -130,17 +128,21 @@ class AlarmNotificationController extends Controller
                     if ($email != '') {
                         try {
 
-                            $data = [
-                                "company_id" => $company_id,
-                                "customer_id" => $customer_id,
-                                "alarm_id" => $alarm_id,
-                                "email" => $email,
-                                "notes" => "Event Forwarded to " . $email,
-                                "event_status" => "Forwarded",
-                                "created_datetime" => date("Y-m-d H:i:s")
-                            ];
+                            // if ($request) {
 
-                            CustomerAlarmNotes::create($data);
+
+                            //     $data = [
+                            //         "company_id" => $request->company_id,
+                            //         "customer_id" => $alarm->customer_id,
+                            //         "alarm_id" => $alarm_id,
+                            //         "email" => $email,
+                            //         "notes" => "Event Forwarded to " . $email,
+                            //         "event_status" => "Forwarded",
+                            //         "created_datetime" => date("Y-m-d H:i:s")
+                            //     ];
+
+                            //     CustomerAlarmNotes::create($data);
+                            // }
                             $response = $response . $this->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
                         } catch (\Exception $e) {
                             $response = $response . $email . ' - Email  Not sent ' . $e;
@@ -149,7 +151,21 @@ class AlarmNotificationController extends Controller
 
                     if ($whatsapp_number != '') {
                         try {
+                            // if ($request) {
 
+
+                            //     $data = [
+                            //         "company_id" => $request->company_id,
+                            //         "customer_id" => $alarm->customer_id,
+                            //         "alarm_id" => $alarm_id,
+                            //         "whatsapp_number" => $whatsapp_number,
+                            //         "notes" => "Event Forwarded to " . $whatsapp_number,
+                            //         "event_status" => "Forwarded",
+                            //         "created_datetime" => date("Y-m-d H:i:s")
+                            //     ];
+
+                            //     CustomerAlarmNotes::create($data);
+                            // }
                             $this->sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id);
                         } catch (\Exception $e) {
                             $response = $response . $whatsapp_number . ' - Whatsapp  Not sent  ';
@@ -178,7 +194,7 @@ class AlarmNotificationController extends Controller
         $external_cc_email = $request->get('external_cc_email');
 
 
-        return  $this->forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email);
+        return  $this->forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email, $request);
     }
     public function sendMail($name, $alarm, $email, $alarm_id, $external_cc_email)
     {

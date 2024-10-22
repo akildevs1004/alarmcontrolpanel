@@ -69,22 +69,24 @@
             <div v-if="plotting.top != '-500px' && plotting.left != '-500px'">
               <v-icon
                 v-if="
-                  plotting.alarm_event?.length &&
-                  plotting.alarm_event.alarm_status == 1
+                  plotting.zone_data.area_code == alarm.area &&
+                  plotting.zone_data.zone_code == alarm.zone &&
+                  alarm.alarm_status == 1
                 "
                 class="alarm-red-to-green"
-                :title="plotting.alarm_event[0].alarm_type + ' Aalrm ON'"
+                :title="alarm.alarm_type + ' Aalrm ON'"
                 size="20"
                 >mdi-circle</v-icon
               >
 
               <v-icon
-                v-if="
-                  plotting.alarm_event?.length &&
-                  plotting.alarm_event.alarm_status == 0
+                v-else-if="
+                  plotting.zone_data.area_code == alarm.area &&
+                  plotting.zone_data.zone_code == alarm.zone &&
+                  alarm.alarm_status == 0
                 "
-                class="red"
-                :title="plotting.alarm_event[0].alarm_type + ' Aalrm Off'"
+                style="color: red"
+                :title="alarm.alarm_type + ' Aalrm Off'"
                 size="20"
                 >mdi-circle</v-icon
               >
@@ -116,7 +118,7 @@
 </template>
 <script>
 export default {
-  props: ["customer_id"],
+  props: ["customer_id", "alarm"],
   data() {
     return {
       isMounted: false,

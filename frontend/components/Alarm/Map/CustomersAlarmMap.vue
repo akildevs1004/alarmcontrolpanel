@@ -455,13 +455,10 @@
                 v-for="(value, name, index) in colorcodes"
                 :value="value"
               >
-                <!-- <img
-                  :src="value.image + '?2=2'"
-                  style="width: 35px; height: 45px"
-                /> -->
+                <img :src="value.image + '?2=2'" style="width: 30px" />
                 <!-- <div>{{ value.name }}</div> -->
 
-                <v-icon :color="value.color">{{ value.icon }} </v-icon>
+                <!-- <v-icon :color="value.color">{{ value.icon }} </v-icon> -->
               </v-btn>
             </v-btn-toggle>
           </div>

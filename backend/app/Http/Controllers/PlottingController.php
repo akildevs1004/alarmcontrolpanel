@@ -22,8 +22,8 @@ class PlottingController extends Controller
         }
         $plottings = $model->plottings;
 
-
-        $plottings =  $this->updatePlottingWithalarm_event($plottings);
+        $plottings =  $this->updatePlottingWithZoneDetails($plottings);
+        /////////// $plottings =  $this->updatePlottingWithalarm_event($plottings);
 
         // // Collect unique sensor IDs to minimize queries
         // // $sensorIds = collect($plottings)->pluck('sensor_id')->unique();
@@ -65,8 +65,8 @@ class PlottingController extends Controller
         foreach ($model as $key => $value) {
             $plottings = $value->plottings;
 
-
-            $plottings =  $this->updatePlottingWithalarm_event($plottings);
+            $plottings =  $this->updatePlottingWithZoneDetails($plottings);
+            /////////////////$plottings =  $this->updatePlottingWithalarm_event($plottings);
 
 
 
@@ -85,40 +85,54 @@ class PlottingController extends Controller
 
         return $model;
     }
-
-    public function updatePlottingWithalarm_event($plottings)
+    public function updatePlottingWithZoneDetails($plottings)
     {
-        $sensorIds = array_column($plottings, 'sensor_id');
-        $deviceZones = DeviceZones::with('device')
-            ->whereIn('id', array_filter($sensorIds))
-            ->get()
-            ->keyBy('id');
+
+        // $plottings->buildingPhotosPlottings->photo_plottings = $plottings->buildingPhotosPlottings->photo_plottings->map(function ($plot) {
+        //     $plot['zone_data'] = DeviceZones::where('id', $plot['sensor_id'])->first();
+        //     return $plot;
+        // });
 
         foreach ($plottings as &$plot) {
-            $plot['alarm_event'] = null;
-
-            if ($plot['sensor_id'] && $plot['sensor_id'] != $plot['device_id']) {
-                $deviceZone = $deviceZones->get($plot['sensor_id']);
-
-                if ($deviceZone) {
-                    $plot['alarm_event'] = AlarmEvents::where('alarm_status', 1)
-                        ->where('serial_number', $deviceZone->device->serial_number)
-                        ->where('zone', $deviceZone->zone_code)
-                        ->where('area', $deviceZone->area_code)
-                        ->get();
-                }
-            } else if ($plot['sensor_id'] == $plot['device_id']) {
-                $plot['alarm_event'] = AlarmEvents::with('device')
-                    ->where('alarm_status', 1)
-                    ->whereHas('device', function ($q) use ($plot) {
-                        $q->where('id', $plot['device_id']);
-                    })
-                    ->get();
-            }
+            $plot['zone_data'] = DeviceZones::where('id', $plot['sensor_id'])->get(['area_code', 'zone_code'])->first();
         }
+
 
         return $plottings;
     }
+    // public function updatePlottingWithalarm_event($plottings)
+    // {
+    //     $sensorIds = array_column($plottings, 'sensor_id');
+    //     $deviceZones = DeviceZones::with('device')
+    //         ->whereIn('id', array_filter($sensorIds))
+    //         ->get()
+    //         ->keyBy('id');
+
+    //     foreach ($plottings as &$plot) {
+    //         $plot['alarm_event'] = null;
+
+    //         if ($plot['sensor_id'] && $plot['sensor_id'] != $plot['device_id']) {
+    //             $deviceZone = $deviceZones->get($plot['sensor_id']);
+
+    //             if ($deviceZone) {
+    //                 $plot['alarm_event'] = AlarmEvents::where('alarm_status', 1)
+    //                     ->where('serial_number', $deviceZone->device->serial_number)
+    //                     ->where('zone', $deviceZone->zone_code)
+    //                     ->where('area', $deviceZone->area_code)
+    //                     ->get();
+    //             }
+    //         } else if ($plot['sensor_id'] == $plot['device_id']) {
+    //             $plot['alarm_event'] = AlarmEvents::with('device')
+    //                 ->where('alarm_status', 1)
+    //                 ->whereHas('device', function ($q) use ($plot) {
+    //                     $q->where('id', $plot['device_id']);
+    //                 })
+    //                 ->get();
+    //         }
+    //     }
+
+    //     return $plottings;
+    // }
 
     public function store(Request $request)
     {

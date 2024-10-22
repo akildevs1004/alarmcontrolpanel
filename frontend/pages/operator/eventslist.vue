@@ -315,6 +315,7 @@
                   :name="'OperatorSensorPhotos' + selectedAlarm?.id"
                   class="rounded-lg"
                   :customer_id="selectedAlarm?.device.customer.id"
+                  :alarm="selectedAlarm"
                 />
               </div> </v-card
           ></v-col>

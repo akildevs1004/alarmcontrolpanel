@@ -9,7 +9,7 @@
     <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Event #{{ eventId }}</span>
+          <span style="color: black">Alarm Event #{{ selecteAlarm?.id }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -34,7 +34,9 @@
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Operator Logs #{{ eventId }}</span>
+          <span style="color: black"
+            >Operator Logs #{{ selecteAlarm?.id }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -572,7 +574,7 @@
                                 <v-icon color="secondary" small>
                                   mdi-file-tree
                                 </v-icon>
-                                View
+                                Notes
                               </v-list-item-title>
                             </v-list-item>
                             <v-list-item

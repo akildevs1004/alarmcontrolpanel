@@ -151,7 +151,7 @@
                     :src="
                       item.profile_picture
                         ? item.profile_picture
-                        : '/no-business_profile.png'
+                        : '/no-profile-image.png'
                     "
                   >
                   </v-img>

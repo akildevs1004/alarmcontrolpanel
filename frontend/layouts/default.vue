@@ -918,7 +918,11 @@ export default {
 
       //console.log("wait5Minutes", this.wait5Minutes);
       //if (this.wait5Minutes == false)
-      if (this.$route.name !== "login") {
+      if (
+        this.$route.name !== "login" &&
+        this.$route.name !== "operator-eventslist" &&
+        this.$route.name !== "operator-dashboard"
+      ) {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
 
@@ -1309,6 +1313,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
+          page_source: "default",
         },
         cancelToken: new this.$axios.CancelToken((cancel) => {
           this.cancelRequest = cancel; // Store the cancel function
@@ -2491,6 +2496,6 @@ v-application .primary {
   left: 24% !important;
 }
 .v-timeline-item__body > .v-card:not(.v-card--flat)::after {
-  border-right-color: red !important;
+  border-right-color: black !important;
 }
 </style>

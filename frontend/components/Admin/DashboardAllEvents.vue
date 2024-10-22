@@ -5,6 +5,31 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Alarm Event #{{ selecteAlarm?.id }}</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewAlarmFormat = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text style="padding: 0px">
+          <v-container style="min-height: 100px; padding-left: 0px">
+            <AlarmNotesFormatView
+              v-if="selecteAlarm"
+              :alarm="selecteAlarm"
+              :key="key"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -514,13 +539,18 @@
                         </v-btn>
                       </template>
                       <v-list width="120" dense>
-                        <v-list-item
-                          v-if="can('branch_view')"
-                          @click="viewCustomerinfo(item)"
-                        >
+                        <v-list-item @click="viewAlarminfo(item)">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-icon color="secondary" small>
+                              mdi-file-tree
+                            </v-icon>
+                            Notes
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="viewCustomerinfo(item)">
                           <v-list-item-title style="cursor: pointer">
                             <v-icon color="secondary" small> mdi-eye </v-icon>
-                            Customer
+                            Contacts
                           </v-list-item-title>
                         </v-list-item>
                         <v-list-item
@@ -590,6 +620,8 @@ export default {
   ],
   data() {
     return {
+      selecteAlarm: null,
+      dialogViewAlarmFormat: false,
       customer: null,
       dialogViewLogs: false,
       cancelTokenSource: null,
@@ -731,6 +763,11 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    viewAlarminfo(alarm) {
+      this.key++;
+      this.selecteAlarm = alarm;
+      this.dialogViewAlarmFormat = true;
     },
     showTabContent() {
       this.showTable = false;

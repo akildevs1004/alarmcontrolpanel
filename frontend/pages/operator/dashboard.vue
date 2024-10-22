@@ -832,7 +832,7 @@ export default {
           await this.getCustomersDatafromApi();
         }, 1000);
       }
-    }, 1000 * 6);
+    }, 1000 * 10);
 
     setInterval(() => {
       if (this.$route.name == "operator-dashboard") {

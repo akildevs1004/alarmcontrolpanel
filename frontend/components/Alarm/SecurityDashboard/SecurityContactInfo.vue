@@ -178,7 +178,7 @@
 
                   <v-radio-group
                     class="radiogroup"
-                    style="color: black"
+                    style="color: black; padding-top: 15px"
                     v-model="event_payload.call_status"
                     @change="updateCallStatus()"
                     @click="updateCallStatus()"
@@ -211,6 +211,7 @@
                   <label class="div-border-label">Response</label>
 
                   <v-radio-group
+                    style="padding-top: 15px"
                     v-model="event_payload.response"
                     class="radiogroup"
                   >
@@ -251,6 +252,7 @@
                   <label class="div-border-label">Event satus</label>
 
                   <v-radio-group
+                    style="padding-top: 15px"
                     v-model="event_payload.event_status"
                     class="radiogroup"
                   >

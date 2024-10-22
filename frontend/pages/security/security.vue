@@ -130,9 +130,7 @@
                       width: 50px;
                       max-width: 50px;
                     "
-                    :src="
-                      item.picture ? item.picture : '/no-business_profile.png'
-                    "
+                    :src="item.picture ? item.picture : '/no-profile-image.png'"
                   >
                   </v-img>
                 </v-col>
