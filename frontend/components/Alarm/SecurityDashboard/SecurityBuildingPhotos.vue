@@ -26,6 +26,7 @@
     </v-row>
     <v-row style="margin: auto">
       <v-col cols="12" style="position: relative" v-if="item">
+        {{ loading }}
         <img
           style="margin: auto; width: 100%"
           :src="item.picture"
@@ -63,7 +64,7 @@
 </template>
 <script>
 export default {
-  props: ["photos"],
+  props: ["photos", "alarm_id"],
   data() {
     return {
       snackbar: false,
@@ -82,6 +83,7 @@ export default {
 
       selectedPhotoId: 0,
       item: null,
+      alarm: null,
     };
   },
   async created() {
@@ -120,7 +122,44 @@ export default {
         ...data,
       ];
     },
+    getAlarmInfo() {
+      let config = {
+        params: {
+          alarm_id: this.alarm_id,
+        },
+      };
+      this.$axios.get(`alarm_event_by_id`, config).then((data) => {
+        this.alarm = data.data;
+        let alarmCounter = 0;
+        if (this.alarm) {
+          this.plottings.forEach((element) => {
+            if (
+              element.top != "-500px" &&
+              this.alarm.zone == element.zone_data.zone_code &&
+              this.alarm.area == element.zone_data.area_code
+            ) {
+              alarmCounter++;
+              element.alarm_event = [];
+              element.alarm_event[0] = this.alarm;
+            }
+          });
 
+          // let alarmEvents = this.plottings.filter(
+          //   (plott) =>
+          //     plott.top != "-500px" &&
+          //     this.alarm.zone == plott.zone_data.zone_code &&
+          //     this.alarm.area == plott.zone_data.area_code
+          // );
+
+          if (alarmCounter == 0) {
+            this.snackbar = true;
+            this.response = "No Alarm Found";
+          } else {
+            this.response = alarmCounter + " Alarms";
+          }
+        }
+      });
+    },
     async getExistingPlottings() {
       this.loading = true;
       this.plottings = [];
@@ -129,25 +168,12 @@ export default {
           customer_building_picture_id: this.item.id,
         },
       };
-      let { data } = await this.$axios.get(`plotting`, config);
-
-      if (data) {
-        this.existingPlottings = data.plottings;
-        this.plottings = data.plottings;
-      }
-
-      let alarmEvents = this.plottings.filter(
-        (plott) => plott.top != "-500px" && plott.alarm_event.length > 0
-      );
-
-      if (alarmEvents.length == 0) {
-        this.snackbar = true;
-        this.response = "No Alarm Found";
-      } else {
-        this.response = alarmEvents.length + " Alarms";
-      }
-
-      this.loading = false;
+      this.$axios.get(`plotting`, config).then((data) => {
+        this.existingPlottings = data.data.plottings;
+        this.plottings = data.data.plottings;
+        this.loading = false;
+        if (this.alarm_id) this.getAlarmInfo();
+      });
     },
 
     checkIsSensorAddedAnyPhoto() {

@@ -473,12 +473,11 @@
 
 <script>
 import SecurityGoogleMap from "../../Alarm/SecurityDashboard/SecurityGoogleMap.vue";
-import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 import SecurityAlarmNotes from "../../Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
 import AlarmForwardEvent from "../AlarmForwardEvent.vue";
 
 export default {
-  components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityAlarmNotes },
+  components: { SecurityGoogleMap, SecurityAlarmNotes },
   props: ["alarmId", "customer", "contact_type"],
   data: () => ({
     dialogForwardEventDetails: false,

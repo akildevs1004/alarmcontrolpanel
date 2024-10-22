@@ -503,14 +503,12 @@
 </template>
 
 <script>
-import SecurityGoogleMap from "../Alarm/SecurityDashboard/SecurityGoogleMap.vue";
-import SecurityBuildingPhotos from "../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 import SecurityAlarmNotes from "../Alarm/SecurityDashboard/SecurityAlarmNotes.vue";
 import AlarmForwardEvent from "../Alarm/AlarmForwardEvent.vue";
 
 export default {
-  components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityAlarmNotes },
-  props: ["alarmId", "customer", "contact_type"],
+  components: { SecurityAlarmNotes },
+  props: ["alarm_id", "customer", "contact_type"],
   data: () => ({
     selectContactButton: null,
     filteredContactInfo: [],

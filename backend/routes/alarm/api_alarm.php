@@ -184,6 +184,7 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
+Route::get('alarm_event_by_id', [CustomerAlarmEventsController::class, 'getAlarmEventById']);
 
 
 

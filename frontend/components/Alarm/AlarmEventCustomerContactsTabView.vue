@@ -63,7 +63,11 @@
           <v-tab-item value="Customer">
             <v-card flat>
               <v-card-text>
-                <SecurityBuildingInfo v-if="customer" :customer="customer" />
+                <SecurityBuildingInfo
+                  v-if="customer"
+                  :customer="customer"
+                  :alarm_id="alarmId"
+                />
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -243,8 +247,6 @@ export default {
   watch: {
     tab: {
       handler(value) {
-        console.log(value);
-
         if (value == 1) this.keyAllContacts += 1;
         else if (value == 2) this.keyPrimary += 1;
         else if (value == 3) this.keySecondary += 1;

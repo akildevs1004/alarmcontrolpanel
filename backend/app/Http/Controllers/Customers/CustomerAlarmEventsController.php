@@ -630,6 +630,11 @@ class CustomerAlarmEventsController extends Controller
 
         return   $model->paginate($request->perPage ?? 10);;
     }
+
+    public function getAlarmEventById(Request $request)
+    {
+        return AlarmEvents::whereId($request->alarm_id)->first();
+    }
     public function getAlarmEvents(Request $request)
     {
         $model = $this->filter($request);

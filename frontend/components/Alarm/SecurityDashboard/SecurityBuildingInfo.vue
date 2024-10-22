@@ -193,6 +193,7 @@
                     class="rounded-lg"
                     :customer_id="customer.id"
                     :photos="customer.photos"
+                    :alarm_id="alarm_id"
                     v-if="customer" /></v-card
               ></v-tab-item>
             </v-tabs>
@@ -210,7 +211,7 @@ import SecurityLeafletMap from "../../Alarm/SecurityDashboard/SecurityLeafletMap
 import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 export default {
   components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityLeafletMap },
-  props: ["_id", "isPopup", "customer"],
+  props: ["_id", "isPopup", "customer", "alarm_id"],
   data: () => ({
     tab: "",
   }),
