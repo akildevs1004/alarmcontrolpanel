@@ -256,8 +256,8 @@
                   >
                     <v-radio
                       @click="displayForwardForm()"
-                      label="Forwaded"
-                      value="Forwaded"
+                      label="Forwarded"
+                      value="Forwarded"
                       style="font-size: 10px"
                     ></v-radio>
 

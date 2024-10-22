@@ -283,8 +283,8 @@
                     class="radiogroup radiogroup-small radioheight"
                   >
                     <v-radio
-                      label="Forwaded"
-                      value="Forwaded"
+                      label="Forwarded"
+                      value="Forwarded"
                       style="font-size: 10px; padding-top: 10px"
                     ></v-radio>
 

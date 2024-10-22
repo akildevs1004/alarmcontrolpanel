@@ -6,14 +6,14 @@
       </v-snackbar>
     </div>
 
-    <v-dialog v-model="dialogViewAlarmForamt" width="80%">
+    <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Alarm Event #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
-            @click="dialogViewAlarmForamt = false"
+            @click="dialogViewAlarmFormat = false"
             outlined
           >
             mdi mdi-close-circle
@@ -22,7 +22,11 @@
 
         <v-card-text style="padding: 0px">
           <v-container style="min-height: 100px; padding-left: 0px">
-            <AlarmEventFormatView :alarm="alarm" :key="key" />
+            <AlarmNotesFormatView
+              v-if="selecteAlarm"
+              :alarm="selecteAlarm"
+              :key="key"
+            />
           </v-container>
         </v-card-text>
       </v-card>
@@ -632,7 +636,7 @@ import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEvent
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
-import AlarmEventFormatView from "./Reports/AlarmEventFormatView.vue";
+import AlarmNotesFormatView from "./Reports/AlarmNotesFormatView.vue";
 
 export default {
   components: {
@@ -642,7 +646,7 @@ export default {
     AlramCloseNotes,
     AlarmForwardEvent,
     SecurityAlarmNotes,
-    AlarmEventFormatView,
+    AlarmNotesFormatView,
   },
   props: [
     "popup",
@@ -659,6 +663,8 @@ export default {
   ],
   data() {
     return {
+      selecteAlarm: null,
+      dialogViewAlarmFormat: false,
       customer: null,
       dialogViewLogs: false,
       cancelTokenSource: null,
@@ -806,7 +812,11 @@ export default {
     closeCustomerDialog() {
       this.dialogTabViewCustomer = false;
     },
-    viewAlarminfo() {},
+    viewAlarminfo(alarm) {
+      this.key++;
+      this.selecteAlarm = alarm;
+      this.dialogViewAlarmFormat = true;
+    },
     viewCustomerinfo(item) {
       if (item.device) {
         this.popupEventText =

@@ -1,13 +1,13 @@
 <template>
-  <AlarmEventFormatView />
+  <AlarmNotesFormatView />
 </template>
 
 <script>
-import AlarmEventFormatView from "../../components/Alarm/Reports/AlarmEventFormatView.vue";
+import AlarmNotesFormatView from "../../components/Alarm/Reports/AlarmNotesFormatView.vue";
 
 export default {
   components: {
-    AlarmEventFormatView,
+    AlarmNotesFormatView,
   },
 };
 </script>

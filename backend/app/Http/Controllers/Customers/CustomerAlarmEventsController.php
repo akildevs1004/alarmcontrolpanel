@@ -640,11 +640,12 @@ class CustomerAlarmEventsController extends Controller
         $model = AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
-
-            "notes",
+            "device.company.user",
+            "notes.contact",
             "category",
             "device.customer.buildingtype",
             "zoneData",
+            "security"
 
         ])->where('company_id', $request->company_id)
 
@@ -658,7 +659,7 @@ class CustomerAlarmEventsController extends Controller
                     // $q->wherehas('notes', function ($qq) use ($request) {
 
 
-                    //     $qq->where("event_status", 'Forwaded');
+                    //     $qq->where("event_status", 'Forwarded');
                     // });
                 } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
                     $q->where("alarm_status", $request->alarm_status);
@@ -667,7 +668,7 @@ class CustomerAlarmEventsController extends Controller
                     // $q->wherehas('notes', function ($qq) use ($request) {
 
 
-                    //     $qq->where("event_status", 'Forwaded');
+                    //     $qq->where("event_status", 'Forwarded');
                     // });
                 }
             })

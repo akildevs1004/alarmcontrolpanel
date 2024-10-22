@@ -2469,4 +2469,25 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
 .v-radio--is-disabled label {
   color: #ddd !important;
 }
+
+.alarm-notes-timeline .v-timeline-item__body {
+  max-width: 80% !important;
+}
+.alarm-notes-timeline .v-timeline-item__opposite {
+  max-width: 20% !important;
+}
+.alarm-notes-timeline
+  .v-application--is-ltr
+  .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
+  left: 24% !important;
+}
+
+v-application .primary {
+  background-color: red !important;
+}
+
+.v-application--is-ltr
+  .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
+  left: 24% !important;
+}
 </style>

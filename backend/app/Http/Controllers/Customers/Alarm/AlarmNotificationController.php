@@ -266,7 +266,7 @@ class AlarmNotificationController extends Controller
                 "alarm_id" => $alarm_id,
                 "email" => $email,
                 "notes" => "Event Forwarded to " . $email,
-                "event_status" => "Forwaded",
+                "event_status" => "Forwarded",
                 "created_datetime" => date("Y-m-d H:i:s")
             ];
 
@@ -321,7 +321,7 @@ class AlarmNotificationController extends Controller
             "alarm_id" => $alarm_id,
             "whatsapp_number" => $whatsapp_number,
             "notes" => "Event Forwarded to " . $whatsapp_number,
-            "event_status" => "Forwaded",
+            "event_status" => "Forwarded",
             "created_datetime" => date("Y-m-d H:i:s")
         ];
 

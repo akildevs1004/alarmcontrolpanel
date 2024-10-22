@@ -248,8 +248,8 @@
                 class="radiogroup radiogroup-small"
               >
                 <v-radio
-                  label="Forwaded"
-                  value="Forwaded"
+                  label="Forwarded"
+                  value="Forwarded"
                   style="font-size: 10px; padding-top: 10px"
                 ></v-radio>
 

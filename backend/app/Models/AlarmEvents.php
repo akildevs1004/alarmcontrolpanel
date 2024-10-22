@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Customers\AlarmCateogories;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\Customers\Customers;
+use App\Models\Customers\SecurityLogin;
 use App\Models\Deivices\DeviceZones;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,9 +30,13 @@ class AlarmEvents extends Model
     {
         return $this->belongsTo(Device::class, "serial_number", "serial_number");
     }
+    public function security()
+    {
+        return $this->belongsTo(SecurityLogin::class, "security_id", "id");
+    }
     public function notes()
     {
-        return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id");
+        return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->orderBy("created_datetime", "ASC");
     }
     // public function zoneData()
     // {
@@ -50,12 +55,12 @@ class AlarmEvents extends Model
     // {
 
     //     //return CustomerAlarmNotes::where("alarm_id", $this->id)->get();
-    //     return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwaded");
+    //     return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwarded");
     // }
     public function getAlarmForwardedAttribute()
     {
 
         //return CustomerAlarmNotes::where("alarm_id", $this->id)->get();
-        return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwaded")->get();;
+        return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->where("event_status", "Forwarded")->get();;
     }
 }
