@@ -583,7 +583,7 @@
                                 <v-icon color="secondary" small>
                                   mdi-eye
                                 </v-icon>
-                                Customer
+                                Contacts
                               </v-list-item-title>
                             </v-list-item>
                             <v-list-item

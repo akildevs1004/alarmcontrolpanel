@@ -63,7 +63,7 @@
           </v-col>
         </v-row></v-col
       >
-      <v-col>
+      <v-col style="border-left: 1px solid #ddd">
         <v-row no-gutters>
           <v-col
             style="
@@ -115,7 +115,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col>
+      <v-col style="border-left: 1px solid #ddd">
         <v-row no-gutters>
           <v-col
             style="
@@ -164,7 +164,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col style="min-width: 400px">
+      <v-col style="min-width: 400px; border-left: 1px solid #ddd">
         <v-row>
           <v-col
             style="

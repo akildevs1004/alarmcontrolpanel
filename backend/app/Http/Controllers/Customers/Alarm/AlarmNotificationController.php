@@ -114,6 +114,8 @@ class AlarmNotificationController extends Controller
 
             $alarm = AlarmEvents::with(["device.customer", "device.company"])->whereId($alarm_id)->first();
 
+
+
             if ($alarm) {
 
                 foreach ($contacts as   $contact) {
@@ -128,7 +130,17 @@ class AlarmNotificationController extends Controller
                     if ($email != '') {
                         try {
 
+                            $data = [
+                                "company_id" => $company_id,
+                                "customer_id" => $customer_id,
+                                "alarm_id" => $alarm_id,
+                                "email" => $email,
+                                "notes" => "Event Forwarded to " . $email,
+                                "event_status" => "Forwarded",
+                                "created_datetime" => date("Y-m-d H:i:s")
+                            ];
 
+                            CustomerAlarmNotes::create($data);
                             $response = $response . $this->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
                         } catch (\Exception $e) {
                             $response = $response . $email . ' - Email  Not sent ' . $e;
