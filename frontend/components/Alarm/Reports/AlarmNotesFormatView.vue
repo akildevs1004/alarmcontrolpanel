@@ -246,14 +246,14 @@
                 <tr style="border-bottom: 1px solid #ddd">
                   <td style="padding: 0 10px">End</td>
                   <td style="padding: 0 10px">
-                    <div v-if="alarm.alarm_end_datetime">
+                    <div v-if="alarm.alarm_end_datetime != ''">
                       {{
                         $dateFormat.formatDateMonthYear(
                           alarm.alarm_end_datetime
                         )
                       }}
                     </div>
-                    <div else>---</div>
+                    <div v-else>---</div>
                   </td>
                 </tr>
               </tbody>
@@ -359,12 +359,13 @@
               </v-card>
             </v-timeline-item>
             <v-timeline-item
+              class="close-alarm"
               v-if="alarm.alarm_status == 0"
               fill-dot
               color="white"
               right
             >
-              <template v-slot:opposite style="">
+              <template v-slot:opposite>
                 <div style="padding-right: 10px; color: red">
                   {{
                     $dateFormat.formatDateMonthYear(alarm.alarm_end_datetime)
