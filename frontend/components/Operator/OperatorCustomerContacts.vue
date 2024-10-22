@@ -734,9 +734,9 @@ export default {
               this.errors = e.response.data.errors;
               this.color = "red";
               this.snackbar = true;
-              this.response = "Some fileds are missing";
+              //this.response = "Some fileds are missing";
               this.snackbar = true;
-              //this.response = e.response.data.message;
+              this.response = e.response.data.message;
               if (this.errors.message) {
                 this.color = "red";
                 this.snackbar = true;

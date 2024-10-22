@@ -274,34 +274,6 @@
               :key="'alarmnotes' + index"
               right
             >
-              <template v-slot:icon>
-                <v-avatar>
-                  <v-icon
-                    v-if="note.event_status == 'Forwarded'"
-                    title="Forwarded"
-                    color="orange"
-                    style="color: red"
-                    >mdi-lock-open-variant-outline</v-icon
-                  >
-                  <v-img
-                    v-else-if="note.contact?.profile_picture"
-                    style="
-                      border-radius: 50%;
-                      height: 40px;
-                      min-height: 40px;
-                      width: 40px;
-                      max-width: 40px;
-                    "
-                    :src="
-                      note.contact?.profile_picture
-                        ? note.contact?.profile_picture
-                        : '/no-business_profile.png'
-                    "
-                  >
-                  </v-img>
-                  <v-icon v-else color="red">mdi-account-tie</v-icon>
-                </v-avatar>
-              </template>
               <template v-slot:opposite style="">
                 <div style="padding-right: 10px">
                   {{ $dateFormat.formatDateMonthYear(note.created_datetime) }}
@@ -333,7 +305,35 @@
                   </div>
                 </div>
               </template>
-              <v-card class="elevation-2" style="">
+              <template v-slot:icon>
+                <v-avatar>
+                  <v-icon
+                    v-if="note.event_status == 'Forwarded'"
+                    title="Forwarded"
+                    color="orange"
+                    style="color: red"
+                    >mdi-lock-open-variant-outline</v-icon
+                  >
+                  <v-img
+                    v-else-if="note.contact?.profile_picture"
+                    style="
+                      border-radius: 50%;
+                      height: 40px;
+                      min-height: 40px;
+                      width: 40px;
+                      max-width: 40px;
+                    "
+                    :src="
+                      note.contact?.profile_picture
+                        ? note.contact?.profile_picture
+                        : '/no-business_profile.png'
+                    "
+                  >
+                  </v-img>
+                  <v-icon v-else color="red">mdi-account-tie</v-icon>
+                </v-avatar>
+              </template>
+              <v-card class="elevation-0" style="border: 1px solid #ddd">
                 <v-card-title style="font-size: 14px">
                   <div v-if="note.event_status == 'Forwarded'">Forwarded</div>
                   <div v-else class="bold">
@@ -355,6 +355,49 @@
                     ><v-col class="bold">Event Status </v-col>
                     <v-col>: {{ note.event_status || "---" }}</v-col>
                   </v-row>
+                </v-card-text>
+              </v-card>
+            </v-timeline-item>
+            <v-timeline-item
+              v-if="alarm.alarm_status == 0"
+              fill-dot
+              color="white"
+              right
+            >
+              <template v-slot:opposite style="">
+                <div style="padding-right: 10px; color: red">
+                  {{
+                    $dateFormat.formatDateMonthYear(alarm.alarm_end_datetime)
+                  }}
+                </div>
+              </template>
+              <template v-slot:icon>
+                <v-avatar>
+                  <v-icon color="red">mdi-circle-slice-8</v-icon>
+                </v-avatar>
+              </template>
+              <v-card class="elevation-0" style="border: 1px solid #ddd">
+                <v-card-title style="font-size: 14px">
+                  Alarm Event Closed at
+                  {{
+                    $dateFormat.formatDateMonthYear(alarm.alarm_end_datetime)
+                  }}
+                </v-card-title>
+
+                <v-card-text>
+                  <div v-if="alarm.alarm_end_manually == 1">
+                    Operator Verified PIN with {{ alarm.pin_verified_by }}
+                    <span class="bold">
+                      {{
+                        alarm.pinverifiedby
+                          ? alarm.pinverifiedby.first_name +
+                            " " +
+                            alarm.pinverifiedby.last_name
+                          : "---"
+                      }}
+                    </span>
+                  </div>
+                  <div v-else>Auto Closed by Disarm Event</div>
                 </v-card-text>
               </v-card>
             </v-timeline-item>

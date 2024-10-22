@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Customers\AlarmCateogories;
 use App\Models\Customers\CustomerAlarmNotes;
+use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
 use App\Models\Deivices\DeviceZones;
@@ -33,6 +34,10 @@ class AlarmEvents extends Model
     public function security()
     {
         return $this->belongsTo(SecurityLogin::class, "security_id", "id");
+    }
+    public function pinverifiedby()
+    {
+        return $this->belongsTo(CustomerContacts::class, "pin_verified_by_id", "id");
     }
     public function notes()
     {

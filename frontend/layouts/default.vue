@@ -2490,4 +2490,7 @@ v-application .primary {
   .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
   left: 24% !important;
 }
+.v-timeline-item__body > .v-card:not(.v-card--flat)::after {
+  border-right-color: red !important;
+}
 </style>

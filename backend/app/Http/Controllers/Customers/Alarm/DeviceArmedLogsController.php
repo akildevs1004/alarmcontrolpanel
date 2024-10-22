@@ -65,6 +65,7 @@ class DeviceArmedLogsController extends Controller
 
         // Retrieve event logs for the given company within the date range
         $eventLogs = AlarmEvents::with([
+
             'device.customer' => function ($query) {
                 $query->without(["primary_contact", "secondary_contact", "profilePictures", 'all_alarm_events', 'user', 'devices', 'contacts', 'profilePictures']);
             }

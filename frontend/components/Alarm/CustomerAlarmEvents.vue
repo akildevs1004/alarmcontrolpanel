@@ -368,6 +368,7 @@ export default {
               customer_id: this.customer_id,
               event_id: item.id,
               status: status,
+              notes: "Alarm Closed by Customer",
             },
           };
           this.loading = true;

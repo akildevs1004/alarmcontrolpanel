@@ -1,7 +1,7 @@
 <template>
   <div max-width="100%">
     <div class="text-center ma-2">
-      <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
+      <v-snackbar v-model="snackbar" top="top" :color="color" elevation="24">
         {{ response }}
       </v-snackbar>
     </div>
@@ -58,7 +58,7 @@
               <v-col style="max-width: 100px">
                 <v-img
                   style="
-                    width: 80px;
+                    min-width: 80px;
                     border-radius: 50%;
                     border: 1px solid #ddd;
                   "
@@ -780,9 +780,9 @@ export default {
               this.errors = e.response.data.errors;
               this.color = "red";
               this.snackbar = true;
-              this.response = "Some fileds are missing";
+              //this.response = "Some fileds are missing";
               this.snackbar = true;
-              //this.response = e.response.data.message;
+              this.response = e.response.data.message;
               if (this.errors.message) {
                 this.color = "red";
                 this.snackbar = true;

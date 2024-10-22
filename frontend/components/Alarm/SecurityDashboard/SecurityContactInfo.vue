@@ -38,7 +38,7 @@
         <v-card-text>
           <v-container style="min-height: 100px">
             <AlarmForwardEvent
-              name="AlramCloseNotes"
+              name="AlarmForwardEvent"
               :key="key"
               :customer_id="customer_id"
               :customer="customer"

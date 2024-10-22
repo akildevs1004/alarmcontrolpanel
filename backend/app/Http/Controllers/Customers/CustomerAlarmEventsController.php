@@ -271,6 +271,7 @@ class CustomerAlarmEventsController extends Controller
             'title' => 'nullable',
             'notes' => 'required',
             'title' => 'nullable',
+            'contact_id' => 'nullable',
 
             'call_status' => 'required',
             'response' => 'nullable',
@@ -358,7 +359,7 @@ class CustomerAlarmEventsController extends Controller
 
                             if ($request->contact_type == 'primary') {
 
-                                $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
+                                $primaryCount = CustomerContacts::where("id", $request->input('contact_id'))
                                     ->where("alarm_stop_pin", (int)$request->input('pin_number'))
                                     ->count();
 
@@ -371,12 +372,13 @@ class CustomerAlarmEventsController extends Controller
 
                                 if ($primaryCount) {
                                     $data2["pin_verified_by"] = "primary";
+                                    $data2["pin_verified_by_id"] = $request->input('contact_id');
                                 }
                             }
 
                             if ($request->contact_type == 'secondary') {
 
-                                $primaryCount = CustomerContacts::where("customer_id", $request->input('customer_id'))
+                                $primaryCount = CustomerContacts::where("id", $request->input('contact_id'))
                                     ->where("alarm_stop_pin", (int)$request->input('pin_number'))
                                     ->count();
 
@@ -389,12 +391,14 @@ class CustomerAlarmEventsController extends Controller
 
                                 if ($primaryCount) {
                                     $data2["pin_verified_by"] = "secondary";
+                                    $data2["pin_verified_by_id"] = $request->input('contact_id');
                                 }
                             }
                         }
 
                         ///$data2["event_status"] = "Closed";
                         $data2["alarm_status"] = 0;
+
                         $data2["alarm_end_manually"] = 1;
                         $data2["alarm_end_datetime"] = date("Y-m-d H:i:s");
 
@@ -645,7 +649,8 @@ class CustomerAlarmEventsController extends Controller
             "category",
             "device.customer.buildingtype",
             "zoneData",
-            "security"
+            "security",
+            "pinverifiedby"
 
         ])->where('company_id', $request->company_id)
 
