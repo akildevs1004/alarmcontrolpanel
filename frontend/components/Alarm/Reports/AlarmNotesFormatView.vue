@@ -315,7 +315,12 @@
                 </div>
                 <div
                   v-if="note.contact"
-                  style="float: right; width: 140px; margin-right: -25px"
+                  style="
+                    float: right;
+                    width: 140px;
+                    margin-right: -25px;
+                    font-size: 10px;
+                  "
                 >
                   <div style="text-align: left">
                     <div class="bold">

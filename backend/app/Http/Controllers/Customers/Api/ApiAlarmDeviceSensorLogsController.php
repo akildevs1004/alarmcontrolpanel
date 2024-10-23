@@ -228,16 +228,22 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         if ($event == '3301') {
                             $alarm_type = '';
                             //AC_Power Recovery 
-                            $this->closeAcOffAlarmsBySerialNumber($serial_number);
+                            $this->closeACOffAlarmsBySerialNumber($serial_number);
+                        }
+                        if ($event == '3309') {
+                            $alarm_type = '';
+                            //AC_Power Recovery 
+                            $this->closeDCOffAlarmsBySerialNumber($serial_number);
                         }
                         // if ($event == '1132') {
                         //     $alarm_type = 'Regular Alarm';
                         // }
                         //1301 - AC Loss 
                         //1309 - Battery Loss
-                        //1321 - Restarted
-                        //1351 - Battery Loss
+                        //1321 - Restart Started 
+                        //1351 - Restart End and System is on// Battery Loss
                         //3301 - AC Recovery
+                        //3309 - DC Recovery
 
                         //1406 - disam  
                     }
@@ -438,7 +444,29 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             return $this->response('Alarm Logs are created', null, true);
         }
     }
-    public function  closeAcOffAlarmsBySerialNumber($serial_number)
+    public function  closeDCOffAlarmsBySerialNumber($serial_number)
+    {
+        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_type", "DC_off")->where("alarm_status", 1)->get();
+
+        foreach ($alarmEvents as $alarm) {
+
+            $timeZone = $alarm->device->utc_time_zone ?: 'Asia/Dubai';
+            $nowInTimeZone = Carbon::now($timeZone);
+            $alarmStartDatetime = Carbon::parse($alarm->alarm_start_datetime);
+            $minutesDifference = $alarmStartDatetime->diffInMinutes($nowInTimeZone);
+
+            if ($alarm->alarm_type == "DC_off") {
+                $alarm->update([
+                    "alarm_end_datetime" => $nowInTimeZone,
+                    "response_minutes" => $minutesDifference,
+                    "alarm_status" => 0
+                ]);
+            }
+        }
+
+        (new ApiAlarmDeviceTemperatureLogsController())->createAlarmEventsJsonFile();
+    }
+    public function  closeACOffAlarmsBySerialNumber($serial_number)
     {
         $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_type", "AC_off")->where("alarm_status", 1)->get();
 
