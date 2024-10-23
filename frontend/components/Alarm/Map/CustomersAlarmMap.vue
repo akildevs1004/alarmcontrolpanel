@@ -511,7 +511,7 @@ export default {
 
   data: () => ({
     currentCustomer: null,
-    mapStyle: "bw",
+    mapStyle: "map",
     mapkeycount: 1,
     popupEventText: "",
     dialogAlarmEventCustomerContactsTabView: false,

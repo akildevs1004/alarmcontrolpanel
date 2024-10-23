@@ -225,6 +225,11 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         } else if ($event == '1309') {
                             $alarm_type = 'DC_off';
                         }
+                        if ($event == '3301') {
+                            $alarm_type = '';
+                            //AC_Power Recovery 
+                            $this->closeAcOffAlarmsBySerialNumber($serial_number);
+                        }
                         // if ($event == '1132') {
                         //     $alarm_type = 'Regular Alarm';
                         // }
@@ -234,11 +239,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         //1351 - Battery Loss
                         //3301 - AC Recovery
 
-                        //1406 - disam 
-
-
-
-
+                        //1406 - disam  
                     }
 
 
@@ -437,7 +438,28 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             return $this->response('Alarm Logs are created', null, true);
         }
     }
+    public function  closeAcOffAlarmsBySerialNumber($serial_number)
+    {
+        $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_type", "AC_off")->where("alarm_status", 1)->get();
 
+        foreach ($alarmEvents as $alarm) {
+
+            $timeZone = $alarm->device->utc_time_zone ?: 'Asia/Dubai';
+            $nowInTimeZone = Carbon::now($timeZone);
+            $alarmStartDatetime = Carbon::parse($alarm->alarm_start_datetime);
+            $minutesDifference = $alarmStartDatetime->diffInMinutes($nowInTimeZone);
+
+            if ($alarm->alarm_type == "AC_off") {
+                $alarm->update([
+                    "alarm_end_datetime" => $nowInTimeZone,
+                    "response_minutes" => $minutesDifference,
+                    "alarm_status" => 0
+                ]);
+            }
+        }
+
+        (new ApiAlarmDeviceTemperatureLogsController())->createAlarmEventsJsonFile();
+    }
     public function  closeOfflineAlarmsBySerialNumber($serial_number)
     {
         $alarmEvents = AlarmEvents::where('serial_number', $serial_number)->where("alarm_type", "Offline")->where("alarm_status", 1)->get();
