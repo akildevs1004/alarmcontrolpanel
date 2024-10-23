@@ -130,7 +130,7 @@ export default {
       this.$axios.get(`alarm_event_by_id`, config).then((data) => {
         this.alarm = data.data;
         let alarmCounter = 0;
-        if (this.alarm) {
+        if (this.alarm && this.plottings) {
           this.plottings.forEach((element) => {
             if (
               element.top != "-500px" &&
@@ -143,13 +143,6 @@ export default {
               element.alarm_event[0] = this.alarm;
             }
           });
-
-          // let alarmEvents = this.plottings.filter(
-          //   (plott) =>
-          //     plott.top != "-500px" &&
-          //     this.alarm.zone == plott.zone_data.zone_code &&
-          //     this.alarm.area == plott.zone_data.area_code
-          // );
 
           if (alarmCounter == 0) {
             this.snackbar = true;
