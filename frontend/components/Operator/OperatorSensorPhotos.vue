@@ -69,6 +69,7 @@
             <div v-if="plotting.top != '-500px' && plotting.left != '-500px'">
               <v-icon
                 v-if="
+                  plotting.zone_data &&
                   plotting.zone_data.area_code == alarm.area &&
                   plotting.zone_data.zone_code == alarm.zone &&
                   alarm.alarm_status == 1
@@ -81,6 +82,7 @@
 
               <v-icon
                 v-else-if="
+                  plotting.zone_data &&
                   plotting.zone_data.area_code == alarm.area &&
                   plotting.zone_data.zone_code == alarm.zone &&
                   alarm.alarm_status == 0
