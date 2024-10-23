@@ -304,7 +304,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         $sensor_zone_id = (clone $deviceZone)->pluck('id');
                         $sensor_zone_id = $sensor_zone_id[0] ?? null;
-                        $alarm_catgory = $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
+                        $alarm_catgory = $logs['alarm_type'] == 'SOS' || $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
 
                         // //verify Device , ZOne and Area - Is any alarm already active 
