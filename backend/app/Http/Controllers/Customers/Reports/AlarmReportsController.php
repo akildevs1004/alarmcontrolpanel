@@ -7,6 +7,7 @@ use App\Exports\DeviceArmedExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
+use App\Models\AlarmEvents;
 use App\Models\AlarmLogs;
 use App\Models\AttendanceLog;
 use App\Models\Company;
@@ -86,7 +87,31 @@ class AlarmReportsController extends Controller
 
         return Excel::download((new DeviceArmedExport($reports)), $file_name);
     }
+
+    public function alarmEventsNotesPrintPdf(Request $request)
+    {
+        $alarmId = 171;
+
+        $reports =   AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "device.company.user",
+            "notes.contact",
+            "category",
+            "device.customer.buildingtype",
+            "zoneData",
+            "security",
+            "pinverifiedby"
+
+        ])->where("id", $alarmId)->get();
+
+
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('reports'))->setPaper('A4', 'potrait');
+        return $pdf->stream('invoice.pdf');
+    }
+
     //----------------------------------------------------------------
+
     public function sample_pdf_pagenumbers()
     {
         $reports =   AttendanceLog::where("UserID", "1001")->get();

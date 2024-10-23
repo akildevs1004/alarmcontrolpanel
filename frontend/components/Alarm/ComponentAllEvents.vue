@@ -9,7 +9,9 @@
     <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Event #{{ selecteAlarm?.id }}</span>
+          <span style="color: black"
+            >Alarm Event Track #{{ selecteAlarm?.id }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"

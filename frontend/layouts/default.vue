@@ -2500,3 +2500,144 @@ v-application .primary {
   border-right-color: black !important;
 }
 </style>
+
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td {
+  padding: 0;
+  margin: 0;
+}
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)
+  .v-timeline-item--after,
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)
+  .v-timeline-item:nth-child(odd):not(.v-timeline-item--before) {
+  flex-direction: row-reverse;
+}
+.v-timeline-item__body {
+  max-width: 80% !important;
+}
+.v-timeline-item__divider {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-width: 96px;
+  position: relative;
+}
+
+.v-timeline-item__dot {
+  z-index: 2;
+  border-radius: 50%;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  height: 38px;
+  left: calc(50% - 19px);
+  width: 38px;
+}
+.v-application--is-ltr
+  .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)
+  .v-timeline-item--after
+  .v-timeline-item__opposite,
+.v-application--is-ltr
+  .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)
+  .v-timeline-item:nth-child(odd):not(.v-timeline-item--before)
+  .v-timeline-item__opposite {
+  text-align: right;
+}
+.v-timeline-item__opposite {
+  max-width: 24% !important;
+}
+.v-timeline-item__opposite {
+  align-self: center;
+  flex: 1 1 auto;
+  max-width: calc(50% - 48px);
+}
+.theme--light.v-timeline .v-timeline-item__dot {
+  background: #fff;
+}
+.v-timeline-item__dot {
+  border-radius: 50%;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  height: 38px;
+  left: calc(50% - 19px);
+  width: 38px;
+  z-index: 2;
+}
+.v-timeline-item--fill-dot .v-timeline-item__inner-dot {
+  height: inherit;
+  margin: 0;
+  width: inherit;
+}
+.v-application .white {
+  background-color: #fff !important;
+  border-color: #fff !important;
+}
+.v-timeline-item__inner-dot {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+}
+.v-avatar {
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  line-height: normal;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+}
+.v-icon.v-icon {
+  font-feature-settings: "liga";
+  align-items: center;
+  display: inline-flex;
+  font-size: 24px;
+  justify-content: center;
+  letter-spacing: normal;
+  line-height: 1;
+  position: relative;
+  text-indent: 0;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), visibility 0s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+}
+.mdi:before {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font: normal normal normal 24px / 1 "Material Design Icons";
+  font-size: inherit;
+  line-height: inherit;
+  text-rendering: auto;
+}
+.v-icon.v-icon:after {
+  background-color: currentColor;
+  border-radius: 50%;
+  content: "";
+  display: inline-block;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: scale(1.3);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+  width: 100%;
+}
+.v-timeline::before {
+  bottom: 0;
+  content: "";
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+</style>
