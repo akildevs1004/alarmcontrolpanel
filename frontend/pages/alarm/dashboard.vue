@@ -53,7 +53,7 @@
         <v-card class="elevation-2">
           <v-card-text
             class="mt-0 pr-8"
-            :style="'height:' + windowHeight - 220 + 'px'"
+            :style="'min-height:' + (windowHeight - 330) + 'px'"
           >
             <AlamAllEventsDashboard name="dashboardPieChart" /> </v-card-text
         ></v-card>
