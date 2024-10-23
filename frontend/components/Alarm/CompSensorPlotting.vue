@@ -165,7 +165,7 @@ export default {
       plottings: [],
       draggingIndex: null,
       buildingPhotosPlottings: [],
-
+      allPhotoPlottings: [],
       existingPlottings: [],
       IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "800px",
       IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "800px",
@@ -174,6 +174,7 @@ export default {
   watch: {
     async dialog() {
       await this.getDevices();
+      await this.getPlottingWithCustomerId();
       await this.getExistingPlottings();
       if (process) {
         this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
@@ -183,6 +184,7 @@ export default {
   },
   async created() {
     await this.getDevices();
+    await this.getPlottingWithCustomerId();
     await this.getExistingPlottings();
     if (process) {
       this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
@@ -201,20 +203,43 @@ export default {
     getDeviceCategory(device_id) {
       return this.devices.find((e) => e.id == device_id).device_type || "---";
     },
+    // checkIsSensorAddedAnyPhoto(verifyPlotting) {
+    //   let matchCount = 0;
+
+    //   this.buildingPhotosPlottings.forEach((building) => {
+    //     building.photo_plottings.forEach((plotting) => {
+    //       const sensors = plotting.plottings;
+    //       sensors.forEach((sensor) => {
+    //         if (
+    //           sensor.sensor_id == verifyPlotting.sensor_id &&
+    //           sensor.top !== "-500px"
+    //         ) {
+    //           matchCount++;
+    //         }
+    //       });
+    //     });
+    //   });
+
+    //   return matchCount;
+    // },
     checkIsSensorAddedAnyPhoto(verifyPlotting) {
       let matchCount = 0;
+      //console.log(this.allPhotoPlottings);
+      this.allPhotoPlottings.forEach((element) => {
+        element.buildingPhotosPlottings.forEach((building) => {
+          console.log(building);
 
-      this.buildingPhotosPlottings.forEach((building) => {
-        building.photo_plottings.forEach((plotting) => {
-          const sensors = plotting.plottings;
-          sensors.forEach((sensor) => {
-            if (
-              sensor.device_id == verifyPlotting.device_id &&
-              sensor.sensor_id == verifyPlotting.sensor_id &&
-              sensor.top !== "-500px"
-            ) {
-              matchCount++;
-            }
+          building.photo_plottings.forEach((plotting) => {
+            const sensors = plotting.plottings;
+            sensors.forEach((sensor) => {
+              if (
+                sensor.top !== "-500px" &&
+                sensor.device_id == verifyPlotting.device_id &&
+                sensor.sensor_id == verifyPlotting.sensor_id
+              ) {
+                matchCount++;
+              }
+            });
           });
         });
       });
@@ -261,6 +286,20 @@ export default {
       //   this.getExistingPlottings();
       //   this.loading = false;
       // }
+    },
+    async getPlottingWithCustomerId() {
+      this.loading = true;
+      let config = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.item.customer_id,
+        },
+      };
+      this.$axios.get(`plotting_with_customer_id`, config).then(({ data }) => {
+        console.log("data", data);
+
+        this.allPhotoPlottings = data;
+      });
     },
     async getExistingPlottings() {
       this.loading = true;
@@ -325,6 +364,7 @@ export default {
 
       await this.submit(false);
       await this.getDevices();
+      await this.getPlottingWithCustomerId();
       await this.getExistingPlottings();
       if (process) {
         this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
@@ -346,6 +386,8 @@ export default {
 
         await this.submit(false);
         await this.getDevices();
+        await this.getPlottingWithCustomerId();
+
         await this.getExistingPlottings();
         if (process) {
           this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
@@ -368,6 +410,7 @@ export default {
         if (status) this.dialog = false;
 
         await this.getDevices();
+        await this.getPlottingWithCustomerId();
         await this.getExistingPlottings();
         if (process) {
           this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;

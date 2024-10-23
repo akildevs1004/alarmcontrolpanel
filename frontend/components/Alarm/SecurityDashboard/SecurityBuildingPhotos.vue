@@ -7,7 +7,7 @@
     </div>
     <v-row>
       <v-col cols="8" class="pt-8 pb-0 pl-10 text-left" dense hide-details
-        >Total {{ plottings ? checkIsSensorAddedAnyPhoto() : "--" }} Mapping(s)
+        >Total {{ plottings ? checkIsSensorAddedAnyPhoto() : "0" }} Mapping(s)
 
         <span style="color: red"> {{ this.response }}</span>
       </v-col>
