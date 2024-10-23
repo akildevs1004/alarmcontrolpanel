@@ -26,7 +26,6 @@
     </v-row>
     <v-row style="margin: auto">
       <v-col cols="12" style="position: relative" v-if="item">
-        {{ loading }}
         <img
           style="margin: auto; width: 100%"
           :src="item.picture"
@@ -135,6 +134,7 @@ export default {
           this.plottings.forEach((element) => {
             if (
               element.top != "-500px" &&
+              element.zone_data &&
               this.alarm.zone == element.zone_data.zone_code &&
               this.alarm.area == element.zone_data.area_code
             ) {
