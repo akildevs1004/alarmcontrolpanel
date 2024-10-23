@@ -301,9 +301,7 @@
     <v-row>
       <v-col class="alarm-notes-timeline">
         <template>
-          <v-timeline
-            v-if="alarm.notes.length > 0 || alarm.alarm_end_datetime != ''"
-          >
+          <v-timeline v-if="alarm.notes.length > 0 || alarm.alarm_end_datetime">
             <v-timeline-item
               fill-dot
               color="white"
