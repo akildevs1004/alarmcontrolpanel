@@ -374,6 +374,13 @@ export default ({ app }, inject) => {
             process.env.BACKEND_URL2 + "/google_map_icons/google_ac_off.png",
           icon: "mdi-lock-open",
         },
+        dc_off: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image:
+            process.env.BACKEND_URL2 + "/google_map_icons/google_dc_off.png",
+          icon: "mdi-lock-open",
+        },
         battery: {
           color: "#ff0000",
           text: "Power Loss",
@@ -419,7 +426,6 @@ export default ({ app }, inject) => {
         Temperature: "/device-icons/temperature.png",
         //Humidity: "/device-icons/humidity.png",
         Offline: "/device-icons/offline.png",
-        Tampered: "/device-icons/burglary.png",
       };
       // Get the image URL based on the alarm key, if exists
       let selectedImage = relaventImage[alarm];

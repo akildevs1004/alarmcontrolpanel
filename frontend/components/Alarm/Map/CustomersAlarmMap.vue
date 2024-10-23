@@ -539,77 +539,7 @@ export default {
     dialogViewCustomer: false,
     totalRowsCount: 0,
 
-    colorcodes: {
-      alarm: {
-        color: "#ff0000",
-        text: "Alarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_alarm.png",
-        icon: "mdi-alarm",
-      },
-      temperature: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_temperature_alarm.png",
-        icon: "mdi-alarm",
-      },
-      fire: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_fire_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      water: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_water_alarm.png",
-        icon: "mdi-alarm",
-      },
-      sos: {
-        color: "#ff0000",
-        text: "SOS Alarm",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_sos_alarm.png",
-        icon: "mdi-alarm",
-      },
-      medical: {
-        color: "#ff0000",
-        text: "Fire Alarm",
-        image:
-          process.env.BACKEND_URL2 +
-          "/google_map_icons/google_medical_alarm.png",
-        icon: "mdi-alarm",
-      },
-      offline: {
-        color: "#626262",
-        text: "Offline",
-        image:
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png",
-        icon: "mdi-download-network-outline",
-      },
-      armed: {
-        color: "#00930b",
-        text: "Armed",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png",
-        icon: "mdi-lock",
-      },
-      disarm: {
-        color: "#ff0000",
-        text: "Disarm",
-        image: process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png",
-        icon: "mdi-lock-open",
-      },
-    },
+    colorcodes: {},
     snack: false,
     snackColor: "",
     snackText: "",
@@ -664,6 +594,8 @@ export default {
     setTimeout(() => {
       this.plotLocations(true);
     }, 1000 * 2);
+
+    this.colorcodes = this.$utils.getAlarmIcons();
   },
 
   created() {
