@@ -156,7 +156,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $this->closeOfflineAlarmsBySerialNumber($serial_number);
 
                     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
-                } else if ($event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote
+                } else if ($event == '1406' || $event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote //1406
                 {
 
                     $data = [
@@ -233,6 +233,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         //1321 - Restarted
                         //1351 - Battery Loss
                         //3301 - AC Recovery
+
+                        //1406 - disam 
 
 
 
