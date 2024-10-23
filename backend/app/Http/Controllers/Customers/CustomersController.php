@@ -1226,7 +1226,7 @@ class CustomersController extends Controller
     }
     public function customersForMap(Request $request)
     {
-        $model = Customers::with(["alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event.device", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
         $model->withCount("alarm_events");

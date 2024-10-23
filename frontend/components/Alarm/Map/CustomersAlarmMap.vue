@@ -594,13 +594,11 @@ export default {
     setTimeout(() => {
       this.plotLocations(true);
     }, 1000 * 2);
-
-    this.colorcodes = this.$utils.getAlarmIcons();
   },
 
   created() {
     //////this._id = 4; //this.$route.params.id;
-
+    this.colorcodes = this.$utils.getAlarmIcons();
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
       this.isCompany = false;
@@ -742,7 +740,6 @@ export default {
           this.getMapKey().then(() => {
             if (
               this.data.length > 0 &&
-              loadMap &&
               this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
             ) {
               this.setCustomerLocationOnMap(this.data[0]);
@@ -782,6 +779,40 @@ export default {
     getImageicon(value) {
       if (process) return value.image;
       else return false;
+    },
+    getAlarmColorObject(alarm, customer = null) {
+      if (alarm) {
+        if (this.colorcodes[alarm.alarm_type.toLowerCase()])
+          return this.colorcodes[alarm.alarm_type.toLowerCase()];
+        if (alarm.alarm_status == 1) {
+          return this.colorcodes.alarm;
+        }
+      }
+      // else if (alarm.alarm_status == 0) {
+      //   return this.colorcodes.closed;
+      // }
+      //if (
+      //   alarm.customer &&
+      //   this.findanyArmedDevice(alarm.customer.devices)
+      // ) {
+      //   return this.colorcodes.armed;
+      // }
+      else if (customer) {
+        if (this.findAnyDeviceisOffline(customer.devices) > 0) {
+          return this.colorcodes.offline;
+        } else if (this.findanyArmedDevice(customer.devices)) {
+          return this.colorcodes.armed;
+        } else if (this.findanyDisamrDevice(customer.devices) > 0) {
+          return this.colorcodes.disarm;
+        }
+      }
+      // console.log(
+      //   "findAnyDeviceisOffline",
+      //   this.findAnyDeviceisOffline(item.devices)
+      // );
+      // console.log(alarm.alarm_status);
+
+      return this.colorcodes.offline;
     },
     getCustomerColorObject(item) {
       // console.log(
@@ -907,44 +938,63 @@ export default {
         this.setCustomerLocationOnMap(this.data[0]);
       }
       this.data.forEach((item) => {
-        try {
-          const position = {
-            lat: parseFloat(item.latitude),
-            lng: parseFloat(item.longitude),
-          };
+        const customerId = item.id;
 
-          let iconURL =
-            process.env.BACKEND_APP_URL + "/google_map_icons/google_online.png";
+        // Check if a marker already exists for this customer
+        if (this.mapMarkersList[customerId]) {
+          // Skip if marker already exists with alarm_status = 1 (high priority)
+          if (
+            item.latest_alarm_event &&
+            item.latest_alarm_event.alarm_status == 1 &&
+            this.mapMarkersList[customerId].alarm_status != "1"
+          )
+            this.mapMarkersList[customerId].setMap(null);
+        }
 
-          let colorObject = this.getCustomerColorObject(item);
-          if (colorObject) iconURL = colorObject.image;
+        // Determine if we should load a marker for this customer
+        let loadMarker =
+          item.latest_alarm_event?.alarm_status == "1" ||
+          !this.mapMarkersList[customerId];
+        if (loadMarker) {
+          try {
+            const position = {
+              lat: parseFloat(item.latitude),
+              lng: parseFloat(item.longitude),
+            };
 
-          const icon = {
-            url: iconURL + "?1=1",
-            scaledSize: new google.maps.Size(28, 34),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(25, 25),
-          };
+            let iconURL =
+              process.env.BACKEND_APP_URL +
+              "/google_map_icons/google_online.png";
 
-          const marker = new google.maps.Marker({
-            position,
-            map: this.map,
-            title: item.name,
-            icon: icon,
-          });
+            let colorObject = this.getAlarmColorObject(item.latest_alarm_event);
+            if (colorObject) iconURL = colorObject.image;
 
-          let alarmHtmlLink = "";
-          let customerHtmlLink = "";
-          if (item.latest_alarm_event)
-            alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+            const icon = {
+              url: iconURL + "?1=1",
+              scaledSize: new google.maps.Size(28, 34),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(25, 25),
+            };
 
-          customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+            const marker = new google.maps.Marker({
+              position,
+              map: this.map,
+              title: item.name,
+              icon: icon,
+            });
 
-          let profile_picture =
-            "https://alarm.xtremeguard.org/no-business_profile.png";
-          if (item.profile_picture) profile_picture = item.profile_picture;
+            let alarmHtmlLink = "";
+            let customerHtmlLink = "";
+            if (item.latest_alarm_event)
+              alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-          let html = `
+            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+
+            let profile_picture =
+              "https://alarm.xtremeguard.org/no-business_profile.png";
+            if (item.profile_picture) profile_picture = item.profile_picture;
+
+            let html = `
     <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
       <tr>
         <td style="width:100px; vertical-align: top;">
@@ -969,62 +1019,65 @@ export default {
         </tr>
     </table>`;
 
-          const infowindow = new google.maps.InfoWindow({
-            content: html,
-            map: this.map,
-            position: position,
-          });
-          infowindow.close();
-
-          this.mapInfowindowsList[item.id] = infowindow;
-          this.mapMarkersList[item.id] = marker;
-
-          marker.addListener("mouseover", () => {
-            this.mapInfowindowsList.forEach((oldinfowindow) => {
-              oldinfowindow.close();
+            const infowindow = new google.maps.InfoWindow({
+              content: html,
+              map: this.map,
+              position: position,
             });
-            infowindow.open(this.map, marker);
-          });
+            infowindow.close();
 
-          google.maps.event.addListener(infowindow, "domready", () => {
-            let btnObject = document.getElementById(
-              "alarmInfowindow-btn-" + item.id
-            );
-            if (btnObject)
-              btnObject.addEventListener("click", () => {
-                this.viewAlarmInformation(item.latest_alarm_event);
+            this.mapInfowindowsList[item.id] = infowindow;
+            this.mapMarkersList[item.id] = marker;
+            if (item.latest_alarm_event?.alarm_status == 1)
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            marker.addListener("mouseover", () => {
+              this.mapInfowindowsList.forEach((oldinfowindow) => {
+                oldinfowindow.close();
               });
-
-            let btnObject2 = document.getElementById(
-              "customerInfowindow-btn-" + item.id
-            );
-            if (btnObject2)
-              btnObject2.addEventListener("click", () => {
-                this.dialog = true;
-                this.key += 1;
-                this.customerInfo = item;
-              });
-
-            const infowindowContent = document.getElementById(
-              "infowindow-content-" + item.id
-            );
-
-            infowindowContent.addEventListener("mouseout", (e) => {
-              // Close only if the mouse has left the entire infowindow div (and not just a child element)
-              if (!infowindowContent.contains(e.relatedTarget)) {
-                infowindow.close();
-              }
+              infowindow.open(this.map, marker);
             });
-          });
 
-          // Open Vue dialog on marker click
-          marker.addListener("click", () => {
-            this.dialog = true;
-            this.key += 1;
-            this.customerInfo = item;
-          });
-        } catch (e) {
-          console.log(e);
+            google.maps.event.addListener(infowindow, "domready", () => {
+              let btnObject = document.getElementById(
+                "alarmInfowindow-btn-" + item.id
+              );
+              if (btnObject)
+                btnObject.addEventListener("click", () => {
+                  this.viewAlarmInformation(item.latest_alarm_event);
+                });
+
+              let btnObject2 = document.getElementById(
+                "customerInfowindow-btn-" + item.id
+              );
+              if (btnObject2)
+                btnObject2.addEventListener("click", () => {
+                  this.dialog = true;
+                  this.key += 1;
+                  this.customerInfo = item;
+                });
+
+              const infowindowContent = document.getElementById(
+                "infowindow-content-" + item.id
+              );
+
+              infowindowContent.addEventListener("mouseout", (e) => {
+                // Close only if the mouse has left the entire infowindow div (and not just a child element)
+                if (!infowindowContent.contains(e.relatedTarget)) {
+                  infowindow.close();
+                }
+              });
+            });
+
+            // Open Vue dialog on marker click
+            marker.addListener("click", () => {
+              this.dialog = true;
+              this.key += 1;
+              this.customerInfo = item;
+            });
+          } catch (e) {
+            console.log(e);
+          }
         }
       });
     },
