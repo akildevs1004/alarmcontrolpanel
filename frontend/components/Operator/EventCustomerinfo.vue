@@ -83,9 +83,8 @@
                 <!-- {{ alarm.zone ?? "---" }} -->
                 {{ alarm.zone_data?.sensor_type ?? "---" }}
 
-                ,{{ alarm.area ?? "---" }},{{
-                  alarm.zone_data?.sensor_name ?? "---"
-                }}
+                <!-- ,{{ alarm.area ?? "---" }} -->
+                ,{{ alarm.zone_data?.sensor_name ?? "---" }}
               </div>
             </v-col>
 
