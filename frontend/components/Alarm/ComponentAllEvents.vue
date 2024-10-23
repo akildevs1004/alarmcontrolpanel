@@ -763,9 +763,9 @@ export default {
     //   this.date_from = monthObj.first;
     //   this.date_to = monthObj.last;
     // }
-    if (this.$route.name == "alarm-dashboard") {
-      this.filterAlarmStatus = 1;
-    }
+    // if (this.$route.name == "alarm-dashboard") {
+    //   this.filterAlarmStatus = 1;
+    // }
     if (this.compFilterAlarmStatus) {
       this.filterAlarmStatus = this.compFilterAlarmStatus;
     }

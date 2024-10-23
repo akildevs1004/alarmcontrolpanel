@@ -55,10 +55,7 @@
             class="mt-0 pr-8"
             :style="'height:' + windowHeight - 220 + 'px'"
           >
-            <AlamAllEventsDashboard
-              :compFilterAlarmStatus="1"
-              name="dashboardPieChart"
-            /> </v-card-text
+            <AlamAllEventsDashboard name="dashboardPieChart" /> </v-card-text
         ></v-card>
       </v-col>
     </v-row>

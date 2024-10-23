@@ -26,8 +26,8 @@
                 max-width: 80px;
               "
               :src="
-                alarm.device.customer?.profile_picture
-                  ? alarm.device.customer?.profile_picture
+                alarm.device?.customer?.profile_picture
+                  ? alarm.device?.customer?.profile_picture
                   : '/no-business_profile.png'
               "
             >
@@ -42,27 +42,27 @@
             "
           >
             <div style="font-size: 13px; color: black; font-weight: bold">
-              {{ alarm.device.customer.building_name || "---" }}
+              {{ alarm.device?.customer.building_name || "---" }}
               <span style="font-size: 10px"
-                >({{ alarm.device.customer.buildingtype.name || "---" }})</span
+                >({{ alarm.device?.customer.buildingtype.name || "---" }})</span
               >
             </div>
 
             <div style="font-size: 12px; color: #6c7184">
-              {{ alarm.device.customer.house_number || "---" }},
-              {{ alarm.device.customer.street_number || "---" }},
+              {{ alarm.device?.customer.house_number || "---" }},
+              {{ alarm.device?.customer.street_number || "---" }},
             </div>
             <div style="font-size: 12px; color: #6c7184">
-              {{ alarm.device.customer.area || "---" }},
-              {{ alarm.device.customer.city || "---" }}
+              {{ alarm.device?.customer.area || "---" }},
+              {{ alarm.device?.customer.city || "---" }}
             </div>
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-at</v-icon
-              >{{ alarm.device.customer.user.email || "---" }},
+              >{{ alarm.device?.customer.user.email || "---" }},
             </div>
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-cellphone-basic</v-icon
-              >{{ alarm.device.customer.contact_number || "---" }}
+              >{{ alarm.device?.customer.contact_number || "---" }}
             </div>
           </v-col>
         </v-row></v-col
@@ -86,8 +86,8 @@
                 max-width: 80px;
               "
               :src="
-                alarm.device.company.logo
-                  ? alarm.device.company.logo
+                alarm.device?.company.logo
+                  ? alarm.device?.company.logo
                   : '/no-business_profile.png'
               "
             >
@@ -102,19 +102,19 @@
             "
           >
             <div style="font-size: 13px; color: black; font-weight: bold">
-              {{ alarm.device.company.name || "---" }}
+              {{ alarm.device?.company.name || "---" }}
             </div>
             <div style="font-size: 12px; color: #6c7184">
-              {{ alarm.device.company.location || "---" }}
+              {{ alarm.device?.company.location || "---" }}
             </div>
 
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-at</v-icon
-              >{{ alarm.device.company.user.email || "---" }}
+              >{{ alarm.device?.company.user.email || "---" }}
             </div>
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-cellphone-basic</v-icon
-              >{{ alarm.device.company.contact_number || "---" }}
+              >{{ alarm.device?.company.contact_number || "---" }}
             </div>
           </v-col>
         </v-row>
@@ -301,7 +301,9 @@
     <v-row>
       <v-col class="alarm-notes-timeline">
         <template>
-          <v-timeline v-if="alarm.notes.length > 0">
+          <v-timeline
+            v-if="alarm.notes.length > 0 || alarm.alarm_end_datetime != ''"
+          >
             <v-timeline-item
               fill-dot
               color="white"
