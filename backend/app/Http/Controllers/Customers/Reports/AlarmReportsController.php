@@ -93,7 +93,7 @@ class AlarmReportsController extends Controller
     {
         $alarmId = 1529;
 
-        return $alarm =   AlarmEvents::with([
+        $alarm =   AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
             "device.company.user",
