@@ -13,17 +13,17 @@
             style="
               padding: 5px;
               padding-left: 0px;
-              width: 70px;
-              max-width: 70px;
+              width: 60px;
+              max-width: 60px;
             "
           >
             <v-img
               style="
                 border-radius: 50%;
-                height: 80px;
-                min-height: 80px;
-                width: 80px;
-                max-width: 80px;
+                height: 60px;
+                min-height: 60px;
+                width: 60px;
+                max-width: 60px;
               "
               :src="
                 alarm.device?.customer?.profile_picture
@@ -73,17 +73,17 @@
             style="
               padding: 5px;
               padding-left: 0px;
-              width: 70px;
-              max-width: 70px;
+              width: 60px;
+              max-width: 60px;
             "
           >
             <v-img
               style="
                 border-radius: 50%;
-                height: 80px;
-                min-height: 80px;
-                width: 80px;
-                max-width: 80px;
+                height: 60px;
+                min-height: 60px;
+                width: 60px;
+                max-width: 60px;
               "
               :src="
                 alarm.device?.company.logo
@@ -125,17 +125,17 @@
             style="
               padding: 5px;
               padding-left: 0px;
-              width: 70px;
-              max-width: 70px;
+              width: 60px;
+              max-width: 60px;
             "
           >
             <v-img
               style="
                 border-radius: 50%;
-                height: 80px;
-                min-height: 80px;
-                width: 80px;
-                max-width: 80px;
+                height: 60px;
+                min-height: 60px;
+                width: 60px;
+                max-width: 60px;
               "
               :src="
                 alarm.security?.picture
@@ -291,7 +291,7 @@
         </v-row>
       </v-col>
     </v-row>
-
+    <v-divider style="margin-top: 13px"></v-divider>
     <div
       style="text-align: center; padding: 7%"
       v-if="alarm.notes.length == 0 && alarm.alarm_status == 1"

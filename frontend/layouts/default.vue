@@ -2477,15 +2477,15 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
 }
 
 .alarm-notes-timeline .v-timeline-item__body {
-  max-width: 80% !important;
+  max-width: 83% !important;
 }
 .alarm-notes-timeline .v-timeline-item__opposite {
-  max-width: 20% !important;
+  max-width: 17% !important;
 }
 .alarm-notes-timeline
   .v-application--is-ltr
   .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
-  left: 24% !important;
+  left: 21% !important;
 }
 
 v-application .primary {
@@ -2494,7 +2494,7 @@ v-application .primary {
 
 .v-application--is-ltr
   .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
-  left: 24% !important;
+  left: 21% !important;
 }
 .v-timeline-item__body > .v-card:not(.v-card--flat)::after {
   border-right-color: black !important;
