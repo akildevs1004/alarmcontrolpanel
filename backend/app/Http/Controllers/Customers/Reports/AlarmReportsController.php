@@ -90,7 +90,7 @@ class AlarmReportsController extends Controller
 
     public function alarmEventsNotesPrintPdf(Request $request)
     {
-        $alarmId = 171;
+        $alarmId = 1529;
 
         $alarm =   AlarmEvents::with([
             "device.customer.primary_contact",
