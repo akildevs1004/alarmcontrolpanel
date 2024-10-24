@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report1</title>
+    <title>{{$alarm->id}} Track Notes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,23 +13,24 @@
         }
 
         @page {
-            margin: 130px 25px;
+            margin: 0px 0px;
             /* Top margin adjusted to fit the 100px header */
         }
 
-        header {
+        /* header {
             position: fixed;
             top: -100px;
-            /* Start the header 100px above the top of the page */
-            left: 0;
-            right: 0;
-            height: 100px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
+          
+        left: 0;
+        right: 0;
+        height: 100px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
         }
 
-        footer {
+        */
+        /* footer {
             position: fixed;
             bottom: -60px;
             left: 0;
@@ -39,12 +40,14 @@
             padding-top: 10px;
             text-align: center;
             font-size: 12px;
-        }
+        } */
 
         .page-number {
             text-align: right;
             position: absolute;
             right: 0;
+            font-size: 10px;
+            ;
         }
 
         main {
@@ -57,166 +60,35 @@
 
     @php
 
+    $customerLogo=getcwd() .'/no-business_profile.png';
+    $companyLogo=getcwd() .'/no-business_profile.png';
+    $securityLogo=getcwd() .'/no-profile-image.jpg';
 
-
-    echo $alarm['device']['customer']['profile_picture'];
-    exit;
-
-    $customerLogo=getcwd() .'no-business_profile.png';
-    $companyLogo=getcwd() .'no-business_profile.png';
-    $operatorLogo=getcwd() .'no-profile-image.png';
+    if($alarm['device']&&$alarm['device']['customer']&&$alarm['device']['customer']['profile_picture']!='')
+    {
+    $customerLogo=$alarm['device']['customer']['profile_picture'];
+    }
+    if($alarm['device']&&$alarm['device']['company']&&$alarm['device']['company']['logo']!='')
+    {
+    $companyLogo=$alarm['device']['company']['logo'];
+    }
+    if($alarm['security']&&$alarm['security']['picture']&&$alarm['security']['picture'] !='')
+    {
+    $securityLogo=$alarm['security']['picture'];
+    }
 
 
 
 
 
     @endphp
-    <header style="min-height:100px; width:750px">
-        <table
-            style="
-        width: 750px;
-        border: 0px solid black;
-        margin: auto;
-        line-height: 15px;
-      ">
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td style="width: 50px">
-                                <img
-                                    style="
-                    border-radius: 50%;
-                    height: 50px;
-                    min-height: 50px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                                    src="https://alarmbackend.xtremeguard.org/customers/building_photos/1725614712.png" />
-                            </td>
-                            <td>
-                                <div style="font-size: 10px">
-                                    <div style="font-weight: bold">
-                                        Akil Security <span>(Commercial)</span>
-                                    </div>
-                                    <div>888-88-456, Al Fahidi,</div>
-                                    <div>Bur Dubai</div>
-                                    <div>customer@gmail.com</div>
-                                    <div>971559952568</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td style="border-left: 1px solid #ddd">
-                    <table>
-                        <tr>
-                            <td style="width: 50px">
-                                <img
-                                    style="
-                    border-radius: 50%;
-                    height: 50px;
-                    min-height: 50px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                                    src="https://alarmbackend.xtremeguard.org/upload/1724341619.png"
-                                    alt="Akil Security Logo" />
-                            </td>
-                            <td>
-                                <div style="font-size: 10px">
-                                    <div style="font-weight: bold">Xtreme Guard LLC</div>
-                                    <div>888-88-456, Al Fahidi,</div>
-                                    <div>Bur Dubai</div>
-                                    <div>customer@gmail.com</div>
-                                    <div>971559952568</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td style="border-left: 1px solid #ddd">
-                    <table>
-                        <tr>
-                            <td style="width: 50px">
-                                <img
-                                    style="
-                    border-radius: 50%;
-                    height: 50px;
-                    min-height: 50px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                                    src="https://alarmbackend.xtremeguard.org/security/1726599377.jpeg"
-                                    alt="Akil Security Logo" />
-                            </td>
-                            <td>
-                                <div style="font-size: 10px">
-                                    <div style="font-weight: bold">Sravan Kumar</div>
-                                    <div>888-88-456, Al Fahidi,</div>
-                                    <div>Bur Dubai</div>
-                                    <div>sravan@gmail.com</div>
-                                    <div>99999999999</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td style="border-left: 1px solid #ddd">
-                    <table>
-                        <tr>
-                            <td style="text-align: center">
-                                <img
-                                    style="
-                    border-radius: 50%;
+    <header style="min-height:0px; width:750px">
 
-                    width: 20px;
-                    max-width: 20px;
-                  "
-                                    src="https://alarmbackend.xtremeguard.org//google_map_icons/google_alarm.png?4=3"
-                                    alt="Akil Security Logo" />
-                                <div style="font-size: 10px">
-                                    <div style="color: blue">Intruder,<span>Bed room</span></div>
-                                    <div style="color: red">
-                                        Vibration Sensor ,
-                                        <div>Emergency zone</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="font-size: 10px; padding-left: 10px">
-                                <table style="width: 100%; border-collapse: collapse">
-                                    <tr style="border-bottom: 1px solid #ddd">
-                                        <td>Event Id</td>
-                                        <td>#1537</td>
-                                    </tr>
-                                    <tr style="border-bottom: 1px solid #ddd">
-                                        <td>Status</td>
-                                        <td>Closed</td>
-                                    </tr>
-                                    <tr style="border-bottom: 1px solid #ddd">
-                                        <td>Category</td>
-                                        <td>Critical</td>
-                                    </tr>
-                                    <tr style="border-bottom: 1px solid #ddd">
-                                        <td>Start</td>
-                                        <td>Oct 23, 2024 12:31</td>
-                                    </tr>
-                                    <tr style="border-bottom: 1px solid #ddd">
-                                        <td>End</td>
-                                        <td>Oct 23, 2024 12:30</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
     </header>
-    <footer>
-        Footer Content 3333
+    <!-- <footer>
+        Footer Content
 
-    </footer>
+    </footer> -->
     <main>
         <!DOCTYPE html>
         <html lang="en">
@@ -229,10 +101,167 @@
         </head>
 
         <body>
-            <table 111111 cellpadding="0" cellspacing="0">
+            <table
+                style="
+        width: 750px;
+        border: 0px solid black;
+        margin: auto;
+        line-height: 15px;font-size: 9px;
+      ">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td style="width: 45px">
+                                    <img
+                                        style="
+                    border-radius: 50%;
+                    height: 40px;
+                    min-height: 40px;
+                    width: 40px;
+                    max-width: 40px;
+                  "
+                                        src="{{ $customerLogo }}" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <div style="font-weight: bold">
+                                            {{ $alarm['device']['customer']['building_name']   }} <span>({{$alarm['device']['customer']['buildingtype']['name']}})</span>
+                                        </div>
+                                        <div>{{$alarm->device->customer->house_number ?? "---"}}, {{$alarm->device->customer->street_number ?? "---"}}</div>
+                                        <div>{{$alarm->device->customer->area ?? "---"}}, {{$alarm->device->customer->city ?? "---"}}</div>
+                                        <div>{{$alarm->device->customer->user->email ?? "---"}}</div>
+                                        <div>{{$alarm->device->customer->contact_number ?? "---"}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border-left: 1px solid #ddd">
+                        <table>
+                            <tr>
+                                <td style="width: 45px">
+                                    <img
+                                        style="
+                    border-radius: 50%;
+                    height: 40px;
+                    min-height: 40px;
+                    width: 40px;
+                    max-width: 40px;
+                  "
+                                        src="{{ $companyLogo }}" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <div style="font-weight: bold">{{$alarm->device->company->name ?? "---"}}</div>
+                                        <div>{{$alarm->device->company->location ?? "---"}}</div>
+                                        <div>{{$alarm->device->company->user->email ?? "---"}}</div>
+                                        <div>{{$alarm->device->company->contact_number ?? "---"}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border-left: 1px solid #ddd">
+                        <table>
+                            <tr>
+                                <td style="width: 45px">
+
+                                    <img
+                                        style="
+                    border-radius: 50%;
+                    height: 40px;
+                    min-height: 40px;
+                    width: 40px;
+                    max-width: 40px;
+                  "
+                                        src="{{ $securityLogo }}" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <div style="font-weight: bold">{{$alarm['security'] ? $alarm['security'] ['first_name'].' '.$alarm['security'] ['last_name'] : '---'}} </div>
+                                        <div>{{$alarm['security'] ? $alarm['security']['user']['email']  : '---'}} </div>
+                                        <div>{{$alarm['security'] ? $alarm['security']['contact_number']  : '---'}} </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border-left: 1px solid #ddd;width:220px">
+                        <table>
+                            <tr>
+                                <td style="text-align: center">
+
+                                    <img
+                                        style="
+                    border-radius: 50%;
+
+                    width: 20px;
+                    max-width: 20px;
+                  "
+                                        src="{{env('BASE_URL')}}{{$icons['alarm']}}" />
+                                    <div>
+                                        <div style="color: blue"> {{ $alarm->alarm_type ?? "---" }},
+                                            {{ $alarm->zoneData->location ?? "---"   }}
+                                        </div>
+                                        <div style="color: red">
+                                            {{ $alarm->zoneData->sensor_type ?? "---" }}
+                                            <div> {{ $alarm->zoneData->sensor_name ?? "---" }} </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="  padding-left: 10px">
+                                    <table style="width: 100%; border-collapse: collapse">
+                                        <tr style="border-bottom: 1px solid #ddd">
+                                            <td>Event Id</td>
+                                            <td style="color:red">#{{ $alarm->id   }}</td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #ddd">
+                                            <td>Status</td>
+
+                                            <td> @if($alarm->forwarded ==true && $alarm->alarm_status==1)
+                                                Forwarded
+                                                @elseif($alarm->alarm_status==1)
+                                                Open
+                                                @else
+                                                Closed
+                                                @endif</td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #ddd">
+                                            <td>Category</td>
+                                            <td>@if($alarm->alarm_category==1 )
+                                                Critical
+                                                @elseif ($alarm->alarm_category==2)
+                                                Medium
+                                                @else
+                                                Low
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #ddd">
+                                            <td>Start</td>
+                                            <td>{{changeDateformat($alarm->alarm_start_datetime)}}</td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #ddd">
+                                            <td>End</td>
+                                            <td>{{changeDateformat($alarm->alarm_end_datetime)}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <hr style="color:#ddd;margin-top:0px " />
+            <table cellpadding="0" cellspacing="0">
+                @foreach ($alarm->notes as $note )
                 <!-- Forward -->
-                <tr 111111 cellpadding="0" cellspacing="0">
-                    <td 111111 cellpadding="0" cellspacing="0">
+                @if($note->event_status== 'Forwarded')
+                <tr cellpadding="0" cellspacing="0">
+                    <td cellpadding="0" cellspacing="0">
                         <table cellpadding="0" cellspacing="0">
                             <td
                                 style="
@@ -240,7 +269,7 @@
                       text-align: center;
                       font-size: 10px;width:180px
                     ">
-                                Sep 28, 2024 16:50
+                                {{changeDateformat($note->created_datetime)}}
                             </td>
                             <td
                                 style="
@@ -271,7 +300,7 @@
                             max-width: 35px;
                             margin-top:-16px
                           "
-                                            src="https://alarmbackend.xtremeguard.org/customers/contacts/1721749459.jpg" />
+                                            src="https://alarmbackend.xtremeguard.org/forwardicon.png" />
                                     </div>
                                 </div>
                             </td>
@@ -293,11 +322,16 @@
                         margin-top: -10px;
                       ">
                                         <div style="font-weight: bold; font-size: 14px">
+
                                             Forwarded
+
+
+
                                         </div>
                                         <div style="padding-top: 10px; font-size: 10px">
-                                            Notes: Event Forwarded to primary@gmail.com
+                                            <span class="bold">Notes: </span>{{ $note->notes }}
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -305,17 +339,43 @@
                         </table>
                     </td>
                 </tr>
-                <!-- Contact -->
+
+                @elseif($note->event_status != 'Forwarded') <!-- Contact -->
                 <tr style=" border-collapse: collapse;">
-                    <td 111111>
+                    <td>
                         <table cellpadding="0" cellspacing="0" style="height:140px">
                             <td
                                 style="
                       vertical-align: middle;
-                      text-align: center;
+                      text-align: left;
                       font-size: 10px;width:180px
                     ">
-                                OCT 28, 2024 16:50
+                                <div style="width:100%;text-align:center;font-weight:bold">
+                                    {{changeDateformat($note->created_datetime)}}
+                                </div>
+
+                                @if($note->contact)
+
+
+                                <div style="text-align:left;font-size:8px;padding-left:50px;margin-top:10px;">
+                                    <div style="font-weight:bold">
+                                        {{ $note->contact?->first_name }}
+                                        {{ $note->contact?->last_name }}
+                                    </div>
+                                    <div>
+                                        {{ $note->contact->phone1 }}
+                                    </div>
+                                    <div>
+                                        {{ $note->contact->phone2 }}
+                                    </div>
+                                    <div>
+                                        {{ $note->contact->email }}
+                                    </div>
+                                    <div>
+                                        {{ $note->contact->whatsapp }}
+                                    </div>
+                                </div>
+                                @endif
                             </td>
                             <td
                                 style="
@@ -338,6 +398,7 @@
                         align-items: center;
                       ">
                                     <div style="text-align: center">
+
                                         <img
                                             style="
                             border-radius: 50%;
@@ -346,7 +407,9 @@
                             max-width: 35px;
                             margin-top:-16px
                           "
-                                            src="https://alarmbackend.xtremeguard.org/customers/contacts/1721749459.jpg" />
+                                            src="{{ $note->contact?->profile_picture ?: 'https://alarmbackend.xtremeguard.org/unknown-person-icon.png' }}" />
+
+
                                     </div>
                                 </div>
                             </td>
@@ -369,33 +432,35 @@
                         height:auto
                       ">
                                         <div style="font-weight: bold; font-size: 14px">
-                                            Secondary
+                                            {{$note->contact->address_type}}
                                         </div>
                                         <div style="padding-top: 10px; font-size: 10px">
-                                            Notes: Secondary Secondary SecondarySecondary Secondary Notes: Secondary
+                                            <span class="bold">Notes: </span>{{ $note->notes }}
                                         </div>
+
                                         <hr style="color:#ddd;margin-top:10px " />
                                         <table style=font-size:10px;>
                                             <tr>
                                                 <td style="font-weight:bold;width:60px;">Call Status
                                                 </td>
-                                                <td>: Answered
+                                                <td>: {{ $note->call_status }}
 
                                                 </td>
                                                 <td style="font-weight:bold;width:70px;">Call Response
 
                                                 </td>
-                                                <td>: Answered
+                                                <td>: {{ $note->response }}
 
                                                 </td>
                                                 <td style="font-weight:bold;width:70px;">Event Status
 
                                                 </td>
-                                                <td>: Answered
+                                                <td>: {{ $note->event_status }}
 
                                                 </td>
                                             </tr>
                                         </table>
+
                                         <div style="height:20px"> </div>
                                     </div>
 
@@ -404,111 +469,20 @@
                             </td>
                         </table>
                     </td>
-                </tr>
-                <!-- Unnown   -->
-                <tr style=" border-collapse: collapse;">
-                    <td 111111>
-                        <table cellpadding="0" cellspacing="0" style="height:140px">
-                            <td
-                                style="
-                      vertical-align: middle;
-                      text-align: center;
-                      font-size: 10px;width:180px
-                    ">
-                                OCT 28, 2024 16:50
-                            </td>
-                            <td
-                                style="
-                      border-left: 1px solid #ddd;
-                      vertical-align: middle;
-                      text-align: center;width:70px
-                    ">
-                                <div
-                                    style="
-                        position: relative;
-                        left: -24px;
-                        width: 1px;
-                        height: 1px;
-                        border-radius: 50%;
-                        padding: 20px;
-                        border: 1px solid #000;
-                        background-color: #fff;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                      ">
-                                    <div style="text-align: center">
-                                        <img
-                                            style="
-                            border-radius: 50%;
+                </tr> <!-- Contact -->
 
-                            width: 35px;
-                            max-width: 35px;
-                            margin-top:-16px
-                          "
-                                            src="https://alarmbackend.xtremeguard.org/unknown-person-icon.png" />
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="vertical-align: middle;height:140px; ">
-                                <div style="position: relative; top: 50px; left: -15px">
-                                    <img
-                                        style="width: 15px"
-                                        src="https://alarmbackend.xtremeguard.org/alarm-notes-left-arrow.png?1=2" />
-                                </div>
-                                <div style="  margin:auto; ">
-
-                                    <div
-                                        style="
-                         
-                        border: 1px solid #ddd;
-                        border-radius: 6px;
-                        padding-left: 20px;
-                        padding-top: 20px;padding-right: 20px;
-                        margin-top: -10px;
-                        height:auto
-                      ">
-                                        <div style="font-weight: bold; font-size: 14px">
-                                            Secondary
-                                        </div>
-                                        <div style="padding-top: 10px; font-size: 10px">
-                                            Notes: Secondary Secondary SecondarySecondary Secondary Notes: Secondary
-                                        </div>
-                                        <hr style="color:#ddd;margin-top:10px " />
-                                        <table style=font-size:10px;>
-                                            <tr>
-                                                <td style="font-weight:bold;width:60px;">Call Status
-                                                </td>
-                                                <td>: Answered
-
-                                                </td>
-                                                <td style="font-weight:bold;width:70px;">Call Response
-
-                                                </td>
-                                                <td>: Answered
-
-                                                </td>
-                                                <td style="font-weight:bold;width:70px;">Event Status
-
-                                                </td>
-                                                <td>: Answered
-
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div style="height:20px"> </div>
-                                    </div>
+                @endif
 
 
-                                </div>
-                            </td>
-                        </table>
-                    </td>
-                </tr>
 
+
+
+                @endforeach
+
+                @if($alarm->alarm_end_datetime != '')
                 <!-- Closed Alarm  -->
                 <tr style=" border-collapse: collapse;">
-                    <td 111111>
+                    <td>
                         <table cellpadding="0" cellspacing="0" style="height:150px">
                             <td
                                 style="
@@ -516,7 +490,7 @@
                       text-align: center;
                       font-size: 10px;width:180px;color:red
                     ">
-                                Nov 28, 2024 16:50
+                                {{changeDateformat($alarm->alarm_end_datetime)}}
                             </td>
                             <td
                                 style="
@@ -581,11 +555,25 @@
                         height:auto
                       ">
                                         <div style="font-weight: bold; font-size: 14px">
-                                            Alarm Event Closed at Oct 23, 2024 12:17
+                                            Alarm Event Closed at {{changeDateformat($alarm->alarm_end_datetime)}}
                                         </div>
                                         <div style="padding-top: 10px; font-size: 10px">
-                                            Auto Closed by Disarm Event
+                                            @if($alarm->alarm_end_manually == 1)
+                                            <div>
+                                                Operator Verified PIN with {{ $alarm->pin_verified_by }} -
 
+                                                {{
+                        $alarm->pinverifiedby
+                          ? $alarm->pinverifiedby->first_name +
+                            " " +
+                            $alarm->pinverifiedby->last_name
+                          : "---"
+                      }}
+                                            </div>
+                                            @else
+
+                                            Auto Closed by Disarm Event
+                                            @endif
                                         </div>
 
                                         <div style="height:30px"> </div>
@@ -597,6 +585,8 @@
                         </table>
                     </td>
                 </tr>
+
+                @endif
             </table>
 
         </body>
@@ -607,7 +597,7 @@
     <script type="text/php">
         if (isset($pdf)) {
         $text = "Page Number {PAGE_NUM} / {PAGE_COUNT}";
-        $size = 10;
+        $size = 6;
         $font = $fontMetrics->getFont("Verdana");
         $width = $fontMetrics->get_text_width($text, $font, $size) / 2;
         $x =$pdf->get_width() - $width;// ($pdf->get_width() - $width) / 2;
@@ -655,3 +645,27 @@
 </style>
 
 </html>
+@php
+
+function changeDateformat($date)
+
+{
+if($date=='') return ['---','---'];
+$date = new DateTime($date);
+
+// Format the date to the desired format
+return $date->format('M j, Y').' '.$date->format('H:i') ;
+}
+function minutesToTime($totalMinutes)
+{
+if($totalMinutes==0) return '00:00';
+if($totalMinutes==null) return '---';
+// Calculate hours and minutes
+$hours = intdiv($totalMinutes, 60); // Integer division to get hours
+$minutes = $totalMinutes % 60; // Remainder to get minutes
+
+// Format hours and minutes to HH:MM
+return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
+
+}
+@endphp

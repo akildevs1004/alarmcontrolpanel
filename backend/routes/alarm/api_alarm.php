@@ -270,4 +270,5 @@ Route::get('operators_live_status', [SecurityLoginController::class, "getOperato
 
 //reprots 
 Route::get('device_armed_reports', [DeviceArmedLogsController::class, "report"]);
-Route::get('alarm_notes_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
+Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
+Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);

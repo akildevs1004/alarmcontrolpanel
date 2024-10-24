@@ -12,7 +12,21 @@
           <span style="color: black"
             >Alarm Event Track #{{ selecteAlarm?.id }}</span
           >
-          <v-spacer></v-spacer>
+          <v-spacer></v-spacer
+          ><v-icon
+            style="padding-right: 20px; color: black"
+            @click="alarmNotesPrint(selecteAlarm?.id, 'download')"
+            outlined
+          >
+            mdi-download-box-outline
+          </v-icon>
+          <v-icon
+            style="padding-right: 20px; color: black"
+            @click="alarmNotesPrint(selecteAlarm?.id, 'print')"
+            outlined
+          >
+            mdi-printer-outline
+          </v-icon>
           <v-icon
             style="color: black"
             @click="dialogViewAlarmFormat = false"
@@ -807,6 +821,18 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    alarmNotesPrint(alarmId, option) {
+      //let option = "print";
+
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/alarm_notes_print_pdf";
+      if (option == "excel") url += "/device_armed_logs_export_excel";
+      if (option == "download") url += "/device_armed_logs_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&alarm_id=" + alarmId;
+
+      window.open(url, "_blank");
     },
     showTabContent() {
       this.showTable = false;

@@ -159,7 +159,7 @@
             </div>
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-at</v-icon
-              >{{ alarm.security?.user.email || "---" }}
+              >{{ alarm.security?.email || "---" }}
             </div>
 
             <div style="font-size: 12px; color: #6c7184">
