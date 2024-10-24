@@ -154,11 +154,12 @@
             "
           >
             <div style="font-size: 13px; color: black; font-weight: bold">
-              {{ alarm.security_name || "---" }}
+              {{ alarm.security?.first_name || "---" }}
+              {{ alarm.security?.last_name || "---" }}
             </div>
             <div style="font-size: 12px; color: #6c7184">
               <v-icon size="15">mdi-at</v-icon
-              >{{ alarm.security_email || "---" }}
+              >{{ alarm.security?.user.email || "---" }}
             </div>
 
             <div style="font-size: 12px; color: #6c7184">
