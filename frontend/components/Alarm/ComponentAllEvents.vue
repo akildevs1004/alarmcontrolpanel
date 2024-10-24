@@ -827,8 +827,8 @@ export default {
 
       let url = process.env.BACKEND_URL;
       if (option == "print") url += "/alarm_notes_print_pdf";
-      if (option == "excel") url += "/device_armed_logs_export_excel";
-      if (option == "download") url += "/device_armed_logs_download_pdf";
+      if (option == "excel") url += "/alarm_notes_download_pdf";
+      if (option == "download") url += "/alarm_notes_download_pdf";
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&alarm_id=" + alarmId;
 
