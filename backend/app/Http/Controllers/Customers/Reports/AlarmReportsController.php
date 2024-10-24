@@ -100,7 +100,7 @@ class AlarmReportsController extends Controller
             "category",
             "device.customer.buildingtype",
             "zoneData",
-            "security",
+            "security.securityInfo",
             "pinverifiedby"
 
         ])->where("id", $alarmId)->first();
