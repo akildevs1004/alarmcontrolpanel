@@ -152,7 +152,7 @@
       </tr>
       <tr>
         <td style="width: 100%" colspan="100">
-          <table style="width: 100%">
+          <table>
             <tr>
               <td>
                 <table style="height: 150px">
@@ -160,7 +160,8 @@
                     style="
                       vertical-align: middle;
                       text-align: center;
-                      font-size: 13px;
+                      font-size: 10px;
+                      width: 180px;
                     "
                   >
                     Sep 28, 2024 16:50
@@ -170,14 +171,15 @@
                       border-left: 1px solid #ddd;
                       vertical-align: middle;
                       text-align: center;
+                      width: 70px;
                     "
                   >
                     <div
                       style="
                         position: relative;
                         left: -24px;
-                        width: 25px;
-                        height: 25px;
+                        width: 1px;
+                        height: 1px;
                         border-radius: 50%;
                         padding: 20px;
                         border: 1px solid #000;
@@ -194,6 +196,7 @@
 
                             width: 35px;
                             max-width: 35px;
+                            margin-top: -16px;
                           "
                           src="https://alarmbackend.xtremeguard.org/customers/contacts/1721749459.jpg"
                         />
@@ -201,9 +204,9 @@
                     </div>
                   </td>
                   <td style="vertical-align: middle">
-                    <div style="position: relative; top: 50px; left: -18px">
+                    <div style="position: relative; top: 50px; left: -15px">
                       <img
-                        style="width: 18px"
+                        style="width: 15px"
                         src="https://alarmbackend.xtremeguard.org/alarm-notes-left-arrow.png?1=2"
                       />
                     </div>
@@ -220,7 +223,7 @@
                       <div style="font-weight: bold; font-size: 14px">
                         Forwarded
                       </div>
-                      <div style="padding-top: 10px; font-size: 12px">
+                      <div style="padding-top: 10px; font-size: 10px">
                         Notes: Event Forwarded to primary@gmail.com
                       </div>
                     </div>
@@ -235,7 +238,8 @@
                     style="
                       vertical-align: middle;
                       text-align: center;
-                      font-size: 13px;
+                      font-size: 10px;
+                      width: 180px;
                     "
                   >
                     Sep 28, 2024 16:50
@@ -245,14 +249,15 @@
                       border-left: 1px solid #ddd;
                       vertical-align: middle;
                       text-align: center;
+                      width: 70px;
                     "
                   >
                     <div
                       style="
                         position: relative;
                         left: -24px;
-                        width: 25px;
-                        height: 25px;
+                        width: 1px;
+                        height: 1px;
                         border-radius: 50%;
                         padding: 20px;
                         border: 1px solid #000;
@@ -269,6 +274,7 @@
 
                             width: 35px;
                             max-width: 35px;
+                            margin-top: -16px;
                           "
                           src="https://alarmbackend.xtremeguard.org/customers/contacts/1721749459.jpg"
                         />
@@ -276,9 +282,9 @@
                     </div>
                   </td>
                   <td style="vertical-align: middle">
-                    <div style="position: relative; top: 50px; left: -18px">
+                    <div style="position: relative; top: 50px; left: -15px">
                       <img
-                        style="width: 18px"
+                        style="width: 15px"
                         src="https://alarmbackend.xtremeguard.org/alarm-notes-left-arrow.png?1=2"
                       />
                     </div>
@@ -289,15 +295,33 @@
                         border-radius: 6px;
                         padding-left: 20px;
                         padding-top: 20px;
+                        padding-right: 20px;
                         margin-top: -10px;
                       "
                     >
                       <div style="font-weight: bold; font-size: 14px">
-                        Forwarded
+                        Secondary
                       </div>
-                      <div style="padding-top: 10px; font-size: 12px">
+                      <div style="padding-top: 10px; font-size: 10px">
                         Notes: Event Forwarded to primary@gmail.com
                       </div>
+                      <hr style="color: #ddd; margin-top: 10px" />
+                      <table style="font-size: 10px">
+                        <tr>
+                          <td style="font-weight: bold; width: 60px">
+                            Call Status
+                          </td>
+                          <td>: Answered</td>
+                          <td style="font-weight: bold; width: 70px">
+                            Call Response
+                          </td>
+                          <td>: Answered</td>
+                          <td style="font-weight: bold; width: 70px">
+                            Event Status
+                          </td>
+                          <td>: Answered</td>
+                        </tr>
+                      </table>
                     </div>
                   </td>
                 </table>
