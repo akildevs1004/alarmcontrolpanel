@@ -54,6 +54,21 @@
 </head>
 
 <body>
+
+    @php
+
+
+
+    echo $alarm['device']['customer']['profile_picture'];
+    exit;
+
+    $customerLogo=getcwd() .'no-business_profile.png';
+    $companyLogo=getcwd() .'no-business_profile.png';
+    $operatorLogo=getcwd() .'no-profile-image.png';
+
+
+
+    @endphp
     <header style="min-height:100px; width:750px">
         <table
             style="
@@ -75,8 +90,7 @@
                     width: 50px;
                     max-width: 50px;
                   "
-                                    src="https://alarmbackend.xtremeguard.org/customers/building_photos/1725614712.png"
-                                    alt="Akil Security Logo" />
+                                    src="https://alarmbackend.xtremeguard.org/customers/building_photos/1725614712.png" />
                             </td>
                             <td>
                                 <div style="font-size: 10px">

@@ -92,7 +92,7 @@ class AlarmReportsController extends Controller
     {
         $alarmId = 171;
 
-        $reports =   AlarmEvents::with([
+        $alarm =   AlarmEvents::with([
             "device.customer.primary_contact",
             "device.customer.secondary_contact",
             "device.company.user",
@@ -103,10 +103,10 @@ class AlarmReportsController extends Controller
             "security",
             "pinverifiedby"
 
-        ])->where("id", $alarmId)->get();
+        ])->where("id", $alarmId)->first();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('reports'))->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm'))->setPaper('A4', 'potrait');
         return $pdf->stream('invoice.pdf');
     }
 
