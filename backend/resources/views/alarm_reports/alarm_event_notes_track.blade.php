@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{$alarm->id}} Track Notes</title>
+    <title>Alarm Event #{{$alarm->id}} - Track Notes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
