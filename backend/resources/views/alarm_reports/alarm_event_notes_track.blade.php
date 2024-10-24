@@ -650,7 +650,7 @@
 function changeDateformat($date)
 
 {
-if($date=='') return ['---','---'];
+if($date=='') return '---';
 $date = new DateTime($date);
 
 // Format the date to the desired format
