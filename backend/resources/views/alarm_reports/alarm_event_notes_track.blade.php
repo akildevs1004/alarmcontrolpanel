@@ -256,6 +256,16 @@
                 </tr>
             </table>
             <hr style="color:#ddd;margin-top:0px " />
+
+            @if (count($alarm->notes)==0)
+            <div style="width:100%;height:200px;margin:auto">
+                Operator Notes are not available
+
+            </div>
+            @endif
+
+
+
             <table cellpadding="0" cellspacing="0">
                 @foreach ($alarm->notes as $note )
                 <!-- Forward -->
