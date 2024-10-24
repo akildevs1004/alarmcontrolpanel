@@ -106,6 +106,23 @@ class AlarmNotificationController extends Controller
             "SOS" => "burglary.png",
         ];
     }
+    public function getGoogleMapIcons()
+    {
+        return   [
+            "intruder" => "/google_map_icons/google_alarm.png",
+            "alarm" => "/google_map_icons/google_alarm.png",
+            "temperature" => "/google_map_icons/google_temperature_alarm.png",
+            "fire" => "/google_map_icons/google_fire_alarm.png",
+            "water" => "/google_map_icons/google_water_alarm.png",
+            "sos" => "/google_map_icons/google_sos_alarm.png",
+            "medical" => "/google_map_icons/google_medical_alarm.png",
+            "offline" => "/google_map_icons/google_offline.png",
+            "ac_off" => "/google_map_icons/google_ac_off.png",
+            "dc_off" => "/google_map_icons/google_dc_off.png",
+            "battery" => "/google_map_icons/google_dc_off.png",
+
+        ];
+    }
 
     public function forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email = '', $request = null)
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customers\Reports;
 use App\Exports\AlarmEventsExport;
 use App\Exports\DeviceArmedExport;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Models\AlarmEvents;
@@ -105,8 +106,10 @@ class AlarmReportsController extends Controller
 
         ])->where("id", $alarmId)->first();
 
+        $icons = (new AlarmNotificationController())->getGoogleMapIcons();
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm'))->setPaper('A4', 'potrait');
+
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
         return $pdf->stream('invoice.pdf');
     }
 
