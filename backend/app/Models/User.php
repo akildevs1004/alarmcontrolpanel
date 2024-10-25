@@ -22,29 +22,34 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'user_type',
-        'name',
-        'email',
-        'password',
-        'role_id',
-        'company_id',
-        'branch_id',
-        'is_master',
-        'first_login',
-        'reset_password_code',
-        'employee_role_id',
-        'email_verified_at',
-        'enable_whatsapp_otp',
-        'web_login_access',
+    // protected $fillable = [
+    //     'user_type',
+    //     'name',
+    //     'email',
+    //     'password',
+    //     'role_id',
+    //     'company_id',
+    //     'branch_id',
+    //     'is_master',
+    //     'first_login',
+    //     'reset_password_code',
+    //     'employee_role_id',
+    //     'email_verified_at',
+    //     'enable_whatsapp_otp',
+    //     'web_login_access',
 
-    ];
-
+    // ]; 
+    protected $appends = ['profile_picture'];
+    protected $guarded = [];
     protected $with = ['assigned_permissions'];
 
     public function assigned_permissions()
     {
-        return $this->hasOne(AssignPermission::class, 'role_id', 'role_id');
+        return $this->hasMany(RolePermissions::class, 'role_id', 'role_id');
+    }
+    public function getProfilePictureAttribute($value)
+    {
+        return asset('users/' . $this->picture);
     }
 
     /**

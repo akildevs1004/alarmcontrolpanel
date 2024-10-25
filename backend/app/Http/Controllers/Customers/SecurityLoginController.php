@@ -212,7 +212,7 @@ class SecurityLoginController extends Controller
                 if ($request->user_id == $isExist->id) {
 
 
-                    if ($request->password == $request->confirm_password) {
+                    if ($request->password == $request->confirm_password &&  $request->password != '') {
                         User::where("id", $request->user_id)->update([
                             'password' => Hash::make($request->password),
                         ]);

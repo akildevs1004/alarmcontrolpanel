@@ -1197,7 +1197,7 @@ export default {
       // Handle inactivity
       this.handleInactivity = () => {
         // Perform actions when the user is inactive
-        this.$router.push(`/dashboard`);
+        this.$router.push(`/security/dashboard`);
         // For example, you could redirect the user, show a message, etc.
       };
 

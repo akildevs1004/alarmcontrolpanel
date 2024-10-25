@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\AttendanceLog;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -33,7 +34,16 @@ class Controller extends BaseController
                 return $q->where('company_id', 0);
             });
         }
+        $model->when($request->filled("common_search"), function ($q) use ($request) {
+            $q->where(function ($qwhere) use ($request) {
+                $qwhere->orwhere("first_name", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("last_name", "ILIKE", "%$request->common_search%");
+                $qwhere->orWhere("contact_number", "ILIKE", "%$request->common_search%");
 
+
+                $qwhere->orWhereHas("role",  fn(Builder $query) => $query->where("name", "ILIKE", "%$request->common_search%"));
+            });
+        });
         return $model;
     }
 

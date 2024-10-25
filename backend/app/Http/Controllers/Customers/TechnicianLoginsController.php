@@ -137,7 +137,7 @@ class TechnicianLoginsController extends Controller
                 if ($request->user_id == $isExist->id) {
 
 
-                    if ($request->password == $request->confirm_password) {
+                    if ($request->password == $request->confirm_password &&  $request->password != '') {
                         User::where("id", $request->user_id)->update([
                             'password' => Hash::make($request->password),
                         ]);
@@ -233,9 +233,11 @@ class TechnicianLoginsController extends Controller
         if ($id > 0) {
 
             $model = TechnicianLogins::where("id", $id)->first();;
-            $filepath = public_path('/technicians') . "/" . $model->picture;
-            if (file_exists($filepath)) {
-                unlink($filepath);
+            if ($model->picture) {
+                $filepath = public_path('/technicians') . "/" . $model->picture;
+                if (file_exists($filepath)) {
+                    unlink($filepath);
+                }
             }
             $return = TechnicianLogins::where("id", $id)->delete();
             return $this->response('Technician account is deleted Successfully', null, true);

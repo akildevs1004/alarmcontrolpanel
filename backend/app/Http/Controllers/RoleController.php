@@ -6,6 +6,7 @@ use App\Http\Requests\Role\StoreRequest;
 use App\Http\Requests\Role\UpdateRequest;
 use App\Models\AssignPermission;
 use App\Models\Role;
+use App\Models\RolePermissions;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -16,7 +17,7 @@ class RoleController extends Controller
     {
         $model = Role::query();
         $model->where('company_id', request('company_id'));
-        $model->when(request()->filled('branch_id'), fn ($q) => $q->where('branch_id', request('branch_id')));
+        $model->when(request()->filled('branch_id'), fn($q) => $q->where('branch_id', request('branch_id')));
         $model->orderBy(request('order_by') ?? "id", request('sort_by_desc') ? "desc" : "asc");
         return $model->get(["id", "name"]);
     }
@@ -83,11 +84,11 @@ class RoleController extends Controller
 
     public function destroy(Role $Role)
     {
-
+        $id = $Role->id;
         $record = $Role->delete();
 
-        if ($record) {
-            $permissionModel = AssignPermission::where('company_id', $Role->company_id)->where('role_id', $Role->id)->first();
+        if ($id) {
+            $permissionModel = RolePermissions::where('role_id', $Role->id);
             $permissionModel->delete();
 
             return $this->response('Role and Permissions successfully deleted.', $record, true);

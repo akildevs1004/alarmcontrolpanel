@@ -86,7 +86,13 @@ Route::get('assign-permission/role-id/{key}', [AssignPermissionController::class
 // User
 Route::apiResource('users', UserController::class);
 Route::get('users/search/{key}', [UserController::class, 'search']);
-Route::post('users/delete/selected', [UserController::class, 'deleteSelected']);
+// Route::post('users/delete/selected', [UserController::class, 'deleteSelected']);
+Route::post('create_user', [UserController::class, 'createUserData']);
+
+Route::delete('users/delete/{key}', [UserController::class, 'deleteSelected']);
+
+
+
 
 // Department
 Route::apiResource('departments', DepartmentController::class);

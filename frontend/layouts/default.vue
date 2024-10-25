@@ -852,6 +852,8 @@ export default {
     };
   },
   created() {
+    console.log("permissions", this.$auth.user.permissions);
+
     if (this.$auth.user.user_type != "company") {
       try {
         if (window) {
@@ -1275,7 +1277,7 @@ export default {
       // Handle inactivity
       this.handleInactivity = () => {
         // Perform actions when the user is inactive
-        this.$router.push(`/dashboard`);
+        this.$router.push(`/alarm/dashboard`);
         // For example, you could redirect the user, show a message, etc.
       };
 
@@ -2639,5 +2641,11 @@ td {
   position: absolute;
   top: 0;
   width: 2px;
+}
+</style>
+<style>
+.v-expansion-panel-header {
+  padding: 10px !important;
+  min-height: 30px !important;
 }
 </style>

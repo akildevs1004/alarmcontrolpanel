@@ -16,12 +16,12 @@ class UserController extends Controller
             $validatedData = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
+                'password' => 'required|min:4',
                 'company_id' => "required",
                 "user_type" => "required"
             ]);
 
-            $validatedData["name"] = "null";
+            $validatedData["name"] = $request->name ?? 'Hello';
             $validatedData["password"] = Hash::make($validatedData["password"]);
             return User::create($validatedData) ? true : false;
         } catch (\Throwable $th) {
@@ -33,9 +33,11 @@ class UserController extends Controller
     {
         $model = $this->FilterCompanyList($model, $request);
 
-        $model->whereHas("role", function ($q) {
-            return $q->where('name', '!=', "company");
-        });
+
+        $model->where("user_type", "user");
+        // $model->whereHas("role", function ($q) {
+        //     return $q->where('name', '!=', "company");
+        // });
 
         $model->with("role");
 
@@ -103,21 +105,46 @@ class UserController extends Controller
             throw $th;
         }
     }
-
-    public function deleteSelected(User $model, Request $request)
+    public function deleteSelected(Request  $request, $id)
     {
-        try {
-            $record = $model->whereIn('id', $request->ids);
+        if ($id > 0) {
 
-            if ($record) {
-                return $this->response('Select record successfully deleted.', null, true);
-            } else {
-                return $this->response('Select record cannot delete.', null, false);
+            $model = User::where("id", $id)->first();;
+            if ($model->picture) {
+                $filepath = public_path('/users') . "/" . $model->picture;
+                if (file_exists($filepath)) {
+                    unlink($filepath);
+                }
             }
-        } catch (\Throwable $th) {
-            throw $th;
+            $return = User::where("id", $id)->delete();
+            return $this->response('User account is deleted Successfully', null, true);
         }
     }
+    // public function deleteSelected(User $model, Request $request, $id)
+    // {
+    //     $id = $request->id;
+    //     if ($id > 0) {
+
+    //         $model = User::where("id", $id)->first();;
+    //         $filepath = public_path('/users') . "/" . $model->picture;
+    //         if (file_exists($filepath)) {
+    //             unlink($filepath);
+    //         }
+    //         $return = User::where("id", $id)->delete();
+    //         return $this->response('User account is deleted Successfully', null, true);
+    //     }
+    //     try {
+    //         $record = $model->whereIn('id', $request->ids);
+
+    //         if ($record) {
+    //             return $this->response('Select record successfully deleted.', null, true);
+    //         } else {
+    //             return $this->response('Select record cannot delete.', null, false);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         throw $th;
+    //     }
+    // }
 
     public function search(User $model, Request $request, $key)
     {
@@ -137,5 +164,101 @@ class UserController extends Controller
         $model->with("role");
 
         return $model->paginate($request->per_page);
+    }
+
+    public function createUserData(Request $request)
+    {
+        $validationErrors = $this->validateRequest($request);
+        if ($validationErrors) return $validationErrors;
+
+
+
+        $data = $request->except(['editId', 'confirm_password', 'attachment', "user_id"]);
+        if ($request->hasFile('attachment')) {
+            $data['picture'] = $this->uploadFile($request->file('attachment'));
+        }
+
+        $isExist = User::where('email', $request->email)->first();
+        if ($request->filled('editId')) {
+
+
+            if ($isExist && $isExist->id !=  $request->editId) {
+                return ["status" => false, "errors" => ["email" => ["User Email already exists111111"]]];
+            }
+            $this->updateUser($request, $data);
+            return $this->response('User account details are updated', null, true);
+        } else {
+            if ($isExist) return ["status" => false, "errors" => ["email" => ["User Email already exists22222"]]];
+            $record = $this->createUser($request, $data);
+            return $this->response('User account is created.', $record, true);
+        }
+    }
+
+    // Modular Validation
+    private function validateRequest($request)
+    {
+        $rules = [
+            'company_id' => 'required|integer',
+            'branch_id' => 'nullable',
+            'editId' => 'nullable',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'contact_number' => 'required',
+            'password' => $request->editId ? 'nullable' : 'required',
+            'confirm_password' => $request->editId ? 'nullable' : 'required',
+        ];
+
+        $request->validate($rules);
+
+        if ($request->password && $request->password !== $request->confirm_password) {
+            return ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password do not match"]]];
+        }
+        return null;
+    }
+
+    // File Upload Helper
+    private function uploadFile($file)
+    {
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('/users'), $fileName);
+        return $fileName;
+    }
+
+    // Update User Helper
+    private function updateUser($request, $data)
+    {
+        $userData = [
+            "user_type" => "user",
+            "role_id" => $request->role_id,
+            'name' => "{$request->first_name} {$request->last_name}",
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email_id,
+            'company_id' => $request->company_id,
+            'web_login_access' => $request->web_login_access ?? 1,
+        ];
+
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($request->password);
+        }
+        User::where("id", $request->editId)->update(array_merge($userData, $data));
+    }
+
+    // Create User Helper
+    private function createUser($request, $data)
+    {
+
+        return User::create([
+            "user_type" => "user",
+            "role_id" => $request->role_id,
+            'name' => "{$request->first_name} {$request->last_name}",
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'company_id' => $request->company_id,
+            'web_login_access' => 1,
+        ] + $data);
     }
 }

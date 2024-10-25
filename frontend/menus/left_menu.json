@@ -417,5 +417,21 @@
     "to": "/web_login_logs",
     "module": "settings",
     "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-web-box",
+    "title": "Users",
+    "open_menu": false,
+    "to": "/settings/users",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-web-box",
+    "title": "Roles",
+    "open_menu": false,
+    "to": "/settings/role",
+    "module": "settings",
+    "top_menu_name": "settings"
   }
 ]

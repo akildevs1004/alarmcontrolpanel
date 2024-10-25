@@ -26,6 +26,7 @@ use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\DeviceZonesController;
 use App\Http\Controllers\DeviceZoneTypesController;
 use App\Http\Controllers\PlottingController;
+use App\Http\Controllers\RolePermissionsController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
@@ -272,3 +273,7 @@ Route::get('operators_live_status', [SecurityLoginController::class, "getOperato
 Route::get('device_armed_reports', [DeviceArmedLogsController::class, "report"]);
 Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
 Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);
+
+//settings permissions 
+Route::post('role_update_permission_pages', [RolePermissionsController::class, 'roleUpdatePermissions']);
+Route::get('role_get_permission_pages', [RolePermissionsController::class, 'getRolePermissions']);
