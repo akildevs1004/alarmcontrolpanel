@@ -1,12 +1,23 @@
 <template>
-  <div v-if="can('settings_roles_access') && can('settings_roles_view')">
+  <NoAccess v-if="!$pagePermission.can('roles_view', this)" />
+  <div v-else>
     <v-dialog v-model="dialogNewRole" width="800">
-      <AssetsIconClose left="790" @click="closeDialog" />
-      <v-card>
-        <v-alert dense flat class="grey lighten-3">
+      <!-- <AssetsIconClose left="790" @click="closeDialog" /> -->
+
+      <v-card
+        ><v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">
+            {{ formTitle }} {{ Model }} and Permissions</span
+          >
+          <v-spacer></v-spacer>
+          <v-icon style="color: black" @click="closeDialog()" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <!-- <v-alert dense flat class="grey lighten-3">
           {{ formTitle }} {{ Model }} and Permissions
           <v-spacer></v-spacer>
-        </v-alert>
+        </v-alert> -->
         <v-card-text>
           <v-row>
             <v-col cols="5">
@@ -34,7 +45,17 @@
               >
             </v-col>
             <v-col cols="2" class="text-right">
-              <v-btn color="primary" fill small @click="save">Save</v-btn>
+              <v-btn
+                color="primary"
+                v-if="
+                  $pagePermission.can('roles_edit', this) ||
+                  $pagePermission.can('roles_create', this)
+                "
+                fill
+                small
+                @click="save"
+                >Save</v-btn
+              >
             </v-col>
 
             <v-col cols="12">
@@ -72,7 +93,44 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-card class="mb-5 rounded-md mt-3" elevation="0">
+      <v-toolbar class="rounded-md" dense flat>
+        <span> Roles</span>
+        <v-tooltip top color="primary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              dense
+              class="ma-0 px-0"
+              x-small
+              :ripple="false"
+              text
+              v-bind="attrs"
+              v-on="on"
+              @click="getDataFromApi()"
+            >
+              <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
+            </v-btn>
+          </template>
+          <span>Reload</span>
+        </v-tooltip>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+          <v-col>
+            <v-btn
+              v-if="$pagePermission.can('roles_create', this)"
+              dark
+              dense
+              color="blue"
+              small
+              @click="dispalyNewDialog()"
+            >
+              <v-icon color="white" small> mdi-plus </v-icon>
+              Role
+            </v-btn>
+          </v-col>
+        </v-toolbar-items>
+      </v-toolbar>
+    </v-card>
     <v-row>
       <v-col md="12">
         <v-data-table
@@ -87,65 +145,37 @@
           }"
           class="elevation-1"
         >
-          <template v-slot:top>
-            <v-card class="mb-5 rounded-md mt-3" elevation="0">
-              <v-toolbar class="rounded-md" dense flat>
-                <span> Roles</span>
-                <v-tooltip top color="primary">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      dense
-                      class="ma-0 px-0"
-                      x-small
-                      :ripple="false"
-                      text
-                      v-bind="attrs"
-                      v-on="on"
-                      @click="getDataFromApi()"
-                    >
-                      <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Reload</span>
-                </v-tooltip>
-                <v-spacer></v-spacer>
-                <v-toolbar-items>
-                  <v-col>
-                    <v-btn
-                      v-if="can('settings_roles_create')"
-                      dark
-                      dense
-                      color="blue"
-                      small
-                      @click="dispalyNewDialog()"
-                    >
-                      <v-icon color="white" small> mdi-plus </v-icon>
-                      Role
-                    </v-btn>
-                  </v-col>
-                </v-toolbar-items>
-              </v-toolbar>
-            </v-card>
-          </template>
+          <template v-slot:top> </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon
-              v-if="can('settings_roles_edit')"
-              color="secondary"
-              small
-              class="mr-2"
-              @click="editItem(item)"
-            >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              v-if="can('settings_roles_delete')"
-              color="error"
-              small
-              @click="deleteItem(item)"
-            >
-              {{ item.role === "customer" ? "" : "mdi-delete" }}
-            </v-icon>
+            <v-menu bottom left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-list-item @click="editItem(item)" v-if="can('roles_edit')">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-icon color="secondary" small class="mr-2">
+                      mdi-pencil </v-icon
+                    >Edit
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  v-if="can('roles_delete')"
+                  @click="deleteItem(item)"
+                >
+                  <v-list-item-title style="cursor: pointer">
+                    <v-icon color="error" small>
+                      {{
+                        item.role === "customer" ? "" : "mdi-delete"
+                      }} </v-icon
+                    >Delete
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </template>
           <template v-slot:no-data>
             <!-- <v-btn color="background" @click="initialize">Reset</v-btn> -->
@@ -236,6 +266,9 @@ export default {
   },
 
   methods: {
+    can(per) {
+      return this.$pagePermission.can(per, this);
+    },
     closeDialog() {
       this.dialogNewRole = false;
       ++this.compKey;
@@ -250,14 +283,6 @@ export default {
       this.formTitle = "New";
       this.dialogNewRole = true;
       this.permission_pages = [];
-    },
-
-    can(per) {
-      return true;
-      let u = this.$auth.user;
-      return (
-        (u && u.permissions.some((e) => e == per || per == "/")) || u.is_master
-      );
     },
 
     getDataFromApi(url = this.endpoint) {

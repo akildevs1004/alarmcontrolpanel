@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
+  <div v-else>
     <v-row>
       <v-col cols="3" class="p-1">
         <v-card class="elevation-2" style="height: 200px">

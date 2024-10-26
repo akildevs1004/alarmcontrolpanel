@@ -1,5 +1,10 @@
 <template>
-  <div style="width: 100%; margin-top: -30px">
+  <NoAccess v-if="!$pagePermission.can('intruder_view', this)" />
+  <div v-else style="width: 100%; margin-top: -30px">
+    <!-- {{ $pagePermission.can("intruder_view111") }}
+    {{ $auth ? $pagePermission.can("intruder_view111", this) : "false" }}-->
+    <!-- {{ can("intruder_view") }} -->
+
     <v-row style="width: 100%">
       <v-col lg="9" md="9" sm="12" xs="12">
         <v-row>
@@ -134,6 +139,10 @@ export default {
   },
   created() {},
   watch: {},
-  methods: {},
+  methods: {
+    can(per) {
+      return this.$pagePermission.can(per, this);
+    },
+  },
 };
 </script>

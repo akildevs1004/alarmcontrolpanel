@@ -108,7 +108,7 @@
                 >
                   <v-checkbox
                     class="py-1 pl-1 ma-0"
-                    color="primary"
+                    color="red"
                     dense
                     hide-details
                     @change="
@@ -265,11 +265,7 @@ export default {
           page_name: "tickets",
           title: "Tickets",
         },
-        {
-          topMenu: "settings",
-          page_name: "settings",
-          title: "Settings",
-        },
+
         {
           topMenu: "settings",
           page_name: "company",
@@ -295,12 +291,23 @@ export default {
           page_name: "weblogs",
           title: "Weblogs",
         },
+        {
+          topMenu: "settings",
+          page_name: "users",
+          title: "Users",
+        },
+        ,
+        {
+          topMenu: "settings",
+          page_name: "roles",
+          title: "Roles",
+        },
       ],
     };
   },
   mounted() {
     this.permission_pages = { ...this.defaultPermissionsIds };
-    this.all();
+    // this.all();
     //this.permission_pages = this.defaultPermissionsIds;
   },
   watch: {
@@ -333,15 +340,23 @@ export default {
     selectAllByfilteredMenus(action, topMenuName, isChecked) {
       const actionLower1 = action.toLowerCase();
 
+      // Initialize permission_pages as an array if it’s not already
+      if (!Array.isArray(this.permission_pages)) {
+        this.permission_pages = [];
+      }
+
+      // Filter menus by topMenuName and map them to formatted permission strings
       const permissions = this.menus
         .filter((menu) => menu.topMenu === topMenuName)
         .map((menu) => `${menu.page_name}_${actionLower1}`);
 
       if (isChecked) {
+        // Add only unique permissions that aren't already in permission_pages
         this.permission_pages = [
           ...new Set([...this.permission_pages, ...permissions]),
         ];
       } else {
+        // Remove permissions that match values in permissions array
         this.permission_pages = this.permission_pages.filter(
           (page) => !permissions.includes(page)
         );

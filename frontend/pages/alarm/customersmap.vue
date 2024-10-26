@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NoAccess v-if="!$pagePermission.can('map_view', this)" />
+  <div v-else>
     <CustomersAlarmMap />
   </div>
 </template>

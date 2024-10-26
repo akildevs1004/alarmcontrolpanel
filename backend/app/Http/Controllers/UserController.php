@@ -33,8 +33,8 @@ class UserController extends Controller
     {
         $model = $this->FilterCompanyList($model, $request);
 
-
-        $model->where("user_type", "user");
+        $model->where("role_id", "!=", 1);
+        $model->where("user_type", "company");
         // $model->whereHas("role", function ($q) {
         //     return $q->where('name', '!=', "company");
         // });
@@ -173,7 +173,7 @@ class UserController extends Controller
 
 
 
-        $data = $request->except(['editId', 'confirm_password', 'attachment', "user_id"]);
+        $data = $request->except(['editId', 'confirm_password', 'password', 'attachment', "user_id"]);
         if ($request->hasFile('attachment')) {
             $data['picture'] = $this->uploadFile($request->file('attachment'));
         }
@@ -229,7 +229,7 @@ class UserController extends Controller
     private function updateUser($request, $data)
     {
         $userData = [
-            "user_type" => "user",
+            "user_type" => "company",
             "role_id" => $request->role_id,
             'name' => "{$request->first_name} {$request->last_name}",
             'first_name' => $request->first_name,
@@ -250,7 +250,7 @@ class UserController extends Controller
     {
 
         return User::create([
-            "user_type" => "user",
+            "user_type" => "company",
             "role_id" => $request->role_id,
             'name' => "{$request->first_name} {$request->last_name}",
             'first_name' => $request->first_name,

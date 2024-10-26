@@ -256,20 +256,30 @@ export default ({ app }, inject) => {
   });
 
   inject("pagePermission", {
-    can(per, thisobj) {
-      let u = thisobj.$auth.user;
-      return true;
+    can(page, thisObj) {
+      console.log("thisObj", thisObj);
+      if (!thisObj) return true; //undefiend
+      //if (!thisObj) thisObj = this.$store.state.auth;
+      if (thisObj) {
+        let u = thisObj.$auth.user;
+        let filter = u.permissions.filter((e) => e.page_name == page);
 
-      // return (
-      //   (u && u.permissions.some((e) => e == per || per == "/")) ||
-      //   u.is_master ||
-      //   u.user_type == "branch"
-      // );
-
-      return (
-        (u && u.permissions.some((e) => e == per || per == "/")) || u.is_master
-      );
+        return (u && filter.length > 0) || u.is_master || u.role_id == 1;
+      }
     },
+    // can(per, thisobj) {
+    //   let u = thisobj.$auth.user;
+
+    //   // return (
+    //   //   (u && u.permissions.some((e) => e == per || per == "/")) ||
+    //   //   u.is_master ||
+    //   //   u.user_type == "branch"
+    //   // );
+
+    //   return (
+    //     (u && u.permissions.some((e) => e == per || per == "/")) || u.is_master
+    //   );
+    // },
   });
 
   inject("utils", {

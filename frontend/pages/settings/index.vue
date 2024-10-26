@@ -1,5 +1,6 @@
 <template>
-  <div v-if="can('company_access')">
+  <NoAccess v-if="!$pagePermission.can('company_view', this)" />
+  <div v-else style="width: 100%; margin-top: -20px">
     <div v-if="!preloader">
       <div class="text-center ma-2">
         <v-snackbar
@@ -102,7 +103,7 @@
                         >
                       </v-col>
                       <v-col cols="4">
-                        <v-card elevation="2" style="height: 540px">
+                        <v-card elevation="2" style="height: 500px">
                           <v-card-title>Information</v-card-title>
 
                           <v-card-text>
@@ -252,7 +253,7 @@
                         </v-card>
                       </v-col>
                       <v-col cols="4">
-                        <v-card elevation="2" style="height: 540px">
+                        <v-card elevation="2" style="height: 500px">
                           <v-card-title>Contact Details</v-card-title>
 
                           <v-card-text>
@@ -268,6 +269,9 @@
                                   outlined
                                   v-model="contact_payload.name"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.name"
@@ -287,6 +291,9 @@
                                   outlined
                                   v-model="contact_payload.number"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.number"
@@ -306,6 +313,9 @@
                                   outlined
                                   v-model="contact_payload.position"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.position"
@@ -325,6 +335,9 @@
                                   outlined
                                   v-model="contact_payload.whatsapp"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.whatsapp"
@@ -342,6 +355,9 @@
                                   outlined
                                   v-model="company_payload.mol_id"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.mol_id"
@@ -360,6 +376,9 @@
                                   outlined
                                   v-model="company_payload.p_o_box_no"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.p_o_box_no"
@@ -376,6 +395,9 @@
                                   outlined
                                   v-model="geographic_payload.lat"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.lat"
@@ -392,6 +414,9 @@
                                   outlined
                                   v-model="geographic_payload.lon"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-text-field>
                                 <span
                                   v-if="errors && errors.lon"
@@ -409,6 +434,9 @@
                                   height="50px"
                                   v-model="geographic_payload.location"
                                   hide-details
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 >
                                 </v-textarea>
                                 <span
@@ -428,6 +456,9 @@
                                   :items="getTimezones()"
                                   item-value="key"
                                   item-text="text"
+                                  :disabled="
+                                    !$pagePermission.can('company_edit', this)
+                                  "
                                 ></v-autocomplete>
                               </v-col>
                             </v-row>
@@ -436,22 +467,11 @@
                       </v-col>
                     </v-row>
 
-                    <v-row> </v-row>
-                    <v-row>
-                      <v-col cols="2" md="2" sm="2"> </v-col>
-                    </v-row>
-
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <div class="form-group"></div>
-                      </div>
-                    </div>
-
                     <v-row>
                       <v-col cols="12">
                         <div class="text-right">
                           <v-btn
-                            v-if="can('company_edit')"
+                            v-if="$pagePermission.can('company_edit', this)"
                             small
                             :loading="loading"
                             color="primary"
@@ -495,6 +515,7 @@
                               ? errors.current_password
                               : ''
                           "
+                          :disabled="!$pagePermission.can('company_edit', this)"
                         ></v-text-field>
                       </v-col>
                       <v-col md="12" sm="12" cols="12" dense>
@@ -517,6 +538,7 @@
                           :error-messages="
                             errors && errors.password ? errors.password[0] : ''
                           "
+                          :disabled="!$pagePermission.can('company_edit', this)"
                         ></v-text-field>
                       </v-col>
 
@@ -545,12 +567,13 @@
                               ? errors.show_password_confirm[0]
                               : ''
                           "
+                          :disabled="!$pagePermission.can('company_edit', this)"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <div class="text-right">
                           <v-btn
-                            v-if="can('setting_company_change_password_access')"
+                            v-if="$pagePermission.can('company_edit', this)"
                             dark
                             small
                             :loading="loading_password"
@@ -572,7 +595,6 @@
     </div>
     <Preloader v-else />
   </div>
-  <NoAccess v-else />
 </template>
 
 <script>

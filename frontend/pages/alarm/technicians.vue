@@ -1,5 +1,6 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <NoAccess v-if="!can('technicians_view')" />
+  <div v-else>
     <div class="text-center ma-2">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
@@ -88,6 +89,7 @@
             ></span>
 
             <v-btn
+              v-if="can('technicians_create')"
               title="Change Request"
               x-small
               :ripple="false"
@@ -199,7 +201,7 @@
                 </template>
                 <v-list width="120" dense>
                   <v-list-item
-                    v-if="can('device_notification_contnet_view')"
+                    v-if="can('technicians_view')"
                     @click="viewItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -208,14 +210,17 @@
                     </v-list-item-title>
                   </v-list-item>
 
-                  <v-list-item @click="editItem(item)">
+                  <v-list-item
+                    @click="editItem(item)"
+                    v-if="can('technicians_edit')"
+                  >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
                       Edit
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
+                    v-if="can('technicians_delete')"
                     @click="deleteItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">

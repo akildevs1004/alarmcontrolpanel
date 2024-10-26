@@ -1,5 +1,6 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <NoAccess v-if="!$pagePermission.can('users_view', this)" />
+  <div v-else>
     <div class="text-center ma-2">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
@@ -88,6 +89,7 @@
             ></span>
 
             <v-btn
+              v-if="can('users_create')"
               title="Change Request"
               x-small
               :ripple="false"
@@ -196,24 +198,21 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
-                    v-if="can('device_notification_contnet_view')"
-                    @click="viewItem(item)"
-                  >
+                  <v-list-item v-if="can('users_view')" @click="viewItem(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
                     </v-list-item-title>
                   </v-list-item>
 
-                  <v-list-item @click="editItem(item)">
+                  <v-list-item @click="editItem(item)" v-if="can('users_edit')">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
                       Edit
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
+                    v-if="can('users_delete')"
                     @click="deleteItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -229,7 +228,6 @@
       </v-col>
     </v-row>
   </div>
-  <NoAccess v-else />
 </template>
 
 <script>
@@ -352,6 +350,9 @@ export default {
     },
   },
   methods: {
+    can(per) {
+      return this.$pagePermission.can(per, this);
+    },
     caps(str) {
       if (str == "" || str == null) {
         return "---";
@@ -435,10 +436,6 @@ export default {
           this.loading = false;
         });
       }
-    },
-
-    can(per) {
-      return this.$pagePermission.can(per, this);
     },
 
     getDataFromApi(url = "", filter_column = "", filter_value = "") {

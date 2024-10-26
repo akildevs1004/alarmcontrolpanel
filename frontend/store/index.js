@@ -29,9 +29,8 @@ export const state = () => ({
   login_token: "",
   email: "",
   password: "",
-
+  user: null,
   location: null,
-
 });
 
 // contains your mutations
@@ -82,6 +81,9 @@ export const mutations = {
   },
   email(state, value) {
     state.email = value;
+  },
+  user(state, value) {
+    state.user = value;
   },
   password(state, value) {
     state.password = value;
@@ -169,9 +171,8 @@ export const mutations = {
 };
 
 export const actions = {
-
   updateData({ commit }, location) {
-    commit('setLocation', location);
+    commit("setLocation", location);
   },
 
   resetState({ commit }) {

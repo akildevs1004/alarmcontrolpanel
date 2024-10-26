@@ -1,5 +1,8 @@
 <template>
-  <div><TicketsCompDashboard :canReply="false" /></div>
+  <NoAccess v-if="!$pagePermission.can('tickets_view', this)" />
+  <div v-else style="width: 100%; margin-top: -20px">
+    <TicketsCompDashboard :canReply="false" />
+  </div>
 </template>
 
 <script>

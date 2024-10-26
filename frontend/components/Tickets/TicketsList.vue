@@ -106,6 +106,7 @@
                     :height="'40px'" /></v-col
                 ><v-col v-if="technician_id == null" class="pt-5">
                   <v-btn
+                    v-if="can('tickets_create')"
                     title="Add Ticket"
                     x-small
                     :ripple="false"
@@ -292,13 +293,19 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item @click="addReply(item)" v-if="verifyCanReply()">
+                  <v-list-item
+                    @click="addReply(item)"
+                    v-if="verifyCanReply() || can('tickets_edit')"
+                  >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-reply</v-icon>
                       Reply
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="viewTicket(item)">
+                  <v-list-item
+                    @click="viewTicket(item)"
+                    v-if="can('tickets_view')"
+                  >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-information</v-icon>
                       View

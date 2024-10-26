@@ -852,8 +852,6 @@ export default {
     };
   },
   created() {
-    console.log("permissions", this.$auth.user.permissions);
-
     if (this.$auth.user.user_type != "company") {
       try {
         if (window) {
@@ -892,7 +890,7 @@ export default {
     this.logo_src = require("@/static/logo_header.png");
     this.pendingNotificationsCount = 0;
 
-    this.setTopmenuHilighter();
+    this.setTopmenuHilighterOnPageReload();
   },
 
   async mounted() {
@@ -1070,10 +1068,13 @@ export default {
         this.wait5Minutes = false;
       }, 1000 * 60 * 60);
     },
-    setTopmenuHilighter() {
+    setTopmenuHilighterOnPageReload() {
       const routeMap = {
         "alarm-map": { name: "alarm_map", path: "/alarm/map" },
-
+        "alarm-dashboard": {
+          name: "alarm_dashboard",
+          path: "/alarm/dashboard",
+        },
         "alarm-customersmap": {
           name: "alarm_customersmap",
           path: "/alarm/customersmap",
@@ -1428,6 +1429,8 @@ export default {
         this.menuProperties[menu_name].elevation = 0;
         this.menuProperties[menu_name].selected = bgColor;
       }
+
+      console.log("menu_name", menu_name);
 
       // console.log(
       //   this.menuProperties,

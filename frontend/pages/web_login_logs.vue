@@ -1,5 +1,6 @@
 <template>
-  <div v-if="can(`web_logs_access`)">
+  <NoAccess v-if="!$pagePermission.can('weblogs_view', this)" />
+  <div v-else>
     <v-card class="mb-5 mt-2 rounded-md" elevation="0">
       <v-toolbar class="rounded-md" dense flat>
         <v-toolbar-title><span> Web user Logins</span></v-toolbar-title>

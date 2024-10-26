@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NoAccess v-if="!$pagePermission.can('devices_view', this)" />
+  <div v-else style="width: 100%; margin-top: -20px">
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}
@@ -321,7 +322,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can(`device_edit`) && item.device_type == 'Intruder'"
+                v-if="can('device_edit') && item.device_type == 'Intruder'"
                 @click="editZones(item)"
               >
                 <v-list-item-title style="cursor: pointer">
@@ -332,7 +333,7 @@
                 </v-list-item-title>
               </v-list-item>
               <v-list-item
-                v-if="can(`device_edit`) && isEditable"
+                v-if="can('device_edit') && isEditable"
                 @click="editItem(item)"
               >
                 <v-list-item-title style="cursor: pointer">
@@ -365,7 +366,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can(`device_delete`) && !customer_id"
+                v-if="can('device_delete') && !customer_id"
                 @click="deleteItem(item)"
               >
                 <v-list-item-title style="cursor: pointer">
@@ -583,6 +584,9 @@ export default {
   },
 
   methods: {
+    can(per) {
+      return this.$pagePermission.can(per, this);
+    },
     closeDialog() {
       this.dialogEditDevice = false;
       this.dialogZones = false;
@@ -1041,9 +1045,7 @@ export default {
           this.getDataFromApi();
         });
     },
-    can(per) {
-      return this.$pagePermission.can(per, this);
-    },
+
     caps(str) {
       if (str == "" || str == null) {
         return "---";

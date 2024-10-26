@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <NoAccess v-if="!$pagePermission.can('alarms_view', this)" />
+  <div v-else>
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}

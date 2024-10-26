@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <div v-if="can(`customers_view`)">
     <div class="text-center ma-2">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
@@ -222,8 +222,8 @@
             ></span>
 
             <v-btn
-              v-if="!eventFilter"
-              title="Change Request"
+              v-if="!eventFilter || can(`customers_create`)"
+              title="New Customer"
               x-small
               :ripple="false"
               text
@@ -426,7 +426,7 @@
                 </template>
                 <v-list width="120" dense>
                   <v-list-item
-                    v-if="can('device_notification_contnet_view')"
+                    v-if="can('customers_view')"
                     @click="viewItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -434,7 +434,7 @@
                       View
                     </v-list-item-title> </v-list-item
                   ><v-list-item
-                    v-if="can('device_notification_contnet_view')"
+                    v-if="can('customers_edit')"
                     @click="editItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -461,7 +461,7 @@
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="can('device_notification_contnet_delete')"
+                    v-if="can('customers_delete')"
                     @click="deleteItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -790,7 +790,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           security_id: this.security_id,
-          customer_id: this.selectedCustomer.id,
+          customers_id: this.selectedCustomer.id,
         },
       };
 
