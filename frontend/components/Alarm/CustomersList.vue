@@ -452,7 +452,7 @@
                     </v-list-item-title>
                   </v-list-item> -->
                   <v-list-item
-                    v-if="can('customers_view')"
+                    v-if="can('customers_edit')"
                     @click="changeSecurity(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
