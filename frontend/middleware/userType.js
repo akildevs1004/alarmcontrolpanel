@@ -1,5 +1,4 @@
 const data = async ({ $auth, redirect }) => {
-  this.$store.commit("user", $auth);
   let userType = {
     user: "/alarm/intruderdashboard",
     company: "/alarm/intruderdashboard",
