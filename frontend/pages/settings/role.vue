@@ -59,7 +59,7 @@
             </v-col>
 
             <v-col cols="12">
-              <Accordian
+              <Permissions
                 :defaultPermissionsIds="
                   editedIndex === -1 ? [] : permission_pages
                 "
@@ -187,10 +187,10 @@
   <NoAccess v-else />
 </template>
 <script>
-import Accordian from "../../components/Roles/Accordian.vue";
+import Permissions from "../../components/Roles/Permissions.vue";
 
 export default {
-  components: { Accordian },
+  components: { Permissions },
   data: () => ({
     compKey: 1,
     dialogNewRole: false,
