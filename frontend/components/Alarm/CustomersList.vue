@@ -222,7 +222,7 @@
             ></span>
 
             <v-btn
-              v-if="!eventFilter || can(`customers_create`)"
+              v-if="!eventFilter && can(`customers_create`)"
               title="New Customer"
               x-small
               :ripple="false"
@@ -452,7 +452,7 @@
                     </v-list-item-title>
                   </v-list-item> -->
                   <v-list-item
-                    v-if="can('device_notification_contnet_view')"
+                    v-if="can('customers_view')"
                     @click="changeSecurity(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
