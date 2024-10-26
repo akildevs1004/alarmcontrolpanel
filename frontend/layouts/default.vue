@@ -242,6 +242,9 @@
       </span>
 
       <v-spacer></v-spacer>
+      <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
+        {{ $auth.user.name }}
+      </div>
       <v-menu
         style="z-index: 9999 !important"
         bottom
@@ -1027,8 +1030,11 @@ export default {
       const profilePicture = "/no-profile-image.jpg";
 
       switch (user.user_type) {
-        case "company":
+        case "company": {
+          if (user.role_id > 1) return user.profile_picture;
           return user.company?.logo || defaultLogo;
+        }
+
         case "master":
           return defaultLogo;
         case "employee":
