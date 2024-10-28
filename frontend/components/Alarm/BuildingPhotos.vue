@@ -76,9 +76,10 @@
     </div>
 
     <v-row>
+      <v-col> Email: {{ customer ? customer.user.email : "---" }} </v-col>
       <v-col
         v-if="!isMapviewOnly && isEditable"
-        cols="12"
+        cols="6"
         class="text-right"
         style="padding-top: 0px"
       >

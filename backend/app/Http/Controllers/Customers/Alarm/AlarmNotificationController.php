@@ -300,23 +300,23 @@ class AlarmNotificationController extends Controller
         ];
 
 
-        $body_content1 = new EmailAlarmForwardMail($data); {
-            Mail::to($email)
-                ->cc($cc_emails)
+        $body_content1 = new EmailAlarmForwardMail($data);
+        Mail::to($email)
+            ->cc($cc_emails)
 
-                ->send($body_content1);
-            $data = [
-                "company_id" => $company_id,
-                "customer_id" => $customer_id,
-                "alarm_id" => $alarm_id,
-                "email" => $email,
-                "notes" => "Event Forwarded to " . $email,
-                "event_status" => "Forwarded",
-                "created_datetime" => date("Y-m-d H:i:s")
-            ];
+            ->send($body_content1);
+        $data = [
+            "company_id" => $company_id,
+            "customer_id" => $customer_id,
+            "alarm_id" => $alarm_id,
+            "email" => $email,
+            "notes" => "Event Forwarded to " . $email,
+            "event_status" => "Forwarded",
+            "created_datetime" => date("Y-m-d H:i:s")
+        ];
 
-            CustomerAlarmNotes::create($data);
-        }
+        CustomerAlarmNotes::create($data);
+
         // return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
     }
 

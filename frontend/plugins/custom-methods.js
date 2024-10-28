@@ -257,7 +257,6 @@ export default ({ app }, inject) => {
 
   inject("pagePermission", {
     can(page, thisObj) {
-      console.log("thisObj", thisObj);
       if (!thisObj) return true; //undefiend
       //if (!thisObj) thisObj = this.$store.state.auth;
       if (thisObj) {

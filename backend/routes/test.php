@@ -9,6 +9,7 @@ use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
+use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\DeviceCameraController;
 use App\Http\Controllers\DeviceCameraModel2Controller;
 use App\Http\Controllers\DeviceController;
@@ -69,6 +70,12 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
     (new ApiAlarmDeviceSensorLogsController())->updateArmedTableCompanyLogs();
 
     (new ApiAlarmDeviceSensorLogsController())->updateDisarmTableCompanyLogs();
+});
+
+Route::get("testNotification", function (Request $request) {
+
+
+    return (new CustomersController)->verifyArmedDeviceWithShopTime();
 });
 Route::get("sync_alarm_logs", function (Request $request) {
     return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();

@@ -270,7 +270,8 @@
                         </v-list-item>
 
                         <v-list-item
-                          v-for="alarmType in alarmTypesList"
+                          v-for="(alarmType, index) in alarmTypesList"
+                          :key="'ArmedReports' + index + 20"
                           style="
                             min-height: 22px;
                             border-bottom: 1px solid #ddd;

@@ -54,6 +54,7 @@
               "
             >
               <v-img
+                v-if="item.model_type == 'company' && item.user.role_id > 1"
                 style="
                   border-radius: 50%;
                   height: auto;
@@ -61,8 +62,55 @@
                   max-width: 30px;
                 "
                 :src="
-                  item.user.employee
-                    ? item.user.employee.profile_picture
+                  item.user.profile_picture
+                    ? item.user.profile_picture
+                    : '/no-profile-image.jpg'
+                "
+              >
+              </v-img
+              ><v-img
+                v-else-if="item.model_type == 'security'"
+                style="
+                  border-radius: 50%;
+                  height: auto;
+                  width: 30px;
+                  max-width: 30px;
+                "
+                :src="
+                  item.user.security
+                    ? item.user.security.picture
+                    : '/no-profile-image.jpg'
+                "
+              >
+              </v-img
+              ><v-img
+                v-else-if="item.model_type == 'technician'"
+                style="
+                  border-radius: 50%;
+                  height: auto;
+                  width: 30px;
+                  max-width: 30px;
+                "
+                :src="
+                  item.user.technician
+                    ? item.user.technician.profile_picture
+                    : '/no-profile-image.jpg'
+                "
+              >
+              </v-img
+              ><v-img
+                v-else-if="
+                  item.model_type == 'company' && item.user.role_id == 1
+                "
+                style="
+                  border-radius: 50%;
+                  height: auto;
+                  width: 30px;
+                  max-width: 30px;
+                "
+                :src="
+                  item.company.logo
+                    ? item.company.logo
                     : '/no-profile-image.jpg'
                 "
               >
@@ -74,6 +122,13 @@
           {{ (item.branch && item.branch_name) || "---" }}
         </template>
         <template v-slot:item.employee.first_name="{ item, index }">
+          <div v-if="item.model_type == 'company' && item.user.role_id > 1">
+            {{ item.user.first_name }} {{ item.user.last_name }}
+          </div>
+          <div v-if="item.model_type == 'company' && item.user.role_id == 1">
+            {{ item.model_type == "company" ? "Admin" : "" }}
+          </div>
+
           {{
             item.user.security
               ? item.user.security.first_name +
@@ -81,7 +136,6 @@
                 item.user.security.last_name
               : ""
           }}{{ item.user.customer ? item.user.customer.building_name : "" }}
-          {{ item.model_type == "company" ? "Admin" : "" }}
         </template>
 
         <template v-slot:item.UserID="{ item }"> #{{ item.UserID }} </template>
@@ -137,7 +191,7 @@ export default {
           value: "employee.pic",
         },
         {
-          text: "User ",
+          text: "User Type",
           align: "left",
           sortable: false,
           filterable: true,

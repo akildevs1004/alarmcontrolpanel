@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\WhatsappController;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Mail\EmailContentDefault;
@@ -15,12 +16,16 @@ use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\MasterDeviceSerialNumbers;
+use App\Models\ReportNotificationLogs;
 use App\Models\SecurityCustomers;
 use App\Models\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToArray;
@@ -1467,5 +1472,191 @@ class CustomersController extends Controller
         }
 
         return $groupResults;
+    }
+
+    public function verifyArmedDeviceWithShopTime()
+    {
+        $message = [];
+        $devices = Device::with(["customer.mappedsecurity" => function ($w) {
+            $w->withOut(["devices", "contacts"]);
+        }])
+            ->whereHas("customer", function ($q) {
+                $q->whereDate("end_date", ">=", now()->toDateString())
+                    ->where("id", 6);
+            })
+            ->where("armed_status", "!=", 1)
+            ->get();
+
+        foreach ($devices as $device) {
+            $timeZone = $device['utc_time_zone'] ?: 'Asia/Dubai';
+            $currentDateTime = new DateTime("now", new DateTimeZone($timeZone));
+            $currentDateTimeFormatted = $currentDateTime->format('Y-m-d H:i:s');
+
+
+            $cc_emails = $device->customer->user->email;
+            // Check if close time is defined
+            if ($device->customer['close_time']) {
+                $closeDateTime = new DateTime($currentDateTime->format('Y-m-d ') . $device->customer['close_time'] . ':00');
+                $totalMinutes = $currentDateTime->diff($closeDateTime)->days * 1440 +
+                    $currentDateTime->diff($closeDateTime)->h * 60 +
+                    $currentDateTime->diff($closeDateTime)->i;
+
+                // Previous notifications timestamps
+                $armed_notification1 = new DateTime($device->armed_notification1 ?: "1970-01-01 00:00:00");
+                $armed_notification2 = new DateTime($device->armed_notification2 ?: "1970-01-01 00:00:00");
+
+                $elapsedSinceNotification1 = $currentDateTime->diff($armed_notification1)->days * 1440 +
+                    $currentDateTime->diff($armed_notification1)->h * 60 +
+                    $currentDateTime->diff($armed_notification1)->i;
+
+                $elapsedSinceNotification2 = $currentDateTime->diff($armed_notification2)->days * 1440 +
+                    $currentDateTime->diff($armed_notification2)->h * 60 +
+                    $currentDateTime->diff($armed_notification2)->i;
+
+                $sendNotification = $elapsedSinceNotification1 > 1440 || $elapsedSinceNotification2 > 1440;
+
+                if ($sendNotification) {
+                    if ($totalMinutes >= 15 && $totalMinutes < 30) {
+                        Device::where("serial_number", $device->serial_number)->update(["armed_notification1" => $currentDateTimeFormatted]);
+                    } else
+
+                    if ($totalMinutes >= 30) {
+                        Device::where("serial_number", $device->serial_number)->update([
+                            "armed_notification2" => $currentDateTimeFormatted,
+                            "armed_notification1" => $device->armed_notification1 ?: $currentDateTimeFormatted
+                        ]);
+                    }
+
+
+
+                    //send Warning Notification 
+
+                    if ($device->customer->primary_contact) {
+                        $this->sendArmedWarningMail($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                        $this->sendArmedWarningWhatsapp($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                    }
+
+                    if ($device->customer->secondary_contact) {
+                        $this->sendArmedWarningMail($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                        $this->sendArmedWarningWhatsapp($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                    }
+
+
+                    if ($device->customer->mappedsecurity) {
+                        $this->sendArmedWarningMail($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
+                        $this->sendArmedWarningWhatsapp($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
+                    }
+                } else {
+                    return 'Notificaiton Not sent';
+                }
+            }
+        }
+
+
+
+
+
+
+
+        return $message;
+    }
+
+    public function sendArmedWarningMail($contact, $device, $currentDateTime, $cc_emails)
+    {
+        $body_content1 = '';
+
+
+        $email = $device['customer']["user"]->email;
+        $whatsapp_number = $device['customer']['contact_number'];
+        $location = "{$device['customer']['latitude']},{$device['customer']['longitude']}";
+
+
+        $body_content1 = "Hello, <strong>{$contact->first_name} {$contact->last_name}</strong><br/>";
+        $body_content1 .= "Building: {$device->customer->building_name}<br/><br/>";
+        $body_content1 .= "<strong>This is notifying you that the device armed is not active</strong><br/>";
+        $body_content1 .= "Scheduled Store Close/Armed Time: {$device->customer->close_time}<br/>";
+        $body_content1 .= "Event Time: {$currentDateTime}<br/>";
+        $body_content1 .= "Priority: Low<br/><br/>";
+        $body_content1 .= "Property: {$device->customer->property_type}<br/>";
+        $body_content1 .= "Address: {$device->customer->address}<br/>";
+        $body_content1 .= "City: {$device->customer->city}<br/><br/>";
+        $body_content1 .= "Contact Number: {$device['customer']['contact_number']}<br/><br/>";
+        $body_content1 .= "Google Map Link: <a href='https://maps.google.com/?q={$location}'>View on Google Maps</a><br/><br/><br/>";
+        $body_content1 .= "Thanks,<br/>Xtreme Guard<br/>";
+
+
+        $logData = [
+            "company_id" => $device->company_id,
+            'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
+            "email" => $email,
+        ];
+        ReportNotificationLogs::create($logData);
+        $emailData = [
+            'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
+            'body' => $body_content1,
+        ];
+        $body_content1 = new EmailContentDefault($emailData);
+        try {
+            if ($email != '')
+                Mail::to($email)
+                    ->cc($cc_emails)
+                    ->send($body_content1);
+        } catch (\Exception $e) {
+
+            Log::error("Email sending failed: " . $e->getMessage());
+        }
+
+
+
+        return $body_content1;
+    }
+    public function sendArmedWarningWhatsapp($contact, $device, $currentDateTime, $cc_emails)
+    {
+
+        return false;
+        $body_content1 = '';
+
+
+        $email = $device['customer']["user"]->email;
+        $whatsapp_number = $device['customer']['contact_number'];
+        $location = "{$device['customer']['latitude']},{$device['customer']['longitude']}";
+
+
+        $body_content1 = "Hello,  {$contact->first_name} {$contact->last_name}\n\n";
+        $body_content1 .= "Building: {$device->customer->building_name}\n";
+        $body_content1 .= "*This is notifying you that the device armed is not active*\n";
+        $body_content1 .= "Scheduled Store Close/Armed Time: {$device->customer->close_time}\n";
+        $body_content1 .= "Event Time: {$currentDateTime}\n";
+        $body_content1 .= "Priority: Low\n\n";
+        $body_content1 .= "Property: {$device->customer->property_type}\n";
+        $body_content1 .= "Address: {$device->customer->address}\n";
+        $body_content1 .= "City: {$device->customer->city}\n\n";
+        $body_content1 .= "Contact Number: {$device['customer']['contact_number']}\n\n";
+        $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location} \n\n\n";
+        $body_content1 .= "Thanks,\nXtreme Guard\n";
+
+
+        $logData = [
+            "company_id" => $device->company_id,
+            'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
+            "whatsapp_number" => $whatsapp_number,
+        ];
+        ReportNotificationLogs::create($logData);
+        $emailData = [
+            'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
+            'body' => $body_content1,
+        ];
+        $body_content1 = new EmailContentDefault($emailData);
+
+
+        try {
+            if ($whatsapp_number != '') (new WhatsappController())->sendWhatsappNotification($device['company'], $body_content1, $whatsapp_number, []);
+        } catch (\Exception $e) {
+
+            Log::error("Whatsapp sending failed: " . $e->getMessage());
+        }
+
+
+        return $body_content1;
     }
 }

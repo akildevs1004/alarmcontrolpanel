@@ -228,7 +228,24 @@
             >
           </v-col> -->
         </v-row>
-        <v-row v-if="!isMapviewOnly">
+        <v-row v-if="!isMapviewOnly"
+          ><v-col md="4" cols="12" sm="12" dense>
+            <v-text-field
+              :readonly="isMapviewOnly"
+              label="Contact Number"
+              dense
+              outlined
+              type="text"
+              v-model="customer_payload.contact_number"
+              hide-details
+              :disabled="!isEditable"
+            ></v-text-field>
+            <span
+              v-if="errors && errors.contact_number"
+              class="text-danger mt-2"
+              >{{ errors.contact_number[0] }}</span
+            >
+          </v-col>
           <v-col md="4" sm="12" cols="12">
             <v-menu
               v-model="startDateMenuOpen"

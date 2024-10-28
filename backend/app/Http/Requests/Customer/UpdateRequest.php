@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
             'building_type_id' => "required",
             'building_name' => "required",
             'house_number' => 'nullable',
+            'contact_number' => 'nullable',
             'street_number' => "nullable",
             'city' => "required",
             'state' => "required",
