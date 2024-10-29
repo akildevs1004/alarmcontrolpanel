@@ -13,6 +13,7 @@ use App\Models\AlarmLogs;
 use App\Models\AttendanceLog;
 use App\Models\Company;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Facades\Excel;
@@ -133,6 +134,117 @@ class AlarmReportsController extends Controller
 
         $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
         return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
+    }
+
+    public function deviceArmedReportsPrintPdf(Request $request)
+    {
+
+        $reports1 = (new DeviceArmedLogsController())->reportProcess($request);
+
+
+        $reports = [];
+
+        foreach ($reports1 as $report) {
+
+            if (empty($report['customers'])) {
+                $reports[] = [
+                    "date" => $report['date'],
+
+                    "customer_id" => "---",
+                    "customer" => "---",
+                    "city" => "---",
+                    "armed" => "---",
+                    "sos" => "---",
+                    "armedHours" => "---",
+                    "disarmHours" => "---",
+                    "events_count" => 0,
+
+                ];
+            } else {
+                foreach ($report['customers'] as $customer) {
+
+                    $armedTotalHrs = $this->getArmedTotalDuration($customer['armed']);
+                    $disarmTotalHrs = $this->getDisarmTotalDuration($customer['armed'], $report['date']);
+                    $reports[] = [
+                        "date" => $report['date'],
+                        "armedHours" => $armedTotalHrs,
+                        "disarmHours" => $disarmTotalHrs,
+
+                        ...$customer
+                    ];
+                }
+            }
+        }
+
+
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
+
+        return $pdf->stream($request->alarm_id . ' Armed Report');
+    }
+    function getDisarmTotalDuration($array, $date)
+    {
+        $startOfDay = new DateTime($date);
+        $startOfDay->setTime(0, 0, 0); // Set to 12:00 AM
+        $endOfDay = clone $startOfDay;
+        $endOfDay->setTime(23, 59, 59); // Set to 11:59 PM
+
+        $totalDurationInSeconds = 0;
+
+        foreach ($array as $item) {
+            if ($item && isset($item['armed_datetime'], $item['disarm_datetime'])) {
+                $armedTime = new DateTime($item['armed_datetime']);
+                $disarmedTime = new DateTime($item['disarm_datetime']);
+
+                $durationInSeconds = $disarmedTime->getTimestamp() - $armedTime->getTimestamp();
+
+                if ($durationInSeconds > 0) {
+                    $totalDurationInSeconds += $durationInSeconds;
+                }
+            }
+        }
+
+        if (!is_numeric($totalDurationInSeconds)) {
+            return "---";
+        }
+
+        $totalDurationInSeconds = 24 * 60 * 60 - $totalDurationInSeconds;
+
+        $totalHours = floor($totalDurationInSeconds / 3600);
+        $totalMinutes = floor(($totalDurationInSeconds % 3600) / 60);
+
+        $totalHours = str_pad($totalHours, 2, "0", STR_PAD_LEFT);
+        $totalMinutes = str_pad($totalMinutes, 2, "0", STR_PAD_LEFT);
+
+        return "$totalHours:$totalMinutes";
+    }
+
+    function getArmedTotalDuration($array)
+    {
+        $totalDurationInSeconds = 0;
+
+        foreach ($array as $item) {
+            if ($item && isset($item['armed_datetime'], $item['disarm_datetime'])) {
+                $armedTime = new DateTime($item['armed_datetime']);
+                $disarmedTime = new DateTime($item['disarm_datetime']);
+
+                $duration = $disarmedTime->getTimestamp() - $armedTime->getTimestamp();
+                $totalDurationInSeconds += $duration;
+            }
+        }
+
+        if (!is_numeric($totalDurationInSeconds)) {
+            return "00:00";
+        }
+
+        $totalHours = floor($totalDurationInSeconds / 3600);
+        $totalMinutes = floor(($totalDurationInSeconds % 3600) / 60);
+
+        $totalHours = str_pad($totalHours, 2, "0", STR_PAD_LEFT);
+        $totalMinutes = str_pad($totalMinutes, 2, "0", STR_PAD_LEFT);
+
+        return "$totalHours:$totalMinutes";
     }
 
     //----------------------------------------------------------------

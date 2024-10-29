@@ -20,7 +20,7 @@
               <v-tabs-slider color="violet"></v-tabs-slider>
               <v-tab>
                 <v-icon left> mdi-domain </v-icon>
-                <span>Profile</span>
+                <span>Company Profile</span>
               </v-tab>
 
               <v-tab>

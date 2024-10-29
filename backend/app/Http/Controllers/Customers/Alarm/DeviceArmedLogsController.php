@@ -38,7 +38,13 @@ class DeviceArmedLogsController extends Controller
 
         return $model->paginate($request->perPage ?? 10);;
     }
+
     public function report(Request $request)
+    {
+
+        return  $this->reportProcess($request);
+    }
+    public function reportProcess($request)
     {
         // Parse start and end dates
         $startDate = Carbon::parse($request->input('date_from'))->startOfDay();
@@ -86,7 +92,10 @@ class DeviceArmedLogsController extends Controller
         });
 
         $eventLogsByDateAndCustomer = $eventLogs->groupBy(function ($log) {
-            return Carbon::parse($log->alarm_start_datetime)->format('Y-m-d') . '_' . optional($log->device->customer)->id;
+
+            $date = Carbon::parse($log->alarm_start_datetime)->format('Y-m-d');
+            $customerId = optional(optional($log->device)->customer)->id ?? 'no_customer';
+            return "{$date}_{$customerId}";
         })->map(function ($logs) {
 
             // return [
