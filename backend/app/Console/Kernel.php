@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('task:alarm_device_sensor_logs_csv')
             ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-alarm-device-sensor-logs-csv.log"))->purpose('Read CSV file which is Genrated By Log Listener'); // 
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log"))->purpose('Read CSV file which is Genrated By Log Listener'); // 
 
         /*------------------------ */
         $monthYear = date("M-Y");
@@ -62,9 +62,10 @@ class Kernel extends ConsoleKernel
 
         /*------------------------ */
         $schedule->call(function () {
-            (new CustomersController)->verifyArmedDeviceWithShopTime();
+            return (new CustomersController)->verifyArmedDeviceWithShopTime();
         })->everyMinute()
-            ->purpose('Send Email or Wahtsapp Alerts if Device is not Armed with Shop Timings')->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-notification-armed-with-shop-time.log"));
+            ->purpose('Send Email or Wahtsapp Alerts if Device is not Armed with Shop Timings')
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
     }
 
     /**
