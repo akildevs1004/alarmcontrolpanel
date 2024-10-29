@@ -33,19 +33,19 @@ class DeviceArmedReportExcelMapping  implements FromCollection, WithHeadings, Wi
 
             "Date",
             "Customer",
-            "Arm1",
-            "Dis1",
+            "Armed1",
+            "Disarm1",
 
-            "Arm2",
-            "Dis2",
+            "Armed2",
+            "Disarm2",
 
-            "Arm3",
-            "Dis3",
+            "Armed3",
+            "Disarm3",
 
-            "Arm4",
-            "Dis4",
+            "Armed4",
+            "Disarm4",
 
-            "Arm5",
+            "Armed5",
             "Disa5",
 
             "Armed ",
