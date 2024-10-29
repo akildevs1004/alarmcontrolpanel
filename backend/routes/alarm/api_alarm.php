@@ -273,7 +273,7 @@ Route::get('operators_live_status', [SecurityLoginController::class, "getOperato
 Route::get('device_armed_reports', [DeviceArmedLogsController::class, "report"]);
 
 //pdf 
-Route::get('device_armed_report_download_excel', [AlarmReportsController::class, 'deviceArmedReportsDownloadExcel']);
+Route::get('device_armed_report_export_excel', [AlarmReportsController::class, 'deviceArmedReportsDownloadExcel']);
 Route::get('device_armed_report_print_pdf', [AlarmReportsController::class, 'deviceArmedReportsPrintPdf']);
 Route::get('device_armed_report_download_pdf', [AlarmReportsController::class, 'deviceArmedReportsDownload']);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers\Reports;
 
 use App\Exports\AlarmEventsExport;
 use App\Exports\DeviceArmedExport;
+use App\Exports\DeviceArmedReportExcelMapping;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Alarm\DeviceArmedLogsController;
@@ -135,10 +136,40 @@ class AlarmReportsController extends Controller
         $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
         return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
     }
+    public function deviceArmedReportsDownloadExcel(Request $request)
+    {
 
+        $reports = $this->pdfArmedProcess($request);
+
+        $file_name =  $request->date_from . ' to ' . $request->date_to . ' Armed Report.xlsx';
+
+        return Excel::download((new DeviceArmedReportExcelMapping($reports)), $file_name);
+    }
+    public function deviceArmedReportsDownload(Request $request)
+    {
+
+        $reports = $this->pdfArmedProcess($request);
+
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
+
+        return $pdf->download($request->date_from . ' to ' . $request->date_to . ' Armed Report.pdf');
+    }
     public function deviceArmedReportsPrintPdf(Request $request)
     {
 
+        $reports = $this->pdfArmedProcess($request);
+
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
+
+        return $pdf->stream($request->date_from . ' to ' . $request->date_to . ' Armed Report');
+    }
+
+    function pdfArmedProcess($request)
+    {
         $reports1 = (new DeviceArmedLogsController())->reportProcess($request);
 
 
@@ -176,12 +207,7 @@ class AlarmReportsController extends Controller
             }
         }
 
-
-        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
-
-        $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
-
-        return $pdf->stream($request->alarm_id . ' Armed Report');
+        return  $reports;
     }
     function getDisarmTotalDuration($array, $date)
     {

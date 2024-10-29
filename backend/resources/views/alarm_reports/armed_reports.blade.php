@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Armed Report</title>
+    <title>Device Armed Report {{ $request->date_from}} - {{$request->date_to}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -190,8 +190,8 @@
                         @endfor
 
 
-                        <td>{{ $item['armedHours'] }}</td>
-                        <td>{{ $item['disarmHours'] }}</td>
+                        <td style="color:red">{{ $item['armedHours'] }}</td>
+                        <td style="color:green">{{ $item['disarmHours'] }}</td>
                         <td style="text-align:center">{{ $item['events_count'] }}</td>
 
                 </tr>
