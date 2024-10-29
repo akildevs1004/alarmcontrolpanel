@@ -1579,8 +1579,8 @@ class CustomersController extends Controller
         $body_content1 = '';
 
 
-        $email = $device['customer']["user"]->email;
-        $whatsapp_number = $device['customer']['contact_number'];
+        $email = $contact->email;
+        $whatsapp_number = $contact['contact_number'];
         $location = "{$device['customer']['latitude']},{$device['customer']['longitude']}";
 
 
