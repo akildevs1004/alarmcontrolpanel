@@ -1482,7 +1482,6 @@ class CustomersController extends Controller
             $w->withOut(["devices", "contacts"]);
         }])->whereHas("customer", function ($q) {
             $q->whereDate("end_date", ">=", date("Y-m-d"));
-            $q->where("id",  6);
         })->where("armed_status", "!=", 1)->get();
 
         foreach ($devices as $key => $device) {
