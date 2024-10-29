@@ -239,8 +239,12 @@ export default {
           value: "building_type",
         },
         { text: "Email/Whatsapp", value: "email", sortable: false },
-        { text: "Subjject", value: "subject", sortable: false },
-        { text: "Date", value: "created_datetime", sortable: false },
+        { text: "Subject", value: "subject", sortable: false },
+        {
+          text: "Notification Time",
+          value: "created_datetime",
+          sortable: false,
+        },
       ],
       items: [],
     };
