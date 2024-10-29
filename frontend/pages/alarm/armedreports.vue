@@ -114,8 +114,7 @@
                       <span v-bind="attrs" v-on="on">
                         <v-icon dark-2 icon color="violet" small
                           >mdi-printer-outline</v-icon
-                        >
-                        Print
+                        >Print
                       </span>
                     </template>
                     <v-list width="100px" dense style="">
@@ -461,8 +460,9 @@ export default {
       let totalHours = Math.floor(totalDurationInSeconds / 3600);
       let totalMinutes = Math.floor((totalDurationInSeconds % 3600) / 60);
 
-      if (totalHours <= 9) totalHours = "0" + totalHours;
-      if (totalMinutes <= 9) totalMinutes = "0" + totalMinutes;
+      if (totalHours <= 9 && totalHours > 0) totalHours = "0" + totalHours;
+      if (totalMinutes <= 9 && totalMinutes > 0)
+        totalMinutes = "0" + totalMinutes;
 
       return `${totalHours}:${totalMinutes}`;
     },
@@ -487,8 +487,9 @@ export default {
       let totalMinutes = Math.floor((totalDurationInSeconds % 3600) / 60);
       let remainingSeconds = totalDurationInSeconds % 60;
 
-      if (totalHours <= 9) totalHours = "0" + totalHours;
-      if (totalMinutes <= 9) totalMinutes = "0" + totalMinutes;
+      if (totalHours <= 9 && totalHours > 0) totalHours = "0" + totalHours;
+      if (totalMinutes <= 9 && totalMinutes > 0)
+        totalMinutes = "0" + totalMinutes;
 
       return `${totalHours}:${totalMinutes}`;
     },
