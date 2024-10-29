@@ -165,7 +165,7 @@ class AlarmReportsController extends Controller
 
         $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
 
-        return $pdf->stream($request->date_from . ' to ' . $request->date_to . ' Armed Report');
+        return $pdf->stream($request->date_from . ' to ' . $request->date_to . ' Armed Report.pdf');
     }
 
     function pdfArmedProcess($request)
