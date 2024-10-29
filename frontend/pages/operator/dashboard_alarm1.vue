@@ -1028,8 +1028,6 @@ export default {
     plotLocations() {
       //set default one customer
 
-      console.log(this.data[0].device.utc_time_zone);
-
       if (
         this.data &&
         this.data[0] &&

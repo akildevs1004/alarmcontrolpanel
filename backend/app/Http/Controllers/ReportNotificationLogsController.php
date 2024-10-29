@@ -15,7 +15,29 @@ class ReportNotificationLogsController extends Controller
      */
     public function index(Request $request)
     {
-        return ReportNotificationLogs::where('notification_id', $request->notification_id)->orderBy("created_at", "desc")->paginate($request->per_page);
+        $model = ReportNotificationLogs::with(
+            [
+                "customer" =>
+                function ($q) {
+                    $q->withOut(["user", "devices", "primary_contact", "contacts", "secondary_contact", "profile_pictures"]);
+                }
+            ]
+        )->where("company_id", $request->company_id)
+            ->whereBetween("created_datetime", [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+
+
+        $model->when($request->filled("filter_customer_id"), function ($q) use ($request) {
+            $q->where("customer_id", $request->filter_customer_id);
+        });
+
+        $model->when($request->filled("fileter_customers_assigned"), function ($q) use ($request) {
+            $q->whereIn("customer_id", $request->fileter_customers_assigned);
+        });
+
+
+
+        return   $model->orderBy("created_at", "desc")
+            ->paginate($request->perPage);
     }
 
     /**

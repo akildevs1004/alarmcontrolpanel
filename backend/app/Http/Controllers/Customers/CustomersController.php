@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToArray;
 
@@ -1479,52 +1480,66 @@ class CustomersController extends Controller
         $message = [];
         $devices = Device::with(["customer.mappedsecurity" => function ($w) {
             $w->withOut(["devices", "contacts"]);
-        }])
-            ->whereHas("customer", function ($q) {
-                $q->whereDate("end_date", ">=", now()->toDateString())
-                    ->where("id", 6);
-            })
-            ->where("armed_status", "!=", 1)
-            ->get();
+        }])->whereHas("customer", function ($q) {
+            $q->whereDate("end_date", ">=", date("Y-m-d"));
+            $q->where("id",  6);
+        })->where("armed_status", "!=", 1)->get();
 
-        foreach ($devices as $device) {
-            $timeZone = $device['utc_time_zone'] ?: 'Asia/Dubai';
-            $currentDateTime = new DateTime("now", new DateTimeZone($timeZone));
-            $currentDateTimeFormatted = $currentDateTime->format('Y-m-d H:i:s');
+        foreach ($devices as $key => $device) {
+
+            $date  = new DateTime("now", new DateTimeZone($device['utc_time_zone'] != '' ? $device['utc_time_zone'] : 'Asia/Dubai'));
 
 
-            $cc_emails = $device->customer->user->email;
-            // Check if close time is defined
-            if ($device->customer['close_time']) {
-                $closeDateTime = new DateTime($currentDateTime->format('Y-m-d ') . $device->customer['close_time'] . ':00');
-                $totalMinutes = $currentDateTime->diff($closeDateTime)->days * 1440 +
-                    $currentDateTime->diff($closeDateTime)->h * 60 +
-                    $currentDateTime->diff($closeDateTime)->i;
+            if ($device->customer['close_time'] != '') {
 
-                // Previous notifications timestamps
-                $armed_notification1 = new DateTime($device->armed_notification1 ?: "1970-01-01 00:00:00");
-                $armed_notification2 = new DateTime($device->armed_notification2 ?: "1970-01-01 00:00:00");
+                $sendNotification = false;
 
-                $elapsedSinceNotification1 = $currentDateTime->diff($armed_notification1)->days * 1440 +
-                    $currentDateTime->diff($armed_notification1)->h * 60 +
-                    $currentDateTime->diff($armed_notification1)->i;
+                $currentDateTime = $date->format('Y-m-d H:i:s');
+                $armedShceduleDateTime = $date->format('Y-m-d ' . $device->customer['close_time'] . ':00');
 
-                $elapsedSinceNotification2 = $currentDateTime->diff($armed_notification2)->days * 1440 +
-                    $currentDateTime->diff($armed_notification2)->h * 60 +
-                    $currentDateTime->diff($armed_notification2)->i;
+                $currentDateTimeObj = new DateTime($currentDateTime);
+                $armedScheduleDateTimeObj = new DateTime($armedShceduleDateTime);
 
-                $sendNotification = $elapsedSinceNotification1 > 1440 || $elapsedSinceNotification2 > 1440;
+                $currentDateTimeFormatted = $currentDateTimeObj->format('Y-m-d H:i:s');
+
+                $difference = $currentDateTimeObj->diff($armedScheduleDateTimeObj);
+
+                $totalMinutes = ($difference->d * 24 * 60 + $difference->h * 60) + $difference->i;
+                $cc_emails = $device['customer']['user']['email'];
+
+
+                $armed_notification1 = new DateTime($device->armed_notification1 != '' ? $device->armed_notification1 : "1970-01-01 00:00:00");
+                $armed_notification2 = new DateTime($device->armed_notification2 != '' ? $device->armed_notification2 : "1970-01-01 00:00:00");
+
+                $difference1 = $currentDateTimeObj->diff($armed_notification1);
+                $difference2 = $currentDateTimeObj->diff($armed_notification2);
+
+                $message[] = ($difference1->d * 24 * 60 + $difference1->h * 60) + $difference1->i;
+                $message[] = ($difference1->d * 24 * 60 + $difference2->h * 60) + $difference2->i;
+
+                if (($difference1->d * 24 * 60 + $difference1->h * 60) + $difference1->i > (24 * 60) ||
+                    ($difference2->d * 24 * 60 + $difference2->h * 60) + $difference2->i > (24 * 60)
+                ) {
+                    $sendNotification = true;
+                }
+
 
                 if ($sendNotification) {
-                    if ($totalMinutes >= 15 && $totalMinutes < 30) {
-                        Device::where("serial_number", $device->serial_number)->update(["armed_notification1" => $currentDateTimeFormatted]);
-                    } else
 
-                    if ($totalMinutes >= 30) {
-                        Device::where("serial_number", $device->serial_number)->update([
-                            "armed_notification2" => $currentDateTimeFormatted,
-                            "armed_notification1" => $device->armed_notification1 ?: $currentDateTimeFormatted
-                        ]);
+                    if ($totalMinutes >= 15 && $totalMinutes < 30) {
+                        Device::where("serial_number", $device->serial_number)->update(["armed_notification1" => $currentDateTime]);
+                        $message[] = 'Notificaiton   sent -  ' . $totalMinutes;
+                    } else if ($totalMinutes >= 30 && $totalMinutes < 60) {
+                        Device::where("serial_number", $device->serial_number)->update(["armed_notification2" => $currentDateTime]);
+
+
+                        Device::where("serial_number", $device->serial_number)
+                            ->where("armed_notification1", null)
+                            ->update(["armed_notification2" => $currentDateTime, "armed_notification1" => $currentDateTime]);
+
+                        $message[] = 'Notificaiton   sent -  ' . $totalMinutes;
+                    } else {
+                        $message[] = 'Notificaiton Not sent - Duration is out of Time ' . $totalMinutes;
                     }
 
 
@@ -1547,11 +1562,10 @@ class CustomersController extends Controller
                         $this->sendArmedWarningWhatsapp($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
                     }
                 } else {
-                    return 'Notificaiton Not sent';
+                    $message[] = 'Notificaiton is Already Sent at ' . $device->armed_notification1 . ' - ' . $device->armed_notification2;
                 }
             }
         }
-
 
 
 
@@ -1589,6 +1603,8 @@ class CustomersController extends Controller
             "company_id" => $device->company_id,
             'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
             "email" => $email,
+            "created_datetime" => $currentDateTime,
+            "customer_id" => $device->customer_id,
         ];
         ReportNotificationLogs::create($logData);
         $emailData = [
@@ -1640,6 +1656,8 @@ class CustomersController extends Controller
             "company_id" => $device->company_id,
             'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
             "whatsapp_number" => $whatsapp_number,
+            "created_datetime" => $currentDateTime,
+            "customer_id" => $device->customer_id,
         ];
         ReportNotificationLogs::create($logData);
         $emailData = [

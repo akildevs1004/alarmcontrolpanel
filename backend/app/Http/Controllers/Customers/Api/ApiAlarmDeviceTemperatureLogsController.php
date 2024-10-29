@@ -805,6 +805,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             "email" => $value->email,
                             "subject" => $issue,
                             "notification_id" => 0,
+                            "created_datetime" => date("Y-m-d H:i:s"),
                         ];
 
                         ReportNotificationLogs::create($data);

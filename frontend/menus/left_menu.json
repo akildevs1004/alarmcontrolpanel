@@ -395,17 +395,18 @@
     "top_menu_name": "settings"
   },
   {
-    "icon": "mdi-text-box-outline",
+    "icon": "mdi-lock-outline",
     "title": "Armed",
     "to": "/alarm/armedreports",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"
   },
+
   {
-    "icon": "mdi-text-box-outline",
-    "title": "Logs",
-    "to": "/alarm/armedlogs",
+    "icon": "mdi-message-text-lock-outline",
+    "title": "Notifications",
+    "to": "/alarm/armednotifications",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"

@@ -196,7 +196,7 @@ export default {
       if (this.chart) {
         this.chart.destroy();
       }
-      console.log(this.date_from);
+
       // Render the chart
       this.chart = await new ApexCharts(
         document.querySelector("#" + this.name),

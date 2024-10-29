@@ -279,8 +279,8 @@ Route::apiResource('report_notification_logs', ReportNotificationLogsController:
 Route::apiResource('device_notifications', DeviceNotificationsController::class);
 Route::apiResource('device_notifications_logs', DeviceNotificationsLogController::class);
 Route::get('testmail', [ReportNotificationController::class, 'testmail']);
-Route::get('/auto_shift', [AutoShiftController::class, 'index']);
-Route::post('/auto_shift', [AutoShiftController::class, 'store']);
+// Route::get('/auto_shift', [AutoShiftController::class, 'index']);
+// Route::post('/auto_shift', [AutoShiftController::class, 'store']);
 Route::apiResource('roster', RosterController::class);
 Route::get('/roster_list', [RosterController::class, 'getRosterList']);
 Route::post('/store_schedule_arrange', [RosterController::class, 'storeScheduleArrange']);

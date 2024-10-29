@@ -37,6 +37,7 @@ class Kernel extends ConsoleKernel
         /*------------------------ */
         $monthYear = date("M-Y");
 
+
         $schedule
             ->command("task:files-delete-old-log-files")
             ->dailyAt('23:30')
@@ -63,7 +64,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             (new CustomersController)->verifyArmedDeviceWithShopTime();
         })->everyMinute()
-            ->purpose('Send Email or Wahtsapp Alerts if Device is not Armed with Shop Timings');
+            ->purpose('Send Email or Wahtsapp Alerts if Device is not Armed with Shop Timings')->appendOutputTo(storage_path("kernal_logs/" . date("d-M-y") . "-notification-armed-with-shop-time.log"));
     }
 
     /**

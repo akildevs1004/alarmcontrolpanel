@@ -209,13 +209,9 @@
 </template>
 
 <script>
-import EditAlarmCustomerEventNotes from "../../components/Alarm/EditCustomerEventNotes.vue";
-import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 export default {
   components: {
-    EditAlarmCustomerEventNotes,
-    AlarmEventNotesListView,
     AlamAllEvents,
   },
   props: ["customer_id"],
