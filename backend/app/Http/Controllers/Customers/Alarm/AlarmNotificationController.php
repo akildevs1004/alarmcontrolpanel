@@ -104,6 +104,8 @@ class AlarmNotificationController extends Controller
             "Offline" => "offline.png",
             "Tampered" => "burglary.png",
             "SOS" => "burglary.png",
+            "AC_off" => "burglary.png",
+            "DC_off" => "burglary.png",
         ];
     }
     public function getGoogleMapIcons()

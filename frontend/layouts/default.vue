@@ -867,23 +867,7 @@ export default {
       return false;
     }
     this.loadAlarmNotificationIcons();
-    /*// this.getBuildingTypes();
-    // this.getAddressTypes();
-    // this.getDeviceTypes();
-    // this.getSensorTypes();
 
-    // this.getZoneTypes();
-
-    // this.getDeviceModels();*/
-    // if (!this.$auth.user) {
-    //   this.$router.push("/logout");
-    //   return;
-    // }
-    // this.alarm_icons["Temperature"] = "temperature.png";
-    // this.alarm_icons["Burglary"] = "burglary.png";
-    // this.alarm_icons["Medical"] = "medical.png";
-    // this.alarm_icons["Water"] = "water.png";
-    // this.alarm_icons["Fire"] = "fire.png";
     this.updateTopmenu();
 
     this.$store.commit("loginType", this.$auth.user.user_type);
