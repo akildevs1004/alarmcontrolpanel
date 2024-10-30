@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('task:alarm_device_sensor_logs_csv')
             ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log"))->purpose('Read CSV file which is Genrated By Log Listener'); // 
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log")); // 
 
         /*------------------------ */
         $monthYear = date("M-Y");
@@ -44,27 +44,27 @@ class Kernel extends ConsoleKernel
             //->withoutOverlapping()
             ->appendOutputTo(storage_path("kernal_logs/$monthYear-delete-old-logs.log"))
             ->runInBackground()
-            ->purpose('Delete Old .log files geenrated by all pages');;
+        ;;
 
         /*------------------------ */
         $schedule->call(function () {
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
         })->everyMinute()
-            ->purpose('Create/Update Alarm Event JSON File');
+        ;
 
 
         /*------------------------ */
         $schedule->call(function () {
             (new AlramEventsController)->verifyOfflineDevices();
         })->everyMinute()
-            ->purpose('Verify and update status of offline devices and Create Event ');
+        ;
 
 
         /*------------------------ */
         $schedule->call(function () {
             return (new CustomersController)->verifyArmedDeviceWithShopTime();
         })->everyMinute()
-            ->purpose('Send Email or Wahtsapp Alerts if Device is not Armed with Shop Timings')
+
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
     }
 
