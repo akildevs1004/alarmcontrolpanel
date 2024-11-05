@@ -1474,7 +1474,11 @@ class CustomersController extends Controller
 
         return $groupResults;
     }
-
+    public function clearDeviceNotification()
+    {
+        Device::where("armed_notification1", "!=", null)
+            ->update(["armed_notification1" => null, "armed_notification2" => null]);
+    }
     public function verifyArmedDeviceWithShopTime()
     {
         $message = [];
@@ -1482,7 +1486,12 @@ class CustomersController extends Controller
             $w->withOut(["devices", "contacts"]);
         }])->whereHas("customer", function ($q) {
             $q->whereDate("end_date", ">=", date("Y-m-d"));
-        })->where("armed_status", "!=", 1)->get();
+        })->where("armed_status", "!=", 1)
+            ->where(function ($q) {
+                $q->where("armed_notification1",   null);
+                $q->Orwhere("armed_notification1",   null);
+            })
+            ->get();
 
         foreach ($devices as $key => $device) {
 
@@ -1525,40 +1534,53 @@ class CustomersController extends Controller
 
                 if ($sendNotification) {
 
-                    if ($totalMinutes >= 15 && $totalMinutes < 30) {
-                        Device::where("serial_number", $device->serial_number)->update(["armed_notification1" => $currentDateTime]);
+                    if ($totalMinutes >= 15 && $totalMinutes < 30 && $device->armed_notification1 == '') {
+                        Device::where("serial_number", $device->serial_number)->update([
+                            "armed_notification1" => $currentDateTime
+                        ]);
                         $message[] = 'Notificaiton   sent -  ' . $totalMinutes;
-                    } else if ($totalMinutes >= 30 && $totalMinutes < 60) {
-                        Device::where("serial_number", $device->serial_number)->update(["armed_notification2" => $currentDateTime]);
+                    } else if ($totalMinutes >= 30 && $totalMinutes < 60 && $device->armed_notification2 == '') {
+                        Device::where("serial_number", $device->serial_number)->update([
+                            "armed_notification2" => $currentDateTime
+                        ]);
 
 
                         Device::where("serial_number", $device->serial_number)
                             ->where("armed_notification1", null)
-                            ->update(["armed_notification2" => $currentDateTime, "armed_notification1" => $currentDateTime]);
+                            ->update([
+                                "armed_notification2" => $currentDateTime,
+                                "armed_notification1" => $currentDateTime
+                            ]);
 
                         $message[] = 'Notificaiton   sent -  ' . $totalMinutes;
                     } else {
                         $message[] = 'Notificaiton Not sent - Duration is out of Time ' . $totalMinutes;
+
+
+                        $sendNotification = false;
                     }
 
 
+                    if ($sendNotification) {
+                        //send Warning Notification 
 
-                    //send Warning Notification 
+                        if ($device->customer->primary_contact) {
+                            $this->sendArmedWarningMail($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                            $this->sendArmedWarningWhatsapp($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                        }
 
-                    if ($device->customer->primary_contact) {
-                        $this->sendArmedWarningMail($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
-                        $this->sendArmedWarningWhatsapp($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);
-                    }
-
-                    if ($device->customer->secondary_contact) {
-                        $this->sendArmedWarningMail($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
-                        $this->sendArmedWarningWhatsapp($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
-                    }
+                        if ($device->customer->secondary_contact) {
+                            $this->sendArmedWarningMail($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                            $this->sendArmedWarningWhatsapp($device->customer->secondary_contact, $device, $currentDateTimeFormatted, $cc_emails);
+                        }
 
 
-                    if ($device->customer->mappedsecurity) {
-                        $this->sendArmedWarningMail($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
-                        $this->sendArmedWarningWhatsapp($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
+                        if ($device->customer->mappedsecurity) {
+                            $this->sendArmedWarningMail($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
+                            $this->sendArmedWarningWhatsapp($device->customer->mappedsecurity, $device, $currentDateTimeFormatted, $cc_emails);
+                        }
+                    } else {
+                        $message[] = 'Notificaiton Not sent - Duration is out of Time ' . $totalMinutes;
                     }
                 } else {
                     $message[] = 'Notificaiton is Already Sent at ' . $device->armed_notification1 . ' - ' . $device->armed_notification2;
