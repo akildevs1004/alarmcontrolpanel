@@ -1489,7 +1489,7 @@ class CustomersController extends Controller
         })->where("armed_status", "!=", 1)
             ->where(function ($q) {
                 $q->where("armed_notification1",   null);
-                $q->Orwhere("armed_notification1",   null);
+                $q->Orwhere("armed_notification2",   null);
             })
             ->get();
 
@@ -1505,22 +1505,30 @@ class CustomersController extends Controller
                 $currentDateTime = $date->format('Y-m-d H:i:s');
                 $armedShceduleDateTime = $date->format('Y-m-d ' . $device->customer['close_time'] . ':00');
 
+                if (strtotime($currentDateTime) <= strtotime($armedShceduleDateTime)) {
+                    $message[] = 'Notificaiton   not sent -  ' . $currentDateTime . ' - Close Time ' . $armedShceduleDateTime;
+
+                    return $message;
+                }
+
+
                 $currentDateTimeObj = new DateTime($currentDateTime);
                 $armedScheduleDateTimeObj = new DateTime($armedShceduleDateTime);
 
                 $currentDateTimeFormatted = $currentDateTimeObj->format('Y-m-d H:i:s');
 
                 $difference = $currentDateTimeObj->diff($armedScheduleDateTimeObj);
+                // $sign = $difference->invert === 1 ? -1 : 1;
 
-                $totalMinutes = ($difference->d * 24 * 60 + $difference->h * 60) + $difference->i;
+                $totalMinutes =  ($difference->d * 24 * 60 + $difference->h * 60) + $difference->i;
                 $cc_emails = $device['customer']['user']['email'];
 
 
                 $armed_notification1 = new DateTime($device->armed_notification1 != '' ? $device->armed_notification1 : "1970-01-01 00:00:00");
                 $armed_notification2 = new DateTime($device->armed_notification2 != '' ? $device->armed_notification2 : "1970-01-01 00:00:00");
 
-                $difference1 = $currentDateTimeObj->diff($armed_notification1);
-                $difference2 = $currentDateTimeObj->diff($armed_notification2);
+                $difference1 = $currentDateTimeObj->diff($armed_notification1, true);
+                $difference2 = $currentDateTimeObj->diff($armed_notification2, true);
 
                 $message[] = ($difference1->d * 24 * 60 + $difference1->h * 60) + $difference1->i;
                 $message[] = ($difference1->d * 24 * 60 + $difference2->h * 60) + $difference2->i;
@@ -1555,7 +1563,6 @@ class CustomersController extends Controller
                         $message[] = 'Notificaiton   sent -  ' . $totalMinutes;
                     } else {
                         $message[] = 'Notificaiton Not sent - Duration is out of Time ' . $totalMinutes;
-
 
                         $sendNotification = false;
                     }
