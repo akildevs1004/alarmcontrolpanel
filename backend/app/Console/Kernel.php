@@ -49,21 +49,28 @@ class Kernel extends ConsoleKernel
         /*------------------------ */
         $schedule->call(function () {
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
-        })->everyMinute()
-        ;
+        })->everyMinute();
+        /*------------------------ */
+
 
 
         /*------------------------ */
         $schedule->call(function () {
             (new AlramEventsController)->verifyOfflineDevices();
-        })->everyMinute()
-        ;
+        })->everyMinute();
 
 
         /*------------------------ */
         $schedule->call(function () {
             return (new CustomersController)->verifyArmedDeviceWithShopTime();
         })->everyMinute()
+
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
+
+        /*------------------------ */
+        $schedule->call(function () {
+            return (new CustomersController)->clearDeviceNotification();
+        })->dailyAt('00:00')
 
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
     }
