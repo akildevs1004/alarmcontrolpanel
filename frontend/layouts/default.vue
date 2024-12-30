@@ -763,7 +763,10 @@ export default {
           elevation: 0,
           selected: "",
         },
-
+        alarm_supervisorevents: {
+          elevation: 0,
+          selected: "",
+        },
         alarm_alarms: {
           elevation: 0,
           selected: "",
@@ -855,6 +858,9 @@ export default {
     };
   },
   created() {
+    console.log("company auth", this.$auth);
+    console.log("company", this.$auth.user);
+
     if (this.$auth.user.user_type != "company") {
       try {
         if (window) {
@@ -1073,6 +1079,10 @@ export default {
         "alarm-allevents": {
           name: "alarm_allevents",
           path: "/alarm/allevents",
+        },
+        "alarm-supervisorevents": {
+          name: "alarm_supervisorevents",
+          path: "/alarm/supervisorevents",
         },
         "alarm-reports": { name: "alarm_reports", path: "/alarm/reports" },
         "alarm-tickets": { name: "alarm_tickets", path: "/alarm/tickets" },
@@ -2640,5 +2650,16 @@ td {
 .v-expansion-panel-header {
   padding: 10px !important;
   min-height: 30px !important;
+}
+
+.footermarkerstyle {
+  text-align: center;
+  max-width: 50px;
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-top: 3px;
+
+  padding-bottom: 0px;
+  margin: auto;
 }
 </style>
