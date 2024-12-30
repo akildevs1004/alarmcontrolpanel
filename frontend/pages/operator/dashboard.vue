@@ -5,6 +5,37 @@
         {{ response }}
       </v-snackbar>
     </div>
+
+    <v-dialog v-model="dialogCameraLive" width="600px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">Camera Live</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogCameraLive = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text style="padding: 0px">
+          <v-container style="min-height: 100px; padding: 0px">
+            <iframe
+              v-if="dialogCameraLive"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14433.170866542543!2d55.291463!3d25.2607368!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43145ef11097%3A0x78e0d1eb3fed1225!2sAkil%20Security%20%26%20Alarm%20System%20Dubai%20LLC!5e0!3m2!1sen!2sae!4v1719239839580!5m2!1sen!2sae"
+              width="100%"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -57,7 +88,7 @@
     </v-dialog>
 
     <v-row>
-      <v-col class="main-leftcontent" style="padding: 4px; padding-top: 5px">
+      <v-col class="main-leftcontent" style="padding: 2px; padding-top: 5px">
         <v-card elevation="10" outlined :loading="loading">
           <div
             :key="mapkeycount"
@@ -94,8 +125,15 @@
             </v-text-field>
           </div>
           <div style="position: absolute; top: 50px; left: 10px">
-            <Clock></Clock>
+            <img
+              title="Alarm Control Panel - Xtremeguard"
+              src="/logo22.png"
+              style="width: 50px"
+            />
           </div>
+          <!-- <div style="position: absolute; top: 50px; left: 10px">
+            <Clock></Clock>
+          </div> -->
 
           <div style="position: absolute; top: 0px; left: 140px">
             <v-btn-toggle
@@ -173,144 +211,71 @@
           </div>
         </v-card>
       </v-col>
+
       <v-col
         v-if="displayRightcontant"
         class="main-rightcontent"
-        style="padding: 0px; padding-top: 6px"
+        style="padding: 0px; padding-top: 0px"
       >
         <v-card
           :loading="loading"
           elevation="10"
           outlined
           :style="
-            ' height:' + windowHeight + 'px;overflow-y: auto;overflow-x: hidden'
+            ' height:' +
+            windowHeight +
+            'px;overflow-y: auto;overflow-x: hidden;margin-top:3px!important;background-color: #99a2a6'
           "
         >
-          <v-card-text style="padding: 10px">
+          <v-card-text style="padding: 0px">
             <Topmenu
               @applyGlobalSearch="getDatafromApi"
-              style="margin-bottom: 20px"
+              style="padding: 10px"
             />
 
-            <!-- <v-row style="margin-top: 10px">
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Property Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterBuildingType"
-                  :items="[{ id: null, name: 'All' }, ...buildingTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Alarm Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterAlarmType"
-                  :items="[{ id: null, name: 'All' }, ...alarmTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 4px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Event Status"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterAlarmStatus"
-                  :items="[
-                    { id: null, name: 'All Events' },
-
-                    { id: 1, name: 'Open' },
-
-                    { id: 0, name: 'Closed' },
-                    { id: 3, name: 'Forwarded' },
-                  ]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-            </v-row> -->
             <v-row v-if="data.length == 0" class="text-center">
-              <v-col> No data available </v-col>
+              <v-col> 0 Alarms </v-col>
             </v-row>
 
-            <!--<v-card :key="selectedAlarm?.id" v-if="displayAlarmMap">
-              <v-card-text style="padding: 0px">
-                <OperatorGoogleMap
-                  :key="OperatorGoogleMapKey"
-                  style="padding: 0px"
-                  class="rounded-lg"
-                  :customer="selectedAlarm.device.customer"
-                  :customer_id="selectedAlarm.device.customer.id"
-                  :name="
-                    'OperatorGoogleMapCustomer' +
-                    selectedAlarm.device.customer.id
-                  "
-                  :mapimage="getAlarmColorObject(selectedAlarm).image + '?5=5'"
-                />
-
-                 <SensorPhotos
-                  class="rounded-lg"
-                  :customer_id="selectedAlarm.device.customer.id"
-                  :photos="selectedAlarm.device.customer.photos"
-                  v-if="selectedAlarm.device.customer"
-                />
-              </v-card-text>
-            </v-card> -->
-
-            <v-card
-              v-if="alarm.device?.customer"
-              :key="index + 55"
-              v-for="(alarm, index) in data"
-              elevation="0"
-              styl.e="border:1px solid #d9d9d9"
-              style="
-                border-color: black;
-                margin-top: 5px;
-                border: 1px solid #a5a5a5;
-                border-radius: 10px;
-              "
-            >
-              <v-card-text style="padding-right: 0px">
-                <v-row style="min-width: 200px; height: 57px; width: 100%">
-                  <v-col style="max-width: 40px; padding-left: 5px">
-                    <img
-                      @click="openWindow(alarm)"
-                      :title="alarm.alarm_type"
-                      style="width: 25px; padding-top: 0%"
-                      :src="getAlarmColorObject(alarm).image + '?5=5'"
-                    />
-                  </v-col>
-                  <v-col
-                    style="
-                      padding: 0px;
-                      font-size: 10px;
-                      padding-left: 10px;
-                      line-height: 18px;
-                      padding-top: 5px;
-                    "
-                  >
-                    <div style="overflow: hidden">
-                      <!-- {{
+            <div style="">
+              <v-card
+                v-if="alarm.device?.customer"
+                :key="index + 55"
+                v-for="(alarm, index) in data"
+                elevation="0"
+                styl.e="border:1px solid #d9d9d9;"
+                style="
+                  border-color: #d3d3d3;
+                  margin-top: 0px;
+                  border-bottom: 1px solid black;
+                  background-color: #99a2a6;
+                  border-radius: 0px;
+                "
+              >
+                <v-card-text
+                  style="padding-right: 0px; padding-top: 5px"
+                  elevation="0"
+                >
+                  <v-row style="min-width: 200px; height: 65px; width: 100%">
+                    <v-col style="max-width: 40px; padding-left: 5px">
+                      <img
+                        @click="openWindow(alarm)"
+                        :title="alarm.alarm_type"
+                        style="width: 25px; padding-top: 0%"
+                        :src="getAlarmColorObject(alarm).image + '?5=5'"
+                      />
+                    </v-col>
+                    <v-col
+                      style="
+                        padding: 0px;
+                        font-size: 10px;
+                        padding-left: 10px;
+                        line-height: 15px;
+                        padding-top: 5px;
+                      "
+                    >
+                      <div style="overflow: hidden">
+                        <!-- {{
                         alarm.device.customer.primary_contact
                           ? alarm.device.customer.primary_contact.first_name +
                             " " +
@@ -318,67 +283,86 @@
                           : "---"
                       }}
                       <br /> -->
-                      <div style="color: black; font-size: 14px">
-                        {{ alarm.device.customer.building_name || "---" }}
-                      </div>
-                      <div style="color: #bbb3b3">
-                        {{ alarm.device.customer.city }}
-                      </div>
-                      <!-- <div style="color: #bbb3b3">
+                        <div style="color: #de651e; font-size: 10px">
+                          {{
+                            alarm.device.customer.buildingtype?.name || "---"
+                          }}
+                        </div>
+                        <div style="color: black; font-size: 14px">
+                          {{ alarm.device.customer.building_name || "---" }}
+                        </div>
+                        <div style="color: black">
+                          {{
+                            alarm.device?.customer?.area
+                              ? alarm.device.customer.area
+                              : "---"
+                          }}
+                          ,
+                          {{ alarm.device.customer.city }}
+                        </div>
+
+                        <div style="color: #534949; text-align: left">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              alarm.alarm_start_datetime
+                            )
+                          }}
+                        </div>
+                        <!-- <div style="color: #bbb3b3">
                         {{
                           alarm.device.customer.primary_contact?.phone1 || "---"
                         }}
                       </div> -->
 
-                      <!-- <br />
+                        <!-- <br />
                       {{
                         alarm.device.customer.primary_contact?.phone1 || "---"
                       }} -->
-                    </div>
-                    <div style="font-size: 10px">
-                      <v-row
-                        ><v-col style="padding-left: 0px"
-                          ><div style="color: #0748ff; text-align: center">
-                            {{
-                              $dateFormat.formatDateMonthYear(
-                                alarm.alarm_start_datetime
-                              )
-                            }}
-                          </div></v-col
-                        >
-                        <!-- <v-col
-                          ><div style="color: red; text-align: center">
-                            <div v-if="alarm.alarm_status == 0">
+                      </div>
+                      <!-- <div style="font-size: 10px">
+                        <v-row
+                          ><v-col style="padding-left: 0px"
+                            ><div style="color: #cecece; text-align: left">
                               {{
                                 $dateFormat.formatDateMonthYear(
-                                  alarm.alarm_end_datetime
+                                  alarm.alarm_start_datetime
                                 )
                               }}
-                            </div>
-                          </div>
-                        </v-col> -->
-                        <v-col class="text-right" style="color: #0748ff"
-                          >#{{ alarm.id }}</v-col
-                        >
-                      </v-row>
-                    </div>
-                    <div
-                      style="
-                        text-align: right;
-                        position: absolute;
-                        top: 10px;
-                        right: 10px;
-                      "
-                    >
-                      <v-icon color="red" size="18">mdi-lock-outline</v-icon>
+                            </div></v-col
+                          >
+                           
+                          <v-col class="text-right" style="color: #0748ff"
+                            >#{{ alarm.id }}</v-col
+                          >
+                        </v-row>
+                      </div> -->
+                      <div
+                        style="
+                          text-align: right;
+                          position: absolute;
+                          top: 10px;
+                          right: 10px;
+                        "
+                      >
+                        <!-- <v-icon color="red" size="18">mdi-lock-outline</v-icon> -->
+                        <div>
+                          <v-icon
+                            @click="openCameradialog()"
+                            color="black"
+                            size="25"
+                            >mdi-camera-outline</v-icon
+                          >
+                        </div>
 
-                      <!-- <img
+                        <div>#{{ alarm.id }}</div>
+
+                        <!-- <img
                         src="/alarm_icons/alarm_open.png"
                         style="width: 30px"
                       /> -->
-                    </div>
+                      </div>
 
-                    <!-- <div style="color: #0064ff">
+                      <!-- <div style="color: #0064ff">
                       <v-row>
                         <v-col>
                            {{
@@ -432,8 +416,8 @@
                         ></v-row
                       >
                     </div> -->
-                  </v-col>
-                  <!-- <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
+                    </v-col>
+                    <!-- <v-col style="max-width: 90px; padding: 2px; font-size: 11px">
                     <div style="text-align: right">#{{ alarm.id }}</div>
                     <div style="margin: auto; text-align: center; height: 40px">
                       <img
@@ -462,8 +446,8 @@
                       </div>
                     </div>
                   </v-col> -->
-                </v-row>
-                <!-- <v-row style="min-width: 300px; height: 95px; width: 100%">
+                  </v-row>
+                  <!-- <v-row style="min-width: 300px; height: 95px; width: 100%">
                   <v-col
                     style="
                       max-width: 60px;
@@ -592,89 +576,91 @@
                   </v-col>
                 </v-row> -->
 
-                <v-row
-                  style="width: 100%; margin-top: 20px"
-                  v-if="
-                    showAlarmEventNotes &&
-                    selectedAlarm &&
-                    selectedAlarm.id == alarm.id
-                  "
-                >
-                  <v-col style="padding: 0px">
-                    <v-tabs
-                      height="25"
-                      center-active
-                      right
-                      class="customerEmergencyContactTabs"
-                    >
-                      <v-tab
-                        v-if="
-                          item.address_type.toLowerCase() == 'primary' ||
-                          item.address_type.toLowerCase() == 'secondary' ||
-                          item.address_type.toLowerCase() == 'security'
+                  <v-row
+                    style="width: 100%; margin-top: 20px"
+                    v-if="
+                      showAlarmEventNotes &&
+                      selectedAlarm &&
+                      selectedAlarm.id == alarm.id
+                    "
+                  >
+                    <v-col style="padding: 0px">
+                      <v-tabs
+                        height="25"
+                        center-active
+                        right
+                        class="customerEmergencyContactTabs"
+                      >
+                        <v-tab
+                          v-if="
+                            item.address_type.toLowerCase() == 'primary' ||
+                            item.address_type.toLowerCase() == 'secondary' ||
+                            item.address_type.toLowerCase() == 'security'
+                          "
+                          v-for="(item, index) in alarm.device.customer
+                            .contacts"
+                          :key="item.id"
+                        >
+                          {{ item.address_type }}</v-tab
+                        >
+                        <v-tab-item
+                          v-if="
+                            contact.address_type.toLowerCase() == 'primary' ||
+                            contact.address_type.toLowerCase() == 'secondary' ||
+                            contact.address_type.toLowerCase() == 'security'
+                          "
+                          v-for="(contact, index) in alarm.device.customer
+                            .contacts"
+                          :key="contact.id + 50"
+                          name="index+50"
+                        >
+                          <v-card class="elevation-1">
+                            <OperatorCustomerContacts
+                              :alarmId="alarm.id"
+                              v-if="contact"
+                              :customer="alarm.device.customer"
+                              :contact_type="contact.address_type"
+                              :key="contact.address_type"
+                            />
+                          </v-card>
+                        </v-tab-item>
+                      </v-tabs>
+                    </v-col>
+                  </v-row>
+                  <v-row
+                    transition="slide-x-transition"
+                    v-if="
+                      showMappingSection &&
+                      selectedAlarm &&
+                      selectedAlarm.id == alarm.id
+                    "
+                  >
+                    <v-col style="padding: 15px; padding-left: 0px">
+                      <OperatorGoogleMap
+                        style="width: 95%; text-align: center; margin: auto"
+                        :key="OperatorGoogleMapKey"
+                        class="rounded-lg"
+                        :customer="alarm.device.customer"
+                        :customer_id="alarm.device.customer.id"
+                        :name="'OperatorGoogleMapCustomer' + alarm.id"
+                        :mapimage="
+                          getAlarmColorObject(alarm, customer).image + '?5=5'
                         "
-                        v-for="(item, index) in alarm.device.customer.contacts"
-                        :key="item.id"
-                      >
-                        {{ item.address_type }}</v-tab
-                      >
-                      <v-tab-item
-                        v-if="
-                          contact.address_type.toLowerCase() == 'primary' ||
-                          contact.address_type.toLowerCase() == 'secondary' ||
-                          contact.address_type.toLowerCase() == 'security'
-                        "
-                        v-for="(contact, index) in alarm.device.customer
-                          .contacts"
-                        :key="contact.id + 50"
-                        name="index+50"
-                      >
-                        <v-card class="elevation-1">
-                          <OperatorCustomerContacts
-                            :alarmId="alarm.id"
-                            v-if="contact"
-                            :customer="alarm.device.customer"
-                            :contact_type="contact.address_type"
-                            :key="contact.address_type"
-                          />
-                        </v-card>
-                      </v-tab-item>
-                    </v-tabs>
-                  </v-col>
-                </v-row>
-                <v-row
-                  transition="slide-x-transition"
-                  v-if="
-                    showMappingSection &&
-                    selectedAlarm &&
-                    selectedAlarm.id == alarm.id
-                  "
-                >
-                  <v-col style="padding: 15px; padding-left: 0px">
-                    <OperatorGoogleMap
-                      style="width: 95%; text-align: center; margin: auto"
-                      :key="OperatorGoogleMapKey"
-                      class="rounded-lg"
-                      :customer="alarm.device.customer"
-                      :customer_id="alarm.device.customer.id"
-                      :name="'OperatorGoogleMapCustomer' + alarm.id"
-                      :mapimage="
-                        getAlarmColorObject(alarm, customer).image + '?5=5'
-                      "
-                    />
+                      />
 
-                    <OperatorSensorPhotos
-                      style="width: 95%; text-align: center; margin: auto"
-                      :key="OperatorGoogleMapKey + 100"
-                      :name="'OperatorSensorPhotos' + alarm.id"
-                      class="rounded-lg"
-                      :customer_id="alarm.device.customer.id"
-                    />
-                  </v-col>
-                </v-row>
-                <!-- </v-fab-transition> -->
-              </v-card-text>
-            </v-card>
+                      <OperatorSensorPhotos
+                        style="width: 95%; text-align: center; margin: auto"
+                        :key="OperatorGoogleMapKey + 100"
+                        :name="'OperatorSensorPhotos' + alarm.id"
+                        class="rounded-lg"
+                        :customer_id="alarm.device.customer.id"
+                      />
+                    </v-col>
+                  </v-row>
+                  <!-- </v-fab-transition> -->
+                </v-card-text>
+              </v-card>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -708,6 +694,7 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    dialogCameraLive: false,
     snackbar: false,
     response: "",
     filter_customer_id: null,
@@ -728,7 +715,7 @@ export default {
     fullscreen: false,
     windowHeight: 1000,
     windowWidth: 600,
-    mapStyle: "bw",
+    mapStyle: "map",
     mapkeycount: 1,
     popupEventText: "",
     dialogAlarmEventCustomerContactsTabView: false,
@@ -825,20 +812,20 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
-    setInterval(async () => {
-      if (this.$route.name == "operator-dashboard") {
-        if (this.filterText == "") await this.getDatafromApi(this.filterText);
-        setTimeout(async () => {
-          await this.getCustomersDatafromApi();
-        }, 1000);
-      }
-    }, 1000 * 10);
+    // setInterval(async () => {
+    //   if (this.$route.name == "operator-dashboard") {
+    //     if (this.filterText == "") await this.getDatafromApi(this.filterText);
+    //     setTimeout(async () => {
+    //       await this.getCustomersDatafromApi();
+    //     }, 1000);
+    //   }
+    // }, 1000 * 10);
 
-    setInterval(() => {
-      if (this.$route.name == "operator-dashboard") {
-        this.updateOperatorLiveStatus();
-      }
-    }, 1000 * 60);
+    // setInterval(() => {
+    //   if (this.$route.name == "operator-dashboard") {
+    //     this.updateOperatorLiveStatus();
+    //   }
+    // }, 1000 * 60);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -868,6 +855,9 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    openCameradialog() {
+      this.dialogCameraLive = true;
     },
     loadCustomersList() {
       this.customersList = [];
@@ -945,7 +935,7 @@ export default {
     onResize() {
       if (window) {
         this.windowWidth = window.innerWidth;
-        this.windowHeight = window.innerHeight - 20;
+        this.windowHeight = window.innerHeight - 10;
       }
     },
     toggleFullscreen() {

@@ -1,17 +1,17 @@
 <template>
-  <div v-if="currentTime" style="line-height: 20px; text-align: center">
-    <div style="font-size: 22px; color: #fff">{{ currentTime }}</div>
-    <div style="font-size: 10px; color: #fff">
+  <div v-if="currentTime" style="text-align: center">
+    <div style="font-size: 35px; color: #fff">{{ currentTime }}</div>
+    <div style="font-size: 13px; color: #fff; margin-top: 6px">
       {{ currentDate }}
     </div>
 
-    <div style="text-align: center">
+    <!-- <div style="text-align: center">
       <img
         title="Alarm Control Panel - Xtremeguard"
         src="/logo22.png"
         style="width: 50px"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -59,9 +59,9 @@ export default {
     let year = now.getFullYear();
     let dayIndex = now.getDay(); // Get the day of the week (0-6)
 
-    this.currentDate = `${day} ${months[
+    this.currentDate = `${days[dayIndex].toUpperCase()} ${day} ${months[
       monthIndex
-    ].toUpperCase()} ${year} ${days[dayIndex].toUpperCase()}`;
+    ].toUpperCase()} ${year} `;
   },
   created() {},
   methods: {},

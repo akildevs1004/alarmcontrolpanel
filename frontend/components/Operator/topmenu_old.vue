@@ -44,50 +44,8 @@
         </v-card>
       </template>
     </v-dialog>
-
-    <v-row
-      align="center"
-      justify="center"
-      style="background-color: #516067; color: #fff; height: 70px"
-      ><v-col
-        class="text-left"
-        style="
-          margin: auto;
-          padding-left: 1px;
-          font-size: 12px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        "
-      >
-        <v-icon color="white">mdi-account-tie</v-icon> {{ displayName }}
-      </v-col>
-      <v-col style="max-width: 40px">
-        <v-icon v-if="displayFullScreenButton()" color="red" @click="openWindow"
-          >mdi-view-dashboard</v-icon
-        >
-
-        <v-icon v-if="!displayFullScreenButton()" @click="refreshEventsList()"
-          >mdi-refresh</v-icon
-        >
-      </v-col>
-      <!-- <v-col
-        class="text-right  " 
-        style="max-width: 85px; padding-left: 0px"
-      >
-        <v-icon
-          v-if="displayFullScreenButton()"
-          class="mr-2"
-          color="red"
-          @click="openWindow"
-          >mdi-overscan</v-icon
-        >
-
-        <v-icon v-if="!displayFullScreenButton()" @click="refreshEventsList()"
-          >mdi-refresh</v-icon
-        >
-      </v-col> -->
-      <v-col style="max-width: 55px">
+    <v-row>
+      <v-col>
         <v-menu
           nudge-bottom="50"
           transition="scale-transition"
@@ -95,6 +53,7 @@
           bottom
           left
           min-width="200"
+          nudge-left="20"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon color="red" v-bind="attrs" v-on="on">
@@ -106,6 +65,19 @@
 
           <v-list light nav dense>
             <v-list-item-group color="primary">
+              <!-- <v-list-item
+                v-if="$auth && $auth.user?.user_type == 'company'"
+                @click="goToCompany()"
+              >
+                <v-list-item-icon>
+                  <v-icon>mdi-account-multiple-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="black--text"
+                    >Profile</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item> -->
               <v-list-item>
                 <v-list-item-icon>
                   <v-icon>mdi-account</v-icon>
@@ -140,23 +112,109 @@
           </v-list>
         </v-menu>
       </v-col>
-    </v-row>
 
-    <v-row
-      align="center"
-      justify="center"
-      style="background-color: #516067; color: #fff; border-top: 1px solid #fff"
-    >
-      <v-col style="padding: 6px"> <Clock></Clock></v-col>
+      <v-col class="text-center" style="min-width: 180px; margin: auto">
+        {{ displayName }}
+        <!-- <v-text-field
+              label="Event ID"
+          style="width: 150px;max-height: 30px !important;"
+          max-height="10px"
+          class="mt-1 custom-text-field-height   global-search-textbox111111"
+          
+          outlined
+          dense
+          height:="20px"
+           
+          append-icon="mdi-magnify"
+          v-model="globalsearch"
+        ></v-text-field> -->
+      </v-col>
+
+      <v-col class="text-right" style="max-width: 85px; padding-left: 0px">
+        <v-icon
+          v-if="displayFullScreenButton()"
+          class="mr-2"
+          color="red"
+          @click="openWindow"
+          >mdi-overscan</v-icon
+        >
+
+        <v-icon v-if="!displayFullScreenButton()" @click="refreshEventsList()"
+          >mdi-refresh</v-icon
+        >
+        <!-- <v-menu
+          style="z-index: 9999 !important"
+          bottom
+          origin="center center"
+          offset-y
+          transition="scale-transition"
+        >
+          <template
+            v-slot:activator="{ on, attrs }"
+            style="z-index: 9999 !important"
+          >
+            <v-btn icon dark v-bind="attrs" v-on="on">
+              <v-badge
+                :color="'  ' + pendingNotificationsCount > 0 ? 'red' : 'green'"
+                :content="
+                  pendingNotificationsCount == ''
+                    ? '0'
+                    : pendingNotificationsCount
+                "
+                style="top: 10px; left: -19px; z-index: 9999 !important"
+              >
+                <v-icon style="top: -10px; left: 10px" class="violet--text"
+                  >mdi mdi-bell-ring</v-icon
+                >
+              </v-badge>
+            </v-btn>
+          </template>
+          <v-list style="z-index: 9999">
+            <v-list-item
+              style="height: 30px; padding-left: 5px"
+              :class="
+                notificationsMenuItems.length > 0 &&
+                index != notificationsMenuItems.length - 1
+                  ? 'border-bottom'
+                  : ''
+              "
+              @click="showPopupAlarmStatus()"
+              v-for="(item, index) in notificationsMenuItems"
+              :key="index"
+            >
+              <v-list-item-content @click="showPopupAlarmStatus()">
+                <v-list-item-title class="black--text align-left text-left">
+                  <v-row style="">
+                    <v-col cols="2" class="align-right text-right pr-1"
+                      ><img
+                        :src="'/device-icons/' + item.icon"
+                        style="width: 20px; vertical-align: middle"
+                    /></v-col>
+                    <v-col cols="10">
+                      <span style="font-size: 14px">
+                        <span>
+                          {{ item.title }}
+                          <div class="secondary-value" v-if="item.date_from">
+                            {{
+                              $dateFormat.formatDateMonthYear(item.date_from)
+                            }}
+                          </div></span
+                        >
+                      </span>
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu> -->
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import Clock from "../../components/Operator/Clock.vue";
-
 export default {
-  components: { Clock },
   data() {
     return {
       globalsearch: "",

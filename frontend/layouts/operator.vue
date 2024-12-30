@@ -208,8 +208,11 @@ export default {
 .main-leftcontent {
 }
 .main-rightcontent {
-  min-width: 300px !important;
-  max-width: 300px !important;
+  /* min-width: 300px !important;
+  max-width: 300px !important; */
+
+  min-width: 250px !important;
+  max-width: 250px !important;
   /* 
   min-width: 450px !important;
   max-width: 450px !important; */
