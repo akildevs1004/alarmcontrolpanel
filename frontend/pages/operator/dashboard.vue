@@ -36,7 +36,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
+    <!-- <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"> Map Customer Information</span>
@@ -55,7 +55,7 @@
             :alarmId="eventId"
         /></v-card-text>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
     <v-dialog
       v-model="dialogAlarmEventCustomerContactsTabView"
       width="1000px"
@@ -88,13 +88,33 @@
     </v-dialog>
 
     <v-row>
-      <v-col class="main-leftcontent" style="padding: 2px; padding-top: 5px">
-        <v-card elevation="10" outlined :loading="loading">
+      <v-col class="main-leftcontent" style="padding: 2px; padding-top: 3px">
+        <v-card elevation="10" outlined>
           <div
             :key="mapkeycount"
             id="map"
             :style="'height:' + windowHeight + 'px'"
           ></div>
+
+          <v-navigation-drawer
+            temporary
+            v-model="dialogCustomerRightInfo"
+            right
+            absolute
+          >
+            <AlarmCustomerMapViewSidebar
+              class="AlarmCustomerMapViewSidebar"
+              style="background-color: #516067 !important"
+              v-if="customerInfo"
+              :key="key"
+              :_id="customerInfo.id"
+              :isPopup="true"
+              :isMapviewOnly="true"
+              :alarmId="eventId"
+              :customerObject="customerInfo"
+              @closeDialog="dialogCustomerRightInfo = false"
+          /></v-navigation-drawer>
+
           <div style="position: absolute; top: 0px; left: 50%">
             <!-- <v-autocomplete
               style="padding-top: 6px"
@@ -194,19 +214,26 @@
             />
           </div>
 
-          <div style="position: absolute; top: 50%; right: 0">
+          <div style="position: absolute; top: 50%; right: -5px; z-index: 99">
             <v-icon
-              style="background-color: #fff"
               v-if="!displayRightcontant"
               @click="changeRightContentDisplay()"
               color="green"
               >mdi-arrow-left-box</v-icon
-            ><v-icon
-              style="background-color: #fff"
+            >
+            <!-- <v-icon
               v-if="displayRightcontant"
               @click="changeRightContentDisplay()"
               color="red"
-              >mdi-arrow-right-box</v-icon
+              >mdi-close-circle</v-icon
+            > -->
+          </div>
+          <div
+            v-if="displayRightcontant"
+            style="position: absolute; top: 50%; right: -12px; z-index: 99"
+          >
+            <v-icon @click="changeRightContentDisplay()" color="red"
+              >mdi-close-circle</v-icon
             >
           </div>
         </v-card>
@@ -673,6 +700,8 @@ import google_map_style_bandw from "../../google/google_style_blackandwhite.json
 import google_map_style_regular from "../../google/google_style_regular.json";
 
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
+import AlarmCustomerMapViewSidebar from "../../components/Alarm/AlarmCustomerMapViewSidebar.vue";
+
 import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 import Topmenu from "../../components/Operator/topmenu.vue";
 import MapFooterContent from "../../components/Operator/MapFooterContent.vue";
@@ -691,9 +720,11 @@ export default {
     OperatorGoogleMap,
     OperatorSensorPhotos,
     OperatorCustomerContacts,
+    AlarmCustomerMapViewSidebar,
   },
   // alarm_event_operator_statistics
   data: () => ({
+    dialogCustomerRightInfo: false,
     dialogCameraLive: false,
     snackbar: false,
     response: "",
@@ -812,20 +843,20 @@ export default {
     // }, 1000 * 2);
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
-    // setInterval(async () => {
-    //   if (this.$route.name == "operator-dashboard") {
-    //     if (this.filterText == "") await this.getDatafromApi(this.filterText);
-    //     setTimeout(async () => {
-    //       await this.getCustomersDatafromApi();
-    //     }, 1000);
-    //   }
-    // }, 1000 * 10);
+    setInterval(async () => {
+      if (this.$route.name == "operator-dashboard") {
+        if (this.filterText == "") await this.getDatafromApi(this.filterText);
+        setTimeout(async () => {
+          await this.getCustomersDatafromApi();
+        }, 1000);
+      }
+    }, 1000 * 10);
 
-    // setInterval(() => {
-    //   if (this.$route.name == "operator-dashboard") {
-    //     this.updateOperatorLiveStatus();
-    //   }
-    // }, 1000 * 60);
+    setInterval(() => {
+      if (this.$route.name == "operator-dashboard") {
+        this.updateOperatorLiveStatus();
+      }
+    }, 1000 * 60);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -1418,7 +1449,7 @@ export default {
               </tr>
               <tr>
                 <td>
-                  <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions</a>
+                  <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions </a>
                 </td>
                 <td style="text-align:right">
                   ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
@@ -1442,12 +1473,12 @@ export default {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
 
               // Marker event listeners
-              marker.addListener("mouseover", () => {
-                this.mapInfowindowsList.forEach((oldinfowindow) =>
-                  oldinfowindow.close()
-                );
-                infowindow.open(this.map, marker);
-              });
+              // marker.addListener("mouseover", () => {
+              //   this.mapInfowindowsList.forEach((oldinfowindow) =>
+              //     oldinfowindow.close()
+              //   );
+              //   infowindow.open(this.map, marker);
+              // });
 
               google.maps.event.addListener(infowindow, "domready", () => {
                 if (item.latest_alarm_event) {
@@ -1484,7 +1515,9 @@ export default {
 
               // Open Vue dialog on marker click
               marker.addListener("click", () => {
-                this.dialog = true;
+                this.dialogCustomerRightInfo = true;
+
+                //this.dialog = true;
                 this.key += 1;
                 this.customerInfo = item;
               });

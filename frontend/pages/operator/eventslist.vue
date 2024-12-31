@@ -5,7 +5,8 @@
         id="lefteventlist"
         class="google-map-right-hand-content"
         style="
-          padding-top: 5px;
+          padding-top: 0px;
+          padding-left: 0px;
           max-width: 350px;
           padding-right: 0px;
           padding-bottom: 0px;
@@ -24,7 +25,7 @@
             />
 
             <v-row
-              style="margin-top: 10px; padding-left: 10px; padding-right: 10px"
+              style="margin-top: 20px; padding-left: 10px; padding-right: 10px"
             >
               <v-col cols="4" style="padding: 2px">
                 <v-select
@@ -254,7 +255,7 @@
 
       <v-col
         class="google-map-right-hand-content"
-        style="padding: 8px; padding-top: 6px; padding-bottom: 0px"
+        style="padding: 0px; padding-top: 6px; padding-bottom: 0px"
       >
         <v-row>
           <v-col
@@ -279,7 +280,7 @@
               min-width: auto;
               max-width: 400px;
               height: 80%;
-              padding-left: 8px;
+              padding-left: 2px;
             "
           >
             <v-card elevation="4">
@@ -321,9 +322,9 @@
           ></v-col>
         </v-row>
         <v-row style="margin-top: 0px">
-          <v-col>
+          <v-col style="padding-top: 1px">
             <v-card
-              elevation="4"
+              elevation="2"
               :style="
                 'height:' +
                 (windowHeight - 645) +

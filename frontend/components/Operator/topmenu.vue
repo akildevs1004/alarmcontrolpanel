@@ -53,7 +53,7 @@
         class="text-left"
         style="
           margin: auto;
-          padding-left: 1px;
+          padding-left: 5px;
           font-size: 12px;
           white-space: nowrap;
           overflow: hidden;
@@ -67,7 +67,10 @@
           >mdi-view-dashboard</v-icon
         >
 
-        <v-icon v-if="!displayFullScreenButton()" @click="refreshEventsList()"
+        <v-icon
+          v-if="!displayFullScreenButton()"
+          color="white"
+          @click="refreshEventsList()"
           >mdi-refresh</v-icon
         >
       </v-col>

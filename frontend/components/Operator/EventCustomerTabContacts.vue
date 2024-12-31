@@ -51,7 +51,7 @@
       </v-card>
     </v-dialog>
     <v-card flat>
-      <v-card-text style="margin-top: 25px">
+      <v-card-text style="margin-top: 5px">
         <v-row>
           <v-col cols="6">
             <v-row>
@@ -160,7 +160,7 @@
             </v-row>
           </v-col>
 
-          <v-col cols="6"
+          <v-col cols="6" style="padding-top: 0px"
             ><v-row
               style="font-size: 12px; margin-top: 0px"
               class="radio-group"
@@ -369,14 +369,17 @@
                       margin-top: 10px;
                     "
                   >
-                    <v-col cols="8" style="">
+                    <v-col style="max-width: 200px; padding-right: 0px">
                       <v-row
                         v-if="filteredContactInfo"
                         :key="filteredContactInfo.id"
                       >
-                        <v-col
-                          cols="5"
-                          style="margin: auto; padding-left: 17px"
+                        <!-- <v-col
+                          style="
+                            margin: auto;
+                            padding-left: 17px;
+                            max-width: 80px;
+                          "
                         >
                           <v-img
                             style="
@@ -391,8 +394,25 @@
                                 : '/no-profile-image.jpg'
                             "
                           ></v-img>
-                        </v-col>
-                        <v-col style="font-size: 12px; padding: 0px">
+                        </v-col> -->
+                        <v-col style="font-size: 12px">
+                          <div style="width: 100%; min-width: 55px">
+                            <v-img
+                              style="
+                                width: 100%;
+                                margin: auto;
+                                max-width: 80px;
+                                border-radius: 10%;
+                                border: 1px solid #ddd;
+                                min-width: 55px;
+                              "
+                              :src="
+                                filteredContactInfo?.profile_picture
+                                  ? filteredContactInfo.profile_picture
+                                  : '/no-profile-image.jpg'
+                              "
+                            ></v-img>
+                          </div>
                           <div style="font-weight: bold">
                             <v-icon size="13" style="border: 0px solid #ddd"
                               >mdi-account</v-icon
@@ -411,19 +431,25 @@
                             >
                             {{ filteredContactInfo.phone1 }}
                           </div>
-                          <div>
+                          <!-- <div>
                             <v-icon style="border: 0px solid #ddd" size="13"
                               >mdi-phone-classic</v-icon
                             >
                             {{ filteredContactInfo.phone2 }}
-                          </div>
+                          </div> -->
                           <div>
                             <v-icon style="border: 0px solid #ddd" size="13"
                               >mdi-cellphone-basic</v-icon
                             >
                             {{ filteredContactInfo.whatsapp }}
                           </div>
-                          <div>
+                          <div
+                            style="
+                              overflow: hidden;
+                              text-overflow: ellipsis;
+                              white-space: nowrap;
+                            "
+                          >
                             <v-icon style="border: 0px solid #ddd" size="13"
                               >mdi-at</v-icon
                             >
@@ -433,8 +459,11 @@
                       </v-row>
                     </v-col>
                     <v-col
-                      cols="4"
-                      style="text-align: right; margin-top: -16px"
+                      style="
+                        text-align: right;
+                        margin-top: -16px;
+                        max-width: 100px;
+                      "
                     >
                       <v-btn-toggle
                         class="buttongroup-small"

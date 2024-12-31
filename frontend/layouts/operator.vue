@@ -1046,5 +1046,21 @@ button {
   font-size: 14px;
   margin-top: 8px;
 }
+
+.operatormap table,
+.operatormap th,
+.operatormap td {
+  border-top: 1px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
+  color: #fff;
+  border-collapse: collapse;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 13px;
+  height: 32px;
+}
+.main-leftcontent .v-navigation-drawer__content {
+  background-color: #516067;
+}
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->
