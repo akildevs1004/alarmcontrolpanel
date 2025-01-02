@@ -79,6 +79,66 @@ export default ({ app }, inject) => {
 
       return `${formattedDate}  ${hours}:${minutes} `;
     },
+    formatDate: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
+      const currentDate = new Date(inputdate);
+
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 to month because it's zero-based.
+      const day = currentDate.getDate().toString().padStart(2, "0");
+      const hours = currentDate.getHours().toString().padStart(2, "0");
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+      const inputDate = new Date(inputdate);
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      };
+      const formattedDate = inputDate.toLocaleDateString("en-US", options);
+
+      return `${formattedDate}`;
+    },
+    formatTime: (inputdate) => {
+      if (!inputdate || inputdate == "--") return "---";
+      const currentDate = new Date(inputdate);
+
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 to month because it's zero-based.
+      const day = currentDate.getDate().toString().padStart(2, "0");
+      const hours = currentDate.getHours().toString().padStart(2, "0");
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+      const inputDate = new Date(inputdate);
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      };
+      const formattedDate = inputDate.toLocaleDateString("en-US", options);
+
+      return `${hours}:${minutes} `;
+    },
+    formatTimeDateMonthYear: (inputdate) => {
+      if (!inputdate || inputdate === "--") return "---";
+
+      const currentDate = new Date(inputdate);
+
+      // Format time components
+      const hours = currentDate.getHours().toString().padStart(2, "0");
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+      // Format date components
+      const day = currentDate.getDate().toString().padStart(2, "0");
+      const month = currentDate.toLocaleString("en-US", { month: "short" });
+      const year = currentDate.getFullYear();
+
+      // Combine time and date
+      return `${hours}:${minutes}:${seconds} ${day} ${month} ${year}`;
+    },
     format5: (inputdate) => {
       if (!inputdate || inputdate == "--") return "---";
       const currentDate = new Date(inputdate);
@@ -192,9 +252,41 @@ export default ({ app }, inject) => {
         hours +
         ":" +
         (remainingMinutes < 10 ? "0" : "") +
-        remainingMinutes
+        remainingMinutes +
+        ":00"
       );
     },
+    getTimeDifference(targetDate) {
+      const now = new Date(); // Current date and time
+      const target = new Date(targetDate); // Target date and time
+
+      // Calculate the difference in milliseconds
+      const differenceInMs = Math.abs(target - now);
+
+      // Calculate days, hours, minutes, and seconds
+      const days = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (differenceInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      )
+        .toString()
+        .padStart(2, "0");
+      const minutes = Math.floor(
+        (differenceInMs % (1000 * 60 * 60)) / (1000 * 60)
+      )
+        .toString()
+        .padStart(2, "0");
+      const seconds = Math.floor((differenceInMs % (1000 * 60)) / 1000)
+        .toString()
+        .padStart(2, "0");
+
+      // Return formatted result
+      if (days > 0) {
+        return `${days} d ${hours}:${minutes}:${seconds}`;
+      } else {
+        return `${hours}:${minutes}:${seconds}`;
+      }
+    },
+
     format6: (inputdate) => {
       if (!inputdate || inputdate == "--") return "---";
       //20:30

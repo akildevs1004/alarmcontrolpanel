@@ -1059,8 +1059,59 @@ button {
   font-size: 13px;
   height: 32px;
 }
+.operatorcustomerTop1 td {
+  border-top: 0px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
+  color: #fff;
+  border-collapse: collapse;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 13px;
+  height: 28px;
+}
+.eventcustomertab td {
+  border-top: 0px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
+  color: #fff;
+  border-collapse: collapse;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 13px;
+  height: 20px;
+}
+.eventcustomertabselect td {
+  border-top: 0px solid rgb(255, 255, 255);
+  border-bottom: 0px solid rgb(255, 255, 255);
+  color: #fff;
+  border-collapse: collapse;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 13px;
+  height: 35px;
+}
 .main-leftcontent .v-navigation-drawer__content {
   background-color: #516067;
+}
+.customerEmergencyContactTabsBGcolor .v-slide-group__content {
+  background-color: #909a9f;
+}
+.customerEmergencyContactTabsBGcolor .v-slide-group__content .v-tab {
+  color: #fff !important;
+  font-size: 10px;
+}
+.white-color textarea,
+.white-color label,
+.white-color .v-input--selection-controls__ripple {
+  color: #fff !important;
+}
+
+.border-white .v-select__selection,
+.border-white .v-select__selection .v-select__selection--comma,
+.border-white .v-input__icon {
+  color: #fff;
+}
+.border-white fieldset {
+  border-color: #fff !important;
 }
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

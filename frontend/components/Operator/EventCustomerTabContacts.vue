@@ -50,258 +50,178 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card flat>
+    <v-card flat style="background-color: #909a9f" elevation="0">
       <v-card-text style="margin-top: 5px">
         <v-row>
-          <v-col cols="6">
-            <v-row>
-              <v-col style="max-width: 100px">
-                <v-img
-                  style="
-                    min-width: 80px;
-                    border-radius: 50%;
-                    border: 1px solid #ddd;
-                  "
-                  :src="
-                    globalContactDetails?.profile_picture
-                      ? globalContactDetails.profile_picture
-                      : '/no-profile-image.jpg'
-                  "
-                ></v-img>
-              </v-col>
-              <v-col
-                style="
-                  font-size: 12px;
-                  padding: 0px;
-                  overflow: hidden;
-                  line-height: 20px;
-                "
-              >
-                <div style="font-weight: bold">
-                  <v-icon size="13" style="border: 0px solid #ddd"
-                    >mdi-account</v-icon
-                  >
+          <v-col style="margin: auto; padding-top: 0px">
+            <v-img
+              style="width: 80px; border: 1px solid #ddd; margin: auto"
+              :src="
+                globalContactDetails?.profile_picture
+                  ? globalContactDetails.profile_picture
+                  : '/no-profile-image.jpg'
+              "
+            ></v-img>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col style="padding: 0px">
+            <table class="eventcustomertab" style="width: 100%">
+              <tr>
+                <td>Name</td>
+                <td>
                   {{
                     globalContactDetails?.first_name
-                      ? globalContactDetails.first_name +
+                      ? $utils.caps(globalContactDetails.first_name) +
                         " " +
-                        globalContactDetails.last_name
+                        $utils.caps(globalContactDetails.last_name)
                       : "---"
                   }}
-                </div>
-                <div>
-                  <v-icon style="border: 0px solid #ddd" size="13"
-                    >mdi-phone</v-icon
-                  >
-                  {{ globalContactDetails.phone1 }}
-                </div>
-                <div>
-                  <v-icon style="border: 0px solid #ddd" size="13"
-                    >mdi-phone-classic</v-icon
-                  >
-                  {{ globalContactDetails.phone2 }}
-                </div>
-                <div>
-                  <v-icon style="border: 0px solid #ddd" size="13"
-                    >mdi-cellphone-basic</v-icon
-                  >
-                  {{ globalContactDetails.whatsapp }}
-                </div>
-                <div>
-                  <v-icon style="border: 0px solid #ddd" size="13"
-                    >mdi-at</v-icon
-                  >
-                  {{ globalContactDetails.email }}
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <div
-                  style="
-                    overflow: auto;
-                    height: 80px;
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                  "
-                >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                      font-size: 12px;
-                    "
-                    >Customer Notes</label
-                  >
-
-                  <div style="padding-top: 10px">
-                    {{ globalContactDetails.notes }}
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
+                </td>
+              </tr>
+              <tr>
+                <td>Mobile</td>
+                <td>
+                  {{
+                    globalContactDetails?.phone1
+                      ? globalContactDetails.phone1
+                      : "---"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>Phone</td>
+                <td>
+                  {{
+                    globalContactDetails?.phone2
+                      ? globalContactDetails.phone2
+                      : "---"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>Whatsapp</td>
+                <td>
+                  {{
+                    globalContactDetails?.whatsapp
+                      ? globalContactDetails.whatsapp
+                      : "---"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>E-Mail</td>
+                <td>
+                  {{
+                    globalContactDetails?.email
+                      ? globalContactDetails.email
+                      : "---"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>Notes</td>
+                <td>
+                  {{
+                    globalContactDetails?.notes
+                      ? globalContactDetails.notes
+                      : "---"
+                  }}
+                </td>
+              </tr>
+            </table>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <v-row>
               <v-col>
                 <v-textarea
                   outlined
-                  class="mt-0"
+                  class="mt-0 white-color"
                   label="Operator Comments"
                   value=""
-                  height="200px"
+                  height="60px"
                   hide-details
                   v-model="event_payload.notes"
                 ></v-textarea>
               </v-col>
             </v-row>
-          </v-col>
+            <v-row>
+              <v-col style="padding: 0px">
+                <table class="eventcustomertabselect" style="width: 100%">
+                  <tr>
+                    <td>Call Status</td>
+                    <td style="width: 60%">
+                      <v-select
+                        style="color: #fff"
+                        class="employee-schedule-search-box border-white"
+                        height="20px"
+                        outlined
+                        v-model="event_payload.call_status"
+                        dense
+                        hide-details
+                        :items="[
+                          null,
+                          'Answered',
+                          'No Answer',
+                          'Busy',
+                          'Not Reachable',
+                        ]"
+                      ></v-select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Response</td>
+                    <td>
+                      <v-select
+                        class="employee-schedule-search-box border-white"
+                        height="20px"
+                        outlined
+                        v-model="event_payload.response"
+                        dense
+                        hide-details
+                        :items="[
+                          null,
 
-          <v-col cols="6" style="padding-top: 0px"
-            ><v-row
-              style="font-size: 12px; margin-top: 0px"
-              class="radio-group"
-            >
-              <v-col cols="4" style="padding-right: 0px">
-                <div
-                  style="
-                    height: 105px;
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                  "
-                >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                    "
-                    >Call Status
-                  </label>
+                          'False alarm',
+                          'No Answer',
+                          'Busy',
+                          'Not Reachable',
+                        ]"
+                      ></v-select>
+                    </td>
+                  </tr>
 
-                  <v-radio-group
-                    class="radiogroup radiogroup-small radioheight"
-                    style="color: black; padding-top: 10px"
-                    v-model="event_payload.call_status"
-                    @change="updateCallStatus()"
-                    @click="updateCallStatus()"
-                  >
-                    <v-radio
-                      label="Answered"
-                      value="Answered"
-                      style="font-size: 10px"
-                    ></v-radio>
-                    <v-radio label="No Answer" value="No Answer"></v-radio>
-                    <v-radio label="Busy" value="Busy"></v-radio>
-                    <v-radio
-                      label="Not Reachable "
-                      value="Not Reachable "
-                    ></v-radio>
-                  </v-radio-group>
-                </div>
-              </v-col>
+                  <tr>
+                    <td>Alarm Status</td>
+                    <td>
+                      <v-select
+                        class="employee-schedule-search-box border-white"
+                        height="20px"
+                        outlined
+                        v-model="event_payload.event_status"
+                        dense
+                        hide-details
+                        :items="[
+                          null,
 
-              <v-col cols="4" style="padding-right: 0px">
-                <div
-                  style="
-                    height: 105px;
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                  "
-                >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                    "
-                    >Response</label
-                  >
-
-                  <v-radio-group
-                    v-model="event_payload.response"
-                    class="radiogroup radiogroup-small radioheight"
-                  >
-                    <v-radio
-                      :disabled="!displayResponse"
-                      label="False alarm"
-                      value="False alarm"
-                      style="font-size: 10px; padding-top: 10px"
-                    ></v-radio>
-                    <v-radio
-                      :disabled="!displayResponse"
-                      label="True alarm"
-                      value="True alarm"
-                    ></v-radio>
-                    <v-radio
-                      :disabled="!displayResponse"
-                      label="Not aware "
-                      value="Not aware"
-                    ></v-radio>
-                    <v-radio
-                      :disabled="!displayResponse"
-                      label="Not in Town"
-                      value="Not in Town"
-                    ></v-radio>
-                  </v-radio-group>
-                </div>
-              </v-col>
-              <v-col cols="4">
-                <div
-                  style="
-                    height: 105px;
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                  "
-                >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                    "
-                    >Event satus</label
-                  >
-
-                  <v-radio-group
-                    v-model="event_payload.event_status"
-                    class="radiogroup radiogroup-small radioheight"
-                  >
-                    <v-radio
-                      label="Forwarded"
-                      value="Forwarded"
-                      style="font-size: 10px; padding-top: 10px"
-                    ></v-radio>
-
-                    <v-radio label="Pending" value="Pending"></v-radio>
-
-                    <v-radio
-                      :disabled="!displayCloseAlarm"
-                      label="Closed"
-                      value="Closed"
-                    ></v-radio>
-                  </v-radio-group>
-                </div>
+                          'Forwarded',
+                          'Closed',
+                          'Pending',
+                          'Not in Town',
+                        ]"
+                      ></v-select>
+                    </td>
+                  </tr>
+                </table>
               </v-col>
             </v-row>
+
             <v-row>
               <v-col>
                 <div
+                  v-if="event_payload.event_status == 'Forwarded'"
                   style="
                     width: 100%;
                     border: 1px solid rgb(157, 157, 157);
@@ -309,16 +229,7 @@
                     padding-left: 0px;
                   "
                 >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                    "
-                    >Select to Event Forward
-                  </label>
+                  <label style="color: #fff"> Forward Event to.. </label>
                   <v-row style="margin-top: 10px; padding-bottom: 10px">
                     <v-col
                       :key="'customercontacts' + index + 20"
@@ -332,7 +243,7 @@
                       v-for="(contact, index) in customer.contacts"
                     >
                       <v-checkbox
-                        class="radiogroup radiogroup-small"
+                        class="radiogroup radiogroup-small white-color"
                         style="font-size: 12px"
                         v-model="contact.forwarded"
                         :label="contact.address_type"
@@ -340,174 +251,17 @@
                     ></v-col>
                   </v-row>
                 </div>
-                <div
-                  style="
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                    margin-top: 20px;
-                    height: auto;
-                    margin-block-end: 10px;
-                    min-height: 180px;
-                  "
-                >
-                  <label
-                    style="
-                      position: absolute;
-                      margin-top: -12px;
-                      margin-left: 12px;
-                      background: #fff;
-                      padding: 0px 5px;
-                    "
-                    >Contacts
-                  </label>
-                  <v-row
-                    style="
-                      overflow-y: auto;
-                      overflow-x: hidden;
-                      margin-top: 10px;
-                    "
-                  >
-                    <v-col style="max-width: 200px; padding-right: 0px">
-                      <v-row
-                        v-if="filteredContactInfo"
-                        :key="filteredContactInfo.id"
-                      >
-                        <!-- <v-col
-                          style="
-                            margin: auto;
-                            padding-left: 17px;
-                            max-width: 80px;
-                          "
-                        >
-                          <v-img
-                            style="
-                              width: 100%;
 
-                              border-radius: 10%;
-                              border: 1px solid #ddd;
-                            "
-                            :src="
-                              filteredContactInfo?.profile_picture
-                                ? filteredContactInfo.profile_picture
-                                : '/no-profile-image.jpg'
-                            "
-                          ></v-img>
-                        </v-col> -->
-                        <v-col style="font-size: 12px">
-                          <div style="width: 100%; min-width: 55px">
-                            <v-img
-                              style="
-                                width: 100%;
-                                margin: auto;
-                                max-width: 80px;
-                                border-radius: 10%;
-                                border: 1px solid #ddd;
-                                min-width: 55px;
-                              "
-                              :src="
-                                filteredContactInfo?.profile_picture
-                                  ? filteredContactInfo.profile_picture
-                                  : '/no-profile-image.jpg'
-                              "
-                            ></v-img>
-                          </div>
-                          <div style="font-weight: bold">
-                            <v-icon size="13" style="border: 0px solid #ddd"
-                              >mdi-account</v-icon
-                            >
-                            {{
-                              filteredContactInfo?.first_name
-                                ? filteredContactInfo.first_name +
-                                  " " +
-                                  filteredContactInfo.last_name
-                                : "---"
-                            }}
-                          </div>
-                          <div>
-                            <v-icon style="border: 0px solid #ddd" size="13"
-                              >mdi-phone</v-icon
-                            >
-                            {{ filteredContactInfo.phone1 }}
-                          </div>
-                          <!-- <div>
-                            <v-icon style="border: 0px solid #ddd" size="13"
-                              >mdi-phone-classic</v-icon
-                            >
-                            {{ filteredContactInfo.phone2 }}
-                          </div> -->
-                          <div>
-                            <v-icon style="border: 0px solid #ddd" size="13"
-                              >mdi-cellphone-basic</v-icon
-                            >
-                            {{ filteredContactInfo.whatsapp }}
-                          </div>
-                          <div
-                            style="
-                              overflow: hidden;
-                              text-overflow: ellipsis;
-                              white-space: nowrap;
-                            "
-                          >
-                            <v-icon style="border: 0px solid #ddd" size="13"
-                              >mdi-at</v-icon
-                            >
-                            {{ filteredContactInfo.email }}
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col
-                      style="
-                        text-align: right;
-                        margin-top: -16px;
-                        max-width: 100px;
-                      "
-                    >
-                      <v-btn-toggle
-                        class="buttongroup-small"
-                        v-model="selectContactButton"
-                        vertical
-                        style="display: inline-grid !important"
-                      >
-                        <v-btn
-                          height="20px"
-                          plain
-                          small
-                          style="
-                            margin-top: 5px;
-                            border: 0px;
-                            border-bottom: 1px solid #ddd;
-                          "
-                          dense
-                          color="black"
-                          :value="contact.id"
-                          @click="displayContactInfoById(contact.id)"
-                          v-if="
-                            contact.address_type.toLowerCase() != 'primary' &&
-                            contact.address_type.toLowerCase() != 'secondary' &&
-                            contact.address_type.toLowerCase() != 'security'
-                          "
-                          v-for="(contact, index) in customer.contacts"
-                          :key="'selectContactButtons' + index"
-                        >
-                          {{ contact.address_type }}
-                        </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                  </v-row>
-                </div>
                 <v-row v-if="globalContactDetails">
                   <v-col cols="6" class="pr-1">
                     <v-text-field
+                      v-if="event_payload.event_status == 'Closed'"
                       :disabled="
                         event_payload.event_status == 'Closed' ? false : true
                       "
-                      type="number"
                       min="0"
                       max="10"
-                      class="input-small-fieldset1 mt-1"
+                      class="input-small-fieldset1 mt-1 border-white white-color"
                       label="Secret Code"
                       dense
                       outlined
@@ -537,30 +291,35 @@
                 </v-row>
 
                 <div>
-                  <div style="color: green">{{ response }}</div>
+                  <div v-if="response != ''" style="color: green">
+                    {{ response }}
+                  </div>
                   <div
-                    v-if="errors && errors.pin_number"
+                    v-else-if="errors && errors.pin_number"
                     class="text-danger mt-2"
                   >
                     {{ errors.pin_number[0] }}
                   </div>
-                  <div v-if="errors && errors.notes" class="text-danger mt-2">
+                  <div
+                    v-else-if="errors && errors.notes"
+                    class="text-danger mt-2"
+                  >
                     {{ errors.notes[0] }}
                   </div>
                   <div
-                    v-if="errors && errors.call_status"
+                    v-else-if="errors && errors.call_status"
                     class="text-danger mt-2"
                   >
                     {{ errors.call_status[0] }}
                   </div>
                   <div
-                    v-if="errors && errors.event_status"
+                    v-else-if="errors && errors.event_status"
                     class="text-danger mt-2"
                   >
                     {{ errors.event_status[0] }}
                   </div>
                   <div
-                    v-if="errors && errors.response"
+                    v-else-if="errors && errors.response"
                     class="text-danger mt-2"
                   >
                     {{ errors.response[0] }}
@@ -753,6 +512,19 @@ export default {
     // },
     submit() {
       let customer = new FormData();
+
+      if (this.event_payload.call_status == null) {
+        alert("Select Option Call Status");
+        return false;
+      }
+      if (this.event_payload.event_status == null) {
+        alert("Select Option Event Status");
+        return false;
+      }
+      if (this.event_payload.response == null) {
+        alert("Select Option Response");
+        return false;
+      }
 
       for (const key in this.event_payload) {
         if (this.event_payload[key] != "" && this.event_payload[key] != null)

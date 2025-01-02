@@ -251,7 +251,7 @@
           :style="
             ' height:' +
             windowHeight +
-            'px;overflow-y: auto;overflow-x: hidden;margin-top:3px!important;background-color: #99a2a6'
+            'px;overflow-y: auto;overflow-x: hidden;margin-top:3px!important;background-color: #909a9f'
           "
         >
           <v-card-text style="padding: 0px">
@@ -275,7 +275,7 @@
                   border-color: #d3d3d3;
                   margin-top: 0px;
                   border-bottom: 1px solid black;
-                  background-color: #99a2a6;
+                  background-color: #909a9f;
                   border-radius: 0px;
                 "
               >
@@ -330,7 +330,7 @@
 
                         <div style="color: #534949; text-align: left">
                           {{
-                            $dateFormat.formatDateMonthYear(
+                            $dateFormat.formatTimeDateMonthYear(
                               alarm.alarm_start_datetime
                             )
                           }}
