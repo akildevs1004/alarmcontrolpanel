@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row style="width: 100%; color: #fff; line-height: 0px">
+    <v-row style="width: 100%; line-height: 0px">
       <v-col>
         <div v-if="alarm && customer">
           <v-row style="padding: 0px">
@@ -26,12 +26,12 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="text-truncate">
                     Property :{{
                       customer.buildingtype ? customer.buildingtype.name : "---"
                     }}
                   </td>
-                  <td>
+                  <td class="text-truncate">
                     Name :
                     {{
                       customer?.building_name
@@ -39,6 +39,21 @@
                         : "---"
                     }}
                   </td>
+                </tr>
+                <tr>
+                  <td class="text-truncate">
+                    Location: {{ alarm.zone_data?.location ?? "---" }}
+                  </td>
+                  <td class="text-truncate">
+                    Sensor :
+                    {{ alarm.zone_data?.sensor_type ?? "---" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-truncate">
+                    Zone: {{ alarm.zone_data?.sensor_name ?? "---" }}
+                  </td>
+                  <td class="text-truncate"></td>
                 </tr>
               </table>
             </v-col>
@@ -97,14 +112,13 @@
     <v-row style="padding: 0px; padding-top: 10px">
       <v-col style="padding: 0px">
         <v-tabs
-          style="background-color: #909a9f"
           height="25"
           center-active
           right
-          class="customerEmergencyContactTabs customerEmergencyContactTabsBGcolor"
+          class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
         >
           <v-tab
-            style="background-color: #909a9f"
+            style="font-size: 10px; min-width: 50px !important"
             v-if="
               contact.address_type.toLowerCase() == 'primary' ||
               contact.address_type.toLowerCase() == 'secondary' ||
@@ -116,7 +130,6 @@
             {{ contact.address_type }}</v-tab
           >
           <v-tab-item
-            style="background-color: #909a9f"
             v-if="
               contact.address_type.toLowerCase() == 'primary' ||
               contact.address_type.toLowerCase() == 'secondary' ||
@@ -126,7 +139,7 @@
             :key="contact.id + 50"
             name="index+50"
           >
-            <v-card class="elevation-1" style="background-color111: #909a9f">
+            <v-card class="elevation-1">
               <EventCustomerTabContacts
                 :alarmId="alarm.id"
                 v-if="contact"

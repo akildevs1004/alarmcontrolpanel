@@ -264,7 +264,7 @@
           >
             <v-card :loading="loading" elevation="3">
               <v-card-text style="height: 660px">
-                <EventCustomerinfo
+                <EventContactNotes
                   :key="selectedAlarm.id"
                   v-if="selectedAlarm"
                   :colorcodes="colorcodes"
@@ -356,7 +356,7 @@ import Clock from "../../components/Operator/Clock.vue";
 import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
 import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
 import OperatorCustomerContacts from "../../components/Operator/OperatorCustomerContacts.vue";
-import EventCustomerinfo from "../../components/Operator/EventCustomerinfo.vue";
+import EventContactNotes from "../../components/Operator/EventContactNotes.vue";
 import EventAlarmNotes from "../../components/Operator/EventAlarmNotes.vue";
 
 export default {
@@ -368,7 +368,7 @@ export default {
     OperatorGoogleMap,
     OperatorSensorPhotos,
     OperatorCustomerContacts,
-    EventCustomerinfo,
+    EventContactNotes,
     EventAlarmNotes,
   },
   // alarm_event_operator_statistics

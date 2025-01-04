@@ -50,7 +50,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card flat style="background-color: #909a9f" elevation="0">
+    <v-card flat elevation="0">
       <v-card-text style="margin-top: 5px">
         <v-row>
           <v-col style="margin: auto; padding-top: 0px">
@@ -67,7 +67,7 @@
         <v-row>
           <v-col style="padding: 0px">
             <table class="eventcustomertab" style="width: 100%">
-              <tr>
+              <tr style="font-weight: bold">
                 <td>Name</td>
                 <td>
                   {{
@@ -134,16 +134,18 @@
         </v-row>
         <v-row>
           <v-col>
+            <!-- <h5>Operator Notes</h5> -->
             <v-row>
               <v-col>
                 <v-textarea
                   outlined
-                  class="mt-0 white-color"
+                  class="mt-0 white-color1"
                   label="Operator Comments"
                   value=""
                   height="60px"
                   hide-details
                   v-model="event_payload.notes"
+                  style="font-size: 12px"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -154,8 +156,7 @@
                     <td>Call Status</td>
                     <td style="width: 60%">
                       <v-select
-                        style="color: #fff"
-                        class="employee-schedule-search-box border-white"
+                        class="employee-schedule-search-box font10"
                         height="20px"
                         outlined
                         v-model="event_payload.call_status"
@@ -175,7 +176,7 @@
                     <td>Response</td>
                     <td>
                       <v-select
-                        class="employee-schedule-search-box border-white"
+                        class="employee-schedule-search-box font10"
                         height="20px"
                         outlined
                         v-model="event_payload.response"
@@ -197,7 +198,7 @@
                     <td>Alarm Status</td>
                     <td>
                       <v-select
-                        class="employee-schedule-search-box border-white"
+                        class="employee-schedule-search-box font10"
                         height="20px"
                         outlined
                         v-model="event_payload.event_status"
@@ -219,7 +220,7 @@
             </v-row>
 
             <v-row>
-              <v-col>
+              <v-col style="padding: 0px">
                 <div
                   v-if="event_payload.event_status == 'Forwarded'"
                   style="
@@ -229,8 +230,8 @@
                     padding-left: 0px;
                   "
                 >
-                  <label style="color: #fff"> Forward Event to.. </label>
-                  <v-row style="margin-top: 10px; padding-bottom: 10px">
+                  <label style="font-size: 11px"> Forward Event to.. </label>
+                  <v-row style="margin-top: 0px; padding-bottom: 0px">
                     <v-col
                       :key="'customercontacts' + index + 20"
                       cols="3"
@@ -243,7 +244,7 @@
                       v-for="(contact, index) in customer.contacts"
                     >
                       <v-checkbox
-                        class="radiogroup radiogroup-small white-color"
+                        class="radiogroup radiogroup-small"
                         style="font-size: 12px"
                         v-model="contact.forwarded"
                         :label="contact.address_type"
@@ -261,7 +262,7 @@
                       "
                       min="0"
                       max="10"
-                      class="input-small-fieldset1 mt-1 border-white white-color"
+                      class="input-small-fieldset1 mt-1"
                       label="Secret Code"
                       dense
                       outlined
@@ -269,7 +270,14 @@
                       v-model="event_payload.pin_number"
                       hide-details
                       small
-                      style="width: 130px; float: right; margin-right: -10px"
+                      style="
+                        width: 130px;
+                        float: right;
+                        margin-right: -10px;
+                        font-size: 11px;
+                        height: 20px;
+                        padding-top: 0px;
+                      "
                     >
                     </v-text-field>
                   </v-col>

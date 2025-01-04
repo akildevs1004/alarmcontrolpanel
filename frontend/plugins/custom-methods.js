@@ -281,7 +281,7 @@ export default ({ app }, inject) => {
 
       // Return formatted result
       if (days > 0) {
-        return `${days} d ${hours}:${minutes}:${seconds}`;
+        return `${days}d ${hours}:${minutes}:${seconds}`;
       } else {
         return `${hours}:${minutes}:${seconds}`;
       }
