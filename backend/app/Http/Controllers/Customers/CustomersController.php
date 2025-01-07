@@ -40,7 +40,7 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Customers::with(["buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
+        $model = Customers::with(["photos", "buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact", "cameras"])
             ->where("company_id", $request->company_id);
 
         $model->when($request->filled("customer_id"), function ($q) use ($request) {

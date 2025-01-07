@@ -92,52 +92,6 @@
           :alarm="alarm"
           :customer="customer"
         />
-        <!-- <v-carousel
-          v-if="customer?.photos"
-          height="400"
-          hide-delimiter-background
-          show-arrows-on-hover
-          @change="keyPlottings++"
-        >
-          <v-carousel-item
-            v-for="(item, index) in customer.photos"
-            :key="'imageplotting' + item.id"
-          >
-            <div class="photo-title">{{ index + 1 }}: {{ item.title }}</div>
-            <img
-              :id="
-                'plotting' +
-                item.photo_plottings[0].customer_building_picture_id
-              "
-              class="photo-img"
-              :src="item.picture"
-              style="width: 100%; height: 400px"
-              @load="
-                onImageLoad(
-                  item.photo_plottings[0].customer_building_picture_id
-                )
-              "
-            />
-            <span
-              v-if="
-                item.photo_plottings[0] &&
-                imageLoaded[
-                  item.photo_plottings[0].customer_building_picture_id
-                ]
-              "
-            >
-              <PlottingIcon
-                v-for="(plotting, idx) in item.photo_plottings[0].plottings"
-                :key="'plotting' + idx"
-                :plotting="plotting"
-                :picture-id="
-                  item.photo_plottings[0].customer_building_picture_id
-                "
-                :alarm="alarm"
-              />
-            </span>
-          </v-carousel-item>
-        </v-carousel> -->
       </v-tab-item>
       <v-tab-item
         ><CompGoogleMapLatLan
@@ -160,7 +114,7 @@
               show-arrows-on-hover
             >
               <template
-                v-for="(item, index) in customer.profile_pictures"
+                v-for="(item, index) in customer.cameras"
                 :name="item.id"
               >
                 <v-carousel-item>
@@ -168,7 +122,10 @@
                     {{ index + 1 }}: {{ item.title }}
                   </div>
                   <iframe
-                    src="https://rtmp.oxsai.com/player.html"
+                    :src="
+                      'https://rtmp.oxsai.com/player.html?url=' +
+                      item.camera_url
+                    "
                     width="100%"
                     height="500"
                     style="border: 0"
@@ -186,26 +143,27 @@
             <v-row justify="center" dense>
               <v-col
                 class="thumbnail-wrapper"
-                v-for="(item, index) in customer.profile_pictures"
+                v-for="(item, index) in customer.cameras"
                 :key="'thumb-' + index"
                 style="max-width: 150px; text-align: center"
               >
                 <div
-                  style="height: 100px; width: 150px; margin: auto"
+                  @click="currentCameraSlide = index"
+                  style="
+                    height: 100px;
+                    width: 150px;
+                    margin: auto;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
                   :class="{ 'active-thumbnail': index === currentCameraSlide }"
                 >
-                  <v-img
-                    :src="item.picture"
-                    :alt="item.title"
-                    contain
-                    width="140px"
-                    max-height="100px"
-                    height="100px"
-                    style="max-height: 100px"
-                    @click="currentCameraSlide = index"
-                  ></v-img>
+                  <v-icon size="100">mdi-camera</v-icon>
                 </div>
-                <label style="font-size: 10px">{{ item.title }}</label>
+                <label style="font-size: 10px; text-align: center">{{
+                  item.title
+                }}</label>
               </v-col>
             </v-row>
           </v-col>

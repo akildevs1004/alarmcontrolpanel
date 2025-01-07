@@ -17,6 +17,7 @@ use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomerAlarmEventsController;
 use App\Http\Controllers\Customers\CustomerBuildingPhotosController;
 use App\Http\Controllers\Customers\CustomerBuildingPicturesController;
+use App\Http\Controllers\Customers\CustomerCamerasController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
@@ -61,6 +62,8 @@ Route::post('customer-update', [CustomersController::class, 'updateCustomer']);
 Route::post('customers_contact_update', [CustomersController::class, 'updateCustomerContact']);
 Route::apiResource('customers_building_picture', CustomerBuildingPicturesController::class);
 Route::apiResource('customers_building_photos', CustomerBuildingPhotosController::class);
+Route::apiResource('customers_building_cameras', CustomerCamerasController::class);
+
 
 Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
@@ -283,3 +286,5 @@ Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEve
 //settings permissions 
 Route::post('role_update_permission_pages', [RolePermissionsController::class, 'roleUpdatePermissions']);
 Route::get('role_get_permission_pages', [RolePermissionsController::class, 'getRolePermissions']);
+Route::get('get_page_roles_menu_data', [RolePermissionsController::class, 'getPageRolesMenuList']);
+Route::post('create_default_roles', [RolePermissionsController::class, 'createDefaultRoles']);

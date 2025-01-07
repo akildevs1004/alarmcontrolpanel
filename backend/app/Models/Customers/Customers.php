@@ -3,6 +3,7 @@
 namespace App\Models\Customers;
 
 use App\Models\AlarmEvents;
+use App\Models\CustomerCameras;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Device;
 use App\Models\SecurityCustomers;
@@ -25,7 +26,10 @@ class Customers extends Model
         //return $this->hasOne(SecurityCustomers::class);
     }
 
-
+    public function cameras()
+    {
+        return $this->hasMany(CustomerCameras::class, "customer_id", "id");
+    }
     public function devices()
     {
         return $this->hasMany(Device::class, "customer_id", "id");
