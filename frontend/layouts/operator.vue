@@ -905,6 +905,10 @@ button {
 .employee-schedule-search-box .v-input__icon {
   height: 17px !important;
 }
+
+.font10 {
+  font-size: 11px !important;
+}
 .reports-events-autocomplete .v-input__slot {
   min-height: 33px !important;
 }
@@ -1056,37 +1060,37 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 13px;
+  font-size: 11px;
   height: 32px;
 }
 .operatorcustomerTop1 td {
-  border-top: 0px solid rgb(255, 255, 255);
-  border-bottom: 1px solid rgb(255, 255, 255);
-  color: #fff;
+  border-top: 0px solid #ddd;
+  border-bottom: 1px solid #ddd;
+
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 13px;
+  font-size: 11px;
   height: 28px;
 }
 .eventcustomertab td {
-  border-top: 0px solid rgb(255, 255, 255);
-  border-bottom: 1px solid rgb(255, 255, 255);
-  color: #fff;
+  border-top: 0px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  /* color: #fff; */
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 13px;
+  font-size: 11px;
   height: 20px;
 }
 .eventcustomertabselect td {
-  border-top: 0px solid rgb(255, 255, 255);
-  border-bottom: 0px solid rgb(255, 255, 255);
-  color: #fff;
+  border-top: 0px solid #ddd;
+  border-bottom: 0px solid #ddd;
+  /* color: #fff; */
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 13px;
+  font-size: 11px;
   height: 35px;
 }
 .main-leftcontent .v-navigation-drawer__content {
@@ -1112,6 +1116,18 @@ button {
 }
 .border-white fieldset {
   border-color: #fff !important;
+}
+.full-height {
+  height: 100vh !important;
+  width: 100vw !important;
+  display: flex !important;
+}
+.thumbnail-wrapper {
+  cursor: pointer;
+}
+.active-thumbnail {
+  border: 2px solid #1976d2; /* Vuetify primary color */
+  border-radius: 4px;
 }
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

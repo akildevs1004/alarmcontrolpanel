@@ -101,6 +101,9 @@
             v-model="dialogCustomerRightInfo"
             right
             absolute
+            :persistent="true"
+            :dark="true"
+            :hide-overlay="true"
           >
             <AlarmCustomerMapViewSidebar
               class="AlarmCustomerMapViewSidebar"
@@ -850,7 +853,7 @@ export default {
           await this.getCustomersDatafromApi();
         }, 1000);
       }
-    }, 1000 * 10);
+    }, 1000 * 15);
 
     setInterval(() => {
       if (this.$route.name == "operator-dashboard") {
@@ -1424,12 +1427,23 @@ export default {
                 alarm_status: item.latest_alarm_event?.alarm_status,
               });
               let alarmId = item.latest_alarm_event?.id;
+
+              let googleDirectionIcon =
+                process.env.APP_URL + "/icons/google-directions.png";
+              let googleInfoIcon =
+                process.env.APP_URL + "/icons/google-info.png";
+
               // Create content for the infowindow
               let alarmHtmlLink = "";
               let customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-              if (item.latest_alarm_event?.alarm_start_datetime)
-                alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+              customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
+
+              if (item.latest_alarm_event?.alarm_start_datetime) {
+                // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+
+                alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:16px;"/>`;
+              }
 
               let profile_picture =
                 item.profile_picture ||
@@ -1437,24 +1451,36 @@ export default {
 
               let html = `
             <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
-              <tr>
-                <td style="width:100px; vertical-align: top;">
-                  <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
-                  <br />
+
+               <tr>
+                <td colspan="2" style="width:100%;;text-align:center; vertical-align: top;">
+                 <div style="width:100%;margin:auto">
+                   <img style="margin:auto;width:auto; max-height:120px; padding-right:5px;" src="${profile_picture}" />
+                  </div>
+
                 </td>
-                <td style="width:150px; vertical-align: top;">
-                  ${item.building_name} <br/> ${item.city}
+                </tr>
+              <tr>
+
+                <td style=" vertical-align: top;font-size:10px">
+                  <div>${item.buildingtype.name}</div>
+                 <div style="font-weight:bold;font-size:12px"> ${item.building_name}</div>
+
+                 <div>${item.house_number},${item.street_number}</div>
+                 <div>${item.city}</div>
+
                   <div>Landmark: ${item.landmark}</div>
                 </td>
+<td style=" vertical-align: middle;text-align:right">
+ <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:20px" src="${googleDirectionIcon}"/></a>
+
+ <span>
+ ${customerHtmlLink}   ${alarmHtmlLink}
+  </span>
+  </td>
+
               </tr>
-              <tr>
-                <td>
-                  <a target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}">Google Directions </a>
-                </td>
-                <td style="text-align:right">
-                  ${customerHtmlLink} &nbsp; &nbsp; ${alarmHtmlLink}
-                </td>
-              </tr>
+
             </table>`;
 
               const infowindow = new google.maps.InfoWindow({
@@ -1473,7 +1499,14 @@ export default {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
 
               // Marker event listeners
-              // marker.addListener("mouseover", () => {
+              marker.addListener("mouseover", () => {
+                this.mapInfowindowsList.forEach((oldinfowindow) =>
+                  oldinfowindow.close()
+                );
+                infowindow.open(this.map, marker);
+              });
+
+              // marker.addListener("mouseout", () => {
               //   this.mapInfowindowsList.forEach((oldinfowindow) =>
               //     oldinfowindow.close()
               //   );
@@ -1498,18 +1531,28 @@ export default {
 
                 if (customerBtn)
                   customerBtn.addEventListener("click", () => {
-                    this.dialog = true;
+                    //this.dialog = true;
+
                     this.key += 1;
                     this.customerInfo = item;
+                    this.dialogCustomerRightInfo = true;
+
+                    let position = {
+                      lat: parseFloat(this.customerInfo.latitude),
+                      lng: parseFloat(this.customerInfo.longitude),
+                    };
+                    this.map.panTo(position);
+
+                    infowindow.open(this.map, marker);
                   });
 
                 const infowindowContent = document.getElementById(
                   `infowindow-content-${item.id}`
                 );
                 infowindowContent.addEventListener("mouseout", (e) => {
-                  if (!infowindowContent.contains(e.relatedTarget)) {
-                    infowindow.close();
-                  }
+                  // if (!infowindowContent.contains(e.relatedTarget)) {
+                  //   infowindow.close();
+                  // }
                 });
               });
 
@@ -1520,6 +1563,13 @@ export default {
                 //this.dialog = true;
                 this.key += 1;
                 this.customerInfo = item;
+
+                let position = {
+                  lat: parseFloat(this.customerInfo.latitude),
+                  lng: parseFloat(this.customerInfo.longitude),
+                };
+
+                this.map.panTo(position);
               });
             } catch (e) {
               console.error(e);

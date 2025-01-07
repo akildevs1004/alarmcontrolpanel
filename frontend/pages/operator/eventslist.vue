@@ -1,199 +1,188 @@
 <template>
-  <div
-    style="
-      min-width: 900px;
-      padding-bottom: 0px;
-      background-color: #516067;
-      height: 100%;
-    "
-  >
-    <v-row style="">
-      <v-col
-        id="lefteventlist"
-        class="google-map-right-hand-content"
-        style="
-          padding-top: 0px;
-          padding-left: 0px;
-          max-width: 350px;
-          padding-right: 0px;
-          padding-bottom: 0px;
-        "
-      >
-        <v-card
-          :loading="loading"
-          elevation="10"
-          outlined
-          :style="' height:100%;;overflow-y: auto;overflow-x: hidden;background-color: #516067; '"
-        >
-          <v-card-text style="padding: 5px; background-color: #516067">
-            <Topmenu
-              @refreshEventsList="getDatafromApi()"
-              @applyGlobalSearch="getDatafromApi"
-            />
-
-            <v-row
-              style="
-                height: 55px;
-                margin-top: 10px;
-                padding-left: 10px;
-                padding-right: 10px;
-                padding-top: 10px;
-                background-color: #fff;
-              "
+  <div>
+    <v-card elevation="5" class="full-height" style="padding-top: 0px">
+      <v-card-text style="background-color: #fff">
+        <v-row>
+          <v-col
+            id="lefteventlist"
+            class="google-map-right-hand-content"
+            style="
+              padding-top: 0px;
+              padding-left: 0px;
+              max-width: 300px;
+              padding-right: 0px;
+              padding-bottom: 0px;
+            "
+          >
+            <v-card
+              class="full-height"
+              :loading="loading"
+              elevation="10"
+              outlined
+              :style="' height:100%;;overflow-y: auto;overflow-x: hidden; '"
             >
-              <v-col cols="4" style="padding: 2px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Property Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterBuildingType"
-                  :items="[{ id: null, name: 'All' }, ...buildingTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 2px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Alarm Type"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterAlarmType"
-                  :items="[{ id: null, name: 'All' }, ...alarmTypes]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="4" style="padding: 2px">
-                <v-select
-                  @change="getDatafromApi()"
-                  style="width: 100%"
-                  label="Event Status"
-                  class="selectfilter"
-                  outlined
-                  dense
-                  height="20px"
-                  v-model="filterAlarmStatus"
-                  :items="[
-                    { id: null, name: 'All Events' },
+              <v-card-text style="padding: 5px">
+                <Topmenu
+                  @refreshEventsList="getDatafromApi()"
+                  @applyGlobalSearch="getDatafromApi"
+                />
 
-                    { id: 1, name: 'Open' },
-
-                    { id: 0, name: 'Closed' },
-                    { id: 3, name: 'Forwarded' },
-                  ]"
-                  item-text="name"
-                  item-value="id"
-                >
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row v-if="data.length == 0" class="text-center">
-              <v-col> No data available </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                :style="{
-                  padding: '0px',
-                  borderBottom:
-                    selectedAlarm.id === alarm.id
-                      ? '1px solid BLACK'
-                      : '1px solid #fff',
-                }"
-                v-if="alarm.device?.customer"
-                v-for="(alarm, index) in data"
-              >
-                <v-card
-                  @click="selectAlarmEvent(alarm)"
-                  :key="index + 55"
-                  elevation="0"
+                <v-row
                   style="
-                    border-color: black;
-
-                    border-bottom: 0px solid #fff;
-
-                    width: 100%;
-                    background-color: #516067;
-                    color: #fff;
+                    height: 55px;
+                    margin-top: 10px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    padding-top: 10px;
+                    background-color: #fff;
                   "
                 >
-                  <v-card-text style="padding-right: 0px">
-                    <v-row
+                  <v-col cols="4" style="padding: 2px">
+                    <v-select
+                      @change="getDatafromApi()"
+                      style="width: 100%"
+                      label="Property Type"
+                      class="selectfilter"
+                      outlined
+                      dense
+                      height="20px"
+                      v-model="filterBuildingType"
+                      :items="[{ id: null, name: 'All' }, ...buildingTypes]"
+                      item-text="name"
+                      item-value="id"
+                    >
+                    </v-select>
+                  </v-col>
+                  <v-col cols="4" style="padding: 2px">
+                    <v-select
+                      @change="getDatafromApi()"
+                      style="width: 100%"
+                      label="Alarm Type"
+                      class="selectfilter"
+                      outlined
+                      dense
+                      height="20px"
+                      v-model="filterAlarmType"
+                      :items="[{ id: null, name: 'All' }, ...alarmTypes]"
+                      item-text="name"
+                      item-value="id"
+                    >
+                    </v-select>
+                  </v-col>
+                  <v-col cols="4" style="padding: 2px">
+                    <v-select
+                      @change="getDatafromApi()"
+                      style="width: 100%"
+                      label="Event Status"
+                      class="selectfilter"
+                      outlined
+                      dense
+                      height="20px"
+                      v-model="filterAlarmStatus"
+                      :items="[
+                        { id: null, name: 'All Events' },
+
+                        { id: 1, name: 'Open' },
+
+                        { id: 0, name: 'Closed' },
+                        { id: 3, name: 'Forwarded' },
+                      ]"
+                      item-text="name"
+                      item-value="id"
+                    >
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row v-if="data.length == 0" class="text-center">
+                  <v-col> No data available </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    :style="{
+                      padding: '0px',
+                      borderTop:
+                        selectedAlarm.id === alarm.id
+                          ? '1px solid #7d7d7d'
+                          : '1px solid #DDD',
+                      borderBottom:
+                        selectedAlarm.id === alarm.id
+                          ? '1px solid #7d7d7d'
+                          : '1px solid #DDD',
+                    }"
+                    v-if="alarm.device?.customer"
+                    v-for="(alarm, index) in data"
+                  >
+                    <v-card
+                      @click="selectAlarmEvent(alarm)"
+                      :key="index + 55"
+                      elevation="0"
                       style="
-                        min-width: 300px;
-                        height: auto;
+                        border-bottom: 0px solid black;
+
                         width: 100%;
-                        color: #fff;
                       "
                     >
-                      <v-col
-                        style="
-                          max-width: 60px;
-                          padding: 0px;
-                          margin: auto;
-                          text-align: center;
-                        "
-                      >
-                        <img
-                          @click="showNotes(alarm)"
-                          :title="alarm.alarm_type"
-                          style="width: 30px; padding-top: 0%"
-                          :src="getAlarmColorObject(alarm).image + '?3=3'"
-                        />
-                      </v-col>
-                      <v-col
-                        style="
-                          padding: 0px;
-                          font-size: 9px;
-                          padding-left: 10px;
-                          line-height: 15px;
-                        "
-                      >
-                        <div style="overflow: hidden">
-                          <div>
-                            {{
-                              alarm.device.customer.buildingtype
-                                ? alarm.device.customer.buildingtype.name.toUpperCase()
-                                : "---"
-                            }}
-                          </div>
-                          <div style="font-weight: bold; font-size: 12px">
-                            {{
-                              $utils.caps(
-                                alarm.device.customer.building_name
-                              ) || "---"
-                            }}
-                          </div>
-                          <div>
-                            <v-icon
-                              style="color: #fff; margin-top: -3px"
-                              size="10"
-                              >mdi-account-tie</v-icon
-                            >{{
-                              alarm.device.customer.primary_contact
-                                ? $utils.caps(
-                                    alarm.device.customer.primary_contact
-                                      .first_name
-                                  ) +
-                                  " " +
+                      <v-card-text style="padding-right: 0px">
+                        <v-row
+                          style="min-width: 300px; height: auto; width: 100%"
+                        >
+                          <v-col
+                            style="
+                              max-width: 60px;
+                              padding: 0px;
+                              margin: auto;
+                              text-align: center;
+                            "
+                          >
+                            <img
+                              @click="showNotes(alarm)"
+                              :title="alarm.alarm_type"
+                              style="width: 30px; padding-top: 0%"
+                              :src="getAlarmColorObject(alarm).image + '?3=3'"
+                            />
+                          </v-col>
+                          <v-col
+                            style="
+                              padding: 0px;
+                              font-size: 9px;
+                              padding-left: 10px;
+                              line-height: 15px;
+                            "
+                          >
+                            <div style="overflow: hidden">
+                              <div>
+                                {{
+                                  alarm.device.customer.buildingtype
+                                    ? alarm.device.customer.buildingtype.name.toUpperCase()
+                                    : "---"
+                                }}
+                              </div>
+                              <div style="font-weight: bold; font-size: 12px">
+                                {{
                                   $utils.caps(
-                                    alarm.device.customer.primary_contact
-                                      .last_name
-                                  )
-                                : "---"
-                            }}
-                          </div>
+                                    alarm.device.customer.building_name
+                                  ) || "---"
+                                }}
+                              </div>
+                              <div>
+                                <v-icon style="margin-top: -3px" size="10"
+                                  >mdi-account-tie</v-icon
+                                >{{
+                                  alarm.device.customer.primary_contact
+                                    ? $utils.caps(
+                                        alarm.device.customer.primary_contact
+                                          .first_name
+                                      ) +
+                                      " " +
+                                      $utils.caps(
+                                        alarm.device.customer.primary_contact
+                                          .last_name
+                                      )
+                                    : "---"
+                                }}
+                              </div>
 
-                          <!-- <div style="font-size: 9px">
+                              <!-- <div style="font-size: 9px">
                             {{
                               alarm.device?.customer?.area
                                 ? alarm.device.customer.area
@@ -206,29 +195,29 @@
                               "---"
                             }}
                           </div> -->
-                        </div>
-                        <div>
-                          <div style="color: #fff; text-align: left">
-                            <div style="color: #fff; text-align: left">
-                              {{
-                                $dateFormat.formatTimeDateMonthYear(
-                                  alarm.alarm_start_datetime
-                                )
-                              }}
                             </div>
-                            <div
-                              style="color: #2f1717"
-                              v-if="alarm.alarm_status == 0"
-                            >
-                              {{
-                                $dateFormat.formatTimeDateMonthYear(
-                                  alarm.alarm_end_datetime
-                                )
-                              }}
+                            <div>
+                              <div style="text-align: left">
+                                <div style="text-align: left">
+                                  {{
+                                    $dateFormat.formatTimeDateMonthYear(
+                                      alarm.alarm_start_datetime
+                                    )
+                                  }}
+                                </div>
+                                <div
+                                  style="color: #2f1717"
+                                  v-if="alarm.alarm_status == 0"
+                                >
+                                  {{
+                                    $dateFormat.formatTimeDateMonthYear(
+                                      alarm.alarm_end_datetime
+                                    )
+                                  }}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <!-- <div style="color: #0064ff">
+                            <!-- <div style="color: #0064ff">
                           <v-row
                             ><v-col style="max-width: 100px"> </v-col>
 
@@ -250,55 +239,57 @@
                             ></v-row
                           >
                         </div> -->
-                      </v-col>
-                      <v-col
-                        style="
-                          max-width: 70px;
-                          padding: 2px;
-                          font-size: 11px;
-                          text-align: center;
-                          margin: auto;
-                        "
-                      >
-                        <div style="">#{{ alarm.id }}</div>
-                        <div style="margin: auto; text-align: center"></div>
-                        <div style="line-height: 0px"></div>
-                        <div v-if="alarm.alarm_status == 1">
-                          OPEN
-                          <div>
-                            {{
-                              $dateFormat.getTimeDifference(
-                                alarm.alarm_start_datetime
-                              )
-                            }}
-                          </div>
-                        </div>
-                        <div v-else style="color: #2f1717">
-                          CLOSED
+                          </v-col>
+                          <v-col
+                            style="
+                              max-width: 70px;
+                              padding: 2px;
+                              font-size: 11px;
+                              text-align: center;
+                              margin: auto;
+                            "
+                          >
+                            <div style="">#{{ alarm.id }}</div>
+                            <div style="margin: auto; text-align: center"></div>
+                            <div style="line-height: 0px"></div>
+                            <div v-if="alarm.alarm_status == 1">
+                              OPEN
+                              <div>
+                                {{
+                                  $dateFormat.getTimeDifference(
+                                    alarm.alarm_start_datetime
+                                  )
+                                }}
+                              </div>
+                            </div>
+                            <div v-else style="color: #2f1717">
+                              CLOSED
 
-                          <div>
-                            {{
-                              $dateFormat.minutesToHHMM(alarm.response_minutes)
-                            }}
-                          </div>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                  <img
-                    v-if="selectedAlarm.id == alarm.id"
-                    src="/right-arrow.png"
-                    style="
-                      width: 50px;
-                      position: absolute;
-                      width: 11px;
-                      right: 4px;
-                      top: 38%;
-                      vertical-align: middle;
-                    "
-                  />
-                </v-card>
-                <!-- <v-card
+                              <div>
+                                {{
+                                  $dateFormat.minutesToHHMM(
+                                    alarm.response_minutes
+                                  )
+                                }}
+                              </div>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                      <img
+                        v-if="selectedAlarm.id == alarm.id"
+                        src="/right-arrow.png"
+                        style="
+                          width: 50px;
+                          position: absolute;
+                          width: 11px;
+                          right: 4px;
+                          top: 38%;
+                          vertical-align: middle;
+                        "
+                      />
+                    </v-card>
+                    <!-- <v-card
                   @click="selectAlarmEvent(alarm)"
                   v-if="alarm.device?.customer"
                   :key="index + 65"
@@ -439,34 +430,72 @@
                     "
                   />
                 </v-card> -->
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col
-        class="google-map-right-hand-content"
-        style="padding: 0px; padding-top: 6px; padding-bottom: 0px"
-      >
-        <v-row style="">
-          <v-col
-            style="padding-right: 0px; max-width: 400px; padding-top: 6px"
-            class="google-map-right-hand-content"
-          >
-            <v-card :loading="loading" elevation="3">
-              <v-card-text style="background-color: #909a9f">
-                <EventCustomerinfo
-                  :key="selectedAlarm.id"
-                  v-if="selectedAlarm"
-                  :colorcodes="colorcodes"
-                  :customer="selectedAlarm?.device.customer"
-                  :alarm="selectedAlarm"
-                  @emitreloadEventNotes3="reloadEventNotes4()"
-              /></v-card-text>
+                  </v-col>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-col>
-          <!-- <v-col
+
+          <v-col
+            class="google-map-right-hand-content"
+            style="padding: 0px; padding-top: 6px; padding-bottom: 0px"
+          >
+            <v-row style="">
+              <v-col
+                style="padding-right: 0px; max-width: 300px; padding-top: 6px"
+                class="google-map-right-hand-content"
+              >
+                <v-card :loading="loading" elevation="5" class="full-height">
+                  <v-card-text style="background-color: #fff">
+                    <EventContactNotes
+                      :key="selectedAlarm.id"
+                      v-if="selectedAlarm"
+                      :colorcodes="colorcodes"
+                      :customer="selectedAlarm?.device.customer"
+                      :alarm="selectedAlarm"
+                      @emitreloadEventNotes3="reloadEventNotes4()"
+                  /></v-card-text>
+                </v-card>
+              </v-col>
+              <v-col
+                style="
+                  padding: 0px;
+                  padding-top: 6px;
+                  padding-bottom: 0px;
+                  max-width: 100%;
+                "
+              >
+                <v-card
+                  :loading="loading"
+                  elevation="5"
+                  style="
+                    height: 100vh !important;
+
+                    display: flex !important;
+                  "
+                >
+                  <v-card-text>
+                    <EventsListBusinessInfoTabs
+                      v-if="selectedAlarm"
+                      :customer="selectedAlarm?.device.customer"
+                      :alarm="selectedAlarm"
+                      :key="selectedAlarm.id"
+                    /> </v-card-text></v-card
+              ></v-col>
+              <!-- <v-col>
+                <v-card
+                  :loading="loading"
+                  elevation="5"
+                  class="full-height 111111"
+                >
+                  <v-card-text style="background-color: #fff">
+                    <EventsListBusinessInfoTabs
+                      :customer="selectedAlarm?.device.customer"
+                    />
+                  </v-card-text>
+                </v-card>
+              </v-col> -->
+              <!-- <v-col
             class="google-map-right-hand-content"
             style="
               min-width: auto;
@@ -512,8 +541,8 @@
                 />
               </div> </v-card
           ></v-col> -->
-        </v-row>
-        <!-- <v-row style="margin-top: 0px">
+            </v-row>
+            <!-- <v-row style="margin-top: 0px">
           <v-col style="padding-top: 1px">
             <v-card
               elevation="2"
@@ -533,8 +562,10 @@
             </v-card>
           </v-col>
         </v-row> -->
-      </v-col>
-    </v-row>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -543,12 +574,14 @@ import google_map_style_bandw from "../../google/google_style_blackandwhite.json
 import google_map_style_regular from "../../google/google_style_regular.json";
 
 import Topmenu from "../../components/Operator/topmenu.vue";
+import EventsListBusinessInfoTabs from "../../components/Operator/EventsListBusinessInfoTabs.vue";
+
 import MapFooterContent from "../../components/Operator/MapFooterContent.vue";
 import Clock from "../../components/Operator/Clock.vue";
 import OperatorGoogleMap from "../../components/Operator/OperatorGoogleMap.vue";
 import OperatorSensorPhotos from "../../components/Operator/OperatorSensorPhotos.vue";
 import OperatorCustomerContacts from "../../components/Operator/OperatorCustomerContacts.vue";
-import EventCustomerinfo from "../../components/Operator/EventCustomerinfo.vue";
+import EventContactNotes from "../../components/Operator/EventContactNotes.vue";
 import EventAlarmNotes from "../../components/Operator/EventAlarmNotes.vue";
 
 export default {
@@ -560,8 +593,9 @@ export default {
     OperatorGoogleMap,
     OperatorSensorPhotos,
     OperatorCustomerContacts,
-    EventCustomerinfo,
+    EventContactNotes,
     EventAlarmNotes,
+    EventsListBusinessInfoTabs,
   },
   // alarm_event_operator_statistics
   data: () => ({

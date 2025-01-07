@@ -3,7 +3,7 @@
     <!-- <v-dialog v-model="dialog" max-width="200px">TTTTTTTTTTT</v-dialog> -->
     <div
       :id="'mapCustomer' + contact_id"
-      style="height: 210px; width: 100%"
+      :style="'height:' + mapheight || '210px' + ' ; width: 100%'"
     ></div>
 
     <!-- <v-btn
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  props: ["latitude", "longitude", "title", "contact_id"],
+  props: ["latitude", "longitude", "title", "contact_id", "mapheight"],
   data: () => ({
     map: null,
     mapKey: null,
@@ -88,24 +88,24 @@ export default {
           streetViewControl: false,
           zoom: 12,
           center: { lat: 25.276987, lng: 55.296249 },
-          // styles: [
-          //   {
-          //     featureType: "administrative",
-          //     stylers: [{ visibility: "off" }],
-          //   },
-          //   {
-          //     featureType: "administrative",
-          //     stylers: [{ visibility: "off" }],
-          //   },
-          //   {
-          //     featureType: "landscape",
-          //     stylers: [{ visibility: "off" }],
-          //   },
-          //   {
-          //     featureType: "poi",
-          //     stylers: [{ visibility: "off" }],
-          //   },
-          // ],
+          styles: [
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "poi",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
         }
       );
       this.geocoder = new google.maps.Geocoder();

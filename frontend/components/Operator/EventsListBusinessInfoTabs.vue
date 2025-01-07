@@ -149,7 +149,68 @@
           :contact_id="customer.id"
         />
       </v-tab-item>
-      <v-tab-item>Camera</v-tab-item>
+      <v-tab-item>
+        <v-row>
+          <v-col>
+            <v-carousel
+              v-model="currentCameraSlide"
+              v-if="customer"
+              height="400"
+              hide-delimiter-background
+              show-arrows-on-hover
+            >
+              <template
+                v-for="(item, index) in customer.profile_pictures"
+                :name="item.id"
+              >
+                <v-carousel-item>
+                  <div style="text-align: Left">
+                    {{ index + 1 }}: {{ item.title }}
+                  </div>
+                  <iframe
+                    src="https://rtmp.oxsai.com/player.html"
+                    width="100%"
+                    height="500"
+                    style="border: 0"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </v-carousel-item>
+              </template>
+            </v-carousel>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col style="width: 600px; overflow: scroll">
+            <v-row justify="center" dense>
+              <v-col
+                class="thumbnail-wrapper"
+                v-for="(item, index) in customer.profile_pictures"
+                :key="'thumb-' + index"
+                style="max-width: 150px; text-align: center"
+              >
+                <div
+                  style="height: 100px; width: 150px; margin: auto"
+                  :class="{ 'active-thumbnail': index === currentCameraSlide }"
+                >
+                  <v-img
+                    :src="item.picture"
+                    :alt="item.title"
+                    contain
+                    width="140px"
+                    max-height="100px"
+                    height="100px"
+                    style="max-height: 100px"
+                    @click="currentCameraSlide = index"
+                  ></v-img>
+                </div>
+                <label style="font-size: 10px">{{ item.title }}</label>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-tab-item>
       <v-tab-item>System</v-tab-item>
       <v-tab-item>Logs</v-tab-item>
     </v-tabs>
@@ -173,6 +234,7 @@ export default {
   data: () => ({
     tab: "",
     currentSlide: 0,
+    currentCameraSlide: 0,
     imageLoaded: {},
     // IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "500PX",
     // IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500PX",
