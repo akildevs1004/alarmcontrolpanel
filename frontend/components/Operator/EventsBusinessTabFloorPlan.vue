@@ -21,14 +21,14 @@
             <img
               :id="
                 'plotting' +
-                item.photo_plottings[0].customer_building_picture_id
+                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
               "
               class="photo-img"
               :src="item.picture"
               style="width: 100%; height: 500px"
               @load="
                 onImageLoad(
-                  item.photo_plottings[0].customer_building_picture_id
+                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
                 )
               "
             />
@@ -36,7 +36,7 @@
               v-if="
                 item.photo_plottings[0] &&
                 imageLoaded[
-                  item.photo_plottings[0].customer_building_picture_id
+                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
                 ]
               "
             >
@@ -45,7 +45,7 @@
                 :key="'plotting' + idx"
                 :plotting="plotting"
                 :picture-id="
-                  item.photo_plottings[0].customer_building_picture_id
+                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
                 "
                 :alarm="alarm"
               />
