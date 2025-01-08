@@ -19,6 +19,7 @@
           >
             <div class="photo-title">{{ index + 1 }}: {{ item.title }}</div>
             <img
+              v-if="item.photo_plottings[0]"
               :id="
                 'plotting' +
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
@@ -41,6 +42,7 @@
               "
             >
               <PlottingIcon
+                v-if="item.photo_plottings[0]"
                 v-for="(plotting, idx) in item.photo_plottings[0].plottings"
                 :key="'plotting' + idx"
                 :plotting="plotting"
