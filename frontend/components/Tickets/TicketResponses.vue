@@ -44,7 +44,7 @@
                   Technician: {{ item.technician.first_name }}
                   {{ item.technician.last_name }}
                 </div>
-                <div v-else>---</div>
+                <div v-else>Admin/Unknown</div>
               </v-col>
               <v-col cols="6" style="text-align: right">
                 <v-icon size="20">mdi-clock-time-four-outline</v-icon>

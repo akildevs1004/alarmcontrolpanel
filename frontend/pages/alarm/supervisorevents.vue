@@ -6,13 +6,14 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <CompAlarmDashboardStatistics />
+    <CompAlarmDashboardStatistics compFilterSupervisor="true" />
     <v-card class="elevation-2">
       <v-card-text class="mt-5">
         <AllEventsDashboard2
           name="AllEvents1"
           showFilters="true"
           showTabs="true"
+          compFilterSupervisor="true"
         /> </v-card-text
     ></v-card>
   </div>

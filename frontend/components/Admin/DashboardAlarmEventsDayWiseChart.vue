@@ -1,9 +1,7 @@
 <template>
   <div style="width: 100%">
     <v-row>
-      <v-col md="6">
-        <h4>{{ display_title }}</h4></v-col
-      >
+      <v-col md="6"> <h4>Events Category</h4></v-col>
 
       <v-col md="6">
         <CustomFilter
@@ -26,7 +24,7 @@ export default {
   data() {
     return {
       loading: false,
-      display_title: "Alarm Events",
+      display_title: "Events Category",
       date_from: "",
       date_to: "",
       series: [
@@ -39,11 +37,11 @@ export default {
           data: [],
         },
         {
-          name: "Medium",
+          name: "Technical",
           data: [],
         },
         {
-          name: "Low",
+          name: "Events",
           data: [],
         },
       ],
@@ -94,9 +92,9 @@ export default {
     };
   },
   watch: {
-    async display_title() {
-      await this.getDataFromApi();
-    },
+    // async display_title() {
+    //   await this.getDataFromApi();
+    // },
     async branch_id(val) {
       this.$store.commit("dashboard/setDashboardData", null);
       //this.$store.commit("setDashboardData", null);
@@ -174,11 +172,11 @@ export default {
           data: [],
         },
         {
-          name: "Meidum",
+          name: "Technical",
           data: [],
         },
         {
-          name: "Low",
+          name: "Events",
           data: [],
         },
       ];
@@ -189,9 +187,11 @@ export default {
 
       data.forEach((item) => {
         this.chartOptions.series[0]["data"][counter] = item.sosCount;
-        this.chartOptions.series[1]["data"][counter] = item.crititalCount;
-        this.chartOptions.series[2]["data"][counter] = item.mediumCount;
-        this.chartOptions.series[3]["data"][counter] = item.lowCount;
+        this.chartOptions.series[1]["data"][counter] = item.crititalCount ?? 0;
+        this.chartOptions.series[2]["data"][counter] = item.technicalCount ?? 0;
+        this.chartOptions.series[3]["data"][counter] = item.eventsCount ?? 0;
+        // this.chartOptions.series[2]["data"][counter] = item.mediumCount;
+        // this.chartOptions.series[3]["data"][counter] = item.lowCount;
         this.chartOptions.xaxis.categories[counter] = this.$dateFormat.format2(
           item.date
         );
@@ -210,10 +210,11 @@ export default {
       //     this.chartOptions
       //   ).render();
       //   console.log(this.chartOptions);
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
+      try {
+        if (this.chart) {
+          this.chart.destroy();
+        }
+      } catch (error) {}
       // Render the chart
       this.chart = await new ApexCharts(
         document.querySelector("#" + this.name),

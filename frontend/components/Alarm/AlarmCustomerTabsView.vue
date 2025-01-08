@@ -29,6 +29,10 @@
             <v-icon>mdi-account-tie</v-icon>
           </v-tab>
           <v-tab class="customer-tab">
+            Camera
+            <v-icon>mdi-camera</v-icon>
+          </v-tab>
+          <v-tab class="customer-tab">
             Devices
             <v-icon>mdi-account</v-icon>
           </v-tab>
@@ -63,6 +67,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item> -->
+
           <v-tab-item>
             <v-card flat>
               <v-card-text>
@@ -106,6 +111,20 @@
                   :isMapviewOnly="isMapviewOnly"
                   :isEditable="isEditable"
                   @callrefreshData="updateContactsData()"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <CameraList
+                  v-if="_id"
+                  @closeDialog="closeDialog"
+                  :customer_id="_id"
+                  :customer="data"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
                 />
               </v-card-text>
             </v-card>
@@ -197,6 +216,7 @@ import DeviceArmedLogs from "./DeviceArmedLogs.vue";
 import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
 import AlarmEditContact from "../../components/Alarm/EditContacts.vue";
 import BuildingPhotos from "./BuildingPhotos.vue";
+import CameraList from "./CameraList.vue";
 
 export default {
   components: {
@@ -214,6 +234,7 @@ export default {
     AlamAllEvents,
     AlarmEditContact,
     BuildingPhotos,
+    CameraList,
   },
   props: ["_id", "isPopup", "isMapviewOnly", "isEditable"],
   data: () => ({

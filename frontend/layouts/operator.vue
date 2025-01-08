@@ -909,6 +909,9 @@ button {
 .font10 {
   font-size: 11px !important;
 }
+.font10 label {
+  font-size: 12px !important;
+}
 .reports-events-autocomplete .v-input__slot {
   min-height: 33px !important;
 }
@@ -1070,7 +1073,7 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 11px;
+  font-size: 11px !important;
   height: 28px;
 }
 .eventcustomertab td {

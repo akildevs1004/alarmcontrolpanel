@@ -103,20 +103,27 @@ class AlarmDashboardController extends Controller
         }
         foreach ($dateStrings as $key => $date) {
 
-            $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
-            COUNT(CASE WHEN alarm_type = 'SOS' THEN 1   END) as sosCount,
-            COUNT(CASE WHEN alarm_category = 1 THEN 1  END) as crititalCount,
-            COUNT(CASE WHEN alarm_category = 2 THEN 1   END) as mediumCount,
-            COUNT(CASE WHEN alarm_category = 3 THEN 1   END) as lowCount
-        ")
+            $counts = AlarmEvents::where("company_id", $request->company_id)
+                ->selectRaw("
+                COUNT(CASE WHEN alarm_type = 'SOS' THEN 1 END) as sosCount,
+                COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' THEN 1 END) as criticalCount,
+                COUNT(CASE WHEN alarm_type = 'Offline' THEN 1 END) as technicalCount,
+                COUNT(CASE WHEN alarm_type IS NOT NULL THEN 1 END) as eventsCount,
+                COUNT(CASE WHEN alarm_category = 1 THEN 1 END) as criticalCount,
+                COUNT(CASE WHEN alarm_category = 2 THEN 1 END) as mediumCount,
+                COUNT(CASE WHEN alarm_category = 3 THEN 1 END) as lowCount
+            ")
                 ->whereDate("alarm_start_datetime", $date)
                 ->first();
             $finalarray[] = [
                 "date" => $date,
-                "sosCount" => $counts->soscount,
-                "highCount" => $counts->crititalcount,
-                "mediumCount" => $counts->mediumcount,
-                "lowCount" => $counts->lowcount,
+                "sosCount" => $counts->sosCount ?? 0,
+                "highCount" => $counts->criticalCount ?? 0,
+                "criticalCount" => $counts->criticalCount ?? 0,
+                "technicalCount" => $counts->technicalCount ?? 0,
+                "eventsCount" => $counts->eventsCount ?? 0,
+                "mediumCount" => $counts->mediumCount ?? 0,
+                "lowCount" => $counts->lowCount ?? 0,
             ];
         }
 
@@ -408,7 +415,14 @@ class AlarmDashboardController extends Controller
             ->where('alarm_type', "Intruder")
             ->when($request->filled("filter_customers_list"), function ($query) use ($request) {
                 $query->whereIn('customer_id', $request->filter_customers_list);
+            })->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+                $query->whereIn('customer_id', $request->filter_customers_list);
             })
+            ->when($request->filled("filter_customers_list"), function ($query) use ($request) {
+                $query->whereIn('customer_id', $request->filter_customers_list);
+            })
+
+
             ->get()->groupBy("alarm_category");
 
         return $events;

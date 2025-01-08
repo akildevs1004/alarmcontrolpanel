@@ -411,17 +411,10 @@
     "module": "settings",
     "top_menu_name": "alarm_reports"
   },
+
   {
     "icon": "mdi-web-box",
-    "title": "Web Logs",
-    "open_menu": false,
-    "to": "/web_login_logs",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
-  {
-    "icon": "mdi-web-box",
-    "title": "Users",
+    "title": "Admin Users",
     "open_menu": false,
     "to": "/settings/users",
     "module": "settings",
@@ -432,6 +425,14 @@
     "title": "Roles",
     "open_menu": false,
     "to": "/settings/role",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-web-box",
+    "title": "Web Logs",
+    "open_menu": false,
+    "to": "/web_login_logs",
     "module": "settings",
     "top_menu_name": "settings"
   }

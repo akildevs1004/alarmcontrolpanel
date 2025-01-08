@@ -200,110 +200,23 @@
 
 <script>
 export default {
-  props: ["permissions", "defaultPermissionsIds"],
+  props: ["permissions", "defaultPermissionsIds", "menuList"],
   data() {
     return {
       panel: [],
       expandedIndex: null, // Index of the currently expanded item
       permission_pages: [],
       toggle_exclusive: 0,
-      topMenus: [
-        { label: "Intruder", name: "intruder" },
-        { label: "Dashboard", name: "dashboard" },
-        { label: "Map", name: "map" },
-        { label: "Alarms", name: "alarms" },
-        { label: "Customers", name: "customers" },
-        { label: "Devices", name: "devices" },
-        { label: "Reports", name: "reports" },
-        { label: "Tickets", name: "tickets" },
-        { label: "Settings", name: "settings" },
-      ],
+      topMenus: [],
       defaultPermissions: ["view", "edit", "delete"],
-      menus: [
-        {
-          topMenu: "intruder",
-          page_name: "intruder",
-          title: "Intruder Dashboard",
-        },
-        {
-          topMenu: "dashboard",
-          page_name: "dashboard",
-          title: "Dashboard",
-        },
-        {
-          topMenu: "map",
-          page_name: "map",
-          title: "MAP",
-        },
-        {
-          topMenu: "alarms",
-          page_name: "alarms",
-          title: "Alarms",
-        },
-        {
-          topMenu: "customers",
-          page_name: "customers",
-          title: "Customers",
-        },
-        {
-          topMenu: "devices",
-          page_name: "devices",
-          title: "Devices",
-        },
-        {
-          topMenu: "reports",
-          page_name: "armedreports",
-          title: "Armed Reports",
-        },
-        {
-          topMenu: "reports",
-          page_name: "armedlogs",
-          title: "Armed Logs",
-        },
-        {
-          topMenu: "tickets",
-          page_name: "tickets",
-          title: "Tickets",
-        },
-
-        {
-          topMenu: "settings",
-          page_name: "company",
-          title: "Company",
-        },
-        {
-          topMenu: "settings",
-          page_name: "serialnumbers",
-          title: "Serial Numbers",
-        },
-        {
-          topMenu: "settings",
-          page_name: "operators",
-          title: "Operators",
-        },
-        {
-          topMenu: "settings",
-          page_name: "technicians",
-          title: "Technicians",
-        },
-        {
-          topMenu: "settings",
-          page_name: "weblogs",
-          title: "Weblogs",
-        },
-        {
-          topMenu: "settings",
-          page_name: "users",
-          title: "Users",
-        },
-        ,
-        {
-          topMenu: "settings",
-          page_name: "roles",
-          title: "Roles",
-        },
-      ],
+      menus: [],
     };
+  },
+  created() {
+    if (this.menuList) {
+      this.topMenus = this.menuList.topmenu;
+      this.menus = this.menuList.submenu;
+    }
   },
   mounted() {
     this.permission_pages = { ...this.defaultPermissionsIds };

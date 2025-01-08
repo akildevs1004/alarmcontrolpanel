@@ -5,54 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
-
-    <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
+    <!-- <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Alarm Event Track #{{ selecteAlarm?.id }}</span
-          >
-          <v-spacer></v-spacer
-          ><v-icon
-            style="padding-right: 20px; color: black"
-            @click="alarmNotesPrint(selecteAlarm?.id, 'download')"
-            outlined
-          >
-            mdi-download-box-outline
-          </v-icon>
-          <v-icon
-            style="padding-right: 20px; color: black"
-            @click="alarmNotesPrint(selecteAlarm?.id, 'print')"
-            outlined
-          >
-            mdi-printer-outline
-          </v-icon>
-          <v-icon
-            style="color: black"
-            @click="dialogViewAlarmFormat = false"
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-
-        <v-card-text style="padding: 0px">
-          <v-container style="min-height: 100px; padding-left: 0px">
-            <AlarmNotesFormatView
-              v-if="selecteAlarm"
-              :alarm="selecteAlarm"
-              :key="key"
-            />
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="dialogViewLogs" width="80%">
-      <v-card>
-        <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Operator Logs #{{ selecteAlarm?.id }}</span
-          >
+          <span style="color: black">Operator Logs #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -103,7 +59,6 @@
               name="AlramCloseNotes"
               :key="key"
               :customer_id="customer_id"
-              :customer="customer"
               @closeDialog="closeDialog"
               :alarm_id="eventId"
               :popupEventText="popupEventText"
@@ -231,34 +186,27 @@
           />
         </v-card-text>
       </v-card>
-    </v-dialog>
-    <v-row class="p-0" style="padding-top: 0px">
-      <v-col
-        cols="12"
-        class="text-right"
-        style="padding-top: 0px; z-index: 9; padding-right: 0px"
-      >
-        <v-row class="mt-0" v-if="showFilters">
-          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
-            <h3>Alarm Events</h3></v-col
-          >
+    </v-dialog> -->
+    <v-row style="padding-top: 0px">
+      <v-col cols="12" class="text-right" style="padding-top: 15px; z-index: 9">
+        <v-row class="mt-0" v-if="!eventFilter">
+          <!-- <v-col v-if="sensorItems.length > 1" class="text-left mt-1">
+            <h3>Customer Alarm Events</h3></v-col
+          > -->
 
-          <v-col
-            :cols="sensorItems.length > 1 ? 8 : 12"
-            class="text-right"
-            style="width: 600px; padding: 0px"
-          >
+          <v-col class="text-right mt-1">
             <v-row>
-              <v-col cols="7">
+              <v-col>
                 <v-icon
                   loading="true"
                   @click="getDataFromApi(0)"
                   class="mt-2 mr-2"
                   >mdi-reload</v-icon
                 >
-
+              </v-col>
+              <v-col>
                 <v-text-field
-                  style="padding-top: 7px; float: right; width: 300px"
+                  style="padding-top: 7px; float: right"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi(0)"
@@ -271,8 +219,8 @@
                   append-icon="mdi-magnify"
                   clearable
                   hide-details
-                ></v-text-field
-              ></v-col>
+                ></v-text-field>
+              </v-col>
               <!-- <v-col cols="3"
                     ><v-select
                       class="employee-schedule-search-box"
@@ -298,7 +246,7 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-              <v-col cols="2" style="min-width: 100px; padding-right: 0px">
+              <v-col style="padding-right: 0px">
                 <v-select
                   class="employee-schedule-search-box"
                   style="
@@ -312,12 +260,16 @@
                   @change="getDataFromApi(0)"
                   v-model="filterAlarmStatus"
                   dense
-                  :items="allEventsList"
+                  :items="[
+                    { id: null, name: 'All Events' },
+                    { id: 1, name: 'Open' },
+                    { id: 0, name: 'Closed' },
+                  ]"
                   item-text="name"
                   item-value="id"
                 ></v-select>
               </v-col>
-              <v-col cols="2">
+              <v-col>
                 <CustomFilter
                   style="float: left; padding-top: 5px; z-index: 999"
                   @filter-attr="filterAttr"
@@ -399,8 +351,8 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="sensorItems.length > 0" style="margin-top: 0px">
-          <v-col cols="12" style="margin-top: 0px">
+        <v-row v-if="sensorItems.length > 0">
+          <v-col cols="12" style="padding: 0px; margin-top: -30px">
             <v-tabs
               v-if="sensorItems.length > 1"
               v-model="tab"
@@ -424,7 +376,7 @@
                 <v-card color="basil" flat>
                   <v-card-text style="padding: 0px">
                     <v-data-table
-                      style="height: auto"
+                      style="font-size: 12px"
                       :name="'table' + index"
                       v-if="showTable"
                       :headers="headers"
@@ -435,7 +387,7 @@
                       :footer-props="{
                         itemsPerPageOptions: [10, 50, 100, 500, 1000],
                       }"
-                      class="elevation-0"
+                      class="elevation-0 operatorcustomerTop1"
                     >
                       <template v-slot:item.sno="{ item, index }">
                         {{ item.id }}
@@ -443,9 +395,6 @@
 
                       <template v-slot:item.customer="{ item }">
                         <div>
-                          {{ item.device?.customer?.building_name ?? "---" }}
-                        </div>
-                        <div class="secondary-value">
                           {{
                             item.device?.customer?.primary_contact
                               ?.first_name ?? "---"
@@ -454,6 +403,9 @@
                             item.device?.customer?.primary_contact?.last_name ??
                             "---"
                           }}
+                        </div>
+                        <div class="secondary-value">
+                          {{ item.device?.customer?.building_name ?? "---" }}
                         </div>
                       </template>
                       <template v-slot:item.address="{ item }">
@@ -537,7 +489,9 @@
                       </template>
 
                       <template v-slot:item.status="{ item }">
-                        <div v-if="item.forwarded === true">Forwarded</div>
+                        <div v-if="item.alarm_forwarded.length > 0">
+                          Forwarded
+                        </div>
                         <div v-else-if="item.alarm_status == 1">
                           Open
                           <!-- <v-icon class="alarm1111111" style="color: red"
@@ -575,17 +529,6 @@
                             </v-btn>
                           </template>
                           <v-list width="120" dense>
-                            <v-list-item
-                              v-if="can('branch_view')"
-                              @click="viewAlarminfo(item)"
-                            >
-                              <v-list-item-title style="cursor: pointer">
-                                <v-icon color="secondary" small>
-                                  mdi-file-tree
-                                </v-icon>
-                                Notes
-                              </v-list-item-title>
-                            </v-list-item>
                             <v-list-item
                               v-if="can('branch_view')"
                               @click="viewCustomerinfo(item)"
@@ -647,7 +590,6 @@ import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEvent
 
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
-import AlarmNotesFormatView from "./Reports/AlarmNotesFormatView.vue";
 
 export default {
   components: {
@@ -657,25 +599,15 @@ export default {
     AlramCloseNotes,
     AlarmForwardEvent,
     SecurityAlarmNotes,
-    AlarmNotesFormatView,
   },
   props: [
-    "popup",
     "showFilters",
-    "showTabs",
     "eventFilter",
     "filter_customer_id",
-
     "compFilterAlarmStatus",
-    "compFilterSupervisor",
-    "filter_date",
-    "filter_alarm_type",
   ],
   data() {
     return {
-      allEventsList: [],
-      selecteAlarm: null,
-      dialogViewAlarmFormat: false,
       customer: null,
       dialogViewLogs: false,
       cancelTokenSource: null,
@@ -711,9 +643,9 @@ export default {
         { text: "Event Id", value: "sno", sortable: false },
         // { text: "Building", value: "building", sortable: false },
 
-        { text: "Customer", value: "customer", sortable: false },
-        { text: "Property", value: "property", sortable: false },
-        { text: "Address", value: "address", sortable: false },
+        // { text: "Customer", value: "customer", sortable: false },
+        // { text: "Property", value: "property", sortable: false },
+        // { text: "Address", value: "address", sortable: false },
 
         // { text: "City", value: "city", sortable: false },
 
@@ -737,14 +669,14 @@ export default {
         // { text: "Category", value: "category", sortable: false },
 
         // { text: "Notes", value: "notes", sortable: false },
-        {
-          text: "Status",
-          value: "status",
-          sortable: false,
-          align: "center",
-        },
+        // {
+        //   text: "Status",
+        //   value: "status",
+        //   sortable: false,
+        //   align: "center",
+        // },
 
-        { text: "Options", value: "options", sortable: false },
+        // { text: "Options", value: "options", sortable: false },
       ],
       items: [],
     };
@@ -766,59 +698,37 @@ export default {
     // },
   },
   created() {
-    this.allEventsList = [];
+    // let today = new Date();
+    // let monthObj = this.$dateFormat.monthStartEnd(today);
+    // this.date_from = monthObj.first;
+    // this.date_to = monthObj.last;
 
-    this.allEventsList = [
-      { id: null, name: "All Events" },
-      { id: 1, name: "Open" },
-
-      { id: 0, name: "Closed" },
-    ];
-    // if (!this.compFilterSupervisor)
-    {
-      this.allEventsList.push({ id: 3, name: "Forwarded" });
+    setTimeout(() => {
+      this.getSensorsList();
+    }, 2000);
+    if (this.sensorItems.length == 0) {
+      this.$axios
+        .get(`sensor_types`, {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        })
+        .then(({ data }) => {
+          //this.sensorItems = ["All", ...data];
+          this.sensorItems = ["All"];
+        });
     }
-    if (this.compFilterSupervisor) {
-      this.filterAlarmStatus = 3;
-    }
-    // if (this.$route.name != "alarm-dashboard") {
-    //   let today = new Date();
-    //   let monthObj = this.$dateFormat.monthStartEnd(today);
-    //   this.date_from = monthObj.first;
-    //   this.date_to = monthObj.last;
-    // }
-    // if (this.$route.name == "alarm-dashboard") {
-    //   this.filterAlarmStatus = 1;
-    // }
     if (this.compFilterAlarmStatus) {
       this.filterAlarmStatus = this.compFilterAlarmStatus;
     }
-    // setTimeout(() => {
-    //   this.getSensorsList();
-    // }, 2000);
-
-    if (this.showTabs) {
-      setTimeout(() => {
-        if (this.sensorItems.length == 0) {
-          this.$axios
-            .get(`sensor_types`, {
-              params: {
-                company_id: this.$auth.user.company_id,
-              },
-            })
-            .then(({ data }) => {
-              this.sensorItems = ["All", ...data];
-            });
-        }
-      }, 5000);
-    } else {
-      this.sensorItems = ["All"];
-    }
+    // setTimeout(() => {}, 1000);
 
     setTimeout(() => {
       setInterval(() => {
         if (
-          this.$route.name == "alarm-dashboard" &&
+          (this.$route.name == "alarm-dashboard" ||
+            this.$route.name == "alarm-allevents" ||
+            this.$route.name == "alarm-alarm-events") &&
           this.filterAlarmStatus == 1
         )
           this.getDataFromApi(0);
@@ -830,18 +740,6 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    alarmNotesPrint(alarmId, option) {
-      //let option = "print";
-
-      let url = process.env.BACKEND_URL;
-      if (option == "print") url += "/alarm_notes_print_pdf";
-      if (option == "excel") url += "/alarm_notes_download_pdf";
-      if (option == "download") url += "/alarm_notes_download_pdf";
-      url += "?company_id=" + this.$auth.user.company_id;
-      url += "&alarm_id=" + alarmId;
-
-      window.open(url, "_blank");
-    },
     showTabContent() {
       this.showTable = false;
 
@@ -849,11 +747,6 @@ export default {
     },
     closeCustomerDialog() {
       this.dialogTabViewCustomer = false;
-    },
-    viewAlarminfo(alarm) {
-      this.key++;
-      this.selecteAlarm = alarm;
-      this.dialogViewAlarmFormat = true;
     },
     viewCustomerinfo(item) {
       if (item.device) {
@@ -888,7 +781,6 @@ export default {
       this.key += 1;
       this.viewCustomerId = item.customer_id;
       this.eventId = item.id;
-      this.customer = item.device.customer;
       this.dialogForwardEventDetails = true;
     },
     viewLogs(item) {
@@ -1009,37 +901,34 @@ export default {
       window.open(url, "_blank");
     },
     async getDataFromApi(custompage = 1) {
-      // Prevent request if loading or no search criteria
-      if (this.loading && this.commonSearch == null) return false;
-
-      // Reset pagination if custompage is 0
-      if (custompage == 0) this.options = { perPage: 10, page: 1 };
-
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
-
-      this.perPage = itemsPerPage;
-      this.currentPage = page;
-
-      // Prevent invalid page request
-      if (!(page > 0)) return false;
-
-      this.loading = true;
-
-      // Prepare filter data
-      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
-      if (this.eventFilter) {
-        filterSensorname = this.eventFilter;
-      }
-
-      // Cancel previous request if it exists
+      // Check for existing request and cancel it
       if (this.cancelTokenSource) {
         this.cancelTokenSource.cancel("Operation canceled due to new request.");
       }
 
       // Create a new cancel token for this request
       this.cancelTokenSource = this.$axios.CancelToken.source();
+
+      // Check loading and commonSearch conditions
+      if (this.loading == true && this.commonSearch == null) return false;
+
+      if (custompage == 0) this.options = { perPage: 10, page: 1 };
+
+      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+      let sortedBy = sortBy ? sortBy[0] : "";
+      let sortedDesc = sortDesc ? sortDesc[0] : "";
+      this.perPage = itemsPerPage;
+      this.currentPage = page;
+
+      if (!page > 0) return false;
+      this.loading = true;
+
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
+
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
+      }
 
       let options = {
         params: {
@@ -1053,34 +942,28 @@ export default {
           customer_id: this.filter_customer_id,
           tab: this.tab,
           alarm_status: this.filterAlarmStatus,
-          filterSupervisor: this.compFilterSupervisor,
-
           filterSensorname: filterSensorname,
           filterResponseInMinutes: this.filterResponseInMinutes,
           sortBy: "alarm_start_datetime",
           sortDesc: "DESC",
-
-          filter_date: this.filter_date,
-          filter_alarm_type: this.filter_alarm_type,
         },
-        cancelToken: this.cancelTokenSource.token, // Assign the cancel token
+        cancelToken: this.cancelTokenSource.token, // Add the cancel token here
       };
 
       try {
-        const { data } = await this.$axios.get(`get_alarm_events`, options);
-
-        // Process the response
+        const { data } = await this.$axios.get("get_alarm_events", options);
         this.items = data.data;
         this.totalRowsCount = data.total;
         this.showTable = true;
-        this.loading = false;
       } catch (error) {
         if (this.$axios.isCancel(error)) {
-          console.log("Request canceled:", error.message);
+          console.log("Request canceled", error.message);
         } else {
-          console.error("Error fetching data:", error);
-          this.loading = false;
+          console.error(error);
         }
+      } finally {
+        this.loading = false;
+        this.cancelTokenSource = null; // Reset the cancel token
       }
     },
   },

@@ -19,7 +19,7 @@
           <v-spacer></v-spacer>
         </v-alert> -->
         <v-card-text>
-          <v-row>
+          <v-row class="pt-2">
             <v-col cols="5">
               <v-text-field
                 hide-details
@@ -60,6 +60,7 @@
 
             <v-col cols="12">
               <Permissions
+                :menuList="menuList"
                 :defaultPermissionsIds="
                   editedIndex === -1 ? [] : permission_pages
                 "
@@ -114,7 +115,19 @@
           <span>Reload</span>
         </v-tooltip>
         <v-spacer></v-spacer>
-        <v-toolbar-items>
+        <v-toolbar-items
+          ><v-col>
+            <v-btn
+              v-if="$pagePermission.can('roles_create', this)"
+              dark
+              dense
+              color="blue"
+              small
+              @click="createDefaultRoles()"
+            >
+              <v-icon color="white" small> mdi-plus </v-icon> Default Roles
+            </v-btn></v-col
+          >
           <v-col>
             <v-btn
               v-if="$pagePermission.can('roles_create', this)"
@@ -238,6 +251,7 @@ export default {
     permissions: [],
     formTitle: "New",
     editPermissionId: "",
+    menuList: [],
   }),
 
   computed: {},
@@ -260,7 +274,7 @@ export default {
   },
   created() {
     this.loading = true;
-
+    this.getPageRolesData();
     //permissions
     this.getPermissions();
   },
@@ -304,6 +318,22 @@ export default {
         this.loading = false;
       });
     },
+    getPageRolesData(url = this.endpoint) {
+      this.loading = true;
+
+      const { page, itemsPerPage } = this.options;
+
+      let options = {
+        params: {
+          per_page: itemsPerPage,
+          company_id: this.$auth.user.company.id,
+        },
+      };
+
+      this.$axios.get(`get_page_roles_menu_data`, options).then(({ data }) => {
+        this.menuList = data;
+      });
+    },
     searchIt(e) {
       if (e.length == 0) {
         this.getDataFromApi();
@@ -335,6 +365,26 @@ export default {
         this.loading = false;
         this.permission_pages = data;
       });
+    },
+    createDefaultRoles() {
+      confirm("Are you sure you wish to Create Default Roles?") &&
+        this.$axios
+          .post(`create_default_roles`, {
+            company_id: this.$auth.user.company.id,
+          })
+          .then(({ data }) => {
+            if (!data.status) {
+              this.errors = data.errors;
+            } else {
+              this.getDataFromApi();
+              this.snackbar = data.status;
+
+              this.response = data.message;
+            }
+
+            this.getDataFromApi();
+          })
+          .catch((err) => console.log(err));
     },
 
     delteteSelectedRecords() {

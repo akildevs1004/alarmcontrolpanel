@@ -3,33 +3,49 @@
   <div v-else>
     <v-card class="mb-5 mt-2 rounded-md" elevation="0">
       <v-toolbar class="rounded-md" dense flat>
-        <v-toolbar-title><span> Web user Logins</span></v-toolbar-title>
-        <span>
-          <v-btn
-            dense
-            class="ma-0 px-0"
-            x-small
-            :ripple="false"
-            text
-            title="Reload"
-          >
-            <v-icon class="ml-2" @click="getRecords()" dark>mdi-reload</v-icon>
-          </v-btn>
-        </span>
-        <!-- <div v-if="isCompany" style="width: 250px">
-          <v-select
-            @change="getRecords()"
-            class="pt-10 px-2"
-            v-model="branch_id"
-            :items="[{ id: ``, branch_name: `Select All` }, ...branchesList]"
-            dense
-            placeholder="Select Branch"
+        <v-toolbar-title><span> Web User Logins</span></v-toolbar-title>
+        <v-col
+          ><span>
+            <v-btn
+              dense
+              class="ma-0 px-0"
+              x-small
+              :ripple="false"
+              text
+              title="Reload"
+            >
+              <v-icon class="ml-2" @click="getRecords()" dark
+                >mdi-reload</v-icon
+              >
+            </v-btn>
+          </span>
+        </v-col>
+        <v-col style="max-width: 200px">
+          <v-text-field
+            class="employee-schedule-search-box"
+            style="
+              padding-top: 35px;
+              z-index: 999;
+              min-width: 100%;
+              width: 150px;
+            "
+            @keyup="getRecords()"
+            height="25px"
             outlined
-            item-value="id"
-            item-text="branch_name"
-          >
-          </v-select>
-        </div> -->
+            v-model="filterText"
+            dense
+            label="Filter"
+          ></v-text-field>
+        </v-col>
+        <v-col style="max-width: 200px">
+          <CustomFilter
+            style="float: left; padding-top: 5px; z-index: 999"
+            @filter-attr="filterAttr"
+            :default_date_from="date_from"
+            :default_date_to="date_to"
+            :defaultFilterType="1"
+            :height="'30px'"
+        /></v-col>
       </v-toolbar>
       <v-data-table
         class="pt-5"
@@ -116,26 +132,62 @@
               >
               </v-img>
             </v-col>
+            <!-- <v-col style="padding: 10px">
+              <div v-if="item.model_type == 'company' && item.user.role_id > 1">
+                {{ item.user.first_name }} {{ item.user.last_name }}
+              </div>
+              <div
+                v-if="item.model_type == 'company' && item.user.role_id == 1"
+              >
+                {{ item.model_type == "company" ? "Admin" : "" }}
+              </div>
+
+              {{
+                item.user.security
+                  ? item.user.security.first_name +
+                    " " +
+                    item.user.security.last_name
+                  : ""
+              }}{{ item.user.customer ? item.user.customer.building_name : "" }}
+            </v-col> -->
           </v-row>
         </template>
-        <template v-slot:item.branch.branch_name="{ item }">
-          {{ (item.branch && item.branch_name) || "---" }}
+
+        <template v-slot:item.user.role="{ item }">
+          <div v-if="item.model_type == 'company' && item.user.role_id == 1">
+            Company
+          </div>
+          <div v-else>
+            {{
+              item.user.user_type == "company"
+                ? item.user.role.name
+                : caps(item.user.user_type)
+            }}
+          </div>
         </template>
+
         <template v-slot:item.employee.first_name="{ item, index }">
           <div v-if="item.model_type == 'company' && item.user.role_id > 1">
             {{ item.user.first_name }} {{ item.user.last_name }}
           </div>
-          <div v-if="item.model_type == 'company' && item.user.role_id == 1">
-            {{ item.model_type == "company" ? "Admin" : "" }}
+          <div
+            v-else-if="item.model_type == 'company' && item.user.role_id == 1"
+          >
+            {{ item.model_type == "company" ? "Company" : "" }}
           </div>
-
-          {{
-            item.user.security
-              ? item.user.security.first_name +
-                " " +
-                item.user.security.last_name
-              : ""
-          }}{{ item.user.customer ? item.user.customer.building_name : "" }}
+          <div v-else-if="item.user.security">
+            {{
+              item.user.security
+                ? item.user.security.first_name +
+                  " " +
+                  item.user.security.last_name
+                : ""
+            }}
+          </div>
+          <div v-else-if="item.user.security">
+            {{ item.user.customer ? item.user.customer.building_name : " " }}
+          </div>
+          <div v-else>---</div>
         </template>
 
         <template v-slot:item.UserID="{ item }"> #{{ item.UserID }} </template>
@@ -170,6 +222,10 @@
 export default {
   data() {
     return {
+      cancelTokenSource: null,
+      filterText: "",
+      date_from: "",
+      date_to: "",
       loading: false,
       items: [],
       emptyLogmessage: "",
@@ -183,20 +239,12 @@ export default {
       options: {},
       headers: [
         {
-          text: "Pic",
+          text: "Profile",
           align: "left",
           sortable: false,
           filterable: true,
 
           value: "employee.pic",
-        },
-        {
-          text: "User Type",
-          align: "left",
-          sortable: false,
-          filterable: true,
-
-          value: "user.user_type",
         },
         {
           text: "Name",
@@ -206,6 +254,15 @@ export default {
 
           value: "employee.first_name",
         },
+        {
+          text: "Role",
+          align: "left",
+          sortable: false,
+          filterable: true,
+
+          value: "user.role",
+        },
+
         {
           text: "Page",
           align: "left",
@@ -253,6 +310,11 @@ export default {
       return;
     }
 
+    let today = new Date();
+    let monthObj = this.$dateFormat.monthStartEnd(today);
+    this.date_from = monthObj.first;
+    this.date_to = monthObj.last;
+
     // const branch_header = [
     //   {
     //     text: "Branch",
@@ -293,37 +355,60 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-    getRecords(filter_column = "", filter_value = "") {
-      //let filter_value = this.datatable_search_textbox;
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+    filterAttr(data) {
+      this.date_from = data.from;
+      this.date_to = data.to;
 
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
-      if (page == 1) this.loading = true;
-      // if (this.filters) {
-      //   page = 1;
-      // }
-      let itemsPerPage1 = itemsPerPage;
-      if (!itemsPerPage1) itemsPerPage1 = 5;
-      let options = {
-        params: {
+      this.getRecords();
+    },
+    async getRecords(filter_column = "", filter_value = "") {
+      try {
+        // Cancel previous request if it exists
+        if (this.cancelTokenSource) {
+          this.cancelTokenSource.cancel(
+            "Operation canceled due to new request."
+          );
+        }
+
+        // Create a new cancel token for this request
+        this.cancelTokenSource = this.$axios.CancelToken.source();
+
+        const { sortBy, sortDesc, page = 1, itemsPerPage = 10 } = this.options;
+        this.loading = page === 1;
+
+        const params = {
           branch_id: this.branch_id,
-          page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
-          per_page: itemsPerPage1,
-          filter_column: filter_value,
+          page,
+          sortBy: sortBy ? sortBy[0] : "",
+          sortDesc: sortDesc ? sortDesc[0] : "",
+          per_page: itemsPerPage,
           company_id: this.$auth.user.company_id,
+          date_from: this.date_from,
+          date_to: this.date_to,
+          filter_text: this.filterText,
           ...this.filters,
-        },
-      };
+          ...(filter_column ? { [filter_column]: filter_value } : {}), // Conditionally add filter column
+        };
 
-      if (filter_column != "") options.params[filter_column] = filter_value;
-      this.$axios.get(`activity`, options).then(({ data }) => {
+        // Fetch data from the API
+        const { data } = await this.$axios.get(`activity`, {
+          params,
+          cancelToken: this.cancelTokenSource.token,
+        });
+
+        // Process and assign data
         this.totalRowsCount = data.total;
         this.logs = data.data;
+      } catch (error) {
+        if (this.$axios.isCancel(error)) {
+          console.log("Request canceled", error.message);
+        } else {
+          console.error(error);
+        }
+      } finally {
         this.loading = false;
-      });
+        this.cancelTokenSource = null; // Reset the cancel token
+      }
     },
   },
 };

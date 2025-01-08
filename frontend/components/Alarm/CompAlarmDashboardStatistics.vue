@@ -9,6 +9,7 @@
                 v-if="key"
                 :key="key"
                 :name="'AlarmBurglaryPieChart'"
+                :compFilterSupervisor="compFilterSupervisor"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -19,6 +20,7 @@
                 v-if="key"
                 :key="key"
                 :name="'AlarmMedicalPieChart'"
+                :compFilterSupervisor="compFilterSupervisor"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -29,6 +31,7 @@
                 v-if="key"
                 :key="key"
                 :name="'AlarmWaterPieChart3'"
+                :compFilterSupervisor="compFilterSupervisor"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -39,6 +42,7 @@
                 v-if="key"
                 :key="key"
                 :name="'AlarmBFirePieChart4'"
+                :compFilterSupervisor="compFilterSupervisor"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -49,6 +53,7 @@
                 v-if="key"
                 :key="key"
                 :name="'AlarmTemperaturePieChart5'"
+                :compFilterSupervisor="compFilterSupervisor"
             /></v-card-text>
           </v-card>
         </v-col>
@@ -361,6 +366,7 @@ import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLiv
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
+  prop: ["compFilterSupervisor"],
   components: {
     AlarmBurglaryPieChart,
     AlarmTemperaturePieChart,

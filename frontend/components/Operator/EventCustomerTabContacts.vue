@@ -5,6 +5,259 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogOperatorNotes" max-width="450px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Operator Comments</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogOperatorNotes = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <v-row>
+                <v-col>
+                  <v-textarea
+                    outlined
+                    class="mt-0 white-color1"
+                    label="Operator Comments"
+                    value=""
+                    height="60px"
+                    hide-details
+                    v-model="event_payload.notes"
+                    style="font-size: 12px"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col style="padding: 0px">
+                  <table class="eventcustomertabselect" style="width: 100%">
+                    <tr>
+                      <td>Call Status</td>
+                      <td style="width: 60%">
+                        <v-select
+                          class="employee-schedule-search-box font10"
+                          height="20px"
+                          outlined
+                          v-model="event_payload.call_status"
+                          dense
+                          hide-details
+                          :items="[
+                            null,
+                            'Answered',
+                            'No Answer',
+                            'Busy',
+                            'Not Reachable',
+                          ]"
+                        ></v-select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Response</td>
+                      <td>
+                        <v-select
+                          class="employee-schedule-search-box font10"
+                          height="20px"
+                          outlined
+                          v-model="event_payload.response"
+                          dense
+                          hide-details
+                          :items="[
+                            null,
+
+                            'False alarm',
+                            'No Answer',
+                            'Busy',
+                            'Not Reachable',
+                          ]"
+                        ></v-select>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>Alarm Status</td>
+                      <td>
+                        <v-select
+                          class="employee-schedule-search-box font10"
+                          height="20px"
+                          outlined
+                          v-model="event_payload.event_status"
+                          dense
+                          hide-details
+                          :items="[
+                            null,
+
+                            'Forwarded',
+                            'Closed',
+                            'Pending',
+                            'Not in Town',
+                          ]"
+                        ></v-select>
+                      </td>
+                    </tr>
+                    <tr v-if="event_payload.event_status == 'Closed'">
+                      <td>Contact Secret Code</td>
+                      <td>
+                        <v-text-field
+                          :disabled="
+                            event_payload.event_status == 'Closed'
+                              ? false
+                              : true
+                          "
+                          min="0"
+                          max="10"
+                          class="employee-schedule-search-box font10"
+                          label="Secret Code"
+                          dense
+                          outlined
+                          flat
+                          height="20px"
+                          v-model="event_payload.pin_number"
+                          hide-details
+                          small
+                          style="
+                            margin-right: -10px;
+                            font-size: 11px;
+
+                            padding-top: 0px;
+                          "
+                        >
+                        </v-text-field>
+                      </td>
+                    </tr>
+                  </table>
+                </v-col>
+              </v-row>
+              <v-row v-if="event_payload.event_status == 'Forwarded'">
+                <v-col>
+                  <div
+                    style="
+                      width: 100%;
+                      border: 0px solid rgb(157, 157, 157);
+                      border-radius: 5px;
+                      padding-left: 0px;
+                    "
+                  >
+                    <label style="font-size: 11px"> Forward Event to.. </label>
+                    <v-row style="margin-top: 0px; padding-bottom: 0px">
+                      <v-col
+                        :key="'customercontacts' + index + 20"
+                        cols="3"
+                        style="padding-bottom: 0px; padding-top: 0px"
+                        v-if="
+                          contact.address_type.toLowerCase() != 'primary' &&
+                          contact.address_type.toLowerCase() != 'secondary' &&
+                          contact.address_type.toLowerCase() != 'security'
+                        "
+                        v-for="(contact, index) in customer.contacts"
+                      >
+                        <v-checkbox
+                          class="radiogroup radiogroup-small"
+                          style="font-size: 12px"
+                          v-model="contact.forwarded"
+                          :label="contact.address_type"
+                        ></v-checkbox
+                      ></v-col>
+                    </v-row>
+                  </div>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <v-row v-if="globalContactDetails" class="mt-5">
+                    <v-col cols="6" class="pr-1">
+                      <!-- <v-text-field
+                        v-if="event_payload.event_status == 'Closed'"
+                        :disabled="
+                          event_payload.event_status == 'Closed' ? false : true
+                        "
+                        min="0"
+                        max="10"
+                        class="input-small-fieldset1 mt-1"
+                        label="Secret Code"
+                        dense
+                        outlined
+                        flat
+                        v-model="event_payload.pin_number"
+                        hide-details
+                        small
+                        style="
+                          width: 130px;
+                          float: right;
+                          margin-right: -10px;
+                          font-size: 11px;
+                          height: 20px;
+                          padding-top: 0px;
+                        "
+                      >
+                      </v-text-field> -->
+                    </v-col>
+                    <v-col cols="6" class="pl-0">
+                      <v-btn
+                        @click="submit"
+                        class="mt-1"
+                        small
+                        color="#203864"
+                        style="
+                          margin: auto;
+                          margin-top: -10px;
+                          width: 100px;
+                          color: #00b8fb;
+                        "
+                        >Submit</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+
+                  <div>
+                    <div v-if="response != ''" style="color: green">
+                      {{ response }}
+                    </div>
+                    <div
+                      v-else-if="errors && errors.pin_number"
+                      class="text-danger mt-2"
+                    >
+                      {{ errors.pin_number[0] }}
+                    </div>
+                    <div
+                      v-else-if="errors && errors.notes"
+                      class="text-danger mt-2"
+                    >
+                      {{ errors.notes[0] }}
+                    </div>
+                    <div
+                      v-else-if="errors && errors.call_status"
+                      class="text-danger mt-2"
+                    >
+                      {{ errors.call_status[0] }}
+                    </div>
+                    <div
+                      v-else-if="errors && errors.event_status"
+                      class="text-danger mt-2"
+                    >
+                      {{ errors.event_status[0] }}
+                    </div>
+                    <div
+                      v-else-if="errors && errors.response"
+                      class="text-danger mt-2"
+                    >
+                      {{ errors.response[0] }}
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogNotes" max-width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -132,210 +385,23 @@
             </table>
           </v-col>
         </v-row>
+
         <v-row>
-          <v-col>
-            <!-- <h5>Operator Notes</h5> -->
-            <v-row>
-              <v-col>
-                <v-textarea
-                  outlined
-                  class="mt-0 white-color1"
-                  label="Operator Comments"
-                  value=""
-                  height="60px"
-                  hide-details
-                  v-model="event_payload.notes"
-                  style="font-size: 12px"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col style="padding: 0px">
-                <table class="eventcustomertabselect" style="width: 100%">
-                  <tr>
-                    <td>Call Status</td>
-                    <td style="width: 60%">
-                      <v-select
-                        class="employee-schedule-search-box font10"
-                        height="20px"
-                        outlined
-                        v-model="event_payload.call_status"
-                        dense
-                        hide-details
-                        :items="[
-                          null,
-                          'Answered',
-                          'No Answer',
-                          'Busy',
-                          'Not Reachable',
-                        ]"
-                      ></v-select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Response</td>
-                    <td>
-                      <v-select
-                        class="employee-schedule-search-box font10"
-                        height="20px"
-                        outlined
-                        v-model="event_payload.response"
-                        dense
-                        hide-details
-                        :items="[
-                          null,
+          <v-col class="text-center"
+            ><v-btn
+              @click="dialogOperatorNotes = true"
+              class="mt-4"
+              small
+              color="#203864"
+              style="
+                margin: auto;
 
-                          'False alarm',
-                          'No Answer',
-                          'Busy',
-                          'Not Reachable',
-                        ]"
-                      ></v-select>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>Alarm Status</td>
-                    <td>
-                      <v-select
-                        class="employee-schedule-search-box font10"
-                        height="20px"
-                        outlined
-                        v-model="event_payload.event_status"
-                        dense
-                        hide-details
-                        :items="[
-                          null,
-
-                          'Forwarded',
-                          'Closed',
-                          'Pending',
-                          'Not in Town',
-                        ]"
-                      ></v-select>
-                    </td>
-                  </tr>
-                </table>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col style="padding: 0px">
-                <div
-                  v-if="event_payload.event_status == 'Forwarded'"
-                  style="
-                    width: 100%;
-                    border: 1px solid rgb(157, 157, 157);
-                    border-radius: 5px;
-                    padding-left: 0px;
-                  "
-                >
-                  <label style="font-size: 11px"> Forward Event to.. </label>
-                  <v-row style="margin-top: 0px; padding-bottom: 0px">
-                    <v-col
-                      :key="'customercontacts' + index + 20"
-                      cols="3"
-                      style="padding-bottom: 0px; padding-top: 0px"
-                      v-if="
-                        contact.address_type.toLowerCase() != 'primary' &&
-                        contact.address_type.toLowerCase() != 'secondary' &&
-                        contact.address_type.toLowerCase() != 'security'
-                      "
-                      v-for="(contact, index) in customer.contacts"
-                    >
-                      <v-checkbox
-                        class="radiogroup radiogroup-small"
-                        style="font-size: 12px"
-                        v-model="contact.forwarded"
-                        :label="contact.address_type"
-                      ></v-checkbox
-                    ></v-col>
-                  </v-row>
-                </div>
-
-                <v-row v-if="globalContactDetails">
-                  <v-col cols="6" class="pr-1">
-                    <v-text-field
-                      v-if="event_payload.event_status == 'Closed'"
-                      :disabled="
-                        event_payload.event_status == 'Closed' ? false : true
-                      "
-                      min="0"
-                      max="10"
-                      class="input-small-fieldset1 mt-1"
-                      label="Secret Code"
-                      dense
-                      outlined
-                      flat
-                      v-model="event_payload.pin_number"
-                      hide-details
-                      small
-                      style="
-                        width: 130px;
-                        float: right;
-                        margin-right: -10px;
-                        font-size: 11px;
-                        height: 20px;
-                        padding-top: 0px;
-                      "
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="6" class="pl-0">
-                    <v-btn
-                      @click="submit"
-                      class="mt-1"
-                      small
-                      color="#203864"
-                      style="
-                        margin: auto;
-                        margin-top: -10px;
-                        width: 100px;
-                        color: #00b8fb;
-                      "
-                      >Submit</v-btn
-                    >
-                  </v-col>
-                </v-row>
-
-                <div>
-                  <div v-if="response != ''" style="color: green">
-                    {{ response }}
-                  </div>
-                  <div
-                    v-else-if="errors && errors.pin_number"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.pin_number[0] }}
-                  </div>
-                  <div
-                    v-else-if="errors && errors.notes"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.notes[0] }}
-                  </div>
-                  <div
-                    v-else-if="errors && errors.call_status"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.call_status[0] }}
-                  </div>
-                  <div
-                    v-else-if="errors && errors.event_status"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.event_status[0] }}
-                  </div>
-                  <div
-                    v-else-if="errors && errors.response"
-                    class="text-danger mt-2"
-                  >
-                    {{ errors.response[0] }}
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
-          </v-col>
+                width: 100px;
+                color: #fff;
+              "
+              >Add Notes</v-btn
+            ></v-col
+          >
         </v-row>
       </v-card-text>
     </v-card>
@@ -349,6 +415,7 @@ export default {
   components: {},
   props: ["alarmId", "customer", "contact_type"],
   data: () => ({
+    dialogOperatorNotes: false,
     selectContactButton: null,
     filteredContactInfo: [],
     dialogForwardEventDetails: false,

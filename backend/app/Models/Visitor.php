@@ -164,7 +164,7 @@ class Visitor extends Model
 
         $model->where("company_id", $request->input("company_id"));
 
-        $model->when($request->filled('status_id'), fn ($q) => $q->Where('status_id',   $request->input("status_id")));
+        $model->when($request->filled('status_id'), fn($q) => $q->Where('status_id',   $request->input("status_id")));
 
         // $model->when($request->filled('branch_id'), fn ($q) => $q->Where('branch_id',   $request->input("branch_id")));
 
@@ -187,11 +187,11 @@ class Visitor extends Model
                     });
             });
         }
-        $model->when($request->filled('host_company_id'), fn ($q) => $q->Where('host_company_id',   $request->input("host_company_id")));
+        $model->when($request->filled('host_company_id'), fn($q) => $q->Where('host_company_id',   $request->input("host_company_id")));
 
-        $model->when($request->filled('purpose_id'), fn ($q) => $q->Where('purpose_id',   $request->input("purpose_id")));
+        $model->when($request->filled('purpose_id'), fn($q) => $q->Where('purpose_id',   $request->input("purpose_id")));
 
-        $model->when($request->filled('branch_id'), fn ($q) => $q->Where('branch_id',   $request->input("branch_id")));
+        $model->when($request->filled('branch_id'), fn($q) => $q->Where('branch_id',   $request->input("branch_id")));
 
 
 
@@ -200,7 +200,7 @@ class Visitor extends Model
 
         foreach ($ilikeFields as $field) {
             $model->when($request->filled($field), function ($q) use ($field, $request) {
-                $q->when($request->filled('purpose_id'), fn ($q) => $q->where($field, 'ILIKE', $request->input($field) . '%'));
+                $q->when($request->filled('purpose_id'), fn($q) => $q->where($field, 'ILIKE', $request->input($field) . '%'));
             });
         }
 
@@ -219,7 +219,7 @@ class Visitor extends Model
                 $q->orWhere('email', 'ILIKE', "$request->phone_number_or_email%");
                 $q->orWhere('first_name', 'ILIKE', "$request->phone_number_or_email%");
                 $q->orWhere('last_name', 'ILIKE', "$request->phone_number_or_email%");
-                $q->orWhereHas('branch', fn (Builder $query) => $query->where('branch_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('branch', fn(Builder $query) => $query->where('branch_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
             });
         });
 
@@ -253,7 +253,7 @@ class Visitor extends Model
             else  if ($request->statsFilterValue == 'Rejected')
                 $q->Where('status_id', 3);
             else  if ($request->statsFilterValue == 'Over Stayed')
-                $q->whereHas('attendances', fn (Builder $q) => $q->where("visitor_attendances.over_stay", "!=", "---"));
+                $q->whereHas('attendances', fn(Builder $q) => $q->where("visitor_attendances.over_stay", "!=", "---"));
         });
 
         $model->when($request->filled('common_search'), function ($q) use ($request) {
@@ -277,14 +277,14 @@ class Visitor extends Model
                 $q->orWhere('host_flat_number', 'ILIKE', "$request->common_search%");
                 $q->orWhere('host_company_name', 'ILIKE', "$request->common_search%");
 
-                $q->orWhereHas('host.employee', fn (Builder $query) => $query->where('first_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('host.employee', fn(Builder $query) => $query->where('first_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
 
-                $q->orWhereHas('host.employee', fn (Builder $query) => $query->where('last_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('host.employee', fn(Builder $query) => $query->where('last_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
 
-                $q->orWhereHas('host.employee', fn (Builder $query) => $query->where('email', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
-                $q->orWhereHas('host.employee', fn (Builder $query) => $query->where('phone_number', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('host.employee', fn(Builder $query) => $query->where('email', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('host.employee', fn(Builder $query) => $query->where('phone_number', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
 
-                $q->orWhereHas('branch', fn (Builder $query) => $query->where('branch_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('branch', fn(Builder $query) => $query->where('branch_name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
             });
         });
 

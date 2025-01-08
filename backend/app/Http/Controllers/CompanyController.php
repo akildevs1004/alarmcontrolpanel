@@ -186,6 +186,10 @@ class CompanyController extends Controller
             $record = Company::with(['user', 'contact'])->find($company->id);
             $record->pass = $randPass;
 
+
+            //create roles 
+            (new RolePermissionsController())->createCompanyDefaultRoles($company->id);
+
             if (!$this->addDefaults($company->id)) {
                 return $this->response('Default cannot add.', null, false);
             }

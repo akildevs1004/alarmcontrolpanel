@@ -149,6 +149,36 @@
                 @emitreloadEventNotesStep1="emitreloadEventNotes2"
               />
             </v-card>
+
+            <div>
+              <!-- <v-btn
+                @click="emitShowCustomerInfoTabs(true)"
+                class="mt-1"
+                small
+                color="#203864"
+                style="
+                  margin: auto;
+                  margin-top: -10px;
+                  width: 100px;
+                  color: #fff;
+                "
+                >Customer Info</v-btn
+              > -->
+
+              <!-- <v-btn
+                @click="emitShowCustomerInfoTabs(false)"
+                class="mt-1"
+                small
+                color="#203864"
+                style="
+                  margin: auto;
+                  margin-top: -10px;
+                  width: 100px;
+                  color: #fff;
+                "
+                >Map</v-btn
+              > -->
+            </div>
           </v-tab-item>
         </v-tabs>
       </v-col>
@@ -172,6 +202,9 @@ export default {
   methods: {
     emitreloadEventNotes2() {
       this.$emit("emitreloadEventNotes3");
+    },
+    emitShowCustomerInfoTabs(status) {
+      this.$emit("emitShowCustomerInfoTabs", status);
     },
     getAlarmColorObject(alarm, customer = null) {
       if (alarm) {

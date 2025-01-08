@@ -85,7 +85,7 @@
             align-self="center"
             style="font-size: 34px !important; color: #894f24"
           >
-            {{ data ? data.highCount : 0 }}
+            {{ data ? data.criticalCount : 0 }}
           </v-col>
         </v-row>
         <v-row class="mt-0">
@@ -107,7 +107,7 @@
               color: #ffb600;
             "
             align-self="center"
-            >Medium</v-col
+            >Technical</v-col
           >
           <v-col
             lg="6"
@@ -117,7 +117,7 @@
             class="text-red orange--text text-center laptop-padding1"
             align-self="center"
             style="font-size: 34px !important; color: #ffb600"
-            >{{ data ? data.mediumCount : 0 }}
+            >{{ data ? data.technicalCount : 0 }}
           </v-col>
         </v-row>
         <v-row class="mt-0">
@@ -139,7 +139,7 @@
               color: #2196f3;
             "
             align-self="center"
-            >Low</v-col
+            >Events</v-col
           >
           <v-col
             lg="6"
@@ -149,7 +149,7 @@
             class="text-center laptop-padding1"
             align-self="center"
             style="font-size: 34px !important; color: #2196f3"
-            >{{ data ? data.lowCount : 0 }}
+            >{{ data ? data.eventsCount ?? 0 : 0 }}
           </v-col>
         </v-row>
       </v-col>

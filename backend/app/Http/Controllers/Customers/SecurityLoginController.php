@@ -43,6 +43,11 @@ class SecurityLoginController extends Controller
     public function getOperatorLiveStatus(Request $request)
     {
 
+        if (!$request->filled('company_id')) {
+            return [];
+        }
+
+
         // $model = SecurityLogin::where("company_id", $request->company_id)->orderBy("last_active_datetime", "DESC");
 
         // return  $securies = $model->get();

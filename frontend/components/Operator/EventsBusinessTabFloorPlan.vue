@@ -51,6 +51,48 @@
         </v-carousel> </v-col
     ></v-row>
     <v-row>
+      <v-col>
+        <div
+          style="
+            max-width: 750px;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin: auto;
+            text-align: center;
+          "
+        >
+          <div
+            style="
+              display: inline-block;
+              width: 140px;
+              text-align: center;
+              margin-right: 10px;
+            "
+            v-for="(item, index) in customer.photos"
+            :key="index"
+          >
+            <div
+              style="height: 100px; width: 150px; margin: auto"
+              :class="{ 'active-thumbnail': index === currentSlide }"
+            >
+              <v-img
+                :src="item.picture"
+                :alt="item.title"
+                contain
+                width="140px"
+                max-height="100px"
+                height="100px"
+                style="max-height: 100px"
+                @click="currentSlide = index"
+              ></v-img>
+            </div>
+            <label style="font-size: 10px">{{ item.title }}</label>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <!-- <v-row>
       <v-col style="width: 600px; overflow: scroll">
         <v-row justify="center" dense>
           <v-col
@@ -77,7 +119,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 

@@ -990,7 +990,6 @@ export default {
 
       // Create a new cancel token for this request
       this.cancelTokenSource = this.$axios.CancelToken.source();
-      console.log(this.filterDeviceType);
 
       let options = {
         params: {

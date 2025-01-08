@@ -578,6 +578,8 @@ class CustomerAlarmEventsController extends Controller
             "device.customer.latest_alarm_event",
             "device.customer.photos",
             "device.customer.buildingtype",
+            "device.customer.cameras",
+            "device.sensorzones",
             "zoneData"
 
         ])->where('company_id', $request->company_id)
@@ -591,7 +593,7 @@ class CustomerAlarmEventsController extends Controller
                     $q->where("forwarded", true);
                 } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
                     $q->where("alarm_status", $request->alarm_status);
-                    $q->where("forwarded", false);
+                    //////////$q->where("forwarded", false);
                 }
             })->when($request->filled("filterBuildingType"), function ($q) use ($request) {
                 $q->whereHas("device.customer", function ($q) use ($request) {
@@ -603,7 +605,7 @@ class CustomerAlarmEventsController extends Controller
                     $q->where("forwarded", true);
                 } else if ($request->filterAlarmStatus == 0 || $request->filterAlarmStatus == 1) {
                     $q->where("alarm_status", $request->filterAlarmStatus);
-                    $q->where("forwarded", false);
+                    ///////$q->where("forwarded", false);
                 }
             })
 
@@ -659,7 +661,10 @@ class CustomerAlarmEventsController extends Controller
 
         ])->where('company_id', $request->company_id)
 
+
             ->when($request->filled("alarm_status"), function ($q) use ($request) {
+
+
 
 
                 if ($request->alarm_status == 3) {
@@ -673,7 +678,7 @@ class CustomerAlarmEventsController extends Controller
                     // });
                 } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
                     $q->where("alarm_status", $request->alarm_status);
-                    $q->where("forwarded", false);
+                    ////////$q->where("forwarded", false);
 
                     // $q->wherehas('notes', function ($qq) use ($request) {
 
@@ -682,6 +687,10 @@ class CustomerAlarmEventsController extends Controller
                     // });
                 }
             })
+            // ->when($request->filled("filterSupervisor"), function ($q) use ($request) {
+            //     $q->where("forwarded", true);
+            // })
+
             ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
                 if ((int) $request->filterResponseInMinutes == 0)
                     $query->where("response_minutes", '>', 10);

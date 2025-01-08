@@ -28,6 +28,13 @@
     "module": "topmenu"
   },
   {
+    "icon": "mdi mdi-calendar-star-four-points",
+    "title": "Supervisor",
+    "to": "/alarm/supervisorevents",
+    "menu": "alarm_supervisorevents",
+    "module": "topmenu"
+  },
+  {
     "icon": "mdi mdi-calendar-account",
     "title": "Customers",
     "to": "/alarm/customers",
@@ -56,6 +63,7 @@
     "menu": "alarm_tickets",
     "module": "topmenu"
   },
+
   {
     "icon": "mdi-bell",
     "title": "Settings",

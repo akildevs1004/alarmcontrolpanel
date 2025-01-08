@@ -1,5 +1,35 @@
 <template>
   <div>
+    <v-dialog v-model="displayEventsListBusinessInfoTabs" width="1000px">
+      <v-card>
+        <v-card-title dense class="popup_background_noviolet">
+          <span
+            >Customer -
+            {{
+              selectedAlarm?.device?.customer
+                ? selectedAlarm?.device.customer.building_name
+                : "---"
+            }}</span
+          >
+          <v-spacer></v-spacer>
+          <v-icon @click="displayEventsListBusinessInfoTabs = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <EventsListBusinessInfoTabs
+              v-if="selectedAlarm"
+              :customer="selectedAlarm?.device.customer"
+              :device="selectedAlarm?.device"
+              :alarm="selectedAlarm"
+              :key="selectedAlarm.id"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-card elevation="5" class="full-height" style="padding-top: 0px">
       <v-card-text style="background-color: #fff">
         <v-row>
@@ -454,6 +484,7 @@
                       :customer="selectedAlarm?.device.customer"
                       :alarm="selectedAlarm"
                       @emitreloadEventNotes3="reloadEventNotes4()"
+                      @emitShowCustomerInfoTabs="changeStatusBusinessInfoTabs"
                   /></v-card-text>
                 </v-card>
               </v-col>
@@ -478,6 +509,7 @@
                     <EventsListBusinessInfoTabs
                       v-if="selectedAlarm"
                       :customer="selectedAlarm?.device.customer"
+                      :device="selectedAlarm?.device"
                       :alarm="selectedAlarm"
                       :key="selectedAlarm.id"
                     /> </v-card-text></v-card
@@ -599,6 +631,7 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
+    displayEventsListBusinessInfoTabs: false,
     globalsearch: "",
     keyLogs: 1,
     showMappingSection: false,
@@ -746,6 +779,9 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    changeStatusBusinessInfoTabs(status) {
+      this.displayEventsListBusinessInfoTabs = status;
     },
     reloadEventNotes4() {
       this.keyLogs++;
