@@ -16,10 +16,10 @@
           <v-carousel-item
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
+            v-if="item.photo_plottings[0]"
           >
             <div class="photo-title">{{ index + 1 }}: {{ item.title }}</div>
             <img
-              v-if="item.photo_plottings[0]"
               :id="
                 'plotting' +
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
