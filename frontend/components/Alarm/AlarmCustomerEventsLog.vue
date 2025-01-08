@@ -211,8 +211,8 @@
                   class="employee-schedule-search-box"
                   @input="getDataFromApi(0)"
                   v-model="commonSearch"
-                  label="Common Search(All Content)"
-                  placeholder="ID,Name,location etc..."
+                  label="Common Search "
+                  placeholder="ID,Name  etc..."
                   dense
                   outlined
                   type="text"

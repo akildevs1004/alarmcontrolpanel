@@ -170,38 +170,18 @@
                       </v-menu></v-col
                     >
                   </v-row>
-
-                  <div style="border: 1px solid #ddd; padding: 20px">
-                    <v-img
-                      @dblclick="viewPhoto(item)"
-                      :src="
-                        item.picture ? item.picture : '/no-business_profile.png'
-                      "
-                      style="width: 100%; height: 500px"
-                    />
-                    <!-- <v-img
-                      @dblclick="viewPhoto(item)"
-                      :src="
-                        item.picture ? item.picture : '/no-business_profile.png'
-                      "
-                      aspect-ratio="1"
-                      class="grey lighten-2"
-                      style="width: auto; max-width: 100%"
-                    >
-                      <template v-slot:placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img> -->
-                  </div>
+                  <v-row>
+                    <v-col>
+                      <v-img
+                        width="100%"
+                        max-width="900px"
+                        height="100%"
+                        :src="item.picture || '/no-business_profile.png'"
+                        contain
+                        style="object-fit: contain; max-height: 100%"
+                      />
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
             </v-tab-item>

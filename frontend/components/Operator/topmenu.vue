@@ -146,6 +146,7 @@
     </v-row>
 
     <v-row
+      v-if="$route?.name != 'operator-eventslist'"
       align="center"
       justify="center"
       style="background-color: #516067; color: #fff; border-top: 1px solid #fff"

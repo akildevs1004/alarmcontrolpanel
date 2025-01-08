@@ -321,8 +321,13 @@
           <v-col style="padding: 0px">
             <table class="eventcustomertab" style="width: 100%">
               <tr style="font-weight: bold">
-                <td>Name</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4"
+                    >mdi-account-tie</v-icon
+                  >
+                  <!-- Name -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.first_name
                       ? $utils.caps(globalContactDetails.first_name) +
@@ -333,8 +338,13 @@
                 </td>
               </tr>
               <tr>
-                <td>Mobile</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4"
+                    >mdi-cellphone-basic</v-icon
+                  >
+                  <!-- Mobile -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.phone1
                       ? globalContactDetails.phone1
@@ -343,8 +353,13 @@
                 </td>
               </tr>
               <tr>
-                <td>Phone</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4"
+                    >mdi-phone-classic</v-icon
+                  >
+                  <!-- Phone -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.phone2
                       ? globalContactDetails.phone2
@@ -353,8 +368,13 @@
                 </td>
               </tr>
               <tr>
-                <td>Whatsapp</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4"
+                    >mdi-whatsapp</v-icon
+                  >
+                  <!-- Whatsapp -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.whatsapp
                       ? globalContactDetails.whatsapp
@@ -363,8 +383,11 @@
                 </td>
               </tr>
               <tr>
-                <td>E-Mail</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4">mdi-at</v-icon>
+                  <!-- E-Mail -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.email
                       ? globalContactDetails.email
@@ -373,8 +396,13 @@
                 </td>
               </tr>
               <tr>
-                <td>Notes</td>
                 <td>
+                  <v-icon color="#2038c0" size="16" class="pr-4"
+                    >mdi-message-bulleted</v-icon
+                  >
+                  <!-- Notes -->
+                  <!-- </td>
+                <td> -->
                   {{
                     globalContactDetails?.notes
                       ? globalContactDetails.notes

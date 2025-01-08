@@ -5,10 +5,13 @@
         <v-carousel
           v-model="currentSlide"
           v-if="customer?.photos"
-          height="400"
+          height="500"
           hide-delimiter-background
           show-arrows-on-hover
           @change="keyPlottings++"
+          hide-arrows-on-hover
+          hide-delimiters
+          hide-arrows
         >
           <v-carousel-item
             v-for="(item, index) in customer.photos"
@@ -22,7 +25,7 @@
               "
               class="photo-img"
               :src="item.picture"
-              style="width: 100%; height: 400px"
+              style="width: 100%; height: 500px"
               @load="
                 onImageLoad(
                   item.photo_plottings[0].customer_building_picture_id

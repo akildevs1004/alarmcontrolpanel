@@ -53,7 +53,7 @@
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col style="padding-left: 0px">
+      <v-col>
         <v-tabs-items v-model="tab" style="overflow: visible">
           <!-- <v-tab-item>
         <v-card flat>

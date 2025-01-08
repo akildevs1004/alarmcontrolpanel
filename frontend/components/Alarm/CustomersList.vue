@@ -57,7 +57,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px; overflow: hidden"
+        <v-card-text
           ><AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"

@@ -16,7 +16,9 @@
           : 'padding-left: 140px;'
       "
     >
-      <v-container style="max-width: 100%">
+      <v-container
+        style="max-width: 100%; padding: 0px; background-color: #fff"
+      >
         <nuxt />
       </v-container>
     </v-main>

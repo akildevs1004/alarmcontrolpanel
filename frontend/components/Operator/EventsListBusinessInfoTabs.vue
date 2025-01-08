@@ -7,7 +7,7 @@
       class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
     >
       <v-tab style="font-size: 10px; min-width: 50px !important"
-        >Premiss Photo</v-tab
+        >Premises Photo</v-tab
       >
       <v-tab style="font-size: 10px; min-width: 50px !important">Address</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important"
@@ -26,9 +26,11 @@
             <v-carousel
               v-model="currentSlide"
               v-if="customer"
-              height="400"
+              height="500"
               hide-delimiter-background
-              show-arrows-on-hover
+              hide-arrows-on-hover
+              hide-delimiters
+              hide-arrows
             >
               <template
                 v-for="(item, index) in customer.profile_pictures"
@@ -40,7 +42,7 @@
                   </div> -->
                   <v-img
                     style="
-                      max-width: 700px;
+                      max-width: 800px;
                       border: 1px solid #ddd;
                       overflow: hidden;
                       margin: auto;
@@ -96,36 +98,6 @@
             </div>
           </v-col>
         </v-row>
-
-        <!-- <v-row>
-          <v-col style="width: 600px; overflow: scroll">
-            <v-row justify="center" dense>
-              <v-col
-                class="thumbnail-wrapper11111"
-                v-for="(item, index) in customer.profile_pictures"
-                :key="'thumb-' + index"
-                style="text-align: center; float: LEFT"
-              >
-                <div
-                  style="height: 100px; width: 150px; margin: auto"
-                  :class="{ 'active-thumbnail': index === currentSlide }"
-                >
-                  <v-img
-                    :src="item.picture"
-                    :alt="item.title"
-                    contain
-                    width="140px"
-                    max-height="100px"
-                    height="100px"
-                    style="max-height: 100px"
-                    @click="currentSlide = index"
-                  ></v-img>
-                </div>
-                <label style="font-size: 10px">{{ item.title }}</label>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row> -->
       </v-tab-item>
       <v-tab-item
         ><EventsBusinessTab1Address :customer="customer"
@@ -143,7 +115,7 @@
           :latitude="customer.latitude"
           :longitude="customer.longitude"
           :title="customer.building_name"
-          :mapheight="'500px'"
+          :mapheight="'650px'"
           :contact_id="customer.id"
         />
       </v-tab-item>

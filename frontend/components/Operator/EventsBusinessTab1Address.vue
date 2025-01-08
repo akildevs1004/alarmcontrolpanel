@@ -5,46 +5,46 @@
         <table class="operatorcustomerTop1" style="width: 100%" v-if="customer">
           <tr class="bold">
             <td>Name</td>
-            <td>{{ customer.building_name }}</td>
+            <td class="bold">{{ customer.building_name }}</td>
           </tr>
           <tr>
             <td>Property</td>
-            <td>{{ customer.buildingtype.name }}</td>
+            <td class="bold">{{ customer.buildingtype.name }}</td>
           </tr>
 
           <tr>
             <td>Address</td>
-            <td>
+            <td class="bold">
               {{ customer.house_number }}, {{ customer.street_number }},
               {{ customer.area }}
             </td>
           </tr>
           <tr>
             <td>Location</td>
-            <td>
+            <td class="bold">
               {{ customer.city }}, {{ customer.state }}, {{ customer.country }}
             </td>
           </tr>
           <tr>
             <td>Landmark</td>
-            <td>{{ customer.landmark }}</td>
+            <td class="bold">{{ customer.landmark }}</td>
           </tr>
           <tr>
             <td>Business Timings</td>
-            <td>
+            <td class="bold">
               {{ customer.open_time || "---" }} TO
               {{ customer.close_time || "---" }}
             </td>
           </tr>
           <tr>
             <td>Business Number</td>
-            <td>
+            <td class="bold">
               {{ customer.contact_number || "---" }}
             </td>
           </tr>
           <tr>
             <td>Business Email</td>
-            <td>
+            <td class="bold">
               {{ customer.email || "---" }}
             </td>
           </tr>

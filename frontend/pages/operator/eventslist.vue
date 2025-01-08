@@ -51,7 +51,7 @@
               outlined
               :style="' height:100%;;overflow-y: auto;overflow-x: hidden; '"
             >
-              <v-card-text style="padding: 5px">
+              <v-card-text style="padding: 5px; padding-top: 0px">
                 <Topmenu
                   @refreshEventsList="getDatafromApi()"
                   @applyGlobalSearch="getDatafromApi"
@@ -130,10 +130,13 @@
                   <v-col
                     :style="{
                       padding: '0px',
+
+                      backgroundColor:
+                        selectedAlarm.id === alarm.id ? '#8f8f8f' : 'red',
                       borderTop:
                         selectedAlarm.id === alarm.id
                           ? '1px solid #7d7d7d'
-                          : '1px solid #DDD',
+                          : '1px solid #FFF',
                       borderBottom:
                         selectedAlarm.id === alarm.id
                           ? '1px solid #7d7d7d'
@@ -152,7 +155,14 @@
                         width: 100%;
                       "
                     >
-                      <v-card-text style="padding-right: 0px">
+                      <v-card-text
+                        :style="{
+                          paddingRight: '0px',
+
+                          backgroundColor:
+                            selectedAlarm.id === alarm.id ? '#8f8f8f' : '#FFF',
+                        }"
+                      >
                         <v-row
                           style="min-width: 300px; height: auto; width: 100%"
                         >
@@ -187,7 +197,13 @@
                                     : "---"
                                 }}
                               </div>
-                              <div style="font-weight: bold; font-size: 12px">
+                              <div
+                                style="
+                                  font-weight: bold;
+                                  font-size: 12px;
+                                  color: #1f1f1f;
+                                "
+                              >
                                 {{
                                   $utils.caps(
                                     alarm.device.customer.building_name
@@ -279,11 +295,11 @@
                               margin: auto;
                             "
                           >
-                            <div style="">#{{ alarm.id }}</div>
+                            <div style="color: blue">#{{ alarm.id }}</div>
                             <div style="margin: auto; text-align: center"></div>
                             <div style="line-height: 0px"></div>
                             <div v-if="alarm.alarm_status == 1">
-                              OPEN
+                              <span style="color: GREEN"> OPEN</span>
                               <div>
                                 {{
                                   $dateFormat.getTimeDifference(
@@ -475,8 +491,14 @@
                 style="padding-right: 0px; max-width: 300px; padding-top: 6px"
                 class="google-map-right-hand-content"
               >
-                <v-card :loading="loading" elevation="5" class="full-height">
-                  <v-card-text style="background-color: #fff">
+                <v-card :loading="loading" elevation="0" class="full-height">
+                  <v-card-text
+                    style="
+                      background-color: #fff;
+                      padding-top: 0px;
+                      padding-right: 0px;
+                    "
+                  >
                     <EventContactNotes
                       :key="selectedAlarm.id"
                       v-if="selectedAlarm"
@@ -498,22 +520,23 @@
               >
                 <v-card
                   :loading="loading"
-                  elevation="5"
+                  elevation="10"
                   style="
                     height: 100vh !important;
 
                     display: flex !important;
                   "
                 >
-                  <v-card-text>
+                  <v-card-text class="pl-0 pr-0">
                     <EventsListBusinessInfoTabs
                       v-if="selectedAlarm"
                       :customer="selectedAlarm?.device.customer"
                       :device="selectedAlarm?.device"
                       :alarm="selectedAlarm"
                       :key="selectedAlarm.id"
-                    /> </v-card-text></v-card
-              ></v-col>
+                    /> </v-card-text
+                ></v-card>
+              </v-col>
               <!-- <v-col>
                 <v-card
                   :loading="loading"

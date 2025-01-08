@@ -1,14 +1,37 @@
 <template>
   <div>
     <v-row style="width: 100%; line-height: 0px">
-      <v-col>
+      <v-col style="padding: 0px">
         <div v-if="alarm && customer">
-          <v-row style="padding: 0px">
-            <v-col style="padding: 0px">
+          <img
+            :src="customer.profile_picture"
+            style="
+              width: 283px;
+              max-height: 200px;
+              margin-left: -2px;
+
+              vertical-align: bottom;
+            "
+          />
+          <v-row>
+            <v-col style="padding: 6px">
               <table class="operatorcustomerTop1" style="width: 100%">
                 <tr>
-                  <td>Event ID : #{{ alarm.id }}</td>
-                  <td>
+                  <td
+                    class="bold"
+                    colspan="2"
+                    style="font-size: 15px !important; color: black"
+                  >
+                    {{
+                      customer?.building_name
+                        ? $utils.caps(customer.building_name)
+                        : "---"
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="bold">Event ID : #{{ alarm.id }}</td>
+                  <td class="bold">
                     {{
                       $dateFormat.formatDateMonthYear(
                         alarm.alarm_start_datetime
@@ -17,8 +40,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Type :{{ alarm.alarm_type ?? "---" }}</td>
-                  <td>
+                  <td class="bold">Type :{{ alarm.alarm_type ?? "---" }}</td>
+                  <td class="bold">
                     Category :
                     <span v-if="alarm.alarm_category == 1">Critical</span>
                     <span v-else-if="alarm.alarm_category == 2">Medium</span>
@@ -32,12 +55,13 @@
                     }}
                   </td>
                   <td class="text-truncate">
-                    Name :
+                    Zone: {{ alarm.zone_data?.sensor_name ?? "---" }}
+                    <!-- Name :
                     {{
                       customer?.building_name
                         ? $utils.caps(customer.building_name)
                         : "---"
-                    }}
+                    }} -->
                   </td>
                 </tr>
                 <tr>
@@ -50,61 +74,12 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="text-truncate">
-                    Zone: {{ alarm.zone_data?.sensor_name ?? "---" }}
-                  </td>
+                  <td class="text-truncate"></td>
                   <td class="text-truncate"></td>
                 </tr>
               </table>
             </v-col>
           </v-row>
-          <!-- <table class="operatormap" style="width: 100%">
-            <tr>
-              <td>Event ID : #{{ alarm.id }}</td>
-              <td>
-                {{
-                  $dateFormat.formatDateMonthYear(alarm.alarm_start_datetime)
-                }}
-              </td>
-            </tr>
-            <tr>
-              <td>Property</td>
-              <td>{{ customerObject?.buildingtype?.name || "---" }}</td>
-            </tr>
-            <tr>
-              <td>Property</td>
-              <td>{{ customerObject?.buildingtype?.name || "---" }}</td>
-            </tr>
-          </table>
-          -->
-
-          <!-- <v-row style="border-bottom: 1px solid #fff"
-            ><v-col style="">Event ID : #{{ alarm.id }}</v-col
-            ><v-col>
-              {{ $dateFormat.formatDateMonthYear(alarm.alarm_start_datetime) }}
-            </v-col> </v-row
-          ><v-row style="border-bottom: 1px solid #fff"
-            ><v-col>Type :{{ alarm.alarm_type ?? "---" }} </v-col
-            ><v-col
-              >Category :
-              <span v-if="alarm.alarm_category == 1">Critical</span>
-              <span v-else-if="alarm.alarm_category == 2">Medium</span>
-              <span v-else-if="alarm.alarm_category == 3">Low</span></v-col
-            > </v-row
-          ><v-row style="border-bottom: 1px solid #fff"
-            ><v-col
-              >Property :{{
-                customer.buildingtype ? customer.buildingtype.name : "---"
-              }}</v-col
-            ><v-col
-              >Name :
-              {{
-                customer?.building_name
-                  ? $utils.caps(customer.building_name)
-                  : "---"
-              }}</v-col
-            >
-          </v-row> -->
         </div>
       </v-col>
     </v-row>
@@ -149,36 +124,6 @@
                 @emitreloadEventNotesStep1="emitreloadEventNotes2"
               />
             </v-card>
-
-            <div>
-              <!-- <v-btn
-                @click="emitShowCustomerInfoTabs(true)"
-                class="mt-1"
-                small
-                color="#203864"
-                style="
-                  margin: auto;
-                  margin-top: -10px;
-                  width: 100px;
-                  color: #fff;
-                "
-                >Customer Info</v-btn
-              > -->
-
-              <!-- <v-btn
-                @click="emitShowCustomerInfoTabs(false)"
-                class="mt-1"
-                small
-                color="#203864"
-                style="
-                  margin: auto;
-                  margin-top: -10px;
-                  width: 100px;
-                  color: #fff;
-                "
-                >Map</v-btn
-              > -->
-            </div>
           </v-tab-item>
         </v-tabs>
       </v-col>
