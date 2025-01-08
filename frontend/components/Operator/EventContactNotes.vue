@@ -2,7 +2,7 @@
   <div>
     <v-row style="width: 100%; line-height: 0px">
       <v-col style="padding: 0px">
-        <div v-if="alarm && customer">
+        <div v-if="alarm && customer" style="padding-top: 14px">
           <img
             :src="customer.profile_picture"
             style="
