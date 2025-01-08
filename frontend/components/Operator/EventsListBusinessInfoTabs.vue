@@ -132,7 +132,7 @@
             <v-carousel
               v-model="currentCameraSlide"
               v-else-if="customer"
-              height="400"
+              height="500"
               hide-delimiter-background
               show-arrows-on-hover
             >

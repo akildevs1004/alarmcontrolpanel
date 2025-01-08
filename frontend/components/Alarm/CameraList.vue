@@ -380,7 +380,7 @@ export default {
             this.color = "background";
             this.errors = [];
             this.snackbar = true;
-            this.response = "Photo Details are deleted successfully";
+            this.response = "Camera Details are deleted successfully";
 
             this.$emit("closeDialog");
             this.getDatafromapi();

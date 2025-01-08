@@ -211,7 +211,7 @@ export default {
             this.color = "background";
             this.primary_errors = [];
             this.snackbar = true;
-            this.response = "Photo Details Updated successfully";
+            this.response = "Camera Details Updated successfully";
             setTimeout(() => {
               this.$emit("closeDialog");
             }, 1000);
