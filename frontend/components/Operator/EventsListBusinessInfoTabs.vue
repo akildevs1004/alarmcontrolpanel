@@ -7,19 +7,29 @@
       class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
     >
       <v-tab style="font-size: 10px; min-width: 50px !important"
+        >Google Map</v-tab
+      >
+      <v-tab style="font-size: 10px; min-width: 50px !important"
         >Premises Photo</v-tab
       >
       <v-tab style="font-size: 10px; min-width: 50px !important">Address</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important"
         >Floor Plan</v-tab
       >
-      <v-tab style="font-size: 10px; min-width: 50px !important"
-        >Google Map</v-tab
-      >
+
       <v-tab style="font-size: 10px; min-width: 50px !important">Camera</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important">System</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important">Logs</v-tab>
-
+      <v-tab-item
+        ><CompGoogleMapLatLan
+          v-if="customer"
+          :latitude="customer.latitude"
+          :longitude="customer.longitude"
+          :title="customer.building_name"
+          :mapheight="'650px'"
+          :contact_id="customer.id"
+        />
+      </v-tab-item>
       <v-tab-item>
         <v-row>
           <v-col>
@@ -109,16 +119,7 @@
           :customer="customer"
         />
       </v-tab-item>
-      <v-tab-item
-        ><CompGoogleMapLatLan
-          v-if="customer"
-          :latitude="customer.latitude"
-          :longitude="customer.longitude"
-          :title="customer.building_name"
-          :mapheight="'650px'"
-          :contact_id="customer.id"
-        />
-      </v-tab-item>
+
       <v-tab-item>
         <v-row>
           <v-col>
