@@ -1,86 +1,104 @@
 <template>
   <div>
-    <v-row style="width: 100%; line-height: 0px">
+    <v-row>
       <v-col style="padding: 0px">
-        <div v-if="alarm && customer" style="padding-top: 14px">
-          <img
-            :src="customer.profile_picture"
-            style="
-              width: 283px;
-              max-height: 200px;
-              margin-left: -2px;
+        <v-row v-if="alarm && customer">
+          <v-col>
+            <!-- <v-img
+              :src="customer.profile_picture"
+              style="
+                width: 100px;
+                height: auto;
+                margin-left: -2px;
 
-              vertical-align: bottom;
-            "
-          />
-          <v-row>
-            <v-col style="padding: 6px">
-              <table class="operatorcustomerTop1" style="width: 100%">
-                <tr>
-                  <td
-                    class="bold"
-                    colspan="2"
-                    style="font-size: 15px !important; color: black"
-                  >
-                    {{
-                      customer?.building_name
-                        ? $utils.caps(customer.building_name)
-                        : "---"
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="bold">Event ID : #{{ alarm.id }}</td>
-                  <td class="bold">
-                    {{
-                      $dateFormat.formatDateMonthYear(
-                        alarm.alarm_start_datetime
-                      )
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="bold">Type :{{ alarm.alarm_type ?? "---" }}</td>
-                  <td class="bold">
-                    Category :
-                    <span v-if="alarm.alarm_category == 1">Critical</span>
-                    <span v-else-if="alarm.alarm_category == 2">Medium</span>
-                    <span v-else-if="alarm.alarm_category == 3">Low</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-truncate">
-                    Property :{{
-                      customer.buildingtype ? customer.buildingtype.name : "---"
-                    }}
-                  </td>
-                  <td class="text-truncate">
-                    Zone: {{ alarm.zone_data?.sensor_name ?? "---" }}
-                    <!-- Name :
-                    {{
-                      customer?.building_name
-                        ? $utils.caps(customer.building_name)
-                        : "---"
-                    }} -->
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-truncate">
-                    Location: {{ alarm.zone_data?.location ?? "---" }}
-                  </td>
-                  <td class="text-truncate">
-                    Sensor :
-                    {{ alarm.zone_data?.sensor_type ?? "---" }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-truncate"></td>
-                  <td class="text-truncate"></td>
-                </tr>
-              </table>
-            </v-col>
-          </v-row>
-        </div>
+                vertical-align: bottom;
+              "
+            /> -->
+            <v-row>
+              <v-col style="text-align: center">
+                <img
+                  :src="customer.profile_picture"
+                  style="
+                    width: 50%;
+                    height: auto;
+                    margin-left: -2px;
+
+                    vertical-align: bottom;
+                  "
+              /></v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-card>
+                  <v-card-text style="padding: 0px">
+                    <table
+                      class="eventcustomertab"
+                      style="width: 100%; height: 150px"
+                    >
+                      <tr>
+                        <td
+                          class="bold"
+                          colspan="2"
+                          style="font-size: 15px !important; color: black"
+                        >
+                          {{
+                            customer?.building_name
+                              ? $utils.caps(customer.building_name)
+                              : "---"
+                          }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="bold">Event ID : #{{ alarm.id }}</td>
+                        <td class="bold">
+                          {{
+                            $dateFormat.formatDateMonthYear(
+                              alarm.alarm_start_datetime
+                            )
+                          }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="bold">
+                          Type :{{ alarm.alarm_type ?? "---" }}
+                        </td>
+                        <td class="bold">
+                          Category :
+                          <span v-if="alarm.alarm_category == 1">Critical</span>
+                          <span v-else-if="alarm.alarm_category == 2"
+                            >Medium</span
+                          >
+                          <span v-else-if="alarm.alarm_category == 3">Low</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-truncate">
+                          Property :{{
+                            customer.buildingtype
+                              ? customer.buildingtype.name
+                              : "---"
+                          }}
+                        </td>
+                        <td class="text-truncate">
+                          Zone: {{ alarm.zone_data?.sensor_name ?? "---" }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-truncate">
+                          Location: {{ alarm.zone_data?.location ?? "---" }}
+                        </td>
+                        <td class="text-truncate">
+                          Sensor :
+                          {{ alarm.zone_data?.sensor_type ?? "---" }}
+                        </td>
+                      </tr>
+                    </table>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 

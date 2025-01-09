@@ -6,8 +6,8 @@
       right
       class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
     >
-      <v-tab style="font-size: 10px; min-width: 50px !important"
-        >Google Map</v-tab
+      <v-tab style="font-size: 10px; min-width: 50px !important">
+        Google Map</v-tab
       >
       <v-tab style="font-size: 10px; min-width: 50px !important"
         >Premises Photo</v-tab
@@ -17,7 +17,7 @@
         >Floor Plan</v-tab
       >
 
-      <v-tab style="font-size: 10px; min-width: 50px !important">Camera</v-tab>
+      <v-tab style="font-size: 10px; min-width: 50px !important"> Camera</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important">System</v-tab>
       <v-tab style="font-size: 10px; min-width: 50px !important">Logs</v-tab>
       <v-tab-item

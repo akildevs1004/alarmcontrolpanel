@@ -5,7 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogOperatorNotes" max-width="450px">
+    <v-dialog v-model="dialogOperatorNotes" max-width="400px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black">Operator Comments</span>
@@ -22,25 +22,12 @@
           <v-row>
             <v-col>
               <v-row>
-                <v-col>
-                  <v-textarea
-                    outlined
-                    class="mt-0 white-color1"
-                    label="Operator Comments"
-                    value=""
-                    height="60px"
-                    hide-details
-                    v-model="event_payload.notes"
-                    style="font-size: 12px"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-              <v-row>
                 <v-col style="padding: 0px">
                   <table class="eventcustomertabselect" style="width: 100%">
                     <tr>
-                      <td>Call Status</td>
-                      <td style="width: 60%">
+                      <!-- <td>Call Status</td> -->
+                      <td style="width: 60%; padding-top: 20px">
+                        <label>Call Status</label>
                         <v-select
                           class="employee-schedule-search-box font10"
                           height="20px"
@@ -49,7 +36,7 @@
                           dense
                           hide-details
                           :items="[
-                            null,
+                            'null',
                             'Answered',
                             'No Answer',
                             'Busy',
@@ -59,9 +46,10 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Response</td>
-                      <td>
+                      <!-- <td>Response</td> -->
+                      <td style="padding-top: 20px">
                         <v-select
+                          label="Response"
                           class="employee-schedule-search-box font10"
                           height="20px"
                           outlined
@@ -81,9 +69,10 @@
                     </tr>
 
                     <tr>
-                      <td>Alarm Status</td>
-                      <td>
+                      <!-- <td>Alarm Status</td> -->
+                      <td style="padding-top: 20px">
                         <v-select
+                          label="Alarm Status"
                           class="employee-schedule-search-box font10"
                           height="20px"
                           outlined
@@ -102,8 +91,8 @@
                       </td>
                     </tr>
                     <tr v-if="event_payload.event_status == 'Closed'">
-                      <td>Contact Secret Code</td>
-                      <td>
+                      <!-- <td>Contact Secret Code</td> -->
+                      <td style="padding-top: 20px">
                         <v-text-field
                           :disabled="
                             event_payload.event_status == 'Closed'
@@ -168,12 +157,42 @@
                   </div>
                 </v-col>
               </v-row>
-
               <v-row>
+                <v-col class="pr-0">
+                  <v-textarea
+                    outlined
+                    class="mt-0 white-color1 font13label"
+                    label="Operator Comments"
+                    value=""
+                    height="60px"
+                    hide-details
+                    v-model="event_payload.notes"
+                    style="font-size: 12px"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-center"
+                  ><v-btn
+                    @click="submit"
+                    class="mt-1"
+                    small
+                    color="#203864"
+                    style="
+                      margin: auto;
+                      margin-top: -10px;
+                      width: 100px;
+                      color: #fff;
+                    "
+                    >Submit</v-btn
+                  ></v-col
+                >
+              </v-row>
+              <!--<v-row>
                 <v-col>
-                  <v-row v-if="globalContactDetails" class="mt-5">
+                  <v-row v-if="globalContactDetails" class="mt-1">
                     <v-col cols="6" class="pr-1">
-                      <!-- <v-text-field
+                       <v-text-field
                         v-if="event_payload.event_status == 'Closed'"
                         :disabled="
                           event_payload.event_status == 'Closed' ? false : true
@@ -197,7 +216,7 @@
                           padding-top: 0px;
                         "
                       >
-                      </v-text-field> -->
+                      </v-text-field>
                     </v-col>
                     <v-col cols="6" class="pl-0">
                       <v-btn
@@ -214,45 +233,43 @@
                         >Submit</v-btn
                       >
                     </v-col>
-                  </v-row>
+                  </v-row> -->
 
-                  <div>
-                    <div v-if="response != ''" style="color: green">
-                      {{ response }}
-                    </div>
-                    <div
-                      v-else-if="errors && errors.pin_number"
-                      class="text-danger mt-2"
-                    >
-                      {{ errors.pin_number[0] }}
-                    </div>
-                    <div
-                      v-else-if="errors && errors.notes"
-                      class="text-danger mt-2"
-                    >
-                      {{ errors.notes[0] }}
-                    </div>
-                    <div
-                      v-else-if="errors && errors.call_status"
-                      class="text-danger mt-2"
-                    >
-                      {{ errors.call_status[0] }}
-                    </div>
-                    <div
-                      v-else-if="errors && errors.event_status"
-                      class="text-danger mt-2"
-                    >
-                      {{ errors.event_status[0] }}
-                    </div>
-                    <div
-                      v-else-if="errors && errors.response"
-                      class="text-danger mt-2"
-                    >
-                      {{ errors.response[0] }}
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
+              <div>
+                <div v-if="response != ''" style="color: green">
+                  {{ response }}
+                </div>
+                <div
+                  v-else-if="errors && errors.pin_number"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.pin_number[0] }}
+                </div>
+                <div
+                  v-else-if="errors && errors.notes"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.notes[0] }}
+                </div>
+                <div
+                  v-else-if="errors && errors.call_status"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.call_status[0] }}
+                </div>
+                <div
+                  v-else-if="errors && errors.event_status"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.event_status[0] }}
+                </div>
+                <div
+                  v-else-if="errors && errors.response"
+                  class="text-danger mt-2"
+                >
+                  {{ errors.response[0] }}
+                </div>
+              </div>
             </v-col>
           </v-row>
         </v-card-text>
@@ -306,9 +323,22 @@
     <v-card flat elevation="0">
       <v-card-text style="margin-top: 5px">
         <v-row>
-          <v-col style="margin: auto; padding-top: 0px">
+          <v-col
+            style="
+              margin: auto;
+              padding-top: 0px;
+              max-width: 60px;
+              padding: 0px;
+            "
+          >
             <v-img
-              style="width: 80px; border: 1px solid #ddd; margin: auto"
+              style="
+                border: 1px solid #ddd;
+                margin: auto;
+                border-radius: 50%;
+                width: 60px;
+                border: 1px solid #6b6bff;
+              "
               :src="
                 globalContactDetails?.profile_picture
                   ? globalContactDetails.profile_picture
@@ -316,18 +346,28 @@
               "
             ></v-img>
           </v-col>
+          <v-col style="margin: auto; padding-top: 0px">
+            <div class="bold">
+              {{
+                globalContactDetails?.first_name
+                  ? $utils.caps(globalContactDetails.first_name) +
+                    " " +
+                    $utils.caps(globalContactDetails.last_name)
+                  : "---"
+              }}
+            </div>
+            <div>{{ contact_type }}</div>
+          </v-col>
         </v-row>
         <v-row>
-          <v-col style="padding: 0px">
+          <v-col style="padding: 0px; padding-top: 10px">
             <table class="eventcustomertab" style="width: 100%">
-              <tr style="font-weight: bold">
+              <!-- <tr style="font-weight: bold">
                 <td>
                   <v-icon color="#2038c0" size="16" class="pr-4"
                     >mdi-account-tie</v-icon
                   >
-                  <!-- Name -->
-                  <!-- </td>
-                <td> -->
+
                   {{
                     globalContactDetails?.first_name
                       ? $utils.caps(globalContactDetails.first_name) +
@@ -336,7 +376,7 @@
                       : "---"
                   }}
                 </td>
-              </tr>
+              </tr> -->
               <tr>
                 <td>
                   <v-icon color="#2038c0" size="16" class="pr-4"

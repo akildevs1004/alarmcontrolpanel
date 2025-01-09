@@ -17,7 +17,11 @@
       "
     >
       <v-container
-        style="max-width: 100%; padding: 0px; background-color: #fff"
+        style="
+          max-width: 100%;
+          padding: 0px;
+          background-color: #ecf0f4 !important;
+        "
       >
         <nuxt />
       </v-container>
@@ -1065,7 +1069,7 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 11px;
+  font-size: 12px;
   height: 32px;
 }
 .operatorcustomerTop1 td {
@@ -1075,8 +1079,8 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 11px !important;
-  height: 28px;
+  font-size: 12px !important;
+  /* height: 28px; */
 }
 .eventcustomertab td {
   border-top: 0px solid #ddd;
@@ -1085,7 +1089,7 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 11px;
+  font-size: 12px;
   height: 20px;
 }
 .eventcustomertabselect td {
@@ -1095,7 +1099,7 @@ button {
   border-collapse: collapse;
   text-align: left;
   padding-left: 10px;
-  font-size: 11px;
+  font-size: 12px;
   height: 35px;
 }
 .main-leftcontent .v-navigation-drawer__content {
@@ -1133,6 +1137,9 @@ button {
 .active-thumbnail {
   border: 2px solid #1976d2; /* Vuetify primary color */
   border-radius: 4px;
+}
+.font13label {
+  font-size: 13px;
 }
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->
