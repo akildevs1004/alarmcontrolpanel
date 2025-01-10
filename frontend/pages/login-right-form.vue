@@ -78,9 +78,9 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogForgotPassword" width="400px">
+    <v-dialog v-model="dialogForgotPassword" width="400px" height="500px">
       <v-card>
-        <v-card-title dense class="popup_background_noviolet">
+        <v-card-title dense class="popup_background">
           Forgot Password
           <v-spacer></v-spacer>
           <v-icon @click="dialogForgotPassword = false" outlined dark>
@@ -116,12 +116,12 @@
               <v-img
                 class="text-center"
                 style="
-                  width: 100px;
+                  width: 180px;
                   padding: 0px;
                   margin: auto;
                   text-align: center;
                 "
-                src="/logo_header.png"
+                src="/login/login-logo.png"
               ></v-img>
             </div>
             <!-- <h3 class="pb-5 pt-0" style="font-size: 14px">
@@ -396,7 +396,7 @@ html {
   height: 100%;
 }
 .bg-body {
-  background-image: url("../static/login/banner202501.jpg") !important;
+  background-image: url("../static/login/bgimage5.png") !important;
 }
 .bg-body {
   padding-top: 5%;
@@ -423,11 +423,8 @@ html {
   font-size: 22px;
 }
 .login-body {
-  /* margin-right: 15%;
-  float: right; */
-
-  margin-left: 10%;
-  background-color: #010d1d;
+  margin-right: 15%;
+  float: right;
 }
 @media (max-width: 1200px) {
   .login-body {

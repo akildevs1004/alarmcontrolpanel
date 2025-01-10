@@ -679,8 +679,6 @@ export default {
     };
   },
   created() {
-    console.log(this.$auth.user.user_type);
-
     if (this.$auth.user.user_type != "security") {
       try {
         if (window) {
@@ -1116,11 +1114,30 @@ export default {
           this.pendingNotificationsCount = data.length;
         })
         .catch((error) => {
+          console.log("error", error);
+
           if (this.$axios.isCancel(error)) {
             console.log("Previous request canceled");
           } else {
-            console.error("Error loading notifications:", error);
+            this.$auth.logout();
+            localStorage.clear(); // If using localStorage for tokens
+
+            // Redirect the user to the login page
+            this.$router.push("/login", true);
           }
+          // {
+          //   console.warn("Session expired. Redirecting to login...");
+
+          //   // Optionally clear tokens and user data
+          //   this.$auth.logout();
+          //   localStorage.clear(); // If using localStorage for tokens
+
+          //   // Redirect the user to the login page
+          //   this.$router.push("/login", true);
+          // }
+          // else {
+          //   console.error("Error loading notifications:", error);
+          // }
           this.isBackendRequestOpen = false;
         });
     },
@@ -1404,11 +1421,21 @@ export default {
       return this.$pagePermission.can(per, this);
     },
 
-    logout() {
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+    async logout() {
+      await this.$auth.logout();
+      // Call the logout endpoint
+      this.$router.push("/logout", true);
+
+      // try {
+      //   await this.$auth.logout();
+      //   // Call the logout endpoint
+      //   await this.$axios.get(`/logout`);
+      //   // Logout the user using the authentication plugin
+      // } catch (error) {
+      //   console.error("Logout failed:", error);
+      // }
     },
+
     GlobalSearchResultsUpdated(value) {
       if (value > 0) this.globalSearchPopupWidth = "1400px";
       else this.globalSearchPopupWidth = "500px";

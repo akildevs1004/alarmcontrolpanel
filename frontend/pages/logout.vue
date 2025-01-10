@@ -8,9 +8,9 @@ export default {
       await this.$auth.logout();
 
       // // Manually clear any other user-related data
-      // this.$auth.setUser(false); // Clear user data
+      this.$auth.setUser(false); // Clear user data
       // this.$auth.setToken("local", null); // Clear the token
-
+      console.log(this.$auth.user);
       // Redirect to login or another route
       this.$router.push("/login");
     } catch (error) {

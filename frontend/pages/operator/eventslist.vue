@@ -121,7 +121,7 @@
             <v-row v-if="data.length == 0" class="text-center">
               <v-col> No data available </v-col>
             </v-row>
-            <v-row>
+            <v-row v-else>
               <v-col
                 class="eventslistscroll"
                 :style="
@@ -501,6 +501,15 @@ export default {
 
     this.getBuildingTypes();
     this.getAlarmTypes();
+
+    setInterval(() => {
+      console.log(this.$auth.user);
+
+      if (!this.$auth.user) {
+        this.$router.push("/logout");
+        return;
+      }
+    }, 1000 * 30);
   },
 
   async created() {

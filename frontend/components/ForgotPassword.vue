@@ -159,11 +159,7 @@
               ></div>
             </v-form>
 
-            <div
-              class="text--green"
-              style="color: green; min-height: 200px"
-              v-model="successView"
-            >
+            <div class="text--green" style="color: green">
               {{ successMessage }}
             </div>
           </div>

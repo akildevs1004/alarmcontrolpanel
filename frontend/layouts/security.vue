@@ -130,7 +130,7 @@
           class="logo-image"
           title="Alarm Control Panel - Xtremeguard"
           :src="logo_src"
-          style="width: 150px !important"
+          style="width: 60px !important"
         />
       </span>
       <v-spacer></v-spacer>
