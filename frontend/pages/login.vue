@@ -19,7 +19,7 @@
               <div class="login-body p-md-5 mx-md-4">
                 <v-row class="pb-5">
                   <v-col md="12" cols="12" class="text-center">
-                    <h2>MyTime2Cloud</h2>
+                    <h2>Alarm XtremeGuard</h2>
                   </v-col>
                 </v-row>
 
@@ -227,7 +227,7 @@
               For Technical Support :
               <a
                 target="_blank"
-                href="https://wa.me/971529048025?text=Hello MyTime2Cloud. I need your support."
+                href="https://wa.me/971529048025?text=Hello Alarm XtremeGuard. I need your support."
                 ><v-icon color="black">mdi-whatsapp</v-icon></a
               >
               <a

@@ -788,7 +788,7 @@ export default {
       clipped: true,
 
       miniVariant: true,
-      title: "MyTime2Cloud",
+      title: "Alarm XtremeGuard",
       socket: null,
       logout_btn: {
         icon: "mdi-logout",

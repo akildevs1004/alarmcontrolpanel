@@ -88,7 +88,10 @@
     </v-dialog>
 
     <v-row>
-      <v-col class="main-leftcontent" style="padding: 2px; padding-top: 3px">
+      <v-col
+        class="main-leftcontent"
+        style="padding-right: 0px; padding-bottom: 0px"
+      >
         <v-card elevation="10" outlined>
           <div
             :key="mapkeycount"
@@ -118,7 +121,7 @@
               @closeDialog="dialogCustomerRightInfo = false"
           /></v-navigation-drawer>
 
-          <div style="position: absolute; top: 0px; left: 50%">
+          <div style="position: absolute; top: 5px; left: 50%">
             <!-- <v-autocomplete
               style="padding-top: 6px"
               @change="gotoCustomerLocationOnMap()"
@@ -144,21 +147,23 @@
               @click:clear="clearCustomerPopup()"
               dense
               clearable
+              height="20px"
+              label="Search Business Name"
             >
             </v-text-field>
           </div>
-          <div style="position: absolute; top: 50px; left: 10px">
+          <!-- <div style="position: absolute; top: 50px; left: 10px">
             <img
               title="Alarm Control Panel - Xtremeguard"
-              src="/logo22.png"
+              src="/logo_header.png"
               style="width: 50px"
             />
-          </div>
+          </div> -->
           <!-- <div style="position: absolute; top: 50px; left: 10px">
             <Clock></Clock>
           </div> -->
 
-          <div style="position: absolute; top: 0px; left: 140px">
+          <div style="position: absolute; top: -3px; left: 140px">
             <v-btn-toggle
               v-model="mapStyle"
               height="20"
@@ -245,7 +250,7 @@
       <v-col
         v-if="displayRightcontant"
         class="main-rightcontent"
-        style="padding: 0px; padding-top: 0px"
+        style="padding-left: 0px; padding-bottom: 0px"
       >
         <v-card
           :loading="loading"
@@ -258,10 +263,10 @@
           "
         >
           <v-card-text style="padding: 0px">
-            <Topmenu
+            <!-- <Topmenu
               @applyGlobalSearch="getDatafromApi"
               style="padding: 10px"
-            />
+            /> -->
 
             <v-row v-if="data.length == 0" class="text-center">
               <v-col> 0 Alarms </v-col>
@@ -747,7 +752,7 @@ export default {
     filterAlarmType: null,
     filterAlarmStatus: 1,
     fullscreen: false,
-    windowHeight: 1000,
+    windowHeight: 650,
     windowWidth: 600,
     mapStyle: "map",
     mapkeycount: 1,
@@ -969,7 +974,7 @@ export default {
     onResize() {
       if (window) {
         this.windowWidth = window.innerWidth;
-        this.windowHeight = window.innerHeight - 10;
+        this.windowHeight = window.innerHeight - 70;
       }
     },
     toggleFullscreen() {
@@ -1274,14 +1279,15 @@ export default {
     },
     gotoCustomerLocationOnMap() {
       if (this.filter_customer_id) {
-        let customer = this.customersList.find(
-          (customer1) =>
-            customer1.building_name.toLowerCase() ==
-            this.filter_customer_id.toLowerCase()
+        let customer = this.customersList.filter((customer1) =>
+          customer1.building_name
+            ?.toLowerCase()
+            .startsWith(this.filter_customer_id?.toLowerCase())
         );
+        //console.log("customer", customer);
 
         if (customer) {
-          this.setCustomerLocationOnMap(customer);
+          this.setCustomerLocationOnMap(customer[0]);
         } else {
           this.snackbar = true;
           this.response = "No Customers found";

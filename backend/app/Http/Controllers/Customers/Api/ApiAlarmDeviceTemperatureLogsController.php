@@ -409,7 +409,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 "category",
                 "zoneData"
             ])
-
+                ->whereHas('device.customer')
                 ->where('company_id', $companyId)
                 ->where('alarm_status', 1);
 

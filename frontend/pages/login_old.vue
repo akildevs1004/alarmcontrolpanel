@@ -19,7 +19,7 @@
               <div class="card-body p-md-5 mx-md-4">
                 <v-row class="pb-5">
                   <v-col md="12" cols="12" class="text-center">
-                    <h2>MyTime2Cloud</h2>
+                    <h2>Alarm XtremeGuard</h2>
                   </v-col>
                 </v-row>
 
@@ -117,7 +117,7 @@
                   margin: auto;
                   text-align: center;
                 "
-                src="/logo22.png"
+                src="/logo_header.png"
               ></v-img>
             </div>
             <h3 class="pb-7 pt-15">

@@ -19,7 +19,7 @@
               <div class="card-body p-md-5 mx-md-4">
                 <v-row class="pb-5">
                   <v-col md="12" cols="12" class="text-center">
-                    <h2>MyTime2Cloud</h2>
+                    <h2>Alarm XtremeGuard</h2>
                   </v-col>
                 </v-row>
 
@@ -121,7 +121,7 @@
                                 margin: auto;
                                 text-align: center;
                               "
-                              src="/logo22.png"
+                              src="/logo_header.png"
                             ></v-img>
                           </div>
                           <h3 class="pb-7 pt-15">
@@ -224,7 +224,7 @@
                             For Technical Support :
                             <a
                               target="_blank"
-                              href="https://wa.me/971529048025?text=Hello MyTime2Cloud. I need your support."
+                              href="https://wa.me/971529048025?text=Hello Alarm XtremeGuard. I need your support."
                               ><v-icon color="black">mdi-whatsapp</v-icon></a
                             >
                             <a
@@ -279,7 +279,7 @@
                             For Technical Support :
                             <a
                               target="_blank"
-                              href="https://wa.me/971529048025?text=Hello MyTime2Cloud. I need your support."
+                              href="https://wa.me/971529048025?text=Hello Alarm XtremeGuard. I need your support."
                               ><v-icon color="white">mdi-whatsapp</v-icon></a
                             >
                             <a
@@ -319,7 +319,7 @@
                       style="color: #fff; padding: 3rem !important"
                     >
                       <h2 class="pb-7" style="font-size: 2em">
-                        Welcome To MyTime2Cloud
+                        Welcome To Alarm XtremeGuard
                       </h2>
 
                       <v-form

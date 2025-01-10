@@ -11,10 +11,7 @@
         <h4 style="color: #fff">Customer Information</h4>
         <div>
           <img
-            :src="
-              customerObject?.primary_contact?.profile_picture ||
-              '/no-business_profile.png'
-            "
+            :src="customerObject?.profile_picture || '/no-business_profile.png'"
             style="
               width: 100%;
               border-radius: 6px;
@@ -89,10 +86,24 @@
               <td>Email</td>
               <td>{{ customerObject?.email || "---" }}</td>
             </tr>
+            <tr>
+              <td>Store Open</td>
+              <td>
+                <v-icon size="15">mdi-clock-outline</v-icon>
+                {{ customerObject?.open_time || "---" }}
+              </td>
+            </tr>
+            <tr>
+              <td>Store Close</td>
+              <td>
+                <v-icon size="15">mdi-clock-outline</v-icon>
+                {{ customerObject?.close_time || "---" }}
+              </td>
+            </tr>
           </table>
         </div>
 
-        <div>
+        <!-- <div>
           <img
             :src="customerObject?.profile_picture || '/no-business_profile.png'"
             style="
@@ -103,7 +114,7 @@
               vertical-align: bottom;
             "
           />
-        </div>
+        </div> -->
         <!--   <div>
            <img
             :src="customer?.profile_picture"

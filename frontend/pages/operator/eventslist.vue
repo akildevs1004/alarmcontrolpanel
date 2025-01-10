@@ -31,40 +31,42 @@
       </v-card>
     </v-dialog>
 
-    <v-row style="margin-left: 10px; margin-top: 10px">
+    <v-row style="margin-left: 5px; margin-top: 0px">
       <v-col
         :style="
           'padding:0px;;max-width: 300px; overflow:scroll1;height:' +
-          browserHeight
+          browserHeight +
+          'px'
         "
       >
         <v-card>
           <v-card-text
             :style="
-              'background-color: #ecf0f4;overflow:scroll1;height:' +
-              browserHeight
+              'padding-top:0px;background-color: #ecf0f4;height:' +
+              browserHeight +
+              'px'
             "
           >
-            <Topmenu
+            <!-- <Topmenu
               @refreshEventsList="getDatafromApi()"
               @applyGlobalSearch="getDatafromApi"
-            />
+            /> -->
 
             <v-row
               style="
-                height: 55px;
-                margin-top: 10px;
-                padding-left: 10px;
-                padding-right: 10px;
-                padding-top: 10px;
+                height: 70px;
+                margin-top: 0px;
+                padding-left: 0px;
+                padding-right: 0px;
+                padding-top: 0px;
                 background-color: #fff;
               "
             >
               <v-col cols="4" style="padding: 2px">
+                <label>Property</label>
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
-                  label="Property Type"
                   class="selectfilter"
                   outlined
                   dense
@@ -77,10 +79,10 @@
                 </v-select>
               </v-col>
               <v-col cols="4" style="padding: 2px">
+                <label>Alarm</label>
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
-                  label="Alarm Type"
                   class="selectfilter"
                   outlined
                   dense
@@ -93,10 +95,10 @@
                 </v-select>
               </v-col>
               <v-col cols="4" style="padding: 2px">
+                <label>Event</label>
                 <v-select
                   @change="getDatafromApi()"
                   style="width: 100%"
-                  label="Event Status"
                   class="selectfilter"
                   outlined
                   dense
@@ -120,7 +122,14 @@
               <v-col> No data available </v-col>
             </v-row>
             <v-row>
-              <v-col>
+              <v-col
+                class="eventslistscroll"
+                :style="
+                  'overflow-y: auto; overflow-x: hidden; height:' +
+                  parseInt(browserHeight - 70) +
+                  'px'
+                "
+              >
                 <v-row>
                   <v-col
                     class="pl-0 pr-0 pt-0 pb-2"
@@ -219,7 +228,7 @@
                                   }}
                                 </div>
                                 <div
-                                  style="color: #2f1717"
+                                  style="color: red"
                                   v-if="alarm.alarm_status == 0"
                                 >
                                   {{
@@ -238,6 +247,7 @@
                               font-size: 11px;
                               text-align: center;
                               margin: auto;
+                              padding-right: 20px;
                             "
                           >
                             <div style="color: blue">#{{ alarm.id }}</div>
@@ -289,7 +299,9 @@
       </v-col>
       <v-col style="max-width: 300px; padding-top: 0px">
         <v-card elevation="2">
-          <v-card-text :style="'overflow:scroll1;height:' + browserHeight">
+          <v-card-text
+            :style="'overflow:scroll1;height:' + browserHeight + 'px'"
+          >
             <EventContactNotes
               :key="selectedAlarm.id"
               v-if="selectedAlarm"
@@ -306,7 +318,9 @@
       <v-col style="padding-top: 0px; padding-left: 0px">
         <v-card elevation="2">
           <v-card-text
-            :style="'overflow:hidden;padding:0px;height:' + browserHeight"
+            :style="
+              'overflow:hidden;padding:0px;height:' + browserHeight + 'px'
+            "
           >
             <EventsListBusinessInfoTabs
               v-if="selectedAlarm"
@@ -352,7 +366,7 @@ export default {
   },
   // alarm_event_operator_statistics
   data: () => ({
-    browserHeight: "700px", // Initial height
+    browserHeight: 600, // Initial height
     displayEventsListBusinessInfoTabs: false,
     globalsearch: "",
     keyLogs: 1,
@@ -491,9 +505,9 @@ export default {
 
   async created() {
     this.colorcodes = this.$utils.getAlarmIcons();
-
-    if (window) this.browserHeight = window.innerHeight - 20 + "px";
-
+    try {
+      if (window) this.browserHeight = window.innerHeight - 70;
+    } catch (e) {}
     console.log(this.browserHeight);
   },
   watch: {},

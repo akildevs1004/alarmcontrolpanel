@@ -420,7 +420,7 @@ export default {
         //   align: "center",
         // },
 
-        { text: "Options", value: "options", sortable: false },
+        // { text: "Options", value: "options", sortable: false },
       ],
       // items: [],
       isBackendRequestOpen: false,
@@ -443,6 +443,12 @@ export default {
     },
   },
   created() {
+    if (this.$auth.user.user_type != "security") {
+      this.headers = [
+        ...this.headers, // Spread the existing headers
+        { text: "Options", value: "options", sortable: false }, // Add the new header
+      ];
+    }
     if (this.items.count == 0) {
       this.$emit("closeDialog");
     }
