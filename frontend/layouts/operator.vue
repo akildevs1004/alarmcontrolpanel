@@ -203,10 +203,10 @@
 
       <v-spacer></v-spacer>
       <span><TopMenuClock></TopMenuClock></span>
-      <span class="pr-3 pl-5" style="color: #5d5d5d"
-        >Hi, {{ topMenuDisplayName }}
+      <span class="pr-3 pl-10" style="color: #5d5d5d; padding-left: 30px">
+        {{ topMenuDisplayName }}
 
-        <div style="font-size: 10px">({{ companyName }})</div>
+        <!-- <div style="font-size: 10px">({{ companyName }})</div> -->
       </span>
       <v-menu
         style="z-index: 9999 !important; width: 300px"
@@ -2413,6 +2413,9 @@ button {
 }
 .main-leftcontent .v-navigation-drawer__content {
   background-color: #516067;
+}
+.customerEmergencyContactTabsBGcolor1 .v-slide-group__wrapper {
+  background-color: #fff;
 }
 .customerEmergencyContactTabsBGcolor .v-slide-group__content {
   background-color: #909a9f;

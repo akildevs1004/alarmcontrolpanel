@@ -26,7 +26,7 @@
                   <table class="eventcustomertabselect" style="width: 100%">
                     <tr>
                       <!-- <td>Call Status</td> -->
-                      <td style="width: 60%; padding-top: 20px">
+                      <td style="width: 60%; padding-top: 5px">
                         <label>Call Status</label>
                         <v-select
                           class="employee-schedule-search-box font10"
@@ -36,7 +36,7 @@
                           dense
                           hide-details
                           :items="[
-                            'null',
+                            null,
                             'Answered',
                             'No Answer',
                             'Busy',
@@ -47,9 +47,9 @@
                     </tr>
                     <tr>
                       <!-- <td>Response</td> -->
-                      <td style="padding-top: 20px">
+                      <td style="padding-top: 5px">
+                        <label>Response</label>
                         <v-select
-                          label="Response"
                           class="employee-schedule-search-box font10"
                           height="20px"
                           outlined
@@ -70,9 +70,9 @@
 
                     <tr>
                       <!-- <td>Alarm Status</td> -->
-                      <td style="padding-top: 20px">
+                      <td style="padding-top: 5px">
+                        <label>Alarm Status</label>
                         <v-select
-                          label="Alarm Status"
                           class="employee-schedule-search-box font10"
                           height="20px"
                           outlined
@@ -92,7 +92,8 @@
                     </tr>
                     <tr v-if="event_payload.event_status == 'Closed'">
                       <!-- <td>Contact Secret Code</td> -->
-                      <td style="padding-top: 20px">
+                      <td style="padding-top: 5px">
+                        <label>Contact Secret Code</label>
                         <v-text-field
                           :disabled="
                             event_payload.event_status == 'Closed'
@@ -102,7 +103,6 @@
                           min="0"
                           max="10"
                           class="employee-schedule-search-box font10"
-                          label="Secret Code"
                           dense
                           outlined
                           flat
@@ -159,12 +159,13 @@
               </v-row>
               <v-row>
                 <v-col class="pr-0">
+                  <label>Operator Comments</label>
+
                   <v-textarea
                     outlined
                     class="mt-0 white-color1 font13label"
-                    label="Operator Comments"
                     value=""
-                    height="60px"
+                    height="100px"
                     hide-details
                     v-model="event_payload.notes"
                     style="font-size: 12px"
@@ -173,6 +174,21 @@
               </v-row>
               <v-row>
                 <v-col class="text-center"
+                  ><v-btn
+                    @click="dialogOperatorNotes = false"
+                    class="mt-1"
+                    small
+                    color="#203864"
+                    style="
+                      margin: auto;
+                      margin-top: -10px;
+                      width: 100px;
+                      color: black;
+                      background-color: #ddd;
+                    "
+                    >Cancel</v-btn
+                  ></v-col
+                ><v-col class="text-center"
                   ><v-btn
                     @click="submit"
                     class="mt-1"
@@ -183,6 +199,7 @@
                       margin-top: -10px;
                       width: 100px;
                       color: #fff;
+                      background-color: #007d1f;
                     "
                     >Submit</v-btn
                   ></v-col
@@ -320,8 +337,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card flat elevation="0">
-      <v-card-text style="margin-top: 5px">
+    <v-card elevation="6">
+      <v-card-text
+        :style="
+          'margin-top: 5px;height:' + parseInt(browserHeight - 380) + 'px'
+        "
+      >
         <v-row>
           <v-col
             style="
@@ -337,7 +358,7 @@
                 margin: auto;
                 border-radius: 50%;
                 width: 60px;
-                border: 1px solid #6b6bff;
+                border: 1px solid #ddd;
               "
               :src="
                 globalContactDetails?.profile_picture
@@ -347,7 +368,7 @@
             ></v-img>
           </v-col>
           <v-col style="margin: auto; padding-top: 0px">
-            <div class="bold">
+            <div class="bold" style="color: black">
               {{
                 globalContactDetails?.first_name
                   ? $utils.caps(globalContactDetails.first_name) +
@@ -364,7 +385,7 @@
             <table class="eventcustomertab" style="width: 100%">
               <!-- <tr style="font-weight: bold">
                 <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4"
+                  <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-account-tie</v-icon
                   >
 
@@ -378,8 +399,8 @@
                 </td>
               </tr> -->
               <tr>
-                <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4"
+                <td style="color: black">
+                  <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-cellphone-basic</v-icon
                   >
                   <!-- Mobile -->
@@ -393,8 +414,8 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4"
+                <td style="color: black">
+                  <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-phone-classic</v-icon
                   >
                   <!-- Phone -->
@@ -408,8 +429,8 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4"
+                <td style="color: black">
+                  <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-whatsapp</v-icon
                   >
                   <!-- Whatsapp -->
@@ -423,8 +444,10 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4">mdi-at</v-icon>
+                <td style="color: black">
+                  <v-icon color="2038c011111" size="16" class="pr-6"
+                    >mdi-at</v-icon
+                  >
                   <!-- E-Mail -->
                   <!-- </td>
                 <td> -->
@@ -436,8 +459,8 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <v-icon color="#2038c0" size="16" class="pr-4"
+                <td style="color: black">
+                  <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-message-bulleted</v-icon
                   >
                   <!-- Notes -->
@@ -459,15 +482,12 @@
             ><v-btn
               @click="dialogOperatorNotes = true"
               class="mt-4"
+              dense
               small
               color="#203864"
-              style="
-                margin: auto;
-
-                width: 100px;
-                color: #fff;
-              "
-              >Add Notes</v-btn
+              style="margin: auto; font-size: 12px; width: 100px; color: #fff"
+            >
+              Comments</v-btn
             ></v-col
           >
         </v-row>
@@ -481,7 +501,7 @@ import AlarmForwardEvent from "../Alarm/AlarmForwardEvent.vue";
 
 export default {
   components: {},
-  props: ["alarmId", "customer", "contact_type"],
+  props: ["alarmId", "customer", "contact_type", "browserHeight"],
   data: () => ({
     dialogOperatorNotes: false,
     selectContactButton: null,

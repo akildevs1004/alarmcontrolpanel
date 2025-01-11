@@ -60,6 +60,7 @@
                 padding-right: 0px;
                 padding-top: 0px;
                 background-color: #fff;
+                font-size: 12px;
               "
             >
               <v-col cols="4" style="padding: 2px">
@@ -70,7 +71,7 @@
                   class="selectfilter"
                   outlined
                   dense
-                  height="20px"
+                  height="16px"
                   v-model="filterBuildingType"
                   :items="[{ id: null, name: 'All' }, ...buildingTypes]"
                   item-text="name"
@@ -147,10 +148,10 @@
                           paddingRight: '5px',
                           border:
                             selectedAlarm.id === alarm.id
-                              ? '1px solid #6b6bff'
+                              ? '1px solid #ecf0f4'
                               : '0px',
                           backgroundColor:
-                            selectedAlarm.id === alarm.id ? '#cdd9ff' : '#FFF',
+                            selectedAlarm.id === alarm.id ? '#ecf0f4' : '#FFF',
                         }"
                       >
                         <v-row
@@ -298,9 +299,13 @@
         </v-card>
       </v-col>
       <v-col style="max-width: 300px; padding-top: 0px">
-        <v-card elevation="2">
+        <v-card elevation="0">
           <v-card-text
-            :style="'overflow:scroll1;height:' + browserHeight + 'px'"
+            :style="
+              ' background-color:#ecf0f4;overflow:scroll1;height:' +
+              browserHeight +
+              'px'
+            "
           >
             <EventContactNotes
               :key="selectedAlarm.id"
@@ -310,6 +315,7 @@
               :alarm="selectedAlarm"
               @emitreloadEventNotes3="reloadEventNotes4()"
               @emitShowCustomerInfoTabs="changeStatusBusinessInfoTabs"
+              :browserHeight="browserHeight"
             />
           </v-card-text>
         </v-card>
@@ -318,9 +324,7 @@
       <v-col style="padding-top: 0px; padding-left: 0px">
         <v-card elevation="2">
           <v-card-text
-            :style="
-              'overflow:hidden;padding:0px;height:' + browserHeight + 'px'
-            "
+            :style="' padding:0px;height:' + parseInt(browserHeight) + 'px'"
           >
             <EventsListBusinessInfoTabs
               v-if="selectedAlarm"
@@ -328,6 +332,7 @@
               :device="selectedAlarm?.device"
               :alarm="selectedAlarm"
               :key="selectedAlarm.id"
+              :browserHeight="browserHeight"
             />
           </v-card-text>
         </v-card>

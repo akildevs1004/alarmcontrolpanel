@@ -6,41 +6,121 @@
       right
       class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
     >
-      <v-tab style="font-size: 10px; min-width: 50px !important">
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
         Google Map</v-tab
       >
-      <v-tab style="font-size: 10px; min-width: 50px !important"
-        >Premises Photo</v-tab
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
+        Camera</v-tab
       >
-      <v-tab style="font-size: 10px; min-width: 50px !important">Address</v-tab>
-      <v-tab style="font-size: 10px; min-width: 50px !important"
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+        >Premises Photo</v-tab
+      ><v-tab style="font-size: 12px; min-width: 50px !important; color: black"
         >Floor Plan</v-tab
       >
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+        >Address</v-tab
+      >
 
-      <v-tab style="font-size: 10px; min-width: 50px !important"> Camera</v-tab>
-      <v-tab style="font-size: 10px; min-width: 50px !important">System</v-tab>
-      <v-tab style="font-size: 10px; min-width: 50px !important">Logs</v-tab>
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+        >System</v-tab
+      >
+      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+        >Logs</v-tab
+      >
       <v-tab-item
         ><CompGoogleMapLatLan
           v-if="customer"
           :latitude="customer.latitude"
           :longitude="customer.longitude"
           :title="customer.building_name"
-          :mapheight="'650px'"
+          :mapheight="parseInt(browserHeight - 25) + 'px'"
           :contact_id="customer.id"
         />
       </v-tab-item>
+
+      <v-tab-item>
+        <v-row>
+          <v-col>
+            <div
+              style="text-align: center; min-height: 600px; padding-top: 50px"
+              v-if="customer?.cameras.length == 0"
+            >
+              No Cameras available
+            </div>
+            <v-carousel
+              v-model="currentCameraSlide"
+              v-else-if="customer"
+              height="500"
+              hide-delimiter-background
+              show-arrows-on-hover
+            >
+              <template
+                v-for="(item, index) in customer.cameras"
+                :name="item.id"
+              >
+                <v-carousel-item style="padding-top: 50px">
+                  <v-chip color="#203864" style="color: #fff" label
+                    >{{ index + 1 }}: {{ item.title }}</v-chip
+                  >
+                  <iframe
+                    :src="
+                      'https://rtmp.oxsai.com/player.html?url=' +
+                      item.camera_url
+                    "
+                    width="100%"
+                    height="600"
+                    style="border: 0; padding-top: 20px"
+                    allowfullscreen=""
+                    referrerpolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </v-carousel-item>
+              </template>
+            </v-carousel>
+          </v-col>
+        </v-row>
+        <!-- <v-row>
+          <v-col style="width: 600px; overflow: scroll">
+            <v-row justify="center" dense>
+              <v-col
+                class="thumbnail-wrapper"
+                v-for="(item, index) in customer.cameras"
+                :key="'thumb-' + index"
+                style="max-width: 150px; text-align: center"
+              >
+                <div
+                  @click="currentCameraSlide = index"
+                  style="
+                    height: 100px;
+                    width: 150px;
+                    margin: auto;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                  :class="{ 'active-thumbnail': index === currentCameraSlide }"
+                >
+                  <v-icon size="100">mdi-camera</v-icon>
+                </div>
+                <label style="font-size: 12px; text-align: center">{{
+                  item.title
+                }}</label>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row> -->
+      </v-tab-item>
+
       <v-tab-item>
         <v-row>
           <v-col>
             <v-carousel
               v-model="currentSlide"
               v-if="customer"
-              height="500"
               hide-delimiter-background
               hide-arrows-on-hover
               hide-delimiters
               hide-arrows
+              :style="'height:' + parseInt(browserHeight - 200) + 'px'"
             >
               <template
                 v-for="(item, index) in customer.profile_pictures"
@@ -109,91 +189,22 @@
           </v-col>
         </v-row>
       </v-tab-item>
-      <v-tab-item
-        ><EventsBusinessTab1Address :customer="customer"
-      /></v-tab-item>
+
       <v-tab-item>
         <EventsBusinessTabFloorPlan
           v-if="customer"
           :alarm="alarm"
           :customer="customer"
+          :browserHeight="browserHeight"
         />
       </v-tab-item>
 
+      <v-tab-item
+        ><EventsBusinessTab1Address :customer="customer"
+      /></v-tab-item>
+
       <v-tab-item>
-        <v-row>
-          <v-col>
-            <div
-              style="text-align: center; min-height: 600px"
-              v-if="customer?.cameras.length == 0"
-            >
-              No Cameras available
-            </div>
-            <v-carousel
-              v-model="currentCameraSlide"
-              v-else-if="customer"
-              height="500"
-              hide-delimiter-background
-              show-arrows-on-hover
-            >
-              <template
-                v-for="(item, index) in customer.cameras"
-                :name="item.id"
-              >
-                <v-carousel-item>
-                  <div style="text-align: Left">
-                    {{ index + 1 }}: {{ item.title }}
-                  </div>
-                  <iframe
-                    :src="
-                      'https://rtmp.oxsai.com/player.html?url=' +
-                      item.camera_url
-                    "
-                    width="100%"
-                    height="500"
-                    style="border: 0"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                  ></iframe>
-                </v-carousel-item>
-              </template>
-            </v-carousel>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col style="width: 600px; overflow: scroll">
-            <v-row justify="center" dense>
-              <v-col
-                class="thumbnail-wrapper"
-                v-for="(item, index) in customer.cameras"
-                :key="'thumb-' + index"
-                style="max-width: 150px; text-align: center"
-              >
-                <div
-                  @click="currentCameraSlide = index"
-                  style="
-                    height: 100px;
-                    width: 150px;
-                    margin: auto;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                  "
-                  :class="{ 'active-thumbnail': index === currentCameraSlide }"
-                >
-                  <v-icon size="100">mdi-camera</v-icon>
-                </div>
-                <label style="font-size: 10px; text-align: center">{{
-                  item.title
-                }}</label>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-tab-item>
-      <v-tab-item>
-        <div>
+        <div style="padding-top: 20px">
           <table class="operatorcustomerTop1" style="width: 100%">
             <tr>
               <td class="bold">#</td>
@@ -249,7 +260,7 @@ export default {
     CompGoogleMapLatLan,
     EventsBusinessTabFloorPlan,
   },
-  props: ["customer", "alarm", "device"],
+  props: ["customer", "alarm", "device", "browserHeight"],
   data: () => ({
     areaList: [
       { id: "01", name: "Area 1" },

@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col class="pt-3">
         <table class="operatorcustomerTop1" style="width: 100%" v-if="customer">
-          <tr class="bold">
-            <td>Name</td>
+          <tr class=" ">
+            <td style="width: 150px">Name</td>
             <td class="bold">{{ customer.building_name }}</td>
           </tr>
           <tr>

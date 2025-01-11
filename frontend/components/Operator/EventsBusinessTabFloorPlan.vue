@@ -5,20 +5,23 @@
         <v-carousel
           v-model="currentSlide"
           v-if="customer?.photos"
-          height="500"
           hide-delimiter-background
           show-arrows-on-hover
           @change="keyPlottings++"
           hide-arrows-on-hover
           hide-delimiters
           hide-arrows
+          :style="'height:' + parseInt(browserHeight - 180) + 'px'"
         >
           <v-carousel-item
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
             v-if="item.photo_plottings[0]"
           >
-            <div class="photo-title">{{ index + 1 }}: {{ item.title }}</div>
+            <v-chip color="#203864" style="color: #fff" label
+              >{{ index + 1 }}: {{ item.title }}</v-chip
+            >
+
             <img
               :id="
                 'plotting' +
@@ -26,7 +29,9 @@
               "
               class="photo-img"
               :src="item.picture"
-              style="width: 100%; height: 500px"
+              :style="
+                'width: 100%; height: ' + parseInt(browserHeight - 220) + 'px'
+              "
               @load="
                 onImageLoad(
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
@@ -132,7 +137,7 @@
 import PlottingIcon from "./PlottingIcon.vue";
 export default {
   components: { PlottingIcon },
-  props: ["customer", "alarm"],
+  props: ["customer", "alarm", "browserHeight"],
   data: () => ({
     tab: "",
     currentSlide: 0,

@@ -1,65 +1,61 @@
 <template>
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
   <div v-else>
-    <v-row>
-      <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 200px">
-          <!-- <v-card-title>Armed </v-card-title> -->
-          <v-card-text>
-            <AlamCustomerEventsPieChart
-              :key="key"
-              :name="'AlamCustomerEventsPieChart'"
-              :date_from="date_from"
-              :date_to="date_to"
-          /></v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 200px">
-          <!-- <v-card-title>Live</v-card-title> -->
-          <v-card-text>
-            <AlamDeviceLiveCountPieChart
-              :key="key"
-              name="AlamDeviceLiveCountPieChart"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 200px">
-          <!-- <v-card-title>Contract</v-card-title> -->
-          <v-card-text>
-            <AlamCustomerContractPieChart
-              :key="key"
-              name="AlamCustomerContractPieChart"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="3" class="p-1">
-        <v-card class="elevation-2" style="height: 200px">
-          <!-- <v-card-title>Alarms</v-card-title> -->
-          <v-card-text class="p-0">
-            <AlamDeviceCountPieChart
-              :key="key"
-              :name="'AlamDeviceCountPieChart'"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-row
+      ><v-col cols="9"
+        ><v-row>
+          <v-col>
+            <v-card elevation="2"
+              ><v-card-text
+                ><v-row><v-col>SOS</v-col><v-col>13</v-col></v-row></v-card-text
+              ></v-card
+            >
+          </v-col>
+          <v-col>
+            <v-card elevation="2"
+              ><v-card-text
+                ><v-row><v-col>SOS</v-col><v-col>13</v-col></v-row></v-card-text
+              ></v-card
+            > </v-col
+          ><v-col>
+            <v-card elevation="2"
+              ><v-card-text
+                ><v-row><v-col>SOS</v-col><v-col>13</v-col></v-row></v-card-text
+              ></v-card
+            >
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card style="height: 250px" elevation="2"
+              ><v-card-text>System Status</v-card-text></v-card
+            > </v-col
+          ><v-col>
+            <v-card style="height: 250px" elevation="2"
+              ><v-card-text>Alarm Status</v-card-text></v-card
+            >
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <v-card class="elevation-2">
-          <v-card-text
-            class="mt-0 pr-8"
-            :style="'min-height:' + (windowHeight - 330) + 'px'"
-          >
-            <AlamAllEventsDashboard name="dashboardPieChart" /> </v-card-text
-        ></v-card>
-      </v-col>
-    </v-row>
+        <v-row>
+          <v-col>
+            <v-card style="height: 250px" elevation="2"
+              ><v-card-text>Reports Tabs</v-card-text></v-card
+            >
+          </v-col>
+        </v-row> </v-col
+      ><v-col cols="3">
+        <v-row>
+          <v-col>
+            <v-card elevation="2"
+              ><v-card-text
+                ><v-row><v-col>SOS</v-col><v-col>13</v-col></v-row></v-card-text
+              ></v-card
+            >
+          </v-col>
+        </v-row></v-col
+      ></v-row
+    >
   </div>
 </template>
 

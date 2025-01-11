@@ -16,28 +16,33 @@
             /> -->
             <v-row>
               <v-col style="text-align: center">
-                <img
-                  :src="customer.profile_picture"
-                  style="
-                    width: 50%;
-                    height: auto;
-                    margin-left: -2px;
-
-                    vertical-align: bottom;
-                  "
-              /></v-col>
-            </v-row>
-            <v-row>
-              <v-col>
                 <v-card>
+                  <v-card-text style="padding: 0px">
+                    <img
+                      :src="customer.profile_picture"
+                      style="
+                        width: 100%;
+                        height: auto;
+                        margin-left: 0px;
+
+                        vertical-align: bottom;
+                      "
+                    />
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row style="margin-top: 0px">
+              <v-col>
+                <v-card elevation="2">
                   <v-card-text style="padding: 0px">
                     <table
                       class="eventcustomertab"
-                      style="width: 100%; height: 150px"
+                      style="width: 100%; height: 150px; color: #0045e5"
                     >
                       <tr>
                         <td
-                          class="bold"
+                          class="bold1"
                           colspan="2"
                           style="font-size: 15px !important; color: black"
                         >
@@ -49,8 +54,8 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="bold">Event ID : #{{ alarm.id }}</td>
-                        <td class="bold">
+                        <td class="bol1">Event ID : #{{ alarm.id }}</td>
+                        <td class="bold1">
                           {{
                             $dateFormat.formatDateMonthYear(
                               alarm.alarm_start_datetime
@@ -59,10 +64,10 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="bold">
+                        <td class="bold1">
                           Type :{{ alarm.alarm_type ?? "---" }}
                         </td>
-                        <td class="bold">
+                        <td class="bold1">
                           Category :
                           <span v-if="alarm.alarm_category == 1">Critical</span>
                           <span v-else-if="alarm.alarm_category == 2"
@@ -109,9 +114,15 @@
           center-active
           right
           class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
+          style="background-color: #fff"
         >
           <v-tab
-            style="font-size: 10px; min-width: 50px !important"
+            style="
+              font-size: 10px;
+              min-width: 50px !important;
+              background-color: #fff;
+              color: black;
+            "
             v-if="
               contact.address_type.toLowerCase() == 'primary' ||
               contact.address_type.toLowerCase() == 'secondary' ||
@@ -132,15 +143,17 @@
             :key="contact.id + 50"
             name="index+50"
           >
-            <v-card class="elevation-1">
-              <EventCustomerTabContacts
-                :alarmId="alarm.id"
-                v-if="contact"
-                :customer="alarm.device.customer"
-                :contact_type="contact.address_type"
-                :key="contact.address_type"
-                @emitreloadEventNotesStep1="emitreloadEventNotes2"
-              />
+            <v-card elevation="2">
+              <v-card-text :style="'background-color: #FFF; padding: 2px; '">
+                <EventCustomerTabContacts
+                  :alarmId="alarm.id"
+                  v-if="contact"
+                  :customer="alarm.device.customer"
+                  :contact_type="contact.address_type"
+                  :key="contact.address_type"
+                  @emitreloadEventNotesStep1="emitreloadEventNotes2"
+                  :browserHeight="browserHeight"
+              /></v-card-text>
             </v-card>
           </v-tab-item>
         </v-tabs>
@@ -154,7 +167,7 @@ import EventCustomerTabContacts from "./EventCustomerTabContacts.vue";
 
 export default {
   components: { EventCustomerTabContacts },
-  props: ["_id", "isPopup", "customer", "alarm", "colorcodes"],
+  props: ["_id", "isPopup", "customer", "alarm", "colorcodes", "browserHeight"],
   data: () => ({
     tab: "",
   }),

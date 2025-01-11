@@ -112,7 +112,7 @@
           "
         >
           <div style="min-height: 100px">
-            <div style="width: 100%" class="text-center">
+            <div class="text-center" style="width: 100%; padding-top: 20px">
               <v-img
                 class="text-center"
                 style="
@@ -121,7 +121,7 @@
                   margin: auto;
                   text-align: center;
                 "
-                src="/logo_header.png"
+                src="/login/login-logo.png"
               ></v-img>
             </div>
             <!-- <h3 class="pb-5 pt-0" style="font-size: 14px">
@@ -129,7 +129,7 @@
               <span style="font-size: 14px"> Alarm Control Panel </span>
             </h3> -->
           </div>
-          <div style="color: #fff; text-align: left" class="pt-10">
+          <div style="color: #fff; text-align: left" class="pt-8">
             <v-form
               style="padding: 20px"
               ref="form"
