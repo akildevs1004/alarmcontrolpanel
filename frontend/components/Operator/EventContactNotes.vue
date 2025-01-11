@@ -17,14 +17,14 @@
             <v-row>
               <v-col style="text-align: center">
                 <v-card>
-                  <v-card-text style="padding: 0px">
+                  <v-card-text style="padding: 0px; height: 170px">
                     <img
                       :src="customer.profile_picture"
                       style="
                         width: 100%;
                         height: auto;
                         margin-left: 0px;
-
+                        height: 170px;
                         vertical-align: bottom;
                       "
                     />
