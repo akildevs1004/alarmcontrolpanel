@@ -191,6 +191,7 @@ export default {
       model_number: "",
       device_type: "",
       serial_number: "",
+
       picture: "",
       company_id: 0,
     },
@@ -245,10 +246,13 @@ export default {
       this.payload_serial_number.editId = this.editId;
       this.payload_serial_number.company_id = this.item.company_id;
       this.payload_serial_number.serial_number = this.item.serial_number;
+      this.new_serial_number = this.item.serial_number;
+
       this.payload_serial_number.model_number = this.item.model_number;
       this.payload_serial_number.device_description =
         this.item.device_description;
       this.payload_serial_number.device_type = this.item.device_type;
+
       this.primary_previewImage = this.item.picture;
     }
   },

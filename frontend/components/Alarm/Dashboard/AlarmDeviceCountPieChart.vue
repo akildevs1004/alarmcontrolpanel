@@ -18,17 +18,18 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row style="margin-top: -27px"
+    <!-- <v-row style="margin-top: -27px"
       ><v-col cols="8" style="color: black; font-size: 12px">Armed</v-col>
 
       <v-col cols="4" class="text-right align-right"
-        ><img
+        >
+        <img
           @click="showDialogEvents()"
           src="/dashboard-arrow.png"
           style="width: 18px; padding-top: 5px"
       /></v-col>
-    </v-row>
-    <v-divider color="#5a82ca" style="margin-bottom: 10px" />
+    </v-row> 
+    <v-divider color="#5a82ca" style="margin-bottom: 10px" />-->
     <v-row class="pt-0 mt-0">
       <v-col
         cols="7"
@@ -57,7 +58,37 @@
           margin: auto;
         "
       >
+        <v-row style="margin-top: -30px">
+          <v-col cols="12" class="text-center justify-center">
+            <div style="font-size: 35px; color: #07af50; font-weight: bold">
+              {{ categories ? categories.armed : "0" }}
+            </div>
+
+            <div style="font-size: 20px">Armed</div>
+          </v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
         <v-row>
+          <v-col cols="12" class="text-center justify-center mt-2">
+            <div style="font-size: 35px; color: #fe0004; font-weight: bold">
+              {{ categories ? categories.armed : "0" }}
+            </div>
+
+            <div style="font-size: 20px">DisArm</div>
+          </v-col>
+        </v-row>
+        <v-divider color="#dddddd" />
+        <v-row>
+          <v-col cols="12" class="text-center justify-center mt-2">
+            <div style="font-size: 35px; color: #ffbe00; font-weight: bold">
+              {{ categories ? categories.armed : "0" }}
+            </div>
+
+            <div style="font-size: 20px">Others</div>
+          </v-col>
+        </v-row>
+
+        <!-- <v-row>
           <v-col cols="8"
             ><v-icon color="#92d050">mdi mdi-square-medium</v-icon>Armed</v-col
           ><v-col cols="4" style="padding-left: 0px">{{
@@ -73,7 +104,7 @@
             categories ? categories.total - categories.armed : "0"
           }}</v-col>
         </v-row>
-        <v-divider color="#dddddd" />
+        <v-divider color="#dddddd" /> -->
       </v-col>
     </v-row>
 
@@ -121,15 +152,15 @@ export default {
           margin: 0,
         },
         //colors: ["#033F9B", "#DC7633", "#02B64B", "#ff0000", "#808080", ""],
-        colors: ["#92d050", "#ff0000"],
+        colors: ["#07af50", "#fe0004", "#ffbe00"],
 
         series: [],
         chart: {
           toolbar: {
             show: false,
           },
-          width: 180,
-          height: 180,
+          width: 200,
+          height: 200,
           type: "donut",
         },
         customTotalValue: 0,
@@ -249,8 +280,11 @@ export default {
       this.chartOptions.labels[0] = "Armed";
       this.chartOptions.series[0] = data.armed;
 
-      this.chartOptions.labels[1] = "Disarmed";
+      this.chartOptions.labels[1] = "DisArm";
       this.chartOptions.series[1] = data.total - data.armed;
+
+      this.chartOptions.labels[2] = "Others";
+      this.chartOptions.series[2] = 0;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 

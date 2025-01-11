@@ -79,7 +79,7 @@ class MasterDeviceSerialNumbersController extends Controller
         $request->validate([
             'company_id' => 'nullable',
             'device_type' => 'nullable',
-            'serial_number' => 'required',
+            'new_serial_number' => 'required',
             'model_number' => 'required',
             'device_description' => 'nullable',
             'picture' => 'nullable',
@@ -87,6 +87,10 @@ class MasterDeviceSerialNumbersController extends Controller
 
 
         $data = $request->all();
+
+
+        $data["serial_number"] = $data["new_serial_number"];
+        unset($data["new_serial_number"]);
         $data["assigned_datetime"] = date("Y-m-d H:i:s");
         $data["status_id"] = 1;
 
@@ -96,12 +100,12 @@ class MasterDeviceSerialNumbersController extends Controller
             $file->move(public_path('/master_devices'), $fileName);
             $data['picture'] = $fileName;
         }
-        $data["device_id"] = $request->serial_number;
+        $data["device_id"] = $request->new_serial_number;
         $data["status_id"] = 2;
         unset($data["attachment"]);
         unset($data["editId"]);
 
-        $isExist = Device::where('serial_number', $request->serial_number)->first();
+        $isExist = Device::where('serial_number', $request->new_serial_number)->first();
 
 
         if ($request->filled("editId")) {

@@ -858,8 +858,8 @@ export default {
     };
   },
   created() {
-    console.log("company auth", this.$auth);
-    console.log("company", this.$auth.user);
+    // console.log("company auth", this.$auth);
+    // console.log("company", this.$auth.user);
 
     if (this.$auth.user.user_type != "company") {
       try {
