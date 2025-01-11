@@ -308,6 +308,8 @@ export default {
       this.$axios.get(`/logout`).then(({ res }) => {
         this.$auth.logout();
       });
+
+      this.$router.push("/logout");
     },
   },
   computed: {
