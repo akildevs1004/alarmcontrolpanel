@@ -215,7 +215,7 @@ export default {
 
       this.chartOptions.colors = this.componentData.colors;
 
-      this.chartOptions.customTotalValue = this.componentData.customTotalValue;
+      this.chartOptions.customTotalValue = this.componentData.series[0]; // this.componentData.customTotalValue;
 
       if (this.chart) {
         this.chart.destroy();
