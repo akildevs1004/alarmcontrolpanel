@@ -71,7 +71,7 @@
         <v-row>
           <v-col cols="12" class="text-center justify-center mt-2">
             <div style="font-size: 35px; color: #fe0004; font-weight: bold">
-              {{ categories ? categories.armed : "0" }}
+              {{ categories ? categories.total - categories.armed : "0" }}
             </div>
 
             <div style="font-size: 15px">DisArm</div>
