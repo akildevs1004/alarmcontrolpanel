@@ -1123,8 +1123,8 @@ export default {
       };
 
       const defaultRoute = {
-        name: "alarm_intruderdashboard",
-        path: "/alarm/intruderdashboard",
+        name: "alarm_dashboard",
+        path: "/alarm/dashboard",
       };
 
       const routeConfig = routeMap[this.$route.name] || defaultRoute;
