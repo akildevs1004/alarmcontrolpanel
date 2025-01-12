@@ -242,6 +242,7 @@
       </span>
 
       <v-spacer></v-spacer>
+      <span class="pl-5"><TopMenuClock></TopMenuClock></span>
       <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
         {{ $auth.user.name }}
       </div>
@@ -709,6 +710,7 @@ import employee_top_menu from "../menus/employee_modules_top.json";
 import controlpanel_top_menu from "../menus/alarm_controlpanel_top_menu.json";
 
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
+import TopMenuClock from "../components/Operator/TopMenuClock.vue";
 
 export default {
   head() {
@@ -723,6 +725,7 @@ export default {
   },
   components: {
     AlarmPopupAllAlarmEvents,
+    TopMenuClock,
   },
   data() {
     return {
@@ -2661,5 +2664,44 @@ td {
 
   padding-bottom: 0px;
   margin: auto;
+}
+.font-black div {
+  color: black;
+}
+
+.table-font12 td {
+  font-size: 12px !important;
+}
+.eventslistscroll {
+  overflow: auto; /* or scroll */
+}
+
+.eventslistscroll::-webkit-scrollbar {
+  width: 6px; /* Width of the vertical scrollbar */
+  height: 6px; /* Height of the horizontal scrollbar */
+}
+
+.eventslistscroll::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.eventslistscroll::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Scrollbar color on hover */
+}
+
+.eventslistscroll::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 10px;
+}
+
+/* For Firefox */
+.eventslistscroll {
+  scrollbar-width: thin; /* Reduces width of the scrollbar */
+  scrollbar-color: #888 #f1f1f1; /* Thumb and track colors */
+}
+
+.eventslistscroll .v-data-footer__select {
+  margin-right: -8px !important;
 }
 </style>

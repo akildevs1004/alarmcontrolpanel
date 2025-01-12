@@ -64,7 +64,7 @@
               {{ categories ? categories.armed : "0" }}
             </div>
 
-            <div style="font-size: 20px">Armed</div>
+            <div style="font-size: 15px">Armed</div>
           </v-col>
         </v-row>
         <v-divider color="#dddddd" />
@@ -74,7 +74,7 @@
               {{ categories ? categories.armed : "0" }}
             </div>
 
-            <div style="font-size: 20px">DisArm</div>
+            <div style="font-size: 15px">DisArm</div>
           </v-col>
         </v-row>
         <v-divider color="#dddddd" />
@@ -84,7 +84,7 @@
               {{ categories ? categories.armed : "0" }}
             </div>
 
-            <div style="font-size: 20px">Others</div>
+            <div style="font-size: 15px">Others</div>
           </v-col>
         </v-row>
 

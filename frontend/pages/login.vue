@@ -177,7 +177,11 @@
               </div>
 
               <div class="text-center pt-1 pt-10">
-                <span v-if="msg" class="error--text111" style="color: #ff9f87">
+                <span
+                  v-if="msg"
+                  class="error--text111"
+                  style="color: #ff9f87; font-size: 12px"
+                >
                   {{ msg }}
                 </span>
                 <v-btn
@@ -335,12 +339,29 @@ export default {
             // }, 1000 * 2);
           })
           .catch(({ response }) => {
+            console.log("response", response);
+            console.log("response", response.data);
+
+            if (response) {
+            } else if (response.data == undefined) {
+              this.snackbar = true;
+              this.snackbarMessage =
+                "Server Unable to connect to Login validation";
+            }
+
             if (!response) {
               return false;
             }
             let { status, data, statusText } = response;
             this.msg = status == 422 ? data.message : statusText;
             setTimeout(() => (this.loading = false), 2000);
+            if (statusText == "") {
+              this.snackbar = true;
+              this.snackbarMessage =
+                "Server Unable to connect to Login validation";
+
+              this.msg = this.snackbarMessage;
+            }
           });
       } else {
         this.snackbar = true;

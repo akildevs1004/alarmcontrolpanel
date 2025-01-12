@@ -238,17 +238,17 @@
         class="text-right"
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
-        <v-row class="mt-0" v-if="showFilters">
+        <v-row class="mt-0">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
-            <h3>Alarm Events</h3></v-col
-          >
+            <h3 style="color: black; font-weight: normal">Alarm Events</h3>
+          </v-col>
 
           <v-col
             :cols="sensorItems.length > 1 ? 8 : 12"
             class="text-right"
             style="width: 600px; padding: 0px"
           >
-            <v-row>
+            <v-row v-if="showFilters == 'true'">
               <v-col cols="7">
                 <v-icon
                   loading="true"
@@ -476,6 +476,13 @@
                       </template>
                       <template v-slot:item.property="{ item }">
                         {{ item.device?.customer?.buildingtype?.name ?? "---" }}
+
+                        <!-- <div class="secondary-value">
+                          {{ item.device?.customer?.area }}
+                        </div> -->
+                        <div class="secondary-value">
+                          {{ item.device?.customer?.city }}
+                        </div>
                       </template>
                       <template v-slot:item.zone="{ item }">
                         <div>{{ item.zone }}</div>
@@ -713,7 +720,7 @@ export default {
 
         { text: "Customer", value: "customer", sortable: false },
         { text: "Property", value: "property", sortable: false },
-        { text: "Address", value: "address", sortable: false },
+        // { text: "Address", value: "address", sortable: false },
 
         // { text: "City", value: "city", sortable: false },
 

@@ -2,7 +2,9 @@
   <div>
     <v-row>
       <v-col md="10">
-        <h4 class="pl-2">Operators Live</h4>
+        <h3 class="pl-2" style="font-weight: normal; color: black">
+          Operators Live
+        </h3>
       </v-col>
       <v-col md="2" class="text-end">
         <v-menu bottom left>
@@ -28,6 +30,10 @@
       :items="logs"
       :loading="loading"
       hide-default-header
+      :footer-props="{
+        itemsPerPage: 8,
+        itemsPerPageOptions: [8, 10, 50, 100, 500, 1000],
+      }"
     >
       <template v-slot:item.employee.pic="{ item, index }">
         <v-row no-gutters>
@@ -104,9 +110,9 @@ export default {
       totalRowsCount: 0,
 
       total: 0,
-      options: { perPage: 10 },
+      options: { perPage: 8 },
       cumulativeIndex: 1,
-      perPage: 10,
+      perPage: 8,
       currentPage: 1,
       headers: [
         {
@@ -153,6 +159,11 @@ export default {
     setTimeout(() => {
       this.getRecords();
     }, 1000 * 8);
+
+    // setTimeout(() => {
+    //   this.loading = false; // Stop loading
+    //   this.triggerFirstPage(); // Trigger initial actions
+    // }, 1000 * 20); // Example delay for loading
   },
   created() {},
   computed: {
@@ -170,6 +181,15 @@ export default {
     },
   },
   methods: {
+    // triggerFirstPage() {
+    //   console.log("First 8 items are displayed"); // Perform any other actions here
+    // },
+    // onPageChange(page) {
+    //   console.log("Page changed to:", page);
+    // },
+    // onItemsPerPageChange(itemsPerPage) {
+    //   console.log("Items per page changed to:", itemsPerPage);
+    // },
     viewLogs() {
       this.$router.push("/web_login_logs");
     },
@@ -189,12 +209,14 @@ export default {
       this.perPage = itemsPerPage;
       this.currentPage = page;
 
+      if (!itemsPerPage) itemsPerPage = 8;
+
       // if (!itemsPerPage) return false;
       this.loading = true;
       this.$axios
         .get(`operators_live_status`, {
           params: {
-            per_page: 5,
+            per_page: itemsPerPage,
             page: page,
             sortBy: sortedBy,
             sortDesc: sortedDesc,

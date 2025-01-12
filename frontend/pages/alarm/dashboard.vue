@@ -120,7 +120,16 @@
           ><v-col>
             <v-card style="height: 275px" elevation="2"
               ><v-card-text
-                ><h3 style="color: black; font-weight: normal">Alarm Status</h3>
+                ><h3
+                  style="
+                    color: black;
+                    font-weight: normal;
+                    margin-top: -10px;
+                    padding-bottom: 10px;
+                  "
+                >
+                  Alarm Status
+                </h3>
 
                 <v-row
                   ><v-col cols="4">
@@ -151,9 +160,17 @@
 
         <v-row>
           <v-col>
-            <v-card style="height: 275px" elevation="2"
-              ><v-card-text>Reports Tabs</v-card-text></v-card
-            >
+            <v-card
+              style="height: 500px; overflow-y: auto; overflow-x: hidden"
+              elevation="2"
+              class="eventslistscroll table-font12"
+              ><v-card-text
+                ><AllEventsDashboard2
+                  name="AllEvents1"
+                  showFilters="false"
+                  showTabs="true"
+                /> </v-card-text
+            ></v-card>
           </v-col>
         </v-row> </v-col
       ><v-col cols="3">
@@ -200,7 +217,7 @@
               style="height: 300px; background-color: transparent"
               elevation="0"
             >
-              <v-card-text>
+              <v-card-text class="font-black">
                 <v-row>
                   <v-col
                     style="padding: 5px; padding-left: 0px; padding-top: 0px"
@@ -208,11 +225,11 @@
                     <v-card style="height: 80px" elevation="2">
                       <v-card-text class="m-0 p-0">
                         <v-row
-                          ><v-col style="height: 20px"
-                            ><v-icon size="25" style="color: green"
-                              >mdi-account-outline</v-icon
-                            ></v-col
-                          >
+                          ><v-col style="height: 20px">
+                            <img
+                              src="/icons/medical_icon.png"
+                              style="width: 25px"
+                          /></v-col>
                         </v-row>
                         <v-row>
                           <v-col
@@ -222,12 +239,12 @@
                               margin-top: -10px;
                             "
                           >
-                            <div style="font-size: 20px">
+                            <div style="font-size: 30px">
                               {{
                                 categoriesStats ? categoriesStats.medical : 0
                               }}
                             </div>
-                            <div>Medical</div>
+                            <div style="padding-top: 5px">Medical</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -240,10 +257,10 @@
                       <v-card-text class="m-0 p-0">
                         <v-row
                           ><v-col style="height: 20px"
-                            ><v-icon size="25" style="color: green"
-                              >mdi-account-outline</v-icon
-                            ></v-col
-                          >
+                            ><img
+                              src="/icons/fire_icon.png"
+                              style="width: 25px"
+                          /></v-col>
                         </v-row>
                         <v-row>
                           <v-col
@@ -253,10 +270,10 @@
                               margin-top: -10px;
                             "
                           >
-                            <div style="font-size: 20px">
+                            <div style="font-size: 30px">
                               {{ categoriesStats ? categoriesStats.fire : 0 }}
                             </div>
-                            <div>Fire</div>
+                            <div style="padding-top: 5px">Fire</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -272,10 +289,10 @@
                       <v-card-text class="m-0 p-0">
                         <v-row
                           ><v-col style="height: 20px"
-                            ><v-icon size="25" style="color: green"
-                              >mdi-account-outline</v-icon
-                            ></v-col
-                          >
+                            ><img
+                              src="/icons/water_icon.png"
+                              style="width: 25px"
+                          /></v-col>
                         </v-row>
                         <v-row>
                           <v-col
@@ -285,10 +302,10 @@
                               margin-top: -10px;
                             "
                           >
-                            <div style="font-size: 20px">
+                            <div style="font-size: 30px">
                               {{ categoriesStats ? categoriesStats.water : 0 }}
                             </div>
-                            <div>Water</div>
+                            <div style="padding-top: 5px">Water</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -301,10 +318,10 @@
                       <v-card-text class="m-0 p-0">
                         <v-row
                           ><v-col style="height: 20px"
-                            ><v-icon size="25" style="color: green"
-                              >mdi-account-outline</v-icon
-                            ></v-col
-                          >
+                            ><img
+                              src="/icons/temperature_icon.png"
+                              style="width: 25px"
+                          /></v-col>
                         </v-row>
                         <v-row>
                           <v-col
@@ -314,14 +331,14 @@
                               margin-top: -10px;
                             "
                           >
-                            <div style="font-size: 20px">
+                            <div style="font-size: 30px">
                               {{
                                 categoriesStats
                                   ? categoriesStats.temperature
                                   : 0
                               }}
                             </div>
-                            <div>Temperature</div>
+                            <div style="padding-top: 5px">Temperature</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -343,21 +360,33 @@
                             style="
                               padding: 0px;
                               text-align: center;
-                              color: #06b050;
+
                               font-weight: bold;
                             "
-                            ><div style="font-size: 20px">100</div>
-                            <div>Online</div>
+                            ><div style="font-size: 20px; color: #06b050">
+                              {{
+                                customerStatusData
+                                  ? customerStatusData.onlineCount
+                                  : 0
+                              }}
+                            </div>
+                            <div style="color: #06b050">Online</div>
                           </v-col>
                           <v-col
                             style="
                               padding: 0px;
                               text-align: center;
-                              color: #fe0000;
+
                               font-weight: bold;
                             "
-                            ><div style="font-size: 20px">100</div>
-                            <div>Offline</div>
+                            ><div style="font-size: 20px; color: #fe0000">
+                              {{
+                                customerStatusData
+                                  ? customerStatusData.offlineCount
+                                  : 0
+                              }}
+                            </div>
+                            <div style="color: #fe0000">Offline</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -368,36 +397,62 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row
-          ><v-col>
-            <v-card style="height: 300px" elevation="2"
-              ><v-card-text>Operators Live</v-card-text></v-card
-            >
+        <v-row style="margin-top: 0px"
+          ><v-col style="padding-top: 0px">
+            <v-card
+              style="height: 500px"
+              elevation="2"
+              class="eventslistscroll table-font12"
+              ><v-card-text><DashboardOperatorLiveStatus /></v-card-text
+            ></v-card>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <v-row
       ><v-col>
-        <v-card style="height: 300px" elevation="2"
-          ><v-card-text>Operators Login Logs </v-card-text></v-card
-        > </v-col
+        <v-card
+          style="height: 450px"
+          elevation="2"
+          class="eventslistscroll table-font12"
+          ><v-card-text>
+            <DashboardLoginActivities
+              :filter_user_type="'security'"
+            /> </v-card-text
+        ></v-card> </v-col
       ><v-col>
-        <v-card style="height: 300px" elevation="2"
-          ><v-card-text>Alarm events - Hourly </v-card-text></v-card
-        >
+        <v-card
+          style="height: 450px"
+          elevation="2"
+          class="eventslistscroll table-font12"
+          ><v-card-text>
+            <DashboardAlarmEventsHourWiseChart
+              :height="'350'"
+              name="DashboardAlarmEventsHourWiseChart1" /></v-card-text
+        ></v-card>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import DashboardLoginActivities from "../../components/Admin/DashboardLoginActivities.vue";
+import DashboardAlarmEventsHourWiseChart from "../../components/Admin/DashboardAlarmEventsHourWiseChart.vue";
+
 import AlarmEventStatusCountPieChart from "../../components/Alarm/Dashboard/AlarmEventStatusCountPieChart.vue";
+import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperatorLiveStatus.vue";
 
 import AlamDeviceCountPieChart from "../../components/Alarm/Dashboard/AlarmDeviceCountPieChart.vue";
+import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
-  components: { AlamDeviceCountPieChart },
+  components: {
+    AlamDeviceCountPieChart,
+    AllEventsDashboard2,
+    DashboardOperatorLiveStatus,
+    DashboardLoginActivities,
+    DashboardAlarmEventsHourWiseChart,
+  },
   data: () => ({
     windowHeight: 1000,
     key: 1,
@@ -408,6 +463,7 @@ export default {
 
     chartEventForwardStatistics: null,
     categoriesStats: null,
+    customerStatusData: null,
   }),
   computed: {},
   mounted() {
@@ -471,6 +527,7 @@ export default {
         })
         .then(({ data }) => {
           if (data) {
+            this.customerStatusData = data;
             this.chartEventOpenStatistics = {
               labels: [],
               series: [],
