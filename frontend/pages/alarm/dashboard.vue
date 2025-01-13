@@ -465,10 +465,11 @@ export default {
     chartEventForwardStatistics: null,
     categoriesStats: null,
     customerStatusData: null,
+    apiLoading: false,
   }),
   computed: {},
   mounted() {
-    setInterval(() => {
+    setTimeout(() => {
       if (window) this.windowHeight = window.innerHeight;
     }, 1000 * 5);
   },
@@ -491,11 +492,14 @@ export default {
       await this.getEventsTypeStats();
       await this.getEventCategoriesStats();
       await this.updateEventsOpenCountStatus();
-    }, 1000 * 15);
+    }, 1000 * 20);
   },
   watch: {},
   methods: {
     async getEventCategoriesStats() {
+      //if (this.apiLoading) return false;
+
+      this.apiLoading = true;
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
@@ -505,9 +509,13 @@ export default {
 
       this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
         this.categoriesStats = data;
+        this.apiLoading = false;
       });
     },
     async getEventsTypeStats() {
+      //if (this.apiLoading) return false;
+
+      this.apiLoading = true;
       this.$axios
         .get("dashboard_statistics_date_range", {
           params: {
@@ -519,11 +527,15 @@ export default {
         .then(({ data }) => {
           if (data.length > 0) {
             this.data = data[0];
+            this.apiLoading = false;
           }
         });
     },
 
     async updateEventsOpenCountStatus() {
+      //if (this.apiLoading) return false;
+
+      this.apiLoading = true;
       let today = new Date();
       let date = today.toISOString().split("T")[0];
       this.$axios
@@ -628,6 +640,8 @@ export default {
             this.chartEventForwardStatistics.customTotalValue = total; //this.items.ExpectingCount;
 
             this.chartEventForwardStatistics.percentage = forwardPercentage;
+
+            this.apiLoading = false;
           }
         });
     },
