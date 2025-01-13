@@ -715,40 +715,66 @@ class CustomerAlarmEventsController extends Controller
             $query->whereIn('customer_id', $request->filter_customers_list);
         });
 
+        $model->when($request->filled("filter_customer_id") && $request->filter_customer_id != '', function ($query) use ($request) {
+            $query->where('customer_id', $request->filter_customer_id);
+        });
+
         $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {
             $query->whereDate('alarm_start_datetime', $request->filter_date);
         });
 
 
-        $model->when($request->filled("filter_alarm_type") && $request->filter_alarm_type != '', function ($query) use ($request) {
+        $model->when($request->filled("filter_alarm_type") && $request->filter_alarm_type != 'All' && $request->filter_alarm_type != '', function ($query) use ($request) {
 
+            // All 
+            // SOS                - alarm_events table : alarm_type = 'SOS'
+            // Power Failure            - alarm_events table :   alarm_type = 'DC_off'
+            // Tampered           - alarm_events table :   alarm_type = 'Tampered'
+            // Technical          - alarm_events table :   alarm_type = 'Offline'
+            // Medical            - Devices table : device_type = 'Medical'
+            // Critical           - alarm_events table :   alarm_category = 1 AND alarm_type != 'SOS' THEN 1 END) as criticalCoun
 
-            $query->where('alarm_type',   $request->filter_alarm_type);
-            // if ($request->filter_alarm_type == 'non-sos')
-            //     $query->where('alarm_type', "!=", "SOS");
+            if ($request->filter_alarm_type == "SOS") {
+                $query->where('alarm_type', "SOS");
+            } else if ($request->filter_alarm_type == "Power Failure") {
+                $query->where('alarm_type', "DC_off");
+            } else if ($request->filter_alarm_type == "Tampered") {
+                $query->where('alarm_type', "Tampered");
+            } else if ($request->filter_alarm_type == "Technical") {
+                $query->where('alarm_type', "Offline");
+            } else if ($request->filter_alarm_type === 'Critical') {
+                // Critical alarms: alarm_category = 1 and alarm_type != 'SOS'
+                $query->where('alarm_category', 1)
+                    ->where('alarm_type', '!=', 'SOS');
+            } elseif ($request->filter_alarm_type === 'Medical') {
+                // Medical devices: Check device relationship
+                $company_id = $request->company_id;
 
-            // if ($request->filter_alarm_type == 'sos')
-            //     $query->where('alarm_type',   "SOS");
+                $query->whereHas('device', function ($q) use ($company_id) {
+                    $q->where('device_type', 'Medical');
+                    $q->where('company_id', $company_id);
+                });
+            }
         });
 
 
-        $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
+        // $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
 
-            $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
-        });
-        $model->when($request->filled('filterDeviceType') && $request->filterDeviceType != '', function ($q) use ($request) {
+        //     $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
+        // });
+        // $model->when($request->filled('filterDeviceType') && $request->filterDeviceType != '', function ($q) use ($request) {
 
-            $q->WhereHas('device',  function ($q) use ($request) {
-                $q->where('device_type', 'ILIKE', "%$request->filterDeviceType%");
-            });
-        });
+        //     $q->WhereHas('device',  function ($q) use ($request) {
+        //         $q->where('device_type', 'ILIKE', "%$request->filterDeviceType%");
+        //     });
+        // });
 
         $model->when($request->filled('common_search') && $request->common_search != '', function ($q) use ($request) {
             $q->where(function ($q) use ($request) {
 
                 //$q->Where('serial_number', 'ILIKE', "$request->common_search%");
                 $q->Where('id',  'ILIKE', "%$request->common_search");
-                $q->orWhere('alarm_type', 'ILIKE', "%$request->common_search%");
+                // $q->orWhere('alarm_type', 'ILIKE', "%$request->common_search%");
                 //$q->orWhere('alarm_category', 'ILIKE', "%$request->common_search%");
                 $q->orWhere('zone', 'ILIKE', "%$request->common_search%");
                 $q->orWhere('area', 'ILIKE', "%$request->common_search%");

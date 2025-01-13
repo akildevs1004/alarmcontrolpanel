@@ -232,38 +232,34 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row class="p-0" style="padding-top: 0px">
-      <v-col
-        cols="12"
-        class="text-right"
-        style="padding-top: 0px; z-index: 9; padding-right: 0px"
-      >
-        <v-row class="mt-0">
-          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
+    <v-row>
+      <v-col cols="12">
+        <div
+          v-if="sensorItems.length > 1"
+          style="display: flex; justify-content: space-between"
+        >
+          <div>
             <h3 style="color: black; font-weight: normal">Alarm Events</h3>
-          </v-col>
+          </div>
 
-          <v-col
-            :cols="sensorItems.length > 1 ? 8 : 12"
-            class="text-right"
-            style="width: 600px; padding: 0px"
+          <div
+            style="display: flex; justify-content: end; z-index: 999999"
+            v-if="showFilters == 'true'"
           >
-            <v-row v-if="showFilters == 'true'">
-              <v-col cols="7">
-                <v-icon
-                  loading="true"
-                  @click="getDataFromApi(0)"
-                  class="mt-2 mr-2"
+            <div
+              style="display: flex; justify-content: space-between; gap: 10px"
+            >
+              <div>
+                <v-icon loading="true" @click="getDataFromApi(0)"
                   >mdi-reload</v-icon
                 >
-
+              </div>
+              <div style="max-width: 150px">
                 <v-text-field
-                  style="padding-top: 7px; float: right; width: 300px"
-                  height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi(0)"
                   v-model="commonSearch"
-                  label="Common Search(All Content)"
+                  label="Search"
                   placeholder="ID,Name,location etc..."
                   dense
                   outlined
@@ -271,9 +267,60 @@
                   append-icon="mdi-magnify"
                   clearable
                   hide-details
-                ></v-text-field
-              ></v-col>
-              <!-- <v-col cols="3"
+                ></v-text-field>
+              </div>
+              <div style="max-width: 150px">
+                <v-select
+                  class="employee-schedule-search-box"
+                  height="25px"
+                  outlined
+                  @change="getDataFromApi(0)"
+                  v-model="filterAlarmType"
+                  dense
+                  :items="alarmTypes"
+                  label="Alarm Types"
+                ></v-select>
+              </div>
+              <div style="max-width: 150px">
+                <v-select
+                  class="employee-schedule-search-box"
+                  height="25px"
+                  outlined
+                  @change="getDataFromApi(0)"
+                  v-model="filterCustomerId"
+                  dense
+                  :items="[{ id: ``, building_name: 'All' }, ...customers]"
+                  item-text="building_name"
+                  item-value="id"
+                  label="Customers"
+                ></v-select>
+              </div>
+              <div style="max-width: 150px">
+                <v-select
+                  class="employee-schedule-search-box"
+                  height="25px"
+                  outlined
+                  @change="getDataFromApi(0)"
+                  v-model="filterAlarmStatus"
+                  dense
+                  :items="allEventsList"
+                  item-text="name"
+                  item-value="id"
+                ></v-select>
+              </div>
+              <div style="max-width: 150px; margin-top: -2px">
+                <CustomFilter
+                  style="max-width: 100%"
+                  @filter-attr="filterAttr"
+                  :default_date_from="date_from"
+                  :default_date_to="date_to"
+                  :defaultFilterType="1"
+                  :height="'30px'"
+                />
+              </div>
+            </div>
+
+            <!-- <v-col cols="3"
                     ><v-select
                       class="employee-schedule-search-box"
                       style="
@@ -298,35 +345,8 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-              <v-col cols="2" style="min-width: 100px; padding-right: 0px">
-                <v-select
-                  class="employee-schedule-search-box"
-                  style="
-                    padding-top: 7px;
-                    z-index: 999;
-                    min-width: 100%;
-                    width: 150px;
-                  "
-                  height="25px"
-                  outlined
-                  @change="getDataFromApi(0)"
-                  v-model="filterAlarmStatus"
-                  dense
-                  :items="allEventsList"
-                  item-text="name"
-                  item-value="id"
-                ></v-select>
-              </v-col>
-              <v-col cols="2">
-                <CustomFilter
-                  style="float: left; padding-top: 5px; z-index: 999"
-                  @filter-attr="filterAttr"
-                  :default_date_from="date_from"
-                  :default_date_to="date_to"
-                  :defaultFilterType="1"
-                  :height="'30px'"
-              /></v-col>
-              <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
+
+            <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>
                       <template v-slot:activator="{ on, attrs }">
                         <span v-bind="attrs" v-on="on">
@@ -395,10 +415,10 @@
                       </v-list>
                     </v-menu>
                   </v-col> -->
-            </v-row>
-          </v-col>
-        </v-row>
-
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="12" style="padding-top: 0px; z-index: 9; padding-right: 0px">
         <v-row v-if="sensorItems.length > 0" style="margin-top: 0px">
           <v-col cols="12" style="margin-top: 0px">
             <v-tabs
@@ -680,6 +700,15 @@ export default {
   ],
   data() {
     return {
+      alarmTypes: [
+        "All",
+        "SOS",
+        "Medical",
+        "Critical",
+        "Technical",
+        "Power Failure",
+        "Tampered",
+      ],
       allEventsList: [],
       selecteAlarm: null,
       dialogViewAlarmFormat: false,
@@ -692,11 +721,14 @@ export default {
       dialogTabViewCustomer: false,
       viewCustomerId: null,
       popupEventText: "",
+      filterAlarmType: null,
+      filterCustomerId: null,
       filterAlarmStatus: null,
       showTable: true,
       requestStatus: false,
       tab: 0,
       sensorItems: [],
+      customers: [],
       value: "recent",
       customer_id: null,
       snackbar: false,
@@ -772,7 +804,7 @@ export default {
     //   deep: true,
     // },
   },
-  created() {
+  async created() {
     this.allEventsList = [];
 
     this.allEventsList = [
@@ -785,9 +817,9 @@ export default {
     {
       this.allEventsList.push({ id: 3, name: "Forwarded" });
     }
-    if (this.compFilterSupervisor) {
-      this.filterAlarmStatus = 3;
-    }
+    // if (this.compFilterSupervisor) {
+    //   this.filterAlarmStatus = 3;
+    // }
     // if (this.$route.name != "alarm-dashboard") {
     //   let today = new Date();
     //   let monthObj = this.$dateFormat.monthStartEnd(today);
@@ -822,15 +854,29 @@ export default {
       this.sensorItems = ["All"];
     }
 
-    setTimeout(() => {
-      setInterval(() => {
-        if (
-          this.$route.name == "alarm-dashboard" &&
-          this.filterAlarmStatus == 1
-        )
-          this.getDataFromApi(0);
-      }, 1000 * 20 * 1);
-    }, 1000 * 40);
+    // setTimeout(() => {
+    //   setInterval(() => {
+    //     if (
+    //       this.$route.name == "alarm-dashboard" &&
+    //       this.filterAlarmStatus == 1
+    //     )
+    //       this.getDataFromApi(0);
+    //   }, 1000 * 20 * 1);
+    // }, 1000 * 40);
+
+    try {
+      const { data } = await this.$axios.get(`customers-all`, {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      });
+
+      // Process the response
+      this.customers = data;
+      console.log("🚀 ~ getDataFromApi ~ this.customers:", this.customers);
+    } catch (error) {
+      console.log("🚀 ~ getDataFromApi ~ error:", error);
+    }
   },
 
   methods: {
@@ -1023,8 +1069,6 @@ export default {
       if (custompage == 0) this.options = { perPage: 10, page: 1 };
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
 
       this.perPage = itemsPerPage;
       this.currentPage = page;
@@ -1040,7 +1084,7 @@ export default {
         filterSensorname = this.eventFilter;
       }
 
-      // Cancel previous request if it exists
+      // // Cancel previous request if it exists
       if (this.cancelTokenSource) {
         this.cancelTokenSource.cancel("Operation canceled due to new request.");
       }
@@ -1059,7 +1103,12 @@ export default {
           common_search: this.commonSearch,
           customer_id: this.filter_customer_id,
           tab: this.tab,
+
+          filter_alarm_type: this.filterAlarmType,
+          filter_customer_id: this.filterCustomerId,
+
           alarm_status: this.filterAlarmStatus,
+
           filterSupervisor: this.compFilterSupervisor,
 
           filterSensorname: filterSensorname,
@@ -1068,10 +1117,10 @@ export default {
           sortDesc: "DESC",
 
           filter_date: this.filter_date,
-          filter_alarm_type: this.filter_alarm_type,
         },
-        cancelToken: this.cancelTokenSource.token, // Assign the cancel token
+        // cancelToken: this.cancelTokenSource.token, // Assign the cancel token
       };
+      console.log("🚀 ~ getDataFromApi ~ options:", options);
 
       try {
         const { data } = await this.$axios.get(`get_alarm_events`, options);
