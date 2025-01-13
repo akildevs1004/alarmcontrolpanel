@@ -321,7 +321,14 @@
         >
       </v-col>
       <v-col cols="3" style="padding: 0px; padding-top: 10px">
-        <v-card elevation="2" :style="'height:' + (browserHeight - 10) + 'px'">
+        <v-card
+          elevation="2"
+          :style="
+            'overflow-y:auto;overflow-x:hidden;height:' +
+            (browserHeight - 10) +
+            'px'
+          "
+        >
           <v-data-table
             dense
             :headers="headers"
