@@ -148,7 +148,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 //-----------Alarm Control panel - Wifi Model 
 
-                if ($event == 'HEARTBEAT') {
+                if ($event == 'HEARTBEAT' || $event == '1351') {
                     Device::where("serial_number", $serial_number)->update(
                         ["status_id" => 1, "last_live_datetime" => $log_time]
                     );
