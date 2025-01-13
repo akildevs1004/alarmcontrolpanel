@@ -150,14 +150,14 @@
       </v-card>
     </v-dialog>
 
-    <v-card elevation="0" v-if="graphs === true">
+    <div elevation="0" v-if="graphs === true">
       <CompCustomersDashboardStatistics
         name="CompCustomersDashboardStatistics1"
         :key="222"
         style="max-width: 99%"
         :setIntervalLoopstatus="setIntervalLoopstatus"
       />
-    </v-card>
+    </div>
     <v-row>
       <v-col>
         <v-card elevation="0" class="mt-2">
@@ -462,7 +462,7 @@
                   </v-list-item>
                   <v-list-item
                     v-if="can('customers_delete')"
-                    @click="deleteItem(item)"
+                    @click="deleteCustomer(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="error" small> mdi-delete </v-icon>
@@ -762,6 +762,23 @@ export default {
     viewItem2(item) {
       this.$router.push("/alarm/view-customer/" + item.id);
     },
+    deleteCustomer(item) {
+      if (confirm("Are you want to Delete Customer?")) {
+        let options = {
+          params: {
+            company_id: this.$auth.user.company_id,
+
+            customer_id: item.id,
+          },
+        };
+
+        this.$axios.post("delete_customer", options.params).then((data) => {
+          this.snackbar = true;
+          this.response = "Customer Details are Deleted successfully";
+          this.getDataFromApi();
+        });
+      }
+    },
     updateCustomerSecurityId() {
       if (this.showCustomerOTP) {
         this.error_messages = "";
@@ -769,8 +786,6 @@ export default {
           this.error_messages = "Customer Verification is required";
           return false;
         } else {
-          console.log(this.selectedCustomer.primary_contact.alarm_stop_pin);
-
           if (
             this.selectedCustomer.primary_contact.alarm_stop_pin ==
               this.customerContactPIN ||

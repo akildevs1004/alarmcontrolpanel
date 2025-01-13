@@ -42,7 +42,7 @@ class CustomersController extends Controller
     {
         $model = Customers::with(["photos", "buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact", "cameras"])
             ->where("company_id", $request->company_id);
-
+        $model->where("deleted", 0);
         $model->when($request->filled("customer_id"), function ($q) use ($request) {
             $q->where("id", $request->customer_id);
         });
@@ -329,6 +329,19 @@ class CustomersController extends Controller
 
         $this->response("Sensor Deleted Successfully", null, true);
     }
+    public function deleteCustomer(Request $request)
+    {
+
+
+        if ($request->filled('customer_id')) {
+            Customers::where("id", $request->customer_id)->update(["deleted" => true]);
+        }
+
+        $this->response("Customer Deleted Successfully", null, true);
+    }
+
+
+
     public function createDeviceZoneIndividual(Request $request)
     {
 

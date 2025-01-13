@@ -73,6 +73,9 @@ Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCusto
 Route::post("security_customers_update", [CustomersController::class, "SecurityCustomersListUpdate"]);
 Route::post("security_customers_single_update", [CustomersController::class, "SecurityCustomersSingleUpdate"]);
 
+Route::post("delete_customer", [CustomersController::class, "deleteCustomer"]);
+
+
 
 
 // Route::get('get_master_device_serial_numbers', [CustomersController::class, 'getMasterDeviceSerialNumbers']);
