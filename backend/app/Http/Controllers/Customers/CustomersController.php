@@ -7,6 +7,7 @@ use App\Http\Controllers\WhatsappController;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Mail\EmailContentDefault;
+use App\Models\AlarmEvents;
 use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
@@ -42,7 +43,7 @@ class CustomersController extends Controller
     {
         $model = Customers::with(["photos", "buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact", "cameras"])
             ->where("company_id", $request->company_id);
-        $model->where("deleted", 0);
+        //$model->where("deleted", 0);
         $model->when($request->filled("customer_id"), function ($q) use ($request) {
             $q->where("id", $request->customer_id);
         });
@@ -334,7 +335,13 @@ class CustomersController extends Controller
 
 
         if ($request->filled('customer_id')) {
-            Customers::where("id", $request->customer_id)->update(["deleted" => true]);
+            Device::where("customer_id", $request->customer_id)->delete();
+            AlarmEvents::where("customer_id", $request->customer_id)->delete();
+
+            Customers::where("id", $request->customer_id)->delete();
+
+
+            //Customers::where("id", $request->customer_id)->update(["deleted" => true]);
         }
 
         $this->response("Customer Deleted Successfully", null, true);

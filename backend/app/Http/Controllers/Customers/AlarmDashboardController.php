@@ -25,8 +25,18 @@ class AlarmDashboardController extends Controller
 
     public function dashboardStatisctsCustomers(Request $request)
     {
-        $totalCustomers = Customers::where("company_id", $request->company_id)->count();
-        $deviceCounts = Device::where("company_id", $request->company_id)->selectRaw("             
+        $totalCustomers = Customers::where("company_id", $request->company_id)->where("deleted", 0)->count();
+        $deviceCounts = Device::where("company_id", $request->company_id)
+
+            // ->whereHas('customer', function ($query) {
+            //     $query->where('deleted', 0);
+            // })
+            ->where("device_type", "!=", "Mobile")
+
+            ->where("device_type", "!=", "Manual")
+            ->where("device_id", "!=", "Manual")
+            ->where("serial_number", "!=", null)
+            ->selectRaw("             
         COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
         COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
         COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
@@ -147,9 +157,13 @@ class AlarmDashboardController extends Controller
     public function getDeviceArmedStatistics(Request $request)
     {
 
-        $model = Device::where("company_id", $request->company_id)->where("device_id", "!=", "Manual");
+        $model = Device::where("company_id", $request->company_id)->where("device_id", "!=", "Manual")
 
+            ->where("device_type", "!=", "Mobile")
 
+            ->where("device_type", "!=", "Manual")
+            ->where("device_id", "!=", "Manual")
+            ->where("serial_number", "!=", null);
 
         $totalCount = $model->clone()->count();
         $armedCount =  $model->clone()->where("armed_status", 1)->count();

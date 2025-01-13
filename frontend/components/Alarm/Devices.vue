@@ -478,8 +478,8 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno", sortable: false },
-      { text: "Building  Name", value: "customer", sortable: false },
-      { text: "Building Type", value: "building_type", sortable: false },
+      { text: "Customer  Name", value: "customer", sortable: false },
+      { text: "Type", value: "building_type", sortable: false },
       { text: "Device Category", value: "device_type", sortable: false },
       { text: "Device Model", value: "model_number", sortable: false },
       // { text: "Zones", value: "zones", align: "left" },
