@@ -281,8 +281,8 @@ export default {
     otp: "",
     userId: "",
     credentials: {
-      email: "",
-      password: "",
+      email: "demo@gmail.com",
+      password: "welcome",
       source: "admin",
     },
   }),
@@ -295,14 +295,14 @@ export default {
     this.$store.dispatch("resetState");
   },
   mounted() {
-    try {
-      const userType = this.$auth.user?.user_type;
-      if (userType) {
-        if (this.$route.name === "login") {
-          window.location.reload();
-        }
-      }
-    } catch (error) {}
+    // try {
+    //   const userType = this.$auth.user?.user_type;
+    //   if (userType) {
+    //     if (this.$route.name === "login") {
+    //       window.location.reload();
+    //     }
+    //   }
+    // } catch (error) {}
 
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");

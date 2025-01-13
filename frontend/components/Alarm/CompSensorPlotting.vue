@@ -21,11 +21,13 @@
             >
               <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
 
-              <img
-                :src="item.picture"
-                :width="IMG_PLOTTING_WIDTH"
-                :height="IMG_PLOTTING_HEIGHT"
-              />
+              <v-avatar tile size="300">
+                <img
+                  :src="item.picture"
+                  :width="IMG_PLOTTING_WIDTH"
+                  :height="IMG_PLOTTING_HEIGHT"
+                />
+              </v-avatar>
               <span v-if="!loading">
                 <div
                   v-for="(plotting, index) in plottings"

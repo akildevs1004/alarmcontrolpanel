@@ -41,25 +41,18 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogEditPhotos" width="600px">
+    <v-dialog v-model="dialogEditPhotos" width="500px">
+      <IconClose
+        left="490"
+        @click="
+          closeDialog();
+          dialogEditPhotos = false;
+        "
+      />
       <v-card>
-        <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"> Camera </span>
-          <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="
-              closeDialog();
-              dialogEditPhotos = false;
-            "
-            outlined
-          >
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
+        <v-alert dense flat>Add Camera</v-alert>
 
-        <v-card-text>
-          <v-container style="min-height: 100px">
+        <v-container style="min-height: 100px">
             <EditCustomerCamera
               :key="key"
               :customer_id="customer_id"
@@ -69,7 +62,6 @@
               :building_cameras="building_cameras"
             />
           </v-container>
-        </v-card-text>
       </v-card>
     </v-dialog>
     <div v-if="building_cameras.length == 0" class="text-center">
@@ -95,7 +87,7 @@
           dense
           x-small
         >
-          + Photo
+          + Camera
         </v-btn>
       </v-col>
 

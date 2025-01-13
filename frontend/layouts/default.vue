@@ -1644,6 +1644,22 @@ header,
 </style>
 
 <style>
+.my-loader {
+  font-family: sans-serif;
+  animation: l1 1s linear infinite alternate;
+}
+.my-loader:before {
+  content:"Loading..."
+}
+@keyframes l1 {to{opacity: 0}}
+
+.hover-zoom-card {
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+}
+
+.hover-zoom-card:hover {
+  transform: scale(1.1); /* Zoom in on hover */
+}
 .table-td-padding-10 td,
 .table-td-padding-10 th {
   padding: 5px !important;

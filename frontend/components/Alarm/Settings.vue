@@ -33,7 +33,7 @@
               </v-col>
               <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                 <v-row>
-                  <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
+                  <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                     <v-select
                       :items="timmingArray"
                       label="Close Time(Armed)"
@@ -48,7 +48,7 @@
                       "
                     ></v-select>
                   </v-col>
-                  <v-col md="6" sm="6" cols="6" dense v-if="isEditable">
+                  <v-col md="12" sm="12" cols="12" dense v-if="isEditable">
                     <v-select
                       :items="timmingArray"
                       label="Open Time(Disarm)"
@@ -106,6 +106,7 @@
                       ? errors.password_confirmation[0]
                       : ''
                   "
+                  hide-details
                 ></v-text-field>
                 <span>{{
                   errors && errors.password_confirmation
@@ -117,9 +118,9 @@
           </v-col>
         </v-row>
         <v-row class="pl-5" v-if="isEditable">
-          <v-col class="pt-5" style="max-width: 100px">Login Status </v-col>
+          <v-col class="" style="max-width: 100px">Login Status </v-col>
 
-          <v-col class="pl-0 pt-1" style="max-width: 80px">
+          <v-col class="pl-0 " style="max-width: 80px">
             <div style="cursor: pointer" v-if="web_login_access == 0">
               <v-img
                 class="ele1"

@@ -6,9 +6,7 @@
       </v-snackbar>
     </div>
 
-    <v-row>
-      <v-col md="12" sm="12" cols="12" dense>
-        <v-card class="elevation-0 p-2" style="padding: 5px">
+    <v-card class="elevation-0 p-2">
           <v-row class="pt-0">
             <v-col cols="6" dense>
               <v-text-field
@@ -74,8 +72,6 @@
             >
           </v-row>
         </v-card>
-      </v-col>
-    </v-row>
   </div>
 </template>
 
