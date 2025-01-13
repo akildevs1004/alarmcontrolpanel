@@ -281,41 +281,48 @@
     </v-dialog>
     <v-row>
       <v-col cols="9">
-        <div :key="mapkeycount" id="map" style="height: 600px"></div>
+        <v-card elevation="2"
+          ><v-card-text style="padding: 0px">
+            <div
+              :key="mapkeycount"
+              id="map"
+              :style="'height:' + (browserHeight - 10) + 'px'"
+            ></div>
 
-        <div style="position: absolute; top: 14px; left: 140px">
-          <v-btn-toggle
-            v-model="mapStyle"
-            height="20"
-            tile
-            color="black white "
-            group
-          >
-            <v-btn
-              height="22"
-              width="60"
-              value="bw"
-              small
-              dense
-              @click="changeGoogleMapColor('bw')"
-              >B & W</v-btn
-            >
-            <v-btn
-              height="22"
-              width="60"
-              value="map"
-              small
-              dense
-              @click="changeGoogleMapColor('map')"
-              >Regular</v-btn
-            >
-          </v-btn-toggle>
-        </div>
+            <div style="position: absolute; top: 14px; left: 140px">
+              <v-btn-toggle
+                v-model="mapStyle"
+                height="20"
+                tile
+                color="black white "
+                group
+              >
+                <v-btn
+                  height="22"
+                  width="60"
+                  value="bw"
+                  small
+                  dense
+                  @click="changeGoogleMapColor('bw')"
+                  >B & W</v-btn
+                >
+                <v-btn
+                  height="22"
+                  width="60"
+                  value="map"
+                  small
+                  dense
+                  @click="changeGoogleMapColor('map')"
+                  >Regular</v-btn
+                >
+              </v-btn-toggle>
+            </div>
+          </v-card-text></v-card
+        >
       </v-col>
       <v-col cols="3" style="padding: 0px; padding-top: 10px">
-        <v-card elevation="2" style="height: 600px">
+        <v-card elevation="2" :style="'height:' + (browserHeight - 10) + 'px'">
           <v-data-table
-            style="padding: 0px"
             dense
             :headers="headers"
             :items="data"
@@ -327,8 +334,9 @@
               'items-per-page-text': ' ',
             }"
             fixed-header
-            height="400px"
             hide-default-header
+            class="map-customers-list-table"
+            :style="'height:' + (browserHeight - 20) + 'px'"
           >
             <template v-slot:top>
               <v-container>
@@ -366,11 +374,103 @@
                     </v-row>
                   </v-col>
                 </v-row>
-                <v-divider class="mt-3" color="#DDD"></v-divider>
+                <!-- <v-divider class="mt-3" color="#DDD"></v-divider> -->
               </v-container>
             </template>
             <template v-slot:item.building_name="{ item, index }">
-              <v-row style="border-bottom: 0px solid #ddd">
+              <v-card
+                @click="setCustomerLocationOnMap(item)"
+                :key="index + 55"
+                elevation="5"
+                style="border-bottom: 0px solid black; margin: 6px"
+              >
+                <v-card-text
+                  :style="{
+                    paddingRight: '5px',
+                    border:
+                      selectedCustomer?.id === item.id
+                        ? '1px solid #ecf0f4'
+                        : '0px',
+                    backgroundColor:
+                      selectedCustomer?.id === item.id ? '#ecf0f4' : '#FFF',
+                  }"
+                >
+                  <v-row style="height: auto; width: 100%">
+                    <v-col
+                      style="
+                        max-width: 30px;
+                        padding: 0px;
+                        margin: auto;
+                        text-align: center;
+                      "
+                    >
+                      {{ index + 1 }}
+                    </v-col>
+                    <v-col
+                      style="
+                        padding: 0px;
+                        font-size: 9px;
+                        padding-left: 10px;
+                        line-height: 15px;
+                      "
+                    >
+                      <div style="overflow: hidden">
+                        <div>
+                          {{
+                            item.buildingtype
+                              ? item.buildingtype.name.toUpperCase()
+                              : "---"
+                          }}
+                        </div>
+                        <div
+                          style="
+                            font-weight: bold;
+                            font-size: 12px;
+                            color: #1f1f1f;
+                          "
+                        >
+                          {{ $utils.caps(item.building_name) || "---" }}
+                        </div>
+                        <div style="font-size: 11px; color: #1f1f1f">
+                          {{ item.area || "---" }}, {{ item.address || "---" }}
+                        </div>
+                        <div style="font-size: 11px; color: #1f1f1f">
+                          {{ item.city || "---" }}, {{ item.state || "---" }}
+                        </div>
+                        <div>
+                          <v-icon style="margin-top: -3px" size="10"
+                            >mdi-account-tie</v-icon
+                          >{{
+                            item.primary_contact
+                              ? $utils.caps(item.primary_contact.first_name) +
+                                " " +
+                                $utils.caps(item.primary_contact.last_name)
+                              : "---"
+                          }}
+                        </div>
+                      </div>
+                    </v-col>
+                    <v-col style="max-width: 50px">
+                      <v-img
+                        style="
+                          border-radius: 2%;
+                          height: 45px;
+                          min-height: 45px;
+                          width: 45px;
+                          max-width: 45px;
+                        "
+                        :src="
+                          item.profile_picture
+                            ? item.profile_picture
+                            : '/no-business_profile.png'
+                        "
+                      >
+                      </v-img>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+              <!-- <v-row style="border-bottom: 0px solid #ddd">
                 <v-col
                   cols="1"
                   style="padding-left: 0px; padding-right: 0px; max-width: 20px"
@@ -383,11 +483,7 @@
                   }}
                 </v-col>
                 <v-col style="padding-left: 0px">
-                  <!-- <v-icon
-                    :title="getCustomerColorObject(item).text"
-                    :color="getCustomerColorObject(item).color"
-                    >mdi mdi-square-medium</v-icon
-                  > -->
+                   
                   <span
                     @click="setCustomerLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
@@ -431,10 +527,10 @@
                     </v-col>
                   </v-row>
                 </v-col>
-              </v-row>
+              </v-row> -->
             </template>
           </v-data-table>
-          <div style="width: 100%">
+          <!-- <div style="width: 100%">
             <v-btn-toggle
               style="width: 100%"
               tile
@@ -456,12 +552,10 @@
                 :value="value"
               >
                 <img :src="value.image + '?2=2'" style="width: 30px" />
-                <!-- <div>{{ value.name }}</div> -->
-
-                <!-- <v-icon :color="value.color">{{ value.icon }} </v-icon> -->
+                
               </v-btn>
             </v-btn-toggle>
-          </div>
+          </div> -->
           <!-- <v-btn-toggle tile color="deep-purple accent-3" group>
             <v-btn style value="left"> Left </v-btn>
 
@@ -583,6 +677,8 @@ export default {
     google_map_style_bandw,
 
     google_map_style_regular,
+    selectedCustomer: null,
+    browserHeight: 700,
   }),
   computed: {},
   mounted() {
@@ -614,6 +710,10 @@ export default {
     //     this.getCustomers();
     // }, 1000 * 10);
     ///this.getBuildingTypes();
+
+    try {
+      if (window) this.browserHeight = window.innerHeight - 70;
+    } catch (e) {}
   },
   watch: {
     options: {
@@ -873,6 +973,7 @@ export default {
     },
 
     setCustomerLocationOnMap(item) {
+      this.selectedCustomer = item;
       try {
         if (item.latitude && item.longitude) {
           const position = {

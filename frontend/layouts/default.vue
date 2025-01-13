@@ -1597,6 +1597,7 @@ export default {
 }
 .main_bg {
   padding-left: 140px;
+  padding-top: 40px !important;
 }
 .v-list-item {
   text-align: center;
@@ -2717,5 +2718,11 @@ td {
 
 .eventslistscroll .v-data-footer__select {
   margin-right: -8px !important;
+}
+.map-customers-list-table td {
+  border: 0px;
+}
+.map-customers-list-table .text-start {
+  padding: 0px !important;
 }
 </style>

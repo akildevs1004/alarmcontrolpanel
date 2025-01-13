@@ -522,7 +522,6 @@ export default {
     try {
       if (window) this.browserHeight = window.innerHeight - 70;
     } catch (e) {}
-    console.log(this.browserHeight);
   },
   watch: {},
   methods: {

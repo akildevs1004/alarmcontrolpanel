@@ -1,7 +1,7 @@
 <template>
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
   <div v-else>
-    <v-row>
+    <v-row class="padding:0px">
       <v-col cols="9"
         ><v-row>
           <v-col>
@@ -169,6 +169,7 @@
                   name="AllEvents1"
                   showFilters="false"
                   showTabs="true"
+                  v-if="loadAllEventsTable"
                 /> </v-card-text
             ></v-card>
           </v-col>
@@ -404,7 +405,9 @@
               style="height: 500px"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text><DashboardOperatorLiveStatus /></v-card-text
+              ><v-card-text
+                ><DashboardOperatorLiveStatus
+                  v-if="loadAllEventsTable" /></v-card-text
             ></v-card>
           </v-col>
         </v-row>
@@ -428,6 +431,7 @@
           class="eventslistscroll table-font12"
           ><v-card-text>
             <DashboardAlarmEventsHourWiseChart
+              v-if="loadAllEventsTable"
               :height="'350'"
               name="DashboardAlarmEventsHourWiseChart1" /></v-card-text
         ></v-card>
@@ -466,6 +470,10 @@ export default {
     categoriesStats: null,
     customerStatusData: null,
     apiLoading: false,
+    cancelgetEventCategoriesStatsToken: null,
+    cancelgetEventsTypeStatsToken: null,
+    cancelupdateEventsOpenCountStatusToken: null,
+    loadAllEventsTable: false,
   }),
   computed: {},
   mounted() {
@@ -483,56 +491,129 @@ export default {
 
     let today = new Date();
     this.date_from = today.toISOString().split("T")[0];
+    await this.updateEventsOpenCountStatus();
     await this.getEventsTypeStats();
 
     await this.getEventCategoriesStats();
-    await this.updateEventsOpenCountStatus();
+
+    setTimeout(() => {
+      this.loadAllEventsTable = true;
+    }, 1000 * 10);
 
     setInterval(async () => {
-      await this.getEventsTypeStats();
-      await this.getEventCategoriesStats();
-      await this.updateEventsOpenCountStatus();
-    }, 1000 * 20);
+      if (this.$route.name == "alarm-dashboard") {
+        await this.getEventsTypeStats();
+        await this.getEventCategoriesStats();
+        await this.updateEventsOpenCountStatus();
+      }
+    }, 1000 * 10);
   },
   watch: {},
   methods: {
     async getEventCategoriesStats() {
-      //if (this.apiLoading) return false;
+      if (this.cancelgetEventCategoriesStatsToken) {
+        this.cancelgetEventCategoriesStatsToken.cancel(
+          "Previous request canceled."
+        );
+      }
 
-      this.apiLoading = true;
-      let options = {
-        params: {
-          company_id: this.$auth.user.company_id,
-          date_from: this.date_from,
-        },
-      };
+      this.cancelgetEventCategoriesStatsToken =
+        this.$axios.CancelToken.source();
 
-      this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
-        this.categoriesStats = data;
-        this.apiLoading = false;
-      });
-    },
-    async getEventsTypeStats() {
-      //if (this.apiLoading) return false;
-
-      this.apiLoading = true;
-      this.$axios
-        .get("dashboard_statistics_date_range", {
+      try {
+        const options = {
           params: {
             company_id: this.$auth.user.company_id,
             date_from: this.date_from,
-            date_to: this.date_from,
           },
-        })
-        .then(({ data }) => {
-          if (data.length > 0) {
-            this.data = data[0];
-            this.apiLoading = false;
+          cancelgetEventCategoriesStatsToken:
+            this.cancelgetEventCategoriesStatsToken.token, // Attach cancel token
+        };
+
+        const { data } = await this.$axios.get(`/alarm_statistics`, options);
+
+        // Update data
+        this.categoriesStats = data;
+      } catch (error) {
+        if (this.$axios.isCancel(error)) {
+          console.log("Request canceled:", error.message);
+        } else {
+          console.error("API Error:", error);
+        }
+      } finally {
+        this.apiLoading = false; // Reset loading state
+      }
+    },
+
+    // async getEventCategoriesStats() {
+    //   //if (this.apiLoading) return false;
+
+    //   this.apiLoading = true;
+    //   let options = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+    //       date_from: this.date_from,
+    //     },
+    //   };
+
+    //   this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
+    //     this.categoriesStats = data;
+    //     this.apiLoading = false;
+    //   });
+    // },
+
+    async getEventsTypeStats() {
+      // Cancel any ongoing request
+      if (this.cancelgetEventsTypeStatsToken) {
+        this.cancelgetEventsTypeStatsToken.cancel("Previous request canceled.");
+      }
+
+      // Create a new cancel token
+      this.cancelgetEventsTypeStatsToken = this.$axios.CancelToken.source();
+
+      this.apiLoading = true; // Start loading state
+
+      try {
+        const response = await this.$axios.get(
+          "dashboard_statistics_date_range",
+          {
+            params: {
+              company_id: this.$auth.user.company_id,
+              date_from: this.date_from,
+              date_to: this.date_from, // Ensure this is intentional
+            },
+            cancelgetEventsTypeStatsToken:
+              this.cancelgetEventsTypeStatsToken.token, // Attach cancel token
           }
-        });
+        );
+
+        // Handle response
+        if (response.data.length > 0) {
+          this.data = response.data[0];
+        }
+      } catch (error) {
+        if (this.$axios.isCancel(error)) {
+          console.log("Request canceled:", error.message);
+        } else {
+          console.error("API Error:", error);
+        }
+      } finally {
+        this.apiLoading = false; // End loading state
+      }
     },
 
     async updateEventsOpenCountStatus() {
+      // Cancel any ongoing request
+      if (this.cancelupdateEventsOpenCountStatusToken) {
+        this.cancelupdateEventsOpenCountStatusToken.cancel(
+          "Previous request canceled."
+        );
+      }
+
+      // Create a new cancel token
+      this.cancelupdateEventsOpenCountStatusToken =
+        this.$axios.CancelToken.source();
+
       //if (this.apiLoading) return false;
 
       this.apiLoading = true;
@@ -544,6 +625,8 @@ export default {
             company_id: this.$auth.user.company_id,
             date: date,
           },
+          cancelupdateEventsOpenCountStatusToken:
+            this.cancelupdateEventsOpenCountStatusToken.token, // Attach cancel token
         })
         .then(({ data }) => {
           if (data) {
