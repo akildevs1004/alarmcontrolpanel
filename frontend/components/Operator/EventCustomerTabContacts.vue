@@ -467,7 +467,8 @@
                   <!-- </td>
                 <td> -->
                   {{
-                    globalContactDetails?.notes
+                    globalContactDetails?.notes &&
+                    globalContactDetails.notes != "null"
                       ? globalContactDetails.notes
                       : "---"
                   }}

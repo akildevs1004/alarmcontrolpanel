@@ -165,12 +165,11 @@
                   /> </v-card
               ></v-tab-item> -->
               <v-tab-item>
-                <v-card elevation="13" outlined>
+                <v-card elevation="2" outlined>
                   <SecurityGoogleMap
                     class="rounded-lg"
                     :customer="customer"
                     :customer_id="customer.id"
-                    style="padding: 20px"
                     name="gogole_map"
                   /> </v-card
               ></v-tab-item>
@@ -178,12 +177,7 @@
                 <v-card elevation="13" outlined>
                   <img
                     :src="customer.profile_picture"
-                    style="
-                      width: 100%;
-                      height: 500px;
-                      height: auto;
-                      padding: 20px;
-                    "
+                    style="width: 100%; height: 500px; height: auto"
                   />
                 </v-card>
               </v-tab-item>

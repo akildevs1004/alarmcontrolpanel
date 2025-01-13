@@ -1,65 +1,64 @@
 <template>
   <div>
-    <v-card>
-      <v-row>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <AlarmBurglaryPieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmBurglaryPieChart'"
-                :compFilterSupervisor="compFilterSupervisor"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <AlarmMedicalPieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmMedicalPieChart'"
-                :compFilterSupervisor="compFilterSupervisor"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <AlarmWaterPieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmWaterPieChart3'"
-                :compFilterSupervisor="compFilterSupervisor"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <AlarmFirePieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmBFirePieChart4'"
-                :compFilterSupervisor="compFilterSupervisor"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <AlarmTemperaturePieChart
-                v-if="key"
-                :key="key"
-                :name="'AlarmTemperaturePieChart5'"
-                :compFilterSupervisor="compFilterSupervisor"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+    <v-row>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <AlarmBurglaryPieChart
+              v-if="key"
+              :key="key"
+              :name="'AlarmBurglaryPieChart'"
+              :compFilterSupervisor="compFilterSupervisor"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <AlarmMedicalPieChart
+              v-if="key"
+              :key="key"
+              :name="'AlarmMedicalPieChart'"
+              :compFilterSupervisor="compFilterSupervisor"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <AlarmWaterPieChart
+              v-if="key"
+              :key="key"
+              :name="'AlarmWaterPieChart3'"
+              :compFilterSupervisor="compFilterSupervisor"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <AlarmFirePieChart
+              v-if="key"
+              :key="key"
+              :name="'AlarmBFirePieChart4'"
+              :compFilterSupervisor="compFilterSupervisor"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <AlarmTemperaturePieChart
+              v-if="key"
+              :key="key"
+              :name="'AlarmTemperaturePieChart5'"
+              :compFilterSupervisor="compFilterSupervisor"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
 
-      <v-row style="margin-top: 0px">
+    <!-- <v-row style="margin-top: 0px">
         <v-col cols="3" class="pr-0" style="max-width: 20%">
           <v-card style="height: 35px; padding: 10px" class="elevation-0">
             <v-progress-linear
@@ -248,55 +247,7 @@
             >
           </v-card>
         </v-col>
-        <!-- <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card style="height: 35px; padding: 10px" class="elevation-0">
-            <v-progress-linear
-              style="pointer-events: none"
-              rounded
-              v-model="onlineStats.Temperature.percentage"
-              :background-color="
-                onlineStats.Temperature.online +
-                  onlineStats.Temperature.offline ==
-                0
-                  ? '#969696'
-                  : 'red'
-              "
-              color="green"
-              height="12"
-            >
-              <template v-slot:default="{ value }" style="color: #fff">
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: left;
-                    padding-left: 5%;
-                    color: #fff;
-                  "
-                >
-                  {{ onlineStats.Temperature.online }}
-                </span>
-                <span
-                  style="
-                    width: 50%;
-                    font-size: 12px;
-                    text-align: right;
-                    padding-right: 5%;
-                    color: #fff;
-                  "
-                >
-                  {{ onlineStats.Temperature.offline }}
-                </span>
-              </template>
-            </v-progress-linear>
-            <v-row style="font-size: 10px"
-              ><v-col>Online</v-col
-              ><v-col style="text-align: right; padding-right: 6%"
-                >Offline</v-col
-              ></v-row
-            >
-          </v-card>
-        </v-col> -->
+         
         <v-col cols="3" style="max-width: 20%">
           <v-card style="height: 35px; padding: 10px" class="elevation-0">
             <v-progress-linear
@@ -346,11 +297,10 @@
             >
           </v-card>
         </v-col>
-      </v-row>
-      <!-- <v-row
+      </v-row> -->
+    <!-- <v-row
         ><v-col><v-divider color="#DDD" /></v-col>
       </v-row> -->
-    </v-card>
   </div>
 </template>
 

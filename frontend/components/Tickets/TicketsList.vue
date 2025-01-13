@@ -67,16 +67,14 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card flat>
+    <v-card>
       <v-row>
         <v-col cols="12" style="padding-top: 0px">
           <v-row v-if="!filterWord">
-            <v-col cols="5"
-              ><h3 class="pl-5" v-if="status">Active Tickets</h3></v-col
-            >
-            <v-col cols="7" class="text-right" style="max-width: 100%">
+            <v-col><h3 class="pl-5" v-if="status">Active Tickets</h3></v-col>
+            <v-col class="text-right" style="max-width: 550px">
               <v-row>
-                <v-co class="mt-2">
+                <v-co class="mt-5">
                   <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
                 </v-co>
                 <v-col style="max-width: 250px; padding-right: 25px"
@@ -95,7 +93,7 @@
                     hide-details
                   ></v-text-field
                 ></v-col>
-                <v-col>
+                <v-col style="max-width: 200px">
                   <CustomFilter
                     v-if="displayDateFilter"
                     style="float: right; padding-top: 5px; z-index: 9"
@@ -104,7 +102,11 @@
                     :default_date_to="date_to"
                     :defaultFilterType="1"
                     :height="'40px'" /></v-col
-                ><v-col v-if="technician_id == null" class="pt-5">
+                ><v-col
+                  v-if="technician_id == null"
+                  class="pt-5"
+                  style="max-width: 80px"
+                >
                   <v-btn
                     v-if="can('tickets_create')"
                     title="Add Ticket"

@@ -573,7 +573,7 @@ export default {
         value: "sno",
       },
       {
-        text: "Building Name",
+        text: "Customer",
         value: "building_name",
       },
       {

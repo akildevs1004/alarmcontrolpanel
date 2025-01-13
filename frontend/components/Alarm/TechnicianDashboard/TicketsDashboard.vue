@@ -1,80 +1,75 @@
 <template>
   <div>
-    <v-card>
-      <v-row>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <TicketsStats v-if="key" :key="key" :name="'TicketsStats'"
-            /></v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <TicketsTodayStats
-                @emitStoprefresh="stopRefreshdata"
-                @emitStartrefresh="startRefreshdata"
-                v-if="key"
-                :key="key"
-                :name="'TicketsTodayStats'"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <TicketsMonthlyStats
-                @emitStoprefresh="stopRefreshdata"
-                @emitStartrefresh="startRefreshdata"
-                v-if="key"
-                :key="key"
-                :name="'TicketsMonthlyStats'"
-            /></v-card-text>
-          </v-card>
-        </v-col>
+    <v-row>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <TicketsStats v-if="key" :key="key" :name="'TicketsStats'"
+          /></v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <TicketsTodayStats
+              @emitStoprefresh="stopRefreshdata"
+              @emitStartrefresh="startRefreshdata"
+              v-if="key"
+              :key="key"
+              :name="'TicketsTodayStats'"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <TicketsMonthlyStats
+              @emitStoprefresh="stopRefreshdata"
+              @emitStartrefresh="startRefreshdata"
+              v-if="key"
+              :key="key"
+              :name="'TicketsMonthlyStats'"
+          /></v-card-text>
+        </v-card>
+      </v-col>
 
-        <v-col cols="3" class="pr-0" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <Tickets10DaysPendingStats
-                @emitStoprefresh="stopRefreshdata"
-                @emitStartrefresh="startRefreshdata"
-                v-if="key"
-                :key="key"
-                :name="'Tickets10DaysPendingStats'"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="3" style="max-width: 20%">
-          <v-card class="elevation-2" style="height: 180px">
-            <v-card-text>
-              <Tickets30DaysPendingStats
-                @emitStoprefresh="stopRefreshdata"
-                @emitStartrefresh="startRefreshdata"
-                v-if="key"
-                :key="key"
-                :name="'Tickets30DaysPendingStats'"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+      <v-col cols="3" class="pr-0" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <Tickets10DaysPendingStats
+              @emitStoprefresh="stopRefreshdata"
+              @emitStartrefresh="startRefreshdata"
+              v-if="key"
+              :key="key"
+              :name="'Tickets10DaysPendingStats'"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" style="max-width: 20%">
+        <v-card class="elevation-2" style="height: 180px">
+          <v-card-text>
+            <Tickets30DaysPendingStats
+              @emitStoprefresh="stopRefreshdata"
+              @emitStartrefresh="startRefreshdata"
+              v-if="key"
+              :key="key"
+              :name="'Tickets30DaysPendingStats'"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
 
-      <v-row
-        ><v-col><v-divider color="#DDD" /></v-col>
-      </v-row>
-      <v-row class="mt-5">
-        <v-col cols="12" style="padding-right: 25px"
-          ><TicketsList
-            :canReply="canReply"
-            :status="1"
-            :technician_id="technician_id"
-        /></v-col>
-      </v-row>
-    </v-card>
+    <v-row class="mt-5">
+      <v-col cols="12" style="padding-right: 25px"
+        ><TicketsList
+          :canReply="canReply"
+          :status="1"
+          :technician_id="technician_id"
+      /></v-col>
+    </v-row>
   </div>
 </template>
 

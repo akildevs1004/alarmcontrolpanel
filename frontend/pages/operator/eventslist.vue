@@ -508,12 +508,12 @@ export default {
     this.getAlarmTypes();
 
     setInterval(() => {
-      console.log(this.$auth.user);
-
       if (!this.$auth.user) {
         this.$router.push("/logout");
         return;
       }
+
+      this.getDatafromApi(this.filterText);
     }, 1000 * 30);
   },
 
