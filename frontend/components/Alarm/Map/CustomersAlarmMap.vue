@@ -1119,6 +1119,58 @@ export default {
       </td>
         </tr>
     </table>`;
+            let googleDirectionIcon =
+              process.env.APP_URL + "/icons/google-directions.png";
+            let googleInfoIcon = process.env.APP_URL + "/icons/google-info.png";
+            // Create content for the infowindow
+            alarmHtmlLink = "";
+            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+
+            customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
+
+            if (item.latest_alarm_event?.alarm_start_datetime) {
+              // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+
+              alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:16px;"/>`;
+            }
+
+            profile_picture =
+              item.profile_picture ||
+              "https://alarm.xtremeguard.org/no-business_profile.png";
+
+            html = `
+            <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
+
+               <tr>
+                <td colspan="2" style="width:100%;;text-align:center; vertical-align: top;">
+                 <div style="width:100%;margin:auto">
+                   <img style="margin:auto;width:auto; max-height:120px; padding-right:5px;" src="${profile_picture}" />
+                  </div>
+
+                </td>
+                </tr>
+              <tr>
+
+                <td style=" vertical-align: top;font-size:10px">
+                  <div>${item.buildingtype.name}</div>
+                 <div style="font-weight:bold;font-size:12px"> ${item.building_name}</div>
+
+                 <div>${item.house_number},${item.street_number}</div>
+                 <div>${item.city}</div>
+
+                  <div>Landmark: ${item.landmark}</div>
+                </td>
+<td style=" vertical-align: middle;text-align:right">
+ <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:20px" src="${googleDirectionIcon}"/></a>
+
+ <span>
+ ${customerHtmlLink}   ${alarmHtmlLink}
+  </span>
+  </td>
+
+              </tr>
+
+            </table>`;
 
             const infowindow = new google.maps.InfoWindow({
               content: html,

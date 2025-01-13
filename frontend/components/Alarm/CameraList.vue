@@ -78,9 +78,9 @@
 
     <v-row>
       <v-col>
-        RTMP Server URL:<span class="bold">
+        <!-- RTMP Server URL:<span class="bold">
           {{ cameraSelected ? cameraSelected.camera_url : "---" }}</span
-        >
+        > -->
       </v-col>
       <v-col
         v-if="!isMapviewOnly && isEditable"

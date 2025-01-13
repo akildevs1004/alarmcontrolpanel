@@ -198,10 +198,10 @@ export default {
       return result;
     },
     getDeviceName(device_id) {
-      return this.devices.find((e) => e.id == device_id).name || "";
+      return this.devices.find((e) => e.id == device_id)?.name || "";
     },
     getDeviceCategory(device_id) {
-      return this.devices.find((e) => e.id == device_id).device_type || "---";
+      return this.devices.find((e) => e.id == device_id)?.device_type || "---";
     },
     // checkIsSensorAddedAnyPhoto(verifyPlotting) {
     //   let matchCount = 0;
