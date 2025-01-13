@@ -1,8 +1,8 @@
 <template>
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
   <div v-else>
-    <v-row
-      ><v-col cols="9"
+    <v-row>
+      <v-col cols="9"
         ><v-row>
           <v-col>
             <v-card elevation="2"
@@ -141,14 +141,14 @@
                     /> </v-col
                   ><v-col cols="4">
                     <AlarmEventStatusCountPieChart
-                      v-if="chartEventOpenStatistics"
+                      v-if="chartEventClosedStatistics"
                       :key="key + 2"
                       :name="'AlarmEventStatusCountPieChart2'"
                       :componentData="chartEventClosedStatistics"
                     /> </v-col
                   ><v-col cols="4">
                     <AlarmEventStatusCountPieChart
-                      v-if="chartEventOpenStatistics"
+                      v-if="chartEventForwardStatistics"
                       :key="key + 4"
                       :name="'AlarmEventStatusCountPieChart3'"
                       :componentData="chartEventForwardStatistics"
@@ -172,8 +172,9 @@
                 /> </v-card-text
             ></v-card>
           </v-col>
-        </v-row> </v-col
-      ><v-col cols="3">
+        </v-row>
+      </v-col>
+      <v-col cols="3">
         <v-row>
           <v-col>
             <v-card elevation="2"
@@ -485,6 +486,12 @@ export default {
 
     await this.getEventCategoriesStats();
     await this.updateEventsOpenCountStatus();
+
+    setInterval(async () => {
+      await this.getEventsTypeStats();
+      await this.getEventCategoriesStats();
+      await this.updateEventsOpenCountStatus();
+    }, 1000 * 15);
   },
   watch: {},
   methods: {
@@ -492,6 +499,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          date_from: this.date_from,
         },
       };
 
@@ -533,21 +541,37 @@ export default {
               series: [],
               colors: [],
               customTotalValue: 0,
+              percentage: 0,
             };
+
+            const total =
+              parseInt(data.openCount) +
+              parseInt(data.closedCount) +
+              parseInt(data.forwardCount);
+
+            let openPercentage = 0;
+            let closedPercentage = 0;
+            let forwardPercentage = 0;
+            if (total > 0) {
+              openPercentage = Math.round((data.openCount / total) * 100, 2);
+              closedPercentage = Math.round((data.closedCount / total) * 100);
+              forwardPercentage = Math.round((data.forwardCount / total) * 100);
+            }
+
             this.chartEventOpenStatistics.title = "Open";
             this.chartEventOpenStatistics.labels[0] = "Open";
             this.chartEventOpenStatistics.series[0] = data.openCount; // data.total - data.armed;
 
-            this.chartEventOpenStatistics.labels[1] = "Total";
-            this.chartEventOpenStatistics.series[1] =
-              data.openCount + data.closedCount;
+            this.chartEventOpenStatistics.labels[1] = "Closed";
+            this.chartEventOpenStatistics.series[1] = data.closedCount;
 
             this.chartEventOpenStatistics.labels[2] = "Forward";
-            this.chartEventOpenStatistics.series[2] = data.openCount; // data.armed;
+            this.chartEventOpenStatistics.series[2] = data.forwardCount; // data.armed;
 
             this.chartEventOpenStatistics.colors = ["#07af50", "#DDD", "#DDD"];
-            this.chartEventOpenStatistics.customTotalValue =
-              data.openCount + data.closedCount; //this.items.ExpectingCount;
+            this.chartEventOpenStatistics.customTotalValue = total; //this.items.ExpectingCount;
+
+            this.chartEventOpenStatistics.percentage = openPercentage;
 
             //----------------------------
 
@@ -556,14 +580,14 @@ export default {
               series: [],
               colors: [],
               customTotalValue: 0,
+              percentage: 0,
             };
             this.chartEventClosedStatistics.title = "Closed";
             this.chartEventClosedStatistics.labels[0] = "Closed";
             this.chartEventClosedStatistics.series[0] = data.closedCount; // data.total - data.armed;
 
-            this.chartEventClosedStatistics.labels[1] = "Total";
-            this.chartEventClosedStatistics.series[1] =
-              data.openCount + data.closedCount; // data.armed;
+            this.chartEventClosedStatistics.labels[1] = "Forward";
+            this.chartEventClosedStatistics.series[1] = data.forwardCount; // data.armed;
 
             this.chartEventClosedStatistics.labels[2] = "Open";
             this.chartEventClosedStatistics.series[2] = data.openCount; // data.armed;
@@ -573,8 +597,9 @@ export default {
               "#DDD",
               "#DDD",
             ];
-            this.chartEventClosedStatistics.customTotalValue =
-              data.openCount + data.closedCount; //this.items.ExpectingCount;
+            this.chartEventClosedStatistics.customTotalValue = total; //this.items.ExpectingCount;
+
+            this.chartEventClosedStatistics.percentage = closedPercentage;
 
             //----------------------------
 
@@ -583,14 +608,14 @@ export default {
               series: [],
               colors: [],
               customTotalValue: 0,
+              percentage: 0,
             };
             this.chartEventForwardStatistics.title = "Forward";
             this.chartEventForwardStatistics.labels[0] = "Forward";
-            this.chartEventForwardStatistics.series[0] = data.openCount; // data.total - data.armed;
+            this.chartEventForwardStatistics.series[0] = data.forwardCount; // data.total - data.armed;
 
-            this.chartEventForwardStatistics.labels[1] = "Total";
-            this.chartEventForwardStatistics.series[1] =
-              data.openCount + data.closedCount; // data.armed;
+            this.chartEventForwardStatistics.labels[1] = "Closed";
+            this.chartEventForwardStatistics.series[1] = data.closedCount; // data.armed;
 
             this.chartEventForwardStatistics.labels[2] = "Open";
             this.chartEventForwardStatistics.series[2] = data.openCount; // data.armed;
@@ -600,8 +625,9 @@ export default {
               "#DDD",
               "#DDD",
             ];
-            this.chartEventForwardStatistics.customTotalValue =
-              data.openCount + data.closedCount; //this.items.ExpectingCount;
+            this.chartEventForwardStatistics.customTotalValue = total; //this.items.ExpectingCount;
+
+            this.chartEventForwardStatistics.percentage = forwardPercentage;
           }
         });
     },

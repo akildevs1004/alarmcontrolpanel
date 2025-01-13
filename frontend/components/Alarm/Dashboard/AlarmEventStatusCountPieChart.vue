@@ -13,11 +13,26 @@
         class="text-center pt-0"
         style="margin: 0 auto; text-align: left; margin-left: -10px"
       >
-        <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut2">
-          Total <br />0
-        </div>
-        <div style="margin: auto; text-align: center; font-weight: bold">
+        <div
+          style="
+            margin: auto;
+            height: 20px;
+            text-align: center;
+            font-weight: bold;
+          "
+        >
           {{ componentData ? componentData.title : "---" }}
+        </div>
+
+        <div
+          v-if="
+            chartOptions.customTotalValue == 0 ||
+            chartOptions.customTotalValue == null ||
+            chartOptions.customTotalValue == 'NaN'
+          "
+          class="empty-doughnut3"
+        >
+          0%
         </div>
         <div
           :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
@@ -103,24 +118,37 @@ export default {
                   fontSize: "22px",
                   fontFamily: "Rubik",
                   color: "#dfsda",
-                  offsetY: -10,
+                  // offsetY: -10,
                 },
                 value: {
                   show: true,
                   fontSize: "16px",
                   fontFamily: "Helvetica, Arial, sans-serif",
                   color: undefined,
-                  offsetY: 16,
+                  // offsetY: 16,
                   formatter: function (val) {
                     return val;
                   },
                 },
                 total: {
                   show: true,
-                  label: "Total",
+                  // label: this.componentData
+                  //   ? this.componentData.title
+                  //   : "Total",
+                  label: this.componentData?.percentage + "%" || 0 + "%",
                   color: "#373d3f",
+                  // fontSize: "30px",
+                  position: "center",
+                  // padding: {
+                  //   top: 20, // Adds padding at the top
+                  // },
+
                   formatter: function (val) {
-                    return val.config.customTotalValue;
+                    return " ";
+                    // return this.componentData
+                    //   ? this.componentData.percentage + "%"
+                    //   : "0%";
+                    return val.config?.customTotalValue + "%" || 0 + "%";
                   },
                 },
               },
@@ -203,30 +231,32 @@ export default {
     //   });
     // },
     async renderChartComponent() {
-      this.chartOptions.labels[0] = this.componentData.labels[0];
-      this.chartOptions.series[0] = this.componentData.series[0];
+      if (this.componentData) {
+        this.chartOptions.labels[0] = this.componentData.labels[0];
+        this.chartOptions.series[0] = this.componentData.series[0];
 
-      this.chartOptions.labels[1] = this.componentData.labels[1];
-      this.chartOptions.series[1] = this.componentData.series[1];
-      if (this.componentData.labels[2]) {
-        this.chartOptions.labels[2] = this.componentData.labels[2];
-        this.chartOptions.series[2] = this.componentData.series[2];
+        this.chartOptions.labels[1] = this.componentData.labels[1];
+        this.chartOptions.series[1] = this.componentData.series[1];
+        if (this.componentData.labels[2]) {
+          this.chartOptions.labels[2] = this.componentData.labels[2];
+          this.chartOptions.series[2] = this.componentData.series[2];
+        }
+
+        this.chartOptions.colors = this.componentData.colors;
+
+        this.chartOptions.customTotalValue = this.componentData.percentage; // this.componentData.customTotalValue;
+
+        if (this.chart) {
+          this.chart.destroy();
+        }
+
+        // Render the chart
+        this.chart = await new ApexCharts(
+          document.querySelector("#" + this.name),
+          this.chartOptions
+        );
+        this.chart.render();
       }
-
-      this.chartOptions.colors = this.componentData.colors;
-
-      this.chartOptions.customTotalValue = this.componentData.series[0]; // this.componentData.customTotalValue;
-
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
-      // Render the chart
-      this.chart = await new ApexCharts(
-        document.querySelector("#" + this.name),
-        this.chartOptions
-      );
-      this.chart.render();
     },
     // async renderChart1(data) {
     //   let counter = 0;
@@ -267,3 +297,8 @@ export default {
   },
 };
 </script>
+<!-- <style>
+.apexcharts-datalabel-label {
+  margin-top: 10px !important;
+}
+</style> -->

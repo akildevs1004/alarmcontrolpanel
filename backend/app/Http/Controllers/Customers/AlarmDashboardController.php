@@ -26,19 +26,20 @@ class AlarmDashboardController extends Controller
     public function dashboardStatisctsCustomers(Request $request)
     {
         $totalCustomers = Customers::where("company_id", $request->company_id)->count();
-        $deviceCounts = Device::selectRaw("             
+        $deviceCounts = Device::where("company_id", $request->company_id)->selectRaw("             
         COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
         COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
         COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
         COUNT(CASE WHEN status_id = 2 THEN 1 END) as offlineCount
     ")->first();
 
-        $alarmCounts = AlarmEvents::selectRaw("             
-        COUNT(CASE WHEN alarm_status = 1 THEN 1  END) as openCount,
-        COUNT(CASE WHEN alarm_status = 0 THEN 1   END) as closedCount 
-        
-    ")
-            //->whereDate("alarm_start_datetime", $request->date)
+        $alarmCounts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("
+    COUNT(CASE WHEN alarm_status = 1 THEN 1 END) as openCount,
+    COUNT(CASE WHEN alarm_status = 0 THEN 1 END) as closedCount,
+    COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
+")
+
+            ->whereDate("alarm_start_datetime", $request->date)
             ->first();
 
 
@@ -50,8 +51,9 @@ class AlarmDashboardController extends Controller
             "offlineCount" => $deviceCounts->offlinecount,
 
 
-            "openCount" => $alarmCounts->opencount,
+            "openCount" => $alarmCounts->opencount - $alarmCounts->forwardcount,
             "closedCount" => $alarmCounts->closedcount,
+            "forwardCount" => $alarmCounts->forwardcount ??  0,
         ];
     }
     public function dashboardStatisctsHourlyRange(Request $request)
@@ -149,10 +151,15 @@ class AlarmDashboardController extends Controller
 
 
 
-        $totalCount = $model->count();
-        $armedCount = $model->where("armed_status", 1)->count();
+        $totalCount = $model->clone()->count();
+        $armedCount =  $model->clone()->where("armed_status", 1)->count();
+        $disarmCount = $model->clone()->where("armed_status", 0)->count();
+        $otherCount =   $totalCount - $armedCount - $disarmCount;
 
-        return ["total" => $totalCount, "armed" => $armedCount];
+
+
+
+        return ["total" => $totalCount, "armed" => $armedCount, "disarm" => $disarmCount, "other" => $otherCount];
     }
     public function getDeviceLiveStatisticsGroupBy(Request $request)
     {
@@ -264,7 +271,7 @@ class AlarmDashboardController extends Controller
             ->when($request->filled('date_from'), function ($query) use ($request) {
                 $query->whereBetween('alarm_start_datetime', [
                     $request['date_from'] . ' 00:00:00',
-                    $request['date_to'] . ' 23:59:59'
+                    $request['date_from'] . ' 23:59:59'
                 ]);
             })
             ->selectRaw('

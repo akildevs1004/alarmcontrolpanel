@@ -71,7 +71,11 @@
         <v-row>
           <v-col cols="12" class="text-center justify-center mt-2">
             <div style="font-size: 35px; color: #fe0004; font-weight: bold">
-              {{ categories ? categories.total - categories.armed : "0" }}
+              {{
+                categories && categories.total > 0
+                  ? categories.total - categories.armed
+                  : "0"
+              }}
             </div>
 
             <div style="font-size: 15px">DisArm</div>
@@ -281,10 +285,10 @@ export default {
       this.chartOptions.series[0] = data.armed;
 
       this.chartOptions.labels[1] = "DisArm";
-      this.chartOptions.series[1] = data.total - data.armed;
+      this.chartOptions.series[1] = data.disarm;
 
       this.chartOptions.labels[2] = "Others";
-      this.chartOptions.series[2] = 0;
+      this.chartOptions.series[2] = data.other;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 

@@ -2424,6 +2424,20 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
 </style>
 
 <style>
+.empty-doughnut3 {
+  border: 12px solid rgb(150, 150, 150);
+  border-radius: 100px;
+  height: 100px;
+  width: 100px;
+  padding-top: 8px;
+  padding-left: 2px;
+  font-size: 18px;
+  margin: auto;
+  line-height: 42px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #373d3f;
+}
 .empty-doughnut2 {
   border: 20px solid rgb(150, 150, 150);
   border-radius: 100px;
