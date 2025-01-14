@@ -301,6 +301,11 @@
                         line-height: 15px;
                         padding-top: 5px;
                       "
+                      @click="
+                        filter_customer_id =
+                          alarm.device.customer.building_name;
+                        gotoCustomerLocationOnMap();
+                      "
                     >
                       <div style="overflow: hidden">
                         <!-- {{
