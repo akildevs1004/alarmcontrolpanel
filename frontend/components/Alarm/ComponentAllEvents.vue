@@ -821,7 +821,7 @@ export default {
     } else {
       this.sensorItems = ["All"];
     }
-
+    this.getDataFromApi(0);
     setTimeout(() => {
       setInterval(() => {
         if (
@@ -830,7 +830,7 @@ export default {
         )
           this.getDataFromApi(0);
       }, 1000 * 20 * 1);
-    }, 1000 * 5);
+    }, 1000 * 30);
   },
 
   methods: {
