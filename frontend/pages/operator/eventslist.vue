@@ -299,7 +299,7 @@
         </v-card>
       </v-col>
       <v-col style="max-width: 300px; padding-top: 0px">
-        <v-card elevation="0">
+        <v-card elevation="2">
           <v-card-text
             :style="
               ' background-color:#ecf0f4;overflow:scroll1;height:' +

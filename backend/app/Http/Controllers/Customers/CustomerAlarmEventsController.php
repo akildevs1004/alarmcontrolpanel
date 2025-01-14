@@ -432,7 +432,7 @@ class CustomerAlarmEventsController extends Controller
                                 Device::where("serial_number", $device_serial_number)->update($device_Data);
                             }
                         }
-                        return $this->response('Alarm stopped Successfully', null, true);
+                        return $this->response('Alarm stopped Successfully #' . $request->alarm_id, $data2, true);
                     } else {
                         return $this->response('Alarm Details are not available', null, false);
                     }
