@@ -134,7 +134,6 @@
                 <v-row>
                   <v-col
                     class="pl-0 pr-0 pt-0 pb-2"
-                    v-if="alarm.device?.customer"
                     v-for="(alarm, index) in data"
                   >
                     <v-card
@@ -144,7 +143,7 @@
                       style="border-bottom: 0px solid black"
                     >
                       <v-card-text
-                        v-if="selectedAlarm"
+                        v-if="selectedAlarm && alarm.device.customer"
                         :style="{
                           paddingRight: '5px',
                           border:
@@ -719,8 +718,19 @@ export default {
             //this.mapkeycount++;
             this.data = data.data; //data.data;
 
+            if (this.data.length == 0 && changeSelectedAram == true) {
+              this.selectedAlarm = null;
+
+              this.$router.push("/operator/eventslist");
+              return false;
+            }
+
             this.loading = false;
             if (changeSelectedAram) this.selectedAlarm = this.data[0];
+
+            if (this.data.length > 0 && this.selectedAlarm == null) {
+              this.selectedAlarm = this.data[0];
+            }
 
             if (this.$route.query.id) {
               this.selectedAlarmFilter = this.data.find(
@@ -743,6 +753,9 @@ export default {
             // this.mapMarkersList = [];
 
             // //this.plotLocations();
+            console.log(this.data.length);
+
+            if (this.data.length == 0) this.selectedAlarm = null;
           });
       } catch (e) {}
     },
