@@ -56,6 +56,7 @@ class DeviceArmedLogsController extends Controller
                 $query->without(["primary_contact", "secondary_contact", "profile_pictures", 'all_alarm_events', 'user', 'devices', 'contacts', 'profilePictures']);
             }
         ])
+            ->whereHas("device.customer")
             ->where("company_id", $request->company_id)
             ->when($request->filled("filter_customer_id"), function ($query) use ($request) {
                 $query->whereHas("device.customer", function ($query) use ($request) {
