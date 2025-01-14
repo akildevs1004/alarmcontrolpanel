@@ -503,6 +503,7 @@ export default {
 
     setInterval(async () => {
       if (this.$route.name == "alarm-dashboard") {
+        this.key++;
         await this.getEventsTypeStats();
         await this.getEventCategoriesStats();
         await this.updateEventsOpenCountStatus();
