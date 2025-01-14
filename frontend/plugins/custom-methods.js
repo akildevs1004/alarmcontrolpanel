@@ -391,6 +391,97 @@ export default ({ app }, inject) => {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    getAlarmIconsNoGoogle() {
+      return {
+        intruder: {
+          color: "#ff0000",
+          text: "Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/intruder.png",
+          icon: "mdi-alarm",
+        },
+        alarm: {
+          color: "#ff0000",
+          text: "Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/intruder.png",
+          icon: "mdi-alarm",
+        },
+        temperature: {
+          color: "#ff0000",
+          text: "Temperature Alarm",
+          image:
+            process.env.BACKEND_URL2 +
+            "/alarm_icons/google_temperature_alarm.png",
+          icon: "mdi-alarm",
+        },
+        fire: {
+          color: "#ff0000",
+          text: "Fire Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/fire.png",
+          icon: "mdi-alarm",
+        },
+        water: {
+          color: "#ff0000",
+          text: "Water Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/water.png",
+          icon: "mdi-alarm",
+        },
+
+        sos: {
+          color: "#ff0000",
+          text: "SOS Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/sos.png",
+          icon: "mdi-alarm",
+        },
+        medical: {
+          color: "#ff0000",
+          text: "Medical Alarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/medical.png",
+          icon: "mdi-alarm",
+        },
+        offline: {
+          color: "#626262",
+          text: "Offline",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/techical.png",
+          icon: "mdi-download-network-outline",
+        },
+        closed: {
+          color: "#626262",
+          text: "Closed",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/techical.png",
+          icon: "mdi-download-network-outline",
+        },
+        armed: {
+          color: "#00930b",
+          text: "Armed",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/google_armed.png",
+          icon: "mdi-lock",
+        },
+        disarm: {
+          color: "#ff0000",
+          text: "Disarm",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/google_disarm.png",
+          icon: "mdi-lock-open",
+        },
+        ac_off: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/google_ac_off.png",
+          icon: "mdi-lock-open",
+        },
+        dc_off: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/google_dc_off.png",
+          icon: "mdi-lock-open",
+        },
+        battery: {
+          color: "#ff0000",
+          text: "Power Loss",
+          image: process.env.BACKEND_URL2 + "/alarm_icons/techical.png",
+          icon: "mdi-lock-open",
+        },
+      };
+    },
     getAlarmIcons() {
       return {
         intruder: {

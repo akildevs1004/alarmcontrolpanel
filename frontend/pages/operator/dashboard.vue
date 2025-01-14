@@ -23,15 +23,16 @@
         <v-card-text style="padding: 0px">
           <v-container style="min-height: 100px; padding: 0px">
             <iframe
-              v-if="dialogCameraLive"
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14433.170866542543!2d55.291463!3d25.2607368!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43145ef11097%3A0x78e0d1eb3fed1225!2sAkil%20Security%20%26%20Alarm%20System%20Dubai%20LLC!5e0!3m2!1sen!2sae!4v1719239839580!5m2!1sen!2sae"
+              v-if="dialogCameraLive && getCameraURL() == ''"
+              :src="getCameraURL()"
               width="100%"
-              height="450"
+              height="350"
               style="border: 0"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
             ></iframe>
+            <div>Camera Live Is not Available</div>
           </v-container>
         </v-card-text>
       </v-card>
@@ -259,7 +260,7 @@
           :style="
             ' height:' +
             windowHeight +
-            'px;overflow-y: auto;overflow-x: hidden;margin-top:3px!important;background-color: #909a9f'
+            'px;overflow-y: auto;overflow-x: hidden;margin-top:3px!important;background-color: #fff'
           "
         >
           <v-card-text style="padding: 0px">
@@ -277,27 +278,19 @@
                 v-if="alarm.device?.customer"
                 :key="index + 55"
                 v-for="(alarm, index) in data"
-                elevation="0"
-                styl.e="border:1px solid #d9d9d9;"
-                style="
-                  border-color: #d3d3d3;
-                  margin-top: 0px;
-                  border-bottom: 1px solid black;
-                  background-color: #909a9f;
-                  border-radius: 0px;
-                "
+                elevation="2"
+                style="border-color: #d3d3d3; margin-top: 5px"
               >
-                <v-card-text
-                  style="padding-right: 0px; padding-top: 5px"
-                  elevation="0"
-                >
-                  <v-row style="min-width: 200px; height: 65px; width: 100%">
-                    <v-col style="max-width: 40px; padding-left: 5px">
+                <v-card-text>
+                  <v-row style="min-width: 200px; width: 100%">
+                    <v-col
+                      style="max-width: 40px; padding-left: 5px; margin: auto"
+                    >
                       <img
                         @click="openWindow(alarm)"
                         :title="alarm.alarm_type"
                         style="width: 25px; padding-top: 0%"
-                        :src="getAlarmColorObject(alarm).image + '?5=5'"
+                        :src="getOperatorColorObject(alarm).image + '?5=5'"
                       />
                     </v-col>
                     <v-col
@@ -382,9 +375,13 @@
                         <!-- <v-icon color="red" size="18">mdi-lock-outline</v-icon> -->
                         <div>
                           <v-icon
-                            @click="openCameradialog()"
+                            v-if="alarm.device?.customer?.cameras?.length > 0"
+                            @click="openCameradialog(alarm)"
                             color="black"
                             size="25"
+                            >mdi-camera-outline</v-icon
+                          >
+                          <v-icon v-else color="#DDD" size="25"
                             >mdi-camera-outline</v-icon
                           >
                         </div>
@@ -783,6 +780,7 @@ export default {
     totalRowsCount: 0,
 
     colorcodes: [],
+    colorcodesMap: [],
     snack: false,
     snackColor: "",
     snackText: "",
@@ -883,6 +881,8 @@ export default {
 
   async created() {
     this.colorcodes = this.$utils.getAlarmIcons();
+    this.colorcodesTable = this.$utils.getAlarmIconsNoGoogle();
+
     this.loadCustomersList();
   },
   watch: {},
@@ -895,7 +895,22 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-    openCameradialog() {
+
+    getCameraURL() {
+      if (
+        this.selectedAlarm &&
+        this.selectedAlarm?.device.customer.cameras[0]
+      ) {
+        return (
+          process?.env.CAMERA_RTMP_PLAYER +
+          "?url=" +
+          this.selectedAlarm?.device.customer.cameras[0].camera_url
+        );
+      }
+      return "";
+    },
+    openCameradialog(alarm) {
+      this.selectedAlarm = alarm;
       this.dialogCameraLive = true;
     },
     loadCustomersList() {
@@ -1181,6 +1196,25 @@ export default {
     getImageicon(value) {
       if (process) return value.image;
       else return false;
+    },
+    getOperatorColorObject(alarm, customer = null) {
+      if (alarm) {
+        if (this.colorcodesTable[alarm.alarm_type.toLowerCase()])
+          return this.colorcodesTable[alarm.alarm_type.toLowerCase()];
+        if (alarm.alarm_status == 1) {
+          return this.colorcodesTable.alarm;
+        }
+      } else if (customer) {
+        if (this.findAnyDeviceisOffline(customer.devices) > 0) {
+          return this.colorcodesTable.offline;
+        } else if (this.findanyArmedDevice(customer.devices)) {
+          return this.colorcodesTable.armed;
+        } else if (this.findanyDisamrDevice(customer.devices) > 0) {
+          return this.colorcodesTable.disarm;
+        }
+      }
+
+      return this.colorcodesTable.offline;
     },
     getAlarmColorObject(alarm, customer = null) {
       if (alarm) {

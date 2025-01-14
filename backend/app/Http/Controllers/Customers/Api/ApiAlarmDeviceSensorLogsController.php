@@ -144,6 +144,13 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $alarm_source = 'Sensor';
 
                 //3401 00 000 / HOME 
+                Device::where("serial_number", $serial_number)->update(
+                    ["status_id" => 1, "last_live_datetime" => $log_time]
+                );
+
+                $this->closeOfflineAlarmsBySerialNumber($serial_number);
+
+                $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
 
 
                 //-----------Alarm Control panel - Wifi Model 
@@ -156,7 +163,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $this->closeOfflineAlarmsBySerialNumber($serial_number);
 
                     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
-                } else if ($event == '1406' || $event == '1407' || $event == '1401') //disarm button  // 1401,000=device //1407=remote //1406
+                } else if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
                 {
 
                     $data = [
@@ -180,7 +187,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
                     $this->updateDisarmTableCompanyLogs();
                     $message[] = $this->getMeta("Device Disarm", $log_time . "<br/>\n");
-                } else if ($event == '3407' || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
+                } else if ($event == '3407'   || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
                 {
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
@@ -246,6 +253,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         //3309 - DC Recovery
 
                         //1406 - disam  
+                        //1455 - disam  
+
                     }
 
 

@@ -64,7 +64,8 @@
                   >
                   <iframe
                     :src="
-                      'https://rtmp.oxsai.com/player.html?url=' +
+                      process?.env.CAMERA_RTMP_PLAYER +
+                      '?url=' +
                       item.camera_url
                     "
                     width="100%"
