@@ -144,6 +144,7 @@
                       style="border-bottom: 0px solid black"
                     >
                       <v-card-text
+                        v-if="selectedAlarm"
                         :style="{
                           paddingRight: '5px',
                           border:
@@ -279,7 +280,7 @@
                         </v-row>
                       </v-card-text>
                       <img
-                        v-if="selectedAlarm.id == alarm.id"
+                        v-if="selectedAlarm && selectedAlarm.id == alarm.id"
                         src="/right-arrow.png"
                         style="
                           width: 50px;
