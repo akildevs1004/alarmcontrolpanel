@@ -515,7 +515,7 @@ export default {
       }
 
       this.getDatafromApi(this.filterText, false);
-    }, 1000 * 30);
+    }, 1000 * 15);
   },
 
   async created() {

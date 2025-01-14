@@ -409,7 +409,8 @@
                   <!-- </td>
                 <td> -->
                   {{
-                    globalContactDetails?.phone1
+                    globalContactDetails?.phone1 &&
+                    globalContactDetails.phone1 != "null"
                       ? globalContactDetails.phone1
                       : "---"
                   }}
@@ -424,7 +425,8 @@
                   <!-- </td>
                 <td> -->
                   {{
-                    globalContactDetails?.phone2
+                    globalContactDetails?.phone2 &&
+                    globalContactDetails.phone2 != "null"
                       ? globalContactDetails.phone2
                       : "---"
                   }}
@@ -439,7 +441,8 @@
                   <!-- </td>
                 <td> -->
                   {{
-                    globalContactDetails?.whatsapp
+                    globalContactDetails?.whatsapp &&
+                    globalContactDetails.whatsapp != "null"
                       ? globalContactDetails.whatsapp
                       : "---"
                   }}
@@ -454,7 +457,8 @@
                   <!-- </td>
                 <td> -->
                   {{
-                    globalContactDetails?.email
+                    globalContactDetails?.email &&
+                    globalContactDetails.email != "null"
                       ? globalContactDetails.email
                       : "---"
                   }}

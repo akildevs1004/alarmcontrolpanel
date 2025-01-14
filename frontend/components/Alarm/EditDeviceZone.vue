@@ -135,7 +135,7 @@
                     :items="[{ id: null, name: 'Default' }, ...areaList]"
                     item-value="id"
                     item-text="name"
-                    label="Area(Default Device Model  XT700)"
+                    label="Area(Default - Device Model  XT700)"
                     dense
                     small
                     outlined
