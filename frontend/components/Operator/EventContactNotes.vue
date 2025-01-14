@@ -148,6 +148,7 @@
                 <EventCustomerTabContacts
                   :alarmId="alarm.id"
                   v-if="contact"
+                  :alarm="alarm"
                   :customer="alarm.device.customer"
                   :contact_type="contact.address_type"
                   :key="contact.address_type"

@@ -8,7 +8,9 @@
     <v-dialog v-model="dialogOperatorNotes" max-width="400px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Operator Comments</span>
+          <span dense style="color: black"
+            >Operator Comments {{ alarmId }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -478,9 +480,9 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col class="text-center"
-            ><v-btn
+        <v-row v-if="alarm && alarm.alarm_status == 1">
+          <v-col class="text-center">
+            <v-btn
               @click="dialogOperatorNotes = true"
               class="mt-4"
               dense
@@ -502,7 +504,7 @@ import AlarmForwardEvent from "../Alarm/AlarmForwardEvent.vue";
 
 export default {
   components: {},
-  props: ["alarmId", "customer", "contact_type", "browserHeight"],
+  props: ["alarmId", "alarm", "customer", "contact_type", "browserHeight"],
   data: () => ({
     dialogOperatorNotes: false,
     selectContactButton: null,
@@ -735,7 +737,11 @@ export default {
               // this.$emit("closeDialog");
               this.key += 1;
 
-              this.$emit("emitreloadEventNotesStep1");
+              setTimeout(() => {
+                this.dialogOperatorNotes = false;
+              }, 1000 * 5);
+
+              //this.$emit("emitreloadEventNotesStep1");
             }
           })
           .catch((e) => {

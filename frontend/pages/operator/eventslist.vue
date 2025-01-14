@@ -512,9 +512,10 @@ export default {
         this.$router.push("/logout");
         return;
       }
-
-      this.getDatafromApi(this.filterText);
     }, 1000 * 30);
+    setInterval(() => {
+      this.getDatafromApi(this.filterText);
+    }, 1000 * 60 * 5);
   },
 
   async created() {
