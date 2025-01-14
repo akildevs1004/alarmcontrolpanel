@@ -416,23 +416,24 @@
     <v-row
       ><v-col>
         <v-card
-          style="height: 450px"
+          style="height: 350px"
           elevation="2"
-          class="eventslistscroll table-font12"
+          class="eventslistscroll1 table-font121"
           ><v-card-text>
             <DashboardLoginActivities
+              v-if="loadAllEventsTable"
               :filter_user_type="'security'"
             /> </v-card-text
         ></v-card> </v-col
       ><v-col>
         <v-card
-          style="height: 450px"
+          style="height: 350px"
           elevation="2"
           class="eventslistscroll table-font12"
           ><v-card-text>
             <DashboardAlarmEventsHourWiseChart
               v-if="loadAllEventsTable"
-              :height="'350'"
+              :height="'300'"
               name="DashboardAlarmEventsHourWiseChart1" /></v-card-text
         ></v-card>
       </v-col>
@@ -498,7 +499,7 @@ export default {
 
     setTimeout(() => {
       this.loadAllEventsTable = true;
-    }, 1000 * 10);
+    }, 1000 * 3);
 
     setInterval(async () => {
       if (this.$route.name == "alarm-dashboard") {

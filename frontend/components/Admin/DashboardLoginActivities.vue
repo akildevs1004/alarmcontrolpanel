@@ -36,20 +36,13 @@
     >
       <template v-slot:item.employee="{ item, index }">
         <v-row no-gutters>
-          <v-col
-            style="
-              padding: 5px;
-              padding-left: 0px;
-              width: 30px;
-              max-width: 30px;
-            "
-          >
+          <v-col style="padding-left: 0px; width: 25px; max-width: 25px">
             <v-img
               style="
                 border-radius: 50%;
                 height: auto;
-                width: 30px;
-                max-width: 30px;
+                width: 25px;
+                max-width: 25px;
               "
               :src="
                 item.user.security

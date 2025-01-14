@@ -830,7 +830,7 @@ export default {
         )
           this.getDataFromApi(0);
       }, 1000 * 20 * 1);
-    }, 1000 * 40);
+    }, 1000 * 5);
   },
 
   methods: {
