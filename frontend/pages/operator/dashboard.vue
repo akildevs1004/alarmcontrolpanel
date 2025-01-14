@@ -23,8 +23,7 @@
         <v-card-text style="padding: 0px">
           <v-container style="min-height: 100px; padding: 0px">
             <iframe
-              v-if="dialogCameraLive && getCameraURL() == ''"
-              :src="getCameraURL()"
+              src="https://rtmp.oxsai.com/player.html?url=rtmp://64.225.28.61/live/cam1"
               width="100%"
               height="350"
               style="border: 0"
@@ -32,7 +31,7 @@
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
             ></iframe>
-            <div>Camera Live Is not Available</div>
+            <!-- <div>Camera Live Is not Available</div> -->
           </v-container>
         </v-card-text>
       </v-card>

@@ -63,11 +63,7 @@
                     >{{ index + 1 }}: {{ item.title }}</v-chip
                   >
                   <iframe
-                    :src="
-                      process?.env.CAMERA_RTMP_PLAYER +
-                      '?url=' +
-                      item.camera_url
-                    "
+                    src="https://rtmp.oxsai.com/player.html?url=rtmp://64.225.28.61/live/cam1"
                     width="100%"
                     height="600"
                     style="border: 0; padding-top: 20px"
