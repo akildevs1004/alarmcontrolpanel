@@ -512,10 +512,8 @@ export default {
         this.$router.push("/logout");
         return;
       }
-    }, 1000 * 30);
-    setInterval(() => {
       this.getDatafromApi(this.filterText);
-    }, 1000 * 60 * 5);
+    }, 1000 * 30);
   },
 
   async created() {
@@ -720,7 +718,7 @@ export default {
             this.data = data.data; //data.data;
 
             this.loading = false;
-            this.selectedAlarm = this.data[0];
+            if (this.selectedAlarm) this.selectedAlarm = this.data[0];
 
             if (this.$route.query.id) {
               this.selectedAlarmFilter = this.data.find(
