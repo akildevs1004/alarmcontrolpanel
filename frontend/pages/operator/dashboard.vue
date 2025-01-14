@@ -269,7 +269,7 @@
             /> -->
 
             <v-row v-if="data.length == 0" class="text-center">
-              <v-col> 0 Alarms </v-col>
+              <v-col style="color: #fff"> 0 Alarms </v-col>
             </v-row>
 
             <div style="">

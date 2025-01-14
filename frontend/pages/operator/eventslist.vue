@@ -462,7 +462,7 @@ export default {
     filterText: "",
 
     google_map_style_bandw,
-
+    changeSelectedAlarm: true,
     google_map_style_regular,
     cancelGetdatafromAPITokenSource: null, // Keep track of the cancel token
   }),
@@ -513,7 +513,8 @@ export default {
         this.$router.push("/logout");
         return;
       }
-      this.getDatafromApi(this.filterText);
+
+      this.getDatafromApi(this.filterText, false);
     }, 1000 * 30);
   },
 
@@ -684,7 +685,7 @@ export default {
       }
     },
 
-    async getDatafromApi(filterText = "") {
+    async getDatafromApi(filterText = "", changeSelectedAram = true) {
       if (this.cancelGetdatafromAPITokenSource) {
         this.cancelGetdatafromAPITokenSource.cancel(
           "request canceled due to new request."
@@ -719,7 +720,7 @@ export default {
             this.data = data.data; //data.data;
 
             this.loading = false;
-            if (this.selectedAlarm) this.selectedAlarm = this.data[0];
+            if (changeSelectedAram) this.selectedAlarm = this.data[0];
 
             if (this.$route.query.id) {
               this.selectedAlarmFilter = this.data.find(
