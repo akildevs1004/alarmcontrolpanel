@@ -65,6 +65,9 @@
       <template v-slot:item.employee.first_name="{ item }">
         {{ item.first_name + " " + item.last_name }}
         <div calss="secondary-value" style="font-size: 10px">
+          <span v-if="item.idle_time <= 5"
+            ><v-icon style="color: green" size="15">mdi mdi-web</v-icon></span
+          >
           {{ item.last_active_datetime || "---" }}
         </div>
       </template>
