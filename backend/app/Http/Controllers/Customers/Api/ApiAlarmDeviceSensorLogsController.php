@@ -261,7 +261,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         }
                     } else  if ($device_model == 'XG-808') //XTream Box
                     {
-
+                        if ($event == '1321') { //unknow event
+                            $alarm_type = '';
+                        } else 
                         if ($event == '1120') {
                             $alarm_type = 'SOS';
                         } else  if ($event == '1133') {

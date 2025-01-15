@@ -164,7 +164,7 @@
             <Clock></Clock>
           </div> -->
 
-          <div style="position: absolute; top: -3px; left: 140px">
+          <div style="position: absolute; top: -3px; left: 180px">
             <v-btn-toggle
               v-model="mapStyle"
               height="20"
