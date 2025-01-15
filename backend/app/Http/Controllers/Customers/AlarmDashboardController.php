@@ -80,9 +80,9 @@ class AlarmDashboardController extends Controller
 
             $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
                 COUNT(CASE WHEN alarm_type = 'SOS' THEN 1   END) as sosCount,
-                COUNT(CASE WHEN alarm_category = 1 THEN 1  END) as crititalCount,
-                COUNT(CASE WHEN alarm_category = 2 THEN 1   END) as mediumCount,
-                COUNT(CASE WHEN alarm_category = 3 THEN 1   END) as lowCount
+                COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' THEN 1  END) as crititalCount,
+                COUNT(CASE WHEN alarm_category = 2 AND alarm_type != 'SOS' THEN 1   END) as mediumCount,
+                COUNT(CASE WHEN alarm_category = 3 AND alarm_type != 'SOS' THEN 1   END) as lowCount
             ")->where('alarm_start_datetime', '>=', $date_from . ' ' . $j . ':00:00')
                 ->where('alarm_start_datetime', '<=', $date_to  . ' ' . $j . ':59:59')
 
