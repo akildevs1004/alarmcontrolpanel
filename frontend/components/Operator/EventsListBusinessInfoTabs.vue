@@ -50,7 +50,7 @@
             <v-carousel
               v-model="currentCameraSlide"
               v-else-if="customer"
-              height="500"
+              height="600"
               hide-delimiter-background
               show-arrows-on-hover
             >
@@ -63,15 +63,11 @@
                     >{{ index + 1 }}: {{ item.title }}</v-chip
                   >
                   <iframe
-                    v-if="process"
-                    :src="
-                      process?.env.CAMERA_RTMP_PLAYER +
-                      '?url=' +
-                      item.camera_url
-                    "
+                    v-if="getCameraUrl(item) != ''"
+                    :src="getCameraUrl(item)"
                     width="100%"
-                    height="600"
-                    style="border: 0; padding-top: 20px"
+                    height="650"
+                    style="border: 0; padding-top: 10px"
                     allowfullscreen=""
                     referrerpolicy="no-referrer-when-downgrade"
                   ></iframe>
@@ -302,6 +298,13 @@ export default {
         this.areaList.find((areaName) => areaName.id == area_code)?.name ||
         "---"
       );
+    },
+    getCameraUrl(item) {
+      if (process) {
+        return process?.env.CAMERA_RTMP_PLAYER + "?url=" + item.camera_url;
+      } else {
+        return "";
+      }
     },
     // adjustHeightPosition(heightInPx, id, plotting) {
     //   const imageElement = document.getElementById("plotting" + id);
