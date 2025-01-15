@@ -541,6 +541,9 @@ export default {
       setTimeout(() => {
         this.onResize();
       }, 1000 * 5);
+
+      this.getDatafromApi(this.filterText);
+      this.getMapKey();
     },
     async getAlarmTypes() {
       const { data } = await this.$axios.get("alarm_types", {

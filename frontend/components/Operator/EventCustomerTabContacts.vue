@@ -9,7 +9,7 @@
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"
-            >Operator Comments {{ alarmId }}</span
+            >Operator Comments #{{ alarmId }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
@@ -738,14 +738,14 @@ export default {
               this.response = "Alarm Notes Details Created successfully";
               this.snackbar = true;
               this.event_payload = {};
-              // this.$emit("closeDialog");
+              this.$emit("closeDialog");
               this.key += 1;
 
               setTimeout(() => {
                 this.dialogOperatorNotes = false;
               }, 1000 * 5);
 
-              //this.$emit("emitreloadEventNotesStep1");
+              this.$emit("emitreloadEventNotesStep1");
             }
           })
           .catch((e) => {
