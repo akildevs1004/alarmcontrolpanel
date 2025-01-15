@@ -157,9 +157,9 @@ Route::get("create_test_alarm", function (Request $request) {
     return $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
 });
 
-Route::get("test900device1", function (Request $request) {
+Route::get("readCSVLogFile", function (Request $request) {
 
-    //return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
+    return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
 
     return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
