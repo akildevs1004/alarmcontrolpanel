@@ -2426,10 +2426,10 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
 
 <style>
 .empty-doughnut3 {
-  border: 16px solid rgb(150, 150, 150);
+  border: 18px solid rgb(150, 150, 150);
   border-radius: 100px;
-  height: 100px;
-  width: 100px;
+  height: 105px;
+  width: 105px;
   padding-top: 8px;
   padding-left: 2px;
   font-size: 18px;

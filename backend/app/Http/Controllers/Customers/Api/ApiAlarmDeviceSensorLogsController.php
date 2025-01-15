@@ -205,6 +205,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 //     $record = DeviceArmedLogs::create($armedRow);
                 //     $message[] = $this->getMeta("Device Armed", $log_time . "<br/>\n");
                 // } 
+                //700 - Model -Disarm -1407
+                //700 - Model -Arm -3407
 
                 $disarmEvents = ['1407', '1401', '1406',  '1455', '1137'];
                 $armEvents = ['3407', '3401'];
