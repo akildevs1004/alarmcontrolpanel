@@ -165,10 +165,56 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 //     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
                 // } else 
 
+                $devices = Device::where('serial_number', $serial_number)->first();;
 
-                if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
-                {
+                $alarm_type = $devices->device_type ?? '';
+                $device_model = $devices->model_number ?? '';
+                // if (($device_model == 'XG-808' && ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137'))
 
+                //     || ($device_model == 'H700-TAB' && ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137'))
+                // ) //disarm button  // 1401,000=device //1407=remote //1406
+                // {
+
+                //     $data = [
+                //         "alarm_status" => 0,
+                //         "alarm_end_datetime" => $log_time,
+                //         "armed_status" => 0,
+                //         "armed_datetime" => $log_time
+                //     ];
+                //     Device::where("serial_number", $serial_number)->update($data);
+                //     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
+
+
+                //     //update armed log 
+                //     $armedRow = ["disarm_datetime" => $log_time];
+                //     $record = DeviceArmedLogs::where("serial_number", $serial_number)
+                //         ->where("disarm_datetime", null)
+                //         ->orderBy("armed_datetime", "desc")
+                //         ->first();
+                //     if ($record) {
+                //         $record->update($armedRow);
+                //     }
+                //     $this->updateDisarmTableCompanyLogs();
+                //     $message[] = $this->getMeta("Device Disarm", $log_time . "<br/>\n");
+                // } else if (($device_model == 'XG-808' && ($event == '3407'   || $event == '3401')) || ($device_model == 'H700-TAB' &&  ($event == '3407'   || $event == '3401'))) //armed button   //device=3401,000 //3407,001=remote
+                // {
+                //     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
+
+                //     //create log
+                //     $armedRow = ["serial_number" => $serial_number, "armed_datetime" => $log_time];
+                //     $record = DeviceArmedLogs::create($armedRow);
+                //     $message[] = $this->getMeta("Device Armed", $log_time . "<br/>\n");
+                // } 
+
+                $disarmEvents = ['1407', '1401', '1406',  '1455', '1137'];
+                $armEvents = ['3407', '3401'];
+
+
+                $isDisarmEvent = in_array($event, $disarmEvents);
+                $isArmEvent = in_array($event, $armEvents);
+
+                if (($isDisarmEvent)) {
+                    // Handle Disarm
                     $data = [
                         "alarm_status" => 0,
                         "alarm_end_datetime" => $log_time,
@@ -190,11 +236,11 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
                     $this->updateDisarmTableCompanyLogs();
                     $message[] = $this->getMeta("Device Disarm", $log_time . "<br/>\n");
-                } else if ($event == '3407'   || $event == '3401') //armed button   //device=3401,000 //3407,001=remote
-                {
+                } elseif (($isArmEvent)) {
+                    // Handle Armed
                     Device::where("serial_number", $serial_number)->update(["armed_status" => 1, "armed_datetime" => $log_time]);
 
-                    //create log
+                    //     //create log
                     $armedRow = ["serial_number" => $serial_number, "armed_datetime" => $log_time];
                     $record = DeviceArmedLogs::create($armedRow);
                     $message[] = $this->getMeta("Device Armed", $log_time . "<br/>\n");
@@ -202,10 +248,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 {
 
 
-                    $devices = Device::where('serial_number', $serial_number)->first();;
 
-                    $alarm_type = $devices->device_type ?? '';
-                    $device_model = $devices->model_number ?? '';
 
                     if ($device_model == 'H700-TAB') //H700 Tab
                     {
