@@ -155,15 +155,18 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 //-----------Alarm Control panel - Wifi Model 
 
-                if ($event == 'HEARTBEAT' || $event == '1351') {
-                    Device::where("serial_number", $serial_number)->update(
-                        ["status_id" => 1, "last_live_datetime" => $log_time]
-                    );
+                // if ($event == 'HEARTBEAT' || $event == '1351') {
+                //     Device::where("serial_number", $serial_number)->update(
+                //         ["status_id" => 1, "last_live_datetime" => $log_time]
+                //     );
 
-                    $this->closeOfflineAlarmsBySerialNumber($serial_number);
+                //     $this->closeOfflineAlarmsBySerialNumber($serial_number);
 
-                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
-                } else if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
+                //     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
+                // } else 
+
+
+                if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
                 {
 
                     $data = [
@@ -174,7 +177,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     ];
                     Device::where("serial_number", $serial_number)->update($data);
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
-                    // Log::info(json_encode($data));
+
 
                     //update armed log 
                     $armedRow = ["disarm_datetime" => $log_time];
@@ -198,15 +201,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 } else if ($zone != '' && $event != '3401' && $zone != '141') //zone verification button
                 {
 
-                    /*$devices = DeviceZones::with(['device'])
-                        ->whereHas('device', function ($query) use ($serial_number) {
-                            $query->where('serial_number', $serial_number);
-                        })
-                        ->where("zone_code", $zone)
-                        ->where("area_code", $area)
-                        ->first();
 
-                    $alarm_type = $devices->sensor_name ?? '';*/
                     $devices = Device::where('serial_number', $serial_number)->first();;
 
                     $alarm_type = $devices->device_type ?? '';
@@ -221,6 +216,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         }
                     } else  if ($device_model == 'XG-808') //XTream Box
                     {
+
                         if ($event == '1120') {
                             $alarm_type = 'SOS';
                         } else  if ($event == '1133') {
