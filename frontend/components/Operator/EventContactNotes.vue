@@ -110,6 +110,7 @@
     <v-row style="padding: 0px; padding-top: 10px">
       <v-col style="padding: 0px">
         <v-tabs
+          v-if="alarm.device.customer"
           height="25"
           center-active
           right
@@ -124,7 +125,8 @@
               color: black;
             "
             v-if="
-              contact.address_type.toLowerCase() == 'primary' ||
+              (alarm.device.customer &&
+                contact.address_type.toLowerCase() == 'primary') ||
               contact.address_type.toLowerCase() == 'secondary' ||
               contact.address_type.toLowerCase() == 'security'
             "
@@ -135,9 +137,10 @@
           >
           <v-tab-item
             v-if="
-              contact.address_type.toLowerCase() == 'primary' ||
-              contact.address_type.toLowerCase() == 'secondary' ||
-              contact.address_type.toLowerCase() == 'security'
+              alarm.device.customer &&
+              (contact.address_type.toLowerCase() == 'primary' ||
+                contact.address_type.toLowerCase() == 'secondary' ||
+                contact.address_type.toLowerCase() == 'security')
             "
             v-for="(contact, index) in alarm.device.customer.contacts"
             :key="contact.id + 50"
@@ -178,6 +181,8 @@ export default {
   watch: {},
   methods: {
     emitreloadEventNotes2() {
+      console.log("emitreloadEventNotes2");
+
       this.$emit("emitreloadEventNotes3");
     },
     emitShowCustomerInfoTabs(status) {

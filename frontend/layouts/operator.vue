@@ -678,7 +678,7 @@ export default {
       companyName: "",
     };
   },
-  created() {
+  async created() {
     if (this.$auth.user.user_type != "security") {
       try {
         if (window) {
@@ -691,11 +691,13 @@ export default {
       return false;
     }
     this.loadAlarmNotificationIcons();
-    this.getBuildingTypes();
-    this.getAddressTypes();
-    this.getDeviceTypes();
-    this.getSensorTypes();
-    this.getDeviceModels();
+    setTimeout(async () => {
+      await this.getBuildingTypes();
+      await this.getAddressTypes();
+      await this.getDeviceTypes();
+      await this.getSensorTypes();
+      await this.getDeviceModels();
+    }, 1000 * 10);
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -767,7 +769,7 @@ export default {
           }
         }
       }
-    }, 1000 * 5 * 1);
+    }, 1000 * 10 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }

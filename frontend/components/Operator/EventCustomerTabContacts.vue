@@ -62,7 +62,7 @@
                             null,
 
                             'False alarm',
-                            'No Answer',
+                            // 'No Answer',
                             'Busy',
                             'Not Reachable',
                           ]"
@@ -142,11 +142,12 @@
                         cols="3"
                         style="padding-bottom: 0px; padding-top: 0px"
                         v-if="
+                          customer &&
                           contact.address_type.toLowerCase() != 'primary' &&
                           contact.address_type.toLowerCase() != 'secondary' &&
                           contact.address_type.toLowerCase() != 'security'
                         "
-                        v-for="(contact, index) in customer.contacts"
+                        v-for="(contact, index) in customer?.contacts"
                       >
                         <v-checkbox
                           class="radiogroup radiogroup-small"
@@ -606,9 +607,10 @@ export default {
     },
 
     displayContactInfoById(contactId) {
-      this.filteredContactInfo = this.customer.contacts.find(
-        (contact) => contact.id == contactId
-      );
+      if (this.customer)
+        this.filteredContactInfo = this.customer.contacts.find(
+          (contact) => contact.id == contactId
+        );
     },
     closeDialog() {
       this.key++;
@@ -738,14 +740,18 @@ export default {
               this.response = "Alarm Notes Details Created successfully";
               this.snackbar = true;
               this.event_payload = {};
-              this.$emit("closeDialog");
+              //this.$emit("closeDialog");
               this.key += 1;
 
               setTimeout(() => {
                 this.dialogOperatorNotes = false;
-              }, 1000 * 5);
 
-              this.$emit("emitreloadEventNotesStep1");
+                this.$emit("emitreloadEventNotesStep1");
+              }, 1000 * 2);
+
+              setTimeout(() => {
+                this.$emit("emitreloadEventNotesStep1");
+              }, 1000 * 10);
             }
           })
           .catch((e) => {

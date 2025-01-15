@@ -307,16 +307,23 @@
               'px'
             "
           >
-            <EventContactNotes
-              :key="selectedAlarm.id"
-              v-if="selectedAlarm"
-              :colorcodes="colorcodes"
-              :customer="selectedAlarm?.device.customer"
-              :alarm="selectedAlarm"
-              @emitreloadEventNotes3="reloadEventNotes4()"
-              @emitShowCustomerInfoTabs="changeStatusBusinessInfoTabs"
-              :browserHeight="browserHeight"
-            />
+            <div
+              v-if="
+                data.length > 0 &&
+                selectedAlarm &&
+                selectedAlarm.device.customer
+              "
+            >
+              <EventContactNotes
+                :key="selectedAlarm.id"
+                :colorcodes="colorcodes"
+                :customer="selectedAlarm?.device?.customer"
+                :alarm="selectedAlarm"
+                @emitreloadEventNotes3="reloadEventNotes4()"
+                @emitShowCustomerInfoTabs="changeStatusBusinessInfoTabs"
+                :browserHeight="browserHeight"
+              />
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -327,7 +334,12 @@
             :style="' padding:0px;height:' + parseInt(browserHeight) + 'px'"
           >
             <EventsListBusinessInfoTabs
-              v-if="selectedAlarm"
+              v-if="
+                data &&
+                data.length > 0 &&
+                selectedAlarm.device.customer &&
+                selectedAlarm
+              "
               :customer="selectedAlarm?.device.customer"
               :device="selectedAlarm?.device"
               :alarm="selectedAlarm"
@@ -514,7 +526,7 @@ export default {
       }
 
       this.getDatafromApi(this.filterText, false);
-    }, 1000 * 15);
+    }, 1000 * 30);
   },
 
   async created() {
@@ -537,13 +549,15 @@ export default {
       this.displayEventsListBusinessInfoTabs = status;
     },
     reloadEventNotes4() {
+      console.log("emitreloadEventNotes3");
+
       this.keyLogs++;
       setTimeout(() => {
         this.onResize();
       }, 1000 * 5);
 
-      this.getDatafromApi(this.filterText);
-      this.getMapKey();
+      this.getDatafromApi();
+      /////this.getMapKey();
     },
     async getAlarmTypes() {
       const { data } = await this.$axios.get("alarm_types", {
@@ -724,7 +738,7 @@ export default {
             if (this.data.length == 0 && changeSelectedAram == true) {
               this.selectedAlarm = null;
 
-              this.$router.push("/operator/eventslist");
+              //this.$router.push("/operator/eventslist");
               return false;
             }
 

@@ -26,6 +26,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\WhatsappController;
 use App\Imports\excelEmployeesData;
 use App\Mail\ReportNotificationMail;
+use App\Models\AlarmEvents;
 use App\Models\Attendance;
 use App\Models\AttendanceLog;
 use App\Models\Company;
@@ -111,6 +112,28 @@ Route::get("create_test_tampred_alarm", function (Request $request) {
 });
 Route::get("create_test_alarm", function (Request $request) {
 
+
+    // $data = [
+    //     "company_id" => 8,
+    //     "serial_number" => "1234",
+    //     "alarm_start_datetime" => date("Y-m-d H:i:s"),
+    //     "customer_id" => 16,
+    //     "zone" => null,
+    //     "area" =>  null,
+    //     "alarm_type" => "SOS",
+    //     "alarm_category" => 1,
+    //     "sensor_zone_id" => null,
+    //     "alarm_source" => null,
+    //     "security_name" => "Test",
+    //     "security_id" => 1,
+    // ];
+    // $offlineDevices[] = $data;
+
+
+    // AlarmEvents::create($data);
+
+
+    // return false;
 
     //return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 

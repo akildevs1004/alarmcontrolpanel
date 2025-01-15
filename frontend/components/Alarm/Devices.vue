@@ -329,7 +329,7 @@
                   <v-icon color="secondary" small>
                     mdi-format-list-bulleted-type
                   </v-icon>
-                  Zones
+                  Sensors
                 </v-list-item-title>
               </v-list-item>
               <v-list-item
