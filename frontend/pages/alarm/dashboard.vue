@@ -514,7 +514,7 @@ export default {
         await this.getEventCategoriesStats();
         await this.updateEventsOpenCountStatus();
       }
-    }, 1000 * 30);
+    }, 1000 * 15);
   },
   watch: {},
   methods: {
