@@ -113,6 +113,8 @@ class AlarmDashboardController extends Controller
                 $dateStrings[] = date('Y-m-d', strtotime(date('Y-m-d') . '-' . $i . ' days'));
             }
         }
+
+
         foreach ($dateStrings as $key => $date) {
 
             $counts = AlarmEvents::where("company_id", $request->company_id)
@@ -129,12 +131,12 @@ class AlarmDashboardController extends Controller
                 ->first();
             $finalarray[] = [
                 "date" => $date,
-                "sosCount" => $counts->sosCount ?? 0,
-                "highCount" => $counts->criticalCount ?? 0,
-                "criticalCount" => $counts->criticalCount ?? 0,
-                "technicalCount" => $counts->technicalCount ?? 0,
-                "eventsCount" => $counts->eventsCount ?? 0,
-                "mediumCount" => $counts->mediumCount ?? 0,
+                "sosCount" => $counts->soscount ?? 0,
+                "highCount" => $counts->criticalcount ?? 0,
+                "criticalCount" => $counts->criticalcount ?? 0,
+                "technicalCount" => $counts->technicalcount ?? 0,
+                "eventsCount" => $counts->eventscount ?? 0,
+                "mediumCount" => $counts->mediumcount ?? 0,
                 "lowCount" => $counts->lowCount ?? 0,
             ];
         }
