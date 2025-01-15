@@ -39,7 +39,11 @@ class CustomerSeeder extends Seeder
         $CustomerLoopCount = 1;
         $DeviceLoopCount = 1;
         $DeviceZones = [
-            "Burglary", "Medical", "Temperature", "Water", "Fire"
+            "Burglary",
+            "Medical",
+            "Temperature",
+            "Water",
+            "Fire"
         ];
 
         // Customers::truncate();
@@ -117,6 +121,7 @@ class CustomerSeeder extends Seeder
                     "area" => "test",
                     "alarm_type" => Arr::random($DeviceZones),
                     "alarm_status" => 1,
+                    "created_event_from" => "customerseeder",
                 ];
 
                 AlarmEvents::create($data);

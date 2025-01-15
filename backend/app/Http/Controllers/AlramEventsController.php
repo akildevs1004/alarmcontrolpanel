@@ -134,6 +134,10 @@ class AlramEventsController extends Controller
                             "alarm_source" => null,
                             "security_name" => $security_name,
                             "security_id" => $security_id,
+                            "created_event_from" => "verifyOfflineDevices",
+
+
+
                         ];
                         $offlineDevices[] = $data;
 
