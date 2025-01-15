@@ -156,6 +156,30 @@ class WhatsappController extends Controller
     //working method
     public function sendWhatsappNotification($company, $message, $number, $attachments = [])
     {
+
+        return false;
+
+        // API endpoint URL
+        $url = 'https://backend.mytime2cloud.com/api/send-whatsapp-wessage';
+
+        // Data to send in the request
+        $data = [
+            'company_id' => 13,
+            'mobile_number' =>  "971552205149", //request("number"),
+            'message' => $message,
+
+        ];
+
+        // Sending POST request using Http facade
+        $response = Http::post($url, $data);
+        Http::withoutVerifying()->timeout(30)->get($url, $data);
+
+        return false;
+
+
+
+
+
         $data = [
             'number' => $number,
             'type' => 'text',

@@ -104,8 +104,8 @@ class AlarmDashboardController extends Controller
         $dateStrings = [];
         if ($request->has("date_from") && $request->has("date_to")) {
             // Usage example:
-            $startDate = new DateTime($request->date_from);
-            $endDate = new DateTime($request->date_to);
+            $startDate = new DateTime($request->date_from . ' 00:00:00');
+            $endDate = new DateTime($request->date_to . ' 23:59:59');
 
             $dateStrings = $this->createDateRangeArray($startDate, $endDate);
         } else {

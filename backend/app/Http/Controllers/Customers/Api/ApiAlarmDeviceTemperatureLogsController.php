@@ -24,6 +24,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -354,6 +355,29 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             //create json file for each company  json file 
 
                             AlarmEvents::create($data);
+                            // // try {
+                            // //Alarm whatsapp notification
+                            // $body_content1 = "";
+                            // $body_content1 = "*New Event Notification*\n\n";
+                            // $body_content1 .= "Building: {$device->customer->building_name}\n";
+
+                            // $body_content1 .= "Event Time: {$logs['log_time']}\n";
+                            // $body_content1 .= "Type: {$logs['alarm_type']}\n";
+                            // $body_content1 .= "Zone: {$logs['zone']}\n";
+                            // $body_content1 .= "Area: {$logs['area']}\n";
+                            // $body_content1 .= "Sensor Type: {$logs['zone_data']['sensor_type']}\n";
+                            // $body_content1 .= "Sensor Name: {$logs['zone_data']['sensor_name']}\n";
+
+
+                            // $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$device['customer']['latitude']},{$device['customer']['longitude']} \n\n\n";
+                            // $body_content1 .= "Thanks,\nXtreme Guard\n";
+
+
+
+                            // (new WhatsappController())->sendWhatsappNotification(null, $body_content1, "971552205149", []);
+                            // // } catch (\Exception $e) {
+                            // // }
+
                             $this->createAlarmEventsJsonFile($logs['company_id']);
 
                             AlarmLogs::where("id",   $logs["id"])
@@ -384,6 +408,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             }
         }
     }
+
     public function createAlarmEventsJsonFile($companyIdFilter = '')
     {
 

@@ -1677,7 +1677,7 @@ class CustomersController extends Controller
     public function sendArmedWarningWhatsapp($contact, $device, $currentDateTime, $cc_emails)
     {
 
-        return false;
+
         $body_content1 = '';
 
 
@@ -1710,11 +1710,11 @@ class CustomersController extends Controller
             "customer_id" => $device->customer_id,
         ];
         ReportNotificationLogs::create($logData);
-        $emailData = [
-            'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
-            'body' => $body_content1,
-        ];
-        $body_content1 = new EmailContentDefault($emailData);
+        // $emailData = [
+        //     'subject' => "Device Armed is not Active. Scheduled Time: " . $device->customer->close_time,
+        //     'body' => $body_content1,
+        // ];
+        // $body_content1 = new EmailContentDefault($emailData);
 
 
         try {
