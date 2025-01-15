@@ -127,12 +127,12 @@
           <v-col cols="12" md="6">
             <v-container>
               <v-card outlined>
-                <v-card-title>Building Info</v-card-title>
+                <v-card-title>Customer Info</v-card-title>
                 <v-card-text>
                   <v-list dense>
                     <v-list-item>
                       <v-list-item-content>
-                        <v-list-item-title>Building Name:</v-list-item-title>
+                        <v-list-item-title>Customer Name:</v-list-item-title>
                         <v-list-item-subtitle>{{
                           customerInfo.building_name
                         }}</v-list-item-subtitle>
@@ -386,7 +386,7 @@ export default {
     loading: false,
     headers: [
       {
-        text: "Building Name",
+        text: "Customer Name",
         value: "building_name",
       },
     ],

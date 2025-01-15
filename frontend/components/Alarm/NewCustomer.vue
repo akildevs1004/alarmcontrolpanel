@@ -54,7 +54,7 @@
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
               :readonly="isMapviewOnly"
-              label="Building Name"
+              label="Customer/Building Name"
               dense
               outlined
               type="text"

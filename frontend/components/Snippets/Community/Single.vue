@@ -44,7 +44,7 @@
             <v-row>
               <v-col md="6" cols="12" sm="12" dense>
                 <v-text-field
-                  label="Building Name"
+                  label="Customer Name"
                   dense
                   outlined
                   type="text"
@@ -157,7 +157,6 @@
               </v-col>
             </v-row>
           </v-col>
-         
         </v-row>
       </v-container>
     </v-tab-item>
@@ -216,7 +215,6 @@
               "
             ></v-text-field>
           </v-col>
-          
         </v-row>
       </v-container>
     </v-tab-item>
@@ -262,7 +260,6 @@
               "
             ></v-textarea>
           </v-col>
-         
         </v-row>
       </v-container>
     </v-tab-item>

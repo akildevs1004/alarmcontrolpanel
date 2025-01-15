@@ -430,7 +430,7 @@ export default {
         value: "primary_contact",
       },
       {
-        text: "Building Name",
+        text: "Customer Name",
         value: "building_name",
       },
       {

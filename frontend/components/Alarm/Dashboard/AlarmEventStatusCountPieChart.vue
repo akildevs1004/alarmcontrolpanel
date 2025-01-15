@@ -8,7 +8,7 @@
       height: 225px;
     "
   >
-    <v-row class="pt-0 mt-0">
+    <v-row class="pt-0 mt-0" style="height: 150px">
       <v-col
         class="text-center pt-0"
         style="margin: 0 auto; text-align: left; margin-left: -10px"

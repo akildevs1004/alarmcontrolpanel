@@ -76,11 +76,16 @@ async function parseMessage(message) {
   // message =
   //   '282A0043"ADM-CID"0009R7896L7896#3456[#3456|1c45 00 003]_14:11:43,07-30-2024';
   // message = '299D002F"NULL"0000R7896L7896#3456[]_17:57:42,07-30-2024';
-  const regexEvent =
-    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#(\d+)\[#(\d+)\|([a-zA-Z0-9]{4}) (\d{2}) (\d{3})\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+  // const regexEvent =
+  //   /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{4}L\d{4})#(\d+)\[#(\d+)\|([a-zA-Z0-9]{4}) (\d{2}) (\d{3})\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
 
+  const regexEvent =
+    /([a-zA-Z0-9]{8})"ADM-CID"\d{4}(R\d{1}L\d{1})#([a-zA-Z0-9]+)\[#([a-zA-Z0-9]+)\|(\d{4}) (\d{2}) (\d{3})\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+
+  // const regexHeartbeat =
+  //   /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{4}L\d{4})#(\d{4})\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
   const regexHeartbeat =
-    /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{4}L\d{4})#(\d{4})\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
+    /([a-zA-Z0-9]{8})"NULL"(\d{4})(R\d{1}L\d{1})#([a-zA-Z0-9]+)\[\]_(\d{2}:\d{2}:\d{2}),(\d{2})-(\d{2})-(\d{4})/;
 
   const matchEvent = message.match(regexEvent);
   const matchHeartbeat = message.match(regexHeartbeat);
@@ -103,8 +108,10 @@ async function parseMessage(message) {
 
     const logEntry = `${deviceId},${eventCode},${timestamp},RECORDNUMBER,${area},${zone}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
-    console.log(logEntry);
+    console.log("Event Found ", eventCode);
     await sendToBackend(timestamp);
+  } else {
+    console.log("logEntry Not Matched");
   }
 }
 // async function parseMessage_working(message) {

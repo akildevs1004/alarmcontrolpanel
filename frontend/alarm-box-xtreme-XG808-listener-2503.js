@@ -94,14 +94,14 @@ async function parseMessage(message) {
 
     const logEntry = `${deviceId},${eventCode},${getTime()},${recordNumber},${area},${zone}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
-
+    console.log("Event Found - " + eventCode);
     if (!isHeartbeat) {
-      console.log(match);
-      console.log(logEntry);
+      //console.log(match);
+      //console.log(logEntry);
     }
     await sendToBackend(getTime());
   } else {
-    console.log("Pattern not found");
+    console.log("Event Not found ");
   }
 }
 

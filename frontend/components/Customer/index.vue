@@ -309,7 +309,7 @@ export default {
         value: "sno",
       },
       {
-        text: "Building Name",
+        text: "Customer Name",
         value: "building_name",
       },
       {

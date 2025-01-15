@@ -710,7 +710,7 @@ export default {
     loading: false,
     headers: [
       {
-        text: "Building Name",
+        text: "Customer Name",
         value: "building_name",
       },
     ],

@@ -366,7 +366,7 @@ export default {
         this.key = this.key + 1;
         this.getDatafromApi();
       }
-    }, 1000 * 30);
+    }, 1000 * 60);
     // this._id = this.$route.params.id;
     let today = new Date();
 

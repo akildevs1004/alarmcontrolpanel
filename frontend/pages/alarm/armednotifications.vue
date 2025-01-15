@@ -231,7 +231,7 @@ export default {
       headers: [
         { text: "#", value: "sno", sortable: false },
         {
-          text: "Building Name",
+          text: "Customer Name",
           value: "building_name",
         },
         {

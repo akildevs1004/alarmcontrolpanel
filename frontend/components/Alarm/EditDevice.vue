@@ -44,7 +44,7 @@
             v-model="payload.customer_id"
             outlined
             dense
-            label="Building Name/Customer"
+            label="Customer Name"
             :items="customersList"
             item-value="id"
             item-text="building_name"
