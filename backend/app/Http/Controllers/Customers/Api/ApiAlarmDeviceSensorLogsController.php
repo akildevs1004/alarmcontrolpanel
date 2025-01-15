@@ -258,7 +258,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                     //$area =   $devices->area_code ?? '';
-                    if ($alarm_type != '') {
+                    if ($alarm_type != '' && $event != '') {
 
                         $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
                         if ($count == 0) {
@@ -280,7 +280,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
-                } else if ($zone == '') {
+                } else if ($zone == ''   && $event != '') {
 
                     $devices = Device::where('serial_number', $serial_number)->first();;
 
