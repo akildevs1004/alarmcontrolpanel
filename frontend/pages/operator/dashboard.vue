@@ -220,6 +220,7 @@
               v-if="loadStatistics"
               :colorcodes="colorcodes"
               style="width: 850px; margin: auto"
+              :key="key"
             />
           </div>
 

@@ -329,8 +329,8 @@ class AlarmDashboardController extends Controller
               (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
 
               
-             (SELECT COUNT(*) FROM devices WHERE armed_status = 1 and status_id = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS armed,
-              (SELECT COUNT(*) FROM devices WHERE armed_status = 0 and status_id = 1  AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS disarm 
+             (SELECT COUNT(*) FROM devices WHERE armed_status = 1   AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS armed,
+              (SELECT COUNT(*) FROM devices WHERE armed_status = 0  AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS disarm 
         ')
 
             ->first();
