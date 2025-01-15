@@ -68,7 +68,12 @@
           <span v-if="item.idle_time <= 5"
             ><v-icon style="color: green" size="15">mdi mdi-web</v-icon></span
           >
-          {{ item.last_active_datetime || "---" }}
+          Online
+          <!-- {{
+            item.last_active_datetime
+              ? $dateFormat.format5(item.last_active_datetime)
+              : "---"
+          }} -->
         </div>
       </template>
       <template v-slot:item.LogTime="{ item }" style="color: green">
