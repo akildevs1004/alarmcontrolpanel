@@ -73,7 +73,7 @@
       </v-card>
     </v-dialog>
     <div v-if="building_cameras.length == 0" class="text-center">
-      No Photos Available
+      No Camera Links Available
     </div>
 
     <v-row>
@@ -175,11 +175,8 @@
               <v-row>
                 <v-col cols="12" class="text-center">
                   <iframe
-                    :src="
-                      process?.env.CAMERA_RTMP_PLAYER +
-                      '?url=' +
-                      item.camera_url
-                    "
+                    v-if="getCameraUrl(item) != ''"
+                    :src="getCameraUrl(item)"
                     width="100%"
                     height="400"
                     style="border: 0"
@@ -359,6 +356,13 @@ export default {
     },
     selectCamera(item) {
       this.cameraSelected = item;
+    },
+    getCameraUrl(item) {
+      if (process) {
+        return process?.env.CAMERA_RTMP_PLAYER + "?url=" + item.camera_url;
+      } else {
+        return "";
+      }
     },
     newPhoto() {
       this.editId = "";

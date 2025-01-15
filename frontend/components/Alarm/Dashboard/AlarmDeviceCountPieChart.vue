@@ -161,8 +161,8 @@ export default {
           toolbar: {
             show: false,
           },
-          width: 200,
-          height: 200,
+          width: 250,
+          height: 250,
           type: "donut",
         },
         customTotalValue: 0,

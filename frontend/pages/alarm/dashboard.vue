@@ -115,6 +115,12 @@
                 <AlamDeviceCountPieChart
                   :key="key"
                   :name="'AlamDeviceCountPieChart'"
+                  style="
+                    height: 230px;
+
+                    max-height: 230px;
+                    overflow: hidden;
+                  "
                 /> </v-card-text
             ></v-card> </v-col
           ><v-col>
@@ -508,7 +514,7 @@ export default {
         await this.getEventCategoriesStats();
         await this.updateEventsOpenCountStatus();
       }
-    }, 1000 * 10);
+    }, 1000 * 30);
   },
   watch: {},
   methods: {

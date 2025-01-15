@@ -353,9 +353,11 @@ export default ({ app }, inject) => {
       //if (!thisObj) thisObj = this.$store.state.auth;
       if (thisObj) {
         let u = thisObj.$auth.user;
-        let filter = u.permissions.filter((e) => e.page_name == page);
+        if (u?.permissions) {
+          let filter = u.permissions.filter((e) => e.page_name == page);
 
-        return (u && filter.length > 0) || u.is_master || u.role_id == 1;
+          return (u && filter.length > 0) || u.is_master || u.role_id == 1;
+        } else return false;
       }
     },
     // can(per, thisobj) {
