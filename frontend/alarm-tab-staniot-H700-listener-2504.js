@@ -93,7 +93,7 @@ async function parseMessage(message) {
   if (matchEvent || matchHeartbeat) {
     const match = matchEvent || matchHeartbeat;
 
-    console.log(match);
+    //console.log(match);
     const isHeartbeat = !!matchHeartbeat;
 
     const deviceId = match[4]; // Extracted device code
