@@ -274,7 +274,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
                     ->where("alarm_status", 1)
-
+                    ->where("event_code", "!=", null)
                     ->where("verified", false)
                     ->where("time_duration_seconds", '>=', 5)
 
