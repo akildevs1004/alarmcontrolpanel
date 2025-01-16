@@ -152,10 +152,10 @@
                   </v-col> -->
                   <v-col style="padding: 10px">
                     <div style="font-size: 13px">
-                      {{ item.device?.customer?.buildingtype?.name || "---" }}
+                      {{ item.device?.customer?.building_name || "" }}
                     </div>
                     <div class="secondary-value">
-                      {{ item.device?.customer?.building_name || "" }}
+                      {{ item.device?.customer?.buildingtype?.name || "---" }}
                     </div>
                     <!-- <small style="font-size: 12px; color: #6c7184">
                       {{ item.device.customer.house_number }},
@@ -394,8 +394,8 @@ export default {
       totalRowsCount: 0,
       headers: [
         { text: "Event Id", value: "sno", sortable: false },
-        { text: "Building", value: "building", sortable: false },
-        { text: "Customer", value: "customer", sortable: false },
+        { text: "Customer", value: "building", sortable: false },
+        { text: "Primary", value: "customer", sortable: false },
         { text: "Address", value: "address", sortable: false },
         // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false },

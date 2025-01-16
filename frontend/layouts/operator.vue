@@ -1101,6 +1101,12 @@ export default {
           this.notificationsMenuItems = [];
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
+
+          if (data.length > 0) {
+            this.dialogAlarmPopupNotificationStatus = true;
+          } else {
+            this.dialogAlarmPopupNotificationStatus = false;
+          }
           this.key += 1;
 
           data.forEach((element) => {
