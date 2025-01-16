@@ -274,7 +274,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
                     ->where("alarm_status", 1)
-                    ->where("event_code", "!=", null)
+                    //->where("event_code", "!=", null)
                     ->where("verified", false)
                     ->where("time_duration_seconds", '>=', 5)
 
@@ -556,31 +556,33 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $logs['zone'] = $request->zone;
             }
 
+            if ($logs['zone'] != '') {
+                $insertedRecord = AlarmLogs::create($logs);
 
-            $insertedRecord = AlarmLogs::create($logs);
+                $deviceModel = Device::where("serial_number", $device_serial_number)->first();
+                if ($deviceModel) {
+                    $company_id = $deviceModel->company_id;
+                    $customer_id = $deviceModel->customer_id;
+                    $device_time_zone = $deviceModel->utc_time_zone;
 
-            $deviceModel = Device::where("serial_number", $device_serial_number)->first();
-            if ($deviceModel) {
-                $company_id = $deviceModel->company_id;
-                $customer_id = $deviceModel->customer_id;
-                $device_time_zone = $deviceModel->utc_time_zone;
+                    $log_time = new DateTime($log_time);
+                    $log_time->setTimezone(new DateTimeZone($device_time_zone));
 
-                $log_time = new DateTime($log_time);
-                $log_time->setTimezone(new DateTimeZone($device_time_zone));
+                    $data = [
+                        "company_id" => $company_id,
+                        "customer_id" => $customer_id,
+                        "log_time" => $log_time->format('Y-m-d H:i:s')
+                    ];
+                    AlarmLogs::where("id", $insertedRecord["id"])->update($data);
 
-                $data = [
-                    "company_id" => $company_id,
-                    "customer_id" => $customer_id,
-                    "log_time" => $log_time->format('Y-m-d H:i:s')
-                ];
-                AlarmLogs::where("id", $insertedRecord["id"])->update($data);
-
-                try {
-                    $this->updateAlarmResponseTime();
-                } catch (\Exception $e) {
+                    try {
+                        $this->updateAlarmResponseTime();
+                    } catch (\Exception $e) {
+                    }
+                    return $this->response('Alarm Logs are created', null, true);
                 }
-                return $this->response('Alarm Logs are created', null, true);
-            }
+            } else
+                return $this->response('Zone is empty. Alarm Logs is not inserted', null, true);
         } else {
             return $this->response('Device Serial Number or Alarm Type is empty', null, false);
         }

@@ -258,7 +258,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                     //$area =   $devices->area_code ?? '';
-                    if ($alarm_type != '' && $event != '') {
+                    if ($alarm_type != '' && $event != '' && $zone != '') {
 
                         $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
                         if ($count == 0) {
@@ -282,29 +282,29 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
                 } else if ($zone == ''   && $event != '') {
 
-                    $devices = Device::where('serial_number', $serial_number)->first();;
+                    // $devices = Device::where('serial_number', $serial_number)->first();;
 
-                    $alarm_type = $devices->device_type ?? '';
-                    //$area =   $devices->area_code ?? '';
-                    if ($alarm_type != '') {
-                        $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->count();
-                        if ($count == 0) {
-                            $records  = [
-                                "serial_number" => $serial_number,
-                                "log_time" => $log_time,
-                                "alarm_status" => 1,
-                                "alarm_type" => $alarm_type,
-                                "alarm_source" => $alarm_source,
+                    // $alarm_type = $devices->device_type ?? '';
+                    // //$area =   $devices->area_code ?? '';
+                    // if ($alarm_type != '') {
+                    //     $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->count();
+                    //     if ($count == 0) {
+                    //         $records  = [
+                    //             "serial_number" => $serial_number,
+                    //             "log_time" => $log_time,
+                    //             "alarm_status" => 1,
+                    //             "alarm_type" => $alarm_type,
+                    //             "alarm_source" => $alarm_source,
 
-                            ];
+                    //         ];
 
-                            $insertedRecord = AlarmLogs::create($records);
-                            $message[] =  $this->getMeta("New Alarm Log Is interted without Zone", $log_time . "<br/>\n");
-                            $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
-                        } else {
-                            $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
-                        }
-                    }
+                    //         $insertedRecord = AlarmLogs::create($records);
+                    //         $message[] =  $this->getMeta("New Alarm Log Is interted without Zone", $log_time . "<br/>\n");
+                    //         $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                    //     } else {
+                    //         $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
+                    //     }
+                    // }
                 } else {
                     $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
                 }
