@@ -452,6 +452,7 @@ export default {
       this.customer_payload.contact_number = this.customer.contact_number;
       this.customer_payload.start_date = this.customer.start_date;
       this.customer_payload.end_date = this.customer.end_date;
+      this.customer_payload.area = this.customer.area;
     } else {
       this.customer_payload = {
         building_type_id: "",
