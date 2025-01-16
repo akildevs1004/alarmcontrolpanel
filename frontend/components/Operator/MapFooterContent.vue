@@ -326,7 +326,7 @@ export default {
     setInterval(() => {
       if (this.$route.name == "operator-dashboard")
         this.getOperatorStatistics();
-    }, 1000 * 20);
+    }, 1000 * 10);
   },
   created() {
     this.getOperatorStatistics();
