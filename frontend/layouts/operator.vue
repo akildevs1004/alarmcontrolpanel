@@ -682,11 +682,11 @@ export default {
     if (this.$auth.user.user_type != "security") {
       try {
         if (window) {
-          if (this.$route.name != "logout") window.location.href = "../logout";
-          //window.location.reload();
+          // if (this.$route.name != "logout") window.location.href = "../logout";
+          window.location.reload();
         }
       } catch (e) {}
-      this.$router.push("/login", true);
+      this.$router.push("/logout", true);
 
       return false;
     }
@@ -814,6 +814,12 @@ export default {
     // setTimeout(() => {
     //   this.$router.push(`/dashboard2`);
     // }, 1000 * 60 * 15); //15 minutes
+
+    setInterval(() => {
+      try {
+        if (window) window.location.reload();
+      } catch (e) {}
+    }, 1000 * 60 * 60);
   },
   watch: {},
   computed: {

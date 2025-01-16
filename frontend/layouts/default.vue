@@ -921,72 +921,21 @@ export default {
       ) {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
-
-        // if (this.$route.name === "alarm-dashboard" && !this.wait5Minutes) {
-        //   const notificationContent = this.notificationAlarmDevicesContent;
-
-        //   if (notificationContent && notificationContent.length > 0) {
-        //     let criticalList = notificationContent.filter(
-        //       (notification) => notification.alarm_category == 1
-        //     );
-        //     if (criticalList.length > 0) {
-        //       if (!this.dialogAlarmPopupNotificationStatus) {
-        //         this.popupKey += 1;
-        //         this.dialogAlarmPopupNotificationStatus = true;
-        //       }
-        //     } else {
-        //       //this.dialogAlarmPopupNotificationStatus = false;
-        //     }
-        //   } else {
-        //     this.dialogAlarmPopupNotificationStatus = false;
-        //   }
-        // }
       }
     }, 1000 * 20 * 1);
-    // setInterval(() => {
-    //   if (this.$route.name != "login") {
-    //   }
-    // }, 1000 * 20 * 1);
-    //this.company_menus = [];
 
     let menu_name = this.$route.name;
     let bgColor = "violet";
     let loadSelectedMenu = "";
     if (menu_name) menu_name = menu_name.replaceAll("-", "/");
 
-    // if (this.getLoginType === "company" || this.getLoginType === "branch") {
-    //   //-------------------
-    //   loadSelectedMenu = this.company_menus.filter(
-    //     (item) => item.to === "/" + menu_name && item.submenu == null
-    //   );
-
-    //   if (loadSelectedMenu[0]) {
-    //     menu_name = loadSelectedMenu[0].module;
-
-    //     if (this.menuProperties.hasOwnProperty(menu_name)) {
-    //       for (const key in this.menuProperties) {
-    //         this.menuProperties[key].elevation = 0;
-    //         this.menuProperties[key].selected = "";
-    //       }
-
-    //       this.menuProperties[menu_name].elevation = 0;
-    //       this.menuProperties[menu_name].selected = bgColor;
-    //     }
-    //     //Color is changed and Now display sub menu - click - load left sub menu items
-
-    //     // this.items = this.company_menus.filter(
-    //     //   (item) => item.module === loadSelectedMenu[0].module
-    //     // );
-    //     this.items = this.company_menus.filter(
-    //       (item) => item.top_menu_name === loadSelectedMenu[0].module
-    //     );
-    //   }
-    // }
     this.setupInactivityDetection();
 
-    // setTimeout(() => {
-    //   this.$router.push(`/dashboard2`);
-    // }, 1000 * 60 * 15); //15 minutes
+    setInterval(() => {
+      try {
+        if (window) window.location.reload();
+      } catch (e) {}
+    }, 1000 * 60 * 60);
   },
   watch: {},
   computed: {

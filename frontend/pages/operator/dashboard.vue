@@ -250,7 +250,7 @@
               @applyGlobalSearch="getDatafromApi"
               style="padding: 10px"
             /> -->
-            {{ displayRightcontant }}
+
             <v-row v-if="data.length == 0" class="text-center">
               <v-col style="color: #fff"> 0 Alarms </v-col>
             </v-row>
