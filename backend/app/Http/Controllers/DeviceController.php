@@ -160,10 +160,11 @@ class DeviceController extends Controller
             }
         });
 
+        // $model->orderBy(request('sortBy') ?? "status_id", request('sort_by_desc') ? "desc" : "asc");
+        // $model->orderBy(request('sortBy') ?? "armed_status", request('sort_by_desc') ? "asc" : "asc");
+        $model->orderBy("customer_id",  "asc");
         $model->orderBy(request('sortBy') ?? "status_id", request('sort_by_desc') ? "desc" : "asc");
         $model->orderBy(request('sortBy') ?? "armed_status", request('sort_by_desc') ? "asc" : "asc");
-
-
         if (!$request->sortBy)
             $model->orderBy("serial_number", "ASC");
         return $model->paginate($request->per_page ?? 1000);
