@@ -781,34 +781,9 @@ export default {
     let loadSelectedMenu = "";
     if (menu_name) menu_name = menu_name.replaceAll("-", "/");
 
-    // if (this.getLoginType === "company" || this.getLoginType === "branch") {
-    //   //-------------------
-    //   loadSelectedMenu = this.company_menus.filter(
-    //     (item) => item.to === "/" + menu_name && item.submenu == null
-    //   );
-
-    //   if (loadSelectedMenu[0]) {
-    //     menu_name = loadSelectedMenu[0].module;
-
-    //     if (this.menuProperties.hasOwnProperty(menu_name)) {
-    //       for (const key in this.menuProperties) {
-    //         this.menuProperties[key].elevation = 0;
-    //         this.menuProperties[key].selected = "";
-    //       }
-
-    //       this.menuProperties[menu_name].elevation = 0;
-    //       this.menuProperties[menu_name].selected = bgColor;
-    //     }
-    //     //Color is changed and Now display sub menu - click - load left sub menu items
-
-    //     // this.items = this.company_menus.filter(
-    //     //   (item) => item.module === loadSelectedMenu[0].module
-    //     // );
-    //     this.items = this.company_menus.filter(
-    //       (item) => item.top_menu_name === loadSelectedMenu[0].module
-    //     );
-    //   }
-    // }
+    setInterval(() => {
+      this.updateOperatorLiveStatus();
+    }, 1000 * 60);
     this.setupInactivityDetection();
 
     // setTimeout(() => {
@@ -879,6 +854,12 @@ export default {
     },
   },
   methods: {
+    updateOperatorLiveStatus() {
+      this.$axios.post("operator_live_update", {
+        company_id: this.$auth.user.company_id,
+        security_id: this.$auth.user.security.id,
+      });
+    },
     Reset5Minutes() {
       this.wait5Minutes = false;
     },

@@ -845,12 +845,6 @@ export default {
       }
     }, 1000 * 10);
 
-    setInterval(() => {
-      if (this.$route.name == "operator-dashboard") {
-        this.updateOperatorLiveStatus();
-      }
-    }, 1000 * 60);
-
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
       this.isCompany = false;
@@ -922,12 +916,7 @@ export default {
         `width=${width},height=${height},toolbar=yes, location=yes,resizable=yes,scrollbars=yes`
       );
     },
-    updateOperatorLiveStatus() {
-      this.$axios.post("operator_live_update", {
-        company_id: this.$auth.user.company_id,
-        security_id: this.$auth.user.security.id,
-      });
-    },
+
     async getAlarmTypes() {
       const { data } = await this.$axios.get("alarm_types", {
         params: {
