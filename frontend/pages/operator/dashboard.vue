@@ -37,26 +37,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Map Customer Information</span>
-          <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialog = false" outlined>
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text style="padding: 0px">
-          <AlarmCustomerTabsView
-            v-if="customerInfo"
-            :key="key"
-            :_id="customerInfo.id"
-            :isPopup="true"
-            :isMapviewOnly="true"
-            :alarmId="eventId"
-        /></v-card-text>
-      </v-card>
-    </v-dialog> -->
+
     <v-dialog
       v-model="dialogAlarmEventCustomerContactsTabView"
       width="1000px"
@@ -269,7 +250,7 @@
               @applyGlobalSearch="getDatafromApi"
               style="padding: 10px"
             /> -->
-
+            {{ displayRightcontant }}
             <v-row v-if="data.length == 0" class="text-center">
               <v-col style="color: #fff"> 0 Alarms </v-col>
             </v-row>
@@ -1113,6 +1094,7 @@ export default {
 
             this.loading = false;
             if (this.customersData) this.plotLocations();
+            if (this.data.length == 0) this.displayRightcontant = false;
             // this.mapMarkersList.forEach((marker, index) => {
             //   if (marker) {
             //     marker.visible = false;
