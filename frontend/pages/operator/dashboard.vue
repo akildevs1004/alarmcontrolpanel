@@ -857,12 +857,12 @@ export default {
     // setInterval(async () => {}, 1000 * 8);
     setInterval(async () => {
       if (this.$route.name == "operator-dashboard") {
-        if (this.filterText == "") await this.getDatafromApi(this.filterText);
-        setTimeout(async () => {
-          await this.getCustomersDatafromApi();
-        }, 1000);
+        await this.getDatafromApi(this.filterText);
+        //setTimeout(async () => {
+        await this.getCustomersDatafromApi();
+        //}, 1000);
       }
-    }, 1000 * 15);
+    }, 1000 * 10);
 
     setInterval(() => {
       if (this.$route.name == "operator-dashboard") {
