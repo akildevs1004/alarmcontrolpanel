@@ -1,6 +1,7 @@
 <template>
   <div max-width="100%">
     <v-row>
+      <v-col style="max-width: 250px"> </v-col>
       <v-col style="max-width: 115px">
         <v-tabs
           style="max-width: 90px; min-height: 100%"

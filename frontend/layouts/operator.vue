@@ -204,7 +204,8 @@
       <v-spacer></v-spacer>
       <span><TopMenuClock></TopMenuClock></span>
       <span class="pr-3 pl-10" style="color: #5d5d5d; padding-left: 30px">
-        {{ topMenuDisplayName }}
+        Operator
+        <!-- {{ topMenuDisplayName }} -->
 
         <!-- <div style="font-size: 10px">({{ companyName }})</div> -->
       </span>
@@ -247,7 +248,9 @@
             v-for="(item, index) in notificationsMenuItems"
             :key="index"
           >
-            <v-list-item-content>
+            <v-list-item-content
+              @click="dialogAlarmPopupNotificationStatus = true"
+            >
               <v-list-item-title class="black--text align-left text-left">
                 <v-row>
                   <v-col cols="2" class="align-right text-right pr-1">
@@ -596,6 +599,7 @@ export default {
   },
   data() {
     return {
+      alarmList: [],
       popupKey: 1,
       key: 1,
       snackbar: false,
@@ -864,8 +868,8 @@ export default {
       this.wait5Minutes = false;
     },
     wait5MinutesNextNotification() {
-      this.snackbar = true;
-      this.response = "New Alarm will be Display after 5 minutes";
+      //this.snackbar = true;
+      // this.response =  "New Alarm will be Display after 5 minutes";
       // alert("New Alarm will be Display after 5 minutes");
       this.wait5Minutes = true;
       setTimeout(() => {
@@ -1078,19 +1082,27 @@ export default {
       this.$axios
         .get(`get_alarm_notification_display`, options)
         .then(({ data }) => {
+          if (!this.processedAlarmIds) {
+            this.processedAlarmIds = new Set(); // Initialize as a Set to track IDs efficiently.
+          }
+
+          let newAlarmFound = false;
+
           this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
 
-          if (data.length > 0) {
-            this.dialogAlarmPopupNotificationStatus = true;
-          } else {
-            this.dialogAlarmPopupNotificationStatus = false;
-          }
           this.key += 1;
 
           data.forEach((element) => {
+            const alarmId = element.id;
+
+            // Check if this is a new alarm/event
+            if (!this.processedAlarmIds.has(alarmId)) {
+              newAlarmFound = true; // A new alarm/event is detected
+              this.processedAlarmIds.add(alarmId); // Mark this ID as processed
+            }
             let notification = {
               title: element.device?.customer?.building_name
                 ? element.device.customer.building_name +
@@ -1106,6 +1118,8 @@ export default {
             this.notificationsMenuItems.push(notification);
           });
 
+          if (!this.dialogAlarmPopupNotificationStatus)
+            this.dialogAlarmPopupNotificationStatus = newAlarmFound;
           this.pendingNotificationsCount = data.length;
         })
         .catch((error) => {

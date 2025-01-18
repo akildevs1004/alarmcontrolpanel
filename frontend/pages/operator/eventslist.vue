@@ -397,7 +397,7 @@ export default {
     loading: true,
     filterBuildingType: null,
     filterAlarmType: null,
-    filterAlarmStatus: 1,
+    filterAlarmStatus: null,
     fullscreen: false,
     windowHeight: 1000,
     windowWidth: 600,
