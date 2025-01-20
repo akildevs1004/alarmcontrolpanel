@@ -372,6 +372,7 @@
                 :items="notificationAlarmDevicesContent"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
                 @callReset5Minutes="Reset5Minutes"
+                @closeDialog="closeDialog"
                 :key="popupKey"
                 :alarm_icons="alarm_icons"
               />
@@ -864,6 +865,9 @@ export default {
         company_id: this.$auth.user.company_id,
         security_id: this.$auth.user.security.id,
       });
+    },
+    closeDialog() {
+      this.dialogAlarmPopupNotificationStatus = false;
     },
     Reset5Minutes() {
       this.wait5Minutes = false;

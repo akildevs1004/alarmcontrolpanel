@@ -685,6 +685,8 @@ export default {
             this.totalRowsCount = 1000; //data.total;
             this.loading = false;
             this.showTable = true;
+
+            if (this.items.length == 0) this.$emit("closeDialog");
           });
       } catch (e) {
         this.isBackendRequestOpen = false;
