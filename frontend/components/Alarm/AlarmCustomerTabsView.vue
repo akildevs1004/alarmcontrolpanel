@@ -1,10 +1,131 @@
 <template>
   <div max-width="100%">
     <v-row>
-      <v-col style="max-width: 250px"> </v-col>
-      <v-col style="max-width: 115px">
+      <v-col style="max-width: 250px">
+        <v-card style="height: 310px"
+          ><v-card-text elevation="2">
+            <v-row style="margin-top: 0x">
+              <v-col class="p-0" style="padding: 0px">
+                <v-img
+                  style="
+                    width: 60%;
+
+                    border-radius: 5%;
+                    border: 1px solid #ddd;
+                    margin: auto;
+                  "
+                  :src="
+                    selectedCustomer && selectedCustomer.primary_contact
+                      ? selectedCustomer.primary_contact?.profile_picture
+                      : '/no-profile-image.jpg'
+                  "
+                ></v-img>
+              </v-col>
+              <v-col style="font-weight: bold; text-align: center">
+                <div style="font-size: 16px; text-align: center">
+                  {{
+                    selectedCustomer && selectedCustomer.primary_contact
+                      ? selectedCustomer.primary_contact?.first_name +
+                        " " +
+                        selectedCustomer.primary_contact?.last_name
+                      : "---"
+                  }}
+                </div>
+                <div style="font-size: 10px">(Primary Contact)</div>
+              </v-col>
+            </v-row>
+
+            <v-row style="margin-top: 0px">
+              <v-col style="line-height: 25px">
+                <!-- <div style="font-weight: bold">
+              <v-icon size="13" style="border: 0px solid #ddd"
+                >mdi-account</v-icon
+              >
+              {{
+                selectedCustomer.primary_contact?.first_name
+                  ? selectedCustomer.primary_contact.first_name +
+                    " " +
+                    selectedCustomer.primary_contact.last_name
+                  : "---"
+              }}
+            </div> -->
+                <div style="border-top: 0px solid #ddd">
+                  <v-icon size="13">mdi-phone</v-icon>
+                  {{ selectedCustomer.primary_contact.phone1 }}
+                </div>
+                <div style="border-top: 1px solid #ddd">
+                  <v-icon size="13">mdi-phone-classic</v-icon>
+                  {{ selectedCustomer.primary_contact.phone2 }}
+                </div>
+                <div style="border-top: 1px solid #ddd">
+                  <v-icon size="13">mdi-whatsapp</v-icon>
+                  {{ selectedCustomer.primary_contact.whatsapp }}
+                </div>
+                <div style="border-top: 1px solid #ddd">
+                  <v-icon size="13">mdi-at</v-icon>
+                  {{ selectedCustomer.primary_contact.email }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+        <v-card style="margin-top: 5px; height: 270px"
+          ><v-card-text elevation="2">
+            <v-row>
+              <v-col class="p1-0" style="padding: 0px">
+                <v-img
+                  style="
+                    width: 60%;
+
+                    border-radius: 5%;
+                    border: 1px solid #ddd;
+                    margin: auto;
+                  "
+                  :src="
+                    selectedCustomer && selectedCustomer.profile_picture
+                      ? selectedCustomer.profile_picture
+                      : '/no-business_profile.png'
+                  "
+                ></v-img>
+              </v-col>
+              <v-col style="font-weight: bold; text-align: center">
+                <div style="font-size: 16px; text-align: center">
+                  {{
+                    selectedCustomer && selectedCustomer.building_name
+                      ? selectedCustomer.building_name
+                      : "---"
+                  }}
+                </div>
+              </v-col>
+            </v-row>
+
+            <v-row style="margin-top: 0px">
+              <v-col style="line-height: 25px; padding: 0px">
+                <div style="border-top: 0px solid #ddd" v-if="selectedCustomer">
+                  {{ selectedCustomer.house_number }},
+                  {{ selectedCustomer.street_number }},
+                  {{ selectedCustomer.area }}, {{ selectedCustomer.city }}
+                </div>
+                <div style="border-top: 1px solid #ddd" v-if="selectedCustomer">
+                  {{ selectedCustomer.state }},
+                  {{ selectedCustomer.country }}
+                </div>
+                <div style="border-top: 1px solid #ddd" v-if="selectedCustomer">
+                  Landmark:
+                  {{ selectedCustomer.landmark }}
+                </div>
+
+                <div style="border-top: 1px solid #ddd">
+                  Email: {{ customer ? selectedCustomer.user?.email : "---" }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text></v-card
+        >
+      </v-col>
+      <v-col style="max-width: 95px">
         <v-tabs
-          style="max-width: 90px; min-height: 100%"
+          style="max-width: 70px; min-height: 100%"
           icons-and-text
           v-model="tab"
           vertical
@@ -13,42 +134,46 @@
           color="#0aafeb"
           class="customer-tabs-right-line"
         >
-          <!-- <v-tab class="customer-tab">
+          <!-- <v-tab class="customer-tab" style="width: 70px" >
         Customer
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab> -->
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" style="width: 70px">
             Address
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab>
-          <!-- <v-tab class="customer-tab">
+          <!-- <v-tab class="customer-tab" style="width: 70px" >
             Contacts
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab> -->
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" style="width: 70px">
             Contacts
             <v-icon>mdi-account-tie</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" style="width: 70px">
             Camera
             <v-icon>mdi-camera</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" style="width: 70px">
             Devices
             <v-icon>mdi-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab">
+          <v-tab class="customer-tab" style="width: 70px">
             Sensors
             <v-icon>mdi-shield-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" v-if="!isMapviewOnly">
+          <v-tab class="customer-tab" style="width: 70px" v-if="!isMapviewOnly">
             Automation
             <v-icon>mdi-car-emergency</v-icon> </v-tab
-          ><v-tab class="customer-tab" v-if="!isMapviewOnly">
+          ><v-tab
+            class="customer-tab"
+            style="width: 70px"
+            v-if="!isMapviewOnly"
+          >
             Subscription
             <v-icon>mdi-medical-bag</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" v-if="!isMapviewOnly">
+          <v-tab class="customer-tab" style="width: 70px" v-if="!isMapviewOnly">
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
           </v-tab>
@@ -71,7 +196,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <BuildingPhotos
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -101,7 +226,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlramEmergencyContacts
                   v-if="data"
                   @closeDialog="closeDialog"
@@ -118,7 +243,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <CameraList
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -132,7 +257,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlarmDevices
                   v-if="_id"
                   :customer_id="_id"
@@ -145,7 +270,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlramPhotos
                   v-if="_id"
                   :key="keyPhotos"
@@ -158,7 +283,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlarmAutomation
                   v-if="_id"
                   :key="keyAutomation"
@@ -170,7 +295,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlarmPayments
                   v-if="_id"
                   :customer="data"
@@ -183,7 +308,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text>
+              <v-card-text elevation="2">
                 <AlarmSettings
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -237,7 +362,7 @@ export default {
     BuildingPhotos,
     CameraList,
   },
-  props: ["_id", "isPopup", "isMapviewOnly", "isEditable"],
+  props: ["_id", "isPopup", "isMapviewOnly", "isEditable", "selectedCustomer"],
   data: () => ({
     dialogEditBuilding: false,
     messages: [],

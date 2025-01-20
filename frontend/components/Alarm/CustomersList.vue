@@ -25,11 +25,12 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px; overflow: hidden"
-          ><AlarmCustomerTabsView
+        <v-card-text style="padding: 0px; overflow: hidden">
+          <AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
             :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
             :isPopup="true"
             :isEditable="false"
         /></v-card-text>
@@ -39,7 +40,7 @@
       v-model="dialogEditCustomer"
       min-width="1100px"
       width="80%"
-      max-width="1200px"
+      max-width="1300px"
       style="overflow: visible"
     >
       <v-card>
@@ -57,11 +58,12 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text
+        <v-card-text style="padding-left: 10px; background-color: #fff"
           ><AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
             :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
             :isPopup="true"
             :isEditable="true"
         /></v-card-text>
@@ -654,6 +656,7 @@ export default {
     _id: null,
     isBackendRequestOpen: false,
     securityList: [],
+    selectedCustomer: null,
   }),
   computed: {},
   async mounted() {
@@ -751,9 +754,11 @@ export default {
       this.setIntervalLoopstatus = false;
       this.viewCustomerId = item.id;
       this.key += 1;
+      this.selectedCustomer = item;
       this.dialogEditCustomer = true;
     },
     viewItem(item) {
+      this.selectedCustomer = item;
       this.setIntervalLoopstatus = false;
       this.viewCustomerId = item.id;
       this.key += 1;

@@ -371,7 +371,7 @@
                       </div>
                       <div>
                         <v-icon style="border: 0px solid #ddd" size="13"
-                          >mdi-cellphone-basic</v-icon
+                          >mdi-whatsapp</v-icon
                         >
                         {{ filteredContactInfo.whatsapp }}
                       </div>
