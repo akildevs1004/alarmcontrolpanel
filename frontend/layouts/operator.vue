@@ -742,7 +742,7 @@ export default {
     }, 1000 * 1);
 
     setInterval(() => {
-      if (!this.$route.name.includes("operator")) return false;
+      //if (!this.$route.name.includes("operator")) return false;
       //this.loadHeaderNotificationMenu();
 
       //console.log("wait5Minutes", this.wait5Minutes);
@@ -752,7 +752,7 @@ export default {
           this.resetTimer();
           this.loadHeaderNotificationMenu();
 
-          if (this.$route.name === "operator-dashboard" && !this.wait5Minutes) {
+          if (!this.wait5Minutes) {
             const notificationContent = this.notificationAlarmDevicesContent;
 
             if (notificationContent && notificationContent.length > 0) {
@@ -763,8 +763,7 @@ export default {
                 if (!this.dialogAlarmPopupNotificationStatus) {
                   this.popupKey += 1;
 
-                  if (this.notificationAlarmDevices.length > 0)
-                    this.dialogAlarmPopupNotificationStatus = true;
+                  this.dialogAlarmPopupNotificationStatus = true;
                 }
               } else {
                 //this.dialogAlarmPopupNotificationStatus = false;
@@ -1095,6 +1094,9 @@ export default {
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
 
+          if (this.notificationAlarmDevicesContent.length == 0)
+            this.dialogAlarmPopupNotificationStatus = false;
+
           this.key += 1;
 
           data.forEach((element) => {
@@ -1229,8 +1231,8 @@ export default {
       this.wait5Minutes = false;
       if (!this.dialogAlarmPopupNotificationStatus) {
         this.popupKey += 1;
-        if (this.notificationAlarmDevices.length > 0)
-          this.dialogAlarmPopupNotificationStatus = true;
+
+        this.dialogAlarmPopupNotificationStatus = true;
       }
       // this.verifyPopupAlarmStatus();
     },
@@ -1256,8 +1258,8 @@ export default {
 
             if (!this.dialogAlarmPopupNotificationStatus) {
               this.popupKey += 1;
-              
-                this.dialogAlarmPopupNotificationStatus = true;
+
+              this.dialogAlarmPopupNotificationStatus = true;
             }
           } else {
             this.dialogAlarmPopupNotificationStatus = false;
