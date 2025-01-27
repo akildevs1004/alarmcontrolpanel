@@ -1126,8 +1126,11 @@ export default {
             this.notificationsMenuItems.push(notification);
           });
 
-          if (!this.dialogAlarmPopupNotificationStatus)
-            this.dialogAlarmPopupNotificationStatus = newAlarmFound;
+          if (!this.dialogAlarmPopupNotificationStatus) {
+            if (this.$route.name == "operator-dashboard")
+              this.dialogAlarmPopupNotificationStatus = newAlarmFound;
+          }
+
           this.pendingNotificationsCount = data.length;
         })
         .catch((error) => {
