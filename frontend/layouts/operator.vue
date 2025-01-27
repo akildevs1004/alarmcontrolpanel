@@ -763,8 +763,8 @@ export default {
               if (criticalList.length > 0) {
                 if (!this.dialogAlarmPopupNotificationStatus) {
                   this.popupKey += 1;
-
-                  this.dialogAlarmPopupNotificationStatus = true;
+                  if (this.$route.name == "operator-dashboard")
+                    this.dialogAlarmPopupNotificationStatus = true;
                 }
               } else {
                 //this.dialogAlarmPopupNotificationStatus = false;
@@ -1235,7 +1235,7 @@ export default {
       this.wait5Minutes = false;
       if (!this.dialogAlarmPopupNotificationStatus) {
         this.popupKey += 1;
-
+        // if (this.$route.name == "operator-dashboard")
         this.dialogAlarmPopupNotificationStatus = true;
       }
       // this.verifyPopupAlarmStatus();
@@ -1262,8 +1262,8 @@ export default {
 
             if (!this.dialogAlarmPopupNotificationStatus) {
               this.popupKey += 1;
-
-              this.dialogAlarmPopupNotificationStatus = true;
+              if (this.$route.name == "operator-dashboard")
+                this.dialogAlarmPopupNotificationStatus = true;
             }
           } else {
             this.dialogAlarmPopupNotificationStatus = false;

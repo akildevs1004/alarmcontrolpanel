@@ -179,7 +179,7 @@
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col>
+      <v-col cols="8">
         <v-tabs-items v-model="tab" style="overflow: visible">
           <!-- <v-tab-item>
         <v-card flat>
