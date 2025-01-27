@@ -1235,8 +1235,8 @@ export default {
       this.wait5Minutes = false;
       if (!this.dialogAlarmPopupNotificationStatus) {
         this.popupKey += 1;
-        // if (this.$route.name == "operator-dashboard")
-        this.dialogAlarmPopupNotificationStatus = true;
+        if (this.$route.name == "operator-dashboard")
+          this.dialogAlarmPopupNotificationStatus = true;
       }
       // this.verifyPopupAlarmStatus();
     },
