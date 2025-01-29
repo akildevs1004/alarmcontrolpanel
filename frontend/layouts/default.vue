@@ -2427,10 +2427,9 @@ label.v-label.v-label--active.v-label--is-disabled.theme--light {
   font-size: 9px !important;
   min-width: 75px !important;
 }
-
 .customer-tab {
   font-size: 9px !important;
-  min-width: 75px !important;
+  min-width: 50px !important;
 }
 </style>
 

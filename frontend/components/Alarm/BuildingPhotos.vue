@@ -71,7 +71,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <div v-if="building_photos.length == 0" class="text-center">
+    <div v-if="!loading && building_photos.length == 0" class="text-center">
       No Photos Available
     </div>
 
@@ -100,7 +100,10 @@
         <v-tabs v-model="tab" right show-arrows class="tabswidthalignment">
           <v-tabs-slider></v-tabs-slider>
 
-          <v-tab href="#tabAddress">Address</v-tab>
+          <v-tab href="#tabAddress"
+            ><v-icon size="18">mdi-office-building-outline</v-icon
+            >Address</v-tab
+          >
           <v-tab
             v-for="(item, index) in building_photos"
             :key="'photo' + item.id"
@@ -174,13 +177,13 @@
                   </v-row>
                   <v-row>
                     <v-col>
-                      <v-img
+                      <img
                         width="100%"
-                        max-width="900px"
-                        height="100%"
+                        max-width="100%"
+                        height="600px"
                         :src="item.picture || '/no-business_profile.png'"
                         contain
-                        style="object-fit: contain; max-height: 100%"
+                        style="object-fit: contain; max-height: 600px"
                       />
                     </v-col>
                   </v-row>

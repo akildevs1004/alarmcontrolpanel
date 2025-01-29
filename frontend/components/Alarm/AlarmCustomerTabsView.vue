@@ -123,9 +123,9 @@
           </v-card-text></v-card
         >
       </v-col>
-      <v-col style="max-width: 95px">
+      <v-col style="max-width: 60px; padding: 0px">
         <v-tabs
-          style="max-width: 70px; min-height: 100%"
+          style="max-width: 50px; min-height: 100%"
           icons-and-text
           v-model="tab"
           vertical
@@ -138,7 +138,7 @@
         Customer
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab> -->
-          <v-tab class="customer-tab" style="width: 70px">
+          <v-tab class="customer-tab" style="max-width: 50px">
             Address
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab>
@@ -146,40 +146,48 @@
             Contacts
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab> -->
-          <v-tab class="customer-tab" style="width: 70px">
+          <v-tab class="customer-tab" style="max-width: 50px">
             Contacts
             <v-icon>mdi-account-tie</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" style="width: 70px">
+          <v-tab class="customer-tab" style="max-width: 50px">
             Camera
             <v-icon>mdi-camera</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" style="width: 70px">
+          <v-tab class="customer-tab" style="max-width: 50px">
             Devices
             <v-icon>mdi-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" style="width: 70px">
+          <v-tab class="customer-tab" style="max-width: 50px">
             Sensors
             <v-icon>mdi-shield-account</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" style="width: 70px" v-if="!isMapviewOnly">
-            Automation
+          <v-tab
+            class="customer-tab"
+            style="max-width: 50px"
+            v-if="!isMapviewOnly"
+          >
+            Auto
             <v-icon>mdi-car-emergency</v-icon> </v-tab
           ><v-tab
             class="customer-tab"
-            style="width: 70px"
+            style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Subscription
+            Account
             <v-icon>mdi-medical-bag</v-icon>
           </v-tab>
-          <v-tab class="customer-tab" style="width: 70px" v-if="!isMapviewOnly">
+          <v-tab
+            class="customer-tab"
+            style="max-width: 50px"
+            v-if="!isMapviewOnly"
+          >
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col cols="8">
+      <v-col class="pa-0">
         <v-tabs-items v-model="tab" style="overflow: visible">
           <!-- <v-tab-item>
         <v-card flat>
@@ -196,7 +204,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <BuildingPhotos
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -226,7 +234,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlramEmergencyContacts
                   v-if="data"
                   @closeDialog="closeDialog"
@@ -243,7 +251,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <CameraList
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -257,7 +265,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlarmDevices
                   v-if="_id"
                   :customer_id="_id"
@@ -270,7 +278,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlramPhotos
                   v-if="_id"
                   :key="keyPhotos"
@@ -283,7 +291,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlarmAutomation
                   v-if="_id"
                   :key="keyAutomation"
@@ -295,7 +303,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlarmPayments
                   v-if="_id"
                   :customer="data"
@@ -308,7 +316,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2">
+              <v-card-text elevation="2" class="pa-0">
                 <AlarmSettings
                   v-if="_id"
                   @closeDialog="closeDialog"
