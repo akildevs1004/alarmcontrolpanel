@@ -175,7 +175,7 @@
             v-if="!isMapviewOnly"
           >
             Account
-            <v-icon>mdi-medical-bag</v-icon>
+            <v-icon> mdi-currency-usd</v-icon>
           </v-tab>
           <v-tab
             class="customer-tab"
