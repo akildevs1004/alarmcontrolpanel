@@ -204,7 +204,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <BuildingPhotos
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -234,7 +234,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlramEmergencyContacts
                   v-if="data"
                   @closeDialog="closeDialog"
@@ -251,7 +251,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <CameraList
                   v-if="_id"
                   @closeDialog="closeDialog"
@@ -265,7 +265,7 @@
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlarmDevices
                   v-if="_id"
                   :customer_id="_id"
@@ -278,7 +278,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlramPhotos
                   v-if="_id"
                   :key="keyPhotos"
@@ -291,7 +291,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlarmAutomation
                   v-if="_id"
                   :key="keyAutomation"
@@ -303,7 +303,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlarmPayments
                   v-if="_id"
                   :customer="data"
@@ -316,7 +316,7 @@
             </v-card> </v-tab-item
           ><v-tab-item>
             <v-card flat>
-              <v-card-text elevation="2" class="pa-0">
+              <v-card-text elevation="2" class="pl-0">
                 <AlarmSettings
                   v-if="_id"
                   @closeDialog="closeDialog"
