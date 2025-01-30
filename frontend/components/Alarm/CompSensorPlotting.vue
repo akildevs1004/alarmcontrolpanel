@@ -132,7 +132,7 @@
                     style="
                       width: 40px;
                       float: left;
-                      margin: 10px;
+                      margin: 5px;
                       filter: grayscale(100%);
                     "
                     :src="plotting.sensorImage"
