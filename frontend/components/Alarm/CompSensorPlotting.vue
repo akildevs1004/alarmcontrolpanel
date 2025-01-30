@@ -104,7 +104,20 @@
                 >
                   <v-img
                     :title="plotting.sensorTypeName"
-                    v-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
+                    v-if="plotting.sensorTypeName == null"
+                    draggable="true"
+                    @dragstart="dragStart($event, plotIndex)"
+                    style="width: 30px; float: left; margin: 5px"
+                    :src="
+                      getSensorTypeRelaventImage(
+                        getDeviceCategory(device.id),
+                        plotting
+                      )
+                    "
+                  ></v-img>
+                  <v-img
+                    :title="plotting.sensorTypeName"
+                    v-else-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
                     draggable="true"
                     @dragstart="dragStart($event, plotIndex)"
                     style="width: 30px; float: left; margin: 5px"
@@ -137,8 +150,8 @@
         ></v-col
       > -->
 
-      <v-col cols="6">
-        <!-- <v-row no-gutters>
+      <!-- <v-col cols="6">
+        <v-row no-gutters>
           <v-col cols="12">
             <v-autocomplete
               label="Select Device "
@@ -175,6 +188,7 @@
                     v-if="device_id == plotting.device_id"
                     style="color: green"
                   >
+                    
                     <v-img
                       :title="plotting.sensorImage"
                       v-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
@@ -212,8 +226,8 @@
               </v-col>
             </v-row>
           </v-col>
-        </v-row> -->
-      </v-col>
+        </v-row>
+      </v-col> -->
     </v-row>
   </div>
 </template>
