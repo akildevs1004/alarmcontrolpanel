@@ -23,24 +23,31 @@ class DeviceZoneTypesController extends Controller
     public function sensorTypesList()
     {
         $sensorNames =  [
-            "Motion Sensor",
-            "Heat Sensor",
-            "Door Contact",
-            "Smoke Sensor",
-            "Glass Break",
-            "Motion sensor ",
-            "Panic Button ",
-            "Gas Sensor",
-            "Microwave Sensor",
-            "Beam Sensor",
-            "Temperature",
-            "Shutter Door",
-            "Flood Sensor",
-            "Curtain Sensor",
+            ["name" => "Fire Sensor", "image" => "fire_sensor.png"],
+            ["name" => "Beam Sensor", "image" => "beam_sensor.png"],
+            ["name" => "Door Sensor", "image" => "door_sensor.png"],
+            ["name" => "Gas Sensor", "image" => "gas_sensor.png"],
+            ["name" => "Glass Break Sensor", "image" => "glass_breake_sensor.png"],
+            ["name" => "Medical Sensor", "image" => "medical_sensor.png"],
+            ["name" => "Motion Sensor", "image" => "motion_sensor.png"],
+            ["name" => "Smoke Sensor", "image" => "smoke_sensor.png"],
+            ["name" => "SOS Sensor", "image" => "sos_sensor.png"],
+            ["name" => "Temperature Sensor", "image" => "temperature_sensor.png"],
+            ["name" => "Vibration Sensor", "image" => "vibration_sensor.png"],
+            ["name" => "Water Leakage Sensor", "image" => "water_leakage_sensor.png"],
+            ["name" => "Other Sensor", "image" => "other_sensor.png"],
+
+
+
+
+            // ["name" => "Heat Sensor", "image" => "motion_sensor.png"],
+            // ["name" => "Microwave Sensor", "image" => "beam_sensor.png"],
+            // ["name" => "Shutter Door", "image" => "beam_sensor.png"],
+            // ["name" => "Curtain Sensor", "image" => "beam_sensor.png"],
 
         ];
 
-        sort($sensorNames);
+        ksort($sensorNames);
 
         return $sensorNames;
     }

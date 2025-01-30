@@ -2673,4 +2673,8 @@ td {
 .map-customers-list-table .text-start {
   padding: 0px !important;
 }
+
+.sensorplotting .v-expansion-panel-content__wrap {
+  padding: 0px !important;
+}
 </style>

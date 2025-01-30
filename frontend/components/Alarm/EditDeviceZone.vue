@@ -48,9 +48,10 @@
                   >
                 </v-col>
                 <v-col cols="12" dense>
-                  <v-combobox
+                  {{ payload_security.sensor_type }}
+                  <v-autocomplete
                     label="Sensor Type"
-                    :items="[...sensorTypes, 'Other']"
+                    :items="sensorTypes"
                     dense
                     small
                     outlined
@@ -58,14 +59,16 @@
                     hide-details
                     :readonly="!editable"
                     :filled="!editable"
-                  ></v-combobox>
+                    item-value="name"
+                    item-text="name"
+                  ></v-autocomplete>
                   <span
                     v-if="primary_errors && primary_errors.sensor_type"
                     class="text-danger mt-2"
                     >{{ primary_errors.sensor_type[0] }}</span
                   >
                 </v-col>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   dense
                   v-if="payload_security.sensor_type == 'Other'"
@@ -81,9 +84,9 @@
                     :readonly="!editable"
                     :filled="!editable"
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <v-col cols="12" dense>
-                  <v-combobox
+                  <v-autocomplete
                     :items="[...ZoneTypes, 'Other']"
                     label="Zone Type"
                     dense
@@ -93,7 +96,7 @@
                     hide-details
                     :readonly="!editable"
                     :filled="!editable"
-                  ></v-combobox>
+                  ></v-autocomplete>
                   <span
                     v-if="primary_errors && primary_errors.sensor_name"
                     class="text-danger mt-2"
@@ -338,10 +341,10 @@ export default {
             customer.append(key, this.payload_security[key]);
       }
 
-      if (this.payload_security.sensor_type.toLowerCase() == "other") {
-        this.payload_security.sensor_type =
-          this.payload_security.sensor_type_other;
-      }
+      // if (this.payload_security.sensor_type.toLowerCase() == "other") {
+      //   this.payload_security.sensor_type =
+      //     this.payload_security.sensor_type_other;
+      // }
       if (this.payload_security.sensor_name.toLowerCase() == "other") {
         this.payload_security.sensor_name =
           this.payload_security.sensor_name_other;

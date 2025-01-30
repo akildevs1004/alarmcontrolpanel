@@ -160,7 +160,7 @@
           </v-tab>
           <v-tab class="customer-tab" style="max-width: 50px">
             Sensors
-            <v-icon>mdi-shield-account</v-icon>
+            <v-icon>mdi-motion-sensor</v-icon>
           </v-tab>
           <v-tab
             class="customer-tab"
