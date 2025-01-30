@@ -130,9 +130,9 @@
                     disabled="true"
                     draggable="false"
                     style="
-                      width: 30px;
+                      width: 40px;
                       float: left;
-                      margin: 5px;
+                      margin: 10px;
                       filter: grayscale(100%);
                     "
                     :src="plotting.sensorImage"

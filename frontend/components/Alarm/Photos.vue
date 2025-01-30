@@ -93,7 +93,7 @@
           dense
           x-small
         >
-          Reset Mapping
+          Clear/Reset Plotting
         </v-btn>
         <v-btn
           v-if="!isMapviewOnly"
