@@ -107,7 +107,7 @@
                     v-if="plotting.sensorTypeName == null"
                     draggable="true"
                     @dragstart="dragStart($event, plotIndex)"
-                    style="width: 30px; float: left; margin: 5px"
+                    style="width: 40px; float: left; margin: 5px"
                     :src="
                       getSensorTypeRelaventImage(
                         getDeviceCategory(device.id),
@@ -120,7 +120,7 @@
                     v-else-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
                     draggable="true"
                     @dragstart="dragStart($event, plotIndex)"
-                    style="width: 30px; float: left; margin: 5px"
+                    style="width: 40px; float: left; margin: 5px"
                     :src="plotting.sensorImage"
                   ></v-img>
 
@@ -503,28 +503,30 @@ export default {
       this.response = "Plotting Details are Sync position details";
     },
     async unmapSensor(draggingIndex) {
-      if (confirm(`Are you sure you want to Unmap Sensor?`)) {
-        // const dropZoneRect = event.currentTarget.getBoundingClientRect();
-        // const offsetX = ""; // event.clientX - dropZoneRect.left;
-        // const offsetY = event.clientY - dropZoneRect.top;
+      try {
+        if (confirm(`Are you sure you want to Unmap Sensor?`)) {
+          // const dropZoneRect = event.currentTarget.getBoundingClientRect();
+          // const offsetX = ""; // event.clientX - dropZoneRect.left;
+          // const offsetY = event.clientY - dropZoneRect.top;
 
-        this.plottings[draggingIndex].left = "-500px"; // `${offsetX}px`;
-        this.plottings[draggingIndex].top = "-500px"; // `${offsetY}px`;
+          this.plottings[draggingIndex].left = "-500px"; // `${offsetX}px`;
+          this.plottings[draggingIndex].top = "-500px"; // `${offsetY}px`;
 
-        this.draggingIndex = null;
+          this.draggingIndex = null;
 
-        await this.submit(false);
-        await this.getDevices();
-        await this.getPlottingWithCustomerId();
+          await this.submit(false);
+          await this.getDevices();
+          await this.getPlottingWithCustomerId();
 
-        await this.getExistingPlottings();
-        if (process) {
-          this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
-          this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+          await this.getExistingPlottings();
+          if (process) {
+            this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
+            this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
+          }
+          this.snackbar = true;
+          this.response = "Unmap Sensor is updated successfully";
         }
-        this.snackbar = true;
-        this.response = "Unmap Sensor is updated successfully";
-      }
+      } catch (e) {}
     },
     async deleteOnDrop(event) {
       if (confirm(`Are you sure you want to delete`)) {
