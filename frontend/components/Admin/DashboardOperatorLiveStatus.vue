@@ -64,8 +64,13 @@
       </template> -->
       <template v-slot:item.employee.first_name="{ item }">
         {{ item.first_name + " " + item.last_name }}
-        <div calss="secondary-value" style="font-size: 10px">
-          <span v-if="item.idle_time <= 5"
+
+        <div
+          calss="secondary-value"
+          style="font-size: 10px"
+          v-if="parseInt(item.idle_time) <= 5"
+        >
+          <span
             ><v-icon style="color: green" size="15">mdi mdi-web</v-icon></span
           >
           Online
@@ -86,7 +91,7 @@
         >
         <v-icon
           :title="item.last_active_datetime || '---'"
-          v-else-if="item.idle_time <= 60"
+          v-else-if="item.idle_time <= 10"
           color="yellow"
           fill
           >mdi-monitor-eye</v-icon
