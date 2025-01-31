@@ -8,7 +8,7 @@
     <v-dialog
       v-model="dialogViewCustomer"
       min-width="1200px"
-      width="90%"
+      width="1200px"
       style="overflow: visible"
     >
       <v-card>
@@ -40,7 +40,7 @@
     <v-dialog
       v-model="dialogEditCustomer"
       min-width="1200px"
-      width="90%"
+      width="1200px"
       style="overflow: visible"
     >
       <v-card>
