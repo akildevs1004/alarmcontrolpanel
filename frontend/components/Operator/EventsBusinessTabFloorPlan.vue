@@ -17,29 +17,38 @@
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
           >
-            <v-chip
-              color="#203864"
-              style="color: #fff; margin-bottom: 2px"
-              label
-              >{{ index + 1 }}: {{ item.title }}</v-chip
-            >
-            <div style="position: relative">
-              <img
-                :id="
-                  'plotting' +
-                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
-                "
-                class="photo-img"
-                :src="item.picture"
-                :width="IMG_PLOTTING_WIDTH"
-                :height="IMG_PLOTTING_HEIGHT"
-                @load="
-                  onImageLoad(
-                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
-                  )
-                "
-              />
-              <!-- <img
+            <v-card
+              ><v-card-text elevation="2" style="text-align: center">
+                <v-chip
+                  color="#203864"
+                  style="color: #fff; margin-bottom: 2px"
+                  label
+                  >{{ index + 1 }}: {{ item.title }}</v-chip
+                >
+                <div
+                  :style="
+                    'margin: auto;position: relative;width:' +
+                    IMG_PLOTTING_WIDTH
+                  "
+                >
+                  <img
+                    :id="
+                      'plotting' +
+                        item.photo_plottings[0]?.customer_building_picture_id ??
+                      0
+                    "
+                    class="photo-img"
+                    :src="item.picture"
+                    :width="IMG_PLOTTING_WIDTH"
+                    :height="IMG_PLOTTING_HEIGHT"
+                    @load="
+                      onImageLoad(
+                        item.photo_plottings[0]?.customer_building_picture_id ??
+                          0
+                      )
+                    "
+                  />
+                  <!-- <img
               :id="
                 'plotting' +
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
@@ -55,26 +64,30 @@
                 )
               "
             /> -->
-              <span
-                v-if="
-                  item.photo_plottings[0] &&
-                  imageLoaded[
-                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
-                  ]
-                "
-              >
-                <PlottingIcon
-                  v-if="plottingStatus && item.photo_plottings[0]"
-                  v-for="(plotting, idx) in item.photo_plottings[0].plottings"
-                  :key="'plotting' + idx"
-                  :plotting="plotting"
-                  :picture-id="
-                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
-                  "
-                  :alarm="alarm"
-                />
-              </span>
-            </div>
+                  <span
+                    v-if="
+                      item.photo_plottings[0] &&
+                      imageLoaded[
+                        item.photo_plottings[0]?.customer_building_picture_id ??
+                          0
+                      ]
+                    "
+                  >
+                    <PlottingIcon
+                      v-if="plottingStatus && item.photo_plottings[0]"
+                      v-for="(plotting, idx) in item.photo_plottings[0]
+                        .plottings"
+                      :key="'plotting' + idx"
+                      :plotting="plotting"
+                      :picture-id="
+                        item.photo_plottings[0]?.customer_building_picture_id ??
+                        0
+                      "
+                      :alarm="alarm"
+                    />
+                  </span>
+                </div> </v-card-text
+            ></v-card>
           </v-carousel-item>
         </v-carousel>
       </v-col>

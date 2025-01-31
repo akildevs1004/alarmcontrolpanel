@@ -421,7 +421,7 @@ export default {
   watch: {},
   methods: {
     async updateContactsData() {
-      console.log("reloadContent");
+      // console.log("reloadContent");
       try {
         await this.getDataFromApi();
       } catch (e) {}
