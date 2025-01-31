@@ -7,7 +7,7 @@
     </div>
     <v-dialog
       v-model="dialogViewCustomer"
-      width="1000px"
+      min-width="1200px"
       style="overflow: visible"
     >
       <v-card>
