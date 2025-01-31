@@ -11,7 +11,7 @@
           hide-arrows-on-hover
           hide-delimiters
           hide-arrows
-          :height="parseInt(IMG_PLOTTING_HEIGHT) + 30"
+          :height="parseInt(IMG_PLOTTING_HEIGHT) + 50"
         >
           <v-carousel-item
             v-for="(item, index) in customer.photos"
@@ -92,7 +92,7 @@
         </v-carousel>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row style="margin-top: 0px">
       <v-col>
         <div
           style="
@@ -123,10 +123,10 @@
                 :src="item.picture"
                 :alt="item.title"
                 contain
-                width="140px"
-                max-height="100px"
-                height="100px"
-                style="max-height: 100px"
+                width="100px"
+                max-height="80px"
+                height="80px"
+                style="max-height: 80px; margin: auto"
               ></v-img>
             </div>
             <label style="font-size: 10px">{{ item.title }}</label>
