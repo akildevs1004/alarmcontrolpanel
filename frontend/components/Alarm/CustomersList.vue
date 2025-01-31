@@ -8,6 +8,7 @@
     <v-dialog
       v-model="dialogViewCustomer"
       min-width="1200px"
+      width="90%"
       style="overflow: visible"
     >
       <v-card>
@@ -25,7 +26,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding: 0px; overflow: hidden">
+        <v-card-text style="padding-left: 10px; background-color: #fff">
           <AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
