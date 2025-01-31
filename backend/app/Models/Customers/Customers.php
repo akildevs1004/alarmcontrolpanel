@@ -78,7 +78,7 @@ class Customers extends Model
     }
     public function photos()
     {
-        return $this->hasmany(CustomerBuildingPictures::class, 'customer_id', 'id');
+        return $this->hasmany(CustomerBuildingPictures::class, 'customer_id', 'id')->orderby("display_order", "ASC");
     }
 
     public function profilePictures()

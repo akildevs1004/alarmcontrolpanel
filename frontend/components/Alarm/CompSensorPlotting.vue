@@ -31,7 +31,12 @@
                 :width="IMG_PLOTTING_WIDTH"
                 :height="IMG_PLOTTING_HEIGHT"
               /> -->
-                <img :src="item.picture" style="width: 95%" :height="500" />
+                <img
+                  draggable="false"
+                  :src="item.picture"
+                  :width="IMG_PLOTTING_WIDTH"
+                  :height="IMG_PLOTTING_HEIGHT"
+                />
                 <span v-if="!loading">
                   <div
                     v-for="(plotting, index) in plottings"
@@ -143,12 +148,11 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
-
-      <!-- <v-col cols="12" class="text-right align-right">
+      <v-col cols="12" class="text-right align-right">
         <v-btn dense small color="primary" @click="submit(true)"
           >Save</v-btn
         ></v-col
-      > -->
+      >
 
       <!-- <v-col cols="6">
         <v-row no-gutters>
@@ -251,8 +255,8 @@ export default {
       buildingPhotosPlottings: [],
       allPhotoPlottings: [],
       existingPlottings: [],
-      IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "800px",
-      IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "800px",
+      IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "650px",
+      IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500px",
 
       panelOpenList: [],
       sensorTypesImages: [],

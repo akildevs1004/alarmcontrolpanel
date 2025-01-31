@@ -4,28 +4,46 @@
     class="plotting-icon"
     :style="plottingStyle"
   >
-    <v-icon
-      v-if="isAlarmOn"
-      class="alarm-red-to-green"
-      :title="alarm?.alarm_type + ' Alarm ON'"
-      size="20"
-    >
-      mdi-circle
-    </v-icon>
-    <v-icon
-      v-else-if="isAlarmOff"
-      style="color: red"
-      :title="alarm.alarm_type + ' Alarm OFF'"
-      size="20"
-    >
-      mdi-circle
-    </v-icon>
-    <v-icon v-else color="green" size="20" title="Alarm OFF">
-      mdi-circle
-    </v-icon>
-    <div class="plotting-label">
-      {{ plotting.label }}
-    </div>
+    <v-row>
+      <v-col style="padding: 0px">
+        <v-img
+          :title="plotting.sensorTypeName"
+          disabled="true"
+          draggable="false"
+          style="width: 40px"
+          :src="plotting.sensorImage"
+        ></v-img>
+      </v-col>
+      <v-col style="padding: 0px; margin: auto; text-align: left">
+        <v-icon
+          v-if="isAlarmOn"
+          class="alarm-red-to-green"
+          :title="alarm?.alarm_type + ' Alarm ON'"
+          size="20"
+        >
+          mdi-circle
+        </v-icon>
+        <v-icon
+          v-else-if="isAlarmOff"
+          style="color: red"
+          :title="alarm.alarm_type + ' Alarm OFF'"
+          size="20"
+        >
+          mdi-circle
+        </v-icon>
+        <v-icon v-else color="green" size="20" title="Alarm OFF">
+          mdi-circle
+        </v-icon>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col style="padding: 0px">
+        <div class="plotting-label" style="margin-top: 2px">
+          <!-- {{ plotting.label }} -->
+          {{ plotting.sensorTypeName }}
+        </div></v-col
+      >
+    </v-row>
   </div>
 </template>
 
@@ -39,8 +57,8 @@ export default {
   data: () => ({
     tab: "",
     imageLoaded: {},
-    IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "500PX",
-    IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500PX",
+    IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "650px",
+    IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500px",
     loadingImagesstatus: false,
     keyPlottings: 1,
   }),
@@ -84,15 +102,20 @@ export default {
     adjustHeightPosition(heightInPx, id, plotting) {
       const imageElement = document.getElementById("plotting" + id);
 
-      console.log(imageElement?.clientHeight);
-
       if (imageElement) {
-        const imageHeight = imageElement.clientHeight - 50;
+        const imageHeight = imageElement.clientHeight; //-50;
 
         let heightRatio =
           imageHeight / parseInt(this.IMG_PLOTTING_HEIGHT.replace("PX", ""));
 
         let finalHeightposition = heightInPx.replace("px", "") * heightRatio;
+
+        /* const imageHeight = imageElement.clientHeight - 50;
+
+        let heightRatio =
+          imageHeight / parseInt(this.IMG_PLOTTING_HEIGHT.replace("PX", ""));
+
+        let finalHeightposition = heightInPx.replace("px", "") * heightRatio;*/
 
         // let sensorCount = this.sensorPlottingCount[id]
         //   ? this.sensorPlottingCount[id] + 1
@@ -113,7 +136,9 @@ export default {
     adjustWidthPosition(widthInPx, id) {
       const imageElement = document.getElementById("plotting" + id);
       if (imageElement) {
-        const imageWidth = imageElement.clientWidth - 50;
+        const imageWidth = imageElement.clientWidth; // - 50;
+
+        //console.log("imageElement.clientWidth", imageElement.clientWidth);
 
         let widthRatio = imageWidth / this.IMG_PLOTTING_WIDTH.replace("PX", "");
 

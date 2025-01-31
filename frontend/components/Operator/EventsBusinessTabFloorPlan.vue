@@ -3,7 +3,7 @@
     <v-row
       ><v-col>
         <v-carousel
-          v-model="currentSlide"
+          v-model="currentSlideUpdated"
           v-if="customer?.photos"
           hide-delimiter-background
           show-arrows-on-hover
@@ -11,18 +11,35 @@
           hide-arrows-on-hover
           hide-delimiters
           hide-arrows
-          :style="'height:' + parseInt(browserHeight - 180) + 'px'"
+          :height="parseInt(IMG_PLOTTING_HEIGHT) + 30"
         >
           <v-carousel-item
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
-            v-if="item.photo_plottings[0]"
           >
-            <v-chip color="#203864" style="color: #fff" label
+            <v-chip
+              color="#203864"
+              style="color: #fff; margin-bottom: 2px"
+              label
               >{{ index + 1 }}: {{ item.title }}</v-chip
             >
-
-            <img
+            <div style="position: relative">
+              <img
+                :id="
+                  'plotting' +
+                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                "
+                class="photo-img"
+                :src="item.picture"
+                :width="IMG_PLOTTING_WIDTH"
+                :height="IMG_PLOTTING_HEIGHT"
+                @load="
+                  onImageLoad(
+                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                  )
+                "
+              />
+              <!-- <img
               :id="
                 'plotting' +
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
@@ -37,29 +54,31 @@
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
                 )
               "
-            />
-            <span
-              v-if="
-                item.photo_plottings[0] &&
-                imageLoaded[
-                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
-                ]
-              "
-            >
-              <PlottingIcon
-                v-if="item.photo_plottings[0]"
-                v-for="(plotting, idx) in item.photo_plottings[0].plottings"
-                :key="'plotting' + idx"
-                :plotting="plotting"
-                :picture-id="
-                  item.photo_plottings[0]?.customer_building_picture_id ?? 0
+            /> -->
+              <span
+                v-if="
+                  item.photo_plottings[0] &&
+                  imageLoaded[
+                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                  ]
                 "
-                :alarm="alarm"
-              />
-            </span>
+              >
+                <PlottingIcon
+                  v-if="plottingStatus && item.photo_plottings[0]"
+                  v-for="(plotting, idx) in item.photo_plottings[0].plottings"
+                  :key="'plotting' + idx"
+                  :plotting="plotting"
+                  :picture-id="
+                    item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                  "
+                  :alarm="alarm"
+                />
+              </span>
+            </div>
           </v-carousel-item>
-        </v-carousel> </v-col
-    ></v-row>
+        </v-carousel>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col>
         <div
@@ -81,10 +100,11 @@
             "
             v-for="(item, index) in customer.photos"
             :key="index"
+            @click="changeSlideImage(index)"
           >
             <div
               style="height: 100px; width: 150px; margin: auto"
-              :class="{ 'active-thumbnail': index === currentSlide }"
+              :class="{ 'active-thumbnail': index === currentSlideUpdated }"
             >
               <v-img
                 :src="item.picture"
@@ -94,7 +114,6 @@
                 max-height="100px"
                 height="100px"
                 style="max-height: 100px"
-                @click="currentSlide = index"
               ></v-img>
             </div>
             <label style="font-size: 10px">{{ item.title }}</label>
@@ -112,7 +131,7 @@
           >
             <div
               style="height: 100px; width: 150px; margin: auto"
-              :class="{ 'active-thumbnail': index === currentSlide }"
+              :class="{ 'active-thumbnail': index === currentSlideUpdated }"
             >
               <v-img
                 :src="item.picture"
@@ -122,7 +141,7 @@
                 max-height="100px"
                 height="100px"
                 style="max-height: 100px"
-                @click="currentSlide = index"
+                @click="currentSlideUpdated = index"
               ></v-img>
             </div>
             <label style="font-size: 10px">{{ item.title }}</label>
@@ -140,19 +159,81 @@ export default {
   props: ["customer", "alarm", "browserHeight"],
   data: () => ({
     tab: "",
-    currentSlide: 0,
+    currentSlideUpdated: 0,
     imageLoaded: {},
 
     loadingImagesstatus: false,
     keyPlottings: 1,
+    IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "650px",
+    IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500px",
+    sensorTypesImages: [],
+    plottingStatus: false,
   }),
   computed: {},
-  mounted() {},
-  created() {},
+  mounted() {
+    setTimeout(() => {
+      if (this.customer)
+        this.customer.photos.forEach((photo) => {
+          if (photo.photo_plottings[0])
+            this.updatePlottingswithSensorTypeImage(
+              photo.photo_plottings[0].plottings
+            );
+        });
+
+      this.plottingStatus = true;
+    }, 1000 * 3);
+  },
+  created() {
+    this.getSensorTypesImages();
+  },
   watch: {},
   methods: {
+    changeSlideImage(index) {
+      this.currentSlideUpdated = index;
+    },
     onImageLoad(imageId) {
       this.$set(this.imageLoaded, imageId, true);
+    },
+    getSensorTypesImages() {
+      this.$axios
+        .get("device_sensor_types_dropdown", {
+          params: {
+            company_id: this.$auth.user.company_id,
+          },
+        })
+        .then(({ data }) => {
+          this.sensorTypesImages = data;
+        });
+    },
+    updatePlottingswithSensorTypeImage(plottings) {
+      //console.log(this.customer.devices);
+
+      const allDevicesSensorTypeZones = this.customer.devices.flatMap(
+        (device) => device.sensorzones
+      );
+
+      plottings.forEach((element) => {
+        // Find the matching sensor zone
+        const element2 = allDevicesSensorTypeZones.find(
+          (zone) => zone.id == element.sensor_id
+        );
+
+        // Default values
+        element.sensorImage =
+          process.env.BACKEND_URL2 + "/sensor_type_icons/" + "other_sensor.png";
+        element.sensorTypeName = "Unknown";
+
+        if (element2) {
+          const find = this.sensorTypesImages.find(
+            (e) => e.name == element2.sensor_type
+          );
+          element.sensorImage =
+            process.env.BACKEND_URL2 +
+            "/sensor_type_icons/" +
+            (find ? find.image : "other_sensor.png");
+          element.sensorTypeName = element2.sensor_type;
+        }
+      });
     },
   },
 };

@@ -107,7 +107,7 @@
         </v-btn>
       </v-col>
 
-      <v-col cols="12" style="margin-top: -20px">
+      <v-col cols="12" style="margin-top: -10px">
         <v-tabs
           :key="tabkey"
           right

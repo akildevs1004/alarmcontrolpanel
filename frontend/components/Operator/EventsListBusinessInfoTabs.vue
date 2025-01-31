@@ -289,7 +289,7 @@ export default {
     }, 1000 * 10);
   },
   created() {
-    if (this.customer) console.log("customer", this.customer);
+    //if (this.customer) console.log("customer", this.customer);
   },
   watch: {},
   methods: {

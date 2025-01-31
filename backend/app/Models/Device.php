@@ -12,6 +12,8 @@ class Device extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    protected $with = ["sensorzones"];
     public function getPictureAttribute($value)
     {
         if (!$value) {
