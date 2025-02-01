@@ -37,6 +37,7 @@
                           v-model="event_payload.call_status"
                           dense
                           hide-details
+                          @change="updateResponseList()"
                           :items="[
                             null,
                             'Answered',
@@ -58,14 +59,8 @@
                           v-model="event_payload.response"
                           dense
                           hide-details
-                          :items="[
-                            null,
-
-                            'False alarm',
-                            // 'No Answer',
-                            'Busy',
-                            'Not Reachable',
-                          ]"
+                          :items="responseList"
+                          @change="updateAlarmStatusList()"
                         ></v-select>
                       </td>
                     </tr>
@@ -81,14 +76,7 @@
                           v-model="event_payload.event_status"
                           dense
                           hide-details
-                          :items="[
-                            null,
-
-                            'Forwarded',
-                            'Closed',
-                            'Pending',
-                            'Not in Town',
-                          ]"
+                          :items="alarmStatusList"
                         ></v-select>
                       </td>
                     </tr>
@@ -511,6 +499,14 @@ export default {
   components: {},
   props: ["alarmId", "alarm", "customer", "contact_type", "browserHeight"],
   data: () => ({
+    responseList: [
+      null,
+      "False alarm",
+      // 'No Answer',
+      "Busy",
+      "Not Reachable",
+    ],
+    alarmStatusList: [null, "Forwarded", "Closed", "Pending", "Not in Town"],
     dialogOperatorNotes: false,
     selectContactButton: null,
     filteredContactInfo: [],
@@ -605,7 +601,35 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    updateAlarmStatusList() {
+      if (
+        this.event_payload.response == "False alarm" ||
+        this.event_payload.response == "True Alarm" ||
+        this.event_payload.response == "Manually Closed Alarm" ||
+        this.event_payload.response == "Not in Town"
+      ) {
+        this.alarmStatusList = [null, "Closed", "Pending"];
+      }
+    },
+    updateResponseList() {
+      if (this.event_payload.call_status == "Answered") {
+        this.responseList = [
+          null,
+          "False alarm",
+          "True Alarm",
+          "Manually Closed Alarm",
+          "Not in Town",
+        ];
 
+        this.alarmStatusList = [null, "Forwarded", "Closed", "Pending"];
+      } else {
+        this.event_payload.response = this.event_payload.call_status;
+        this.responseList = [this.event_payload.call_status];
+
+        this.event_payload.alarm_status = ["Pending"];
+        this.alarmStatusList = ["Pending"];
+      }
+    },
     displayContactInfoById(contactId) {
       if (this.customer)
         this.filteredContactInfo = this.customer.contacts.find(
@@ -747,7 +771,7 @@ export default {
                 this.dialogOperatorNotes = false;
 
                 this.$emit("emitreloadEventNotesStep1");
-              }, 1000 * 2);
+              }, 1000 * 1);
 
               setTimeout(() => {
                 this.$emit("emitreloadEventNotesStep1");

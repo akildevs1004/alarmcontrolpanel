@@ -887,6 +887,12 @@ export default {
     this.pendingNotificationsCount = 0;
 
     this.setTopmenuHilighterOnPageReload();
+
+    setInterval(() => {
+      try {
+        if (window) window.location.reload();
+      } catch (e) {}
+    }, 1000 * 60 * 60);
   },
 
   async mounted() {
