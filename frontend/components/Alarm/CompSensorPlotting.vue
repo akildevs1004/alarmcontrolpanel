@@ -148,11 +148,11 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
-      <v-col cols="12" class="text-right align-right">
+      <!-- <v-col cols="12" class="text-right align-right">
         <v-btn dense small color="primary" @click="submit(true)"
           >Save</v-btn
         ></v-col
-      >
+      > -->
 
       <!-- <v-col cols="6">
         <v-row no-gutters>
