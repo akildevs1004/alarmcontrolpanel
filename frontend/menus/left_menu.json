@@ -428,6 +428,14 @@
     "top_menu_name": "alarm_reports"
   },
   {
+    "icon": "mdi-account-group",
+    "title": "Customers2",
+    "to": "/alarm/customerseventsgroup",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
+  {
     "icon": "mdi-web-box",
     "title": "Admin Users",
     "open_menu": false,
