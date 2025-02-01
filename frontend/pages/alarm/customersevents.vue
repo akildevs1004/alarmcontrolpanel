@@ -236,7 +236,7 @@
       <v-col
         cols="12"
         class="text-right"
-        style="padding-top: 0px; z-index: 9; padding-right: 0px"
+        style="padding-top: 0px; padding-right: 0px"
       >
         <v-row class="mt-0">
           <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
