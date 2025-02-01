@@ -317,6 +317,7 @@
         left
         min-width="200"
         nudge-left="20"
+        style="z-index: 9999"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon color="red" v-bind="attrs" v-on="on">
@@ -326,7 +327,7 @@
           </v-btn>
         </template>
 
-        <v-list light nav dense>
+        <v-list light nav dense style="z-index: 9999">
           <v-list-item-group color="primary">
             <v-list-item
               v-if="$auth && $auth.user?.user_type == 'company'"
