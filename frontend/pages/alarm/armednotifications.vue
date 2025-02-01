@@ -5,42 +5,45 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-card>
-      <v-row>
-        <v-col cols="12" class="text-right" style="padding-top: 0px">
-          <v-row>
-            <v-col class="text-left pa-5"><h4>Armed Notifications</h4></v-col>
-            <v-col class="text-right" style="max-width: 750px">
-              <v-row>
-                <v-col class="mt-2">
-                  <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-                </v-col>
-                <v-col style="">
-                  <v-autocomplete
-                    clearable
-                    style="padding-top: 6px; max-width: 300px"
-                    @change="getDataFromApi()"
-                    class="reports-events-autocomplete bgwhite"
-                    v-model="filter_customer_id"
-                    :items="customersList"
-                    dense
-                    placeholder="All Customers"
-                    outlined
-                    item-value="id"
-                    item-text="building_name"
-                  >
-                  </v-autocomplete>
-                </v-col>
-                <v-col style="">
-                  <CustomFilter
-                    style="float: right; padding-top: 5px; z-index: 9999"
-                    @filter-attr="filterAttr"
-                    :default_date_from="date_from"
-                    :default_date_to="date_to"
-                    :defaultFilterType="1"
-                    :height="'40px'"
-                /></v-col>
-                <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
+
+    <v-row>
+      <v-col cols="12" class="text-right" style="padding-top: 0px">
+        <v-card elevation="2"
+          ><v-card-text>
+            <v-row>
+              <v-col class="text-left pa-5"><h4>Armed Notifications</h4></v-col>
+              <v-col class="text-right" style="max-width: 750px">
+                <v-row>
+                  <v-col class="mt-2">
+                    <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+                  </v-col>
+                  <v-col style="">
+                    <v-autocomplete
+                      clearable
+                      style="padding-top: 6px; max-width: 300px"
+                      @change="getDataFromApi()"
+                      class="reports-events-autocomplete bgwhite"
+                      v-model="filter_customer_id"
+                      :items="customersList"
+                      dense
+                      placeholder="All Customers"
+                      outlined
+                      item-value="id"
+                      item-text="building_name"
+                      hide-details
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col style="">
+                    <CustomFilter
+                      style="float: right; padding-top: 5px; z-index: 9999"
+                      @filter-attr="filterAttr"
+                      :default_date_from="date_from"
+                      :default_date_to="date_to"
+                      :defaultFilterType="1"
+                      :height="'40px'"
+                  /></v-col>
+                  <!-- <v-col cols="2" style="width: 100px; margin-top: 10px">
                   <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -109,97 +112,102 @@
                     </v-list>
                   </v-menu>
                 </v-col> -->
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            :server-items-length="totalRowsCount"
-            :loading="loading"
-            :options.sync="options"
-            :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
-            }"
-            class="elevation-0"
-          >
-            <template v-slot:item.sno="{ item, index }">
-              {{
-                currentPage
-                  ? (currentPage - 1) * perPage +
-                    (cumulativeIndex + items.indexOf(item))
-                  : "-"
-              }} </template
-            ><template
-              v-slot:item.building_name="{ item, index }"
-              style="width: 300px"
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card-text></v-card
+        >
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card elevation="2"
+          ><v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              :server-items-length="totalRowsCount"
+              :loading="loading"
+              :options.sync="options"
+              :footer-props="{
+                itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              }"
+              class="elevation-0"
             >
-              <v-row no-gutters>
-                <v-col
-                  style="
-                    padding: 5px;
-                    padding-left: 0px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                >
-                  <v-img
+              <template v-slot:item.sno="{ item, index }">
+                {{
+                  currentPage
+                    ? (currentPage - 1) * perPage +
+                      (cumulativeIndex + items.indexOf(item))
+                    : "-"
+                }} </template
+              ><template
+                v-slot:item.building_name="{ item, index }"
+                style="width: 300px"
+              >
+                <v-row no-gutters>
+                  <v-col
                     style="
-                      border-radius: 50%;
-                      height: 45px;
-                      min-height: 45px;
-                      width: 45px;
-                      max-width: 45px;
-                    "
-                    :src="
-                      item.customer?.profile_picture
-                        ? item.customer?.profile_picture
-                        : '/no-business_profile.png'
+                      padding: 5px;
+                      padding-left: 0px;
+                      width: 50px;
+                      max-width: 50px;
                     "
                   >
-                  </v-img>
-                </v-col>
-                <v-col style="padding: 10px">
-                  <div style="font-size: 13px">
-                    {{ item.customer?.building_name || "" }}
-                  </div>
-                  <small style="font-size: 12px; color: #6c7184">
-                    {{ item.customer?.house_number }},
-                    {{ item.customer?.street_number }},
-                    {{ item.customer?.area }},
-                    {{ item.city }}
-                  </small>
-                </v-col>
-              </v-row>
-            </template>
-            <template v-slot:item.building_type="{ item }">
-              <div>
-                {{ getBuildingTypeName(item.customer?.building_type_id) }}
-              </div>
-              <!-- <small style="font-size: 12px; color: #6c7184">
+                    <v-img
+                      style="
+                        border-radius: 50%;
+                        height: 45px;
+                        min-height: 45px;
+                        width: 45px;
+                        max-width: 45px;
+                      "
+                      :src="
+                        item.customer?.profile_picture
+                          ? item.customer?.profile_picture
+                          : '/no-business_profile.png'
+                      "
+                    >
+                    </v-img>
+                  </v-col>
+                  <v-col style="padding: 10px">
+                    <div style="font-size: 13px">
+                      {{ item.customer?.building_name || "" }}
+                    </div>
+                    <small style="font-size: 12px; color: #6c7184">
+                      {{ item.customer?.house_number }},
+                      {{ item.customer?.street_number }},
+                      {{ item.customer?.area }},
+                      {{ item.city }}
+                    </small>
+                  </v-col>
+                </v-row>
+              </template>
+              <template v-slot:item.building_type="{ item }">
+                <div>
+                  {{ getBuildingTypeName(item.customer?.building_type_id) }}
+                </div>
+                <!-- <small style="font-size: 12px; color: #6c7184">
                 {{ item.landmark }}
               </small> -->
-            </template>
-            <template v-slot:item.email="{ item }">
-              {{ item.email != "" ? item.email : item.wahtsapp }}
-            </template>
-            <template v-slot:item.created_datetime="{ item }">
-              <div>
-                {{
-                  item.armed_datetime != ""
-                    ? $dateFormat.formatDateMonthYear(item.created_datetime)
-                    : "---"
-                }}
-              </div>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
-    </v-card>
+              </template>
+              <template v-slot:item.email="{ item }">
+                {{ item.email != "" ? item.email : item.wahtsapp }}
+              </template>
+              <template v-slot:item.created_datetime="{ item }">
+                <div>
+                  {{
+                    item.armed_datetime != ""
+                      ? $dateFormat.formatDateMonthYear(item.created_datetime)
+                      : "---"
+                  }}
+                </div>
+              </template>
+            </v-data-table>
+          </v-card-text></v-card
+        >
+      </v-col>
+    </v-row>
   </div>
 </template>
 

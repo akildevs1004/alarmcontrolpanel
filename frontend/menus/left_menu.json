@@ -419,7 +419,14 @@
     "module": "settings",
     "top_menu_name": "alarm_reports"
   },
-
+  {
+    "icon": "mdi-account-details-outline",
+    "title": "Customers",
+    "to": "/alarm/customersevents",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
   {
     "icon": "mdi-web-box",
     "title": "Admin Users",

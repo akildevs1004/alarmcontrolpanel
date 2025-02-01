@@ -316,7 +316,7 @@ import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLiv
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
-  prop: ["compFilterSupervisor"],
+  props: ["compFilterSupervisor"],
   components: {
     AlarmBurglaryPieChart,
     AlarmTemperaturePieChart,

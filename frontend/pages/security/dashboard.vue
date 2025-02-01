@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CompAlarmDashboardStatistics />
+    <CompAlarmDashboardStatistics :compFilterSupervisor="false" />
     <!-- <v-row
         ><v-col><v-divider color="#DDD" /></v-col>
       </v-row> -->

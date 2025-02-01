@@ -1340,7 +1340,7 @@ class CustomersController extends Controller
     {
         $model = Customers::with(["devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])->where('company_id', $request->company_id);
 
-        return $model->orderByDesc('id')->get();
+        return $model->orderBy('building_name', "asc")->get();
     }
     public function customerProfileCompletionPercentage(Request $request)
     {

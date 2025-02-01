@@ -39,40 +39,42 @@
       </v-card>
     </v-dialog>
 
-    <v-card>
-      <v-row>
-        <v-col cols="12" class="text-right" style="padding-top: 0px">
-          <v-row>
-            <v-col class="text-left pa-5"><h4>Armed Report</h4></v-col>
-            <v-col class="text-right" style="max-width: 1200px">
-              <v-row>
-                <v-col class="mt-3">
-                  <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-                </v-col>
-                <v-col style="text-align: right; max-width: 100px">
-                  <v-checkbox
-                    style="margin-top: 8px"
-                    @change="getDataFromApi()"
-                    v-model="only_show_alarms"
-                    label="Alarms"
-                  ></v-checkbox>
-                </v-col>
-                <v-col>
-                  <v-autocomplete
-                    clearable
-                    style="padding-top: 6px; width: 200px"
-                    @change="getDataFromApi()"
-                    class="reports-events-autocomplete bgwhite"
-                    v-model="filter_customer_id"
-                    :items="customersList"
-                    dense
-                    placeholder="All Customers"
-                    outlined
-                    item-value="id"
-                    item-text="building_name"
-                  >
-                  </v-autocomplete>
-                  <!-- <v-text-field
+    <v-row>
+      <v-col cols="12" class="text-right" style="">
+        <v-card
+          ><v-card-text elevation="2">
+            <v-row>
+              <v-col class="text-left"><h4>Armed Report</h4></v-col>
+              <v-col class="text-right" style="max-width: 1200px">
+                <v-row>
+                  <v-col class="mt-3">
+                    <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+                  </v-col>
+                  <v-col style="text-align: right; max-width: 100px">
+                    <v-checkbox
+                      style="margin-top: 8px"
+                      @change="getDataFromApi()"
+                      v-model="only_show_alarms"
+                      label="Alarms"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col>
+                    <v-autocomplete
+                      clearable
+                      style="padding-top: 6px; width: 200px"
+                      @change="getDataFromApi()"
+                      class="reports-events-autocomplete bgwhite"
+                      v-model="filter_customer_id"
+                      :items="customersList"
+                      dense
+                      placeholder="All Customers"
+                      outlined
+                      item-value="id"
+                      item-text="building_name"
+                      hide-details
+                    >
+                    </v-autocomplete>
+                    <!-- <v-text-field
                   style="padding-top: 7px; width: 200px"
                   height="20"
                   class="employee-schedule-search-box"
@@ -86,254 +88,261 @@
                   clearable
                   hide-details
                 ></v-text-field> -->
-                </v-col>
-                <v-col>
-                  <CustomFilter
+                  </v-col>
+                  <v-col>
+                    <CustomFilter
+                      style="
+                        float: right;
+                        padding-top: 5px;
+                        z-index: 9999;
+                        padding-right: 15px;
+                      "
+                      @filter-attr="filterAttr"
+                      :default_date_from="date_from"
+                      :default_date_to="date_to"
+                      :defaultFilterType="1"
+                      :height="'40px'"
+                  /></v-col>
+                  <v-col
                     style="
-                      float: right;
-                      padding-top: 5px;
-                      z-index: 9999;
-                      padding-right: 15px;
+                      max-width: 100px;
+                      margin-top: 0px;
+                      padding-left: 0px;
+                      text-align: center;
                     "
-                    @filter-attr="filterAttr"
-                    :default_date_from="date_from"
-                    :default_date_to="date_to"
-                    :defaultFilterType="1"
-                    :height="'40px'"
-                /></v-col>
-                <v-col
-                  style="
-                    max-width: 100px;
-                    margin-top: 10px;
-                    padding-left: 0px;
-                    text-align: left;
-                  "
-                >
-                  <v-menu bottom style="z-index: 99999">
-                    <template v-slot:activator="{ on, attrs }">
-                      <span v-bind="attrs" v-on="on">
-                        <v-icon dark-2 icon color="violet" small
-                          >mdi-printer-outline</v-icon
-                        >Print
-                      </span>
-                    </template>
-                    <v-list width="100px" dense style="">
-                      <v-list-item @click="downloadOptions(`print`)">
-                        <v-list-item-title style="cursor: pointer">
-                          <v-row>
-                            <v-col cols="5"
-                              ><img
-                                style="padding-top: 5px"
-                                src="/icons/icon_print.png"
-                                class="iconsize"
-                            /></v-col>
-                            <v-col
-                              cols="7"
-                              style="padding-left: 0px; padding-top: 19px"
-                            >
-                              Print
-                            </v-col>
-                          </v-row>
-                        </v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="downloadOptions('download')">
-                        <v-list-item-title style="cursor: pointer">
-                          <v-row>
-                            <v-col cols="5"
-                              ><img
-                                style="padding-top: 5px"
-                                src="/icons/icon_pdf.png"
-                                class="iconsize"
-                            /></v-col>
-                            <v-col
-                              cols="7"
-                              style="padding-left: 0px; padding-top: 19px"
-                            >
-                              PDF
-                            </v-col>
-                          </v-row>
-                        </v-list-item-title>
-                      </v-list-item>
+                  >
+                    <v-menu bottom style="z-index: 99999">
+                      <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">
+                          <v-icon dark-2 icon color="violet" small
+                            >mdi-printer-outline</v-icon
+                          >Print
+                        </span>
+                      </template>
+                      <v-list width="100px" dense style="">
+                        <v-list-item @click="downloadOptions(`print`)">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_print.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                Print
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="downloadOptions('download')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_pdf.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                PDF
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
 
-                      <v-list-item @click="downloadOptions('excel')">
-                        <v-list-item-title style="cursor: pointer">
-                          <v-row>
-                            <v-col cols="5"
-                              ><img
-                                style="padding-top: 5px"
-                                src="/icons/icon_excel.png"
-                                class="iconsize"
-                            /></v-col>
-                            <v-col
-                              cols="7"
-                              style="padding-left: 0px; padding-top: 19px"
-                            >
-                              EXCEL
-                            </v-col>
-                          </v-row>
-                        </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row style="margin-top: -30px">
-        <v-col style="">
-          <div
-            class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
-          >
-            <v-data-table
-              :headers="headers"
-              :items="formattedDataItems"
-              class="elevation-0 table-td-padding-10"
-              :items-per-page="100"
-              :loading="loading"
+                        <v-list-item @click="downloadOptions('excel')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_excel.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                EXCEL
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card-text></v-card
+        >
+      </v-col>
+    </v-row>
+    <v-row style="">
+      <v-col style="">
+        <v-card
+          ><v-card-text elevation="2">
+            <div
+              class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
             >
-              <template v-slot:item="{ item }">
-                <tr>
-                  <td style="font-size: 13px">{{ item.date }}</td>
-                  <td>
-                    {{ item.customer }}
-                    <div class="secondary-value">{{ item.city }}</div>
-                  </td>
+              <v-data-table
+                :headers="headers"
+                :items="formattedDataItems"
+                class="elevation-0 table-td-padding-10"
+                :items-per-page="100"
+                :loading="loading"
+              >
+                <template v-slot:item="{ item }">
+                  <tr>
+                    <td style="font-size: 13px">{{ item.date }}</td>
+                    <td>
+                      {{ item.customer }}
+                      <div class="secondary-value">{{ item.city }}</div>
+                    </td>
 
-                  <template v-for="index in 5">
-                    <td
-                      :title="item.armed[index - 1]?.armed_datetime"
-                      style="color: red"
-                    >
-                      {{
-                        $dateFormat.format6(
-                          item.armed[index - 1]?.armed_datetime
-                        ) || "---"
-                      }}
-
-                      <div class="secondary-value">
+                    <template v-for="index in 5">
+                      <td
+                        :title="item.armed[index - 1]?.armed_datetime"
+                        style="color: red"
+                      >
                         {{
-                          $dateFormat.format2(
+                          $dateFormat.format6(
                             item.armed[index - 1]?.armed_datetime
                           ) || "---"
                         }}
-                      </div>
-                    </td>
-                    <td
-                      style="color: green"
-                      :title="item.armed[index - 1]?.disarm_datetime"
-                    >
-                      {{
-                        $dateFormat.format6(
-                          item.armed[index - 1]?.disarm_datetime
-                        ) || "---"
-                      }}
-                      <div class="secondary-value">
+
+                        <div class="secondary-value">
+                          {{
+                            $dateFormat.format2(
+                              item.armed[index - 1]?.armed_datetime
+                            ) || "---"
+                          }}
+                        </div>
+                      </td>
+                      <td
+                        style="color: green"
+                        :title="item.armed[index - 1]?.disarm_datetime"
+                      >
                         {{
-                          $dateFormat.format2(
+                          $dateFormat.format6(
                             item.armed[index - 1]?.disarm_datetime
                           ) || "---"
                         }}
-                      </div>
-                    </td>
-                  </template>
-                  <td>{{ getArmedTotalDuration(item.armed) }}</td>
-                  <td>{{ getDisarmTotalDuration(item.armed, item.date) }}</td>
-                  <td>
-                    <!-- <div v-if="item.events_count == 0">0</div>
+                        <div class="secondary-value">
+                          {{
+                            $dateFormat.format2(
+                              item.armed[index - 1]?.disarm_datetime
+                            ) || "---"
+                          }}
+                        </div>
+                      </td>
+                    </template>
+                    <td>{{ getArmedTotalDuration(item.armed) }}</td>
+                    <td>{{ getDisarmTotalDuration(item.armed, item.date) }}</td>
+                    <td>
+                      <!-- <div v-if="item.events_count == 0">0</div>
                     <div
                       v-else
                       @click="showAlarmEvents(item.date, item.customer_id)"
                     >
                       {{ item.events_count || "0" }}
                     </div> -->
-                    <!-- {{ item.events_count }} -->
-                    <v-menu>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          style="color: black"
-                          text
-                          dense
-                          small
-                          dark
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          {{ item.events_count || 0 }}
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item
-                          @click="showAlarmEvents(item.date, item.customer_id)"
-                          style="
-                            min-height: 22px;
-                            border-bottom: 1px solid #ddd;
-                          "
-                        >
-                          <v-list-item-title style="font-size: 12px">
-                            {{ item.events_count || 0 }} - All
-                          </v-list-item-title>
-                        </v-list-item>
+                      <!-- {{ item.events_count }} -->
+                      <v-menu>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            style="color: black"
+                            text
+                            dense
+                            small
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            {{ item.events_count || 0 }}
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            @click="
+                              showAlarmEvents(item.date, item.customer_id)
+                            "
+                            style="
+                              min-height: 22px;
+                              border-bottom: 1px solid #ddd;
+                            "
+                          >
+                            <v-list-item-title style="font-size: 12px">
+                              {{ item.events_count || 0 }} - All
+                            </v-list-item-title>
+                          </v-list-item>
 
-                        <v-list-item
-                          v-for="(alarmType, index) in alarmTypesList"
-                          :key="'ArmedReports' + index + 20"
-                          style="
-                            min-height: 22px;
-                            border-bottom: 1px solid #ddd;
-                          "
-                          @click="
-                            showAlarmEvents(
-                              item.date,
-                              item.customer_id,
-                              alarmType.name
-                            )
-                          "
-                        >
-                          <v-list-item-title style="font-size: 12px">
-                            <div v-if="alarmType.name == 'SOS'">
-                              {{ item.SOS_count || 0 }} - SOS
-                            </div>
-                            <div v-else-if="alarmType.name == 'Intruder'">
-                              {{ item.Intruder_count || 0 }} - Intruder
-                            </div>
-                            <div v-else-if="alarmType.name == 'Offline'">
-                              {{ item.Offline_count || 0 }} - Offline
-                            </div>
-                            <div v-else-if="alarmType.name == 'Tampered'">
-                              {{ item.Tampered_count || 0 }} - Offline
-                            </div>
-                            <div v-else-if="alarmType.name == 'AC Off'">
-                              {{ item.AC_off_count || 0 }} - AC Off
-                            </div>
-                            <div v-else-if="alarmType.name == 'DC Off'">
-                              {{ item.DC_off_count || 0 }} - DC Off
-                            </div>
-                            <div v-else-if="alarmType.name == 'Medical'">
-                              {{ item.Medical_count || 0 }} - Medical
-                            </div>
-                            <div v-else-if="alarmType.name == 'Temperature'">
-                              {{ item.Temperature_count || 0 }} - Temperature
-                            </div>
-                            <div v-else-if="alarmType.name == 'Water'">
-                              {{ item.Water_count || 0 }} - Water
-                            </div>
-                            <div v-else-if="alarmType.name == 'Fire'">
-                              {{ item.Fire_count || 0 }} - Fire
-                            </div>
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </td>
-                </tr>
-              </template>
-            </v-data-table>
-          </div>
-        </v-col>
-      </v-row>
-    </v-card>
+                          <v-list-item
+                            v-for="(alarmType, index) in alarmTypesList"
+                            :key="'ArmedReports' + index + 20"
+                            style="
+                              min-height: 22px;
+                              border-bottom: 1px solid #ddd;
+                            "
+                            @click="
+                              showAlarmEvents(
+                                item.date,
+                                item.customer_id,
+                                alarmType.name
+                              )
+                            "
+                          >
+                            <v-list-item-title style="font-size: 12px">
+                              <div v-if="alarmType.name == 'SOS'">
+                                {{ item.SOS_count || 0 }} - SOS
+                              </div>
+                              <div v-else-if="alarmType.name == 'Intruder'">
+                                {{ item.Intruder_count || 0 }} - Intruder
+                              </div>
+                              <div v-else-if="alarmType.name == 'Offline'">
+                                {{ item.Offline_count || 0 }} - Offline
+                              </div>
+                              <div v-else-if="alarmType.name == 'Tampered'">
+                                {{ item.Tampered_count || 0 }} - Offline
+                              </div>
+                              <div v-else-if="alarmType.name == 'AC Off'">
+                                {{ item.AC_off_count || 0 }} - AC Off
+                              </div>
+                              <div v-else-if="alarmType.name == 'DC Off'">
+                                {{ item.DC_off_count || 0 }} - DC Off
+                              </div>
+                              <div v-else-if="alarmType.name == 'Medical'">
+                                {{ item.Medical_count || 0 }} - Medical
+                              </div>
+                              <div v-else-if="alarmType.name == 'Temperature'">
+                                {{ item.Temperature_count || 0 }} - Temperature
+                              </div>
+                              <div v-else-if="alarmType.name == 'Water'">
+                                {{ item.Water_count || 0 }} - Water
+                              </div>
+                              <div v-else-if="alarmType.name == 'Fire'">
+                                {{ item.Fire_count || 0 }} - Fire
+                              </div>
+                            </v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </div>
+          </v-card-text></v-card
+        >
+      </v-col>
+    </v-row>
   </div>
 </template>
 

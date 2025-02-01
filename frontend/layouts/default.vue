@@ -18,7 +18,6 @@
       :color="sideBarcolor"
       :width="!miniVariant ? '80px!important' : '150px'"
     >
-      <br />
       <v-list
         v-for="(i, idx) in items"
         :key="idx"
@@ -2682,5 +2681,10 @@ td {
 
 .sensorplotting .v-expansion-panel-content__wrap {
   padding: 0px !important;
+}
+
+.v-navigation-drawer {
+  top: 55px !important;
+  max-height: calc(100% - 55px) !important;
 }
 </style>
