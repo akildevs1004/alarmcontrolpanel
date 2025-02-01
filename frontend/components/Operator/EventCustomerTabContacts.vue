@@ -623,11 +623,11 @@ export default {
 
         this.alarmStatusList = [null, "Forwarded", "Closed", "Pending"];
       } else {
-        this.event_payload.response = this.event_payload.call_status;
         this.responseList = [this.event_payload.call_status];
+        this.event_payload.response = this.event_payload.call_status;
 
-        this.event_payload.alarm_status = ["Pending"];
         this.alarmStatusList = ["Pending"];
+        this.event_payload.event_status = "Pending";
       }
     },
     displayContactInfoById(contactId) {
@@ -710,15 +710,19 @@ export default {
       let customer = new FormData();
 
       if (this.event_payload.call_status == null) {
-        alert("Select Option Call Status");
+        alert("Select Call Status");
         return false;
       }
       if (this.event_payload.event_status == null) {
-        alert("Select Option Event Status");
+        alert("Select Alarm Status");
         return false;
       }
       if (this.event_payload.response == null) {
-        alert("Select Option Response");
+        alert("Select Response");
+        return false;
+      }
+      if (this.event_payload.notes == null) {
+        alert("Operator Comments information is required");
         return false;
       }
 
