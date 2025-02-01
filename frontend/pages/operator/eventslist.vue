@@ -302,7 +302,7 @@
         <v-card elevation="2">
           <v-card-text
             :style="
-              ' background-color:#ecf0f4;overflow:scroll1;height:' +
+              ' background-color:#ecf0f4;overflow:scroll1;min-height:200px;height:' +
               browserHeight +
               'px'
             "
@@ -311,7 +311,7 @@
               v-if="
                 data.length > 0 &&
                 selectedAlarm &&
-                selectedAlarm.device.customer
+                selectedAlarm.device?.customer
               "
             >
               <EventContactNotes

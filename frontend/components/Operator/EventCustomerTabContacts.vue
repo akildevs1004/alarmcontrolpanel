@@ -334,6 +334,9 @@
           'margin-top: 5px;height:' + parseInt(browserHeight - 380) + 'px'
         "
       >
+        <!-- <div v-if="!globalContactDetails">
+          Primary or Secondary Contact Details are not available
+        </div> -->
         <v-row>
           <v-col
             style="
@@ -473,7 +476,7 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="alarm && alarm.alarm_status == 1">
+        <v-row>
           <v-col class="text-center">
             <v-btn
               @click="dialogOperatorNotes = true"
@@ -482,6 +485,7 @@
               small
               color="#203864"
               style="margin: auto; font-size: 12px; width: 100px; color: #fff"
+              :disabled="alarm && alarm.alarm_status == 0"
             >
               Comments</v-btn
             ></v-col

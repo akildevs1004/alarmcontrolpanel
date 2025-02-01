@@ -109,6 +109,11 @@
 
     <v-row style="padding: 0px; padding-top: 10px">
       <v-col style="padding: 0px">
+        <v-card elevation="2" v-if="alarm.device.customer.contacts.length == 0">
+          <v-card-text>
+            <div style="height: 250px">No Contacts Found</div>
+          </v-card-text></v-card
+        >
         <v-tabs
           v-if="alarm.device.customer"
           height="25"
@@ -135,6 +140,7 @@
           >
             {{ contact.address_type }}</v-tab
           >
+
           <v-tab-item
             v-if="
               alarm.device.customer &&
@@ -157,7 +163,8 @@
                   :key="contact.address_type"
                   @emitreloadEventNotesStep1="emitreloadEventNotes2"
                   :browserHeight="browserHeight"
-              /></v-card-text>
+                />
+              </v-card-text>
             </v-card>
           </v-tab-item>
         </v-tabs>
