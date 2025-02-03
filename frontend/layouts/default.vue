@@ -863,6 +863,7 @@ export default {
   created() {
     // console.log("company auth", this.$auth);
     // console.log("company", this.$auth.user);
+    console.log("default-logout");
 
     if (this.$auth.user.user_type != "company") {
       try {
@@ -1528,6 +1529,7 @@ export default {
         this.$auth.logout();
       });
     },
+
     GlobalSearchResultsUpdated(value) {
       if (value > 0) this.globalSearchPopupWidth = "1400px";
       else this.globalSearchPopupWidth = "500px";

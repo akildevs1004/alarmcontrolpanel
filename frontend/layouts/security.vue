@@ -1535,6 +1535,8 @@ export default {
     },
 
     logout() {
+      console.log("security-logout");
+
       this.$axios.get(`/logout`).then(({ res }) => {
         this.$auth.logout();
       });

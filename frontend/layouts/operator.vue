@@ -684,6 +684,8 @@ export default {
     };
   },
   async created() {
+    console.log("operator-layout", this.$auth.user.user_type);
+
     if (this.$auth.user.user_type != "security") {
       try {
         if (window) {
@@ -691,7 +693,7 @@ export default {
           window.location.reload();
         }
       } catch (e) {}
-      this.$router.push("/logout", true);
+      this.$router.push("/login", true);
 
       return false;
     }
@@ -861,10 +863,12 @@ export default {
   },
   methods: {
     updateOperatorLiveStatus() {
-      this.$axios.post("operator_live_update", {
-        company_id: this.$auth.user.company_id,
-        security_id: this.$auth.user.security.id,
-      });
+      if (this.$auth.user?.security) {
+        this.$axios.post("operator_live_update", {
+          company_id: this.$auth.user.company_id,
+          security_id: this.$auth.user.security.id,
+        });
+      }
     },
     closeDialog() {
       this.dialogAlarmPopupNotificationStatus = false;
@@ -1139,11 +1143,12 @@ export default {
           if (this.$axios.isCancel(error)) {
             console.log("Previous request canceled");
           } else {
+            console.log("operator-layologoutut");
             this.$auth.logout();
             localStorage.clear(); // If using localStorage for tokens
 
             // Redirect the user to the login page
-            this.$router.push("/login", true);
+            this.$router.push("/logout", true);
           }
           // {
           //   console.warn("Session expired. Redirecting to login...");
@@ -1444,6 +1449,8 @@ export default {
     },
 
     async logout() {
+      console.log("operator-logout");
+
       await this.$auth.logout();
       // Call the logout endpoint
       this.$router.push("/logout", true);

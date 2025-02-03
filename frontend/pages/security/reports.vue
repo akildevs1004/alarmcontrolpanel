@@ -127,7 +127,7 @@ import AlarmEventsResponseChart from "../../components/Alarm/AlarmEventsResponse
 
 // import VueApexCharts from 'vue-apexcharts'
 export default {
-  layout: "security",
+  layout: "security_old",
   components: {
     AlamCustomerResponsePieChart,
     AlamCustomerReportsEventsPieChart,

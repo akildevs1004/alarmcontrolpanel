@@ -306,6 +306,8 @@ export default {
       return this.$pagePermission.can(per, this);
     },
     logout() {
+      console.log("master logout");
+
       this.$axios.get(`/logout`).then(({ res }) => {
         this.$auth.logout();
       });

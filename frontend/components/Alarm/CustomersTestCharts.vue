@@ -62,7 +62,7 @@ import CustomersDeviceStatsPieChart from "./Dashboard/CustomersDeviceTypesStatsP
 
 export default {
   props: ["setIntervalLoopstatus"],
-  layout: "security",
+  layout: "security_old",
   components: {
     CustomersTypePieChart,
     CustomersContractExpiteChart,

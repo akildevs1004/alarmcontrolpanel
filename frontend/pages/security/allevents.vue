@@ -17,7 +17,7 @@ import AllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 // import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
 export default {
-  layout: "security",
+  layout: "security_old",
   components: {
     AllEvents,
   },

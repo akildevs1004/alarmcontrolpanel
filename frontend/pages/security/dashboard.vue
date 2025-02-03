@@ -31,7 +31,7 @@ import AlamAllEventsDashboardsecurity from "../../components/Alarm/ComponentAllE
 import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashboardStatistics.vue";
 
 export default {
-  layout: "security",
+  layout: "security_old",
   components: {
     // AlarmBurglaryPieChart,
     // AlarmTemperaturePieChart,

@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  layout: "security",
+  layout: "security_old",
   components: {},
   props: ["_id", "isPopup"],
   data: () => ({}),

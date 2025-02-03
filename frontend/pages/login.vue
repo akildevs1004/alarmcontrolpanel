@@ -329,6 +329,25 @@ export default {
         this.$auth
           .loginWith("local", { data: this.credentials })
           .then((data) => {
+            try {
+              console.log("user_type", this.$auth.user.user_type);
+              let userType = {
+                user: "/alarm/dashboard",
+                company: "/alarm/dashboard",
+                customer: "/customer/dashboard",
+                //security: "/security/dashboard",
+                security: "/operator/dashboard",
+                technician: "/technician/dashboard",
+                //operator: "/technician/dashboard",
+              };
+
+              this.$router.push(
+                userType[this.$auth.user.user_type] || "/master"
+              );
+            } catch (e) {
+              console.log(e);
+            }
+
             //redirect("/alarm/dashboard");
             // setTimeout(() => {
             //   {
@@ -339,8 +358,8 @@ export default {
             // }, 1000 * 2);
           })
           .catch(({ response }) => {
-            console.log("response", response);
-            console.log("response", response.data);
+            console.log("catch response", response);
+            console.log("catch response", response.data);
 
             if (response) {
             } else if (response.data == undefined) {

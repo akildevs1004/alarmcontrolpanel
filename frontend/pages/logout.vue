@@ -4,15 +4,17 @@ export default {
   layout: "login",
   async created() {
     try {
+      this.$store.dispatch("dashboard/resetState");
+      this.$store.dispatch("resetState");
       // Clear the token and user data
       await this.$auth.logout();
 
       // // Manually clear any other user-related data
-      this.$auth.setUser(false); // Clear user data
+      await this.$auth.setUser(false); // Clear user data
       // this.$auth.setToken("local", null); // Clear the token
-      console.log(this.$auth.user);
+      console.log("logout page", this.$auth.user);
       // Redirect to login or another route
-      this.$router.push("/login");
+      this.$router.push("/login", true);
     } catch (error) {
       console.error("Error during logout:", error);
     }

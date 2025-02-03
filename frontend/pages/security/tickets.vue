@@ -8,7 +8,7 @@
 import TicketsList from "../../components/Tickets/TicketsList.vue";
 
 export default {
-  layout: "security",
+  layout: "security_old",
   components: {
     TicketsList,
   },
