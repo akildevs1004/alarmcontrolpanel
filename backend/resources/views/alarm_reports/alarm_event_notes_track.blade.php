@@ -206,6 +206,57 @@
         </table>
 
     </header>
+
+    <!-- Footer -->
+    <footer>
+        <table style="width:100%;text-align:center;border:0px solid black">
+
+            <tr>
+                <td colspan="100%" style="background-color:black;height:5px"></td>
+            </tr>
+            <tr>
+
+                <td style="width:33%;vertical-align: middle;height:40px;;text-align:left">
+
+
+                    <div style="font-weight:bold">{{ $company->name }}</div>
+
+                    Phone1: {{ $company->contact->number ?? '---' }}
+                </td>
+                <td style="width:33%;vertical-align: middle;height:50px;padding-top:10px;border:0px solid red;margin:auto">
+                    <table>
+                        <tr>
+                            <td>
+                                <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/website.png" width="15">
+                            </td>
+                            <td>
+                                Email: {{ $company->user->email ?? '---' }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                Website:---
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+
+
+                </td>
+                <td style="width:33%;vertical-align: middle;height:40px;text-align:left;padding-left:50px;"><span style=" margin-left: 3px">P.O.Box
+                        {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
+
+                    <br />
+                    <span style="margin-left: 3px">{{ $company->location }}</span>
+
+                </td>
+            </tr>
+        </table>
+    </footer>
     @php
 
     $customerLogo=getcwd() .'/no-business_profile.png';
@@ -415,20 +466,72 @@
 
 
 
-                    <table cellpadding="0" cellspacing="0">
+                    <table cellpadding="0" cellspacing="0" style="width:100%">
                         @foreach ($alarm->notes as $note )
                         <!-- Forward -->
                         @if($note->event_status== 'Forwarded')
                         <tr cellpadding="0" cellspacing="0">
                             <td cellpadding="0" cellspacing="0">
-                                <table cellpadding="0" cellspacing="0">
+                                <table cellpadding="0" cellspacing="0" style="width:100%">
                                     <td
                                         style="
                       vertical-align: middle;
                       text-align: center;
                       font-size: 10px;width:180px
                     ">
-                                        {{changeDateformat($note->created_datetime)}}
+
+                                        <table>
+                                            <tr>
+                                                <td style="font-weight: bold">
+                                                    {{changeDateformat($note->created_datetime)}}
+
+                                                </td>
+                                            </tr>
+                                            @php
+                                            if($note->security)
+                                            {
+                                            @endphp
+                                            <tr>
+                                                <td>
+
+
+                                                    <table>
+                                                        <tr>
+
+                                                            <td colspan="2">
+                                                                <div>{{ $note->security->first_name   }} {{ $note->security->last_name   }}</div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15">
+                                                            </td>
+                                                            <td>
+                                                                {{ $note->security->email? $note->security->email:'---' }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/phone.png" width="15">
+                                                            </td>
+                                                            <td>
+                                                                {{ $note->security->contact_number? $note->security->contact_number:'---'   }}
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+
+
+
+
+
+
+                                                </td>
+                                            </tr>
+
+                                            @php
+                                            } @endphp
+                                        </table>
                                     </td>
                                     <td
                                         style="
@@ -482,13 +585,13 @@
                       ">
                                                 <div style="font-weight: bold; font-size: 14px">
 
-                                                    Forwarded
+                                                    Forwarded by <span>{{ $note->security_id?"Operator":'Admin' }}</span>
 
 
 
                                                 </div>
                                                 <div style="padding-top: 10px; font-size: 10px">
-                                                    <span class="bold">Notes: </span>{{ $note->notes }}
+                                                    <span class="bold" style="font-style:italic">Operator Notes: </span>{{ $note->notes }}
                                                 </div>
 
                                             </div>
@@ -752,56 +855,7 @@
         </table>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <table style="width:100%;text-align:center;border:0px solid black">
 
-            <tr>
-                <td colspan="100%" style="background-color:black;height:5px"></td>
-            </tr>
-            <tr>
-
-                <td style="width:33%;vertical-align: middle;height:40px;;text-align:left">
-
-
-                    <div style="font-weight:bold">{{ $company->name }}</div>
-
-                    Phone1: {{ $company->contact->number ?? '---' }}
-                </td>
-                <td style="width:33%;vertical-align: middle;height:50px;padding-top:10px;border:0px solid red;margin:auto">
-                    <table>
-                        <tr>
-                            <td>
-                                <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/website.png" width="15">
-                            </td>
-                            <td>
-                                Email: {{ $company->user->email ?? '---' }}
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                Website:---
-                            </td>
-                        </tr>
-                    </table>
-
-
-
-
-
-                </td>
-                <td style="width:33%;vertical-align: middle;height:40px;text-align:left;padding-left:50px;"><span style=" margin-left: 3px">P.O.Box
-                        {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
-
-                    <br />
-                    <span style="margin-left: 3px">{{ $company->location }}</span>
-
-                </td>
-            </tr>
-        </table>
-    </footer>
     <script type="text/php">
         if (isset($pdf)) {
         $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
