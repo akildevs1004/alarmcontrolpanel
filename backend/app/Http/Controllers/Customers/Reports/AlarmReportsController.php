@@ -25,10 +25,12 @@ class AlarmReportsController extends Controller
     {
         $model =   (new CustomerAlarmEventsController())->filter($request);
         $model->orderBy("alarm_start_datetime", "asc");
-        $reports = $model->get();
 
+        if ($request->date_from == '') {
+            $model = $model->limit(50);
+        }
         $file_name =  'Alarm Events from ' . $request->date_from . ' to ' . $request->date_to . ' .xlsx';
-
+        $reports = $model->get();
         return Excel::download((new AlarmEventsExport($reports)), $file_name);
     }
     public function alarmEventsDownloadPdf(Request $request)
@@ -36,12 +38,29 @@ class AlarmReportsController extends Controller
         $file_name =  'Alarm Events from ' . $request->date_from . ' to ' . $request->date_to . ' .pdf';
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
+        $modelCount = $model->clone();
+
+
+        $countResults = $modelCount->selectRaw("
+                COUNT(CASE WHEN alarm_type = 'SOS' AND alarm_status =1  THEN 1 END) as sosCount,
+               COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
+                COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
+                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+                COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
+                COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
+                COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+            ")->first();
+
+
         $model->orderBy("alarm_start_datetime", "asc");
-        $reports = $model->get();
+
         $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
-
-
-        $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
+        if ($request->date_from == '') {
+            $model = $model->limit(50);
+        }
+        $reports = $model->get();
+        $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ["counts" => $countResults, 'reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
         return $pdf->download($file_name);
     }
     public function alarmEventsPrintPdf(Request $request)
@@ -49,12 +68,39 @@ class AlarmReportsController extends Controller
 
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
+
+        $modelCount = $model->clone();
+
+
+        $countResults = $modelCount->selectRaw("
+                COUNT(CASE WHEN alarm_type = 'SOS' AND alarm_status =1  THEN 1 END) as sosCount,
+               COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
+                COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
+                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+                COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
+                COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
+                COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+            ")->first();
+
+
+
+
+
+
         $model->orderBy("alarm_start_datetime", "asc");
+
+
+        if ($request->date_from == '') {
+            $model = $model->limit(50);
+        }
+
+
         $reports = $model->get();
         $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ['reports' => $reports, 'company' => $company, "request" => $request])->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ['reports' => $reports, 'company' => $company, "request" => $request, "counts" => $countResults])->setPaper('A4', 'potrait');
         return $pdf->stream('report.pdf');
     }
     //----------------------------------------DEVICE ARMED REPORTS 
@@ -131,9 +177,10 @@ class AlarmReportsController extends Controller
         ])->where("id", $request->alarm_id)->first();
 
         $icons = (new AlarmNotificationController())->getGoogleMapIcons();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons', "company"))->setPaper('A4', 'potrait');
         return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
     }
     public function deviceArmedReportsDownloadExcel(Request $request)
