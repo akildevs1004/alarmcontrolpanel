@@ -934,7 +934,7 @@ export default {
       if (option == "print") url += "/alarm_events_print_pdf";
       if (option == "excel") url += "/alarm_events_export_excel";
       if (option == "download") url += "/alarm_events_download_pdf";
-      if (option == "download") url += "/alarm_events_download_pdf";
+      //if (option == "download") url += "/alarm_events_download_pdf";
 
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&date_from=" + this.date_from;

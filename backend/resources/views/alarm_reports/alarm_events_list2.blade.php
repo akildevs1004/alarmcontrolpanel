@@ -4,44 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alarm Events Report</title>
+    <title>Alarm Events</title>
     <style>
-        /* body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-        }
-
-        @page {
-            margin: 100px 25px;
-            
-        }
-
-        header {
-            position: fixed;
-            top: -80px;
-            left: 0px;
-            right: 0px;
-            height: 60px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        footer {
-            position: fixed;
-            bottom: -50px;
-            left: 0px;
-            right: 0px;
-            height: 30px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .pagenum:before {
-            content: counter(page) " of " counter(pages);
-        } */
-
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -50,7 +14,7 @@
         }
 
         @page {
-            margin: 100px 25px 100px 25px;
+            margin: 200px 25px 200px 200px;
             /* Adjust bottom margin */
         }
 
@@ -60,7 +24,7 @@
             }
         }
 
-        /* footer {
+        footer {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -70,7 +34,7 @@
             font-size: 12px;
             border-top: 1px solid #ddd;
             padding-top: 5px;
-        } */
+        }
 
 
 
@@ -80,26 +44,24 @@
             /* Start the header 100px above the top of the page */
             left: 0;
             right: 0;
-            height: 100px;
+            height: 80px;
             text-align: center;
 
             padding-bottom: 10px;
-
-            border: 0px solid red;
         }
 
         footer {
             position: fixed;
-            bottom: -50px;
-            height: 100px;
+            bottom: -150px;
+
             left: 0;
             right: 0;
             height: 30px;
             border-top: 1px solid #ddd;
             padding-top: 0px;
             text-align: center;
-            font-size: 10px;
-            border: 0px solid red;
+            font-size: 12px;
+            border: 1px solid red;
         }
 
         .page-number {
@@ -118,17 +80,7 @@
         }
 
         .table-border tr {
-            /* border-top: 1px solid black; */
-
-            border-top: 1px solid #313131;
-        }
-
-        .table-border tr:first-child {
-            border-top: none !important;
-        }
-
-        .table-border tr:first-child {
-            border-bottom: 1px solid #313131;
+            border-top: 1px solid black;
         }
 
         .table-border th,
@@ -136,43 +88,13 @@
             padding: 8px;
             text-align: left;
         }
-
-        .table-border-stats tr {
-
-            border-top: 1px solid red !important;
-
-        }
-
-        .table-border-stats td {
-
-            padding: 8px;
-
-        }
-
-
-        .table-border-header {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .table-border-header tr {
-            border-bottom: 1px solid #313131;
-
-        }
-
-        .table-border-header th,
-        .table-border-header td {
-            padding: 5px;
-
-        }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
+    <header style="height:90px">
 
-        <table style="margin-top:  0px !important; padding-bottom:5px; ;width:100%;border:0px solid red">
+        <table style="margin-top:  0px !important; padding-bottom:5px;height:90px; ;width:100%;border:0px solid red">
 
             <tr>
                 <td style="border: nonse;width:30%">
@@ -194,78 +116,27 @@
                         </tr>
                         <tr>
                             <td style="text-align:center">
-                                @php
-                                // Check if the request has 'date_from' and 'date_to' parameters
-                                if($request->date_from && $request->date_to) {
-                                // Assuming changeDateformat returns an array, so accessing the first element
-                                $fromDate = changeDateformat($request->date_from)[0];
-                                $toDate = changeDateformat($request->date_to)[0];
-                                echo "From $fromDate to $toDate";
-                                }
-                                @endphp
+                                From {{changeDateformat($request->date_from)[0]}} to {{changeDateformat($request->date_to)[0]}}
                             </td>
-
                         </tr>
                     </table>
+
+
+
+
 
                 </td>
                 <td style=" text-align: right; width:35% ;margin:auto">
-                    <table class="table-border-header" style="width:100%">
-                        <tr>
-                            <td style="color:#FF0000">SOS</td>
-                            <td>{{ $counts->soscount}}</td>
 
-                            <td style="color:#df3079">Critical</td>
-                            <td>
-
-
-                                {{ $counts->criticalcount}}
-
-
-
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td style="color:#007BFF">Technical</td>
-                            <td> {{ $counts->technicalcount}}
-                            </td>
-
-                            <td style="color:black">Event</td>
-                            <td> {{ $counts->eventscount}}
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td style="color:#28A745">Medical</td>
-                            <td> {{ $counts->medicalcount}}
-                            </td>
-
-                            <td style="color:#FF8C00">Fire</td>
-                            <td> {{ $counts->firecount}}
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td style="color:#20C997">Water</td>
-                            <td> {{ $counts->watercount}}
-                            </td>
-
-                            <td style="color:#DC3545">Temperature</td>
-                            <td> {{ $counts->temperaturecount}}
-                            </td>
-
-                        </tr>
-                    </table>
-                    <!-- <table style="padding:0px;margin:0px;border-left :1px solid #DDD; ">
-                          <tr style="text-align: left; border :none;padding:0px 0px">
+                    <table style="padding:0px;margin:0px;border-left :1px solid #DDD; ">
+                        <tr style="text-align: left; border :none;padding:0px 0px">
                             <td style="text-align: left; border :none;font-size:12px;padding:0 0 5px 0px;">
                                 <b style="padding:0px;margin:0px">
                                     {{ $company->name }}
                                 </b>
                                 <br>
                             </td>
-                        </tr>  
+                        </tr>
                         <tr style="text-align: left; border :none;padding:0px 0px">
                             <td style="text-align: left; border :none;font-size:10px;padding:0 0 5px 0px;">
                                 <span style="margin-left: 3px">P.O.Box
@@ -281,12 +152,12 @@
                         </tr>
                         <tr style="text-align: left; border :none;padding:0px 0px">
                             <td style="text-align: left; border :none;font-size:10px;padding:0 0 5px 0px;">
-                                <span style="margin-left: 3px">{{ $company->contact->number ?? '---' }}</span>
+                                <span style="margin-left: 3px">{{ $company->contact->number ?? '' }}</span>
                                 <br>
                             </td>
                         </tr>
 
-                    </table> -->
+                    </table>
 
                 </td>
             </tr>
@@ -299,8 +170,16 @@
 
     </header>
 
-
     <main>
+
+        <!-- <table width="100%">
+            <tr style="background-color:black ">
+                <td colspan=100% style="margin-bottom:5px;height:10px">
+
+                </td>
+
+            </tr>
+        </table> -->
         @php if(count($reports)>0) { @endphp
         <br />
         <table class="table-border" width="100%" cellspacing="0" cellpadding="5">
@@ -309,7 +188,7 @@
 
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Event Id</th>
                     <th>Customer</th>
                     <th>Property</th>
                     <th>Address</th>
@@ -318,7 +197,7 @@
                     <th>Event Time</th>
                     <th>Closed Time</th>
                     <th>Priority</th>
-                    <th>Duration <br /> (HH:MM)</th>
+                    <th>Resolved Time(HH:MM)</th>
                 </tr>
             </thead>
             <tbody>
@@ -357,7 +236,7 @@
                     <td>{{ changeDateformat($item->alarm_start_datetime)[1] }} <br /> {{ changeDateformat($item->alarm_start_datetime)[0] }} </td>
                     <td>{{ changeDateformat($item->alarm_end_datetime)[1] }} <br /> {{ changeDateformat($item->alarm_end_datetime)[0] }} </td>
                     <td>{{ $item->category->name }} </td>
-                    <td style="text-align:left">
+                    <td style="text-align:center">
                         @php
                         if($item->alarm_end_datetime==null)
                         echo '---';
@@ -383,93 +262,65 @@
         }
 
         @endphp
+
+
     </main>
 
-    <!-- Footer -->
     <footer>
-        <table style="width:100%;text-align:center;border:0px solid black">
-
+        <table style="width:100%; border-top: 1px solid #ddd; font-size: 10px; padding-top: 5px;">
             <tr>
-                <td colspan="100%" style="background-color:black;height:5px"></td>
-            </tr>
-            <tr>
-
-                <td style="width:33%;vertical-align: middle;height:40px;;text-align:left">
-
-
-                    <div style="font-weight:bold">{{ $company->name }}</div>
-
-                    Phone1: {{ $company->contact->number ?? '---' }}
+                <td style="text-align: left;">
+                    <b>{{ $company->name }}</b>
                 </td>
-                <td style="width:33%;vertical-align: middle;height:50px;padding-top:10px;border:0px solid red;margin:auto">
-                    <table>
-                        <tr>
-                            <td>
-                                <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/website.png" width="15">
-                            </td>
-                            <td>
-                                Email: {{ $company->user->email ?? '---' }}
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                Website:---
-                            </td>
-                        </tr>
-                    </table>
-
-
-
-
-
+                <td style="text-align: center;">
+                    Generated on: {{ date('d M Y') }}
                 </td>
-                <td style="width:33%;vertical-align: middle;height:40px;text-align:left;padding-left:50px;"><span style=" margin-left: 3px">P.O.Box
-                        {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
-
-                    <br />
-                    <span style="margin-left: 3px">{{ $company->location }}</span>
-
+                <td style="text-align: right;">
+                    Page <span class="page-number"></span> of <span class="total-pages"></span>
                 </td>
             </tr>
         </table>
     </footer>
+
+
     <script type="text/php">
         if (isset($pdf)) {
         $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
         $font = $fontMetrics->getFont("Verdana");
-        $size = 6;
+        $size = 8;
         $x = $pdf->get_width() - 50; 
         $y = $pdf->get_height() - 30;
         $pdf->page_text($x, $y, $text, $font, $size);
     }
+</script>
+
+
 
     @php
 
-function changeDateformat($date)
+    function changeDateformat($date)
 
-{
-if($date=='') return ['---','---'];
-$date = new DateTime($date);
+    {
+    if($date=='') return ['---','---'];
+    $date = new DateTime($date);
 
-// Format the date to the desired format
-return [$date->format('M j, Y'),$date->format('H:i')];
-}
-function minutesToTime($totalMinutes)
-{
-if($totalMinutes==0) return '00:00';
-if($totalMinutes==null) return '---';
-// Calculate hours and minutes
-$hours = intdiv($totalMinutes, 60); // Integer division to get hours
-$minutes = $totalMinutes % 60; // Remainder to get minutes
+    // Format the date to the desired format
+    return [$date->format('M j, Y'),$date->format('H:i')];
+    }
+    function minutesToTime($totalMinutes)
+    {
+    if($totalMinutes==0) return '00:00';
+    if($totalMinutes==null) return '---';
+    // Calculate hours and minutes
+    $hours = intdiv($totalMinutes, 60); // Integer division to get hours
+    $minutes = $totalMinutes % 60; // Remainder to get minutes
 
-// Format hours and minutes to HH:MM
-return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
+    // Format hours and minutes to HH:MM
+    return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
 
-}
-@endphp
-</script>
+    }
+    @endphp
+
 </body>
 
 </html>

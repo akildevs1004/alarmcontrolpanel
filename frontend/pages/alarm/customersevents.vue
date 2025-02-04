@@ -248,7 +248,7 @@
             class="text-right"
             style="width: 600px"
           >
-            <v-card elevation="2"
+            <v-card elevation="2" style="z-index: 9"
               ><v-card-text>
                 <v-row>
                   <v-col class="text-left"><h3>Customer Events</h3></v-col>
@@ -324,75 +324,81 @@
                       :defaultFilterType="1"
                       :height="'30px'"
                   /></v-col>
-                  <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
-                      <v-menu bottom right>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span v-bind="attrs" v-on="on">
-                            <v-icon dark-2 icon color="violet"
-                              >mdi-printer-outline</v-icon
-                            >
-                            Print
-                          </span>
-                        </template>
-                        <v-list width="100" dense>
-                          <v-list-item @click="downloadOptions(`print`)">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_print.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  Print
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-                          <v-list-item @click="downloadOptions('download')">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_pdf.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  PDF
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-  
-                          <v-list-item @click="downloadOptions('excel')">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_excel.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  EXCEL
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-col> -->
+                  <v-col
+                    style="
+                      margin-top: 10px;
+                      margin-left: -16px;
+                      max-width: 100px;
+                    "
+                  >
+                    <v-menu bottom right style="z-index: 9999">
+                      <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">
+                          <v-icon dark-2 icon color="violet"
+                            >mdi-printer-outline</v-icon
+                          >
+                          Print
+                        </span>
+                      </template>
+                      <v-list width="100" dense>
+                        <v-list-item @click="downloadOptions(`print`)">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_print.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                Print
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="downloadOptions('download')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_pdf.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                PDF
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="downloadOptions('excel')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_excel.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                EXCEL
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-col>
                 </v-row>
               </v-card-text></v-card
             >
@@ -592,51 +598,77 @@
                                   <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                               </template>
-                              <v-list width="120" dense>
+                              <v-list width="100" dense>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewAlarminfo(item)"
+                                  @click="alarmNotesPrint(item.id, 'print')"
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-file-tree
-                                    </v-icon>
-                                    Notes
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_print.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Print
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewCustomerinfo(item)"
+                                  @click="alarmNotesPrint(item.id, 'download')"
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-eye
-                                    </v-icon>
-                                    Contacts
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_pdf.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        PDF
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
-                                <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="eventForward(item)"
+
+                                <!-- <v-list-item
+                                  @click="alarmNotesPrint(item.id, 'excel')"
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi mdi-share-all
-                                    </v-icon>
-                                    Forward
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_excel.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        EXCEL
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
-                                </v-list-item>
-                                <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewLogs(item)"
-                                >
-                                  <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-format-list-numbered
-                                    </v-icon>
-                                    Operator
-                                  </v-list-item-title>
-                                </v-list-item>
+                                </v-list-item> -->
                               </v-list>
                             </v-menu>
                           </template>
@@ -767,7 +799,7 @@ export default {
           align: "center",
         },
 
-        // { text: "Options", value: "options", sortable: false },
+        { text: "Options", value: "options", sortable: false },
       ],
       items: [],
     };
@@ -1024,7 +1056,7 @@ export default {
       if (option == "print") url += "/alarm_events_print_pdf";
       if (option == "excel") url += "/alarm_events_export_excel";
       if (option == "download") url += "/alarm_events_download_pdf";
-      if (option == "download") url += "/alarm_events_download_pdf";
+      // if (option == "download") url += "/alarm_events_download_pdf";
 
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&date_from=" + this.date_from;

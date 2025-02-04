@@ -612,7 +612,7 @@ export default {
         this.event_payload.response == "Manually Closed Alarm" ||
         this.event_payload.response == "Not in Town"
       ) {
-        this.alarmStatusList = [null, "Closed", "Pending"];
+        this.alarmStatusList = [null, "Closed", "Pending", "Forwarded"];
       }
     },
     updateResponseList() {
@@ -630,7 +630,7 @@ export default {
         this.responseList = [this.event_payload.call_status];
         this.event_payload.response = this.event_payload.call_status;
 
-        this.alarmStatusList = ["Pending"];
+        this.alarmStatusList = ["Pending", "Forwarded"];
         this.event_payload.event_status = "Pending";
       }
     },

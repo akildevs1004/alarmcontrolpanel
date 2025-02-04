@@ -17,6 +17,7 @@
       app
       :color="sideBarcolor"
       :width="!miniVariant ? '80px!important' : '150px'"
+      style="z-index: 100"
     >
       <v-list
         v-for="(i, idx) in items"
