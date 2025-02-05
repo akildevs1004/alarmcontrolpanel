@@ -163,49 +163,21 @@
 
 <body>
     <!-- Header -->
+    @php
+    $title1='Alarm Event Notes Report';
 
-
+    @endphp
     <header>
 
-        <table style="margin-top:  0px !important; padding-bottom:5px; ;width:100%;border:0px solid red; ">
+        @include('alarm_reports.header', [
 
-            <tr>
-                <td style="border: nonse;width:30%;vertical-align:middle;height:90px">
-                    <div style="text-align:left;    ;margin:auto;">
+        'title1' => $title1,
+        'company' => $company,
+        'title2' => '',
 
-                        @if (env('APP_ENV') !== 'local')
-                        <img src="{{ $company->logo }}" style=" margin:auto;width:100px;max-width:150px;max-height:40px ">
-                        @else
-                        <img src="{{ getcwd() .   '/'.$company->logo_raw }}" style="margin:auto; width:100px;max-width:150px; ;max-height:40px  ">
-                        @endif
-                    </div>
-                </td>
-                <td style="text-align: center;width: 55%; border :0px solid red;padding-left:0px;margin:0px   ">
-                    <table style="width:100%">
-                        <tr>
-                            <td style="text-align:center;font-size:14px">
-                                {{$company->name}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center">
+        ])
 
-                            </td>
 
-                        </tr>
-                    </table>
-
-                </td>
-                <td style=" text-align: right; width:10% ;margin:auto">
-
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="100%" style="background-color:brown;height:10px"></td>
-            </tr>
-
-        </table>
 
     </header>
 
@@ -213,7 +185,6 @@
     <footer>
 
         @include('alarm_reports.footer', [
-
 
         'company' => $company
         ])
@@ -339,62 +310,9 @@
                     @if($alarm->alarm_end_datetime != '')
                     <!-- Closed Alarm  -->
 
-                    <table cellpadding="0" cellspacing="0" style="height:150px">
-                        <td
-                            style="  vertical-align: middle; text-align: center; font-size: 10px;width:180px;color:red ">
-                            {{changeDateformat($alarm->alarm_end_datetime)}}
-                        </td>
-                        <td
-                            style=" border-left: 1px solid #ddd; vertical-align: middle; text-align: center;width:70px  ">
-                            <div
-                                style="  position: relative; left: -24px; width: 1px; height: 1px; border-radius: 50%; padding: 18px; border: 1px solid #000;   background-color: #fff; display: flex; justify-content: center; align-items: center; ">
-                                <div style="text-align: center">
-                                    <div
-                                        style="  position: relative; width: 1px; height: 1px; border-radius: 50%; padding: 12px; border: 1px solid #FFF; background-color:  red; display: flex; justify-content: center; align-items: center;  margin-top:-13px;  margin-left:-13px;
-                      ">
-
-                                    </div>
-                                </div>
-                        </td>
-                        <td style="vertical-align: middle;height:140px; ">
-                            <div style="position: relative; top: 50px; left: -15px">
-                                <img
-                                    style="width: 15px"
-                                    src="https://alarmbackend.xtremeguard.org/alarm-notes-left-arrow.png?1=2" />
-                            </div>
-                            <div style="  margin:auto; ">
-
-                                <div
-                                    style=" border: 1px solid #ddd; border-radius: 6px; padding-left: 20px; padding-top: 20px;padding-right: 20px; margin-top: -10px;  height:auto ">
-                                    <div style="font-weight: bold; font-size: 14px">
-                                        Alarm Event Closed at {{changeDateformat($alarm->alarm_end_datetime)}}
-                                    </div>
-                                    <div style="padding-top: 10px; font-size: 10px">
-                                        @if($alarm->alarm_end_manually == 1)
-                                        <div>
-                                            Operator Verified PIN with {{ $alarm->pin_verified_by }} -
-
-                                            {{
-                        $alarm->pinverifiedby
-                          ? $alarm->pinverifiedby->first_name +
-                            " " +
-                            $alarm->pinverifiedby->last_name
-                          : "---"
-                      }}
-                                        </div>
-                                        @else
-
-                                        Auto Closed by Disarm Event
-                                        @endif
-                                    </div>
-
-                                    <div style="height:30px"> </div>
-                                </div>
-
-
-                            </div>
-                        </td>
-                    </table>
+                    @include('alarm_reports.include_alarm_event_notes_track_closed', [
+                    'note' => $note
+                    ])
 
                     @endif
 

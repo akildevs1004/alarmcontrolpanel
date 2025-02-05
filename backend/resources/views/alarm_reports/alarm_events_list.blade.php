@@ -169,13 +169,30 @@
 </head>
 
 <body>
+
+    @php
+    $title2='';
+    // Check if the request has 'date_from' and 'date_to' parameters
+    if($request->date_from && $request->date_to) {
+    // Assuming changeDateformat returns an array, so accessing the first element
+    $fromDate = changeDateformat($request->date_from)[0];
+    $toDate = changeDateformat($request->date_to)[0];
+    $title2= "From $fromDate to $toDate";
+    }
+    @endphp
+
+    @php
+    $title1='Alarm Events List Report';
+
+    @endphp
     <!-- Header -->
     <header>
 
         @include('alarm_reports.header', [
-        'request' => $request ,
-        'counts' => $counts ,
-        'company' => $company
+
+        'company' => $company,
+
+        'title2'=>$title2
         ])
 
 
@@ -186,15 +203,58 @@
     <footer>
 
         @include('alarm_reports.footer', [
-        'request' => $request ,
-        'counts' => $counts ,
+
         'company' => $company
         ])
 
     </footer>
     <main>
+        <table class="table-border-header" style="width:100%">
+            <tr>
+                <td style="color:#FF0000">SOS</td>
+                <td>{{ $counts->soscount}}</td>
+
+                <td style="color:#df3079">Critical</td>
+                <td>
+
+
+                    {{ $counts->criticalcount}}
+
+
+
+                </td>
+                <td style="color:#007BFF">Technical</td>
+                <td> {{ $counts->technicalcount}}
+                </td>
+                <td style="color:black">Event</td>
+                <td> {{ $counts->eventscount}}
+                </td>
+            </tr>
+            <tr>
+
+
+
+                <td style="color:#28A745">Medical</td>
+                <td> {{ $counts->medicalcount}}
+                </td>
+
+                <td style="color:#FF8C00">Fire</td>
+                <td> {{ $counts->firecount}}
+                </td>
+                <td style="color:#20C997">Water</td>
+                <td> {{ $counts->watercount}}
+                </td>
+                <td style="color:#DC3545">Temperature</td>
+                <td> {{ $counts->temperaturecount}}
+                </td>
+            </tr>
+
+
+        </table>
         @php if(count($reports)>0) { @endphp
         <br />
+
+
         <table class="table-border" width="100%" cellspacing="0" cellpadding="5">
 
 
