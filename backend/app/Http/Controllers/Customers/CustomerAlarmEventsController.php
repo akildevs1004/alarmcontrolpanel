@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\Customers\CustomerContacts;
+use App\Models\Customers\Customers;
 use App\Models\Device;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
@@ -637,6 +638,133 @@ class CustomerAlarmEventsController extends Controller
     {
         return AlarmEvents::whereId($request->alarm_id)->first();
     }
+    public function getAlarmEventsCustomersGroup(Request $request)
+    {
+
+        $customers = Customers::where("company_id", $request->company_id)
+
+            ->when($request->filled("customer_id") && $request->customer_id != '', function ($query) use ($request) {
+                $query->where('id', $request->customer_id);
+            })
+            ->orderBy("building_name", "asc")
+            ->get();
+
+        $customerIds = $customers->pluck('id'); // Collect all customer ids in a single array.
+
+        $model = AlarmEvents::whereIn('customer_id', $customerIds);
+
+        if ($request->filled("date_from") && $request->date_from != '') {
+            $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+        }
+
+        $model->when($request->filled("customer_id") && $request->customer_id != '', function ($query) use ($request) {
+            $query->where('customer_id', $request->customer_id);
+        });
+
+        $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {
+            $query->whereDate('alarm_start_datetime', $request->filter_date);
+        });
+
+        $model = $model->rightJoin("customers", "customers.id", "=", "alarm_events.customer_id")
+            ->leftJoin("customers_building_types", "customers_building_types.id", "=", "customers.building_type_id")
+            ->selectRaw("
+        customers.id as customer_id,
+        customers.building_name,
+        customers_building_types.name as building_type_name,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'SOS' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as sosCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 1 AND alarm_events.alarm_type != 'SOS' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as criticalCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Offline' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as technicalCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type IS NOT NULL AND alarm_events.alarm_type != 'SOS' AND alarm_events.alarm_status = 1 AND alarm_events.alarm_category != 1 THEN 1 END), 0) as eventsCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 2 AND alarm_events.alarm_status = 1 THEN 1 END), 0) as mediumCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 3 AND alarm_events.alarm_status = 1 THEN 1 END), 0) as lowCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Temperature' THEN 1 END), 0) as temperatureCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Water' THEN 1 END), 0) as waterCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Medical' THEN 1 END), 0) as medicalCount,
+        COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Fire' THEN 1 END), 0) as fireCount
+    ")
+            ->groupBy("customers.id", "customers.building_name", "customers_building_types.name")
+            ->orderBy("customers.building_name", "asc");
+
+        $counts = $model->get();
+
+        $countDefaults = [
+            "soscount" => 0,
+            "criticalcount" => 0,
+            "technicalcount" => 0,
+            "eventscount" => 0,
+            "mediumcount" => 0,
+            "lowcount" => 0,
+            "temperaturecount" => 0,
+            "watercount" => 0,
+            "medicalcount" => 0,
+            "firecount" => 0,
+        ];
+
+        // Map the counts back to customers
+        $customers->map(function ($customer) use ($counts) {
+            $customer->counts = $counts->where('customer_id', $customer->id)->first();
+
+
+            if (!$customer->counts) {
+                $customer->counts =  [
+                    "soscount" => 0,
+                    "criticalcount" => 0,
+                    "technicalcount" => 0,
+                    "eventscount" => 0,
+                    "mediumcount" => 0,
+                    "lowcount" => 0,
+                    "temperaturecount" => 0,
+                    "watercount" => 0,
+                    "medicalcount" => 0,
+                    "firecount" => 0,
+                ];
+            }
+
+
+
+            return $customer;
+        });
+
+        return ["data" => $customers];
+
+
+
+        // $model =  AlarmEvents::where("customers.company_id", $request->company_id);
+
+        // if ($request->filled("date_from") && $request->date_from != '') {
+        //     $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+        // }
+        // $model->when($request->filled("customer_id") && $request->customer_id != '', function ($query) use ($request) {
+        //     $query->where('customers.id', $request->customer_id);
+        // });
+
+        // $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {
+        //     $query->whereDate('alarm_start_datetime', $request->filter_date);
+        // });
+        // $model = $model->rightjoin("customers", "customers.id", "=", "alarm_events.customer_id") // LEFT JOIN to get all customers
+        //     ->leftJoin("customers_building_types", "customers_building_types.id", "=", "customers.building_type_id") // Join with building types
+        //     ->selectRaw("
+        //     customers.building_name,
+        //     customers_building_types.name as building_type_name,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'SOS' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as sosCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 1 AND alarm_events.alarm_type != 'SOS' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as criticalCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Offline' AND alarm_events.alarm_status = 1 THEN 1 END), 0) as technicalCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type IS NOT NULL AND alarm_events.alarm_type != 'SOS' AND alarm_events.alarm_status = 1 AND alarm_events.alarm_category != 1 THEN 1 END), 0) as eventsCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 2 AND alarm_events.alarm_status = 1 THEN 1 END), 0) as mediumCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_category = 3 AND alarm_events.alarm_status = 1 THEN 1 END), 0) as lowCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Temperature' THEN 1 END), 0) as temperatureCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Water' THEN 1 END), 0) as waterCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Medical' THEN 1 END), 0) as medicalCount,
+        //     COALESCE(COUNT(CASE WHEN alarm_events.alarm_type = 'Fire' THEN 1 END), 0) as fireCount
+        // ")
+        //     ->groupBy("customers.building_name", "customers_building_types.name") // Group by customer and building type
+        //     ->orderBy("customers.building_name", "asc"); // Order by customer building name
+
+
+        // // $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "desc");
+
+        // return  $model->paginate($request->perPage ?? 10);;
+    }
     public function getAlarmEvents(Request $request)
     {
         $model = $this->filter($request);
@@ -657,9 +785,10 @@ class CustomerAlarmEventsController extends Controller
             "device.customer.buildingtype",
             "zoneData",
             "security",
-            "pinverifiedby"
+            "pinverifiedby",
 
-        ])->where('company_id', $request->company_id)
+
+        ])->where('alarm_events.company_id', $request->company_id)
 
 
             ->when($request->filled("alarm_status"), function ($q) use ($request) {
@@ -713,6 +842,10 @@ class CustomerAlarmEventsController extends Controller
         }
         $model->when($request->filled("filter_customers_list") && $request->filter_customers_list != '', function ($query) use ($request) {
             $query->whereIn('customer_id', $request->filter_customers_list);
+        });
+
+        $model->when($request->filled("customer_id") && $request->customer_id != '', function ($query) use ($request) {
+            $query->where('customer_id', $request->customer_id);
         });
 
         $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {

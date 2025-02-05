@@ -300,6 +300,7 @@
                       item-text="building_name"
                       item-value="id"
                       hide-details
+                      clearable
                     ></v-autocomplete>
                   </v-col>
                   <!-- <v-col style="max-width: 150px; padding-right: 0px">
@@ -325,6 +326,7 @@
                       :default_date_to="date_to"
                       :defaultFilterType="1"
                       :height="'30px'"
+                      clearable
                   /></v-col>
                   <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                       <v-menu bottom right>
@@ -444,57 +446,15 @@
                           }"
                           class="elevation-0"
                         >
-                          <template v-slot:item.sno="{ item, index }">
-                            {{ item.id }}
-                          </template>
-
                           <template v-slot:item.customer="{ item }">
                             <div>
-                              {{
-                                item.device?.customer?.building_name ?? "---"
-                              }}
+                              {{ item.building_name ?? "---" }}
                             </div>
                             <div class="secondary-value">
-                              {{
-                                item.device?.customer?.primary_contact
-                                  ?.first_name ?? "---"
-                              }}
-                              {{
-                                item.device?.customer?.primary_contact
-                                  ?.last_name ?? "---"
-                              }}
+                              {{ item.building_type_name ?? "---" }}
                             </div>
                           </template>
-                          <template v-slot:item.address="{ item }">
-                            <div>{{ item.device?.customer?.area }}</div>
-                            <div class="secondary-value">
-                              {{ item.device?.customer?.city }}
-                            </div>
-                          </template>
-                          <template v-slot:item.city="{ item }"> </template>
 
-                          <template v-slot:item.sensor="{ item }">
-                            <div>
-                              {{ item.alarm_type }}
-                            </div>
-                            <div class="secondary-value">
-                              <div class="secondary-value">
-                                {{ item.zone_data?.location ?? "---" }}
-                              </div>
-                            </div>
-                          </template>
-                          <template v-slot:item.property="{ item }">
-                            {{
-                              item.device?.customer?.buildingtype?.name ?? "---"
-                            }}
-
-                            <!-- <div class="secondary-value">
-                            {{ item.device?.customer?.area }}
-                          </div> -->
-                            <div class="secondary-value">
-                              {{ item.device?.customer?.city }}
-                            </div>
-                          </template>
                           <template v-slot:item.zone="{ item }">
                             <div>{{ item.zone }}</div>
                             <div class="secondary-value">{{ item.area }}</div>
@@ -506,91 +466,39 @@
                             </div>
                           </template>
                           <template v-slot:item.soscount="{ item }">
-                            10
+                            {{ item.counts.soscount }}
+                          </template>
+                          <template v-slot:item.criticalcount="{ item }">
+                            {{ item.counts.criticalcount }} </template
+                          ><template v-slot:item.technicalcount="{ item }">
+                            {{ item.counts.technicalcount }} </template
+                          ><template v-slot:item.eventscount="{ item }">
+                            {{ item.counts.eventscount }} </template
+                          ><template v-slot:item.temperaturecount="{ item }">
+                            {{ item.counts.temperaturecount }} </template
+                          ><template v-slot:item.watercount="{ item }">
+                            {{ item.counts.watercount }} </template
+                          ><template v-slot:item.medicalcount="{ item }">
+                            {{ item.counts.medicalcount }} </template
+                          ><template v-slot:item.firecount="{ item }">
+                            {{ item.counts.firecount }}
                           </template>
 
-                          <template v-slot:item.zonedata="{ item }">
-                            <div>
-                              {{ item.zone_data?.sensor_type ?? "---" }}
-                            </div>
-
-                            <div class="secondary-value">
-                              {{ item.zone_data?.sensor_name ?? "---" }}
-                            </div>
-                          </template>
-
-                          <template v-slot:item.start_date="{ item }">
-                            <div>
+                          <template v-slot:item.total="{ item }">
+                            <div style="font-weight: bold">
                               {{
-                                $dateFormat.formatDateMonthYear(
-                                  item.alarm_start_datetime
-                                )
+                                item.counts.soscount +
+                                item.counts.criticalcount +
+                                item.counts.technicalcount +
+                                item.counts.eventscount +
+                                item.counts.temperaturecount +
+                                item.counts.watercount +
+                                item.counts.medicalcount +
+                                item.counts.firecount
                               }}
                             </div>
                           </template>
-                          <template v-slot:item.end_date="{ item }">
-                            <div>
-                              {{
-                                item.alarm_end_datetime
-                                  ? $dateFormat.formatDateMonthYear(
-                                      item.alarm_end_datetime
-                                    )
-                                  : "---"
-                              }}
-                            </div>
-                          </template>
-                          <template v-slot:item.duration="{ item }">
-                            <div>
-                              {{
-                                item.alarm_end_datetime
-                                  ? $dateFormat.minutesToHHMM(
-                                      item.response_minutes
-                                    )
-                                  : "---"
-                              }}
-                            </div>
-                          </template>
-                          <template v-slot:item.notes="{ item }">
-                            <div @click="viewNotes(item)">
-                              {{ item.notes.length }}
-                            </div>
-                          </template>
 
-                          <template v-slot:item.alarm_category="{ item }">
-                            <div>{{ item.category?.name || "---" }}</div>
-                          </template>
-
-                          <template v-slot:item.status="{ item }">
-                            <div v-if="item.forwarded === true">Forwarded</div>
-                            <div v-else-if="item.alarm_status == 1">
-                              Open
-                              <!-- <v-icon class="alarm1111111" style="color: red"
-                              >mdi mdi-alarm-light</v-icon
-                            > -->
-                              <!-- <br />
-                            <v-btn
-                              class="text--red"
-                              color="red"
-                              title="Click to Stop Alarm "
-                              @click="UpdateAlarmStatus(item, 0)"
-                              outlined
-                              x-small
-                              dense
-                              >Stop</v-btn
-                            > -->
-                            </div>
-                            <div v-else-if="item.alarm_status == 0">
-                              Closed
-                              <!-- <v-icon title="Now Alaram is OFF"
-                              >mdi mdi-alarm-light-outline</v-icon
-                            >
-                            <div class="secondary-value">
-                              {{
-                                item.alarm_end_manually == 1 ? "Manually" : "Auto"
-                              }}
-                            </div> -->
-                            </div>
-                          </template>
                           <template v-slot:item.options="{ item }">
                             <v-menu bottom left>
                               <template v-slot:activator="{ on, attrs }">
@@ -737,22 +645,20 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       headers: [
-        { text: "Event Id", value: "sno", sortable: false },
+        // { text: "Event Id", value: "sno", sortable: false },
         // { text: "Building", value: "building", sortable: false },
 
         { text: "Customer", value: "customer", sortable: false },
-        { text: "Property", value: "property", sortable: false },
 
         { text: "SOS", value: "soscount", sortable: false },
-        { text: "Critical", value: "soscount", sortable: false },
-        { text: "Technical", value: "soscount", sortable: false },
-        { text: "Event", value: "soscount", sortable: false },
-        { text: "Medical", value: "soscount", sortable: false },
-        { text: "Fire", value: "soscount", sortable: false },
-        { text: "Water", value: "soscount", sortable: false },
-        { text: "Temperature", value: "soscount", sortable: false },
-
-        { text: "Avg.Duration", value: "soscount", sortable: false },
+        { text: "Critical", value: "criticalcount", sortable: false },
+        { text: "Technical", value: "technicalcount", sortable: false },
+        { text: "Event", value: "eventscount", sortable: false },
+        { text: "Medical", value: "medicalcount", sortable: false },
+        { text: "Fire", value: "firecount", sortable: false },
+        { text: "Water", value: "watercount", sortable: false },
+        { text: "Temperature", value: "temperaturecount", sortable: false },
+        { text: "Total", value: "total", sortable: false },
 
         // // { text: "Address", value: "address", sortable: false },
 
@@ -793,7 +699,7 @@ export default {
   watch: {
     options: {
       handler() {
-        this.getDataFromApi();
+        if (!this.loading) this.getDataFromApi();
       },
       deep: true,
     },
@@ -823,10 +729,10 @@ export default {
       this.filterAlarmStatus = 3;
     }
     // if (this.$route.name != "alarm-dashboard") {
-    let today = new Date();
-    let monthObj = this.$dateFormat.monthStartEnd(today);
-    this.date_from = monthObj.first;
-    this.date_to = monthObj.last;
+    // let today = new Date();
+    // let monthObj = this.$dateFormat.monthStartEnd(today);
+    // this.date_from = monthObj.first;
+    // this.date_to = monthObj.last;
     // }
     // if (this.$route.name == "alarm-dashboard") {
     //   this.filterAlarmStatus = 1;
@@ -1125,7 +1031,10 @@ export default {
       };
 
       try {
-        const { data } = await this.$axios.get(`get_alarm_events`, options);
+        const { data } = await this.$axios.get(
+          `get_alarm_events_customer_group`,
+          options
+        );
 
         // Process the response
         this.items = data.data;
