@@ -209,6 +209,7 @@
 
     </footer>
     <main>
+        <hr style="color:#ddd;margin-top:10px " />
         <table class="table-border-header" style="width:100%">
             <tr>
                 <td style="color:#FF0000">SOS</td>
@@ -251,6 +252,8 @@
 
 
         </table>
+
+
         @php if(count($reports)>0) { @endphp
         <br />
 

@@ -102,6 +102,18 @@
             margin-top: 10px;
         }
 
+
+        .table-border1 table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-border1 tr {
+            /* border-top: 1px solid black; */
+
+            border-top: 1px solid #313131;
+        }
+
         .table-border table {
             width: 100%;
             border-collapse: collapse;
@@ -155,6 +167,19 @@
             padding: 5px;
 
         }
+
+        .table-border-top {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+
+
+        .table-border-top th,
+        .table-border-top td {
+            padding: 5px;
+
+        }
     </style>
 
 
@@ -172,7 +197,7 @@
         @include('alarm_reports.header', [
 
         'title1' => $title1,
-        'company' => $company,
+        'company' => $alarm['device']['company'],
         'title2' => '',
 
         ])
@@ -186,7 +211,7 @@
 
         @include('alarm_reports.footer', [
 
-        'company' => $company
+        'company' => $alarm['device']['company']
         ])
 
     </footer>
@@ -242,21 +267,139 @@
     }
     @endphp
     <main>
-        <table style="width:100%">
+
+
+        <table style="width:100%;font-size:12px">
+
+
+
             <tr>
+                <td>
+                    <table class="table-border-top" style="width:100%">
+                        <tr>
+                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Customer Details</td>
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;border-top:0px">
+                            <td rowspan="4" style="width:100px;text-align:center"> <img
+                                    style="border-radius: 50%;height: 70px;min-height: 70px;  "
+                                    src="{{ $customerLogo }}" /> </td>
+
+                            <td style="font-weight:bold">Customer/Building Name</td>
+                            <td>: {{ $alarm['device']['customer']['building_name'] }}</td>
+
+                            <td style="font-weight:bold">Type</td>
+                            <td>:{{$alarm['device']['customer']['buildingtype']['name']}}</td>
+
+
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;">
+
+                            <td style="font-weight:bold">Address</td>
+                            <td colspan="3">: <span>{{$alarm->device->customer->house_number ?? "---"}}, {{$alarm->device->customer->street_number ?? "---"}}</span>
+                                <span>{{$alarm->device->customer->area ?? "---"}}, {{$alarm->device->customer->city ?? "---"}} </span> <span>{{$alarm->device->customer->state ?? "---"}}, {{$alarm->device->customer->country ?? "---"}} </span>
+                            </td>
+
+
+                        </tr>
+
+                        <tr style="border: 1px solid #8f8f8f;">
+
+                            <td style="font-weight:bold">Contact</td>
+
+                            <td colspan=3>: {{$alarm->device->customer?->primary_contact?->first_name ?? "---"}} {{$alarm->device->customer?->primary_contact?->last_name ?? "---"}} </td>
+
+
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;">
+
+                            <td style="font-weight:bold">Phone Number</td>
+
+                            <td>: {{$alarm->device->customer?->primary_contact?->phone1 ?? "---"}}</td>
+                            <td style="font-weight:bold">Email</td>
+
+                            <td>: {{$alarm->device->customer?->primary_contact?->email ?? "---"}}</td>
+
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="table-border-top" style="width:100%">
+                        <tr>
+                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Event Details</td>
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;border-top:0px">
+                            <td rowspan="4" style="width:100px;text-align:center"> <img
+                                    style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
+                                    src="{{env('BASE_PUBLIC_URL')}}{{$icons['alarm']}}" /></td>
+
+                            <td style="font-weight:bold">Event Id</td>
+                            <td style="color:red">#{{ $alarm->id   }}</td>
+
+                            <td style="font-weight:bold">Status</td>
+
+                            <td>: @if($alarm->forwarded ==true && $alarm->alarm_status==1)
+                                Forwarded
+                                @elseif($alarm->alarm_status==1)
+                                Open
+                                @else
+                                Closed
+                                @endif</td>
+
+
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;">
+
+                            <td style="font-weight:bold">Sensor Name</td>
+                            <td>: {{ $alarm->zoneData->sensor_type ?? "---" }}</td>
+
+                            <td style="font-weight:bold">Alarm Zone</td>
+                            <td>: {{ $alarm->zoneData->sensor_name ?? "---" }}</td>
+
+
+                        </tr>
+
+                        <tr style="border: 1px solid #8f8f8f;">
+                            <td style="font-weight:bold">Alarm Type</td>
+                            <td>: {{ $alarm->alarm_type ?? "---" }}</td>
+
+                            <td style="font-weight:bold">Alarm Location</td>
+                            <td>: {{ $alarm->zoneData->location ?? "---"   }}</td>
+
+
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;">
+
+
+
+                            <td style="font-weight:bold">Start</td>
+                            <td>: {{changeDateformat($alarm->alarm_start_datetime)}}</td>
+
+                            <td style="font-weight:bold">End</td>
+                            <td>: {{changeDateformat($alarm->alarm_end_datetime)}}</td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+
+            <!-- <tr>
                 <td style="width:100%">
                     @include('alarm_reports.include_alarm_event_notes_track_customer1', [
                     'alarm' => $alarm
                     ])
 
                 </td>
-            </tr>
+            </tr> -->
 
-            <tr>
+            <!-- <tr>
                 <td colspan="100%">
                     <hr style="color:#ddd;margin-top:0px " />
                 </td>
-            </tr>
+            </tr> -->
 
             <tr>
 
@@ -311,7 +454,8 @@
                     <!-- Closed Alarm  -->
 
                     @include('alarm_reports.include_alarm_event_notes_track_closed', [
-                    'note' => $note
+
+                    'alarm' => $alarm
                     ])
 
                     @endif

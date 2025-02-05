@@ -14,26 +14,30 @@
              <tr>
                  <td>
                      @if($note->contact)
-                     <table cellpadding="0" cellspacing="0" style=" width:100%; ">
-                         <tr>
 
+
+
+
+                     <table>
+                         <tr>
                              <td colspan="2">
                                  <div>{{ $note->contact->first_name   }} {{ $note->contact->last_name   }}</div>
                              </td>
                          </tr>
-                         <tr>
-                             <td>
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15">
+                         <tr style=" vertical-align:middle;margin:auto">
+                             <td style="width:15px;  margin :auto;vertical-align:middle">
+                                 <img style=" padding-top:5px;margin :auto;vertical-align:middle" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15">
                              </td>
-                             <td>
+                             <td style="  margin :auto">
                                  {{ $note->contact->email? $note->contact->email:'---' }}
                              </td>
                          </tr>
+
                          <tr>
-                             <td>
+                             <td style="  padding-top:5px;;margin :auto">
                                  <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/phone.png" width="15">
                              </td>
-                             <td>
+                             <td style="  margin :auto">
                                  {{ $note->contact->contact_number? $note->contact->contact_number:'---'   }}
                              </td>
                          </tr>

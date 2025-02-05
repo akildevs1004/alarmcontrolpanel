@@ -70,7 +70,7 @@
                             </tr>
                             <tr style="border-bottom:0px solid rgb(143, 141, 141)">
                                 <td>Alarm Zone</td>
-                                <td>{{ $alarm->zoneData->sensor_name ?? "---" }}
+                                <td>{{ $alarm->zoneData->sensor_name ?? "---" }}</td>
 
                             </tr>
                         </table>
