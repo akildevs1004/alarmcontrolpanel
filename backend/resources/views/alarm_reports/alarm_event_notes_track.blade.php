@@ -224,6 +224,8 @@
     $customerLogo=getcwd() .'/no-business_profile.png';
     $companyLogo=getcwd() .'/no-business_profile.png';
     $securityLogo=getcwd() .'/no-profile-image.jpg';
+    if (env('APP_ENV') !== 'local')
+    {
 
     if($alarm['device']&&$alarm['device']['customer']&&$alarm['device']['customer']['profile_picture']!='')
     {
@@ -237,7 +239,7 @@
     {
     $securityLogo=$alarm['security']['picture'];
     }
-
+    }
 
 
 
@@ -272,7 +274,7 @@
         <table style="width:100%">
             <tr>
                 <td style="width:100%">
-                    @include('alarm_reports.alarm_event_notes_track_customer1', [
+                    @include('alarm_reports.include_alarm_event_notes_track_customer1', [
                     'alarm' => $alarm
                     ])
 
@@ -305,14 +307,14 @@
             <tr>
 
                 <td>@if($note->event_status== 'Forwarded')
-                    @include('alarm_reports.alarm_event_notes_track_forward1', [
+                    @include('alarm_reports.include_alarm_event_notes_track_forward1', [
                     'note' => $note
                     ])
 
                     @elseif($note->event_status != 'Forwarded')
 
 
-                    @include('alarm_reports.alarm_event_notes_track_operator_notes', [
+                    @include('alarm_reports.include_alarm_event_notes_track_operator_notes', [
                     'note' => $note
                     ])
 

@@ -52,7 +52,7 @@
                     <td>
                         <img
                             style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
-                            src="{{env('BASE_URL')}}{{$icons['alarm']}}" />
+                            src="{{env('BASE_PUBLIC_URL')}}{{$icons['alarm']}}" />
                     </td>
                     <td>
                         <table style="width: 100%; border-collapse: collapse;line-height:20px">

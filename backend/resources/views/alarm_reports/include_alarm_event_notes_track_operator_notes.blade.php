@@ -78,10 +78,16 @@
          <div
              style=" position: relative;  left: -24px; width: 1px; height: 1px; border-radius: 50%;  padding: 20px; border: 1px solid #000; background-color: #fff;    display: flex; justify-content: center; align-items: center;  ">
              <div style="text-align: center">
+                 @if (env('APP_ENV') !== 'local')
+                 <img
+                     style=" border-radius: 50%; width: 35px; max-width: 35px; margin-top:-16px "
+                     src="{{ $note->contact?->profile_picture ? $note->contact->profile_picture : 'https://alarmbackend.xtremeguard.org/unknown-person-icon.png' }}" />
+
+                 @endif
 
                  <img
                      style=" border-radius: 50%; width: 35px; max-width: 35px; margin-top:-16px "
-                     src="{{ $note->contact?->profile_picture ?: 'https://alarmbackend.xtremeguard.org/unknown-person-icon.png' }}" />
+                     src="{{ getcwd() .'/no-profile-image.jpg' }}" />
 
 
              </div>
