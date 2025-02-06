@@ -50,7 +50,7 @@
             <table style="width:100%">
                 <tr>
                     <td>
-                        1111111<img
+                        <img
                             style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
                             src="{{env('BASE_PUBLIC_URL')}}" />
                     </td>

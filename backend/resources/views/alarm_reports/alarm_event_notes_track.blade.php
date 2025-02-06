@@ -385,7 +385,12 @@
                             <td>: {{changeDateformatTime($alarm->alarm_start_datetime)}}</td>
 
                             <td style="font-weight:bold">End</td>
-                            <td>: {{changeDateformatTime($alarm->alarm_end_datetime)}}</td>
+                            <td>:
+
+
+
+                                {{changeDateformatTime($alarm->alarm_end_datetime)}}
+                            </td>
                         </tr>
 
                     </table>
@@ -426,7 +431,7 @@
             @foreach ($alarm->notes as $note )
             <tr>
 
-                <td>@if($note->event_status== 'Forwarded')
+                <td style="padding:0px">@if($note->event_status== 'Forwarded')
                     @include('alarm_reports.include_alarm_event_notes_track_forward1', [
                     'note' => $note
                     ])
@@ -449,7 +454,7 @@
             @endforeach
             <tr>
 
-                <td colspan="100%">
+                <td colspan="100%" style="padding:0px">
 
 
 

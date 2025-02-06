@@ -15,10 +15,7 @@
                  <td>
                      @if($note->contact)
 
-
-
-
-                     <table style="line-height:5px; ">
+                     <table style="line-height:15px; ">
                          <tr style="border-bottom:1px solid #8f8f8f">
                              <td colspan="2">
                                  {{ $note->contact->first_name   }} {{ $note->contact->last_name   }}
