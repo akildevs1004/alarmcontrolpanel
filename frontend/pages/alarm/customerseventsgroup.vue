@@ -381,7 +381,7 @@
                           </v-list-item-title>
                         </v-list-item>
 
-                        <!-- <v-list-item @click="downloadOptions('excel')">
+                        <v-list-item @click="downloadOptions('excel')">
                           <v-list-item-title style="cursor: pointer">
                             <v-row>
                               <v-col cols="5"
@@ -398,7 +398,7 @@
                               </v-col>
                             </v-row>
                           </v-list-item-title>
-                        </v-list-item> -->
+                        </v-list-item>
                       </v-list>
                     </v-menu>
                   </v-col>

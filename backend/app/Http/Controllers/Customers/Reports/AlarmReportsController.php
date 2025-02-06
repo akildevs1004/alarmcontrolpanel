@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers\Reports;
 
+use App\Exports\ExportAlarmEventsCustomerGroup;
 use App\Exports\AlarmEventsExport;
 use App\Exports\DeviceArmedExport;
 use App\Exports\DeviceArmedReportExcelMapping;
@@ -235,6 +236,15 @@ class AlarmReportsController extends Controller
 
         $fileName = "Alarm Events Count - Customers Group.pdf";
         return   Pdf::loadview("alarm_reports/alarm_events_customer_group_count", ["request" => $request, "reports" => $report["data"], "company" => $company])->setpaper("A4", "potrait")->download($fileName);
+    }
+    public function alarmEventsCustomersGroupDownloadCSV(Request $request)
+    {
+
+        $reports =  (new CustomerAlarmEventsController)->getGroupFilter($request);
+
+        $fileName = "Alarm Events Count - Customers Group.xlsx";
+
+        return Excel::download((new ExportAlarmEventsCustomerGroup($reports["data"])), $fileName);
     }
 
     function pdfArmedProcess($request)
