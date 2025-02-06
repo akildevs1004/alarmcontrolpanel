@@ -195,7 +195,7 @@
 
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
                             <td rowspan="4" style="width:100px;text-align:center"> <img
-                                    style="border-radius: 50%;height: 70px;min-height: 70px;  "
+                                    style="border-radius: 50%;height: 50px;min-height: 50px;  "
                                     src="{{ $customerLogo }}" /> </td>
 
                             <td style="font-weight:bold">Customer/Building Name</td>
