@@ -259,7 +259,7 @@
 
             @if (count($alarm->notes)==0)
             <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
-                <div style="margin:auto">
+                <div style="margin:auto;padding-top:50px">
                     Operator Notes are not available
                 </div>
 

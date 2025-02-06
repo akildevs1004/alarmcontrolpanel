@@ -883,6 +883,11 @@ export default {
 
     this.$store.commit("loginType", this.$auth.user.user_type);
     this.getCompanyDetails();
+
+    //console.log("top", this.$route.name);
+    //this.topMenu_Selected = menu_name;
+    // if(this.$route.name=='')
+
     this.setMenus();
 
     this.logo_src = require("@/static/logo_header.png");

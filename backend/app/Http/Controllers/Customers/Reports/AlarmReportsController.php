@@ -176,7 +176,7 @@ class AlarmReportsController extends Controller
 
         ])->where("id", $request->alarm_id)->first();
 
-        $icons = (new AlarmNotificationController())->getGoogleMapIcons();
+        $icons = (new AlarmNotificationController())->getAlarmNotificationIcons();
         $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
 
 
@@ -213,6 +213,28 @@ class AlarmReportsController extends Controller
         $pdf = Pdf::loadView("alarm_reports/armed_reports", compact('company', 'reports',  'request'))->setPaper('A4', 'potrait');
 
         return $pdf->stream($request->date_from . ' to ' . $request->date_to . ' Armed Report.pdf');
+    }
+
+
+    public function alarmEventsCustomersGroupPrintPdf(Request $request)
+    {
+
+        $report =  (new CustomerAlarmEventsController)->getGroupFilter($request);
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $fileName = "Alarm Events Count - Customers Group.pdf";
+
+
+        return   Pdf::loadview("alarm_reports/alarm_events_customer_group_count", ["request" => $request, "reports" => $report["data"], "company" => $company])->setpaper("A4", "potrait")->stream($fileName);
+    }
+    public function alarmEventsCustomersGroupDownloadPdf(Request $request)
+    {
+
+        $report =  (new CustomerAlarmEventsController)->getGroupFilter($request);
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $fileName = "Alarm Events Count - Customers Group.pdf";
+        return   Pdf::loadview("alarm_reports/alarm_events_customer_group_count", ["request" => $request, "reports" => $report["data"], "company" => $company])->setpaper("A4", "potrait")->download($fileName);
     }
 
     function pdfArmedProcess($request)

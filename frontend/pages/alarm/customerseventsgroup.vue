@@ -326,77 +326,82 @@
                       :default_date_to="date_to"
                       :defaultFilterType="1"
                       :height="'30px'"
-                      clearable
                   /></v-col>
-                  <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
-                      <v-menu bottom right>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span v-bind="attrs" v-on="on">
-                            <v-icon dark-2 icon color="violet"
-                              >mdi-printer-outline</v-icon
-                            >
-                            Print
-                          </span>
-                        </template>
-                        <v-list width="100" dense>
-                          <v-list-item @click="downloadOptions(`print`)">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_print.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  Print
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-                          <v-list-item @click="downloadOptions('download')">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_pdf.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  PDF
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-  
-                          <v-list-item @click="downloadOptions('excel')">
-                            <v-list-item-title style="cursor: pointer">
-                              <v-row>
-                                <v-col cols="5"
-                                  ><img
-                                    style="padding-top: 5px"
-                                    src="/icons/icon_excel.png"
-                                    class="iconsize"
-                                /></v-col>
-                                <v-col
-                                  cols="7"
-                                  style="padding-left: 0px; padding-top: 19px"
-                                >
-                                  EXCEL
-                                </v-col>
-                              </v-row>
-                            </v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-col> -->
+                  <v-col
+                    style="
+                      margin-top: 10px;
+                      margin-left: -20px;
+                      max-width: 90px;
+                    "
+                  >
+                    <v-menu bottom right>
+                      <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">
+                          <v-icon dark-2 icon color="violet"
+                            >mdi-printer-outline</v-icon
+                          >
+                          Print
+                        </span>
+                      </template>
+                      <v-list width="100" dense>
+                        <v-list-item @click="downloadOptions(`print`)">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_print.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                Print
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="downloadOptions('download')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_pdf.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                PDF
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item>
+
+                        <!-- <v-list-item @click="downloadOptions('excel')">
+                          <v-list-item-title style="cursor: pointer">
+                            <v-row>
+                              <v-col cols="5"
+                                ><img
+                                  style="padding-top: 5px"
+                                  src="/icons/icon_excel.png"
+                                  class="iconsize"
+                              /></v-col>
+                              <v-col
+                                cols="7"
+                                style="padding-left: 0px; padding-top: 19px"
+                              >
+                                EXCEL
+                              </v-col>
+                            </v-row>
+                          </v-list-item-title>
+                        </v-list-item> -->
+                      </v-list>
+                    </v-menu>
+                  </v-col>
                 </v-row>
               </v-card-text></v-card
             >
@@ -450,9 +455,9 @@
                             <div>
                               {{ item.building_name ?? "---" }}
                             </div>
-                            <div class="secondary-value">
+                            <!-- <div class="secondary-value">
                               {{ item.building_type_name ?? "---" }}
-                            </div>
+                            </div> -->
                           </template>
 
                           <template v-slot:item.zone="{ item }">
@@ -466,22 +471,88 @@
                             </div>
                           </template>
                           <template v-slot:item.soscount="{ item }">
-                            {{ item.counts.soscount }}
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.soscount > 0 ? 'bold' : 'normal')
+                              "
+                            >
+                              {{ item.counts.soscount }}
+                            </div>
                           </template>
                           <template v-slot:item.criticalcount="{ item }">
-                            {{ item.counts.criticalcount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.criticalcount > 0
+                                  ? 'bold'
+                                  : 'normal')
+                              "
+                            >
+                              {{ item.counts.criticalcount }}
+                            </div></template
                           ><template v-slot:item.technicalcount="{ item }">
-                            {{ item.counts.technicalcount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.technicalcount > 0
+                                  ? 'bold'
+                                  : 'normal')
+                              "
+                            >
+                              {{ item.counts.technicalcount }}
+                            </div> </template
                           ><template v-slot:item.eventscount="{ item }">
-                            {{ item.counts.eventscount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.eventscount > 0
+                                  ? 'bold'
+                                  : 'normal')
+                              "
+                            >
+                              {{ item.counts.eventscount }}
+                            </div> </template
                           ><template v-slot:item.temperaturecount="{ item }">
-                            {{ item.counts.temperaturecount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.temperaturecount > 0
+                                  ? 'bold'
+                                  : 'normal')
+                              "
+                            >
+                              {{ item.counts.temperaturecount }}
+                            </div> </template
                           ><template v-slot:item.watercount="{ item }">
-                            {{ item.counts.watercount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.watercount > 0 ? 'bold' : 'normal')
+                              "
+                            >
+                              {{ item.counts.watercount }}
+                            </div> </template
                           ><template v-slot:item.medicalcount="{ item }">
-                            {{ item.counts.medicalcount }} </template
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.medicalcount > 0
+                                  ? 'bold'
+                                  : 'normal')
+                              "
+                            >
+                              {{ item.counts.medicalcount }}
+                            </div> </template
                           ><template v-slot:item.firecount="{ item }">
-                            {{ item.counts.firecount }}
+                            <div
+                              :style="
+                                'font-weight:' +
+                                (item.counts.firecount > 0 ? 'bold' : 'normal')
+                              "
+                            >
+                              {{ item.counts.firecount }}
+                            </div>
                           </template>
 
                           <template v-slot:item.total="{ item }">
@@ -945,9 +1016,10 @@ export default {
       }
 
       let url = process.env.BACKEND_URL;
-      if (option == "print") url += "/alarm_events_print_pdf";
-      if (option == "excel") url += "/alarm_events_export_excel";
-      if (option == "download") url += "/alarm_events_download_pdf";
+      if (option == "print") url += "/alarm_events_customer_group_print_pdf";
+      if (option == "excel") url += "/alarm_events_customer_group_export_excel";
+      if (option == "download")
+        url += "/alarm_events_customer_group_download_pdf";
       //if (option == "download") url += "/alarm_events_download_pdf";
 
       url += "?company_id=" + this.$auth.user.company_id;

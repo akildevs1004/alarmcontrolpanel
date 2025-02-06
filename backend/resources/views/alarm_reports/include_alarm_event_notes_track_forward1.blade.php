@@ -26,7 +26,7 @@
                          </tr>
                          <tr>
                              <td>
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15">
+                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                              </td>
                              <td>
                                  {{ $note->security->email? $note->security->email:'---' }}
@@ -34,7 +34,7 @@
                          </tr>
                          <tr>
                              <td>
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/phone.png" width="15">
+                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
                              </td>
                              <td>
                                  {{ $note->security->contact_number? $note->security->contact_number:'---'   }}

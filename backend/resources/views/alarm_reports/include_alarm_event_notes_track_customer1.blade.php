@@ -23,7 +23,7 @@
 
                                 <table>
                                     <tr>
-                                        <td><span><img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15" style="padding-top:5px"></span>
+                                        <td><span><img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15" style="padding-top:5px"></span>
 
                                         </td>
                                         <td><span>{{$alarm->device->customer->user->email ?? "---"}}</span></td>
@@ -34,7 +34,7 @@
                             <div>
                                 <table>
                                     <tr>
-                                        <td><span><img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/phone.png" width="15"></span>
+                                        <td><span><img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15"></span>
 
                                         </td>
                                         <td><span>{{$alarm->device->customer->contact_number ?? "---"}}</span></td>
@@ -50,9 +50,9 @@
             <table style="width:100%">
                 <tr>
                     <td>
-                        <img
+                        1111111<img
                             style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
-                            src="{{env('BASE_PUBLIC_URL')}}{{$icons['alarm']}}" />
+                            src="{{env('BASE_PUBLIC_URL')}}" />
                     </td>
                     <td>
                         <table style="width: 100%; border-collapse: collapse;line-height:20px">

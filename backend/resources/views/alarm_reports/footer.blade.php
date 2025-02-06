@@ -16,7 +16,7 @@
             <table>
                 <tr>
                     <td>
-                        <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/website.png" width="15">
+                        <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                     </td>
                     <td>
                         Email: {{ $company->user->email ?? '---' }}
@@ -24,7 +24,9 @@
 
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>
+                        <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/website.png" width="15">
+                    </td>
                     <td>
                         Website:---
                     </td>

@@ -256,6 +256,11 @@ Route::get('/device_armed_logs_download_pdf', [AlarmReportsController::class, 'd
 Route::get('/device_armed_logs_export_excel', [AlarmReportsController::class, 'deviceArmedLogsExportExcel']);
 
 
+Route::get('/alarm_events_customer_group_print_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupPrintPdf']);
+Route::get('/alarm_events_customer_group_download_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupDownloadPdf']);
+Route::get('/alarm_events_customer_group_export_excel', [AlarmReportsController::class, 'alarmEventsExportCsv']);
+
+
 Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);
 
 

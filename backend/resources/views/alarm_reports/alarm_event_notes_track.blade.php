@@ -332,9 +332,15 @@
                             <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Event Details</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
-                            <td rowspan="4" style="width:100px;text-align:center"> <img
+                            <td rowspan="4" style="width:100px;text-align:center">
+
+                                @if ($alarm->zoneData)
+                                <img
                                     style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
-                                    src="{{env('BASE_PUBLIC_URL')}}{{$icons['alarm']}}" /></td>
+                                    src="{{env('BASE_PUBLIC_URL')}}/{{$alarm->zoneData->sensor_type}}" />
+
+                                @endif
+                            </td>
 
                             <td style="font-weight:bold">Event Id</td>
                             <td style="color:red">#{{ $alarm->id   }}</td>
@@ -407,7 +413,7 @@
 
                     @if (count($alarm->notes)==0)
                     <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
-                        <div style="margin:auto">
+                        <div style="margin:auto;padding-top:50px">
                             Operator Notes are not available
                         </div>
 

@@ -26,7 +26,7 @@
                          </tr>
                          <tr style=" vertical-align:middle;margin:auto">
                              <td style="width:15px;  margin :auto;vertical-align:middle">
-                                 <img style=" padding-top:5px;margin :auto;vertical-align:middle" src="{{env('BASE_PUBLIC_URL')}}icons/email.png" width="15">
+                                 <img style=" padding-top:5px;margin :auto;vertical-align:middle" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                              </td>
                              <td style="  margin :auto">
                                  {{ $note->contact->email? $note->contact->email:'---' }}
@@ -35,7 +35,7 @@
 
                          <tr>
                              <td style="  padding-top:5px;;margin :auto">
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}icons/phone.png" width="15">
+                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
                              </td>
                              <td style="  margin :auto">
                                  {{ $note->contact->contact_number? $note->contact->contact_number:'---'   }}

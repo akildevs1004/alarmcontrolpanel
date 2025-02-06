@@ -108,6 +108,39 @@ class AlarmNotificationController extends Controller
             "DC_off" => "burglary.png",
         ];
     }
+    public function getPDFAlarmNotificationIcons()
+    {
+
+        return  [
+            "Fire Sensor"  => "fire_sensor.png",
+            "Beam Sensor"  => "beam_sensor.png",
+            "Door Sensor" => "door_sensor.png",
+            "Gas Sensor"  => "gas_sensor.png",
+            "Glass Break Sensor"  => "glass_breake_sensor.png",
+            "Medical Sensor" => "medical_sensor.png",
+            "Motion Sensor"  => "motion_sensor.png",
+            "Smoke Sensor"  => "smoke_sensor.png",
+            "SOS Sensor"  => "sos_sensor.png",
+            "Temperature Sensor"  => "temperature_sensor.png",
+            "Vibration Sensor"  => "vibration_sensor.png",
+            "Water Leakage Sensor"  => "water_leakage_sensor.png",
+            "Other Sensor" => "other_sensor.png"
+        ];
+        return   [
+            "Temperature" => "temperature.png",
+            "Burglary" => "burglary.png",
+            "Medical" => "medical.png",
+            "Water" => "water.png",
+            "Fire" => "fire.png",
+            "Humidity" => "humidity.png",
+            "Intruder" => "intruder.png",
+            "Offline" => "offline.png",
+            "Tampered" => "burglary.png",
+            "SOS" => "burglary.png",
+            "AC_off" => "burglary.png",
+            "DC_off" => "burglary.png",
+        ];
+    }
     public function getGoogleMapIcons()
     {
         return   [
