@@ -1,13 +1,13 @@
  <table cellpadding="0" cellspacing="0" style="height:140px;width:100%;border:0px solid red;line-height:18px">
      <td
-         style="  vertical-align: middle;  text-align: left; font-size: 10px;width:180px  ">
+         style="  vertical-align: middle;  text-align: left; font-size: 10px;width:180px;  ">
 
-         <table cellpadding="0" cellspacing="0" style=" width:100%;border:0px solid red">
-             <tr>
+         <table cellpadding="0" cellspacing="0" style=" width:100%;border:0px solid red;line-height:10px">
+             <tr style="border:0px">
 
                  <td colspan="2" style="font-weight: bold">
 
-                     {{changeDateformat($note->created_datetime)}}
+                     {{changeDateformatTime($note->created_datetime)}}
 
                  </td>
              </tr>
@@ -18,13 +18,13 @@
 
 
 
-                     <table>
-                         <tr>
+                     <table style="line-height:5px; ">
+                         <tr style="border-bottom:1px solid #8f8f8f">
                              <td colspan="2">
-                                 <div>{{ $note->contact->first_name   }} {{ $note->contact->last_name   }}</div>
+                                 {{ $note->contact->first_name   }} {{ $note->contact->last_name   }}
                              </td>
                          </tr>
-                         <tr style=" vertical-align:middle;margin:auto">
+                         <tr style="border-bottom:1px solid #8f8f8f; vertical-align:middle;margin:auto">
                              <td style="width:15px;  margin :auto;vertical-align:middle">
                                  <img style=" padding-top:5px;margin :auto;vertical-align:middle" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                              </td>
@@ -33,7 +33,7 @@
                              </td>
                          </tr>
 
-                         <tr>
+                         <tr style="border-bottom:1px solid #8f8f8f">
                              <td style="  padding-top:5px;;margin :auto">
                                  <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
                              </td>
@@ -108,7 +108,7 @@
              <div
                  style=" border: 1px solid #ddd; border-radius: 6px; padding-left: 20px; padding-top: 20px;padding-right: 20px; margin-top: -10px; height:auto ">
                  <div style="font-weight: bold; font-size: 14px">
-                     {{$note->contact->address_type}}
+                     {{$note->contact?->address_type??'---'}}
                  </div>
                  <div style="padding-top: 10px; font-size: 10px">
                      <span class="bold">Notes: </span>{{ $note->notes }}

@@ -382,10 +382,10 @@
 
 
                             <td style="font-weight:bold">Start</td>
-                            <td>: {{changeDateformat($alarm->alarm_start_datetime)}}</td>
+                            <td>: {{changeDateformatTime($alarm->alarm_start_datetime)}}</td>
 
                             <td style="font-weight:bold">End</td>
-                            <td>: {{changeDateformat($alarm->alarm_end_datetime)}}</td>
+                            <td>: {{changeDateformatTime($alarm->alarm_end_datetime)}}</td>
                         </tr>
 
                     </table>

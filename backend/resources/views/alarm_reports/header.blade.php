@@ -49,3 +49,14 @@
     </tr> -->
 
 </table>
+@php
+function changeDateformatTime($date)
+
+{
+if($date=='') return ['---','---'];
+$date = new DateTime($date);
+
+// Format the date to the desired format
+return $date->format('M j, Y').' '.$date->format('H:i') ;
+}
+@endphp

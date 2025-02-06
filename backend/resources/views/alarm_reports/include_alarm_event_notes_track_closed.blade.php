@@ -1,7 +1,7 @@
 <table cellpadding="0" cellspacing="0" style="height:150px">
     <td
         style="  vertical-align: middle; text-align: center; font-size: 10px;width:180px;color:red ">
-        {{changeDateformat($alarm->alarm_end_datetime)}}
+        {{changeDateformatTime($alarm->alarm_end_datetime)}}
     </td>
     <td
         style=" border-left: 1px solid #ddd; vertical-align: middle; text-align: center;width:70px  ">
@@ -26,7 +26,7 @@
             <div
                 style=" border: 1px solid #ddd; border-radius: 6px; padding-left: 20px; padding-top: 20px;padding-right: 20px; margin-top: -10px;  height:auto ">
                 <div style="font-weight: bold; font-size: 14px">
-                    Alarm Event Closed at {{changeDateformat($alarm->alarm_end_datetime)}}
+                    Alarm Event Closed at {{changeDateformatTime($alarm->alarm_end_datetime)}}
                 </div>
                 <div style="padding-top: 10px; font-size: 10px">
                     @if($alarm->alarm_end_manually == 1)
@@ -35,8 +35,8 @@
 
                         {{
                         $alarm->pinverifiedby
-                          ? $alarm->pinverifiedby->first_name +
-                            " " +
+                          ? $alarm->pinverifiedby->first_name .
+                            " " .
                             $alarm->pinverifiedby->last_name
                           : "---"
                       }}

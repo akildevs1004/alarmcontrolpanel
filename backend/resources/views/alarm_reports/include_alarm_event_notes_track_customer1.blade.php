@@ -112,11 +112,11 @@
                 </tr>
                 <tr style="border-bottom: 1px solid rgb(143, 141, 141)">
                     <td>Start</td>
-                    <td>{{changeDateformat($alarm->alarm_start_datetime)}}</td>
+                    <td>{{changeDateformatTime($alarm->alarm_start_datetime)}}</td>
                 </tr>
                 <tr style="border-bottom: 0px solid rgb(143, 141, 141)">
                     <td>End</td>
-                    <td>{{changeDateformat($alarm->alarm_end_datetime)}}</td>
+                    <td>{{changeDateformatTime($alarm->alarm_end_datetime)}}</td>
                 </tr>
             </table>
 

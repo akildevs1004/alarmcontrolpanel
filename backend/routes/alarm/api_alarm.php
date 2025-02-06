@@ -261,6 +261,17 @@ Route::get('/alarm_events_customer_group_download_pdf', [AlarmReportsController:
 Route::get('/alarm_events_customer_group_export_excel', [AlarmReportsController::class, 'alarmEventsCustomersGroupDownloadCSV']);
 
 
+Route::get('/alarm_events_customer_group_list_individual_print_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupListIndividualPrintPdf']);
+Route::get('/alarm_events_customer_group_list_individual_download_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupListIndividualDownloadPdf']);
+Route::get('/alarm_events_customer_group_export_excel', [AlarmReportsController::class, 'alarmEventsCustomersGroupDownloadCSV']);
+
+Route::get('/alarm_events_customer_group_list_individual_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupListIndividualNotesPrintPdf']);
+Route::get('/alarm_events_customer_group_list_individual_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsCustomersGroupListIndividualNotesDownloadPdf']);
+Route::get('/alarm_events_customer_group_export_excel', [AlarmReportsController::class, 'alarmEventsCustomersGroupDownloadCSV']);
+
+
+
+
 Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);
 
 

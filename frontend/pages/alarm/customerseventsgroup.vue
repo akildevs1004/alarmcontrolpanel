@@ -577,49 +577,105 @@
                                   <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                               </template>
-                              <v-list width="120" dense>
+                              <v-list width="180" dense>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewAlarminfo(item)"
+                                  @click="
+                                    downloadPDFIndividualList(`print`, item)
+                                  "
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-file-tree
-                                    </v-icon>
-                                    Notes
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_print.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Print List
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewCustomerinfo(item)"
+                                  @click="
+                                    downloadPDFIndividualList(`download`, item)
+                                  "
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-eye
-                                    </v-icon>
-                                    Contacts
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_pdf.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Download List
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="eventForward(item)"
+                                  @click="
+                                    downloadPDFIndividualNotes(`print`, item)
+                                  "
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi mdi-share-all
-                                    </v-icon>
-                                    Forward
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_print.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Print Notes
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
                                 <v-list-item
-                                  v-if="can('branch_view')"
-                                  @click="viewLogs(item)"
+                                  @click="
+                                    downloadPDFIndividualNotes(`download`, item)
+                                  "
                                 >
                                   <v-list-item-title style="cursor: pointer">
-                                    <v-icon color="secondary" small>
-                                      mdi-format-list-numbered
-                                    </v-icon>
-                                    Operator
+                                    <v-row>
+                                      <v-col cols="5"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_pdf.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="7"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Download Notes
+                                      </v-col>
+                                    </v-row>
                                   </v-list-item-title>
                                 </v-list-item>
                               </v-list>
@@ -877,6 +933,7 @@ export default {
 
       window.open(url, "_blank");
     },
+
     showTabContent() {
       this.showTable = false;
 
@@ -1025,6 +1082,84 @@ export default {
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&date_from=" + this.date_from;
       url += "&date_to=" + this.date_to;
+      if (this.commonSearch) url += "&common_search=" + this.commonSearch;
+      if (this.filterAlarmStatus)
+        url += "&alarm_status=" + this.filterAlarmStatus;
+      if (filterSensorname != "null" && filterSensorname)
+        url += "&filterSensorname=" + filterSensorname;
+      if (this.filterResponseInMinutes)
+        url += "&filterResponseInMinutes=" + this.filterResponseInMinutes;
+      url += "&tab=" + this.tab;
+      //  url += "&alarm_status=" + this.filterAlarmStatus;
+      if (this.$auth.user.user_type == "security") {
+        let customersList = this.$auth.user.security.customers_assigned.map(
+          (e) => e.customer_id
+        );
+        customersList.forEach((element) => {
+          url += "&filter_customers_list[]=" + element;
+        });
+      }
+      window.open(url, "_blank");
+    },
+    downloadPDFIndividualNotes(option, customer) {
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
+
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
+      }
+
+      let url = process.env.BACKEND_URL;
+      if (option == "print")
+        url += "/alarm_events_customer_group_list_individual_notes_print_pdf";
+      if (option == "excel") url += "/alarm_events_export_excel";
+      if (option == "download")
+        url +=
+          "/alarm_events_customer_group_list_individual_notes_download_pdf";
+      // if (option == "download") url += "/alarm_events_download_pdf";
+
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&date_from=" + this.date_from;
+      url += "&date_to=" + this.date_to;
+      url += "&customer_id=" + customer.id;
+      if (this.commonSearch) url += "&common_search=" + this.commonSearch;
+      if (this.filterAlarmStatus)
+        url += "&alarm_status=" + this.filterAlarmStatus;
+      if (filterSensorname != "null" && filterSensorname)
+        url += "&filterSensorname=" + filterSensorname;
+      if (this.filterResponseInMinutes)
+        url += "&filterResponseInMinutes=" + this.filterResponseInMinutes;
+      url += "&tab=" + this.tab;
+      //  url += "&alarm_status=" + this.filterAlarmStatus;
+      if (this.$auth.user.user_type == "security") {
+        let customersList = this.$auth.user.security.customers_assigned.map(
+          (e) => e.customer_id
+        );
+        customersList.forEach((element) => {
+          url += "&filter_customers_list[]=" + element;
+        });
+      }
+      window.open(url, "_blank");
+    },
+
+    downloadPDFIndividualList(option, customer) {
+      let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
+
+      if (this.eventFilter) {
+        filterSensorname = this.eventFilter;
+      }
+
+      let url = process.env.BACKEND_URL;
+      if (option == "print")
+        url += "/alarm_events_customer_group_list_individual_print_pdf";
+      if (option == "excel") url += "/alarm_events_export_excel";
+      if (option == "download")
+        url += "/alarm_events_customer_group_list_individual_download_pdf";
+      // if (option == "download") url += "/alarm_events_download_pdf";
+
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&date_from=" + this.date_from;
+      url += "&date_to=" + this.date_to;
+      url += "&customer_id=" + customer.id;
       if (this.commonSearch) url += "&common_search=" + this.commonSearch;
       if (this.filterAlarmStatus)
         url += "&alarm_status=" + this.filterAlarmStatus;

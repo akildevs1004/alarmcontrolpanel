@@ -1,11 +1,11 @@
- <table cellpadding="0" cellspacing="0" style="width:100%">
-     <td
+ <table class="no-border" cellpadding="0" cellspacing="0" style="width:100%">
+     <td class="no-border"
          style=" vertical-align: middle; text-align: center; font-size: 10px; width:180px  ">
 
-         <table cellpadding="0" cellspacing="0" style="width:100%">
-             <tr>
+         <table class="no-border" cellpadding="0" cellspacing="0" style="width:100%">
+             <tr class="no-border">
                  <td style="font-weight: bold">
-                     {{changeDateformat($note->created_datetime)}}
+                     222 {{changeDateformatTime($note->created_datetime)}}
 
                  </td>
              </tr>
@@ -15,16 +15,14 @@
              @endphp
              <tr>
                  <td>
-
-
-                     <table>
-                         <tr>
+                     <table cellpadding="0" cellspacing="0" style="width:100%">
+                         <tr style="border-bottom:1px solid #8f8f8f">
 
                              <td colspan="2">
                                  <div>{{ $note->security->first_name   }} {{ $note->security->last_name   }}</div>
                              </td>
                          </tr>
-                         <tr>
+                         <tr style="border-bottom:1px solid #8f8f8f">
                              <td>
                                  <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                              </td>
@@ -32,7 +30,7 @@
                                  {{ $note->security->email? $note->security->email:'---' }}
                              </td>
                          </tr>
-                         <tr>
+                         <tr style="border-bottom:1px solid #8f8f8f">
                              <td>
                                  <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
                              </td>
@@ -42,10 +40,6 @@
                          </tr>
 
                      </table>
-
-
-
-
 
 
                  </td>

@@ -242,11 +242,11 @@
                                         </tr>
                                         <tr style="border-bottom: 1px solid #ddd">
                                             <td>Start</td>
-                                            <td>{{changeDateformat($alarm->alarm_start_datetime)}}</td>
+                                            <td>{{changeDateformatTime($alarm->alarm_start_datetime)}}</td>
                                         </tr>
                                         <tr style="border-bottom: 1px solid #ddd">
                                             <td>End</td>
-                                            <td>{{changeDateformat($alarm->alarm_end_datetime)}}</td>
+                                            <td>{{changeDateformatTime($alarm->alarm_end_datetime)}}</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -281,7 +281,7 @@
                       text-align: center;
                       font-size: 10px;width:180px
                     ">
-                                {{changeDateformat($note->created_datetime)}}
+                                {{changeDateformatTime($note->created_datetime)}}
                             </td>
                             <td
                                 style="
@@ -502,7 +502,7 @@
                       text-align: center;
                       font-size: 10px;width:180px;color:red
                     ">
-                                {{changeDateformat($alarm->alarm_end_datetime)}}
+                                {{changeDateformatTime($alarm->alarm_end_datetime)}}
                             </td>
                             <td
                                 style="
@@ -567,7 +567,7 @@
                         height:auto
                       ">
                                         <div style="font-weight: bold; font-size: 14px">
-                                            Alarm Event Closed at {{changeDateformat($alarm->alarm_end_datetime)}}
+                                            Alarm Event Closed at {{changeDateformatTime($alarm->alarm_end_datetime)}}
                                         </div>
                                         <div style="padding-top: 10px; font-size: 10px">
                                             @if($alarm->alarm_end_manually == 1)
