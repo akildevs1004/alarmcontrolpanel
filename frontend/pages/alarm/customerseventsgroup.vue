@@ -856,10 +856,10 @@ export default {
       this.filterAlarmStatus = 3;
     }
     // if (this.$route.name != "alarm-dashboard") {
-    // let today = new Date();
-    // let monthObj = this.$dateFormat.monthStartEnd(today);
-    // this.date_from = monthObj.first;
-    // this.date_to = monthObj.last;
+    let today = new Date();
+    let monthObj = this.$dateFormat.monthStartEnd(today);
+    this.date_from = monthObj.first;
+    this.date_to = monthObj.last;
     // }
     // if (this.$route.name == "alarm-dashboard") {
     //   this.filterAlarmStatus = 1;
