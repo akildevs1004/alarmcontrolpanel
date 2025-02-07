@@ -451,6 +451,20 @@
                           }"
                           class="elevation-0"
                         >
+                          <template v-slot:item.sno="{ item, index }">
+                            <!-- {{
+                              currentPage
+                                ? (currentPage - 1) * perPage +
+                                  (cumulativeIndex + items.indexOf(item))
+                                : ""
+                            }} -->
+
+                            {{
+                              currentPage
+                                ? cumulativeIndex + items.indexOf(item)
+                                : ""
+                            }}
+                          </template>
                           <template v-slot:item.customer="{ item }">
                             <div>
                               {{ item.building_name ?? "---" }}
@@ -766,7 +780,11 @@ export default {
       loading: false,
       commonSearch: "",
       filterbuildingName: null,
-      options: { perPage: 10 },
+      options: {
+        current: 1,
+        total: 0,
+        itemsPerPage: 10,
+      },
       cumulativeIndex: 1,
       perPage: 10,
       currentPage: 1,
@@ -774,6 +792,7 @@ export default {
       headers: [
         // { text: "Event Id", value: "sno", sortable: false },
         // { text: "Building", value: "building", sortable: false },
+        { text: "#", value: "sno", sortable: false },
 
         { text: "Customer", value: "customer", sortable: false },
 
@@ -1184,7 +1203,9 @@ export default {
       if (this.loading && this.commonSearch == null) return false;
 
       // Reset pagination if custompage is 0
-      if (custompage == 0) this.options = { perPage: 10, page: 1 };
+      // if (custompage == 0) this.options = { perPage: 10, page: 1 };
+
+      console.log("this.options", this.options);
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
       let sortedBy = sortBy ? sortBy[0] : "";
@@ -1212,6 +1233,8 @@ export default {
       // Create a new cancel token for this request
       this.cancelTokenSource = this.$axios.CancelToken.source();
 
+      this.currentPage = page;
+      this.perPage = itemsPerPage;
       let options = {
         params: {
           page: page,
