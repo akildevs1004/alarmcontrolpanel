@@ -418,7 +418,7 @@
                                 {{ ucfirst($alarm->security->last_name) }}
                             </div>
 
-                            <div style="font-weight:bold">Phone: {{ $alarm->security?->phone1 ?? '---' }}</div>
+                            <div style="font-weight:bold">Phone: {{ $alarm->security?->contact_number ?? '---' }}</div>
                         @endif
 
                     </div>
