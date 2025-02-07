@@ -76,10 +76,10 @@ class AlarmReportsController extends Controller
 
 
         $countResults = $modelCount->selectRaw("
-                COUNT(CASE WHEN alarm_type = 'SOS' AND alarm_status =1  THEN 1 END) as sosCount,
-               COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
-                COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
-                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+                COUNT(CASE WHEN alarm_type = 'SOS'    THEN 1 END) as sosCount,
+               COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS'  THEN 1 END) as criticalCount,
+                COUNT(CASE WHEN alarm_type = 'Offline'   THEN 1 END) as technicalCount,
+                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS'   AND alarm_category != 1 THEN 1 END) as eventsCount,
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
