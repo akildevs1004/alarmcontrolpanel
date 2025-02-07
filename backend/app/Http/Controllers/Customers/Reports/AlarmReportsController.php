@@ -52,7 +52,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
 
@@ -85,7 +85,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
 
@@ -108,7 +108,7 @@ class AlarmReportsController extends Controller
         $pdf = Pdf::loadView('alarm_reports/alarm_events_list',  ['reports' => $reports, 'company' => $company, "request" => $request, "counts" => $countResults])->setPaper('A4', 'potrait');
         return $pdf->stream('report.pdf');
     }
-    //----------------------------------------DEVICE ARMED REPORTS 
+    //----------------------------------------DEVICE ARMED REPORTS
     public function deviceArmedLogsPrintPdf(Request $request)
     {
         $model =   (new DeviceArmedLogsController())->filter($request);
@@ -233,7 +233,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
         $model->orderBy("alarm_start_datetime", "asc");
@@ -268,7 +268,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
         $model->orderBy("alarm_start_datetime", "asc");
@@ -286,7 +286,7 @@ class AlarmReportsController extends Controller
         $icons = (new AlarmNotificationController())->getAlarmNotificationIcons();
         $pdf = Pdf::loadView('alarm_reports/alarm_events_list_customer_individual_notes',  ['reports' => $reports, 'company' => $company, 'customer' => $customer, "icons" => $icons, "request" => $request, "counts" => $countResults])->setPaper('A4', 'potrait');
 
-        $fileName = "Alarm Events Customer Notes.pdf";
+        $fileName = "Alarm Customer Events with Notes.pdf";
         return $pdf->stream($fileName);
     }
     public function alarmEventsCustomersGroupListIndividualNotesDownloadPdf(Request $request)
@@ -305,7 +305,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
         $model->orderBy("alarm_start_datetime", "asc");
@@ -343,7 +343,7 @@ class AlarmReportsController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Temperature' THEN 1 END) as temperatureCount,
                 COUNT(CASE WHEN alarm_type = 'Water' THEN 1 END) as waterCount,
                 COUNT(CASE WHEN alarm_type = 'Medical' THEN 1 END) as medicalCount,
-                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount 
+                COUNT(CASE WHEN alarm_type = 'Fire' THEN 1 END) as fireCount
             ")->first();
 
         $model->orderBy("alarm_start_datetime", "asc");
@@ -504,7 +504,7 @@ class AlarmReportsController extends Controller
         $reports =   AttendanceLog::where("UserID", "1001")->get();
         $pdf =  App::make('dompdf.wrapper');
 
-        //$pdf->getDomPDF()->set_option("enable_php", true);//do not delete this line 
+        //$pdf->getDomPDF()->set_option("enable_php", true);//do not delete this line
         $pdf->loadView('alarm_reports/sample_with_page_numbers', compact('reports'))->setPaper('A4', 'potrait');
         return $pdf->stream('invoice.pdf');
     }

@@ -13,7 +13,7 @@
 
         @page {
             margin: 100px 25px;
-            
+
         }
 
         header {
@@ -275,7 +275,7 @@
         $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
         $font = $fontMetrics->getFont("Verdana");
         $size = 6;
-        $x = $pdf->get_width() - 50; 
+        $x = $pdf->get_width() - 50;
         $y = $pdf->get_height() - 30;
         $pdf->page_text($x, $y, $text, $font, $size);
     }

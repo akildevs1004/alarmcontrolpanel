@@ -1,7 +1,68 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
+    }
+
+    @page {
+        margin: 100px 25px 100px 25px;
+        /* Adjust bottom margin */
+    }
+
+    @page :first {
+        @bottom-center {
+            content: "Company Name | Page {PAGE_NUM} of {PAGE_COUNT}";
+        }
+    }
+
+
+
+
+
+    header {
+        position: fixed;
+        top: -100px;
+        /* Start the header 100px above the top of the page */
+        left: 0;
+        right: 0;
+        height: 100px;
+        text-align: center;
+
+        padding-bottom: 10px;
+
+        border: 0px solid red;
+    }
+
+    footer {
+        position: fixed;
+        bottom: -50px;
+        height: 100px;
+        left: 0;
+        right: 0;
+        height: 30px;
+        border-top: 1px solid #ddd;
+        padding-top: 0px;
+        text-align: center;
+        font-size: 10px;
+        border: 0px solid red;
+    }
+
+    .page-number {
+        text-align: right;
+        position: absolute;
+        right: 0;
+    }
+
+    main {
+        margin-top: 10px;
+    }
+</style>
 <table style="margin-top:  0px !important; padding-bottom:5px; ;width:100%;border:0px solid red;">
 
     <tr>
-        <td style="border: nonse; ;height:90px">
+        <td style="border: nonse; ;height:90px;width:200px;">
             <div style="text-align:left;    ;margin:auto;">
 
                 @if (env('APP_ENV') !== 'local')
@@ -14,7 +75,7 @@
 
             </div>
         </td>
-        <td style="text-align: center;width: 30%; border :0px solid red;padding-left:0px;margin:0px   ">
+        <td style="text-align: center;  border :0px solid red;padding-left:0px;margin:0px   ">
             <table style="width:100%">
                 <tr>
                     <td style="text-align:center;font-size:14px">
@@ -33,9 +94,9 @@
             </table>
 
         </td>
-        <td style=" text-align: right; width:35% ;margin:auto">
+        <td style=" text-align: right; width:200px; ;margin:auto">
 
-            Generated Date: <br />
+            Generated Date <br />
             {{date("Y-m-d ")}}
 
 

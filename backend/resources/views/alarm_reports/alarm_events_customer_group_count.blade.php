@@ -6,63 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alarm Customer Events Report</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            font-size: 10px;
-        }
-
-        @page {
-            margin: 100px 25px 100px 25px;
-            /* Adjust bottom margin */
-        }
-
-        @page :first {
-            @bottom-center {
-                content: "Company Name | Page {PAGE_NUM} of {PAGE_COUNT}";
-            }
-        }
-
-
-        header {
-            position: fixed;
-            top: -100px;
-            /* Start the header 100px above the top of the page */
-            left: 0;
-            right: 0;
-            height: 100px;
-            text-align: center;
-
-            padding-bottom: 10px;
-
-            border: 0px solid red;
-        }
-
-        footer {
-            position: fixed;
-            bottom: -50px;
-            height: 100px;
-            left: 0;
-            right: 0;
-            height: 30px;
-            border-top: 1px solid #ddd;
-            padding-top: 0px;
-            text-align: center;
-            font-size: 10px;
-            border: 0px solid red;
-        }
-
-        .page-number {
-            text-align: right;
-            position: absolute;
-            right: 0;
-        }
-
-        main {
-            margin-top: 10px;
-        }
-
         .table-border table {
             width: 100%;
             border-collapse: collapse;
@@ -256,7 +199,7 @@
         $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
         $font = $fontMetrics->getFont("Verdana");
         $size = 6;
-        $x = $pdf->get_width() - 50; 
+        $x = $pdf->get_width() - 50;
         $y = $pdf->get_height() - 30;
         $pdf->page_text($x, $y, $text, $font, $size);
     }
