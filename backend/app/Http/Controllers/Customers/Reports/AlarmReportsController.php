@@ -330,6 +330,7 @@ class AlarmReportsController extends Controller
     {
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
+
         $model->whereHas("device.customer");
         $modelCount = $model->clone();
 

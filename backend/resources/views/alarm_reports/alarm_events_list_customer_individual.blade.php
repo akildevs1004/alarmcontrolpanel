@@ -313,11 +313,14 @@
             <thead>
                 <tr>
                     <th>#Id</th>
-                    <th>Customer</th>
-                    <th>Property</th>
-                    <th>Address</th>
-                    <th>City</th>
                     <th>Type</th>
+                    <th>Area</th>
+                    <th>Sensor </th>
+                    <th>Source</th>
+                    <th>Wired</th>
+                    <th>Sensor Type</th>
+
+
                     <th>Event Time</th>
                     <th>Closed Time</th>
                     <th>Priority</th>
@@ -345,18 +348,15 @@
 
 
                     <td>{{ $item->id }}</td>
-                    <td>
-
-                        {{$item->device->customer?->building_name??'---'}}
-                        <div style="font-size:8px">{{ $item->device->customer?->primary_contact?->first_name ?? '---' }}
-                            {{ $item->device->customer?->primary_contact?->last_name ?? '---' }}
-                        </div>
-                    </td>
-
-                    <td>{{ $item->device->customer?->buildingtype?->name ??'---'  }} </td>
-                    <td>{{ $item->device->customer?->area ?? '---' }} </td>
-                    <td>{{ $item->device->customer?->city ?? '---' }} </td>
                     <td>{{ $item->alarm_type  }} </td>
+                    <td>{{ $item->zonedata?->location ??'---'  }}</td>
+                    <td>{{ $item->zonedata?->sensor_name ??'---'  }} </td>
+                    <td>{{ $item->alarm_source ??'---'  }} </td>
+                    <td>{{ $item->zonedata?->wired ??'---'  }} </td>
+                    <td>{{ $item->zonedata?->sensor_type ??'---'  }} </td>
+
+
+
                     <td>{{ changeDateformat($item->alarm_start_datetime)[1] }} <br /> {{ changeDateformat($item->alarm_start_datetime)[0] }} </td>
                     <td>{{ changeDateformat($item->alarm_end_datetime)[1] }} <br /> {{ changeDateformat($item->alarm_end_datetime)[0] }} </td>
                     <td>{{ $item->category->name }} </td>
