@@ -421,7 +421,7 @@
   },
   {
     "icon": "mdi-account-details-outline",
-    "title": "Customers",
+    "title": "Report1",
     "to": "/alarm/customersevents",
     "menu": "device_access",
     "module": "settings",
@@ -429,7 +429,7 @@
   },
   {
     "icon": "mdi-account-group",
-    "title": "Customers2",
+    "title": "Report2",
     "to": "/alarm/customerseventsgroup",
     "menu": "device_access",
     "module": "settings",
