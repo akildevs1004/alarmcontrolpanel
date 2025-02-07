@@ -285,7 +285,7 @@
 
 
                             <td rowspan="5" style="border:1px solid #8f8f8f; width:100px;text-align:center">
-                                <img style="border-radius:10px;height: 100px;min-height: 100px;  "
+                                <img style="border-radius:5px;height: 100px;min-height: 100px;  "
                                     src="{{ $customerLogo }}" />
                             </td>
                         </tr>
