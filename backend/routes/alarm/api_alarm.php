@@ -172,7 +172,7 @@ Route::get('customer_devices_types_stats', [CustomersController::class, "custome
 
 
 
-//api alarm logs 
+//api alarm logs
 Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
 Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
 Route::get('api_alarm_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'AlarmLogs']);
@@ -233,7 +233,7 @@ Route::get('plotting_with_customer_id', [PlottingController::class, "plottingWit
 
 
 
-//security 
+//security
 
 Route::apiResource('security', SecurityLoginController::class);
 Route::get("security-dropdownlist", [SecurityLoginController::class, "securityDropdownlist"]);
@@ -275,14 +275,14 @@ Route::get('/alarm_events_customer_group_export_excel', [AlarmReportsController:
 Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_pagenumbers']);
 
 
-//notifications 
+//notifications
 
 Route::post("alarm_forward_notification", [AlarmNotificationController::class, "sendAlarmForwardNotification"]);
 Route::get("alarm_notification_icons", [AlarmNotificationController::class, "getAlarmNotificationIcons"]);
 Route::get("get_google_icons", [AlarmNotificationController::class, "getGoogleIcons"]);
 
 
-//operator 
+//operator
 Route::get('get_operator_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEventsMapOperator']);
 Route::get('customers_for_map_operator', [CustomersController::class, "customersForMapOperator"]);
 Route::get('events_for_map_operator', [CustomersController::class, "eventsForMapOperator"]);
@@ -293,10 +293,10 @@ Route::get('operators_live_status', [SecurityLoginController::class, "getOperato
 
 
 
-//reprots 
+//reprots
 Route::get('device_armed_reports', [DeviceArmedLogsController::class, "report"]);
 
-//pdf 
+//pdf
 Route::get('device_armed_report_export_excel', [AlarmReportsController::class, 'deviceArmedReportsDownloadExcel']);
 Route::get('device_armed_report_print_pdf', [AlarmReportsController::class, 'deviceArmedReportsPrintPdf']);
 Route::get('device_armed_report_download_pdf', [AlarmReportsController::class, 'deviceArmedReportsDownload']);
@@ -304,7 +304,11 @@ Route::get('device_armed_report_download_pdf', [AlarmReportsController::class, '
 Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
 Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);
 
-//settings permissions 
+
+Route::get('alarm_notes_summary_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesSummaryPrintPdf']);
+Route::get('alarm_notes_summary_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesSummaryDownload']);
+
+//settings permissions
 Route::post('role_update_permission_pages', [RolePermissionsController::class, 'roleUpdatePermissions']);
 Route::get('role_get_permission_pages', [RolePermissionsController::class, 'getRolePermissions']);
 Route::get('get_page_roles_menu_data', [RolePermissionsController::class, 'getPageRolesMenuList']);

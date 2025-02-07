@@ -598,26 +598,77 @@
                                   <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                               </template>
-                              <v-list width="100" dense>
+                              <v-list width="150" dense>
                                 <v-list-item
-                                  @click="alarmNotesPrint(item.id, 'print')"
+                                  @click="
+                                    alarmNotesSummaryPrint(item.id, 'print')
+                                  "
                                 >
                                   <v-list-item-title style="cursor: pointer">
                                     <v-row>
-                                      <v-col cols="5"
+                                      <v-col cols="3"
                                         ><img
                                           style="padding-top: 5px"
                                           src="/icons/icon_print.png"
                                           class="iconsize"
                                       /></v-col>
                                       <v-col
-                                        cols="7"
+                                        cols="9"
                                         style="
                                           padding-left: 0px;
                                           padding-top: 19px;
                                         "
                                       >
-                                        Print
+                                        Print Summary
+                                      </v-col>
+                                    </v-row>
+                                  </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item
+                                  @click="
+                                    alarmNotesSummaryPrint(item.id, 'download')
+                                  "
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-row>
+                                      <v-col cols="3"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_pdf.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="9"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        PDF Summary
+                                      </v-col>
+                                    </v-row>
+                                  </v-list-item-title>
+                                </v-list-item>
+
+                                <v-list-item
+                                  @click="alarmNotesPrint(item.id, 'print')"
+                                >
+                                  <v-list-item-title style="cursor: pointer">
+                                    <v-row>
+                                      <v-col cols="3"
+                                        ><img
+                                          style="padding-top: 5px"
+                                          src="/icons/icon_print.png"
+                                          class="iconsize"
+                                      /></v-col>
+                                      <v-col
+                                        cols="9"
+                                        style="
+                                          padding-left: 0px;
+                                          padding-top: 19px;
+                                        "
+                                      >
+                                        Print Notes
                                       </v-col>
                                     </v-row>
                                   </v-list-item-title>
@@ -627,20 +678,20 @@
                                 >
                                   <v-list-item-title style="cursor: pointer">
                                     <v-row>
-                                      <v-col cols="5"
+                                      <v-col cols="3"
                                         ><img
                                           style="padding-top: 5px"
                                           src="/icons/icon_pdf.png"
                                           class="iconsize"
                                       /></v-col>
                                       <v-col
-                                        cols="7"
+                                        cols="9"
                                         style="
                                           padding-left: 0px;
                                           padding-top: 19px;
                                         "
                                       >
-                                        PDF
+                                        PDF Notes
                                       </v-col>
                                     </v-row>
                                   </v-list-item-title>
@@ -909,6 +960,18 @@ export default {
       if (option == "print") url += "/alarm_notes_print_pdf";
       if (option == "excel") url += "/alarm_notes_download_pdf";
       if (option == "download") url += "/alarm_notes_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&alarm_id=" + alarmId;
+
+      window.open(url, "_blank");
+    },
+    alarmNotesSummaryPrint(alarmId, option) {
+      //let option = "print";
+
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/alarm_notes_summary_print_pdf";
+      if (option == "excel") url += "/alarm_notes_download_pdf";
+      if (option == "download") url += "/alarm_notes_summary_download_pdf";
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&alarm_id=" + alarmId;
 

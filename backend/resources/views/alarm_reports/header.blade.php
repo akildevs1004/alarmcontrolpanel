@@ -66,12 +66,13 @@
             <div style="text-align:left;    ;margin:auto;">
 
                 @if (env('APP_ENV') !== 'local')
-                <img src="{{ $company->logo }}" style=" margin:auto;width:100px;max-width:150px;max-height:40px ">
+                    <img src="{{ $company->logo }}" style=" margin:auto;width:100px;max-width:150px;max-height:40px ">
                 @else
-                <img src="{{ getcwd() .   '/'.$company->logo_raw }}" style="margin:auto; width:100px;max-width:150px; ;max-height:40px  ">
+                    <img src="{{ getcwd() . '/' . $company->logo_raw }}"
+                        style="margin:auto; width:100px;max-width:150px; ;max-height:40px  ">
                 @endif
 
-                <div style=" font-size:10px;padding-top:10px"> {{$company->name}}</div>
+                <div style=" font-size:10px;padding-top:10px"> {{ $company->name }}</div>
 
             </div>
         </td>
@@ -79,13 +80,13 @@
             <table style="width:100%">
                 <tr>
                     <td style="text-align:center;font-size:14px">
-                        {{$title1}}
+                        {{ $title1 }}
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align:center">
                         @if ($title2)
-                        {{$title2 }}
+                            {{ $title2 }}
                         @endif
 
                     </td>
@@ -97,7 +98,7 @@
         <td style=" text-align: right; width:200px; ;margin:auto">
 
             Generated Date <br />
-            {{date("Y-m-d ")}}
+            {{ date('Y-m-d ') }}
 
 
         </td>
@@ -111,13 +112,14 @@
 
 </table>
 @php
-function changeDateformatTime($date)
+    function changeDateformatTime($date)
+    {
+        if ($date == '') {
+            return '---';
+        }
+        $date = new DateTime($date);
 
-{
-if($date=='') return '---';
-$date = new DateTime($date);
-
-// Format the date to the desired format
-return $date->format('M j, Y').' '.$date->format('H:i') ;
-}
+        // Format the date to the desired format
+        return $date->format('M j, Y') . ' ' . $date->format('H:i');
+    }
 @endphp

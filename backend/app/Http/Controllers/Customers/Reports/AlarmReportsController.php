@@ -161,10 +161,35 @@ class AlarmReportsController extends Controller
         $icons = (new AlarmNotificationController())->getGoogleMapIcons();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_trac', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
         return $pdf->download($request->alarm_id . "_event_track_notes.pdf");
     }
     public function alarmEventsNotesPrintPdf(Request $request)
+    {
+
+        if (!$request->filled('alarm_id')) return [];
+        $alarm =   AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "device.customer.contacts",
+            "device.company.user",
+            "notes.contact",
+            "category",
+            "device.customer.buildingtype",
+            "zoneData",
+            "security.user",
+            "pinverifiedby"
+
+        ])->where("id", $request->alarm_id)->first();
+
+        $icons = (new AlarmNotificationController())->getAlarmNotificationIcons();
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons', "company"))->setPaper('A4', 'potrait');
+        return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
+    }
+    public function alarmEventsNotesSummaryDownload(Request $request)
     {
 
         if (!$request->filled('alarm_id')) return [];
@@ -181,11 +206,35 @@ class AlarmReportsController extends Controller
 
         ])->where("id", $request->alarm_id)->first();
 
+        $icons = (new AlarmNotificationController())->getGoogleMapIcons();
+
+
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track_summary', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
+        return $pdf->download($request->alarm_id . "_event_track_notes.pdf");
+    }
+    public function alarmEventsNotesSummaryPrintPdf(Request $request)
+    {
+
+        if (!$request->filled('alarm_id')) return [];
+        $alarm =   AlarmEvents::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "device.customer.contacts",
+            "device.company.user",
+            "notes.contact",
+            "category",
+            "device.customer.buildingtype",
+            "zoneData",
+            "security.user",
+            "pinverifiedby"
+
+        ])->where("id", $request->alarm_id)->first();
+
         $icons = (new AlarmNotificationController())->getAlarmNotificationIcons();
         $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons', "company"))->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track_summary', compact('alarm', 'icons', "company"))->setPaper('A4', 'potrait');
         return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
     }
     public function deviceArmedReportsDownloadExcel(Request $request)
