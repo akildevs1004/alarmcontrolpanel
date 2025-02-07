@@ -400,7 +400,7 @@
                     <span>Date Time:
                         {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
                     </span>
-                    <div style="border : 1px solid #313131;;width:100%;height:100px;padding:5px;">
+                    <div style="border : 1px solid #313131;;width:100%;height:130px;padding:5px;">
                         @if (count($alarm->notes) == 0)
                             <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
                                 <div style="margin:auto;padding-top:50px">

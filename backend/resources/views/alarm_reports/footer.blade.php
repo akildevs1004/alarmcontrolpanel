@@ -1,7 +1,7 @@
 <table style="width:100%;text-align:center;border:0px solid black">
 
     <tr>
-        <td colspan="100%" style="background-color:black;height:5px"></td>
+        <td colspan="100%" style="background-color:#156082;height:5px"></td>
     </tr>
     <tr>
 
@@ -16,7 +16,7 @@
             <table>
                 <tr>
                     <td>
-                        <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
+                        <img style="margin :auto" src="{{ env('BASE_PUBLIC_URL') }}/icons/email.png" width="15">
                     </td>
                     <td>
                         Email: {{ $company->user->email ?? '---' }}
@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/website.png" width="15">
+                        <img style="margin :auto" src="{{ env('BASE_PUBLIC_URL') }}/icons/website.png" width="15">
                     </td>
                     <td>
                         Website:---
@@ -38,7 +38,8 @@
 
 
         </td>
-        <td style="width:33%;vertical-align: middle;height:40px;text-align:left;padding-left:50px;"><span style=" margin-left: 3px">P.O.Box
+        <td style="width:33%;vertical-align: middle;height:40px;text-align:left;padding-left:50px;"><span
+                style=" margin-left: 3px">P.O.Box
                 {{ $company->p_o_box_no == 'null' ? '---' : $company->p_o_box_no }}</span>
 
             <br />
