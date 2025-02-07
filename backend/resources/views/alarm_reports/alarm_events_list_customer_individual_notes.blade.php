@@ -458,10 +458,13 @@
                     </td>
                 </tr>
 
-
+                @php if(count($reports)>0) { @endphp
                 <tr class="my-break" style="border:0px">
                     <td colspan="7" style="border: none;text-align:center;color:red">Alarm #{{$item->id}} Notes Page End</td>
                 </tr>
+                @php } @endphp
+
+
                 @endforeach
             </tbody>
         </table>
