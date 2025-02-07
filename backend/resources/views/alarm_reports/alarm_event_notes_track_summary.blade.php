@@ -103,7 +103,7 @@
 <body>
     <!-- Header -->
     @php
-        $title1 = 'Alarm Event Notes Report';
+        $title1 = 'Alert !';
 
     @endphp
     <header>
@@ -111,7 +111,8 @@
         @include('alarm_reports.header', [
             'title1' => $title1,
             'company' => $alarm['device']['company'],
-            'title2' => '',
+            'title2' => 'Alarm Urgest',
+            'qrcode' => 'qrcode',
         ])
 
 
@@ -186,7 +187,7 @@
                 <td>
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="4" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                            <td colspan="4" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
                                 Event Details</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
@@ -269,7 +270,7 @@
                 <td style="padding-top:10px;">
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="3" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                            <td colspan="3" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
                                 Event Location</td>
                         </tr>
 
@@ -284,7 +285,7 @@
 
 
                             <td rowspan="5" style="border:1px solid #8f8f8f; width:100px;text-align:center">
-                                <img style="border-radius: 50%;height: 70px;min-height: 70px;  "
+                                <img style="border-radius: 50%;height: 100px;min-height: 100px;  "
                                     src="{{ $customerLogo }}" />
                             </td>
                         </tr>
@@ -339,8 +340,14 @@
 
             <tr>
                 <td style="padding-top:10px;">
-                    <h3>Contact Details</h3>
-                    <table class="table-border table-border-all " style="width:100%;border:1px solid red">
+
+                    <table class="table-border table-border-all " style="width:100%;border:0px solid red">
+
+
+                        <tr>
+                            <td colspan="5" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
+                                Contact Details</td>
+                        </tr>
                         <tr>
                             <th>
                                 Category
@@ -390,28 +397,31 @@
                 <td style="padding-top:10px;padding-bottom:20px">
                     <h3>Operator Notes</h3>
 
+                    <span>Date Time:
+                        {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
+                    </span>
+                    <div style="border : 1px solid #313131;;width:100%;height:100px;padding:5px;">
+                        @if (count($alarm->notes) == 0)
+                            <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
+                                <div style="margin:auto;padding-top:50px">
+                                    Operator Notes are not available
+                                </div>
 
-                    @if (count($alarm->notes) == 0)
-                        <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
-                            <div style="margin:auto;padding-top:50px">
-                                Operator Notes are not available
                             </div>
+                        @else
+                            <div style="padding-top: 10px;  ">
 
-                        </div>
-                    @else
-                        <div style="padding-top: 10px; font-size: 10px">
-                            <div>Date Time:
-                                {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
+                                <span class="bold" style="font-style:italic">
+                                </span>{{ $alarm->notes[count($alarm->notes) - 1]->notes }}
                             </div>
-                            <span class="bold" style="font-style:italic">Operator Notes:
-                            </span>{{ $alarm->notes[count($alarm->notes) - 1]->notes }}
-                        </div>
-                    @endif
+                        @endif
+
+                    </div>
                 </td>
             </tr>
 
             <tr>
-                <td style="width:100%;border-top: 1px solid #313131!important; ">
+                <td style="width:100%;border-top: 0px solid #313131!important; ">
                     <div style="color:red">Required Action:</div>
                     <div>
                         Please verify the situation and take necessary action as per the security protocol. If immediate

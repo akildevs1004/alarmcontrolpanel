@@ -83,7 +83,7 @@ class CustomersController extends Controller
         });
 
 
-        return $model->orderByDesc('id')->paginate($request->perPage);;
+        return $model->orderBy('building_name', "asc")->paginate($request->perPage);;
     }
 
     public function customerinfo(Request $request)
@@ -379,7 +379,7 @@ class CustomersController extends Controller
 
 
 
-        //verify same zone name exist in Table 
+        //verify same zone name exist in Table
         $deviceZoneDuplicate = DeviceZones::where("device_id", $request->device_id)
             ->where("zone_code", $request->zone_code);
 
@@ -428,7 +428,7 @@ class CustomersController extends Controller
             if ($deviceZone) {
 
 
-                //verify same zone name exist in Table 
+                //verify same zone name exist in Table
                 $deviceZoneDuplicate = DeviceZones::where("device_id", $request->device_id)
                     ->where("zone_code", $request->zone_code)
                     ->where("id", "!=", $request->device_zone_id);
@@ -1589,7 +1589,7 @@ class CustomersController extends Controller
 
 
                     if ($sendNotification) {
-                        //send Warning Notification 
+                        //send Warning Notification
 
                         if ($device->customer->primary_contact) {
                             $this->sendArmedWarningMail($device->customer->primary_contact, $device, $currentDateTimeFormatted, $cc_emails);

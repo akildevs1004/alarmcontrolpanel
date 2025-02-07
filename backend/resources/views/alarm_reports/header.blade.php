@@ -59,7 +59,7 @@
         margin-top: 10px;
     }
 </style>
-<table style="margin-top:  0px !important; padding-bottom:5px; ;width:100%;border:0px solid red;">
+<table style="margin-top:  0px !important; padding-bottom:5px; ;width:100%;border-bottom:1px solid #156082;">
 
     <tr>
         <td style="border: nonse; ;height:90px;width:200px;">
@@ -79,7 +79,7 @@
         <td style="text-align: center;  border :0px solid red;padding-left:0px;margin:0px   ">
             <table style="width:100%">
                 <tr>
-                    <td style="text-align:center;font-size:14px">
+                    <td style="text-align:center;font-size:14px;color:red">
                         {{ $title1 }}
                     </td>
                 </tr>
@@ -95,10 +95,14 @@
             </table>
 
         </td>
-        <td style=" text-align: right; width:200px; ;margin:auto">
+        <td style=" text-align: right; width:200px; ;margin:auto;vertical-align:middle;margin:auto">
 
-            Generated Date <br />
-            {{ date('Y-m-d ') }}
+
+            @if (!empty($qrcode))
+                <img style="width:60px;   " src="{{ env('BASE_PUBLIC_URL') }}/qrcode.png" />
+            @endif
+            <div style="font-size:9px;margin:auto">{{ date('Y-m-d ') }}</div>
+
 
 
         </td>
