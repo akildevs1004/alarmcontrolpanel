@@ -408,7 +408,7 @@
                     <div>
                         Please verify the situation and take necessary action as per the security protocol. If immediate
                         intervention is required, contact the relevant authority listed above for further assistance.
-                        Reach out to our XtremeGuard Security company operator/supervisor if needed.
+                        Reach out to our XtremeGuard Security company Operator/Supervisor if needed.
                         <br />
                         @if ($alarm->security)
                             <div style="font-weight:bold;line-height:20px">
