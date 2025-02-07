@@ -404,7 +404,8 @@
                         </tr>
 
                         <tr>
-                            <td style="border : 1px solid #8f8f8f;;width:100%;height:130px;padding:0px;">
+                            <td
+                                style="border : 1px solid #8f8f8f;;width:100%;height:130px;padding:0px;vertical-align:top">
 
                                 @if (count($alarm->notes) == 0)
                                     <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
@@ -414,7 +415,7 @@
 
                                     </div>
                                 @else
-                                    <table style="width:100%">
+                                    <table style="width:100%;vertical-align:top">
                                         <tr>
                                             <td>
 
