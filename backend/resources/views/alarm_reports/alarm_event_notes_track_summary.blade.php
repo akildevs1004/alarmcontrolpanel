@@ -283,7 +283,7 @@
                                 {{ $alarm['device']['customer']['building_name'] }}</td>
 
 
-                            <td rowspan="4" style="border:1px solid #8f8f8f; width:100px;text-align:center">
+                            <td rowspan="5" style="border:1px solid #8f8f8f; width:100px;text-align:center">
                                 <img style="border-radius: 50%;height: 70px;min-height: 70px;  "
                                     src="{{ $customerLogo }}" />
                             </td>
@@ -322,7 +322,15 @@
 
                         </tr>
 
+                        <tr style="border: 1px solid #8f8f8f;">
 
+                            <td style="font-weight:bold">Google Map </td>
+                            <td style="border-left: 1px solid #8f8f8f;">
+                                <span>https://www.google.com/maps?q={{ $alarm->device->customer->latitude }},{{ $alarm->device->customer->longitude }}</span>
+                            </td>
+
+
+                        </tr>
 
 
                     </table>
