@@ -305,7 +305,7 @@
                         </div>
                     </td>
 
-                    <td>{{ $item->device->customer?->buildingtypee?->name ??'---'  }} </td>
+                    <td>{{ $item->device->customer?->buildingtype?->name ??'---'  }} </td>
                     <td>{{ $item->device->customer?->area ?? '---' }} </td>
                     <td>{{ $item->device->customer?->city ?? '---' }} </td>
                     <td>{{ $item->alarm_type  }} </td>
