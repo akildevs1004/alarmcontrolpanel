@@ -66,13 +66,13 @@
             <div style="text-align:left;    ;margin:auto;">
 
                 @if (env('APP_ENV') !== 'local')
-                    <img src="{{ $company->logo }}" style=" margin:auto;width:100px;max-width:150px;max-height:40px ">
+                    <img src="{{ $company->logo }}" style=" margin:auto;width:70px;max-width:70px;   ">
                 @else
                     <img src="{{ getcwd() . '/' . $company->logo_raw }}"
-                        style="margin:auto; width:100px;max-width:150px; ;max-height:40px  ">
+                        style="margin:auto; width:70px;max-width:70px;    ">
                 @endif
 
-                <div style=" font-size:10px;padding-top:10px"> {{ $company->name }}</div>
+                {{-- <div style=" font-size:10px;padding-top:10px"> {{ $company->name }}</div> --}}
 
             </div>
         </td>
@@ -99,9 +99,10 @@
 
 
             @if (!empty($qrcode))
-                <img style="width:60px;   " src="{{ env('BASE_PUBLIC_URL') }}/qrcode.png" />
+                <img style="width:80px;   " src="{{ env('BASE_PUBLIC_URL') }}/qrcode.png" />
             @endif
-            <div style="font-size:9px;margin:auto">{{ date('Y-m-d ') }}</div>
+
+            <div style="font-size:9px;margin:auto">SCAN {{ date('Y-m-d ') }}</div>
 
 
 

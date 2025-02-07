@@ -179,7 +179,7 @@
         }
     @endphp
     <main>
-
+        <br />
 
         <table style="width:100%;font-size:12px">
 
@@ -187,7 +187,7 @@
                 <td>
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="4" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
+                            <td colspan="4" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
                                 Event Details</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
@@ -270,7 +270,7 @@
                 <td style="padding-top:10px;">
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="3" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
+                            <td colspan="3" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
                                 Event Location</td>
                         </tr>
 
@@ -345,7 +345,7 @@
 
 
                         <tr>
-                            <td colspan="5" style="background-color:#156082;height:20px;color:#FFF;font-size:16px">
+                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
                                 Contact Details</td>
                         </tr>
                         <tr>
@@ -395,11 +395,17 @@
 
             <tr>
                 <td style="padding-top:10px;padding-bottom:20px">
-                    <h3>Operator Notes</h3>
 
-                    <span>Date Time:
-                        {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
-                    </span>
+
+                    <table class="table-border-top" style="width:100%">
+                        <tr>
+                            <td colspan="4" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                                Operator Notes</td>
+                        </tr>
+
+                    </table>
+
+
                     <div style="border : 1px solid #313131;;width:100%;height:130px;padding:5px;">
                         @if (count($alarm->notes) == 0)
                             <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
@@ -409,10 +415,33 @@
 
                             </div>
                         @else
+                            <table style="width:100%">
+                                <tr>
+                                    <td>
+
+                                        <span>Date Time:
+                                            {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                        Operator:
+                                        {{ $alarm->notes[count($alarm->notes) - 1]->security ? ucfirst($alarm->notes[count($alarm->notes) - 1]->security->first_name) . ' ' . ucfirst($alarm->notes[count($alarm->notes) - 1]->security->last_name) : '---' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                        Note: {{ $alarm->notes[count($alarm->notes) - 1]->notes }}
+                                    </td>
+                                </tr>
+                            </table>
                             <div style="padding-top: 10px;  ">
 
                                 <span class="bold" style="font-style:italic">
-                                </span>{{ $alarm->notes[count($alarm->notes) - 1]->notes }}
+                                </span>
                             </div>
                         @endif
 
