@@ -223,7 +223,7 @@ class AlarmReportsController extends Controller
     {
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
-
+        $model->whereHas("device.customer");
         $modelCount = $model->clone();
         $countResults = $modelCount->selectRaw("
                 COUNT(CASE WHEN alarm_type = 'SOS'    THEN 1 END) as sosCount,
@@ -256,7 +256,7 @@ class AlarmReportsController extends Controller
     {
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
-
+        $model->whereHas("device.customer");
         $modelCount = $model->clone();
 
 
@@ -293,7 +293,7 @@ class AlarmReportsController extends Controller
     {
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
-
+        $model->whereHas("device.customer");
         $modelCount = $model->clone();
 
 
@@ -330,7 +330,7 @@ class AlarmReportsController extends Controller
     {
 
         $model =   (new CustomerAlarmEventsController())->filter($request);
-
+        $model->whereHas("device.customer");
         $modelCount = $model->clone();
 
 
