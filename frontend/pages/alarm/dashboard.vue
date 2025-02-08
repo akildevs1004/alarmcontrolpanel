@@ -78,7 +78,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/alarm_icons/google_offline.png"
+                      src="/alarm_icons/google_medical_alarm.png"
                       style="width: 25px"
                     />
                   </v-col>
@@ -91,7 +91,7 @@
 
                       color: black;
                     "
-                    >Technical</v-col
+                    >Medical</v-col
                   ><v-col
                     class="d-flex justify-center"
                     style="
@@ -100,7 +100,7 @@
                       font-weight: bold;
                       color: red;
                     "
-                    >{{ data ? data.technicalCount : 0 }}</v-col
+                    >{{ data ? data.medicalCount : 0 }}</v-col
                   ></v-row
                 ></v-card-text
               ></v-card
@@ -189,7 +189,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/alarm_icons/google_alarm.png"
+                      src="/alarm_icons/google_fire_alarm.png"
                       style="width: 25px"
                     />
                   </v-col>
@@ -202,7 +202,7 @@
 
                       color: black;
                     "
-                    >Event</v-col
+                    >Fire</v-col
                   ><v-col
                     class="d-flex justify-center"
                     style="
@@ -211,7 +211,7 @@
                       font-weight: bold;
                       color: red;
                     "
-                    >{{ data ? data.eventsCount : 0 }}</v-col
+                    >{{ data ? data.fireCount : 0 }}</v-col
                   ></v-row
                 ></v-card-text
               ></v-card
@@ -234,9 +234,7 @@
                       <v-card-text class="m-0 p-0">
                         <v-row
                           ><v-col style="height: 20px">
-                            <img
-                              src="/icons/medical_icon.png"
-                              style="width: 25px"
+                            <img src="/icons/techical.png" style="width: 25px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -249,10 +247,10 @@
                           >
                             <div style="font-size: 30px">
                               {{
-                                categoriesStats ? categoriesStats.medical : 0
+                                categoriesStats ? categoriesStats.techinical : 0
                               }}
                             </div>
-                            <div style="padding-top: 5px">Medical</div>
+                            <div style="padding-top: 5px">Technical</div>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -265,9 +263,7 @@
                       <v-card-text class="m-0 p-0">
                         <v-row
                           ><v-col style="height: 20px"
-                            ><img
-                              src="/icons/fire_icon.png"
-                              style="width: 25px"
+                            ><img src="/icons/intruder.png" style="width: 25px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -279,9 +275,9 @@
                             "
                           >
                             <div style="font-size: 30px">
-                              {{ categoriesStats ? categoriesStats.fire : 0 }}
+                              {{ categoriesStats ? categoriesStats.events : 0 }}
                             </div>
-                            <div style="padding-top: 5px">Fire</div>
+                            <div style="padding-top: 5px">Events</div>
                           </v-col>
                         </v-row>
                       </v-card-text>

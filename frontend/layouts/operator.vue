@@ -160,7 +160,7 @@
                   menuProperties[items.menu].selected
                 "
                 fill
-                @click="setSubLeftMenuItems(items.menu, items.to)"
+                @click="setSubLeftMenuItems(items.menu, items.to, true, false)"
               >
                 <b class="header-menu-item">
                   {{ items.title }}
@@ -396,14 +396,14 @@
                     Device Location :{{ device?.branch?.location }}
                   </div>
                 </v-col>
-              </v-row> 
+              </v-row>
 
               <div></div>-->
               <!-- <div>
                  <div style="color: green">
                   <strong>Note: </strong>All Branch Level Doors are Opened
                 </div>
-                <br />  
+                <br />
                 Check Devices list and Turn off Alarm to Close this popup.
 
                 <v-btn
@@ -579,7 +579,7 @@ import company_top_menu from "../menus/company_modules_top.json";
 
 import employee_top_menu from "../menus/employee_modules_top.json";
 
-import controlpanel_top_menu from "../menus/security_operator_top_menu.json";
+import controlpanel_top_menu from "../menus/operator_operator_top_menu.json";
 
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
 import TopMenuClock from "../components/Operator/TopMenuClock.vue";
@@ -624,6 +624,10 @@ export default {
         },
 
         operator_eventslist: {
+          elevation: 0,
+          selected: "",
+        },
+        operator_map: {
           elevation: 0,
           selected: "",
         },
@@ -897,11 +901,15 @@ export default {
       const routeMap = {
         "operator-eventslist": {
           name: "operator_eventslist",
-          path: "/operator/tickets",
+          path: "/operator/eventslist",
         },
         "operator-dashboard": {
           name: "operator_dashboard",
           path: "/operator/dashboard",
+        },
+        "operator-map": {
+          name: "operator_map",
+          path: "/operator/map",
         },
       };
 
@@ -1295,43 +1303,73 @@ export default {
     },
 
     //change selected menu color
-    setSubLeftMenuItems(menu_name, page, redirect = true) {
-      console.log("menu_name", menu_name);
+    setSubLeftMenuItems(menu_name, page, redirect = true, hilightmenu = true) {
+      if (
+        this.$route.name == "operator-eventslist" ||
+        this.$route.name == "operator-map"
+      ) {
+        hilightmenu = true;
+      }
+      console.log("menu_name", menu_name, hilightmenu);
 
       this.topMenu_Selected = menu_name;
+      let bgColor = "";
+      if (hilightmenu) {
+        bgColor = "violet";
 
-      let bgColor = "violet";
-      this.setMenus();
+        this.setMenus();
 
-      // Check if menu_name exists in menuProperties// data sesction
-      if (this.menuProperties.hasOwnProperty(menu_name)) {
-        for (const key in this.menuProperties) {
-          this.menuProperties[key].elevation = 0;
-          this.menuProperties[key].selected = "";
+        // Check if menu_name exists in menuProperties// data sesction
+        if (this.menuProperties.hasOwnProperty(menu_name)) {
+          for (const key in this.menuProperties) {
+            this.menuProperties[key].elevation = 0;
+            this.menuProperties[key].selected = "";
+          }
+
+          this.menuProperties[menu_name].elevation = 0;
+          this.menuProperties[menu_name].selected = bgColor;
         }
+        //alarm menu select color
+        if (this.menuProperties.hasOwnProperty(menu_name)) {
+          for (const key in this.menuProperties) {
+            this.menuProperties[key].elevation = 0;
+            this.menuProperties[key].selected = "";
+          }
 
-        this.menuProperties[menu_name].elevation = 0;
-        this.menuProperties[menu_name].selected = bgColor;
-      }
-      //alarm menu select color
-      if (this.menuProperties.hasOwnProperty(menu_name)) {
-        for (const key in this.menuProperties) {
-          this.menuProperties[key].elevation = 0;
-          this.menuProperties[key].selected = "";
+          this.menuProperties[menu_name].elevation = 0;
+          this.menuProperties[menu_name].selected = bgColor;
         }
-
-        this.menuProperties[menu_name].elevation = 0;
-        this.menuProperties[menu_name].selected = bgColor;
       }
       try {
         if (
-          menu_name == "operator_eventslist" &&
-          window &&
-          redirect &&
-          this.$route.name != "operator-eventslist"
-        )
-          window.open(this.$router.resolve(page).href, "_blank");
-        else if (redirect) return this.$router.push(page);
+          this.$route.name == "operator-eventslist" ||
+          this.$route.name == "operator-map" ||
+          menu_name == "operator_dashboard"
+        ) {
+          return this.$router.push(page);
+        }
+        const pageUrl = this.$router.resolve(page).href;
+        this.openOrFocusWindow(menu_name, pageUrl);
+
+        return false;
+
+        // const redirectPages = {
+        //   operator_map: "operator-map",
+        //   operator_dashboard: "operator-dashboard",
+        //   operator_eventslist: "operator-eventslist",
+        // };
+        // if (
+        //   this.$route.name == redirectPages[menu_name] ||
+        //   menu_name == "operator-dashboard"
+        // ) {
+        //   return this.$router.push(page);
+        // }
+
+        // if (menu_name in redirectPages && window && redirect) {
+        //   this.openOrFocusWindow(menu_name, pageUrl);
+        // } else if (redirect) {
+        //   return this.$router.push(page);
+        // }
       } catch (error) {}
     },
 
@@ -1343,7 +1381,13 @@ export default {
         (item) => item.top_menu_name === this.topMenu_Selected
       );
     },
+    openOrFocusWindow(menu_name, url) {
+      const windowFeatures =
+        "width=1500px,height=800,top=100,left=100,resizable=yes";
+      console.log("windowFeatures", windowFeatures);
 
+      return window.open(url, menu_name, windowFeatures);
+    },
     changeLoginType() {
       try {
         // if (this.getLoginType == "branch")
@@ -1556,7 +1600,7 @@ export default {
 
   min-width: 250px !important;
   max-width: 250px !important;
-  /* 
+  /*
   min-width: 450px !important;
   max-width: 450px !important; */
 }

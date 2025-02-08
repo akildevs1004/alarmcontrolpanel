@@ -25,7 +25,13 @@ class AlarmDashboardController extends Controller
 
     public function dashboardStatisctsCustomers(Request $request)
     {
-        $totalCustomers = Customers::where("company_id", $request->company_id)->where("deleted", 0)->count();
+        $totalCustomers = Customers::where("company_id", $request->company_id)->where("deleted", 0)
+
+            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                $q->whereIn("id", $request->filter_customers_list);
+            })
+
+            ->count();
         $deviceCounts = Device::where("company_id", $request->company_id)
 
             // ->whereHas('customer', function ($query) {
@@ -36,7 +42,15 @@ class AlarmDashboardController extends Controller
             ->where("device_type", "!=", "Manual")
             ->where("device_id", "!=", "Manual")
             ->where("serial_number", "!=", null)
-            ->selectRaw("             
+
+            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                $q->whereIn("customer_id", $request->filter_customers_list);
+            })
+
+
+
+
+            ->selectRaw("
         COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
         COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
         COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
@@ -50,6 +64,13 @@ class AlarmDashboardController extends Controller
 ")
 
             ->whereDate("alarm_start_datetime", $request->date)
+
+            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                $q->whereIn("customer_id", $request->filter_customers_list);
+            })
+
+
+
             ->first();
 
 
@@ -78,14 +99,16 @@ class AlarmDashboardController extends Controller
             $j = $i <= 9 ? "0" . $i : $i;
 
 
-            $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("             
+            $counts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("
                 COUNT(CASE WHEN alarm_type = 'SOS' THEN 1   END) as sosCount,
                 COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' THEN 1  END) as crititalCount,
                 COUNT(CASE WHEN alarm_category = 2 AND alarm_type != 'SOS' THEN 1   END) as mediumCount,
                 COUNT(CASE WHEN alarm_category = 3 AND alarm_type != 'SOS' THEN 1   END) as lowCount
             ")->where('alarm_start_datetime', '>=', $date_from . ' ' . $j . ':00:00')
                 ->where('alarm_start_datetime', '<=', $date_to  . ' ' . $j . ':59:59')
-
+                ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                    $model->whereIn('customer_id', $request->filter_customers_list);
+                })
                 ->first();
             $finalarray[] = [
                 "hour" => $i,
@@ -124,9 +147,23 @@ class AlarmDashboardController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
                 COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
                 COUNT(CASE WHEN alarm_category = 2 AND alarm_status =1 THEN 1 END) as mediumCount,
-                COUNT(CASE WHEN alarm_category = 3 AND alarm_status =1 THEN 1 END) as lowCount
+                COUNT(CASE WHEN alarm_category = 3 AND alarm_status =1 THEN 1 END) as lowCount,
+
+  COUNT(CASE WHEN alarm_type = 'Temperature' AND alarm_status =1 THEN 1 END) as temperatureCount,
+                COUNT(CASE WHEN alarm_type = 'Water' AND alarm_status =1 THEN 1 END) as waterCount,
+                COUNT(CASE WHEN alarm_type = 'Medical' AND alarm_status =1 THEN 1 END) as medicalCount,
+                COUNT(CASE WHEN alarm_type = 'Fire' AND alarm_status =1 THEN 1 END) as fireCount
+
+
+
             ")
                 ->whereDate("alarm_start_datetime", $date)
+
+                ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                    $model->whereIn('customer_id', $request->filter_customers_list);
+                })
+
+
                 ->first();
             $finalarray[] = [
                 "date" => $date,
@@ -136,7 +173,11 @@ class AlarmDashboardController extends Controller
                 "technicalCount" => $counts->technicalcount ?? 0,
                 "eventsCount" => $counts->eventscount ?? 0,
                 "mediumCount" => $counts->mediumcount ?? 0,
-                "lowCount" => $counts->lowCount ?? 0,
+                "temperatureCount" => $counts->temperatureCount ?? 0,
+                "waterCount" => $counts->waterCount ?? 0,
+                "medicalCount" => $counts->medicalCount ?? 0,
+                "fireCount" => $counts->fireCount ?? 0,
+
             ];
         }
 
@@ -165,6 +206,11 @@ class AlarmDashboardController extends Controller
             ->where("device_type", "!=", "Manual")
             ->where("device_id", "!=", "Manual")
             ->where("serial_number", "!=", null);
+
+
+        $model->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+            $model->whereIn('customer_id', $request->filter_customers_list);
+        });
 
         $totalCount = $model->clone()->count();
         $armedCount =  $model->clone()->where("armed_status", 1)->count();
@@ -289,15 +335,25 @@ class AlarmDashboardController extends Controller
                     $request['date_from'] . ' 23:59:59'
                 ]);
             })
+            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                $q->whereIn("customer_id", $request->filter_customers_list);
+            })
+
+
+
             ->selectRaw('
-            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' THEN 1  END), 0) AS burglary,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' THEN 1   END), 0) AS medical,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' THEN 1   END), 0) AS temperature,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' THEN 1 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' THEN 1 END), 0) AS fire,
-            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' THEN 1   END), 0) AS sos,
-            COALESCE(SUM(CASE WHEN alarm_category = \'1\' THEN 1   END), 0) AS critical 
-            
+            COALESCE(SUM(CASE WHEN alarm_type = \'Burglary\' and alarm_status=1 THEN 1  END), 0) AS burglary,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' and alarm_status=1 THEN 1   END), 0) AS medical,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' and alarm_status=1 THEN 1   END), 0) AS temperature,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Water\' and alarm_status=1 THEN 1 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' and alarm_status=1 THEN 1 END), 0) AS fire,
+            COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' and alarm_status=1 THEN 1   END), 0) AS sos,
+            COALESCE(SUM(CASE WHEN alarm_category = \'1\' and alarm_status=1 THEN 1   END), 0) AS critical,
+ COALESCE(SUM(CASE WHEN alarm_type = \'Offline\' and alarm_status=1  THEN 1 END), 0) AS techinical,
+            COALESCE(SUM(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != \'SOS\'   AND alarm_category != 1 and alarm_status=1 THEN 1 END), 0) AS events
+
+
+
 
 
         ')
@@ -320,17 +376,17 @@ class AlarmDashboardController extends Controller
 
             ->selectRaw('
             COALESCE(SUM(CASE WHEN alarm_type = \'Intruder\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS intruder,
-            
+
             COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS sos,
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS medical,
             COALESCE(SUM(CASE WHEN alarm_type = \'ac_off\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1  END), 0) AS ac_off,
             COALESCE(SUM(CASE WHEN alarm_category = \'1\' AND alarm_status = 1 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ') THEN 1   END), 0) AS critical,
-           
+
               (SELECT COUNT(*) FROM devices WHERE status_id = 2 AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS offline,
 
-              
+
              (SELECT COUNT(*) FROM devices WHERE armed_status = 1   AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS armed,
-              (SELECT COUNT(*) FROM devices WHERE armed_status = 0  AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS disarm 
+              (SELECT COUNT(*) FROM devices WHERE armed_status = 0  AND customer_id IN (' . implode(',', $request->filter_customers_list) . ')) AS disarm
         ')
 
             ->first();

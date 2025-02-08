@@ -201,35 +201,11 @@ export default {
     };
   },
   mounted() {
-    // setInterval(() => {
-    //   if (this.$route.name == "alarm-dashboard") this.loadDevicesStatistics();
-    // }, 1000 * 20);
-    // this.loadDevicesStatistics();
-
     if (this.componentData) {
       this.renderChartComponent();
     }
   },
   methods: {
-    // showDialogEvents() {
-    //   this.key += 1;
-    //   this.dialogDevicesList = true;
-    // },
-    // applyFilter() {
-    //   this.loadDevicesStatistics();
-    // },
-    // loadDevicesStatistics() {
-    //   let options = {
-    //     params: {
-    //       company_id: this.$auth.user.company_id,
-    //     },
-    //   };
-
-    //   this.$axios.get(`/device_armed_stats`, options).then(({ data }) => {
-    //     this.categories = data;
-    //     this.renderChart1(data);
-    //   });
-    // },
     async renderChartComponent() {
       if (this.componentData) {
         this.chartOptions.labels[0] = this.componentData.labels[0];
@@ -258,47 +234,7 @@ export default {
         this.chart.render();
       }
     },
-    // async renderChart1(data) {
-    //   let counter = 0;
-    //   let total = 1000;
-
-    //   // this.chartOptions.labels[0] = "Total";
-    //   // this.chartOptions.series[0] = data.total;
-
-    //   this.chartOptions.labels[0] = "Armed";
-    //   this.chartOptions.series[0] = 10; // data.armed;
-
-    //   this.chartOptions.labels[1] = "DisArm";
-    //   this.chartOptions.series[1] = 20; // data.total - data.armed;
-
-    //   this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
-
-    //   if (this.chart) {
-    //     this.chart.destroy();
-    //   }
-
-    //   // Render the chart
-    //   this.chart = await new ApexCharts(
-    //     document.querySelector("#" + this.name),
-    //     this.chartOptions
-    //   );
-    //   this.chart.render();
-    // },
   },
-  created() {
-    // try {
-    //   this.items.forEach((element) => {
-    //     this.totalCount += element.value;
-    //   });
-    //   this.options.labels = this.items.map((e) => e.title);
-    //   this.options.series = this.items.map((e) => e.value);
-    //   new ApexCharts(document.querySelector("#pie2"), this.options).render();
-    // } catch (error) {}
-  },
+  created() {},
 };
 </script>
-<!-- <style>
-.apexcharts-datalabel-label {
-  margin-top: 10px !important;
-}
-</style> -->

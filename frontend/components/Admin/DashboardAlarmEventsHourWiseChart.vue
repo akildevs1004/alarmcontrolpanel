@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       loading: false,
-      display_title: "Alarm Events - Hourly ",
+      display_title: "Alarm Events - Hourly",
       date_from: "",
       date_to: "",
       series: [
@@ -107,7 +107,7 @@ export default {
     setTimeout(() => {
       this.getDataFromApi();
     }, 1000 * 10);
-    if (this.$route.page == "alarm-intruderdashboard") {
+    if (this.$route.page == "operator-dashboard") {
       setInterval(() => {
         this.getDataFromApi();
       }, 1000 * 30);

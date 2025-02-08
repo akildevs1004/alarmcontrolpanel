@@ -770,7 +770,6 @@ export default {
             // this.mapMarkersList = [];
 
             // //this.plotLocations();
-            console.log(this.data.length);
 
             if (this.data.length == 0) this.selectedAlarm = null;
           });
