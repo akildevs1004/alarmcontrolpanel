@@ -7,7 +7,7 @@
         </h3>
       </v-col>
       <v-col md="2" class="text-end">
-        <v-menu bottom left>
+        <!-- <v-menu bottom left>
           <template v-slot:activator="{ on, attrs }">
             <v-btn dark-2 icon v-bind="attrs" v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
@@ -20,7 +20,7 @@
               </v-list-item-title>
             </v-list-item>
           </v-list>
-        </v-menu>
+        </v-menu> -->
       </v-col>
     </v-row>
 
