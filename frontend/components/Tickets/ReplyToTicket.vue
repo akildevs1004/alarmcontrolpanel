@@ -6,7 +6,7 @@
       </v-snackbar>
     </div>
 
-    <v-row>
+    <v-row v-if="messageReply">
       <v-col md="12" sm="12" cols="12" dense>
         <v-card class="elevation-0 p-2 pa-2" style="border: 1px solid #ddd">
           <v-row>
@@ -24,7 +24,7 @@
                     type="text"
                     v-model="payload_ticket.description"
                     hide-details
-                    rows="8"
+                    rows="4"
                   ></v-textarea>
                   <!-- <ClientOnly style-="height:600px">
                     <tiptap-vuetify
@@ -53,7 +53,6 @@
             <v-col cols="6">
               <div style="float: right">
                 <v-checkbox
-                  style="color: red"
                   v-model="payload_ticket.status"
                   label="Close Ticket"
                 ></v-checkbox>
@@ -82,7 +81,7 @@
                         class="smalltextbox"
                         v-model="d.file"
                         placeholder="Upload your file"
-                        :rules="FileRules"
+                        accept=".jpg,.png,.pdf"
                       >
                         <template v-slot:selection="{ text }">
                           <v-chip v-if="text" small label color="primary">
@@ -164,7 +163,7 @@
 // } from "tiptap-vuetify";
 import TicketResponses from "./TicketResponses.vue";
 export default {
-  props: ["editItem", "editId"],
+  props: ["editItem", "editId", "messageReply"],
   components: {
     // TiptapVuetify,
     TicketResponses,
@@ -200,10 +199,23 @@ export default {
 
     FileRules: [
       (value) => {
-        console.log("File value:", value); // Debugging to see the value being validated
-        if (!value || typeof value !== "object") return true;
-        if (value.size < 200000) return true;
-        return "File size should be less than 200 KB!";
+        console.log("File value:", value); // Debugging
+
+        try {
+          if (!value) return true; // Allow empty file (if not required)
+          if (Array.isArray(value) && value.length === 0) return true; // Handle empty array case
+
+          const file = Array.isArray(value) ? value[0] : value; // Handle single or multiple file uploads
+
+          if (!(file instanceof File)) return "Invalid file format!";
+          if (file.size > 200000)
+            return "File size should be less than 200 KB!";
+
+          return true;
+        } catch (e) {
+          console.error("File validation error:", e);
+          return "File validation failed!";
+        }
       },
     ],
 

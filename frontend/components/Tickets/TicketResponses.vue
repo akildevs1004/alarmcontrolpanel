@@ -13,10 +13,16 @@
         focusable
         v-if="ticket?.responses"
       >
-        <v-expansion-panel v-for="(item, i) in ticket.responses" :key="i">
-          <v-expansion-panel-header style="min-height: 25px">
+        <v-expansion-panel
+          style="margin-bottom: 10px"
+          v-for="(item, i) in ticket.responses"
+          :key="i"
+        >
+          <v-expansion-panel-header
+            style="min-height: 25px; background-color: #8f8f8f; color: #fff"
+          >
             <v-row :class="item.is_read ? '' : 'bold'">
-              <v-col cols="6">
+              <v-col>
                 <div
                   v-if="
                     item.customer_id &&
@@ -46,8 +52,16 @@
                 </div>
                 <div v-else>Admin/Unknown</div>
               </v-col>
-              <v-col cols="6" style="text-align: right">
-                <v-icon size="20">mdi-clock-time-four-outline</v-icon>
+
+              <v-col style="max-width: 50px">
+                <v-icon v-if="item?.attachments?.length" color="#FFF"
+                  >mdi-arrow-down-bold-circle</v-icon
+                ></v-col
+              >
+              <v-col style="text-align: right; max-width: 180px">
+                <v-icon size="20" color="#FFF"
+                  >mdi-clock-time-four-outline</v-icon
+                >
                 {{ item.created_datetime }}</v-col
               >
             </v-row>
@@ -94,7 +108,8 @@ export default {
 
   data: () => ({ snackbar: false, response: "", panel: [] }),
   created() {
-    if (this.ticket && this.expandPanels) {
+    //if (this.ticket && this.expandPanels)
+    {
       for (var i = 0; i < this.ticket.responses.length; i++) {
         this.panel.push(i);
       }

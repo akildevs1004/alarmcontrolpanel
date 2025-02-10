@@ -8,7 +8,7 @@
 
     <v-card class="elevation-0 p-2" style="padding: 5px">
       <v-row>
-        <v-col cols="12" style="height: 300px">
+        <v-col cols="12" style="height: 150px">
           <v-row class="pt-0">
             <v-col>
               <h3>Subject: {{ payload_ticket.subject }}</h3>
@@ -45,7 +45,7 @@
     <v-row>
       <v-col cols="12" class="text-right">
         <TicketResponses
-          :expandPanels="false"
+          :expandPanels="true"
           v-if="editItem"
           :ticket="editItem"
           @updateTicketReadStatus="updateTickets"

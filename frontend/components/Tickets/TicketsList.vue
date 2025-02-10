@@ -27,7 +27,7 @@
     <v-dialog v-model="dialogReply" max-width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense> Reply to Ticket</span>
+          <span dense> Ticket Information</span>
           <v-spacer></v-spacer>
           <v-icon @click="dialogReply = false" outlined>
             mdi mdi-close-circle
@@ -39,6 +39,7 @@
             :editId="editId"
             :editItem="editItem"
             :ticketId="ticketId"
+            :messageReply="messageReply"
             @close_dialog="close_dialog_reaction"
           />
         </v-card-text>
@@ -68,73 +69,70 @@
       </v-card>
     </v-dialog>
     <v-card>
-      <v-row>
-        <v-col cols="12" style="padding-top: 0px">
-          <v-row v-if="!filterWord">
-            <v-col><h3 class="pl-5" v-if="status">Active Tickets</h3></v-col>
-            <v-col class="text-right" style="max-width: 550px">
-              <v-row>
-                <v-co class="mt-5">
-                  <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-                </v-co>
-                <v-col style="max-width: 250px; padding-right: 25px"
-                  ><v-text-field
-                    style="padding-top: 7px"
-                    height="20"
-                    class="employee-schedule-search-box"
-                    @input="getDataFromApi()"
-                    v-model="commonSearch"
-                    label="Common Search"
-                    dense
-                    outlined
-                    type="text"
-                    append-icon="mdi-magnify"
-                    clearable
-                    hide-details
-                  ></v-text-field
-                ></v-col>
-                <v-col style="max-width: 200px">
-                  <CustomFilter
-                    v-if="displayDateFilter"
-                    style="float: right; padding-top: 5px; z-index: 9"
-                    @filter-attr="filterAttr"
-                    :default_date_from="date_from"
-                    :default_date_to="date_to"
-                    :defaultFilterType="1"
-                    :height="'40px'" /></v-col
-                ><v-col
-                  v-if="technician_id == null"
-                  class="pt-5"
-                  style="max-width: 80px"
-                >
-                  <v-btn
-                    v-if="can('tickets_create')"
-                    title="Add Ticket"
-                    x-small
-                    :ripple="false"
-                    text
-                    @click="addItem()"
-                  >
-                    <v-icon class="">mdi mdi-plus-circle</v-icon>
-                  </v-btn>
-                </v-col>
-                <v-col v-if="technician_id != null" style="max-width: 160px">
-                  <v-select
-                    @change="getDataFromApi()"
-                    :items="[
-                      { text: 'All', value: '' },
-                      { text: 'Operator', value: 'security' },
-                      { text: 'Customer', value: 'customer' },
-                    ]"
-                    v-model="filterRequestfrom"
-                    outlined
-                    dense
-                    height="20px"
-                    class="employee-schedule-search-box"
-                  >
-                  </v-select>
-                </v-col>
-                <!--<v-col style="margin-top: 10px">
+      <v-row v-if="!filterWord">
+        <v-col class="pl-4"><h3 v-if="status">Active Tickets</h3></v-col>
+
+        <v-col style="max-width: 40px; padding-top: 20px">
+          <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+        </v-col>
+        <v-col style="max-width: 300px"
+          ><v-text-field
+            style="padding-top: 7px; width: 250px"
+            height="20"
+            class="employee-schedule-search-box"
+            @input="getDataFromApi()"
+            v-model="commonSearch"
+            label="Common Search"
+            dense
+            outlined
+            type="text"
+            append-icon="mdi-magnify"
+            clearable
+            hide-details
+          ></v-text-field
+        ></v-col>
+        <v-col style="max-width: 200px; padding-right: 20px">
+          <CustomFilter
+            v-if="displayDateFilter"
+            style="float: right; padding-top: 5px; z-index: 9"
+            @filter-attr="filterAttr"
+            :default_date_from="date_from"
+            :default_date_to="date_to"
+            :defaultFilterType="1"
+            :height="'40px'" /></v-col
+        ><v-col
+          v-if="technician_id == null && can('tickets_create')"
+          class="pt-5"
+          style="max-width: 80px"
+        >
+          <v-btn
+            title="Add Ticket"
+            x-small
+            :ripple="false"
+            text
+            @click="addItem()"
+          >
+            <v-icon class="">mdi mdi-plus-circle</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col style="max-width: 160px" class="pt-5">
+          <v-select
+            @change="getDataFromApi()"
+            :items="[
+              { text: 'All', value: '' },
+              { text: 'Operator', value: 'security' },
+              { text: 'Customer', value: 'customer' },
+            ]"
+            v-model="filterRequestfrom"
+            outlined
+            dense
+            height="20px"
+            class="employee-schedule-search-box"
+            hide-details
+          >
+          </v-select>
+        </v-col>
+        <!--<v-col style="margin-top: 10px">
                   <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -201,13 +199,10 @@
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
-                  </v-menu> 
+                  </v-menu>
                 </v-col>-->
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
       </v-row>
+
       <v-row>
         <v-col>
           <v-data-table
@@ -236,7 +231,8 @@
             </template>
             <template v-slot:item.subject="{ item }">
               <div :title="item.subject">
-                {{ item.subject.slice(0, 10) }}...
+                <!-- {{ item.subject.slice(0, 10) }} -->
+                {{ item.subject }}
               </div>
             </template>
             <template v-slot:item.customer="{ item }">
@@ -244,19 +240,16 @@
                 :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-if="item.customer"
               >
-                Customer
-                <div class="secondary-value">
-                  {{ item.customer.building_name }}
-                </div>
+                {{ item.customer.building_name }}
+                <div class="secondary-value">Customer</div>
               </div>
               <div
                 :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-else-if="item.security"
               >
-                Operator
-                <div class="secondary-value">
-                  {{ item.security.first_name }} {{ item.security.last_name }}
-                </div>
+                {{ item.security.first_name }} {{ item.security.last_name }}
+
+                <div class="secondary-value">Operator</div>
               </div>
               <div
                 :class="getIsReadStatus(item) ? '' : 'bold'"
@@ -270,7 +263,9 @@
               </div>
             </template>
             <template v-slot:item.ticket_responses="{ item }">
-              <div>{{ item.responses?.length || 0 }}</div>
+              <div @click="addReply(item, false)">
+                {{ item.responses?.length || 0 }}
+              </div>
             </template>
             <template v-slot:item.last_active_datetime="{ item }">
               <div>
@@ -321,7 +316,7 @@
                         <v-icon color="secondary" small> mdi-pencil </v-icon>
                         Edit
                       </v-list-item-title>
-                    </v-list-item> 
+                    </v-list-item>
                     <v-list-item
                       v-if="can('branch_edit')"
                       @click="deleteNotes(item.id)"
@@ -362,6 +357,7 @@ export default {
   ],
   data() {
     return {
+      messageReply: true,
       filterRequestfrom: "",
       displayDateFilter: false,
       dialogViewTicket: false,
@@ -385,12 +381,10 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       headers: [
-        { text: "Requested Date", value: "created_datetime", sortable: false },
         { text: "Ticket ID", value: "id", sortable: false },
 
-        { text: "Subject", value: "subject", sortable: false },
         { text: "Created By", value: "customer", sortable: false },
-        { text: "Reply Count", value: "ticket_responses", sortable: false },
+        { text: "Subject", value: "subject", sortable: false },
 
         {
           text: "Last Activity",
@@ -398,7 +392,10 @@ export default {
           sortable: false,
         },
         { text: "Status", value: "status", sortable: false },
+        { text: "Reply Count", value: "ticket_responses", sortable: false },
         { text: "Closed Date", value: "closed_datetime", sortable: false },
+        { text: "Requested Date", value: "created_datetime", sortable: false },
+
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
@@ -461,10 +458,11 @@ export default {
       this.dialogNewTicket = false;
     },
 
-    addReply(item) {
+    addReply(item, message = true) {
       this.key += 1;
       this.editItem = item;
       this.editId = item.id;
+      this.messageReply = message;
       this.dialogReply = true;
     },
     editTicket(item) {

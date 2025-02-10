@@ -63,7 +63,7 @@
     </v-row>
 
     <v-row class="mt-5">
-      <v-col cols="12" style="padding-right: 25px"
+      <v-col cols="12"
         ><TicketsList
           :canReply="canReply"
           :status="1"

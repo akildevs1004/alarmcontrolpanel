@@ -95,7 +95,7 @@
           dense
           x-small
         >
-          + Photo
+          + Camera
         </v-btn>
       </v-col>
 
