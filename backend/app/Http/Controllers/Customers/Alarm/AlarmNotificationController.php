@@ -336,7 +336,7 @@ class AlarmNotificationController extends Controller
         ];
         try {
 
-            // Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
+            // return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
 
             // Save PDF to a temporary path
             $pdf = PDF::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "portrait");

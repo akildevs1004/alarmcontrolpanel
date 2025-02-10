@@ -100,7 +100,7 @@
 
 </head>
 
-<body style="width:1000px;">
+<body style="max-width:1000px;">
     <!-- Header -->
     @php
         $title1 = 'Alert !';
@@ -184,11 +184,11 @@
     <main>
         <br />
 
-        <table style="width:100%;font-size:12px">
+        <table style="max-width:1000px;font-size:12px">
 
             <tr>
                 <td>
-                    <table class="table-border-top" style="width:100%">
+                    <table class="table-border-top" style="max-width:100%">
                         <tr>
                             <td colspan="4" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
                                 Event Details</td>

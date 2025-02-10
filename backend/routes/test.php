@@ -117,7 +117,7 @@ Route::get("test_sendMail", function (Request $request) {
 
     $name = "Testing";
 
-    $alarm = AlarmEvents::whereId("1735")->first();
+    $alarm = AlarmEvents::whereId("181")->first();
 
 
     $email = "venuakil2@gmail.com";
