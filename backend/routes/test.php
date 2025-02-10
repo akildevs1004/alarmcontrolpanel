@@ -7,6 +7,7 @@ use App\Http\Controllers\AlramEventsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\CameraController;
+use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\Customers\CustomersController;
@@ -109,6 +110,21 @@ Route::get("create_test_tampred_alarm", function (Request $request) {
     Storage::append($csvPath,  $content);
 
     return $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+});
+
+Route::get("test_sendMail", function (Request $request) {
+
+
+    $name = "Testing";
+
+    $alarm = AlarmEvents::whereId("181")->first();
+
+
+    $email = "venuakil2@gmail.com";
+    $alarm_id = 181;
+    $external_cc_email = "venuakil2@gmail.com";
+
+    return (new AlarmNotificationController())->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
 });
 Route::get("create_test_alarm", function (Request $request) {
 
@@ -422,7 +438,7 @@ Route::get('/testAttendanceRender111', function (Request $request) {
         'auto_render' => false
     );
 
-    //calling manual render method to pull all 
+    //calling manual render method to pull all
     $renderRequest = Request::create('/render_logs', 'get', $requestArray);
 
     return ((new RenderController())->renderLogs($renderRequest));
@@ -661,7 +677,7 @@ Route::get('/open_door_always_old', function (Request $request) {
 });
 
 Route::get('/test_device_timeslots', function (Request $request) {
-    //Schedule Device Access Control 
+    //Schedule Device Access Control
 
 
     return  $result = (new SDKController)->handleCommand("FC-8300T20094123", "HoldDoor");;

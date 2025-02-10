@@ -166,6 +166,7 @@
                   role="presentation"
                   dense
                   outlined
+                  clearable
                   autocomplete="off"
                   :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="show_password ? 'text' : 'password'"

@@ -11,6 +11,7 @@ use App\Models\Customers\CustomerAlarmNotes;
 use App\Models\ReportNotificationLogs;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -333,14 +334,31 @@ class AlarmNotificationController extends Controller
             'name' => $name,
 
         ];
+        try {
 
+            // Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
 
-        $body_content1 = new EmailAlarmForwardMail($data);
-        Mail::to($email)
-            ->cc($cc_emails)
+            // Save PDF to a temporary path
+            $pdf = PDF::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "portrait");
+            $pdfPath = storage_path("temp/alarm_report" . date("YmdHis") . $alarm_id . ".pdf");
+            $pdf->save($pdfPath);
 
-            ->send($body_content1);
-        $data = [
+            $body_content1 = new EmailAlarmForwardMail($data, $pdfPath);
+            Mail::to($email)
+                ///->cc($cc_emails)
+
+                ->send($body_content1);
+
+            // Delete the PDF after sending the email
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
+        } catch (\Exception $e) {
+
+            return $e;
+        }
+
+        $tableData = [
             "company_id" => $company_id,
             "customer_id" => $customer_id,
             "alarm_id" => $alarm_id,
@@ -350,9 +368,7 @@ class AlarmNotificationController extends Controller
             "created_datetime" => date("Y-m-d H:i:s")
         ];
 
-        CustomerAlarmNotes::create($data);
-
-        // return Pdf::loadView("emails.AlarmForwardEmail", $data)->setPaper("A4", "potrait")->stream();
+        CustomerAlarmNotes::create($tableData);
     }
 
     public function sendWhatsappMessage($name, $alarm, $whatsapp_number, $alarm_id)
