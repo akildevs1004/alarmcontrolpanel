@@ -436,7 +436,7 @@ html {
   height: 100%;
 }
 .bg-body {
-  background-image: url("../static/login/banner202501.jpg") !important;
+  background-image: url("../static/login/banner202502.png") !important;
 }
 .bg-body {
   padding-top: 5%;
@@ -463,11 +463,11 @@ html {
   font-size: 22px;
 }
 .login-body {
-  /* margin-right: 15%;
-  float: right; */
+  margin-right: 5%;
+  float: right;
 
-  margin-left: 10%;
-  background-color: #010d1d;
+  /* margin-left: 10%;
+  background-color: #010d1d; */
 }
 @media (max-width: 1200px) {
   .login-body {
