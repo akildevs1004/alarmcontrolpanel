@@ -367,117 +367,119 @@
 
                         </tr>
                         @foreach ($alarm->device->customer->contacts as $contact)
-                            <tr>
-                                <td>
-                                    {{ ucfirst($contact->address_type) }}
-                                </td>
-                                <td>
-                                    {{ ucfirst($contact->first_name) }}
-                                    {{ ucfirst($contact->last_name) }}
-                                </td>
-                                <td>
-                                    {{ $contact->phone1 }}
+                            @if (strtolower($contact->address_type) != 'police' &&
+                                    strtolower($contact->address_type) != 'medical' &&
+                                    strtolower($contact->address_type) != 'fire')
+                                <tr>
+                                    <td>
+                                        {{ ucfirst($contact->address_type) }}
+                                    </td>
+                                    <td>
+                                        {{ ucfirst($contact->first_name) }}
+                                        {{ ucfirst($contact->last_name) }}
+                                    </td>
+                                    <td>
+                                        {{ $contact->phone1 }}
 
-                                </td>
-                                <td>
-                                    {{ $contact->email }}
-                                </td>
-                                <td style="font-size:10px">
-                                    {{ $contact->notes }}
-                                </td>
-
-                            </tr>
-                        @endforeach
-
-                    </table>
-                </td>
+                                    </td>
+                                    <td>
+                                        {{ $contact->email }}
+                                    </td>
+                                    <td style="font-size:10px">
+                                        {{ $contact->notes }}
+                                    </td>
+                            @endif
             </tr>
+            @endforeach
 
-            <tr>
-                <td style="padding-top:10px;padding-bottom:20px;">
+        </table>
+        </td>
+        </tr>
+
+        <tr>
+            <td style="padding-top:10px;padding-bottom:20px;">
 
 
-                    <table class="table-border-top" style="width:100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
-                                Operator Notes</td>
-                        </tr>
+                <table class="table-border-top" style="width:100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                            Operator Notes</td>
+                    </tr>
 
-                        <tr>
-                            <td
-                                style="border : 1px solid #8f8f8f;;width:100%;height:130px;padding:0px;vertical-align:top">
+                    <tr>
+                        <td style="border : 1px solid #8f8f8f;;width:100%;height:130px;padding:0px;vertical-align:top">
 
-                                @if (count($alarm->notes) == 0)
-                                    <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
-                                        <div style="margin:auto;padding-top:50px">
-                                            Operator Notes are not available
-                                        </div>
-
+                            @if (count($alarm->notes) == 0)
+                                <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
+                                    <div style="margin:auto;padding-top:50px">
+                                        Operator Notes are not available
                                     </div>
-                                @else
-                                    <table style="width:100%;vertical-align:top">
-                                        <tr>
-                                            <td>
 
-                                                <span>Date Time:
-                                                    {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
+                                </div>
+                            @else
+                                <table style="width:100%;vertical-align:top">
+                                    <tr>
+                                        <td>
 
-                                                Operator:
-                                                {{ $alarm->notes[count($alarm->notes) - 1]->security ? ucfirst($alarm->notes[count($alarm->notes) - 1]->security->first_name) . ' ' . ucfirst($alarm->notes[count($alarm->notes) - 1]->security->last_name) : '---' }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
+                                            <span>Date Time:
+                                                {{ changeDateformat($alarm->notes[count($alarm->notes) - 1]->created_datetime) }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
 
-                                                Note: {{ $alarm->notes[count($alarm->notes) - 1]->notes }}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <div style="padding-top: 10px;  ">
+                                            Operator:
+                                            {{ $alarm->notes[count($alarm->notes) - 1]->security ? ucfirst($alarm->notes[count($alarm->notes) - 1]->security->first_name) . ' ' . ucfirst($alarm->notes[count($alarm->notes) - 1]->security->last_name) : '---' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
 
-                                        <span class="bold" style="font-style:italic">
-                                        </span>
-                                    </div>
-                                @endif
+                                            Note: {{ $alarm->notes[count($alarm->notes) - 1]->notes }}
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="padding-top: 10px;  ">
 
-
-                            </td>
-                        </tr>
-
-                    </table>
+                                    <span class="bold" style="font-style:italic">
+                                    </span>
+                                </div>
+                            @endif
 
 
+                        </td>
+                    </tr>
 
-                </td>
-            </tr>
-
-            <tr>
-                <td style="width:100%;border-top: 0px solid #313131!important; ">
-                    <div style="color:red">Required Action:</div>
-                    <div>
-                        Please verify the situation and take necessary action as per the security protocol. If immediate
-                        intervention is required, contact the relevant authority listed above for further assistance.
-                        Reach out to our XtremeGuard Security company Operator/Supervisor if needed.
-                        <br />
-                        @if ($alarm->security)
-                            <div style="font-weight:bold;line-height:20px">
-                                Name: Mr.{{ ucfirst($alarm->security->first_name) }}
+                </table>
 
 
-                                {{ ucfirst($alarm->security->last_name) }}
-                            </div>
 
-                            <div style="font-weight:bold">Phone: {{ $alarm->security?->contact_number ?? '---' }}</div>
-                        @endif
+            </td>
+        </tr>
 
-                    </div>
-                </td>
-            </tr>
+        <tr>
+            <td style="width:100%;border-top: 0px solid #313131!important; ">
+                <div style="color:red">Required Action:</div>
+                <div>
+                    Please verify the situation and take necessary action as per the security protocol. If immediate
+                    intervention is required, contact the relevant authority listed above for further assistance.
+                    Reach out to our XtremeGuard Security company Operator/Supervisor if needed.
+                    <br />
+                    @if ($alarm->security)
+                        <div style="font-weight:bold;line-height:20px">
+                            Name: Mr.{{ ucfirst($alarm->security->first_name) }}
+
+
+                            {{ ucfirst($alarm->security->last_name) }}
+                        </div>
+
+                        <div style="font-weight:bold">Phone: {{ $alarm->security?->contact_number ?? '---' }}</div>
+                    @endif
+
+                </div>
+            </td>
+        </tr>
 
 
 

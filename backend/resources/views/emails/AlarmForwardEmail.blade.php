@@ -370,26 +370,32 @@
 
                         </tr>
                         @foreach ($alarm->device->customer->contacts as $contact)
-                            <tr>
-                                <td>
-                                    {{ ucfirst($contact->address_type) }}
-                                </td>
-                                <td>
-                                    {{ ucfirst($contact->first_name) }}
-                                    {{ ucfirst($contact->last_name) }}
-                                </td>
-                                <td>
-                                    {{ $contact->phone1 }}
+                            @if (strtolower($contact->address_type) != 'police' &&
+                                    strtolower($contact->address_type) != 'medical' &&
+                                    strtolower($contact->address_type) != 'fire')
 
-                                </td>
-                                <td>
-                                    {{ $contact->email }}
-                                </td>
-                                <td style="font-size:10px">
-                                    {{ $contact->notes }}
-                                </td>
+                                <tr>
+                                    <td>
+                                        {{ ucfirst($contact->address_type) }}
+                                    </td>
+                                    <td>
+                                        {{ ucfirst($contact->first_name) }}
+                                        {{ ucfirst($contact->last_name) }}
+                                    </td>
+                                    <td>
+                                        {{ $contact->phone1 }}
 
-                            </tr>
+                                    </td>
+                                    <td>
+                                        {{ $contact->email }}
+                                    </td>
+                                    <td style="font-size:10px">
+                                        {{ $contact->notes }}
+                                    </td>
+
+                                </tr>
+
+                            @endif
                         @endforeach
 
                     </table>
