@@ -23,16 +23,18 @@
                                      </td>
                          </tr>
                          <tr style="border-bottom:0px solid #8f8f8f">
-                             <td>
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
+                            <td style="width:20px;  margin :auto;vertical-align:middle">
+                                <img style=" padding-top:8px;margin :auto;vertical-align:middle"  src="{{env('BASE_PUBLIC_URL')}}/icons/email.png" width="15">
                              </td>
-                             <td>
+                             <td style="margin :auto">
                                  {{ $note->security->email? $note->security->email:'---' }}
                              </td>
                          </tr>
+
+
                          <tr style="border-bottom:0px solid #8f8f8f">
-                             <td>
-                                 <img style="margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
+                             <td style="width:20px;  margin :auto;vertical-align:middle">
+                                 <img style="padding-top:5px;margin :auto" src="{{env('BASE_PUBLIC_URL')}}/icons/phone.png" width="15">
                              </td>
                              <td>
                                  {{ $note->security->contact_number? $note->security->contact_number:'---'   }}
