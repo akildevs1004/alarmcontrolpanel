@@ -78,7 +78,7 @@
                   >
                   <div style="width: 100%; margin: auto; text-align: center">
                     <iframe
-                      :style="';  border: none; height:600px;min-width:750px'"
+                      :style="';  border: none;  min-width:750px'"
                       :width="browserWidth - 830"
                       :height="browserHeight - 200"
                       v-if="browserWidth && getCameraUrl(item) != ''"
