@@ -28,7 +28,7 @@
           src="/dashboard-arrow.png"
           style="width: 18px; padding-top: 5px"
       /></v-col>
-    </v-row> 
+    </v-row>
     <v-divider color="#5a82ca" style="margin-bottom: 10px" />-->
     <v-row class="pt-0 mt-0">
       <v-col
@@ -56,12 +56,13 @@
           padding-right: 0px;
           line-height: 32px;
           margin: auto;
+          height: 230px;
         "
       >
-        <v-row style="margin-top: -30px">
+        <v-row style="">
           <v-col cols="12" class="text-center justify-center">
             <div style="font-size: 35px; color: #07af50; font-weight: bold">
-              {{ categories ? categories.armed : "0" }}
+              {{ categories && categories.armed > 0 ? categories.armed : "0" }}
             </div>
 
             <div style="font-size: 15px">Armed</div>
@@ -83,7 +84,7 @@
         <v-row>
           <v-col cols="12" class="text-center justify-center mt-2">
             <div style="font-size: 35px; color: #ffbe00; font-weight: bold">
-              {{ categories ? categories.other : "0" }}
+              {{ categories && categories.other > 0 ? categories.other : "0" }}
             </div>
 
             <div style="font-size: 15px">Others</div>
@@ -280,13 +281,13 @@ export default {
       // this.chartOptions.series[0] = data.total;
 
       this.chartOptions.labels[0] = "Armed";
-      this.chartOptions.series[0] = data.armed;
+      this.chartOptions.series[0] = data.armed ?? 0;
 
       this.chartOptions.labels[1] = "DisArm";
-      this.chartOptions.series[1] = data.disarm;
+      this.chartOptions.series[1] = data.disarm ?? 0;
 
       this.chartOptions.labels[2] = "Others";
-      this.chartOptions.series[2] = data.other;
+      this.chartOptions.series[2] = data.other ?? 0;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
 
