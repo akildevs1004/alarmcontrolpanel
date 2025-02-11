@@ -2565,5 +2565,9 @@ header {
   scrollbar-width: thin; /* Reduces width of the scrollbar */
   scrollbar-color: #888 #f1f1f1; /* Thumb and track colors */
 }
+
+.sensorPlottingdevices .v-icon {
+  color: #fff !important;
+}
 </style>
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

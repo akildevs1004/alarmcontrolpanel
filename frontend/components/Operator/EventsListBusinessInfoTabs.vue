@@ -47,37 +47,51 @@
             >
               No Cameras available
             </div>
+            <!-- <iframe
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+              "
+              src="https://rtmp.oxsai.com/player.html?url=rtmp://64.225.28.61/live/cam1"
+            ></iframe> -->
             <v-carousel
               v-model="currentCameraSlide"
-              v-else-if="customer"
-              height="600"
+              :height="browserHeight - 150"
               hide-delimiter-background
               show-arrows-on-hover
+              style="width: 100%"
             >
               <template
                 v-for="(item, index) in customer.cameras"
                 :name="item.id"
+                style="width: 100%"
               >
-                <v-carousel-item style="padding-top: 50px">
+                <v-carousel-item style="padding-top: 50px; width: 100%">
                   <v-chip color="#203864" style="color: #fff" label
                     >{{ index + 1 }}: {{ item.title }}</v-chip
                   >
-                  <iframe
-                    v-if="getCameraUrl(item) != ''"
-                    :src="getCameraUrl(item)"
-                    width="100%"
-                    height="650"
-                    style="border: 0; padding-top: 10px"
-                    allowfullscreen=""
-                    referrerpolicy="no-referrer-when-downgrade"
-                  ></iframe>
+                  <div style="width: 100%; margin: auto; text-align: center">
+                    <iframe
+                      :style="';  border: none; height:600px'"
+                      :width="browserWidth - 830"
+                      :height="browserHeight - 200"
+                      v-if="browserWidth && getCameraUrl(item) != ''"
+                      :src="getCameraUrl(item)"
+                    ></iframe>
+                  </div>
                 </v-carousel-item>
               </template>
             </v-carousel>
           </v-col>
         </v-row>
-        <!-- <v-row>
-          <v-col style="width: 600px; overflow: scroll">
+        <v-row>
+          <v-col style="width: 600px; overflow: auto">
             <v-row justify="center" dense>
               <v-col
                 class="thumbnail-wrapper"
@@ -88,8 +102,8 @@
                 <div
                   @click="currentCameraSlide = index"
                   style="
-                    height: 100px;
-                    width: 150px;
+                    height: 50px;
+                    width: 50px;
                     margin: auto;
                     display: flex;
                     justify-content: center;
@@ -105,7 +119,7 @@
               </v-col>
             </v-row>
           </v-col>
-        </v-row> -->
+        </v-row>
       </v-tab-item>
 
       <v-tab-item>
@@ -281,6 +295,7 @@ export default {
     // IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500PX",
     loadingImagesstatus: false,
     keyPlottings: 1,
+    browserWidth: 1200,
   }),
   computed: {},
   mounted() {
@@ -290,6 +305,9 @@ export default {
   },
   created() {
     //if (this.customer) console.log("customer", this.customer);
+    try {
+      if (window) this.browserWidth = window.innerWidth;
+    } catch (e) {}
   },
   watch: {},
   methods: {

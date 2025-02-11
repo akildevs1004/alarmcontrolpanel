@@ -93,7 +93,11 @@
         ></v-col
       >
 
-      <v-col cols="3" style="height: 500px; overflow: auto">
+      <v-col
+        cols="3"
+        style="height: 500px; overflow: auto"
+        class="sensorPlottingdevices"
+      >
         <v-expansion-panels v-model="panelOpenList" multiple>
           <v-expansion-panel v-for="device in devices">
             <v-expansion-panel-header
@@ -109,7 +113,25 @@
                 >
                   <v-img
                     :title="plotting.sensorTypeName"
-                    v-if="plotting.sensorTypeName == null"
+                    v-if="checkIsSensorAddedAnyPhoto(plotting) > 0"
+                    :src="
+                      getSensorTypeRelaventImage(
+                        getDeviceCategory(device.id),
+                        plotting
+                      )
+                    "
+                    disabled="true"
+                    draggable="false"
+                    style="
+                      width: 40px;
+                      float: left;
+                      margin: 5px;
+                      filter: grayscale(100%);
+                    "
+                  ></v-img>
+                  <v-img
+                    :title="plotting.sensorTypeName"
+                    v-else-if="plotting.sensorTypeName == null"
                     draggable="true"
                     @dragstart="dragStart($event, plotIndex)"
                     style="width: 40px; float: left; margin: 5px"
@@ -192,7 +214,7 @@
                     v-if="device_id == plotting.device_id"
                     style="color: green"
                   >
-                    
+
                     <v-img
                       :title="plotting.sensorImage"
                       v-if="checkIsSensorAddedAnyPhoto(plotting) == 0"
@@ -275,6 +297,8 @@ export default {
     },
   },
   async created() {
+    this.snackbar = true;
+    this.response = "Sensor list is loading...Please wait....";
     await this.getSensorTypesImages();
     await this.getDevices();
     await this.getPlottingWithCustomerId();
@@ -283,6 +307,7 @@ export default {
       this.IMG_PLOTTING_WIDTH = process?.env?.IMG_PLOTTING_WIDTH;
       this.IMG_PLOTTING_HEIGHT = process?.env?.IMG_PLOTTING_HEIGHT;
     }
+    this.snackbar = false;
   },
   methods: {
     showContextMenu(event, selectedImageId) {

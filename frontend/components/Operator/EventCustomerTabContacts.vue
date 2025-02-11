@@ -783,7 +783,7 @@ export default {
 
               setTimeout(() => {
                 this.$emit("emitreloadEventNotesStep1");
-              }, 1000 * 10);
+              }, 1000 * 2);
             }
           })
           .catch((e) => {

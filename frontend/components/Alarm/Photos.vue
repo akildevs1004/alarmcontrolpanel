@@ -186,11 +186,11 @@
                       </v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item>
+                    <!-- <v-list-item>
                       <v-list-item-title style="cursor: pointer">
                         <AlarmSensorPlotting :key="key" :item="item" />
                       </v-list-item-title>
-                    </v-list-item>
+                    </v-list-item> -->
 
                     <v-list-item
                       v-if="isEditable"

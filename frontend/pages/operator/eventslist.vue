@@ -483,10 +483,6 @@ export default {
     if (window) window.removeEventListener("resize", this.onResize);
   },
   async mounted() {
-    setTimeout(() => {
-      this.onResize();
-    }, 1000 * 20);
-
     if (window) window.addEventListener("resize", this.onResize);
 
     if (window) {
@@ -527,6 +523,11 @@ export default {
 
       this.getDatafromApi(this.filterText, false);
     }, 1000 * 10);
+
+    this.onResize();
+    setTimeout(() => {
+      this.onResize();
+    }, 1000 * 5);
   },
 
   async created() {
@@ -534,6 +535,8 @@ export default {
     try {
       if (window) this.browserHeight = window.innerHeight - 70;
     } catch (e) {}
+
+    this.onResize();
   },
   watch: {},
   methods: {

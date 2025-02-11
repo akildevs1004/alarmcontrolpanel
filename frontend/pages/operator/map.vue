@@ -345,7 +345,7 @@
                               }}
                             </div></v-col
                           >
-                           
+
                           <v-col class="text-right" style="color: #0748ff"
                             >#{{ alarm.id }}</v-col
                           >
@@ -825,6 +825,10 @@ export default {
       this.onResize();
     }, 1000 * 5);
 
+    setTimeout(() => {
+      this.onResize();
+    }, 1000 * 10);
+
     if (window) window.addEventListener("resize", this.onResize);
 
     // if (window) {
@@ -865,6 +869,7 @@ export default {
     this.colorcodesTable = this.$utils.getAlarmIconsNoGoogle();
 
     this.loadCustomersList();
+    this.onResize();
   },
   watch: {},
   methods: {
