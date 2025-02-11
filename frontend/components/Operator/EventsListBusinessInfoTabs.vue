@@ -80,7 +80,7 @@
                     <iframe
                       :style="';  border: none;  min-width:750px'"
                       :width="browserWidth - 830"
-                      :height="browserHeight - 200"
+                      :height="browserHeight - 250"
                       v-if="browserWidth && getCameraUrl(item) != ''"
                       :src="getCameraUrl(item)"
                     ></iframe>
