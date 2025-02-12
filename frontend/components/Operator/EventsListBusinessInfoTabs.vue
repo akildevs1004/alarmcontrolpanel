@@ -305,12 +305,16 @@ export default {
   },
   created() {
     //if (this.customer) console.log("customer", this.customer);
-    try {
-      if (window) this.browserWidth = window.innerWidth;
-    } catch (e) {}
+    this.onResize();
+    //if (window) window.addEventListener("resize", this.onResize);
   },
   watch: {},
   methods: {
+    onResize() {
+      try {
+        if (window) this.browserWidth = window.innerWidth;
+      } catch (e) {}
+    },
     getAreaName(area_code) {
       return (
         this.areaList.find((areaName) => areaName.id == area_code)?.name ||
