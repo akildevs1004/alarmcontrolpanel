@@ -801,6 +801,8 @@ export default {
       alarmPopupNotificationStatus: false,
       key: 1,
       isBackendRequestOpen: false,
+
+      abortController: null,
     };
   },
   created() {
@@ -1192,70 +1194,68 @@ export default {
       //location.href = process.env.APP_URL + "/dashboard2";
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
-    loadHeaderNotificationMenu() {
-      if (this.isBackendRequestOpen && this.cancelRequest) {
-        this.cancelRequest();
-      }
-
-      this.isBackendRequestOpen = true;
+    async loadHeaderNotificationMenu() {
       this.key = this.key + 1;
 
       let company_id = this.$auth.user?.company?.id || 0;
-      if (company_id == 0) {
-        this.isBackendRequestOpen = false;
-        return false;
+
+      // Cancel the previous request if it exists
+      if (this.abortController) {
+        this.abortController.abort();
       }
 
-      // Use axios.CancelToken.source() for better handling
-      const cancelSource = this.$axios.CancelToken.source();
-      this.cancelRequest = cancelSource.cancel;
+      // Create a new AbortController
+      this.abortController = new AbortController();
+      const signal = this.abortController.signal;
 
-      let options = {
+      this.isBackendRequestOpen = true;
+
+      const options = {
         params: {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
           pageSource: "layoutcustomer",
         },
-        cancelToken: new this.$axios.CancelToken((cancel) => {
-          this.cancelRequest = cancel; // Store the cancel function
-        }),
+        signal, // Attach the abort signal
       };
 
-      this.$axios
-        .get(`get_alarm_notification_display`, options)
-        .then(({ data }) => {
-          this.isBackendRequestOpen = false;
-          this.notificationsMenuItems = [];
-          this.pendingNotificationsCount = 0;
-          this.notificationAlarmDevicesContent = data;
-          this.key += 1;
+      try {
+        const { data } = await this.$axios.get(
+          `get_alarm_notification_display`,
+          options
+        );
 
-          data.forEach((element) => {
-            let notification = {
-              title: element.device?.customer?.building_name
-                ? element.device.customer.building_name +
-                  " - " +
-                  element.alarm_type
-                : "---",
-              date_from: element.alarm_start_datetime,
-              click: "/alarm/allevents",
-              icon: this.alarm_icons[element.alarm_type] ?? "burglary.png",
-              key: "leaves",
-            };
+        this.notificationAlarmDevicesContent = data;
+        this.pendingNotificationsCount = data.length;
 
-            this.notificationsMenuItems.push(notification);
-          });
+        this.notificationsMenuItems = data.map((element) => ({
+          title: element.device?.customer?.building_name
+            ? `${element.device.customer.building_name} - ${
+                element.alarm_type ?? "Unknown"
+              }`
+            : "---",
+          date_from: element.alarm_start_datetime,
+          click: "/alarm/allevents",
+          icon: this.alarm_icons[element.alarm_type] ?? "burglary.png",
+          key: "leaves",
+        }));
 
-          this.pendingNotificationsCount = data.length;
-        })
-        .catch((error) => {
-          if (this.$axios.isCancel(error)) {
-            console.log("Previous request canceled");
-          } else {
-            console.error("Error loading notifications:", error);
-          }
-          this.isBackendRequestOpen = false;
-        });
+        this.key += 1;
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Request was canceled.");
+        } else {
+          console.error("Error loading notifications:", error);
+        }
+      } finally {
+        this.isBackendRequestOpen = false;
+      }
+    },
+    cancelRequest() {
+      if (this.abortController) {
+        this.abortController.abort();
+        console.log("Previous request canceled");
+      }
     },
 
     loadHeaderNotificationTicketMenu() {
