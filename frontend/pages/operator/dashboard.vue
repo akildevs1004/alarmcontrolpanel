@@ -9,8 +9,8 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/alarm_icons/google_sos_alarm.png"
-                      style="width: 25px; margin: auto"
+                      src="/dashboard_icons/sos.png"
+                      style="width: 30px; margin: auto"
                     />
                   </v-col>
 
@@ -43,8 +43,8 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/alarm_icons/google_alarm.png"
-                      style="width: 25px"
+                      src="/dashboard_icons/critical.png"
+                      style="width: 30px"
                     />
                   </v-col>
 
@@ -77,8 +77,8 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/alarm_icons/google_medical_alarm.png"
-                      style="width: 25px"
+                      src="/dashboard_icons/medical.png"
+                      style="width: 30px"
                     />
                   </v-col>
 
@@ -186,10 +186,7 @@
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img
-                      src="/alarm_icons/google_fire_alarm.png"
-                      style="width: 25px"
-                    />
+                    <img src="/dashboard_icons/fire.png" style="width: 30px" />
                   </v-col>
 
                   <v-col
@@ -230,9 +227,28 @@
                   >
                     <v-card style="height: 80px" elevation="2">
                       <v-card-text class="m-0 p-0">
-                        <v-row
+                        <v-row>
+                          <v-col style="max-width: 50px; margin: auto">
+                            <img
+                              src="/dashboard_icons/technical.png"
+                              style="width: 40px"
+                            />
+                          </v-col>
+
+                          <v-col style="text-align: center">
+                            <div style="font-size: 40px">
+                              {{
+                                categoriesStats ? categoriesStats.techinical : 0
+                              }}
+                            </div>
+                            <div style="padding-top: 5px">Technical</div>
+                          </v-col>
+                        </v-row>
+                        <!-- <v-row
                           ><v-col style="height: 20px">
-                            <img src="/icons/techical.png" style="width: 25px"
+                            <img
+                              src="/dashboard_icons/technical.png"
+                              style="width: 30px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -250,7 +266,7 @@
                             </div>
                             <div style="padding-top: 5px">Technical</div>
                           </v-col>
-                        </v-row>
+                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -259,9 +275,26 @@
                   >
                     <v-card style="height: 80px" elevation="2">
                       <v-card-text class="m-0 p-0">
-                        <v-row
+                        <v-row>
+                          <v-col style="max-width: 50px; margin: auto">
+                            <img
+                              src="/dashboard_icons/event.png"
+                              style="width: 40px"
+                            />
+                          </v-col>
+
+                          <v-col style="text-align: center">
+                            <div style="font-size: 40px">
+                              {{ categoriesStats ? categoriesStats.events : 0 }}
+                            </div>
+                            <div style="padding-top: 5px">Events</div>
+                          </v-col>
+                        </v-row>
+                        <!-- <v-row
                           ><v-col style="height: 20px"
-                            ><img src="/icons/intruder.png" style="width: 25px"
+                            ><img
+                              src="/dashboard_icons/event.png"
+                              style="width: 30px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -277,7 +310,7 @@
                             </div>
                             <div style="padding-top: 5px">Events</div>
                           </v-col>
-                        </v-row>
+                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -289,11 +322,26 @@
                   >
                     <v-card style="height: 85px" elevation="2">
                       <v-card-text class="m-0 p-0">
-                        <v-row
+                        <v-row>
+                          <v-col style="max-width: 50px; margin: auto">
+                            <img
+                              src="/dashboard_icons/water.png"
+                              style="width: 40px"
+                            />
+                          </v-col>
+
+                          <v-col style="text-align: center">
+                            <div style="font-size: 40px">
+                              {{ categoriesStats ? categoriesStats.water : 0 }}
+                            </div>
+                            <div style="padding-top: 5px">Water</div>
+                          </v-col>
+                        </v-row>
+                        <!-- <v-row
                           ><v-col style="height: 20px"
                             ><img
-                              src="/icons/water_icon.png"
-                              style="width: 25px"
+                              src="/dashboard_icons/water.png"
+                              style="width: 30px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -309,7 +357,7 @@
                             </div>
                             <div style="padding-top: 5px">Water</div>
                           </v-col>
-                        </v-row>
+                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -318,11 +366,30 @@
                   >
                     <v-card style="height: 85px" elevation="2">
                       <v-card-text class="m-0 p-0">
-                        <v-row
+                        <v-row>
+                          <v-col style="max-width: 50px; margin: auto">
+                            <img
+                              src="/dashboard_icons/temperature.png"
+                              style="width: 40px"
+                            />
+                          </v-col>
+
+                          <v-col style="text-align: center">
+                            <div style="font-size: 40px">
+                              {{
+                                categoriesStats
+                                  ? categoriesStats.temperature
+                                  : 0
+                              }}
+                            </div>
+                            <div style="padding-top: 5px">Temperature</div>
+                          </v-col>
+                        </v-row>
+                        <!-- <v-row
                           ><v-col style="height: 20px"
                             ><img
-                              src="/icons/temperature_icon.png"
-                              style="width: 25px"
+                              src="/dashboard_icons/temperature.png"
+                              style="width: 30px"
                           /></v-col>
                         </v-row>
                         <v-row>
@@ -342,7 +409,7 @@
                             </div>
                             <div style="padding-top: 5px">Temperature</div>
                           </v-col>
-                        </v-row>
+                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
