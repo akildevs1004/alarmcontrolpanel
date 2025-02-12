@@ -285,7 +285,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon color="red" v-bind="attrs" v-on="on">
-            <v-avatar size="35" style="border: 1px solid #6946dd">
+            <v-avatar size="35" style="border: 0px solid #6946dd">
               <v-img class="company_logo" :src="getLogo"></v-img>
             </v-avatar>
           </v-btn>
