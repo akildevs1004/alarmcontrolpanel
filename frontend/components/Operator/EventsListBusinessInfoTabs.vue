@@ -30,6 +30,7 @@
       <v-tab-item
         ><CompGoogleMapLatLan
           v-if="customer"
+          :alarm="alarm"
           :latitude="customer.latitude"
           :longitude="customer.longitude"
           :title="customer.building_name"

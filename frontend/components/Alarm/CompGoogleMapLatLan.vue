@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  props: ["latitude", "longitude", "title", "contact_id", "mapheight"],
+  props: ["latitude", "longitude", "title", "contact_id", "mapheight", "alarm"],
   data: () => ({
     map: null,
     mapKey: null,
@@ -119,18 +119,25 @@ export default {
           lng: parseFloat(this.longitude),
         };
 
-        // const icon = {
-        //   url: this.$utils.getRelaventMarkers(e.alarm), // Path to the customer image
-        //   scaledSize: new google.maps.Size(75, 75), // Adjust the size as needed
-        //   origin: new google.maps.Point(0, 0),
-        //   anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
-        // };
+        let colorcodes = this.$utils.getAlarmIcons();
+
+        let iconURL =
+          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png";
+        const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
+        if (colorObject) iconURL = colorObject.image;
+
+        const icon = {
+          url: iconURL + "?5=5",
+          scaledSize: new google.maps.Size(28, 34),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(25, 25),
+        };
 
         const marker = new google.maps.Marker({
           position,
           map: this.map,
           title: this.title,
-          //icon: icon,
+          icon: icon,
         });
 
         // marker.addListener("click", () => {
@@ -140,18 +147,25 @@ export default {
 
         let html =
           "<div style='width:250px'><div style='width:100px;float:left'>  " +
+          "<img style='width:100px;padding-right:5px;' src='" +
+          this.alarm.device.customer.profile_picture +
+          "'/>" +
           "</div>";
         html +=
           "<div style='width:150px; float:left'>" +
-          this.title +
+          this.alarm.device.customer.building_name +
+          " <br/> " +
+          this.alarm.device.customer.city +
+          "<div>Landmark: " +
+          this.alarm.device.customer.landmark +
           "</div>" +
           "" +
           " ";
         html +=
           "<br/> <a target='_blank' href='https://www.google.com/maps?q=" +
-          this.latitude +
+          this.alarm.device.customer.latitude +
           "," +
-          this.longitude +
+          this.alarm.device.customer.longitude +
           "'>Google Map Link</a>" +
           " ";
         html += "</div></div>";
@@ -165,6 +179,8 @@ export default {
         infowindow.close();
 
         this.map.panTo(position);
+        if (this.alarm?.alarm_status == 1)
+          marker.setAnimation(google.maps.Animation.BOUNCE);
 
         marker.addListener("mouseover", function () {
           infowindow.open(this.map, this);

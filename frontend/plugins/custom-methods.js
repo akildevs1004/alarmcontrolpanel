@@ -592,6 +592,8 @@ export default ({ app }, inject) => {
       };
     },
     getRelaventMarkers(alarm) {
+      console.log("alarm.alarm_type", alarm.alarm_type);
+
       let relaventImage = {
         Intruder: "/alarm-icons/intruder.png",
         Burglary: "/alarm-icons/burglary.png",
@@ -600,6 +602,7 @@ export default ({ app }, inject) => {
         Water: "/alarm-icons/water.png",
         Temperature: "/alarm-icons/temperature.png",
         Humidity: "/alarm-icons/humidity.png",
+        Offline: "/alarm-icons/google_offline.png",
       };
       if (relaventImage[alarm.alarm_type])
         return relaventImage[alarm.alarm_type];
