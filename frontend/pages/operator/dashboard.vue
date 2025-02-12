@@ -10,7 +10,7 @@
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
                       src="/dashboard_icons/sos.png"
-                      style="width: 30px; margin: auto"
+                      style="width: 40px; margin: auto"
                     />
                   </v-col>
 
@@ -44,7 +44,7 @@
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
                       src="/dashboard_icons/critical.png"
-                      style="width: 30px"
+                      style="width: 40px"
                     />
                   </v-col>
 
@@ -78,7 +78,7 @@
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
                       src="/dashboard_icons/medical.png"
-                      style="width: 30px"
+                      style="width: 40px"
                     />
                   </v-col>
 
@@ -186,7 +186,7 @@
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img src="/dashboard_icons/fire.png" style="width: 30px" />
+                    <img src="/dashboard_icons/fire.png" style="width: 40px" />
                   </v-col>
 
                   <v-col
