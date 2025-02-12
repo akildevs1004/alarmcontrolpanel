@@ -197,7 +197,7 @@ export default {
       (value) => {
         console.log("File value:", value); // Debugging to see the value being validated
         if (!value || typeof value !== "object") return true;
-        if (value.size < 200000) return true;
+        if (value.size < 1000 * 500) return true;
         return "File size should be less than 200 KB!";
       },
     ],
@@ -275,7 +275,7 @@ export default {
     save_documents() {
       //if (!this.$auth?.user?.customer) return false;
 
-      if (this.customer_id && this.security_id) {
+      if (this.customer_id || this.security_id) {
       } else {
         this.snackbar = true;
         this.response = "Operator or Customer Details are not available";

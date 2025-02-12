@@ -99,22 +99,8 @@
             :default_date_from="date_from"
             :default_date_to="date_to"
             :defaultFilterType="1"
-            :height="'40px'" /></v-col
-        ><v-col
-          v-if="technician_id == null && can('tickets_create')"
-          class="pt-5"
-          style="max-width: 80px"
-        >
-          <v-btn
-            title="Add Ticket"
-            x-small
-            :ripple="false"
-            text
-            @click="addItem()"
-          >
-            <v-icon class="">mdi mdi-plus-circle</v-icon>
-          </v-btn>
-        </v-col>
+            :height="'40px'"
+        /></v-col>
         <v-col style="max-width: 160px" class="pt-5">
           <v-select
             @change="getDataFromApi()"
@@ -131,6 +117,21 @@
             hide-details
           >
           </v-select>
+        </v-col>
+        <v-col
+          v-if="technician_id == null && customer_id"
+          class="pt-5"
+          style="max-width: 80px"
+        >
+          <v-btn
+            title="Add Ticket"
+            x-small
+            :ripple="false"
+            text
+            @click="addItem()"
+          >
+            <v-icon class="">mdi mdi-plus-circle</v-icon>
+          </v-btn>
         </v-col>
         <!--<v-col style="margin-top: 10px">
                   <v-menu bottom right>

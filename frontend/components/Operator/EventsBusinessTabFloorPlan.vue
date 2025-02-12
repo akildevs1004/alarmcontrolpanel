@@ -232,18 +232,23 @@ export default {
         );
 
         // Default values
-        element.sensorImage =
-          process.env.BACKEND_URL2 + "/sensor_type_icons/" + "other_sensor.png";
+        element.sensorImage = "/sensor_type_icons/" + "other_sensor.png";
+
+        // element.sensorImage =
+        //   process.env.BACKEND_URL2 + "/sensor_type_icons/" + "other_sensor.png";
         element.sensorTypeName = "Unknown";
 
         if (element2) {
           const find = this.sensorTypesImages.find(
             (e) => e.name == element2.sensor_type
           );
+
           element.sensorImage =
-            process.env.BACKEND_URL2 +
-            "/sensor_type_icons/" +
-            (find ? find.image : "other_sensor.png");
+            "/sensor_type_icons/" + (find ? find.image : "other_sensor.png");
+          // element.sensorImage =
+          //   process.env.BACKEND_URL2 +
+          //   "/sensor_type_icons/" +
+          //   (find ? find.image : "other_sensor.png");
           element.sensorTypeName = element2.sensor_type;
         }
       });

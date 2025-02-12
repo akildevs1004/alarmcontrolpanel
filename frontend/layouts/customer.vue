@@ -506,14 +506,14 @@
                     Device Location :{{ device?.branch?.location }}
                   </div>
                 </v-col>
-              </v-row> 
+              </v-row>
 
               <div></div>-->
               <!-- <div>
                  <div style="color: green">
                   <strong>Note: </strong>All Branch Level Doors are Opened
                 </div>
-                <br />  
+                <br />
                 Check Devices list and Turn off Alarm to Close this popup.
 
                 <v-btn
@@ -1193,11 +1193,8 @@ export default {
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
     loadHeaderNotificationMenu() {
-      if (this.isBackendRequestOpen) {
-        // Cancel the previous request if it's still pending
-        if (this.cancelRequest) {
-          this.cancelRequest(); // This triggers the cancellation
-        }
+      if (this.isBackendRequestOpen && this.cancelRequest) {
+        this.cancelRequest();
       }
 
       this.isBackendRequestOpen = true;
@@ -1208,6 +1205,10 @@ export default {
         this.isBackendRequestOpen = false;
         return false;
       }
+
+      // Use axios.CancelToken.source() for better handling
+      const cancelSource = this.$axios.CancelToken.source();
+      this.cancelRequest = cancelSource.cancel;
 
       let options = {
         params: {
