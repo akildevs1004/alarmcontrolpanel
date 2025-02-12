@@ -231,7 +231,7 @@
                           <v-col style="max-width: 50px; margin: auto">
                             <img
                               src="/dashboard_icons/technical.png"
-                              style="width: 40px"
+                              style="width: 55px"
                             />
                           </v-col>
 
@@ -279,7 +279,7 @@
                           <v-col style="max-width: 50px; margin: auto">
                             <img
                               src="/dashboard_icons/event.png"
-                              style="width: 40px"
+                              style="width: 55px"
                             />
                           </v-col>
 
@@ -326,7 +326,7 @@
                           <v-col style="max-width: 50px; margin: auto">
                             <img
                               src="/dashboard_icons/water.png"
-                              style="width: 40px"
+                              style="width: 55px"
                             />
                           </v-col>
 
@@ -370,7 +370,7 @@
                           <v-col style="max-width: 50px; margin: auto">
                             <img
                               src="/dashboard_icons/temperature.png"
-                              style="width: 40px"
+                              style="width: 55px"
                             />
                           </v-col>
 
