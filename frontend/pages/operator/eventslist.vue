@@ -31,7 +31,7 @@
       </v-card>
     </v-dialog>
 
-    <v-row style="margin-left: 5px; margin-top: 0px">
+    <v-row style="margin-left: 5px; margin-top: 0px" :key="2">
       <v-col
         :style="
           'padding:0px;;max-width: 300px; overflow:scroll1;height:' +
@@ -399,7 +399,7 @@ export default {
     filterAlarmType: null,
     filterAlarmStatus: null,
     fullscreen: false,
-    windowHeight: 1000,
+    // windowHeight: 1000,
     windowWidth: 600,
     mapStyle: "bw",
     mapkeycount: 1,
@@ -486,11 +486,11 @@ export default {
     if (window) window.addEventListener("resize", this.onResize);
 
     if (window) {
-      this.windowHeight = window.innerHeight;
+      // this.windowHeight = window.innerHeight;
 
       const element = document.getElementById("lefteventlist");
       if (element) {
-        this.windowHeight = element.getBoundingClientRect().height;
+        // this.windowHeight = element.getBoundingClientRect().height;
       }
 
       // this.windowWidth = window.innerWidth;
@@ -524,10 +524,10 @@ export default {
       this.getDatafromApi(this.filterText, false);
     }, 1000 * 10);
 
-    this.onResize();
-    setTimeout(() => {
-      this.onResize();
-    }, 1000 * 5);
+    //this.onResize();
+    // setTimeout(() => {
+    //   this.onResize();
+    // }, 1000 * 5);
   },
 
   async created() {
@@ -537,6 +537,8 @@ export default {
     } catch (e) {}
 
     this.onResize();
+
+    if (window) window.addEventListener("resize", this.onResize);
   },
   watch: {},
   methods: {
@@ -608,14 +610,18 @@ export default {
       this.buildingTypes = data;
     },
     onResize() {
+      console.log("window.innerHeight", window.innerHeight);
+
       if (window) {
         if (window) {
-          this.windowHeight = window.innerHeight;
+          // this.windowHeight = window.innerHeight;
 
           const element = document.getElementById("lefteventlist");
           if (element) {
-            this.windowHeight = element.getBoundingClientRect().height;
+            // this.windowHeight = element.getBoundingClientRect().height;
           }
+
+          this.browserHeight = window.innerHeight - 70;
 
           // this.windowWidth = window.innerWidth;
         }

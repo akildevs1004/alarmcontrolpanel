@@ -807,6 +807,8 @@ export default {
         if (window) window.location.reload();
       } catch (e) {}
     }, 1000 * 60 * 60);
+
+    if (window) window.addEventListener("resize", this.handleResize);
   },
   watch: {},
   computed: {
@@ -873,6 +875,37 @@ export default {
           security_id: this.$auth.user.security.id,
         });
       }
+    },
+    reloadPage() {
+      try {
+        if (window) window.location.reload();
+      } catch (e) {}
+    },
+
+    handleResize() {
+      // try {
+      //   console.log(
+      //     window.innerWidth,
+      //     screen.width,
+      //     window.innerHeight,
+      //     screen.height
+      //   );
+      //   if (window)
+      //     if (
+      //       window.innerWidth === screen.width
+      //       //   &&            window.innerHeight === screen.height
+      //     ) {
+      //       console.log("Window is maximized!", this.$route.path);
+      //       this.$router.replace({
+      //         path: this.$route.path,
+      //         query: this.$route.query,
+      //       });
+      //       // this.$router.push(this.$route.path);
+      //       //window.location.reload();
+      //     }
+      // } catch (e) {
+      //   console.log(e);
+      // }
     },
     closeDialog() {
       this.dialogAlarmPopupNotificationStatus = false;
@@ -1383,7 +1416,7 @@ export default {
     },
     openOrFocusWindow(menu_name, url) {
       const windowFeatures =
-        "width=1500px,height=800,top=100,left=100,resizable=yes";
+        "width=1500px,height=800,top=100,left=100,resizable=yes,toolbar=yes";
       console.log("windowFeatures", windowFeatures);
 
       return window.open(url, menu_name, windowFeatures);
