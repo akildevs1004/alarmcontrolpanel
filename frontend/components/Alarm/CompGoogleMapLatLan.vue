@@ -145,30 +145,33 @@ export default {
         //   this.customerInfo = this.customer.building_name;
         // });
 
-        let html =
-          "<div style='width:250px'><div style='width:100px;float:left'>  " +
-          "<img style='width:100px;padding-right:5px;' src='" +
-          this.alarm.device.customer.profile_picture +
-          "'/>" +
-          "</div>";
-        html +=
-          "<div style='width:150px; float:left'>" +
-          this.alarm.device.customer.building_name +
-          " <br/> " +
-          this.alarm.device.customer.city +
-          "<div>Landmark: " +
-          this.alarm.device.customer.landmark +
-          "</div>" +
-          "" +
-          " ";
-        html +=
-          "<br/> <a target='_blank' href='https://www.google.com/maps?q=" +
-          this.alarm.device.customer.latitude +
-          "," +
-          this.alarm.device.customer.longitude +
-          "'>Google Map Link</a>" +
-          " ";
-        html += "</div></div>";
+        let html = `
+            <table style="width:250px; min-height:100px" id="infowindow-content-${this.alarm.device.customer.id}">
+
+               <tr>
+                <td colspan="2" style="width:100%;;text-align:center; vertical-align: top;">
+                 <div style="width:100%;margin:auto">
+                   <img style="margin:auto;width:auto; max-height:120px; padding-right:5px;" src="${this.alarm.device.customer.profile_picture}" />
+                  </div>
+
+                </td>
+                </tr>
+              <tr>
+
+                <td style=" vertical-align: top;font-size:10px">
+                  <div>${this.alarm.device.customer.buildingtype.name}</div>
+                 <div style="font-weight:bold;font-size:12px"> ${this.alarm.device.customer.building_name}</div>
+
+                 <div>${this.alarm.device.customer.house_number},${this.alarm.device.customer.street_number}</div>
+                 <div>${this.alarm.device.customer.city}</div>
+
+                  <div>Landmark: ${this.alarm.device.customer.landmark}</div>
+                </td>
+
+
+              </tr>
+
+            </table>`;
 
         var infowindow = new google.maps.InfoWindow({
           content: html,
