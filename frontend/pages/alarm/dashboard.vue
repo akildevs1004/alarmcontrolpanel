@@ -372,7 +372,7 @@
                           <v-col style="max-width: 45px; margin: auto">
                             <img
                               src="/dashboard_icons/temperature.png"
-                              style="width: 45px"
+                              style="width: 50px"
                             />
                           </v-col>
 

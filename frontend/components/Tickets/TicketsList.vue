@@ -45,11 +45,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="dialogViewTicket"
-      max-width="700px"
-      style="z-index: 9999"
-    >
+    <v-dialog v-model="dialogViewTicket" width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense> View Ticket</span>
@@ -291,19 +287,13 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
-                    @click="addReply(item)"
-                    v-if="verifyCanReply() || can('tickets_edit')"
-                  >
+                  <v-list-item @click="addReply(item)" v-if="verifyCanReply()">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-reply</v-icon>
                       Reply
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
-                    @click="viewTicket(item)"
-                    v-if="can('tickets_view')"
-                  >
+                  <v-list-item @click="viewTicket(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-information</v-icon>
                       View
@@ -420,10 +410,10 @@ export default {
 
     this.getDataFromApi();
 
-    setInterval(() => {
-      if (this.dialogViewTicket == false && this.dialogReply == false)
-        this.getDataFromApi();
-    }, 1000 * 30);
+    // setInterval(() => {
+    //   if (this.dialogViewTicket == false && this.dialogReply == false)
+    //     this.getDataFromApi();
+    // }, 1000 * 30);
   },
 
   methods: {

@@ -228,10 +228,10 @@
                     <v-card style="height: 80px" elevation="2">
                       <v-card-text class="m-0 p-0">
                         <v-row>
-                          <v-col style="max-width: 50px; margin: auto">
+                          <v-col style="max-width: 45px; margin: auto">
                             <img
                               src="/dashboard_icons/technical.png"
-                              style="width: 55px"
+                              style="width: 45px"
                             />
                           </v-col>
 
@@ -276,10 +276,10 @@
                     <v-card style="height: 80px" elevation="2">
                       <v-card-text class="m-0 p-0">
                         <v-row>
-                          <v-col style="max-width: 50px; margin: auto">
+                          <v-col style="max-width: 45px; margin: auto">
                             <img
                               src="/dashboard_icons/event.png"
-                              style="width: 55px"
+                              style="width: 45px"
                             />
                           </v-col>
 
@@ -323,10 +323,10 @@
                     <v-card style="height: 85px" elevation="2">
                       <v-card-text class="m-0 p-0">
                         <v-row>
-                          <v-col style="max-width: 50px; margin: auto">
+                          <v-col style="max-width: 45px; margin: auto">
                             <img
                               src="/dashboard_icons/water.png"
-                              style="width: 55px"
+                              style="width: 45px"
                             />
                           </v-col>
 
@@ -367,10 +367,10 @@
                     <v-card style="height: 85px" elevation="2">
                       <v-card-text class="m-0 p-0">
                         <v-row>
-                          <v-col style="max-width: 50px; margin: auto">
+                          <v-col style="max-width: 45px; margin: auto">
                             <img
                               src="/dashboard_icons/temperature.png"
-                              style="width: 55px"
+                              style="width: 50px"
                             />
                           </v-col>
 

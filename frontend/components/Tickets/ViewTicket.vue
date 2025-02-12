@@ -8,15 +8,23 @@
 
     <v-card class="elevation-0 p-2" style="padding: 5px">
       <v-row>
-        <v-col cols="12" style="height: 150px">
+        <v-col cols="12">
           <v-row class="pt-0">
             <v-col>
               <h3>Subject: {{ payload_ticket.subject }}</h3>
+              <span
+                >Created:
+                {{
+                  $dateFormat.formatDateMonthYear(
+                    payload_ticket.created_datetime
+                  )
+                }}</span
+              >
             </v-col>
             <v-col
               cols="12"
               dense
-              style="height: 270px; border: 1px solid #ddd"
+              style="height: 150px; border: 1px solid #ddd; overflow-y: scroll"
             >
               <div v-html="payload_ticket.description"></div>
             </v-col>
@@ -25,19 +33,25 @@
       </v-row>
 
       <v-row style="margin-top: 15px">
-        <v-col cols="6">
-          <h3>Attachments({{ editItem?.attachments?.length ?? 0 }})</h3></v-col
+        <v-col cols="6" style="padding-bottom: 0px">
+          <h4>Attachments({{ editItem?.attachments?.length ?? 0 }})</h4></v-col
         >
-        <v-col cols="6">
-          <a
-            class="pr-5"
+        <v-col cols="12">
+          <div
             v-if="editItem?.attachments"
-            v-for="attachment in editItem.attachments"
-            title="Download Profile Picture"
-            :href="getDonwloadLink(attachment.ticket_id, attachment.attachment)"
-            >{{ attachment.title }}
-            <v-icon color="violet">mdi-arrow-down-bold-circle</v-icon></a
+            v-for="(attachment, index) in editItem.attachments"
           >
+            {{ ++index }}:
+            <a
+              style="text-decoration: none"
+              title="Download Profile Picture"
+              :href="
+                getDonwloadLink(attachment.ticket_id, attachment.attachment)
+              "
+              >{{ attachment.title }}
+              <v-icon color="violet">mdi-arrow-down-bold-circle</v-icon></a
+            >
+          </div>
         </v-col>
       </v-row>
     </v-card>
@@ -74,6 +88,7 @@ export default {
     if (this.editId != "" && this.editItem) {
       this.payload_ticket.subject = this.editItem.subject;
       this.payload_ticket.description = this.editItem.description;
+      this.payload_ticket.created_datetime = this.editItem.created_datetime;
     }
   },
 
