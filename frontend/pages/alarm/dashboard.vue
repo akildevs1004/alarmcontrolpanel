@@ -434,7 +434,7 @@
 
                               font-weight: bold;
                             "
-                            ><div style="font-size: 20px; color: #06b050">
+                            ><div style="font-size: 30px; color: #06b050">
                               {{
                                 customerStatusData
                                   ? customerStatusData.onlineCount
@@ -450,7 +450,7 @@
 
                               font-weight: bold;
                             "
-                            ><div style="font-size: 20px; color: #fe0000">
+                            ><div style="font-size: 30px; color: #fe0000">
                               {{
                                 customerStatusData
                                   ? customerStatusData.offlineCount

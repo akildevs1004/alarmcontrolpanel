@@ -16,7 +16,7 @@
 
   {
     "icon": "mdi-home",
-    "title": "Active Events",
+    "title": "Events",
     "to": "/operator/eventslist",
     "menu": "operator_eventslist",
     "module": "topmenu"

@@ -10,7 +10,7 @@
       <v-col md="12" sm="12" cols="12" dense>
         <v-card class="elevation-0 p-2 pa-2" style="border: 1px solid #ddd">
           <v-row>
-            <v-col cols="12" style="height: 300px">
+            <v-col cols="12" style="">
               <v-row class="pt-0">
                 <v-col>
                   <h3>Subject: {{ payload_ticket.subject }}</h3>
@@ -51,12 +51,7 @@
           <v-row style="margin-top: 15px">
             <v-col cols="6"> <h3>Attachments</h3></v-col>
             <v-col cols="6">
-              <div style="float: right">
-                <v-checkbox
-                  v-model="payload_ticket.status"
-                  label="Close Ticket"
-                ></v-checkbox>
-              </div>
+              <div style="float: right"></div>
             </v-col>
             <v-col cols="12" class="text-right mt-0 pt-0">
               <v-form class="mt-0" ref="form" method="post" lazy-validation>
@@ -123,7 +118,15 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" class="text-right pb-5">
+            <v-col>
+              <v-checkbox
+                class="text-right pb-5 mt-0"
+                style="margin-top: 0px"
+                v-model="payload_ticket.status"
+                label="Close Ticket"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="6" class="text-right pb-5">
               <v-btn
                 small
                 :loading="loading"
@@ -298,7 +301,7 @@ export default {
     save_documents() {
       if (!this.editId) alert("Ticket Id is missing");
 
-      if (this.customer_id && this.security_id) {
+      if (this.customer_id || this.security_id) {
       } else {
         this.snackbar = true;
         this.response = "Operator or Customer Details are not available";

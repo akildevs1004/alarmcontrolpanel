@@ -67,6 +67,7 @@
                   v-if="customer"
                   :customer="customer"
                   :alarm_id="alarmId"
+                  :alarm="alarm"
                 />
               </v-card-text>
             </v-card>
@@ -223,7 +224,7 @@ export default {
     AlamAllEventsPopup,
     DeviceArmedLogs,
   },
-  props: ["_customerID", "alarmId"],
+  props: ["_customerID", "alarmId", "selectedAlarm", "alarm"],
   data: () => ({
     tab: "",
     customer: null,

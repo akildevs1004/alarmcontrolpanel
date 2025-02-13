@@ -228,6 +228,7 @@
             :alarmId="eventId"
             :customer="customer"
             :isPopup="true"
+            :alarm="alarm"
           />
         </v-card-text>
       </v-card>
@@ -754,6 +755,7 @@ export default {
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
+      selectedAlarm: null,
     };
   },
   watch: {
@@ -877,6 +879,7 @@ export default {
         this.key += 1;
         this.viewCustomerId = item.customer_id;
         this.eventId = item.id;
+        this.selectedAlarm = item;
         this.dialogTabViewCustomer = true;
       }
     },

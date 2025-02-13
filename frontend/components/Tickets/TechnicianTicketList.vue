@@ -50,7 +50,7 @@
     <v-dialog v-model="dialogViewTicket" width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense> View Ticket</span>
+          <span dense> Technician View Ticket</span>
           <v-spacer></v-spacer>
           <v-icon @click="dialogViewTicket = false" outlined>
             mdi mdi-close-circle
@@ -67,8 +67,8 @@
       </v-card>
     </v-dialog>
     <v-card>
-      <v-row v-if="!filterWord">
-        <v-col class="pl-4"><h3 v-if="status">Active Tickets</h3></v-col>
+      <v-row>
+        <v-col class="pl-4"><h3>Technician Tickets</h3></v-col>
 
         <v-col style="max-width: 40px; padding-top: 20px">
           <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
@@ -280,7 +280,7 @@
 
             <template v-slot:item.status="{ item }">
               <div :class="getIsReadStatus(item) ? '' : 'bold'">
-                {{ item.status == 1 ? "Open" : "Closed" }}
+                {{ item.status == 1 ? "New" : "Closed" }}
               </div>
             </template>
             <template v-slot:item.closed_datetime="{ item }">
@@ -343,7 +343,7 @@
 <script>
 import NewTicket from "../../components/Tickets/NewTicket.vue";
 import ReplyToTicket from "../../components/Tickets/ReplyToTicket.vue";
-import ViewTicket from "../../components/Tickets/ViewTicket.vue";
+import ViewTicket from "../../components/Tickets/TechnicianViewTicket.vue";
 
 export default {
   components: {

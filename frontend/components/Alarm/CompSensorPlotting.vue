@@ -73,7 +73,7 @@
                           @click="unmapSensor(index)"
                           primary
                           fill
-                          >UnMap Sensor</v-btn
+                          >Delete Sensor</v-btn
                         >
                       </v-card-text>
                     </v-card>

@@ -34,9 +34,7 @@
 
       <v-row style="margin-top: 15px">
         <v-col cols="6" style="padding-bottom: 0px">
-          <h4>Attachments({{ editItem?.attachments?.length ?? 0 }})</h4></v-col
-        >
-        <v-col cols="12">
+          <h4>Attachments({{ editItem?.attachments?.length ?? 0 }})</h4>
           <div
             v-if="editItem?.attachments"
             v-for="(attachment, index) in editItem.attachments"
@@ -52,6 +50,12 @@
               <v-icon color="violet">mdi-arrow-down-bold-circle</v-icon></a
             >
           </div>
+        </v-col>
+        <v-col cols="3">
+          <v-btn class="btn" color="primary" small>Customer Info</v-btn>
+        </v-col>
+        <v-col cols="3" class="text-right">
+          <v-btn class="btn" color="primary" small>Start Job</v-btn>
         </v-col>
       </v-row>
     </v-card>

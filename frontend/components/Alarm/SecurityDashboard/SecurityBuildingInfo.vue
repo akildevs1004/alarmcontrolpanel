@@ -183,13 +183,21 @@
               </v-tab-item>
               <v-tab-item>
                 <v-card elevation="13" outlined>
-                  <SecurityBuildingPhotos
+                  <EventsBusinessTabFloorPlan
+                    v-if="customer"
+                    :alarm="alarm"
+                    :customer="customer"
+                    :browserHeight="browserHeight"
+                  />
+                  <!-- <SecurityBuildingPhotos
                     class="rounded-lg"
                     :customer_id="customer.id"
                     :photos="customer.photos"
                     :alarm_id="alarm_id"
-                    v-if="customer" /></v-card
-              ></v-tab-item>
+                    v-if="customer" />
+                     -->
+                </v-card></v-tab-item
+              >
             </v-tabs>
           </v-col>
         </v-row>
@@ -205,7 +213,7 @@ import SecurityLeafletMap from "../../Alarm/SecurityDashboard/SecurityLeafletMap
 import SecurityBuildingPhotos from "../../Alarm/SecurityDashboard/SecurityBuildingPhotos.vue";
 export default {
   components: { SecurityGoogleMap, SecurityBuildingPhotos, SecurityLeafletMap },
-  props: ["_id", "isPopup", "customer", "alarm_id"],
+  props: ["_id", "isPopup", "customer", "alarm_id", "alarm"],
   data: () => ({
     tab: "",
   }),

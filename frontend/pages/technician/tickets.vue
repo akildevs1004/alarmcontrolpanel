@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import TicketsList from "../../components/Tickets/TicketsList.vue";
+import TicketsList from "../../components/Tickets/TechnicianTicketList.vue";
 
 export default {
   layout: "technician",

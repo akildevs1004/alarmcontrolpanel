@@ -5,8 +5,12 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <template class="pt-3 text-left">
-      <h3>All Responses({{ ticket ? ticket.responses?.length : 0 }})</h3>
+    <template class="pt-3 text-left align-left">
+      <h3 style="text-align: left">
+        All Responses({{ ticket ? ticket.responses?.length : 0 }})
+      </h3>
+
+      <!-- <div v-if="ticket.responses.length == 0">0 New Messages</div> -->
       <v-expansion-panels
         v-model="panel"
         multiple
@@ -29,7 +33,7 @@
                     item.customer_id == $auth.user.customer?.id
                   "
                 >
-                  You
+                  You (Customer)
                 </div>
                 <div
                   v-else-if="
@@ -37,7 +41,7 @@
                     item.security_id == $auth.user.security?.id
                   "
                 >
-                  You
+                  You(Operator)
                 </div>
                 <div v-else-if="item.security">
                   Operator: {{ item.security.first_name }}
