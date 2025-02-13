@@ -143,7 +143,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $alarm_type = '';
                 $alarm_source = 'Sensor';
 
-                //3401 00 000 / HOME 
+                //3401 00 000 / HOME
                 Device::where("serial_number", $serial_number)->update(
                     ["status_id" => 1, "last_live_datetime" => $log_time]
                 );
@@ -153,7 +153,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
 
 
-                //-----------Alarm Control panel - Wifi Model 
+                //-----------Alarm Control panel - Wifi Model
 
                 // if ($event == 'HEARTBEAT' || $event == '1351') {
                 //     Device::where("serial_number", $serial_number)->update(
@@ -163,7 +163,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 //     $this->closeOfflineAlarmsBySerialNumber($serial_number);
 
                 //     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
-                // } else 
+                // } else
 
 
                 if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
@@ -179,7 +179,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $this->endAllAlarmsBySerialNumber($serial_number, $log_time);
 
 
-                    //update armed log 
+                    //update armed log
                     $armedRow = ["disarm_datetime" => $log_time];
                     $record = DeviceArmedLogs::where("serial_number", $serial_number)
                         ->where("disarm_datetime", null)
@@ -230,26 +230,26 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                         }
                         if ($event == '3301') {
                             $alarm_type = '';
-                            //AC_Power Recovery 
+                            //AC_Power Recovery
                             $this->closeACOffAlarmsBySerialNumber($serial_number);
                         }
                         if ($event == '3309') {
                             $alarm_type = '';
-                            //AC_Power Recovery 
+                            //AC_Power Recovery
                             $this->closeDCOffAlarmsBySerialNumber($serial_number);
                         }
                         // if ($event == '1132') {
                         //     $alarm_type = 'Regular Alarm';
                         // }
-                        //1301 - AC Loss 
+                        //1301 - AC Loss
                         //1309 - Battery Loss
-                        //1321 - Restart Started 
+                        //1321 - Restart Started
                         //1351 - Restart End and System is on// Battery Loss
                         //3301 - AC Recovery
                         //3309 - DC Recovery
 
-                        //1406 - disam  
-                        //1455 - disam  
+                        //1406 - disam
+                        //1455 - disam
 
                     }
 
@@ -319,7 +319,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 }
             }
 
-            //update company ids armed logs 
+            //update company ids armed logs
 
 
 
@@ -346,14 +346,14 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     {
 
         $alarmActiveEvents = AlarmEvents::where("serial_number", $serial_number)->where("alarm_status", 1)->get();
-        //turn off all alarms 
+        //turn off all alarms
         foreach ($alarmActiveEvents  as $key => $event) {
             $datetime1 = new DateTime($log_end_datetime);
             $datetime2 = new DateTime($event["alarm_start_datetime"]);
 
             $interval = $datetime1->diff($datetime2);
 
-            $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes part of the interval 
+            $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes part of the interval
 
             AlarmEvents::where("id",  $event["id"])
                 ->update([
@@ -363,7 +363,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 ]);
         }
 
-        //turnoff device alarm status 
+        //turnoff device alarm status
         if ($serial_number != '') {
             $alarm_event_active_count = AlarmEvents::where("serial_number", $serial_number)->where("alarm_status", 1)->count();
             if ($alarm_event_active_count == 0) {
@@ -388,10 +388,12 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
         foreach ($logs as $key => $log) {
 
-            $device = Device::where("serial_number", $log->serial_number)->first();
 
+
+            $device = Device::where("serial_number", $log->serial_number)->first();
+            $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
             $armed_datetime = new DateTime($log->armed_datetime);
-            $armed_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
+            $armed_datetime->setTimezone(new DateTimeZone($timeZone));
 
             $data = [
                 "company_id" => $device->company_id,
@@ -410,14 +412,16 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             $device = Device::where("serial_number", $log->serial_number)->first();
             if ($device) {
 
+
+                $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
                 $disarm_datetime = new DateTime($log->disarm_datetime);
-                $disarm_datetime->setTimezone(new DateTimeZone($device->utc_time_zone));
+                $disarm_datetime->setTimezone(new DateTimeZone($timeZone));
 
 
                 $datetime1 = new DateTime($log->armed_datetime);
                 $datetime2 = $disarm_datetime;
                 $interval = $datetime1->diff($datetime2);
-                $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes 
+                $minutesDifference = $interval->i + ($interval->h * 60) + ($interval->days * 1440); // i represents the minutes
 
                 $data = [
                     "duration_in_minutes" => $minutesDifference,

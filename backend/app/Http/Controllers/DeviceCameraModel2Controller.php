@@ -37,7 +37,7 @@ class DeviceCameraModel2Controller extends Controller
         $data = [];
         $json = '{
             "cmd": "person_list_query",
-            
+
             "limit": 10,
             "offset": 0,
             "sort": "asc",
@@ -82,7 +82,7 @@ class DeviceCameraModel2Controller extends Controller
     public function closeDoor($device)
     {
         $this->resetDoorStatus($device);
-        //reset the always open door settings and then close the door automatically after 1 sec 
+        //reset the always open door settings and then close the door automatically after 1 sec
 
         $this->sxdmSn = $device->device_id;
         $json = '{
@@ -98,9 +98,9 @@ class DeviceCameraModel2Controller extends Controller
         //$this->resetDoorStatus($device);
 
         $this->sxdmSn = $device->device_id;
-        $json = '{             
-                "door_open_stat": "open"                 
-            
+        $json = '{
+                "door_open_stat": "open"
+
         }';
         $response = $this->putCURL('/api/devices/door', $json);
 
@@ -117,13 +117,13 @@ class DeviceCameraModel2Controller extends Controller
     public function resetDoorStatus($device)
     {
         $this->sxdmSn = $device->device_id;
-        $json = '{             
-                "door_open_stat": "none"   
+        $json = '{
+                "door_open_stat": "none"
 
 
         }';
-        //     $json = '{             
-        //         "door_open_stat": "close" //it will close permanent   
+        //     $json = '{
+        //         "door_open_stat": "close" //it will close permanent
 
 
         // }';
@@ -132,7 +132,7 @@ class DeviceCameraModel2Controller extends Controller
     public function updateSettings($request)
     {
         $this->sxdmSn = $request->deviceSettings['device_id'];
-        $json = '{             
+        $json = '{
                 "voice_volume": ' . round($request->deviceSettings['voice_volume']) . '   }';
         $response = $this->putCURL('/api/devices/profile', $json);
         //---------------------------
@@ -143,7 +143,7 @@ class DeviceCameraModel2Controller extends Controller
 
         $response1  = $this->putCURL('/api/devices/door', json_encode($data));
         //---------------------------
-        $json = '{             
+        $json = '{
             "recognition_mode": "' .  ($request->deviceSettings['recognition_mode']) . '"}';
         $response = $this->putCURL('/api/devices/recognition', $json);
 
@@ -254,11 +254,11 @@ class DeviceCameraModel2Controller extends Controller
 
             $json = '{
                 "cmd": "person_list_query",
-                 
+
                 "limit": 100,
                 "offset": 0,
                 "sort": "asc",
-               
+
               }';
             $persons = $this->postCURL('/api/groups/query', $json);
 
@@ -303,7 +303,7 @@ class DeviceCameraModel2Controller extends Controller
                 $password = $persons['password'];
             }
         }
-        //          
+        //
 
         try {
             if ($this->sxdmSn == '')
@@ -323,15 +323,15 @@ class DeviceCameraModel2Controller extends Controller
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => '{
-                        "person_code": ' . $system_user_id . ', 
+                        "person_code": ' . $system_user_id . ',
                         "visit_begin_time": "",
                         "visit_end_time": "",
                         "recognition_type": "staff",
                         "person_name":  "' . $name . '",
                         "person_id": "",
-                        "id":  ' . $system_user_id . ', 
+                        "id":  ' . $system_user_id . ',
                         "card_number": ' . $card_number . ',
-                        "id_number": "", 
+                        "id_number": "",
                         "pass": "",
                         "password": "' . $password . '",
                         "phone_num": "",
@@ -403,8 +403,8 @@ class DeviceCameraModel2Controller extends Controller
 
     {
         $this->sxdmSn = $device->device_id;
-
-        $utc_time_zone  = $device->utc_time_zone;
+        $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+        $utc_time_zone  = $timeZone;
         if ($utc_time_zone != '') {
 
             $timezone = new DateTimeZone($utc_time_zone);
