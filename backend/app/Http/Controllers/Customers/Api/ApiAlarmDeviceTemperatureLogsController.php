@@ -144,7 +144,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     /////->where("time_duration_seconds", "!=", null)
                     //->where("time_duration_seconds", '>', 30)
                     ->where("log_time", '>=',  $alarmData['alarm_start_datetime'])
-                    // ->where("log_time", '<=', date("Y-m-d H:i:s", strtotime("-30 seconds")))  //wait for 1 minute to close the Alram 
+                    // ->where("log_time", '<=', date("Y-m-d H:i:s", strtotime("-30 seconds")))  //wait for 1 minute to close the Alram
                     ->orderBy("log_time", "DESC")
 
                     ->first();
@@ -210,7 +210,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     //   return [$datetime1, $datetime2];
                     $interval = $datetime1->diff($datetime2);
                     $secondsDifference = $interval->s + ($interval->i * 60) + ($interval->h * 3600) + ($interval->days * 86400);
-                    if ($secondsDifference >= 0)  //close event only afer 60 seconds 
+                    if ($secondsDifference >= 0)  //close event only afer 60 seconds
                     { //as per cron job have to wait 1 minute
 
                         $datetime1 = new DateTime($logs['log_time']);
@@ -308,7 +308,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         $alarm_catgory = $logs['alarm_type'] == 'SOS' || $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
 
 
-                        // //verify Device , ZOne and Area - Is any alarm already active 
+                        // //verify Device , ZOne and Area - Is any alarm already active
                         $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
                             ->where("zone", $logs['zone'])
                             ->where("area", $logs['area'])
@@ -319,7 +319,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                            //verify if OLD alram active count 
+                            //verify if OLD alram active count
 
                             $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
                                 ->whereDate("alarm_start_datetime", date("Y-m-d"))
@@ -353,7 +353,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             ];
 
 
-                            //create json file for each company  json file 
+                            //create json file for each company  json file
 
                             AlarmEvents::create($data);
                             // // try {
@@ -401,7 +401,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
                             }
                         } else {
-                            Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
+                            //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
                         }
                     }
                 }
@@ -659,7 +659,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             $deviceModel = Device::where("serial_number", $device_serial_number);
 
             $deviceObj = $deviceModel->clone()->get();
-            //update device live status 
+            //update device live status
             $deviceModel->clone()->update(["status_id" => 1, "last_live_datetime" => date("Y-m-d H:i:s")]);
             if (count($deviceObj) == 0) {
                 return $this->response('Device Information is not available', null, false);
@@ -786,7 +786,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 }
 
 
-                if ($minutesDifference >=   15 || $ignore15Minutes) { // 
+                if ($minutesDifference >=   15 || $ignore15Minutes) { //
 
 
 
@@ -867,7 +867,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                    if ($minutesDifference >=   15   || $ignore15Minutes) { // 
+                    if ($minutesDifference >=   15   || $ignore15Minutes) { //
 
                         if ($value->whatsapp_number != '') {
 
