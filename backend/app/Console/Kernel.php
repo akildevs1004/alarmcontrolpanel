@@ -29,10 +29,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule
-            ->command('task:alarm_device_sensor_logs_csv')
-            ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log")); // 
+        // $schedule
+        //     ->command('task:alarm_device_sensor_logs_csv')
+        //     ->everyMinute()
+        //     ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log")); //
 
         /*------------------------ */
         $monthYear = date("M-Y");
