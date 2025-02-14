@@ -83,7 +83,14 @@
                     <tr v-if="event_payload.event_status == 'Closed'">
                       <!-- <td>Contact Secret Code</td> -->
                       <td style="padding-top: 5px">
-                        <label>Contact Secret Code</label>
+                        <label>
+                          {{
+                            contact_type && contact_type == "primary"
+                              ? "Primary"
+                              : "Secondary"
+                          }}
+                          Contact Secret Code</label
+                        >
                         <v-text-field
                           :disabled="
                             event_payload.event_status == 'Closed'

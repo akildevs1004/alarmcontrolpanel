@@ -5,6 +5,28 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewStartJob" width="700px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Customer Contacs</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewStartJob = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
+          <PrimaryContactsInfo
+            v-if="selectedCustomer"
+            :key="key"
+            :customer="selectedCustomer"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog
       v-model="dialogViewCustomer"
       width="1200px"
@@ -90,7 +112,9 @@
           >
         </v-col>
         <v-col cols="3" class="text-right">
-          <v-btn class="btn" color="primary" small>Start Job</v-btn>
+          <v-btn class="btn" @click="startJob()" color="primary" small
+            >Start Job</v-btn
+          >
         </v-col>
       </v-row>
     </v-card>
@@ -109,12 +133,17 @@
 </template>
 
 <script>
+import PrimaryContactsInfo from "../Alarm/TechnicianDashboard/PrimaryContactsInfo.vue";
 import TechnicianCustomerTabsView from "../Alarm/TechnicianDashboard/TechnicianCustomerTabsView.vue";
 import TicketResponses from "./TicketResponses.vue";
 
 export default {
   props: ["editItem", "editId"],
-  components: { TicketResponses, TechnicianCustomerTabsView },
+  components: {
+    TicketResponses,
+    TechnicianCustomerTabsView,
+    PrimaryContactsInfo,
+  },
   data: () => ({
     dialogViewCustomer: false,
     selectedCustomer: null,
@@ -125,6 +154,7 @@ export default {
     snackText: "",
     snackbar: false,
     response: "",
+    dialogViewStartJob: false,
     //end editor
   }),
   created() {
@@ -153,7 +183,10 @@ export default {
     updateTickets() {
       this.$emit("refreshTickets");
     },
-
+    startJob() {
+      this.selectedCustomer = this.editItem.customer;
+      this.dialogViewStartJob = true;
+    },
     viewCustomer(item) {
       this.selectedCustomer = null;
       this.viewCustomerId = null;

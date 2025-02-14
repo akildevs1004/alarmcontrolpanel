@@ -2,7 +2,11 @@
   <div>
     <v-row>
       <v-col class="pt-3">
-        <table class="operatorcustomerTop1" style="width: 100%" v-if="customer">
+        <table
+          class="operatorcustomerTop1"
+          style="width: 100%; line-height: 28px"
+          v-if="customer"
+        >
           <tr class=" ">
             <td style="width: 150px">Name</td>
             <td class="bold">{{ customer.building_name }}</td>
@@ -123,7 +127,11 @@
                         >
                       </td>
                       <td>
-                        {{ contact?.address ? contact.address : "---" }}
+                        {{
+                          contact?.address && contact?.address != "null"
+                            ? contact.address
+                            : "---"
+                        }}
                       </td>
                     </tr>
                     <tr>
@@ -133,7 +141,7 @@
                         >
                       </td>
                       <td>
-                        Office Phone :
+                        <!-- Office Phone : -->
                         {{
                           contact?.office_phone ? contact.office_phone : "---"
                         }}
@@ -146,7 +154,7 @@
                         >
                       </td>
                       <td>
-                        Mobile :
+                        <!-- Mobile : -->
                         {{ contact?.phone1 ? contact.phone1 : "---" }}
                       </td>
                     </tr>
@@ -155,7 +163,7 @@
                         <v-icon color="#2038c0" size="20">mdi-cellphone</v-icon>
                       </td>
                       <td>
-                        Office :
+                        <!-- Office : -->
                         {{ contact?.phone2 ? contact.phone2 : "---" }}
                       </td>
                     </tr>
@@ -164,7 +172,7 @@
                         <v-icon color="#2038c0" size="20">mdi-whatsapp</v-icon>
                       </td>
                       <td>
-                        Whatsapp :
+                        <!-- Whatsapp : -->
                         {{ contact?.whatsapp ? contact.whatsapp : "---" }}
                       </td>
                     </tr>
@@ -173,7 +181,7 @@
                         <v-icon color="#2038c0" size="20">mdi-at</v-icon>
                       </td>
                       <td>
-                        E-Mail :
+                        <!-- E-Mail : -->
                         {{ contact?.email ? contact.email : "---" }}
                       </td>
                     </tr>
