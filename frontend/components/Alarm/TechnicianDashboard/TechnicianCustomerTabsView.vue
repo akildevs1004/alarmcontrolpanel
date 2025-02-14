@@ -192,7 +192,7 @@
                 "
                 >Events
               </v-tab>
-              <v-tab-item>
+              <v-tab-item style="height: 530px">
                 <CompGoogleMapLatLan
                   v-if="customer"
                   :alarm="alarm"
@@ -203,7 +203,7 @@
                   :contact_id="selectedCustomer.id"
                 />
               </v-tab-item>
-              <v-tab-item>
+              <v-tab-item style="height: 530px">
                 <v-row v-if="customer">
                   <v-col>
                     <div
@@ -298,17 +298,17 @@
                   </v-col>
                 </v-row>
               </v-tab-item>
-              <v-tab-item
+              <v-tab-item style="height: 530px"
                 ><v-row v-if="customer">
                   <v-col>
                     <v-carousel
+                      height="380"
                       v-model="currentSlide"
                       v-if="customer"
                       hide-delimiter-background
                       hide-arrows-on-hover
                       hide-delimiters
                       hide-arrows
-                      :style="'height:' + parseInt(browserHeight - 200) + 'px'"
                     >
                       <template
                         v-for="(item, index) in customer.profile_pictures"
@@ -319,17 +319,12 @@
                     {{ index + 1 }}: {{ item.title }}
                   </div> -->
                           <v-img
-                            style="
-                              max-width: 800px;
-                              border: 1px solid #ddd;
-                              overflow: hidden;
-                              margin: auto;
-                            "
-                            :src="
-                              item?.picture
-                                ? item.picture
-                                : '/no-profile-image.jpg'
-                            "
+                            max-width="800"
+                            height="400"
+                            class="mx-auto border"
+                            :src="item?.picture || '/no-profile-image.jpg'"
+                            contain
+                            lazy-src="/no-profile-image.jpg"
                           ></v-img>
                         </v-carousel-item>
                       </template>
@@ -381,7 +376,7 @@
                   </v-col>
                 </v-row>
               </v-tab-item>
-              <v-tab-item>
+              <v-tab-item style="height: 530px">
                 <EventsBusinessTabFloorPlan
                   v-if="customer"
                   :alarm="alarm"
@@ -389,12 +384,12 @@
                   :browserHeight="browserHeight"
                 />
               </v-tab-item>
-              <v-tab-item
+              <v-tab-item style="height: 530px"
                 ><EventsBusinessTab1Address
                   v-if="customer"
                   :customer="customer"
               /></v-tab-item>
-              <v-tab-item>
+              <v-tab-item style="height: 530px">
                 <div v-if="customer" style="padding-top: 20px">
                   <table
                     if="customer.devices"
@@ -431,7 +426,7 @@
                   </table>
                 </div>
               </v-tab-item>
-              <v-tab-item>
+              <v-tab-item style="height: 530px">
                 <AlarmCustomerEventsLog
                   v-if="customer"
                   :showTabs="false"

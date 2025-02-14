@@ -92,7 +92,7 @@
         </v-carousel>
       </v-col>
     </v-row>
-    <v-row style="margin-top: 0px">
+    <!-- <v-row style="margin-top: 0px">
       <v-col>
         <div
           style="
@@ -133,7 +133,7 @@
           </div>
         </div>
       </v-col>
-    </v-row>
+    </v-row> -->
     <!-- <v-row>
       <v-col style="width: 600px; overflow: scroll">
         <v-row justify="center" dense>
