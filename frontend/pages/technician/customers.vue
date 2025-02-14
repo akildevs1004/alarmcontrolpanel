@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <div>
     <div class="text-center ma-2">
       <v-snackbar v-model="snackbar" top="top" color="purple" elevation="24">
         {{ response }}
@@ -281,10 +281,7 @@
                       Popup
                     </v-list-item-title>
                   </v-list-item> -->
-                  <v-list-item
-                    v-if="can('device_notification_contnet_view')"
-                    @click="viewItem2(item)"
-                  >
+                  <v-list-item @click="viewItem2(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
@@ -316,7 +313,6 @@
       </v-col>
     </v-row>
   </div>
-  <NoAccess v-else />
 </template>
 
 <script>

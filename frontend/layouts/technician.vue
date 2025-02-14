@@ -1525,6 +1525,7 @@ export default {
 }
 .main_bg {
   padding-left: 140px;
+  padding-top: 35px !important;
 }
 .v-list-item {
   text-align: center;

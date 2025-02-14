@@ -19,6 +19,9 @@ class TicketsController extends Controller
     {
         $model = Tickets::with("customer")->where("company_id", $request->company_id);
 
+
+
+
         $model->when($request->filled("common_search"), function ($query) use ($request) {
 
             $query->where(function ($q) use ($request) {

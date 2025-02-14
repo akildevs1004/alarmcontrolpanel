@@ -122,9 +122,11 @@ export default {
         let colorcodes = this.$utils.getAlarmIcons();
 
         let iconURL =
-          process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png";
-        const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
-        if (colorObject) iconURL = colorObject.image;
+          process.env.BACKEND_URL2 + "/google_map_icons/google_customer.png";
+        if (this.alarm.alarm_type) {
+          const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
+          if (colorObject) iconURL = colorObject.image;
+        }
 
         const icon = {
           url: iconURL + "?5=5",

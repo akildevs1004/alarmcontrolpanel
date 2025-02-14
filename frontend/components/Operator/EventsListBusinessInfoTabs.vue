@@ -25,7 +25,7 @@
         >System</v-tab
       >
       <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
-        >Logs</v-tab
+        >Events</v-tab
       >
       <v-tab-item
         ><CompGoogleMapLatLan
@@ -218,7 +218,10 @@
 
       <v-tab-item>
         <div style="padding-top: 20px">
-          <table class="operatorcustomerTop1" style="width: 100%">
+          <table
+            class="operatorcustomerTop1"
+            style="width: 100%; line-height: 40px"
+          >
             <tr>
               <td class="bold">#</td>
               <td class="bold">Zone Number</td>

@@ -5,7 +5,36 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-dialog
+      v-model="dialogViewCustomer"
+      width="1200px"
+      height="700px"
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">View Customer Information</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewCustomer = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
+          <TechnicianCustomerTabsView
+            v-if="selectedCustomer"
+            :key="key"
+            :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
+            :isPopup="true"
+            :isEditable="false"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-card class="elevation-0 p-2" style="padding: 5px">
       <v-row>
         <v-col cols="12">
@@ -52,7 +81,13 @@
           </div>
         </v-col>
         <v-col cols="3">
-          <v-btn class="btn" color="primary" small>Customer Info</v-btn>
+          <v-btn
+            class="btn"
+            color="primary"
+            @click="viewCustomer(editItem)"
+            small
+            >Customer Info</v-btn
+          >
         </v-col>
         <v-col cols="3" class="text-right">
           <v-btn class="btn" color="primary" small>Start Job</v-btn>
@@ -74,11 +109,17 @@
 </template>
 
 <script>
+import TechnicianCustomerTabsView from "../Alarm/TechnicianDashboard/TechnicianCustomerTabsView.vue";
 import TicketResponses from "./TicketResponses.vue";
+
 export default {
   props: ["editItem", "editId"],
-  components: { TicketResponses },
+  components: { TicketResponses, TechnicianCustomerTabsView },
   data: () => ({
+    dialogViewCustomer: false,
+    selectedCustomer: null,
+    viewCustomerId: null,
+    key: 0,
     snack: false,
     snackColor: "",
     snackText: "",
@@ -111,6 +152,18 @@ export default {
     },
     updateTickets() {
       this.$emit("refreshTickets");
+    },
+
+    viewCustomer(item) {
+      this.selectedCustomer = null;
+      this.viewCustomerId = null;
+      this.$axios
+        .get(`customers`, { params: { customer_id: item.customer_id } })
+        .then(({ data }) => {
+          this.selectedCustomer = data.data[0];
+          this.viewCustomerId = item.customer_id;
+          this.dialogViewCustomer = true;
+        });
     },
   },
 };

@@ -196,7 +196,8 @@
 
           <v-col class="text-right mt-1">
             <v-row>
-              <v-col>
+              <v-col></v-col>
+              <v-col style="max-width: 100px">
                 <v-icon
                   loading="true"
                   @click="getDataFromApi(0)"
@@ -204,7 +205,7 @@
                   >mdi-reload</v-icon
                 >
               </v-col>
-              <v-col>
+              <v-col style="max-width: 200px">
                 <v-text-field
                   style="padding-top: 7px; float: right"
                   height="20"
@@ -246,7 +247,7 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-              <v-col style="padding-right: 0px">
+              <v-col style="padding-right: 0px; max-width: 200px">
                 <v-select
                   class="employee-schedule-search-box"
                   style="
@@ -269,7 +270,7 @@
                   item-value="id"
                 ></v-select>
               </v-col>
-              <v-col>
+              <v-col style="max-width: 230px">
                 <CustomFilter
                   style="float: left; padding-top: 5px; z-index: 999"
                   @filter-attr="filterAttr"
@@ -605,6 +606,7 @@ export default {
     "eventFilter",
     "filter_customer_id",
     "compFilterAlarmStatus",
+    "showTabs",
   ],
   data() {
     return {
@@ -704,7 +706,7 @@ export default {
     // this.date_to = monthObj.last;
 
     setTimeout(() => {
-      this.getSensorsList();
+      if (!this.showTabs || showTabs) this.getSensorsList();
     }, 2000);
     if (this.sensorItems.length == 0) {
       this.$axios
