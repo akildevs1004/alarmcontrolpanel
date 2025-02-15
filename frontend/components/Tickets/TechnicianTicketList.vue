@@ -549,7 +549,7 @@ export default {
     closeDialogProcess() {
       this.key++;
       this.dialogCloseJob = false;
-
+      this.getDataFromApi();
       this.$emit("close_dialog");
     },
     closeTicket(ticket) {
