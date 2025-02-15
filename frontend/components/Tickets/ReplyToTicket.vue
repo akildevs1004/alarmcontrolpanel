@@ -119,12 +119,12 @@
 
           <v-row>
             <v-col>
-              <v-checkbox
+              <!-- <v-checkbox
                 class="text-right pb-5 mt-0"
                 style="margin-top: 0px"
                 v-model="payload_ticket.status"
                 label="Close Ticket"
-              ></v-checkbox>
+              ></v-checkbox> -->
             </v-col>
             <v-col cols="6" class="text-right pb-5">
               <v-btn
@@ -141,11 +141,11 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" class="text-right">
         <TicketResponses v-if="editItem" :ticket="editItem" />
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 

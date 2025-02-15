@@ -5,6 +5,7 @@ namespace App\Models\Customers;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
 use App\Models\Customers\TicketResponses;
+use App\Models\TicketCategories;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +30,10 @@ class Tickets extends Model
     {
         return $this->belongsTo(Customers::class, "customer_id", "id");
     }
-
+    public function category()
+    {
+        return $this->belongsTo(TicketCategories::class, "category_id", "id");
+    }
     public function security()
     {
         return $this->belongsTo(SecurityLogin::class, "security_id", "id");

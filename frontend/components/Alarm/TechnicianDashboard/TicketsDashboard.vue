@@ -63,12 +63,13 @@
     </v-row>
 
     <v-row class="mt-5">
-      <v-col cols="12"
-        ><TicketsList
+      <v-col cols="12">
+        <TechnicianTicketList
           :canReply="canReply"
           :status="1"
           :technician_id="technician_id"
-      /></v-col>
+        />
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -82,7 +83,7 @@ import Tickets10DaysPendingStats from "../../../components/Alarm/TechnicianDashb
 
 import Tickets30DaysPendingStats from "../../../components/Alarm/TechnicianDashboard/Tickets30DaysPendingStats.vue";
 
-import TicketsList from "../../../components/Tickets/TicketsList.vue";
+import TechnicianTicketList from "../../../components/Tickets/TechnicianTicketList.vue";
 
 export default {
   props: ["canReply"],
@@ -92,7 +93,7 @@ export default {
     TicketsTodayStats,
     Tickets10DaysPendingStats,
     Tickets30DaysPendingStats,
-    TicketsList,
+    TechnicianTicketList,
   },
   data: () => ({
     dialogEventsList: false,

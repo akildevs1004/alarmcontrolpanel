@@ -235,13 +235,14 @@
                       hide-delimiter-background
                       show-arrows-on-hover
                       style="width: 100%"
+                      hide-delimiters
                     >
                       <template
                         v-for="(item, index) in customer.cameras"
                         :name="item.id"
                         style="width: 100%"
                       >
-                        <v-carousel-item style="padding-top: 50px; width: 100%">
+                        <v-carousel-item style="width: 100%">
                           <v-chip color="#203864" style="color: #fff" label
                             >{{ index + 1 }}: {{ item.title }}</v-chip
                           >
@@ -254,8 +255,8 @@
                           >
                             <iframe
                               :style="';  border: none;  min-width:750px'"
-                              :width="browserWidth - 800"
-                              :height="browserHeight - 200"
+                              :width="browserWidth - 700"
+                              :height="browserHeight - 150"
                               v-if="browserWidth && getCameraUrl(item) != ''"
                               :src="getCameraUrl(item)"
                             ></iframe>
@@ -376,7 +377,7 @@
                   </v-col>
                 </v-row>
               </v-tab-item>
-              <v-tab-item style="height: 530px">
+              <v-tab-item style="height: 560px; margin-top: -20px">
                 <EventsBusinessTabFloorPlan
                   v-if="customer"
                   :alarm="alarm"

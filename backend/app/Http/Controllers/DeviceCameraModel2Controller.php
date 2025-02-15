@@ -403,7 +403,7 @@ class DeviceCameraModel2Controller extends Controller
 
     {
         $this->sxdmSn = $device->device_id;
-        $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+        $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
         $utc_time_zone  = $timeZone;
         if ($utc_time_zone != '') {
 

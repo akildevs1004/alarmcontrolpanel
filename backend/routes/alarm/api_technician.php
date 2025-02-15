@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Customers\TechnicianLoginsController;
+use App\Http\Controllers\Customers\TicketCategoriesController;
 use App\Http\Controllers\Customers\TicketResponsesController;
 use App\Http\Controllers\Customers\TicketsController;
 use App\Models\Customers\TicketResponses;
@@ -25,3 +26,6 @@ Route::get("technician_tickets_today_stats", [TicketsController::class, 'technic
 Route::get("technician_tickets_pending_days_stats", [TicketsController::class, "technicianDashboardPendingMorethanDaysStats"]);
 
 Route::get("tickets_unread_notifications", [TicketsController::class, "ticketsUnreadNotifications"]);
+
+Route::post("technician_start_job", [TicketsController::class, "TechnicianStartJob"]);
+Route::get("ticket_categories", [TicketsController::class, "TicketCategories"]);

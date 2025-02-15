@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EmailContentDefault;
+use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\TicketAttachments;
+use App\Models\Customers\TicketResponses;
 use App\Models\Customers\Tickets;
+use App\Models\Device;
+use App\Models\TicketCategories;
 use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TicketsController extends Controller
 {
@@ -17,10 +24,12 @@ class TicketsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Tickets::with("customer")->where("company_id", $request->company_id);
+        $model = Tickets::with(["customer", "category"])->where("company_id", $request->company_id);
 
 
-
+        $model->when($request->filled("category_id"), function ($query) use ($request) {
+            $query->where("category_id", $request->category_id);
+        });
 
         $model->when($request->filled("common_search"), function ($query) use ($request) {
 
@@ -121,8 +130,11 @@ class TicketsController extends Controller
         $selected["created_datetime"] = date("Y-m-d H:i:s");
         //$selected["is_read"] = false;
         $selected["is_technician_read"] = false;
-        $selected["is_customer_read"] = true;
-        $selected["is_security_read"] = true;
+        $selected["is_customer_read"] = false;
+        $selected["is_security_read"] = false;
+
+        if ($request->filled("category_id"))
+            $selected["category_id"] = $request->category_id;
 
 
         $model = Tickets::create($selected);
@@ -291,5 +303,99 @@ class TicketsController extends Controller
 
 
         return [];
+    }
+
+    public function TechnicianStartJob(Request $request)
+    {
+
+
+        $request->validate([
+
+            'company_id' => 'required|integer',
+            'customer_id' => 'required|integer',
+            'technician_id' => 'required|integer',
+            'pin_verified_by_id' => 'required|integer',
+            'tikcet_id' => 'required|integer',
+            'pin_number' => 'required|integer',
+            'close_ticket' => 'nullable|integer',
+
+
+
+
+        ]);
+
+
+        if ($request->filled("contact_type")) {
+
+
+
+            $contactModel = CustomerContacts::where("id", $request->input('pin_verified_by_id'))
+                ->where("alarm_stop_pin", (int)$request->input('pin_number'))
+                ->get();
+
+            if (count($contactModel) == 0) {
+                return [
+                    "status" => false,
+                    "errors" => ['pin_number' => ['Customer PIN number is not matched']],
+                ];
+            } else {
+
+                $device = Device::where("customer_id", $request->customer_id)->first();
+                $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
+                $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
+                $currentDateTime = $dateObj->format('Y-m-d H:i:s');
+
+
+                $data2 = [];
+
+                if ($request->filled('close_ticket')) {
+                    $data2["job_end_verified_contact_id"] = $request->pin_verified_by_id;
+                    $data2["job_end_datetime"] =  $currentDateTime;
+                    $data2["status"] = 0;
+                } else {
+                    $data2["job_start_verified_contact_id"] = $request->pin_verified_by_id;
+                    $data2["job_start_datetime"] =  $currentDateTime;
+                }
+
+
+
+
+                $ticket = Tickets::where("id", $request->tikcet_id);
+                $ticket->update($data2);
+            }
+        }
+
+
+        $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+        $data = [
+            "company_id" => $request->company_id,
+            "ticket_id" => $request->tikcet_id,
+            "technician_id" => $request->technician_id,
+            "description" => $subject,
+            "created_datetime" => date("Y-m-d H:i:s")
+        ];
+
+        $model = TicketResponses::create($data);
+        if ($contactModel[0]["email"] != '') {
+            $emailData = [
+                'subject' => $subject,
+                'body' =>  $subject,
+            ];
+            $body_content1 = new EmailContentDefault($emailData);
+            try {
+                Mail::to($contactModel[0]["email"])
+                    ->send($body_content1);
+            } catch (\Exception $e) {
+            }
+        }
+
+
+        return $this->response("Technician Job started Successfully", null, true);
+    }
+
+    public function TicketCategories(Request $request)
+    {
+
+        return TicketCategories::query()->get();
     }
 }

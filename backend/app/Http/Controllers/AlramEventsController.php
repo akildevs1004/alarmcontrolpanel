@@ -48,44 +48,44 @@ class AlramEventsController extends Controller
      * @param  \App\Models\AlramEvents  $alramEvents
      * @return \Illuminate\Http\Response
      */
-    public function show(AlramEvents $alramEvents)
-    {
-        //
-    }
+    // public function show(AlramEvents $alramEvents)
+    // {
+    //     //
+    // }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AlramEvents  $alramEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AlramEvents $alramEvents)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  *
+    //  * @param  \App\Models\AlramEvents  $alramEvents
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function edit(AlramEvents $alramEvents)
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AlramEvents  $alramEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, AlramEvents $alramEvents)
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  \App\Models\AlramEvents  $alramEvents
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function update(Request $request, AlramEvents $alramEvents)
+    // {
+    //     //
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\AlramEvents  $alramEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(AlramEvents $alramEvents)
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  \App\Models\AlramEvents  $alramEvents
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function destroy(AlramEvents $alramEvents)
+    // {
+    //     //
+    // }
 
     public function verifyOfflineDevices()
     {
@@ -97,7 +97,7 @@ class AlramEventsController extends Controller
         $offlineDevices = [];
 
         foreach ($devices as $device) {
-            $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+            $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
             $nowInTimeZone = Carbon::now($timeZone);
 
 

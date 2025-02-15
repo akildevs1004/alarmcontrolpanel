@@ -12,7 +12,7 @@
           <v-row>
             <v-col cols="12" style="height: 300px">
               <v-row class="pt-0">
-                <v-col cols="12" dense>
+                <v-col :cols="is_admin ? 6 : 12" dense>
                   <v-text-field
                     label="Subject"
                     dense
@@ -29,6 +29,40 @@
                     >{{ errors.subject[0] }}</span
                   >
                 </v-col>
+
+                <v-col cols="3" v-if="is_admin"
+                  ><v-autocomplete
+                    clearable
+                    style="width: 200px"
+                    class="reports-events-autocomplete bgwhite"
+                    v-model="filter_customer_id"
+                    :items="customersList"
+                    dense
+                    placeholder="All Customers"
+                    outlined
+                    item-value="id"
+                    item-text="building_name"
+                    hide-details
+                  >
+                  </v-autocomplete
+                ></v-col>
+                <v-col cols="3" v-if="is_admin">
+                  {{ category_id }}
+                  <v-autocomplete
+                    clearable
+                    style="width: 200px"
+                    class="reports-events-autocomplete bgwhite"
+                    v-model="category_id"
+                    :items="categoryList"
+                    dense
+                    placeholder="Category"
+                    outlined
+                    item-value="id"
+                    item-text="name"
+                    hide-details
+                  >
+                  </v-autocomplete
+                ></v-col>
                 <v-col cols="12" dense>
                   <v-textarea
                     style="width: 100%"
@@ -165,7 +199,11 @@ export default {
   props: ["customer_id", "security_id", "editId", "editItem", "editable"],
   // components: { TiptapVuetify },
   data: () => ({
+    category_id: null,
     TitleRules: [(v) => !!v || "Title is required"],
+    customersList: [],
+    filter_customer_id: null,
+    categoryList: [],
     extensions: [
       // History,
       // Blockquote,
@@ -243,16 +281,41 @@ export default {
     snack: false,
     snackColor: "",
     snackText: "",
-
+    is_admin: false,
     //end editor
   }),
   created() {
     this.primary_previewImage = null;
     this.payload_ticket = { subject: "", description: "" };
+    this.getCustomersList();
+
+    this.getCategoriesList();
     this.preloader = false;
+
+    if (this.$auth.user.user_type == "company") this.is_admin = true;
   },
 
   methods: {
+    async getCustomersList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/customers_list`, options).then(({ data }) => {
+        this.customersList = data;
+      });
+    },
+    async getCategoriesList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/ticket_categories`, options).then(({ data }) => {
+        this.categoryList = data;
+      });
+    },
     onScroll() {
       this.scrollInvoked++;
     },
@@ -303,8 +366,12 @@ export default {
       payload.append(`company_id`, this.$auth?.user?.company?.id);
       if (this.$auth?.user.customer)
         payload.append(`customer_id`, this.$auth?.user.customer.id);
-      if (this.$auth?.user.security)
+      else if (this.$auth?.user.security)
         payload.append(`security_id`, this.$auth?.user.security.id);
+
+      payload.append(`customer_id`, this.filter_customer_id);
+      if (this.category_id) payload.append(`category_id`, this.category_id);
+
       payload.append(`subject`, this.payload_ticket.subject);
       payload.append(`description`, this.payload_ticket.description);
 

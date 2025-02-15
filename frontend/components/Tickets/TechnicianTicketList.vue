@@ -5,6 +5,47 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogCloseJob" width="700px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"
+            >Close Ticket - Customer Contacs</span
+          >
+          <v-spacer></v-spacer>
+          <v-icon style="color: black" @click="dialogCloseJob = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
+          <PrimaryContactsInfo
+            v-if="selectedCustomer"
+            :key="key"
+            :customer="selectedCustomer"
+            :ticketId="editId"
+            @closeDialogCall="closeDialogProcess()"
+            :close_ticket="true"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="dialogTicketResponsesList"
+      max-width="700px"
+      style="z-index: 9999"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense>Ticket History</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogTicketResponsesList = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <TicketResponses :ticket="editItem" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogNewTicket" max-width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -27,9 +68,7 @@
     <v-dialog v-model="dialogReply" max-width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense>
-            Ticket Information - {{ editItem?.created_datetime }}</span
-          >
+          <span dense> Reply to Ticket - {{ editItem?.created_datetime }}</span>
           <v-spacer></v-spacer>
           <v-icon @click="dialogReply = false" outlined>
             mdi mdi-close-circle
@@ -60,6 +99,7 @@
           <ViewTicket
             :key="key"
             :editItem="editItem"
+            :editId="editItem?.id"
             @close_dialog="close_dialog_reaction"
             @refreshTickets="getDataFromApi"
           />
@@ -99,6 +139,24 @@
             :defaultFilterType="1"
             :height="'40px'"
         /></v-col>
+        <v-col style="max-width: 250px" class="pt-5">
+          <v-select
+            @change="getDataFromApi()"
+            clearable
+            style="width: 200px"
+            v-model="filterCategoryId"
+            :items="[{ id: null, name: 'All Categories' }, ...categoryList]"
+            dense
+            placeholder="Category"
+            outlined
+            item-value="id"
+            item-text="name"
+            height="20px"
+            class="employee-schedule-search-box"
+            hide-details
+          >
+          </v-select>
+        </v-col>
         <v-col style="max-width: 160px" class="pt-5">
           <v-select
             @change="getDataFromApi()"
@@ -117,7 +175,7 @@
           </v-select>
         </v-col>
         <v-col
-          v-if="technician_id == null && customer_id"
+          v-if="technician_id == null"
           class="pt-5"
           style="max-width: 80px"
         >
@@ -240,7 +298,17 @@
             <template v-slot:item.customer="{ item }">
               <div
                 :class="getIsReadStatus(item) ? '' : 'bold'"
-                v-if="item.customer"
+                v-if="item.category_id > 0"
+              >
+                Admin
+                <div class="secondary-value">
+                  <!-- Customer <br /> -->
+                  For {{ item.customer.building_name }}
+                </div>
+              </div>
+              <div
+                :class="getIsReadStatus(item) ? '' : 'bold'"
+                v-else-if="item.customer"
               >
                 {{ item.customer.building_name }}
                 <div class="secondary-value">Customer</div>
@@ -267,10 +335,14 @@
             <template v-slot:item.ticket_responses="{ item }">
               <div
                 :class="getIsReadStatus(item) ? '' : 'bold'"
-                @click="addReply(item, false)"
+                @click="responses(item)"
               >
                 {{ item.responses?.length || 0 }}
               </div>
+            </template>
+
+            <template v-slot:item.category_id="{ item }">
+              {{ item.category?.name || "---" }}
             </template>
             <template v-slot:item.last_active_datetime="{ item }">
               <div :class="getIsReadStatus(item) ? '' : 'bold'">
@@ -280,7 +352,13 @@
 
             <template v-slot:item.status="{ item }">
               <div :class="getIsReadStatus(item) ? '' : 'bold'">
-                {{ item.status == 1 ? "New" : "Closed" }}
+                <div v-if="item.status == 0" style="color: red">
+                  Closed <br />{{
+                    $dateFormat.formatDateMonthYear(item.last_active_datetime)
+                  }}
+                </div>
+                <div v-else-if="item.responses?.length > 0">in-Process</div>
+                <div v-else-if="item.status == 1" style="color: green">New</div>
               </div>
             </template>
             <template v-slot:item.closed_datetime="{ item }">
@@ -300,7 +378,13 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item @click="addReply(item)" v-if="verifyCanReply()">
+                  <v-list-item @click="responses(item)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-view-list</v-icon>
+                      History
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="addReply(item)" v-if="item.status != 0">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-reply</v-icon>
                       Reply
@@ -309,7 +393,19 @@
                   <v-list-item @click="viewTicket(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-information</v-icon>
-                      View
+                      Info
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="
+                      (userType == 'technician' || userType == 'operator') &&
+                      item.status != 0
+                    "
+                    @click="closeTicket(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="red" small> mdi-close-box</v-icon>
+                      Close
                     </v-list-item-title>
                   </v-list-item>
                   <!-- <v-list-item
@@ -344,12 +440,16 @@
 import NewTicket from "../../components/Tickets/NewTicket.vue";
 import ReplyToTicket from "../../components/Tickets/ReplyToTicket.vue";
 import ViewTicket from "../../components/Tickets/TechnicianViewTicket.vue";
+import PrimaryContactsInfo from "../Alarm/TechnicianDashboard/PrimaryContactsInfo.vue";
+import TicketResponses from "./TicketResponses.vue";
 
 export default {
   components: {
     NewTicket,
     ReplyToTicket,
     ViewTicket,
+    TicketResponses,
+    PrimaryContactsInfo,
   },
   props: [
     "canReply",
@@ -361,6 +461,11 @@ export default {
   ],
   data() {
     return {
+      selectedCustomer: null,
+      dialogCloseJob: false,
+      filterCategoryId: null,
+      categoryList: [],
+      dialogTicketResponsesList: false,
       messageReply: true,
       filterRequestfrom: "",
       displayDateFilter: false,
@@ -390,21 +495,25 @@ export default {
         { text: "Created By", value: "customer", sortable: false },
         { text: "Subject", value: "subject", sortable: false },
 
+        { text: "Category", value: "category_id", sortable: false },
+
+        // { text: "Reply Count", value: "ticket_responses", sortable: false },
+        // { text: "Closed Date", value: "closed_datetime", sortable: false },
         {
           text: "Last Activity",
           value: "last_active_datetime",
           sortable: false,
         },
-        { text: "Status", value: "status", sortable: false },
-        { text: "Reply Count", value: "ticket_responses", sortable: false },
-        { text: "Closed Date", value: "closed_datetime", sortable: false },
-        { text: "Requested Date", value: "created_datetime", sortable: false },
 
+        { text: "Status", value: "status", sortable: false },
+        { text: "Requested Date", value: "created_datetime", sortable: false },
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
       dialogNewTicket: false,
       isPageload: true,
+      is_admin: false,
+      userType: "",
     };
   },
   watch: {
@@ -422,6 +531,10 @@ export default {
     // this.date_to = null; // monthObj.last;
 
     this.getDataFromApi();
+    this.getCategoriesList();
+    if (this.$auth.user.user_type == "company") this.is_admin = true;
+
+    this.userType = this.$auth.user.user_type;
 
     // setInterval(() => {
     //   if (this.dialogViewTicket == false && this.dialogReply == false)
@@ -433,11 +546,38 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    closeDialogProcess() {
+      this.key++;
+      this.dialogCloseJob = false;
+
+      this.$emit("close_dialog");
+    },
+    closeTicket(ticket) {
+      this.selectedCustomer = ticket.customer;
+      this.editId = ticket.id;
+      this.dialogCloseJob = true;
+    },
     verifyCanReply() {
       if (this.canReply != null) {
         return this.canReply;
       }
       return true;
+    },
+    responses(item) {
+      this.editItem = item;
+      this.key += 1;
+
+      this.dialogTicketResponsesList = true;
+    },
+    async getCategoriesList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/ticket_categories`, options).then(({ data }) => {
+        this.categoryList = data;
+      });
     },
     getIsReadStatus(item) {
       if (this.$auth.user.user_type == "technician") {
@@ -449,6 +589,8 @@ export default {
       if (this.$auth.user.user_type == "customer") {
         return item.is_customer_read;
       }
+
+      return true;
     },
     viewTicket(item) {
       this.editItem = item;
@@ -460,6 +602,7 @@ export default {
 
       this.dialogReply = false;
       this.dialogNewTicket = false;
+      this.dialogViewTicket = false;
     },
 
     addReply(item, message = true) {
@@ -530,11 +673,12 @@ export default {
           date_from: this.date_from,
           date_to: this.date_to,
           common_search: this.commonSearch,
+          category_id: this.filterCategoryId,
           sortBy: "alarm_start_datetime",
           filterRequestfrom:
             this.filterRequestfrom == "" ? null : this.filterRequestfrom,
 
-          status: this.status ?? null,
+          //status: this.status ?? null,
           filterWord: this.filterWord ?? null,
         },
       };

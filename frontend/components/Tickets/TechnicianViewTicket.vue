@@ -8,7 +8,7 @@
     <v-dialog v-model="dialogViewStartJob" width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Customer Contacs</span>
+          <span dense style="color: black">Start Job - Customer Contacs</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -23,6 +23,8 @@
             v-if="selectedCustomer"
             :key="key"
             :customer="selectedCustomer"
+            :ticketId="editId"
+            @closeDialogCall="closeDialogProcess()"
           />
         </v-card-text>
       </v-card>
@@ -118,17 +120,18 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-divider class="mt-5"></v-divider>
+    <!-- <v-divider class="mt-5"></v-divider>
     <v-row>
       <v-col cols="12" class="text-right">
         <TicketResponses
           :expandPanels="true"
           v-if="editItem"
           :ticket="editItem"
+          :key="key"
           @updateTicketReadStatus="updateTickets"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -170,6 +173,12 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    closeDialogProcess() {
+      this.key++;
+      this.dialogViewStartJob = false;
+
+      this.$emit("close_dialog");
     },
     getDonwloadLink(ticket_id, file_name) {
       return (

@@ -391,7 +391,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
             $device = Device::where("serial_number", $log->serial_number)->first();
-            $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+            $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
             $armed_datetime = new DateTime($log->armed_datetime);
             $armed_datetime->setTimezone(new DateTimeZone($timeZone));
 
@@ -413,7 +413,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
             if ($device) {
 
 
-                $timeZone = $device->utc_time_zone ?: 'Asia/Dubai';
+                $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
                 $disarm_datetime = new DateTime($log->disarm_datetime);
                 $disarm_datetime->setTimezone(new DateTimeZone($timeZone));
 

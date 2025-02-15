@@ -243,6 +243,7 @@
       </span>
 
       <v-spacer></v-spacer>
+      Customer
       <v-menu
         style="z-index: 9999 !important"
         bottom

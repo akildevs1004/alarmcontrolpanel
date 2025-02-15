@@ -1,7 +1,13 @@
 <template>
   <div>
+    <div class="text-center ma-2">
+      <v-snackbar v-model="snackbar" top="top" elevation="24">
+        {{ response }}
+      </v-snackbar>
+    </div>
     <v-tabs right show-arrows class="tabswidthalignment">
       <v-tab
+        @click="clearFrom()"
         style="font-size: 10px; min-width: 50px !important"
         v-if="
           contact.address_type.toLowerCase() == 'primary' ||
@@ -21,7 +27,7 @@
         :key="contact.id + 50"
         name="index+50"
       >
-        <v-card class="elevation-1">
+        <v-card class="elevation-1" :key="contact.id" :loading="loading">
           <v-row>
             <v-col style="margin: auto; padding-top: 0px; max-width: 200px">
               <div style="margin: auto; text-align: center">
@@ -130,8 +136,9 @@
           </v-row>
         </v-card>
         <v-card class="mt-5"
-          ><v-card-text>
+          ><v-card-text :key="contact.id">
             <!-- <v-divider></v-divider> -->
+
             <v-row class="mt-1">
               <v-col cols="6" class="text-right">
                 <label>
@@ -163,28 +170,41 @@
 
                     padding-top: 0px;
                   "
+                  max-length="10"
+                  type="number"
                 >
                 </v-text-field>
               </v-col>
 
               <v-col cols="3">
-                <v-col class="text-center"
-                  ><v-btn
+                <v-col class="text-center">
+                  <v-btn
+                    :loading="loading"
+                    @click="submit(contact.id, contact.address_type)"
                     small
                     color="#203864"
                     style="
                       margin: auto;
                       margin-top: -15px;
-                      width: 100px;
+
                       color: #fff;
                       background-color: #007d1f;
                     "
-                    >Submit</v-btn
+                    :hide-details="!errors.pin_number"
+                    :error="errors.pin_number"
+                    :error-messages="
+                      errors && errors.pin_number ? errors.pin_number : ''
+                    "
+                    >Verify and Submit</v-btn
                   ></v-col
                 >
               </v-col>
-            </v-row></v-card-text
-          ></v-card
+            </v-row>
+
+            <div style="color: red; text-align: center">
+              {{ errors && errors.pin_number ? errors.pin_number[0] : "" }}
+            </div>
+          </v-card-text></v-card
         >
       </v-tab-item>
     </v-tabs>
@@ -194,14 +214,122 @@
 <script>
 export default {
   components: {},
-  props: ["customer"],
+  props: ["customer", "ticketId", "close_ticket"],
   data: () => ({
     responseList: "",
+    pin_number: null,
+    error_message: "",
+    color: "background",
+    errors: [],
+    response: "",
+    snackbar: false,
+    key: 0,
+    loading: false,
   }),
   computed: {},
   mounted() {},
   created() {},
 
-  methods: {},
+  methods: {
+    clearFrom() {
+      this.pin_number = "";
+      this.response = "";
+      this.errors = [];
+    },
+    submit(contact_id, address_type) {
+      if (this.close_ticket) {
+        if (!confirm("Are you sure want to close the Job?")) {
+          return false;
+        }
+      }
+
+      this.loading = true;
+      console.log(
+        "this.$auth.user.technician.id",
+        this.$auth.user.technician.id
+      );
+
+      if (this.$auth.user.technician?.id) {
+        let options = {
+          params: {
+            company_id: this.$auth.user.company_id,
+            technician_id: this.$auth.user.technician.id,
+            customer_id: this.customer.id,
+            pin_verified_by_id: contact_id,
+            tikcet_id: this.ticketId,
+            contact_type: address_type,
+            pin_number: this.pin_number,
+            close_ticket: this.close_ticket,
+          },
+        };
+
+        {
+          this.$axios
+            .post("/technician_start_job", options.params)
+            .then(({ data }) => {
+              this.loading = false;
+
+              this.response = "";
+
+              if (!data.status) {
+                this.errors = [];
+                if (data.errors) this.errors = data.errors;
+                this.color = "red";
+
+                this.snackbar = true;
+                //this.response = data.errors.pin_number[0];
+                const firstErrorField = Object.keys(this.errors)[0];
+
+                if (firstErrorField && this.errors[firstErrorField]?.length) {
+                  this.response = this.errors[firstErrorField][0]; // First error message
+                  //console.log(`Error in ${firstErrorField}:`, this.response);
+                } else {
+                  //this.response = "An unknown error occurred.";
+                }
+              } else {
+                this.error_message = "";
+                this.color = "background";
+                this.errors = [];
+                this.snackbar = true;
+                this.response = "Job Details Updated successfully";
+                setTimeout(() => {
+                  this.$emit("closeDialogCall");
+                }, 1000 * 1);
+              }
+            })
+            .catch((e) => {
+              console.log("e.response", e.response);
+
+              if (e.response?.data?.errors) {
+                this.errors = e.response.data.errors;
+                this.color = "red";
+                this.snackbar = true;
+                this.response = e.response.data.message;
+
+                if (this.errors.message) {
+                  this.response = this.errors.message; // Fixed typo
+                  this.error_message = this.errors.message;
+                }
+              } else if (e.response?.data) {
+                this.snackbar = true;
+                this.response = e.response.data.message;
+
+                if (e.response.data.errors) {
+                  e.response.data.errors.forEach((element) => {
+                    console.log(element);
+                    this.response = element;
+                  });
+                }
+              } else {
+                // Handle cases where response is completely missing
+                this.snackbar = true;
+                this.response = "An unexpected error occurred.";
+                console.log("Error:", e);
+              }
+            });
+        }
+      }
+    },
+  },
 };
 </script>

@@ -146,7 +146,7 @@ export default {
         //   this.dialog = true;
         //   this.customerInfo = this.customer.building_name;
         // });
-
+        let googleDirectionIcon = process.env.APP_URL + "/icons/google_map.jpg";
         let html = `
             <table style="width:250px; min-height:100px" id="infowindow-content-${this.alarm.device.customer.id}">
 
@@ -168,6 +168,12 @@ export default {
                  <div>${this.alarm.device.customer.city}</div>
 
                   <div>Landmark: ${this.alarm.device.customer.landmark}</div>
+
+                  <td style=" vertical-align: middle;text-align:right">
+ <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${this.alarm.device.customer.latitude},${this.alarm.device.customer.longitude}"><img title="Directions" style="width:20px" src="${googleDirectionIcon}"/></a>
+
+
+  </td>
                 </td>
 
 

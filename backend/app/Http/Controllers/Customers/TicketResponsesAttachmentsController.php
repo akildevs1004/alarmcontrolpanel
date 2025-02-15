@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customers;
 
-use App\Models\Customers\TicketAttachments;
+use App\Http\Controllers\Controller;
+
+use App\Models\Customers\TicketResponsesAttachments;
 use Illuminate\Http\Request;
 
-class TicketAttachmentsController extends Controller
+class TicketResponsesAttachmentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +43,10 @@ class TicketAttachmentsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customers\TicketAttachments  $ticketAttachments
+     * @param  \App\Models\Customers\TicketResponsesAttachments  $ticketResponsesAttachments
      * @return \Illuminate\Http\Response
      */
-    public function show(TicketAttachments $ticketAttachments)
+    public function show(TicketResponsesAttachments $ticketResponsesAttachments)
     {
         //
     }
@@ -52,10 +54,10 @@ class TicketAttachmentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customers\TicketAttachments  $ticketAttachments
+     * @param  \App\Models\Customers\TicketResponsesAttachments  $ticketResponsesAttachments
      * @return \Illuminate\Http\Response
      */
-    public function edit(TicketAttachments $ticketAttachments)
+    public function edit(TicketResponsesAttachments $ticketResponsesAttachments)
     {
         //
     }
@@ -64,10 +66,10 @@ class TicketAttachmentsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customers\TicketAttachments  $ticketAttachments
+     * @param  \App\Models\Customers\TicketResponsesAttachments  $ticketResponsesAttachments
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TicketAttachments $ticketAttachments)
+    public function update(Request $request, TicketResponsesAttachments $ticketResponsesAttachments)
     {
         //
     }
@@ -75,10 +77,10 @@ class TicketAttachmentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customers\TicketAttachments  $ticketAttachments
+     * @param  \App\Models\Customers\TicketResponsesAttachments  $ticketResponsesAttachments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TicketAttachments $ticketAttachments)
+    public function destroy(TicketResponsesAttachments $ticketResponsesAttachments)
     {
         //
     }

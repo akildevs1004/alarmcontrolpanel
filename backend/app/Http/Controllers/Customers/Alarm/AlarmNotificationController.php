@@ -345,7 +345,7 @@ class AlarmNotificationController extends Controller
 
             $body_content1 = new EmailAlarmForwardMail($data, $pdfPath);
             Mail::to($email)
-                ///->cc($cc_emails)
+                ->cc($cc_emails)
 
                 ->send($body_content1);
 
