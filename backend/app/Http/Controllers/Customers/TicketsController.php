@@ -339,7 +339,7 @@ class TicketsController extends Controller
                     "errors" => ['pin_number' => ['Customer PIN number is not matched']],
                 ];
             } else {
-
+                $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
                 $device = Device::where("customer_id", $request->customer_id)->first();
                 $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
                 $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
@@ -352,9 +352,13 @@ class TicketsController extends Controller
                     $data2["job_end_verified_contact_id"] = $request->pin_verified_by_id;
                     $data2["job_end_datetime"] =  $currentDateTime;
                     $data2["status"] = 0;
+
+                    $subject = "#" . $request->tikcet_id . ":Technican Closed Ticket with Customer Verification-" . $contactModel[0]["address_type"];
                 } else {
                     $data2["job_start_verified_contact_id"] = $request->pin_verified_by_id;
                     $data2["job_start_datetime"] =  $currentDateTime;
+
+                    $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
                 }
 
 
@@ -366,7 +370,7 @@ class TicketsController extends Controller
         }
 
 
-        $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+
         $data = [
             "company_id" => $request->company_id,
             "ticket_id" => $request->tikcet_id,
