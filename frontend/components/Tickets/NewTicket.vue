@@ -47,7 +47,6 @@
                   </v-autocomplete
                 ></v-col>
                 <v-col cols="3" v-if="is_admin">
-                  {{ category_id }}
                   <v-autocomplete
                     clearable
                     style="width: 200px"

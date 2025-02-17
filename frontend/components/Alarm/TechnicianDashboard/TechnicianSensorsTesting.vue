@@ -45,23 +45,25 @@
             </template>
 
             <template v-slot:item.test_status="{ item }">
-              <v-btn
-                v-if="item.test_status == null || item.test_status == 0"
-                small
-                color="primary"
-                fill
-                @click="sensor_test(item)"
-                >Test</v-btn
-              >
-              <v-btn
-                :loading="true"
-                v-else
-                small
-                color="red"
-                fill
-                @click="stop_test(item)"
-              >
-              </v-btn>
+              <div>
+                <v-btn
+                  v-if="testingStatus == false"
+                  small
+                  color="primary"
+                  fill
+                  @click="sensor_test(item)"
+                  >Test</v-btn
+                >
+                <v-btn
+                  v-if="testingStatus == true && item.test_status == 1"
+                  :loading="true"
+                  small
+                  color="red"
+                  fill
+                  @click="stop_test(item)"
+                >
+                </v-btn>
+              </div>
             </template>
             <template v-slot:item.test_result="{ item }">
               <!-- {{ item.test_result }} -->
@@ -207,6 +209,8 @@ export default {
     isBackendRequestOpen: false,
     interval: null, // Store interval ID
     timeout: null, // Timeout for stopping after 1 minute
+
+    testingStatus: false,
   }),
   computed: {},
   mounted() {
@@ -343,37 +347,42 @@ export default {
       }
     },
     async fetchData(sensorResult, dateTime) {
-      console.log("sensorResult", sensorResult);
+      if (this.$route.name == "technician-dashboard") {
+        console.log("sensorResult", sensorResult);
 
-      let options = {
-        params: {
-          company_id: this.$auth.user.company_id,
-          serial_number: sensorResult.device.serial_number,
-          device_id: sensorResult.device.id,
-          zone: sensorResult.zone_code,
-          area: sensorResult.area_code,
-          customer_id: this.customer_id,
-          test_date_time: dateTime,
-        },
-      };
-      console.log("options", options);
+        let options = {
+          params: {
+            company_id: this.$auth.user.company_id,
+            serial_number: sensorResult.device.serial_number,
+            device_id: sensorResult.device.id,
+            zone: sensorResult.zone_code,
+            area: sensorResult.area_code,
+            customer_id: this.customer_id,
+            test_date_time: dateTime,
+          },
+        };
+        console.log("options", options);
 
-      try {
-        this.$axios.get("technician_test_sensor", options).then(({ data }) => {
-          if (data.status) {
-            this.cleartestingmethod(sensorResult);
-            console.log("Stopped polling as API result is 1");
+        try {
+          this.$axios
+            .get("technician_test_sensor", options)
+            .then(({ data }) => {
+              if (data.status) {
+                this.cleartestingmethod(sensorResult);
+                console.log("Stopped polling as API result is 1");
 
-            this.$set(sensorResult, "test_status", 0); //stop
-            this.$set(sensorResult, "test_result", 1); //loading
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        this.loading = false;
+                this.$set(sensorResult, "test_status", 0); //stop
+                this.$set(sensorResult, "test_result", 1); //loading
+              }
+            });
+        } catch (e) {
+          console.log(e);
+          this.loading = false;
+        }
       }
     },
     sensor_test(sensor) {
+      this.testingStatus = true;
       var sensorResult = this.data.find((e) => e.id == sensor.id);
       if (sensorResult) {
         this.$set(sensorResult, "test_status", 1);
@@ -443,6 +452,8 @@ export default {
 
     cleartestingmethod(sensorResult) {
       console.log("cleartestingmethod");
+
+      this.testingStatus = false;
 
       if (this.interval) {
         clearInterval(this.interval);
