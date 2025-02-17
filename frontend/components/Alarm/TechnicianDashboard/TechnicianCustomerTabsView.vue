@@ -13,7 +13,7 @@
                     border-radius: 5%;
                     border: 1px solid #ddd;
                     margin: auto;
-                    max-height: 120px;
+                    max-height: 100px;
                   "
                   :src="
                     selectedCustomer && selectedCustomer.profile_picture

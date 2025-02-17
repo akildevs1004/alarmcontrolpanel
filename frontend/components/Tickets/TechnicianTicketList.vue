@@ -19,7 +19,7 @@
         <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
           <PrimaryContactsInfo
             v-if="selectedCustomer"
-            :key="key"
+            :key="selectedCustomer"
             :customer="selectedCustomer"
             :ticketId="editId"
             @closeDialogCall="closeDialogProcess()"
@@ -553,6 +553,7 @@ export default {
       this.$emit("close_dialog");
     },
     closeTicket(ticket) {
+      this.key++;
       this.selectedCustomer = ticket.customer;
       this.editId = ticket.id;
       this.dialogCloseJob = true;
