@@ -85,8 +85,16 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6"></v-col>
-      <v-col cols="6" class="text-right pt-0 pb-6">
+      <v-col></v-col>
+      <v-col style="max-width: 100px">
+        <span style="padding: 5px" @click="downloadOptions('print')"
+          ><img src="/icons/icon_print.png" class="iconsize"
+        /></span>
+        <span style="padding: 5px" @click="downloadOptions('download')"
+          ><img src="/icons/icon_pdf.png" class="iconsize"
+        /></span>
+      </v-col>
+      <v-col style="max-width: 150px">
         <v-btn small fill color="primary" @click="saveResults()"
           >Save Results</v-btn
         >
@@ -249,7 +257,18 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    downloadOptions(option) {
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/technician_test_results_print_pdf";
+      if (option == "excel") url += "/technician_test_results_export_excel";
+      if (option == "download") url += "/technician_test_results_download_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+      url += "&customer_id=" + this.customer_id;
 
+      url += "&ticket_id=" + this.ticket_id;
+
+      window.open(url, "_blank");
+    },
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
       if (this.loading) return false;
 

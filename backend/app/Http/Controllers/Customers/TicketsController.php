@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Mail\EmailContentDefault;
 use App\Models\AlarmEvents;
+use App\Models\Company;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\TicketAttachments;
 use App\Models\Customers\TicketResponses;
+use App\Models\Customers\TicketResponsesAttachments;
 use App\Models\Customers\Tickets;
 use App\Models\Device;
 use App\Models\TicketCategories;
 use App\Models\TicketSensorTest;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -382,21 +386,72 @@ class TicketsController extends Controller
         ];
 
         $model = TicketResponses::create($data);
+
+
+        //add test results attachement
+
+        if ($request->filled('close_ticket')) {
+            $sensorList = (new AlarmReportsController())->processTestResults($request->company_id, $request->customer_id,  $request->tikcet_id);
+
+
+
+
+            $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+            $fileName = "#" . $request->ticket_id . " - Technician Ticket - Test Sensor Results.pdf";
+
+
+
+
+            // Save PDF to a temporary path
+            $pdf = PDF::loadView("alarm_reports/technician_ticket_sensor_test_results", ["request" => $request, "reports" => $sensorList, "ticket_id" => $request->ticket_id, "company" => $company])->setPaper("A4", "portrait");
+
+
+            $fileName = time() . '.' . "pdf";
+
+            $folderPath = public_path('ticket_responses/attachments/' . $model->id . "/");
+
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath);
+            }
+
+
+
+            $pdfPath = public_path('ticket_responses/attachments/' . $model->id . "/" . $fileName);
+            $pdf->save($pdfPath);
+            $insertedId = $model->id;
+            $attachments[] = [
+                "title" => "Alarm Sensor test Results",
+                "attachment" => $fileName,
+                "file_type" => "pdf",
+                "ticket_response_id" => $insertedId,
+
+            ];
+            TicketResponsesAttachments::insert($attachments);
+        }
+
+
+
         if ($contactModel[0]["email"] != '') {
             $emailData = [
                 'subject' => $subject,
                 'body' =>  $subject,
             ];
-            $body_content1 = new EmailContentDefault($emailData);
+            if ($request->filled('close_ticket')) {
+                $body_content1 = new EmailContentDefault($emailData, $pdfPath, $fileName);
+            } else
+                $body_content1 = new EmailContentDefault($emailData);
+
             try {
                 Mail::to($contactModel[0]["email"])
+                    ->cc("venuakil2@gmail.com")
                     ->send($body_content1);
             } catch (\Exception $e) {
             }
         }
 
 
-        return $this->response("Technician Job started Successfully", null, true);
+        return $this->response("Technician Job updated Successfully", null, true);
     }
 
     public function TicketCategories(Request $request)

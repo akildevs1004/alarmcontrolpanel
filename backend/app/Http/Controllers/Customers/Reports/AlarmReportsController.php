@@ -16,6 +16,8 @@ use App\Models\AttendanceLog;
 use App\Models\Company;
 use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\Customers;
+use App\Models\Deivices\DeviceZones;
+use App\Models\TicketSensorTest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\Request;
@@ -338,6 +340,8 @@ class AlarmReportsController extends Controller
         $fileName = "Alarm Customer Events with Notes.pdf";
         return $pdf->stream($fileName);
     }
+
+
     public function alarmEventsCustomersGroupListIndividualNotesDownloadPdf(Request $request)
     {
 
@@ -411,6 +415,67 @@ class AlarmReportsController extends Controller
         $pdf = Pdf::loadView('alarm_reports/alarm_events_list_customer_individual',  ['reports' => $reports, 'company' => $company, 'customer' => $customer, "request" => $request, "counts" => $countResults])->setPaper('A4', 'potrait');
         return $pdf->stream('report.pdf');
     }
+    public function processTestResults($company_id, $customer_id, $ticket_id)
+    {
+        $model = DeviceZones::with("device")
+            ->where("company_id", $company_id)
+            ->whereHas("device", function ($query) use ($customer_id) {
+                $query->where("customer_id", $customer_id);
+            });
+
+        $sensorList = $model->orderBy("zone_code", "ASC")->get();
+
+        // Fetch all test results in one query to avoid multiple queries
+        $reportData = TicketSensorTest::where("ticket_id", $ticket_id)
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->zone_code . '-' . $item->area_code . '-' . $item->device_id;
+            });
+
+        // Attach test results to sensors efficiently
+        foreach ($sensorList as $sensor) {
+            $key = $sensor->zone_code . '-' . $sensor->area_code . '-' . $sensor->device_id;
+            $sensor->test_result = isset($reportData[$key]) ? $reportData[$key]->first()->test_status : 0;
+
+            $sensor->test_datetime = isset($reportData[$key]) ? $reportData[$key]->first()->test_datetime : 0;
+        }
+
+        return $sensorList;
+    }
+    public function technicianTestResultsDownloadPdf(Request $request)
+    {
+        $sensorList = $this->processTestResults($request->company_id, $request->customer_id, $request->ticket_id);
+
+
+
+
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $fileName = "#" . $request->ticket_id . " - Technician Ticket - Test Sensor Results.pdf";
+
+
+        return   Pdf::loadview("alarm_reports/technician_ticket_sensor_test_results", ["request" => $request, "reports" => $sensorList, "ticket_id" => $request->ticket_id, "company" => $company])->setpaper("A4", "potrait")->download($fileName);
+    }
+    public function technicianTestResultsPrintPdf(Request $request)
+    {
+
+
+
+
+
+        $sensorList = $this->processTestResults($request->company_id, $request->customer_id, $request->ticket_id);
+
+
+
+
+        $company = Company::whereId($request->company_id)->with('contact:id,company_id,number')->first();
+
+        $fileName = "#" . $request->ticket_id . " - Technician Ticket - Test Sensor Results.pdf";
+
+
+        return   Pdf::loadview("alarm_reports/technician_ticket_sensor_test_results", ["request" => $request, "reports" => $sensorList, "ticket_id" => $request->ticket_id, "company" => $company])->setpaper("A4", "potrait")->stream($fileName);
+    }
+
     public function alarmEventsCustomersGroupPrintPdf(Request $request)
     {
 

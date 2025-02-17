@@ -292,6 +292,13 @@ Route::get('device_armed_report_export_excel', [AlarmReportsController::class, '
 Route::get('device_armed_report_print_pdf', [AlarmReportsController::class, 'deviceArmedReportsPrintPdf']);
 Route::get('device_armed_report_download_pdf', [AlarmReportsController::class, 'deviceArmedReportsDownload']);
 
+
+Route::get('technician_test_results_print_pdf', [AlarmReportsController::class, 'technicianTestResultsPrintPdf']);
+Route::get('technician_test_results_export_excel', [AlarmReportsController::class, 'technicianTestResultsExportExcel']);
+Route::get('technician_test_results_download_pdf', [AlarmReportsController::class, 'technicianTestResultsDownloadPdf']);
+
+
+
 Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
 Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);
 
