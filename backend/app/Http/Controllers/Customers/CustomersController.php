@@ -1055,6 +1055,16 @@ class CustomersController extends Controller
         return $model->orderBy("zone_code", "ASC")->paginate($request->per_page ?? 10);
     }
 
+    public function getCustomerDevicesSensorZones(Request $request)
+    {
+        $model = DeviceZones::with("device")->where("company_id", $request->company_id)->whereHas("device", function ($query) use ($request) {
+            $query->where("customer_id", $request->customer_id);
+        });
+
+
+        return $model->orderBy("zone_code", "ASC")->get();
+    }
+
     public function getSensorsList()
     {
 

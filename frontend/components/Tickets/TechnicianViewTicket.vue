@@ -86,7 +86,7 @@
       </v-row>
 
       <v-row style="margin-top: 15px">
-        <v-col cols="6" style="padding-bottom: 0px">
+        <v-col style="padding-bottom: 0px">
           <h4>Attachments({{ editItem?.attachments?.length ?? 0 }})</h4>
           <div
             v-if="editItem?.attachments"
@@ -113,7 +113,11 @@
             >Customer Info</v-btn
           >
         </v-col>
-        <v-col cols="3" class="text-right">
+        <v-col
+          cols="3"
+          v-if="editItem.status == 0 && editItem.job_start_datetime == null"
+          class="text-right"
+        >
           <v-btn class="btn" @click="startJob()" color="primary" small
             >Start Job</v-btn
           >

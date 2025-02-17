@@ -5,12 +5,12 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogCloseJob" width="700px">
+    <v-dialog v-model="dialogCloseJob" width="900px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense style="color: black"
-            >Close Ticket - Customer Contacs</span
-          >
+            >Close Ticket - Customer Contacs
+          </span>
           <v-spacer></v-spacer>
           <v-icon style="color: black" @click="dialogCloseJob = false" outlined>
             mdi mdi-close-circle

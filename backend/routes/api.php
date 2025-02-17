@@ -35,21 +35,14 @@ include('realtime_location.php');
 include('clocking.php');
 include('change_request.php');
 
-include('community/room.php');
-include('community/floor.php');
-include('community/tanent.php');
-include('community/member.php');
-include('community/community.php');
-include('community/report.php');
-include('community/dashboard.php');
-include('community/parking.php');
-
 include('csv.php');
 include('other.php');
 include('camera2.php');
 include('client_support_api.php');
-include('alarm/api_alarm.php');
+
 
 include('master.php');
 
-include 'alarm/api_technician.php';
+include('alarm/api_alarm.php');
+include('alarm/api_technician.php');
+include('alarm/api_operator.php');

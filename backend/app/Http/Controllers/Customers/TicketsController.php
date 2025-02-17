@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Mail\EmailContentDefault;
+use App\Models\AlarmEvents;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\TicketAttachments;
 use App\Models\Customers\TicketResponses;
 use App\Models\Customers\Tickets;
 use App\Models\Device;
 use App\Models\TicketCategories;
+use App\Models\TicketSensorTest;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -401,5 +403,58 @@ class TicketsController extends Controller
     {
 
         return TicketCategories::query()->get();
+    }
+
+    public function TechnicianTestSensor(Request $request)
+    {
+        $test_datetime = date("Y-m-d H:i:s", strtotime("-1 minutes", strtotime($request->test_date_time)));
+
+        $alarmCount = AlarmEvents::where("serial_number", $request->serial_number)
+            ->where("zone", $request->zone)
+            ->where("area", $request->area)
+            ->where("alarm_start_datetime", ">=", $test_datetime)->get();
+        if (count($alarmCount)) {
+
+            return $this->response("Alarm Event Found", $alarmCount[0], true);
+            //return $alarmCount->alarm_start_datetime;
+        }
+
+        return $this->response("Alarm Event Not Found", null, false);
+    }
+
+    public function TechnicianTestResultsUpdate(Request $request)
+    {
+
+
+
+        if ($request->filled("results")) {
+            $data = $request->results;
+
+
+            TicketSensorTest::where("ticket_id", $request->ticket_id)->delete();
+
+            foreach ($data as $result) {
+
+                $resultsData = [
+                    "ticket_id" => $result["ticket_id"],
+                    "company_id" => $result["company_id"],
+                    "customer_id" => $result["customer_id"],
+                    "device_id" => $result["device_id"],
+                    "serial_number" => $result["serial_number"],
+                    "test_datetime" => $result["test_date_time"],
+                    "test_status" => $result["test_result"],
+                    "zone_code" => $result["zone_code"],
+                    "area_code" => $result["area_code"],
+
+
+
+
+                ];
+
+                TicketSensorTest::create($resultsData);
+            }
+        }
+
+        return $this->response("Ticket Sensor results saved", null, true);
     }
 }

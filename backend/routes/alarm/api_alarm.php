@@ -74,8 +74,7 @@ Route::post("security_customers_update", [CustomersController::class, "SecurityC
 Route::post("security_customers_single_update", [CustomersController::class, "SecurityCustomersSingleUpdate"]);
 
 Route::post("delete_customer", [CustomersController::class, "deleteCustomer"]);
-
-
+Route::get("customer_devices_sensors_zones", [CustomersController::class, "getCustomerDevicesSensorZones"]);
 
 
 // Route::get('get_master_device_serial_numbers', [CustomersController::class, 'getMasterDeviceSerialNumbers']);
@@ -118,16 +117,6 @@ Route::post('create_sensor_type', [AlarmSensorTypesController::class, 'create'])
 Route::delete('delete_sensor_type', [AlarmSensorTypesController::class, 'destroy']);
 
 
-
-
-//security dashboard
-Route::get('security_device_alarm_burglary_stats', [AlarmDashboardController::class, 'alarmEventBurglaryStatistics']);
-Route::get('security_device_alarm_medical_stats', [AlarmDashboardController::class, 'alarmEventMedicalStatistics']);
-Route::get('security_device_alarm_water_stats', [AlarmDashboardController::class, 'alarmEventWaterStatistics']);
-Route::get('security_device_alarm_temperature_stats', [AlarmDashboardController::class, 'alarmEventTemperatureStatistics']);
-Route::get('security_device_alarm_fire_stats', [AlarmDashboardController::class, 'alarmEventFireStatistics']);
-Route::get('buildingtype_customer_stats', [AlarmDashboardController::class, 'buildingtypeCustomerStats']);
-Route::get('customers_accounts_expire_stats', [AlarmDashboardController::class, 'customersAccountsExpireStats']);
 
 
 
@@ -223,6 +212,8 @@ Route::post('plotting', [PlottingController::class, "store"]);
 Route::post('reset_plotting', [PlottingController::class, "resetPlotting"]);
 Route::post('reset_plotting_all', [PlottingController::class, "resetPlottingAll"]);
 Route::get('plotting_with_customer_id', [PlottingController::class, "plottingWithCustomerId"]);
+
+
 
 
 

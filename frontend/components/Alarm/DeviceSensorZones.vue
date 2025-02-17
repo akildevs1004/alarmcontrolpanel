@@ -483,8 +483,11 @@ export default {
         this.payloadOptions.params[filter_column] = filter_value;
       this.loading = true;
 
-      this.currentPage = page;
-      this.perPage = itemsPerPage;
+      // this.currentPage = page;
+      // this.perPage = itemsPerPage;
+      this.currentPage = page ?? 1;
+      this.perPage = perPage ?? 10;
+
       try {
         this.$axios
           .get("get_device_zones", this.payloadOptions)

@@ -29,3 +29,5 @@ Route::get("tickets_unread_notifications", [TicketsController::class, "ticketsUn
 
 Route::post("technician_start_job", [TicketsController::class, "TechnicianStartJob"]);
 Route::get("ticket_categories", [TicketsController::class, "TicketCategories"]);
+Route::get("technician_test_sensor", [TicketsController::class, "TechnicianTestSensor"]);
+Route::post("technician_test_results_update", [TicketsController::class, "TechnicianTestResultsUpdate"]);
