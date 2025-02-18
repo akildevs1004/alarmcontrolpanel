@@ -64,7 +64,7 @@
       <v-row>
         <v-col cols="12">
           <v-row class="pt-0">
-            <v-col cols="6">
+            <v-col>
               <h3>Subject: {{ payload_ticket.subject }}</h3>
               <span
                 >Created:
@@ -86,7 +86,11 @@
             </v-col>
             <v-col
               cols="3"
-              v-if="editItem.status == 1 && editItem.job_start_datetime == null"
+              v-if="
+                editItem.status == 1 &&
+                editItem.job_start_datetime == null &&
+                isTechnician()
+              "
               class="text-right"
             >
               <v-btn class="btn" @click="startJob()" color="primary" small
@@ -185,6 +189,12 @@ export default {
       this.dialogViewStartJob = false;
 
       this.$emit("close_dialog");
+    },
+
+    isTechnician() {
+      if (this.$auth.user.technician) return true;
+
+      return false;
     },
     getDonwloadLink(ticket_id, file_name) {
       return (

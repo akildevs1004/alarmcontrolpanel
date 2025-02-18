@@ -351,8 +351,6 @@ class TicketsController extends Controller
                 $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
                 $currentDateTime = $dateObj->format('Y-m-d H:i:s');
 
-                //upadate technicain id
-                Device::where("customer_id", $request->customer_id)->update(["ticket_id" => $request->tikcet_id]);
 
 
 
@@ -373,6 +371,10 @@ class TicketsController extends Controller
                     $data2["technician_id"] =  $request->technician_id;
 
                     $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+
+
+                    //upadate technicain id
+                    Device::where("customer_id", $request->customer_id)->update(["ticket_id" => $request->tikcet_id]);
                 }
 
 
@@ -452,7 +454,7 @@ class TicketsController extends Controller
 
             try {
                 Mail::to($contactModel[0]["email"])
-                    ->cc("venuakil2@gmail.com")
+                    //->cc("venuakil2@gmail.com")
                     ->send($body_content1);
             } catch (\Exception $e) {
             }

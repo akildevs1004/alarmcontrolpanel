@@ -610,7 +610,7 @@ export default {
       this.buildingTypes = data;
     },
     onResize() {
-      console.log("window.innerHeight", window.innerHeight);
+      // console.log("window.innerHeight", window.innerHeight);
 
       if (window) {
         if (window) {
@@ -795,7 +795,7 @@ export default {
 
             if (this.data.length == 0) this.selectedAlarm = null;
 
-            console.log("this.selectedAlarm", this.selectedAlarm.alarm_status);
+            // console.log("this.selectedAlarm", this.selectedAlarm.alarm_status);
 
             ///////this.keySelectedItem++;
           });

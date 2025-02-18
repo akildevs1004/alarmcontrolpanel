@@ -11,6 +11,7 @@ use App\Mail\EmailContentDefault;
 use App\Mail\ReportNotificationMail;
 use App\Models\AlarmDeviceTemperatureLogs;
 use App\Models\AlarmEvents;
+use App\Models\AlarmEventsTechnician;
 use App\Models\AlarmLogs;
 use Illuminate\Http\Request;
 use App\Models\Community\AttendanceLog;
@@ -363,7 +364,14 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 ]);
         }
 
-        //turnoff device alarm status
+        AlarmEventsTechnician::where("serial_number",  $serial_number)
+            ->update([
+                "alarm_end_datetime" => $log_end_datetime,
+
+                "alarm_status" => 0
+            ]);
+
+        //turnoff device alarmlogs status
         if ($serial_number != '') {
             $alarm_event_active_count = AlarmEvents::where("serial_number", $serial_number)->where("alarm_status", 1)->count();
             if ($alarm_event_active_count == 0) {
