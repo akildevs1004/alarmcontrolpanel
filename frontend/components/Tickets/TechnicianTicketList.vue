@@ -23,6 +23,7 @@
             :customer="selectedCustomer"
             :ticketId="editId"
             @closeDialogCall="closeDialogProcess()"
+            @savedResults="savedResults()"
             :close_ticket="true"
           />
         </v-card-text>
@@ -569,6 +570,9 @@ export default {
   methods: {
     can(per) {
       return this.$pagePermission.can(per, this);
+    },
+    savedResults(status) {
+      this.status;
     },
     closeDialogProcess() {
       this.key++;

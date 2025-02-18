@@ -99,6 +99,10 @@
           >Save Results</v-btn
         >
       </v-col>
+
+      <!-- <v-col v-if="savedResults" style="max-width: 150px">
+        <v-btn small fill color="primary" @click="saveResults()">Step2</v-btn>
+      </v-col> -->
     </v-row>
   </div>
 </template>
@@ -219,6 +223,7 @@ export default {
     timeout: null, // Timeout for stopping after 1 minute
 
     testingStatus: false,
+    savedResults: false,
   }),
   computed: {},
   mounted() {
@@ -356,6 +361,9 @@ export default {
           this.$axios
             .post("technician_test_results_update", options.params)
             .then(({ data }) => {
+              this.savedResults = true;
+
+              //  this.$emit("savedResults", true);
               if (data.status) {
               }
             });

@@ -13,7 +13,7 @@
         </div>
 
         <v-tabs right show-arrows class="tabswidthalignment">
-          <v-tab v-if="close_ticket"> Test Alarm/Sensors</v-tab>
+          <v-tab v-if="close_ticket"> Test Alarm/Sensors (Step1)</v-tab>
           <v-tab
             @click="clearFrom()"
             style="font-size: 10px; min-width: 50px !important"
@@ -24,8 +24,8 @@
             v-for="(contact, index) in customer.contacts"
             :key="contact.id"
           >
-            {{ contact.address_type }}</v-tab
-          >
+            {{ contact.address_type }}
+          </v-tab>
           <v-tab-item v-if="close_ticket">
             <TechnicianSensorsTesting
               :customer_id="customer.id"
