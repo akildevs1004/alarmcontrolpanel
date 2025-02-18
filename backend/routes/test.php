@@ -28,6 +28,7 @@ use App\Http\Controllers\WhatsappController;
 use App\Imports\excelEmployeesData;
 use App\Mail\ReportNotificationMail;
 use App\Models\AlarmEvents;
+use App\Models\AlarmEventsTechnician;
 use App\Models\Attendance;
 use App\Models\AttendanceLog;
 use App\Models\Company;
@@ -126,51 +127,92 @@ Route::get("test_sendMail", function (Request $request) {
 
     return (new AlarmNotificationController())->sendMail($name, $alarm, $email, $alarm_id, $external_cc_email);
 });
+
+
+Route::get("create_test_alarm_technician", function (Request $request) {
+
+
+
+    $data = [
+        "company_id" => 8,
+        "serial_number" => $request->serial_number,
+        "alarm_start_datetime" => date("Y-m-d H:i:s"),
+        "alarm_status" => 1,
+        "customer_id" => 6,
+        "zone" => $request->zone ?? null,
+        "area" =>  $request->area ?? null,
+        "alarm_type" => $request->zone ? $request->zone : "SOS",
+        "alarm_category" => 1,
+        "sensor_zone_id" => null,
+        "alarm_source" => 78,
+        "security_name" => "Test",
+        "security_id" => 1,
+        "technician_id" => 1,
+        "ticket_id" => 184,
+    ];
+
+
+    $offlineDevices[] = $data;
+
+
+    //AlarmEvents::create($data);
+    AlarmEventsTechnician::create($data);
+    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+
+    return false;
+});
+
 Route::get("create_test_alarm", function (Request $request) {
 
 
-    // $data = [
-    //     "company_id" => 8,
-    //     "serial_number" => "1234",
-    //     "alarm_start_datetime" => date("Y-m-d H:i:s"),
-    //     "customer_id" => 16,
-    //     "zone" => null,
-    //     "area" =>  null,
-    //     "alarm_type" => "SOS",
-    //     "alarm_category" => 1,
-    //     "sensor_zone_id" => null,
-    //     "alarm_source" => null,
-    //     "security_name" => "Test",
-    //     "security_id" => 1,
-    // ];
-    // $offlineDevices[] = $data;
+    $data = [
+        "company_id" => 8,
+        "serial_number" => $request->serial_number,
+        "alarm_start_datetime" => date("Y-m-d H:i:s"),
+        "alarm_status" => 1,
+        "customer_id" => 6,
+        "zone" => $request->zone ?? null,
+        "area" =>  $request->area ?? null,
+        "alarm_type" => $request->zone ? $request->zone : "SOS",
+        "alarm_category" => 1,
+        "sensor_zone_id" => null,
+        "alarm_source" => 78,
+        "security_name" => "Test",
+        "security_id" => 1,
+        "technician_id" => 1,
+        "ticket_id" => 184,
+    ];
 
 
-    // AlarmEvents::create($data);
+    $offlineDevices[] = $data;
 
 
-    // return false;
+    //AlarmEvents::create($data);
+    AlarmEventsTechnician::create($data);
+    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 
-    //return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
-
-    $date = date("d-m-Y");
-    $csvPath = "alarm-sensors/sensor-logs-$date.csv";
-
-    $area = '';
-    $zone = '';
-    if ($request->filled("area"))
-        $area  =   $request->area;
-
-    if ($request->filled("area"))
-        $zone  =   $request->zone;
-
-    $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+    return false;
 
 
 
-    Storage::append($csvPath,  $content);
+    // $date = date("d-m-Y");
+    // $csvPath = "alarm-sensors/sensor-logs-$date.csv";
 
-    return $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+    // $area = '';
+    // $zone = '';
+    // if ($request->filled("area"))
+    //     $area  =   $request->area;
+
+    // if ($request->filled("area"))
+    //     $zone  =   $request->zone;
+
+    // $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+
+
+
+    // Storage::append($csvPath,  $content);
+
+    // return $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
 });
 
 Route::get("readCSVLogFile", function (Request $request) {

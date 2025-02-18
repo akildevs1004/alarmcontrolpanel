@@ -120,7 +120,7 @@
       app
       :style="$nuxt.$route.name == 'index' ? 'z-index: 100000' : ''"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
       <span
         class="text-overflow"
         style="cursor: pointer"
@@ -272,6 +272,7 @@
         </template>
         <v-list style="z-index: 9999">
           <v-list-item
+            @click="dialogAlarmPopupNotificationStatus = true"
             style="height: 30px; padding-left: 5px"
             :class="
               notificationsMenuItems.length > 0 &&
@@ -734,6 +735,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        technician_allevents: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -874,7 +879,7 @@ export default {
           }
         }
       }
-    }, 1000 * 50 * 1);
+    }, 1000 * 5 * 1);
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -980,8 +985,8 @@ export default {
       this.wait5Minutes = false;
     },
     wait5MinutesNextNotification() {
-      this.snackbar = true;
-      this.response = "New Alarm will be Display after 5 minutes";
+      // this.snackbar = true;
+      // this.response = "New Alarm will be Display after 5 minutes";
       // alert("New Alarm will be Display after 5 minutes");
       this.wait5Minutes = true;
       setTimeout(() => {
@@ -1005,6 +1010,10 @@ export default {
         "technician-dashboard": {
           name: "technician_dashboard",
           path: "/technician/dashboard",
+        },
+        "technician-allevents": {
+          name: "technician_allevents",
+          path: "/technician/allevents",
         },
       };
 
@@ -1192,7 +1201,7 @@ export default {
       };
 
       this.$axios
-        .get(`get_alarm_notification_display`, options)
+        .get(`get_alarm_notification_display_technician`, options)
         .then(({ data }) => {
           this.isBackendRequestOpen = false;
           this.notificationsMenuItems = [];

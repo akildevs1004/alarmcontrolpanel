@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customers\Api;
 
-
+use App\Http\Controllers\AlarmEventsTechnicianController;
 use Illuminate\Support\Facades\Log as Logger;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
@@ -11,10 +11,12 @@ use App\Mail\EmailContentDefault;
 use App\Mail\ReportNotificationMail;
 use App\Models\AlarmDeviceTemperatureLogs;
 use App\Models\AlarmEvents;
+use App\Models\AlarmEventsTechnician;
 use App\Models\AlarmLogs;
 use Illuminate\Http\Request;
 use App\Models\Community\AttendanceLog;
 use App\Models\Company;
+use App\Models\Customers\Tickets;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\DeviceNotificationsManagers;
@@ -23,6 +25,7 @@ use App\Models\ReportNotificationLogs;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use DateTimeZone;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -352,10 +355,30 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 "created_event_from" => "updateAlarmStartDatetime3",
                             ];
 
+                            $isTechnicianTesting = false;
+                            try {
+                                if ($device['ticket_id'] > 0) {
+                                    $isTechnicianTesting = true;
+                                }
+                            } catch (\Exception $e) {
+                            }
 
-                            //create json file for each company  json file
 
-                            AlarmEvents::create($data);
+                            if ($isTechnicianTesting) {
+
+                                $technician_id = Tickets::where("id", $device['ticket_id'])->pluck("technician_id")[0];
+
+                                $data = array_merge($data ?? [], [
+                                    "alarm_status" => 1,
+                                    "technician_id" => $technician_id,
+                                    "ticket_id" => $device['ticket_id'] ?? null, // Prevent undefined index error
+                                ]);
+
+                                AlarmEventsTechnician::create($data);
+                            } else {
+                                AlarmEvents::create($data);
+                            }
+
                             // // try {
                             // //Alarm whatsapp notification
                             // $body_content1 = "";

@@ -180,6 +180,10 @@ Route::get('alarm_logs_data_month_data', [AlarmDeviceTemperatureLogsController::
 Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
 
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
+Route::get('get_alarm_events_technician', [CustomerAlarmEventsController::class, 'getAlarmEventsTechnician']);
+
+
+
 Route::get('get_alarm_events_customer_group', [CustomerAlarmEventsController::class, 'getAlarmEventsCustomersGroup']);
 
 Route::get('alarm_event_by_id', [CustomerAlarmEventsController::class, 'getAlarmEventById']);
@@ -187,6 +191,10 @@ Route::get('alarm_event_by_id', [CustomerAlarmEventsController::class, 'getAlarm
 
 
 Route::get('get_alarm_notification_display', [CustomerAlarmEventsController::class, 'getAlarmNotificationsList']);
+Route::get('get_alarm_notification_display_technician', [CustomerAlarmEventsController::class, 'getAlarmNotificationsListTechnician']);
+
+
+
 
 Route::get('get_alarm_events_notes', [CustomerAlarmEventsController::class, 'getAlarmEventsNotes']);
 

@@ -30,6 +30,12 @@ class Tickets extends Model
     {
         return $this->belongsTo(Customers::class, "customer_id", "id");
     }
+    public function technician()
+    {
+        return $this->belongsTo(TechnicianLogins::class, "technician_id", "id");
+    }
+
+
     public function category()
     {
         return $this->belongsTo(TicketCategories::class, "category_id", "id");

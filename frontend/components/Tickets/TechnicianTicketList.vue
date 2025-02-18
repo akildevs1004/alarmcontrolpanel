@@ -19,7 +19,7 @@
         <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
           <PrimaryContactsInfo
             v-if="selectedCustomer"
-            :key="selectedCustomer"
+            :key="selectedCustomerCounter"
             :customer="selectedCustomer"
             :ticketId="editId"
             @closeDialogCall="closeDialogProcess()"
@@ -106,90 +106,91 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card>
-      <v-row>
-        <v-col class="pl-4"><h3>Technician Tickets</h3></v-col>
+    <v-card elevation="3" class="mt-1">
+      <v-card-text>
+        <v-row>
+          <v-col class="pl-4"><h3>Technician Tickets</h3></v-col>
 
-        <v-col style="max-width: 40px; padding-top: 20px">
-          <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
-        </v-col>
-        <v-col style="max-width: 300px"
-          ><v-text-field
-            style="padding-top: 7px; width: 250px"
-            height="20"
-            class="employee-schedule-search-box"
-            @input="getDataFromApi()"
-            v-model="commonSearch"
-            label="Common Search"
-            dense
-            outlined
-            type="text"
-            append-icon="mdi-magnify"
-            clearable
-            hide-details
-          ></v-text-field
-        ></v-col>
-        <v-col style="max-width: 200px; padding-right: 20px">
-          <CustomFilter
-            v-if="displayDateFilter"
-            style="float: right; padding-top: 5px; z-index: 9"
-            @filter-attr="filterAttr"
-            :default_date_from="date_from"
-            :default_date_to="date_to"
-            :defaultFilterType="1"
-            :height="'40px'"
-        /></v-col>
-        <v-col style="max-width: 250px" class="pt-5">
-          <v-select
-            @change="getDataFromApi()"
-            clearable
-            style="width: 200px"
-            v-model="filterCategoryId"
-            :items="[{ id: null, name: 'All Categories' }, ...categoryList]"
-            dense
-            placeholder="Category"
-            outlined
-            item-value="id"
-            item-text="name"
-            height="20px"
-            class="employee-schedule-search-box"
-            hide-details
+          <v-col style="max-width: 40px; padding-top: 20px">
+            <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
+          </v-col>
+          <v-col style="max-width: 300px"
+            ><v-text-field
+              style="padding-top: 7px; width: 250px"
+              height="20"
+              class="employee-schedule-search-box"
+              @input="getDataFromApi()"
+              v-model="commonSearch"
+              label="Common Search"
+              dense
+              outlined
+              type="text"
+              append-icon="mdi-magnify"
+              clearable
+              hide-details
+            ></v-text-field
+          ></v-col>
+          <v-col style="max-width: 200px; padding-right: 20px">
+            <CustomFilter
+              v-if="displayDateFilter"
+              style="float: right; padding-top: 5px; z-index: 9"
+              @filter-attr="filterAttr"
+              :default_date_from="date_from"
+              :default_date_to="date_to"
+              :defaultFilterType="1"
+              :height="'40px'"
+          /></v-col>
+          <v-col style="max-width: 250px" class="pt-5">
+            <v-select
+              @change="getDataFromApi()"
+              clearable
+              style="width: 200px"
+              v-model="filterCategoryId"
+              :items="[{ id: null, name: 'All Categories' }, ...categoryList]"
+              dense
+              placeholder="Category"
+              outlined
+              item-value="id"
+              item-text="name"
+              height="20px"
+              class="employee-schedule-search-box"
+              hide-details
+            >
+            </v-select>
+          </v-col>
+          <v-col style="max-width: 160px" class="pt-5">
+            <v-select
+              @change="getDataFromApi()"
+              :items="[
+                { text: 'All', value: '' },
+                { text: 'Operator', value: 'security' },
+                { text: 'Customer', value: 'customer' },
+              ]"
+              v-model="filterRequestfrom"
+              outlined
+              dense
+              height="20px"
+              class="employee-schedule-search-box"
+              hide-details
+            >
+            </v-select>
+          </v-col>
+          <v-col
+            v-if="technician_id == null"
+            class="pt-5"
+            style="max-width: 80px"
           >
-          </v-select>
-        </v-col>
-        <v-col style="max-width: 160px" class="pt-5">
-          <v-select
-            @change="getDataFromApi()"
-            :items="[
-              { text: 'All', value: '' },
-              { text: 'Operator', value: 'security' },
-              { text: 'Customer', value: 'customer' },
-            ]"
-            v-model="filterRequestfrom"
-            outlined
-            dense
-            height="20px"
-            class="employee-schedule-search-box"
-            hide-details
-          >
-          </v-select>
-        </v-col>
-        <v-col
-          v-if="technician_id == null"
-          class="pt-5"
-          style="max-width: 80px"
-        >
-          <v-btn
-            title="Add Ticket"
-            x-small
-            :ripple="false"
-            text
-            @click="addItem()"
-          >
-            <v-icon class="">mdi mdi-plus-circle</v-icon>
-          </v-btn>
-        </v-col>
-        <!--<v-col style="margin-top: 10px">
+            <v-btn
+              title="Add Ticket"
+              x-small
+              :ripple="false"
+              text
+              @click="addItem()"
+            >
+              <v-icon class="">mdi mdi-plus-circle</v-icon>
+            </v-btn>
+          </v-col>
+          <!--<v-col style="margin-top: 10px">
                   <v-menu bottom right>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -258,62 +259,66 @@
                     </v-list>
                   </v-menu>
                 </v-col>-->
-      </v-row>
+        </v-row>
+      </v-card-text>
+    </v-card>
 
-      <v-row>
-        <v-col>
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            :server-items-length="totalRowsCount"
-            :loading="loading"
-            :options.sync="options"
-            :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
-            }"
-            class="elevation-0"
-          >
-            <template v-slot:item.sno="{ item, index }">
-              {{
-                currentPage
-                  ? (currentPage - 1) * perPage +
-                    (cumulativeIndex + items.indexOf(item))
-                  : "-"
-              }}
-            </template>
-            <template v-slot:item.created_datetime="{ item }">
-              <div :class="getIsReadStatus(item) ? '' : 'bold'">
-                {{ $dateFormat.formatDateMonthYear(item.created_datetime) }}
-              </div>
-            </template>
-            <template v-slot:item.subject="{ item }">
-              <div
-                :class="getIsReadStatus(item) ? '' : 'bold'"
-                :title="item.subject"
-              >
-                <!-- {{ item.subject.slice(0, 10) }} -->
-                {{ item.subject }}
-              </div>
-            </template>
-            <template v-slot:item.customer="{ item }">
-              <div
-                :class="getIsReadStatus(item) ? '' : 'bold'"
-                v-if="item.category_id > 0"
-              >
-                Admin
-                <div class="secondary-value">
-                  <!-- Customer <br /> -->
-                  For {{ item.customer.building_name }}
+    <v-card elevation="3" class="mt-3">
+      <v-card-text>
+        <v-row>
+          <v-col>
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              :server-items-length="totalRowsCount"
+              :loading="loading"
+              :options.sync="options"
+              :footer-props="{
+                itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              }"
+              class="elevation-0"
+            >
+              <template v-slot:item.sno="{ item, index }">
+                {{
+                  currentPage
+                    ? (currentPage - 1) * perPage +
+                      (cumulativeIndex + items.indexOf(item))
+                    : "-"
+                }}
+              </template>
+              <template v-slot:item.created_datetime="{ item }">
+                <div :class="getIsReadStatus(item) ? '' : 'bold'">
+                  {{ $dateFormat.formatDateMonthYear(item.created_datetime) }}
                 </div>
-              </div>
-              <div
-                :class="getIsReadStatus(item) ? '' : 'bold'"
-                v-else-if="item.customer"
-              >
-                {{ item.customer.building_name }}
-                <div class="secondary-value">Customer</div>
-              </div>
-              <div
+              </template>
+              <template v-slot:item.subject="{ item }">
+                <div
+                  :class="getIsReadStatus(item) ? '' : 'bold'"
+                  :title="item.subject"
+                >
+                  <!-- {{ item.subject.slice(0, 10) }} -->
+                  {{ item.subject }}
+                </div>
+              </template>
+              <template v-slot:item.customer="{ item }">
+                <div
+                  :class="getIsReadStatus(item) ? '' : 'bold'"
+                  v-if="item.category_id > 0"
+                >
+                  Admin
+                  <div class="secondary-value">
+                    <!-- Customer <br /> -->
+                    For {{ item.customer.building_name }}
+                  </div>
+                </div>
+                <div
+                  :class="getIsReadStatus(item) ? '' : 'bold'"
+                  v-else-if="item.customer"
+                >
+                  {{ item.customer.building_name }}
+                  <div class="secondary-value">Customer</div>
+                </div>
+                <!-- <div
                 :class="getIsReadStatus(item) ? '' : 'bold'"
                 v-else-if="item.security"
               >
@@ -330,88 +335,103 @@
                   {{ item.technician.first_name }}
                   {{ item.technician.last_name }}
                 </div>
-              </div>
-            </template>
-            <template v-slot:item.ticket_responses="{ item }">
-              <div
-                :class="getIsReadStatus(item) ? '' : 'bold'"
-                @click="responses(item)"
-              >
-                {{ item.responses?.length || 0 }}
-              </div>
-            </template>
+              </div> -->
+              </template>
+              <template v-slot:item.ticket_responses="{ item }">
+                <div
+                  :class="getIsReadStatus(item) ? '' : 'bold'"
+                  @click="responses(item)"
+                >
+                  {{ item.responses?.length || 0 }}
+                </div>
+              </template>
 
-            <template v-slot:item.category_id="{ item }">
-              {{ item.category?.name || "---" }}
-            </template>
-            <template v-slot:item.last_active_datetime="{ item }">
-              <div :class="getIsReadStatus(item) ? '' : 'bold'">
-                {{ $dateFormat.formatDateMonthYear(item.last_active_datetime) }}
-              </div>
-            </template>
-
-            <template v-slot:item.status="{ item }">
-              <div :class="getIsReadStatus(item) ? '' : 'bold'">
-                <div v-if="item.status == 0" style="color: red">
-                  Closed <br />{{
+              <template v-slot:item.category_id="{ item }">
+                {{ item.category?.name || "---" }}
+              </template>
+              <template v-slot:item.last_active_datetime="{ item }">
+                <div :class="getIsReadStatus(item) ? '' : 'bold'">
+                  {{
                     $dateFormat.formatDateMonthYear(item.last_active_datetime)
                   }}
                 </div>
-                <div v-else-if="item.job_start_datetime != null">
-                  in-Process
+              </template>
+
+              <template v-slot:item.status="{ item }">
+                <div :class="getIsReadStatus(item) ? '' : 'bold'">
+                  <div v-if="item.status == 0" style="color: red">
+                    Closed <br />{{
+                      $dateFormat.formatDateMonthYear(item.last_active_datetime)
+                    }}
+                  </div>
+                  <div v-else-if="item.job_start_datetime != null">
+                    in-Process
+                    <div class="secondary-value">
+                      {{ item.technician?.first_name }}
+                      {{ item.technician?.last_name || "---" }}
+                    </div>
+                  </div>
+                  <div v-else-if="item.status == 1" style="color: green">
+                    New
+                  </div>
                 </div>
-                <div v-else-if="item.status == 1" style="color: green">New</div>
-              </div>
-            </template>
-            <template v-slot:item.closed_datetime="{ item }">
-              <div
-                v-if="item.status == 0"
-                :class="getIsReadStatus(item) ? '' : 'bold'"
-              >
-                {{ $dateFormat.formatDateMonthYear(item.last_active_datetime) }}
-              </div>
-              <div v-else>---</div>
-            </template>
-            <template v-slot:item.options="{ item }">
-              <v-menu bottom left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list width="120" dense>
-                  <v-list-item @click="responses(item)">
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-view-list</v-icon>
-                      History
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="addReply(item)" v-if="item.status != 0">
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-reply</v-icon>
-                      Reply
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="viewTicket(item)">
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-information</v-icon>
-                      Info
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    v-if="
-                      (userType == 'technician' || userType == 'operator') &&
-                      item.status != 0 &&
-                      item.job_start_datetime != null
-                    "
-                    @click="closeTicket(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="red" small> mdi-close-box</v-icon>
-                      Close
-                    </v-list-item-title>
-                  </v-list-item>
-                  <!-- <v-list-item
+              </template>
+              <template v-slot:item.closed_datetime="{ item }">
+                <div
+                  v-if="item.status == 0"
+                  :class="getIsReadStatus(item) ? '' : 'bold'"
+                >
+                  {{
+                    $dateFormat.formatDateMonthYear(item.last_active_datetime)
+                  }}
+                </div>
+                <div v-else>---</div>
+              </template>
+              <template v-slot:item.options="{ item }">
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list width="120" dense>
+                    <v-list-item @click="responses(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-view-list</v-icon>
+                        History
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      @click="addReply(item)"
+                      v-if="item.status != 0"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-reply</v-icon>
+                        Reply
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="viewTicket(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small>
+                          mdi-information</v-icon
+                        >
+                        Customer Info
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="
+                        (userType == 'technician' || userType == 'operator') &&
+                        item.status != 0 &&
+                        item.job_start_datetime != null
+                      "
+                      @click="closeTicket(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="red" small> mdi-close-box</v-icon>
+                        Close
+                      </v-list-item-title>
+                    </v-list-item>
+                    <!-- <v-list-item
                       v-if="can('branch_view')"
                       @click="editTicket(item)"
                     >
@@ -429,12 +449,13 @@
                         Delete
                       </v-list-item-title>
                     </v-list-item>-->
-                </v-list>
-              </v-menu>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
+                  </v-list>
+                </v-menu>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -557,6 +578,7 @@ export default {
     },
     closeTicket(ticket) {
       this.key++;
+      this.selectedCustomerCounter++;
       this.selectedCustomer = ticket.customer;
       this.editId = ticket.id;
       this.dialogCloseJob = true;
@@ -603,7 +625,7 @@ export default {
     },
     close_dialog_reaction() {
       this.getDataFromApi();
-
+      this.key += 1;
       this.dialogReply = false;
       this.dialogNewTicket = false;
       this.dialogViewTicket = false;

@@ -5,18 +5,13 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-card class="elevation-2">
-      <v-card-text class="mt-5">
-        <AllEventsTechnicain
-          name="AllEvents2"
-          :showFilters="true"
-        /> </v-card-text
-    ></v-card>
+
+    <AllEventsTechnicain name="AllEvents2" :showFilters="true" />
   </div>
 </template>
 
 <script>
-import AllEventsTechnicain from "../../components/Alarm/ComponentAllEvents.vue";
+import AllEventsTechnicain from "../../components/Alarm/TechnicianDashboard/TechnicianAllEvents.vue";
 // import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
 export default {

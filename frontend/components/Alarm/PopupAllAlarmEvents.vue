@@ -453,12 +453,15 @@ export default {
     },
   },
   created() {
-    if (this.$auth.user.user_type != "security") {
-      this.headers = [
-        ...this.headers, // Spread the existing headers
-        { text: "Options", value: "options", sortable: false }, // Add the new header
-      ];
-    }
+    // if (
+    //   this.$auth.user.user_type != "security" &&
+    //   this.$auth.user.user_type != "technician"
+    // ) {
+    //   this.headers = [
+    //     ...this.headers, // Spread the existing headers
+    //     { text: "Options", value: "options", sortable: false }, // Add the new header
+    //   ];
+    // }
     if (this.items.count == 0) {
       this.$emit("closeDialog");
     }

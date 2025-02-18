@@ -30,7 +30,7 @@ class TicketsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Tickets::with(["customer", "category"])->where("company_id", $request->company_id);
+        $model = Tickets::with(["customer", "category", "technician"])->where("company_id", $request->company_id);
 
 
         $model->when($request->filled("category_id"), function ($query) use ($request) {

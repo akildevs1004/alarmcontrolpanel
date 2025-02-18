@@ -6,9 +6,7 @@
       </v-snackbar>
     </div>
     <v-tabs right show-arrows class="tabswidthalignment">
-      <v-tab v-if="ticket?.job_start_datetime != null">
-        Test Alarm/Sensors</v-tab
-      >
+      <v-tab v-if="close_ticket"> Test Alarm/Sensors</v-tab>
       <v-tab
         @click="clearFrom()"
         style="font-size: 10px; min-width: 50px !important"
@@ -21,7 +19,7 @@
       >
         {{ contact.address_type }}</v-tab
       >
-      <v-tab-item v-if="ticket?.job_start_datetime != null">
+      <v-tab-item v-if="close_ticket">
         <TechnicianSensorsTesting
           :customer_id="customer.id"
           :ticket_id="ticketId"

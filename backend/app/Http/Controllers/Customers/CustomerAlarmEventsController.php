@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Models\AlarmEvents;
+use App\Models\AlarmEventsTechnician;
 use App\Models\AlarmLogs;
 use App\Models\Company;
 use App\Models\Customers\CustomerAlarmEvents;
@@ -218,10 +219,10 @@ class CustomerAlarmEventsController extends Controller
 
 
 
-            //udapte json file 
+            //udapte json file
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
 
-            //turnoff device alarm status 
+            //turnoff device alarm status
             if ($device_serial_number != '') {
                 $alarm_event_active_count = AlarmEvents::where("serial_number", $device_serial_number)->where("alarm_status", 1)->count();
                 if ($alarm_event_active_count == 0) {
@@ -419,10 +420,10 @@ class CustomerAlarmEventsController extends Controller
 
 
 
-                        //udapte json file 
+                        //udapte json file
                         (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($request->company_id);
 
-                        //turnoff device alarm status 
+                        //turnoff device alarm status
                         if ($device_serial_number != '') {
                             $alarm_event_active_count = AlarmEvents::where("serial_number", $device_serial_number)->where("alarm_status", 1)->count();
                             if ($alarm_event_active_count == 0) {
@@ -523,9 +524,23 @@ class CustomerAlarmEventsController extends Controller
 
         return $model;
     }
+
+    public function getAlarmNotificationsListTechnician(Request $request)
+    {
+        $model = AlarmEventsTechnician::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "notes"
+        ])->where('company_id', $request->company_id)->where('alarm_status', 1);
+
+
+
+        $model->orderBy("alarm_start_datetime", "DESC");
+        return  $events = $model->get();
+    }
     public function getAlarmNotificationsList(Request $request)
     {
-        // 
+        //
 
 
 
@@ -712,6 +727,158 @@ class CustomerAlarmEventsController extends Controller
 
         return ["data" => $customers];
     }
+    public function getAlarmEventsTechnician(Request $request)
+    {
+        $model = AlarmEventsTechnician::with([
+            "device.customer.primary_contact",
+            "device.customer.secondary_contact",
+            "device.company.user",
+            "notes.contact",
+            "category",
+            "device.customer.buildingtype",
+            "zoneData",
+            "security",
+            "pinverifiedby",
+            "technician",
+
+
+        ])->where('alarm_events_technicians.company_id', $request->company_id)
+
+
+            ->when($request->filled("alarm_status"), function ($q) use ($request) {
+
+
+
+
+                if ($request->alarm_status == 3) {
+
+                    $q->where("forwarded", true);
+
+                    // $q->wherehas('notes', function ($qq) use ($request) {
+
+
+                    //     $qq->where("event_status", 'Forwarded');
+                    // });
+                } else if ($request->alarm_status == 0 || $request->alarm_status == 1) {
+                    $q->where("alarm_status", $request->alarm_status);
+                    ////////$q->where("forwarded", false);
+
+                    // $q->wherehas('notes', function ($qq) use ($request) {
+
+
+                    //     $qq->where("event_status", 'Forwarded');
+                    // });
+                }
+            })
+            // ->when($request->filled("filterSupervisor"), function ($q) use ($request) {
+            //     $q->where("forwarded", true);
+            // })
+
+            ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
+                if ((int) $request->filterResponseInMinutes == 0)
+                    $query->where("response_minutes", '>', 10);
+                else
+                if ((int) $request->filterResponseInMinutes == 1)
+                    $query->where("response_minutes", '<=', 1);
+                else
+                if ((int) $request->filterResponseInMinutes == 5)
+
+                    $query->where("response_minutes", '>=', 1)->where("response_minutes", '<=', 5);
+
+                else
+                    if ((int) $request->filterResponseInMinutes == 10)
+
+                    $query->where("response_minutes", '>=', 5)->where("response_minutes", '<=', 10);
+            })
+            ->when($request->filled("customer_id"), fn($q) => $q->where("customer_id", $request->customer_id));
+        if ($request->filled("date_from") && $request->date_from != '') {
+            $model->whereBetween('alarm_start_datetime', [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']);
+        }
+        $model->when($request->filled("filter_customers_list") && $request->filter_customers_list != '', function ($query) use ($request) {
+            $query->whereIn('customer_id', $request->filter_customers_list);
+        });
+
+        $model->when($request->filled("customer_id") && $request->customer_id != '', function ($query) use ($request) {
+            $query->where('customer_id', $request->customer_id);
+        });
+
+        $model->when($request->filled("filter_date") && $request->filter_date != '', function ($query) use ($request) {
+            $query->whereDate('alarm_start_datetime', $request->filter_date);
+        });
+
+
+        $model->when($request->filled("filter_alarm_type") && $request->filter_alarm_type != '', function ($query) use ($request) {
+
+
+            $query->where('alarm_type',   $request->filter_alarm_type);
+            // if ($request->filter_alarm_type == 'non-sos')
+            //     $query->where('alarm_type', "!=", "SOS");
+
+            // if ($request->filter_alarm_type == 'sos')
+            //     $query->where('alarm_type',   "SOS");
+        });
+
+
+        $model->when($request->filled('filterSensorname') && $request->filterSensorname != '', function ($q) use ($request) {
+
+            $q->Where('alarm_type', 'ILIKE', "%$request->filterSensorname%");
+        });
+        $model->when($request->filled('filterDeviceType') && $request->filterDeviceType != '', function ($q) use ($request) {
+
+            $q->WhereHas('device',  function ($q) use ($request) {
+                $q->where('device_type', 'ILIKE', "%$request->filterDeviceType%");
+            });
+        });
+
+        $model->when($request->filled('common_search') && $request->common_search != '', function ($q) use ($request) {
+            $q->where(function ($q) use ($request) {
+
+                //$q->Where('serial_number', 'ILIKE', "$request->common_search%");
+                $q->Where('id',  'ILIKE', "%$request->common_search");
+                $q->orWhere('alarm_type', 'ILIKE', "%$request->common_search%");
+                //$q->orWhere('alarm_category', 'ILIKE', "%$request->common_search%");
+                $q->orWhere('zone', 'ILIKE', "%$request->common_search%");
+                $q->orWhere('area', 'ILIKE', "%$request->common_search%");
+
+                $q->orWhereHas('device.customer.primary_contact', fn(Builder $query) => $query->where('first_name', 'ILIKE', "$request->common_search%")
+                    ->orWhere('last_name', 'ILIKE', "$request->common_search%"));
+
+                $q->orWhereHas(
+                    'device.customer',
+                    fn(Builder $query) => $query->where('city', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas(
+                    'device.customer.buildingtype',
+                    fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas(
+                    'category',
+                    fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")
+                );
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('name', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('device_type', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+                $q->orWhereHas('device', fn(Builder $query) => $query->where('location', 'ILIKE', "$request->common_search%")->where('company_id', $request->company_id));
+
+                $q->when(
+                    !$request->filled("customer_id"),
+                    function ($quqery) use ($request) {
+                        $quqery->orWhereHas('device.customer', fn(Builder $query) => $query->where('building_name', 'ILIKE', "$request->common_search%")
+                            ->orWhere('area', 'ILIKE', "$request->common_search%")
+                            ->orWhere('city', 'ILIKE', "$request->common_search%")
+
+                            ->where('company_id', $request->company_id));
+                    }
+
+                );
+            });
+        });
+
+
+        $model->orderBy(request('sortBy') ?? "alarm_start_datetime", request('sortDesc') ? "desc" : "desc");
+
+        return $model->paginate($request->perPage ?? 10);;
+    }
+
     public function getAlarmEvents(Request $request)
     {
         $model = $this->filter($request);
@@ -770,7 +937,7 @@ class CustomerAlarmEventsController extends Controller
             ->when($request->filled("filterResponseInMinutes"), function ($query) use ($request) {
                 if ((int) $request->filterResponseInMinutes == 0)
                     $query->where("response_minutes", '>', 10);
-                else 
+                else
                 if ((int) $request->filterResponseInMinutes == 1)
                     $query->where("response_minutes", '<=', 1);
                 else

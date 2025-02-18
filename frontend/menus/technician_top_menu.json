@@ -13,5 +13,12 @@
     "to": "/technician/tickets",
     "menu": "technician_tickets",
     "module": "topmenu"
+  },
+  {
+    "icon": "mdi-home",
+    "title": "Events",
+    "to": "/technician/allevents",
+    "menu": "technician_allevents",
+    "module": "topmenu"
   }
 ]
