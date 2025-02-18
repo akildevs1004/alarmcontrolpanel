@@ -364,7 +364,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 ]);
         }
 
-        AlarmEventsTechnician::where("serial_number",  $serial_number)
+        AlarmEventsTechnician::where("serial_number",  $serial_number)->where("alarm_status",  1)
             ->update([
                 "alarm_end_datetime" => $log_end_datetime,
 
