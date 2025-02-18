@@ -475,12 +475,15 @@ class TicketsController extends Controller
     {
         $test_datetime = date("Y-m-d H:i:s", strtotime("-1 minutes", strtotime($request->test_date_time)));
 
-        $alarmCount = AlarmEventsTechnician::where("serial_number", $request->serial_number)
+        $model = AlarmEventsTechnician::where("serial_number", $request->serial_number)
             ->where("zone", $request->zone);
 
         if ($request->filled("area"))
-            $alarmCount->where("area", $request->area);
-        $alarmCount->where("alarm_start_datetime", ">=", $test_datetime)->get();
+            $model->where("area", $request->area);
+
+
+
+        $alarmCount = $model->where("alarm_start_datetime", ">=", $test_datetime)->get();
         if (count($alarmCount)) {
 
             return $this->response("Alarm Event Found", $alarmCount[0], true);
