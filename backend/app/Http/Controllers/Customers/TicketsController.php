@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Mail\EmailContentDefault;
 use App\Models\AlarmEvents;
+use App\Models\AlarmEventsTechnician;
 use App\Models\Company;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\TicketAttachments;
@@ -474,7 +475,7 @@ class TicketsController extends Controller
     {
         $test_datetime = date("Y-m-d H:i:s", strtotime("-1 minutes", strtotime($request->test_date_time)));
 
-        $alarmCount = AlarmEvents::where("serial_number", $request->serial_number)
+        $alarmCount = AlarmEventsTechnician::where("serial_number", $request->serial_number)
             ->where("zone", $request->zone)
             ->where("area", $request->area)
             ->where("alarm_start_datetime", ">=", $test_datetime)->get();
