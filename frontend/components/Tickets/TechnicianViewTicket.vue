@@ -64,7 +64,7 @@
       <v-row>
         <v-col cols="12">
           <v-row class="pt-0">
-            <v-col>
+            <v-col cols="6">
               <h3>Subject: {{ payload_ticket.subject }}</h3>
               <span
                 >Created:
@@ -73,6 +73,24 @@
                     payload_ticket.created_datetime
                   )
                 }}</span
+              >
+            </v-col>
+            <v-col cols="3">
+              <v-btn
+                class="btn"
+                color="primary"
+                @click="viewCustomer(editItem)"
+                small
+                >Customer Info</v-btn
+              >
+            </v-col>
+            <v-col
+              cols="3"
+              v-if="editItem.status == 1 && editItem.job_start_datetime == null"
+              class="text-right"
+            >
+              <v-btn class="btn" @click="startJob()" color="primary" small
+                >Start Job</v-btn
               >
             </v-col>
             <v-col
@@ -104,24 +122,6 @@
               <v-icon color="violet">mdi-arrow-down-bold-circle</v-icon></a
             >
           </div>
-        </v-col>
-        <v-col cols="3">
-          <v-btn
-            class="btn"
-            color="primary"
-            @click="viewCustomer(editItem)"
-            small
-            >Customer Info</v-btn
-          >
-        </v-col>
-        <v-col
-          cols="3"
-          v-if="editItem.status == 1 && editItem.job_start_datetime == null"
-          class="text-right"
-        >
-          <v-btn class="btn" @click="startJob()" color="primary" small
-            >Start Job</v-btn
-          >
         </v-col>
       </v-row>
     </v-card>
