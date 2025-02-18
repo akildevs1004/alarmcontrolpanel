@@ -33,18 +33,22 @@ export default {
     snackText: "",
     dialog: false,
     customerInfo: "",
+    alarm_status: null,
   }),
   computed: {},
   async mounted() {
     await this.getMapKey();
+
+    // setInterval(() => {
+    //   if (this.alarm) this.alarm_status = this.alarm.alarm_status;
+    // }, 1000 * 5);
   },
   created() {},
   watch: {
-    // options: {
-    //   handler() {
-    //     this.getCustomers();
-    //   },
-    //   deep: true,
+    // alarm_status: function () {
+    //   console.log("alarm_status", this.alarm_status);
+    //   this.getMapKey();
+    //   //this.alarm_status = null;
     // },
   },
   methods: {

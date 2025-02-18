@@ -202,6 +202,7 @@
                   :title="selectedCustomer.building_name"
                   :mapheight="parseInt(browserHeight - 20) + 'px'"
                   :contact_id="selectedCustomer.id"
+                  :key="keySelectedItem"
                 />
               </v-tab-item>
               <v-tab-item style="height: 530px">
@@ -384,6 +385,7 @@
                   :alarm="alarm"
                   :customer="customer"
                   :browserHeight="browserHeight"
+                  :key="keySelectedItem"
                 />
               </v-tab-item>
               <v-tab-item style="height: 530px"
@@ -485,6 +487,7 @@ export default {
   },
   props: ["_id", "isPopup", "isMapviewOnly", "isEditable", "selectedCustomer"],
   data: () => ({
+    keySelectedItem: 1,
     currentCameraSlide: 0,
     currentSlide: 0,
     browserWidth: 1200,
@@ -547,7 +550,14 @@ export default {
 
     this.alarm = { device: { customer: this.selectedCustomer } };
   },
-  watch: {},
+  // watch: {
+  //   "selectedCustomer.alarm_status": function () {
+  //     this.keySelectedItem++;
+
+  //     console.log(this.keySelectedItem);
+  //   },
+  // },
+
   methods: {
     getAreaName(area_code) {
       return (

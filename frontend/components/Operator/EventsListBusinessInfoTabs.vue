@@ -7,8 +7,8 @@
       class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
     >
       <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
-        Google Map</v-tab
-      >
+        Google Map
+      </v-tab>
       <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
         Camera</v-tab
       >
@@ -27,8 +27,8 @@
       <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
         >Events</v-tab
       >
-      <v-tab-item
-        ><CompGoogleMapLatLan
+      <v-tab-item>
+        <CompGoogleMapLatLan
           v-if="customer"
           :alarm="alarm"
           :latitude="customer.latitude"
@@ -36,6 +36,7 @@
           :title="customer.building_name"
           :mapheight="parseInt(browserHeight - 25) + 'px'"
           :contact_id="customer.id"
+          :key="keySelectedItem"
         />
       </v-tab-item>
 
@@ -300,6 +301,7 @@ export default {
     loadingImagesstatus: false,
     keyPlottings: 1,
     browserWidth: 1200,
+    keySelectedItem: 1,
   }),
   computed: {},
   mounted() {
@@ -312,7 +314,13 @@ export default {
     this.onResize();
     //if (window) window.addEventListener("resize", this.onResize);
   },
-  watch: {},
+  // watch: {
+  //   "alarm.alarm_status": function () {
+  //     this.keySelectedItem++;
+
+  //     console.log(this.keySelectedItem);
+  //   },
+  // },
   methods: {
     onResize() {
       try {

@@ -343,7 +343,7 @@
               :customer="selectedAlarm?.device.customer"
               :device="selectedAlarm?.device"
               :alarm="selectedAlarm"
-              :key="selectedAlarm.id"
+              :key="keySelectedItem"
               :browserHeight="browserHeight"
             />
           </v-card-text>
@@ -471,7 +471,7 @@ export default {
     mapMarkersList: [],
     mapInfowindowsList: [],
     filterText: "",
-
+    keySelectedItem: 1,
     google_map_style_bandw,
     changeSelectedAlarm: true,
     google_map_style_regular,
@@ -522,7 +522,7 @@ export default {
       }
 
       this.getDatafromApi(this.filterText, false);
-    }, 1000 * 10);
+    }, 1000 * 5);
 
     //this.onResize();
     // setTimeout(() => {
@@ -686,6 +686,7 @@ export default {
       this.loading = true;
       this.selectedAlarm = alarm;
       this.keyLogs++;
+      this.keySelectedItem++;
       this.loading = false;
     },
     closeCustomerDialog() {
@@ -756,6 +757,18 @@ export default {
 
             if (this.data.length > 0 && this.selectedAlarm == null) {
               this.selectedAlarm = this.data[0];
+            } else if (this.selectedAlarm != null) {
+              this.selectedAlarmNew = this.data.find(
+                (x) => x.id == this.selectedAlarm.id
+              );
+
+              if (
+                this.selectedAlarmNew.alarm_status !=
+                this.selectedAlarm.alarm_status
+              ) {
+                this.selectedAlarm = this.selectedAlarmNew;
+                this.keySelectedItem++;
+              }
             }
 
             if (this.$route.query.id) {
@@ -781,6 +794,10 @@ export default {
             // //this.plotLocations();
 
             if (this.data.length == 0) this.selectedAlarm = null;
+
+            console.log("this.selectedAlarm", this.selectedAlarm.alarm_status);
+
+            ///////this.keySelectedItem++;
           });
       } catch (e) {}
     },
