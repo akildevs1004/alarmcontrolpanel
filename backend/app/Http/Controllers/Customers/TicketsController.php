@@ -478,8 +478,11 @@ class TicketsController extends Controller
         $model = AlarmEventsTechnician::where("serial_number", $request->serial_number)
             ->where("zone", $request->zone);
 
+
+        $area = "00";
         if ($request->filled("area"))
-            $model->where("area", $request->area);
+            $area = $request->area;
+        $model->where("area", $area);
 
 
 
