@@ -841,13 +841,14 @@ export default {
     // await this.getMapKey();
     // setInterval(async () => {}, 1000 * 8);
     setInterval(async () => {
-      if (this.$route.name == "operator-dashboard") {
+      // if (this.$route.name == "operator-dashboard")
+      {
         await this.getDatafromApi(this.filterText);
         //setTimeout(async () => {
         await this.getCustomersDatafromApi();
         //}, 1000);
       }
-    }, 1000 * 10);
+    }, 1000 * 5);
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;

@@ -351,6 +351,10 @@ class TicketsController extends Controller
                 $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
                 $currentDateTime = $dateObj->format('Y-m-d H:i:s');
 
+                //upadate technicain id
+                Device::where("customer_id", $request->customer_id)->update(["ticket_id" => $request->tikcet_id]);
+
+
 
                 $data2 = [];
 
@@ -360,9 +364,13 @@ class TicketsController extends Controller
                     $data2["status"] = 0;
 
                     $subject = "#" . $request->tikcet_id . ":Technican Closed Ticket with Customer Verification-" . $contactModel[0]["address_type"];
+
+                    //upadate technicain id
+                    Device::where("customer_id", $request->customer_id)->update(["ticket_id" => null]);
                 } else {
                     $data2["job_start_verified_contact_id"] = $request->pin_verified_by_id;
                     $data2["job_start_datetime"] =  $currentDateTime;
+                    $data2["technician_id"] =  $request->technician_id;
 
                     $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
                 }

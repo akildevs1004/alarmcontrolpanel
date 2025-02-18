@@ -357,7 +357,9 @@
                     $dateFormat.formatDateMonthYear(item.last_active_datetime)
                   }}
                 </div>
-                <div v-else-if="item.responses?.length > 0">in-Process</div>
+                <div v-else-if="item.job_start_datetime != null">
+                  in-Process
+                </div>
                 <div v-else-if="item.status == 1" style="color: green">New</div>
               </div>
             </template>
@@ -399,7 +401,8 @@
                   <v-list-item
                     v-if="
                       (userType == 'technician' || userType == 'operator') &&
-                      item.status != 0
+                      item.status != 0 &&
+                      item.job_start_datetime != null
                     "
                     @click="closeTicket(item)"
                   >

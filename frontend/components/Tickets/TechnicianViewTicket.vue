@@ -25,6 +25,7 @@
             :customer="selectedCustomer"
             :ticketId="editId"
             @closeDialogCall="closeDialogProcess()"
+            :ticket="selectedTicket"
           />
         </v-card-text>
       </v-card>
@@ -115,7 +116,7 @@
         </v-col>
         <v-col
           cols="3"
-          v-if="editItem.status == 0 && editItem.job_start_datetime == null"
+          v-if="editItem.status == 1 && editItem.job_start_datetime == null"
           class="text-right"
         >
           <v-btn class="btn" @click="startJob()" color="primary" small
@@ -154,6 +155,7 @@ export default {
   data: () => ({
     dialogViewCustomer: false,
     selectedCustomer: null,
+    selectedTicket: null,
     viewCustomerId: null,
     key: 0,
     snack: false,
@@ -197,7 +199,9 @@ export default {
       this.$emit("refreshTickets");
     },
     startJob() {
+      this.key++;
       this.selectedCustomer = this.editItem.customer;
+      this.selectedTicket = this.editItem;
       this.dialogViewStartJob = true;
     },
     viewCustomer(item) {

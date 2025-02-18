@@ -6,7 +6,9 @@
       </v-snackbar>
     </div>
     <v-tabs right show-arrows class="tabswidthalignment">
-      <v-tab> Test Alarm/Sensors</v-tab>
+      <v-tab v-if="ticket?.job_start_datetime != null">
+        Test Alarm/Sensors</v-tab
+      >
       <v-tab
         @click="clearFrom()"
         style="font-size: 10px; min-width: 50px !important"
@@ -19,7 +21,7 @@
       >
         {{ contact.address_type }}</v-tab
       >
-      <v-tab-item>
+      <v-tab-item v-if="ticket?.job_start_datetime != null">
         <TechnicianSensorsTesting
           :customer_id="customer.id"
           :ticket_id="ticketId"
@@ -223,7 +225,7 @@ import TechnicianSensorsTesting from "./TechnicianSensorsTesting.vue";
 
 export default {
   components: { TechnicianSensorsTesting },
-  props: ["customer", "ticketId", "close_ticket"],
+  props: ["customer", "ticketId", "close_ticket", "ticket"],
   data: () => ({
     responseList: "",
     pin_number: null,
