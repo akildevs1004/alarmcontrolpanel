@@ -329,6 +329,7 @@ export default {
     response: "",
     buildingTypes: [],
     _id: null,
+    perPage: 10,
     isBackendRequestOpen: false,
   }),
   computed: {},
@@ -486,7 +487,7 @@ export default {
       // this.currentPage = page;
       // this.perPage = itemsPerPage;
       this.currentPage = page ?? 1;
-      this.perPage = perPage ?? 10;
+      this.perPage = itemsPerPage ?? 10;
 
       try {
         this.$axios

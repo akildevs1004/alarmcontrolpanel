@@ -1,26 +1,35 @@
 <template>
   <div>
     <div
+      v-if="contact_id"
       :id="'mapCustomerChangemarker' + contact_id"
       style="height: 400px; width: 100%"
     ></div>
-    <div class="text-center pt-2">
-      <v-btn
-        dense
-        color="red"
-        style="color: #fff"
-        class="mr-5"
-        small
-        @click="$emit('closePopup')"
-        >Close</v-btn
-      >
-      <v-btn dense color="primary" class="mr-5" small @click="getUserLocation()"
-        ><v-icon size="15">mdi-image-filter-center-focus-strong</v-icon> My
-        Location</v-btn
-      >
-      <v-btn dense color="primary" small @click="updateAddress()"
-        >Update Location</v-btn
-      >
+
+    <div class="text-center" style="width: 95%">
+      <v-row style="padding: 20px; padding-bottom: 0px">
+        <v-col>
+          <!-- <v-btn
+            dense
+            color="red"
+            style="color: #fff"
+            small
+            @click="$emit('closePopup')"
+            >Close</v-btn
+          > -->
+        </v-col>
+        <v-col style="max-width: 200px"
+          ><v-btn dense color="primary" small @click="readmyBrowserLocation()"
+            ><v-icon size="15">mdi-image-filter-center-focus-strong</v-icon>
+            Find My Location</v-btn
+          ></v-col
+        >
+        <v-col style="max-width: 200px; text-align: right"
+          ><v-btn dense color="primary" small @click="updateAddress()"
+            >Update and Close</v-btn
+          ></v-col
+        >
+      </v-row>
 
       <!-- <p>Latitude: {{ latitude }}</p>
     <p>Longitude: {{ longitude }}</p>
@@ -34,8 +43,9 @@ export default {
   props: ["title", "contact_id", "customer_latitude", "customer_longitude"],
   data() {
     return {
-      latitude: "25.276987",
-      longitude: "55.296249",
+      latitude: 25.239416614237363,
+      longitude: 55.319938270019534,
+
       address: "",
       map: null,
       mapKey: null,
@@ -89,7 +99,7 @@ export default {
       this.map = new google.maps.Map(
         document.getElementById("mapCustomerChangemarker" + this.contact_id),
         {
-          zoom: 16,
+          zoom: 14,
           center: { lat: this.latitude, lng: this.longitude },
           mapTypeControl: false,
           streetViewControl: false,
@@ -98,6 +108,13 @@ export default {
 
       if (this.customer_latitude == null || this.customer_latitude == "")
         this.getUserLocation();
+
+      if (isNaN(this.latitude) || isNaN(this.longitude)) {
+        this.latitude = 25.239416614237363;
+        this.longitude = 55.319938270019534;
+      }
+
+      //console.log("this.latitude", this.latitude, this.longitude);
 
       const userLocation = {
         lat: this.latitude,
@@ -147,8 +164,7 @@ export default {
         }
       });
     },
-
-    getUserLocation() {
+    readmyBrowserLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -163,11 +179,13 @@ export default {
             this.map.panTo(userLocation);
 
             this.placeDraggableMarker(userLocation);
+
+            return;
           },
           (error) => {
             if (error.code === error.PERMISSION_DENIED) {
               alert(
-                "Location access was denied. Please enable location services."
+                "Location access was denied. Please enable location services  and reload the page"
               );
             } else {
               alert("Unable to retrieve location.");
@@ -177,6 +195,19 @@ export default {
       } else {
         alert("Geolocation is not supported by this browser.");
       }
+    },
+    getUserLocation() {
+      //if user has no map loaded
+
+      const userLocation = {
+        lat: 25.239416614237363,
+        lng: 55.319938270019534,
+      };
+      console.log("userLocation", userLocation);
+      // Center map on user's location and place draggable marker
+      this.map.panTo(userLocation);
+
+      this.placeDraggableMarker(userLocation);
     },
   },
 };

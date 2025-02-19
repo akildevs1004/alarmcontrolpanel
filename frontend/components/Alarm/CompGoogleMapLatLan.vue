@@ -127,7 +127,7 @@ export default {
 
         let iconURL =
           process.env.BACKEND_URL2 + "/google_map_icons/google_customer.png";
-        if (this.alarm.alarm_type) {
+        if (this.alarm?.alarm_type) {
           const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
           if (colorObject) iconURL = colorObject.image;
         }
@@ -150,8 +150,11 @@ export default {
         //   this.dialog = true;
         //   this.customerInfo = this.customer.building_name;
         // });
-        let googleDirectionIcon = process.env.APP_URL + "/icons/google_map.jpg";
-        let html = `
+
+        if (this.alarm) {
+          let googleDirectionIcon =
+            process.env.APP_URL + "/icons/google_map.jpg";
+          let html = `
             <table style="width:250px; min-height:100px" id="infowindow-content-${this.alarm.device.customer.id}">
 
                <tr>
@@ -185,21 +188,22 @@ export default {
 
             </table>`;
 
-        var infowindow = new google.maps.InfoWindow({
-          content: html,
-          map: this.map,
-          position: position,
-        });
+          var infowindow = new google.maps.InfoWindow({
+            content: html,
+            map: this.map,
+            position: position,
+          });
 
-        infowindow.close();
+          infowindow.close();
 
-        this.map.panTo(position);
-        if (this.alarm?.alarm_status == 1)
-          marker.setAnimation(google.maps.Animation.BOUNCE);
+          this.map.panTo(position);
+          if (this.alarm?.alarm_status == 1)
+            marker.setAnimation(google.maps.Animation.BOUNCE);
 
-        marker.addListener("mouseover", function () {
-          infowindow.open(this.map, this);
-        });
+          marker.addListener("mouseover", function () {
+            infowindow.open(this.map, this);
+          });
+        }
       }
     },
     openInGoogleMaps() {

@@ -79,6 +79,9 @@
               >
 
               <v-icon v-else small color="brown" fill>checking...</v-icon>
+              <div class="secondary-value1" v-if="item.test_result != 2">
+                {{ item.test_datetime }}
+              </div>
             </template>
           </v-data-table>
         </v-card>
@@ -279,7 +282,7 @@ export default {
 
       this.newCustomerDialog = false;
 
-      console.log("this.options", this.options);
+      // console.log("this.options", this.options);
 
       const { sortBy, sortDesc, page, perPage } = this.options;
 
@@ -338,6 +341,8 @@ export default {
           .replace(",", "");
         var results = [];
         this.data.forEach((element) => {
+          console.log("test_datetime_update", element.test_datetime);
+
           let sensor1 = {
             ticket_id: this.ticket_id,
             company_id: this.$auth.user.company_id,
@@ -348,7 +353,7 @@ export default {
             customer_id: this.customer_id,
             test_result:
               element.test_result == 1 ? element.test_result == 1 : 0,
-            test_date_time: dateTime,
+            test_date_time: element.test_datetime,
           };
           results.push(sensor1);
         });
@@ -375,7 +380,7 @@ export default {
     },
     async fetchData(sensorResult, dateTime) {
       if (this.$route.name == "technician-dashboard") {
-        console.log("sensorResult", sensorResult);
+        // console.log("sensorResult", sensorResult);
 
         let options = {
           params: {
@@ -388,7 +393,7 @@ export default {
             test_date_time: dateTime,
           },
         };
-        console.log("options", options);
+        //console.log("options", options);
 
         try {
           this.$axios
@@ -396,7 +401,7 @@ export default {
             .then(({ data }) => {
               if (data.status) {
                 this.cleartestingmethod(sensorResult);
-                console.log("Stopped polling as API result is 1");
+                //console.log("Stopped polling as API result is 1");
 
                 this.$set(sensorResult, "test_status", 0); //stop
                 this.$set(sensorResult, "test_result", 1); //loading
@@ -428,13 +433,13 @@ export default {
           .replace(",", "");
         this.interval = setInterval(
           () => this.fetchData(sensorResult, dateTime),
-          5000
+          1000 * 5
         );
 
         // Stop polling automatically after 1 minute
         this.timeout = setTimeout(() => {
           this.cleartestingmethod(sensorResult);
-          console.log("Stopped polling after 1 minute");
+          //  console.log("Stopped polling after 1 minute");
         }, 1000 * 30);
 
         // let dateTime = new Date()
@@ -478,7 +483,7 @@ export default {
     },
 
     cleartestingmethod(sensorResult) {
-      console.log("cleartestingmethod");
+      //console.log("cleartestingmethod");
 
       this.testingStatus = false;
 
@@ -491,8 +496,23 @@ export default {
         this.timeout = null;
       }
       if (sensorResult) {
+        let dateTime = new Date()
+          .toLocaleString("en-CA", {
+            // year: "numeric",
+            // month: "2-digit",
+            // day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          })
+          .replace(",", "");
+
         this.$set(sensorResult, "test_status", 0); //stop
         this.$set(sensorResult, "test_result", 0); //loading
+        this.$set(sensorResult, "test_datetime", dateTime); //loading
+
+        console.log("test_datetime", dateTime);
       }
     },
     stop_test(sensor) {

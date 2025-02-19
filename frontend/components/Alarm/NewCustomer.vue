@@ -26,6 +26,7 @@
             @closePopup="showMap = false"
             :customer_latitude="customer_payload?.latitude"
             :customer_longitude="customer_payload?.longitude"
+            :contact_id="1"
         /></v-card-text>
       </v-card>
     </v-dialog>
@@ -323,6 +324,24 @@
           </v-col>
         </v-row>
         <v-row>
+          <v-col md="4" cols="12" sm="12" dense class="mt-2 text-center">
+            <!-- <LocationFinderDialogBox /> -->
+            <v-btn
+              cols="12"
+              v-if="!showMap"
+              dense
+              outlined
+              small
+              fill
+              color="#000000"
+              @click="showMap = true"
+              ><v-icon dark> mdi-map-marker-radius-outline</v-icon>Pick location
+              from Google Map
+            </v-btn>
+            <!-- <v-btn dense v-if="showMap" outlined small @click="showMap = false"
+              >Close Map</v-btn
+            > -->
+          </v-col>
           <v-col md="4" cols="12" sm="12" dense>
             <v-text-field
               :readonly="isMapviewOnly"
@@ -352,16 +371,6 @@
             <span v-if="errors && errors.longitude" class="text-danger mt-2">{{
               errors.longitude[0]
             }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense class="mt-2">
-            <!-- <LocationFinderDialogBox /> -->
-            <v-btn v-if="!showMap" dense outlined small @click="showMap = true"
-              ><v-icon dark> mdi-map-marker-radius-outline</v-icon>Change
-              Location
-            </v-btn>
-            <!-- <v-btn dense v-if="showMap" outlined small @click="showMap = false"
-              >Close Map</v-btn
-            > -->
           </v-col>
         </v-row>
         <v-row v-if="!isMapviewOnly && isEditable">
@@ -408,8 +417,9 @@ export default {
       state: "",
       country: "",
       landmark: "",
-      latitude: "",
-      longitude: "",
+
+      latitude: 25.239416614237363,
+      longitude: 55.319938270019534,
 
       start_date: "",
       end_date: "",
@@ -449,6 +459,12 @@ export default {
       this.customer_payload.landmark = this.customer.landmark;
       this.customer_payload.latitude = this.customer.latitude;
       this.customer_payload.longitude = this.customer.longitude;
+
+      if (this.customer.latitude == "") {
+        this.customer_payload.latitude = 25.239416614237363;
+        this.customer_payload.longitude = 55.319938270019534;
+      }
+
       this.customer_payload.contact_number = this.customer.contact_number;
       this.customer_payload.start_date = this.customer.start_date;
       this.customer_payload.end_date = this.customer.end_date;

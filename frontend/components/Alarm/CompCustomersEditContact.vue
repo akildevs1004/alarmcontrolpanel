@@ -65,6 +65,7 @@
             @closePopup="showMap = false"
             :customer_latitude="payload_primary?.latitude"
             :customer_longitude="payload_primary?.longitude"
+            :contact_id="1"
         /></v-card-text>
       </v-card>
     </v-dialog>
@@ -129,7 +130,8 @@
                     small
                     color="primary"
                     @click="changeAddresss()"
-                    >Update Address</v-btn
+                    ><v-icon>mdi-map-marker-radius</v-icon>Update Address Using
+                    Google Map</v-btn
                   >
                 </div>
               </div>
@@ -149,6 +151,7 @@
                     :readonly="isMapviewOnly"
                   ></v-combobox
                 ></v-col>
+                <v-col cols="6" dense></v-col>
                 <v-col cols="6" dense>
                   <v-text-field
                     :readonly="isMapviewOnly"
@@ -349,14 +352,7 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col
-                  :cols="
-                    contact?.address_type == 'primary' ||
-                    contact?.address_type == 'secondary'
-                      ? 6
-                      : 12
-                  "
-                >
+                <v-col cols="12">
                   <v-text-field
                     outlined
                     label="Important Notes"

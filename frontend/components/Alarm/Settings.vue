@@ -183,7 +183,7 @@
           <v-col class="pt-5" style="max-width: 100px">Setting 1 </v-col>
 
           <v-col class="pl-0 pt-1" style="max-width: 80px">
-           
+
             <v-img
               class="ele1"
               v-if="!item.is_over_time"
@@ -301,7 +301,7 @@ export default {
     if (this.customer) {
       this.payload.email = this.customer.email;
       //this.payload.web_login_access = this.customer.user.web_login_access;
-      this.web_login_access = this.customer.user.web_login_access;
+      this.web_login_access = this.customer.user?.web_login_access || false;
       //this.payload.account_status = this.customer.account_status;
       this.payload.password = "";
       this.payload.password_confirmation = "";

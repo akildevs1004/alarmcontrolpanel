@@ -331,7 +331,7 @@ class TicketsController extends Controller
 
         ]);
 
-
+        $subject = '';
         if ($request->filled("contact_type")) {
 
 
@@ -346,7 +346,7 @@ class TicketsController extends Controller
                     "errors" => ['pin_number' => ['Customer PIN number is not matched']],
                 ];
             } else {
-                $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+                $subject = "#" . $request->tikcet_id . ":Technician Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
                 $device = Device::where("customer_id", $request->customer_id)->first();
                 $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
                 $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
@@ -371,7 +371,6 @@ class TicketsController extends Controller
                     $data2["job_start_datetime"] =  $currentDateTime;
                     $data2["technician_id"] =  $request->technician_id;
 
-                    $subject = "#" . $request->tikcet_id . ":Technican Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
 
 
                     //upadate technicain id
@@ -509,13 +508,17 @@ class TicketsController extends Controller
 
             foreach ($data as $result) {
 
+                $datetime = null;
+                if (isset($result["test_date_time"]))
+                    $datetime = date("Y-m-d") . ' ' . $result["test_date_time"];
+
                 $resultsData = [
                     "ticket_id" => $result["ticket_id"],
                     "company_id" => $result["company_id"],
                     "customer_id" => $result["customer_id"],
                     "device_id" => $result["device_id"],
                     "serial_number" => $result["serial_number"],
-                    "test_datetime" => $result["test_date_time"],
+                    "test_datetime" => $datetime, // date("Y-m-d") . ' ' . $result["test_date_time"],
                     "test_status" => $result["test_result"],
                     "zone_code" => $result["zone_code"],
                     "area_code" => $result["area_code"],

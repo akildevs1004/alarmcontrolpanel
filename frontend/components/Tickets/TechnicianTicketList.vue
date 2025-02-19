@@ -5,6 +5,61 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogViewStartJob" width="700px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Start Job - Customer Contacs</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewStartJob = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="">
+          <PrimaryContactsInfo
+            v-if="selectedCustomer && selectedTicket"
+            :key="key"
+            :customer="selectedCustomer"
+            :ticketId="selectedTicket.id"
+            @closeDialogCall="closeDialogProcess()"
+            :ticket="selectedTicket"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="dialogViewCustomer"
+      width="1200px"
+      height="700px"
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">View Customer Information</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewCustomer = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
+          <TechnicianCustomerTabsView
+            v-if="selectedCustomer"
+            :key="key"
+            :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
+            :isPopup="true"
+            :isEditable="false"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogCloseJob" width="900px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -25,6 +80,38 @@
             @closeDialogCall="closeDialogProcess()"
             @savedResults="savedResults()"
             :close_ticket="true"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogTestingJob" width="1000px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Ticket - Testing Sensors </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogTestingJob = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px">
+          <!-- <TicketTestingSensor
+            v-if="selectedCustomer"
+            :key="selectedCustomerCounter"
+            :customer="selectedCustomer"
+            :ticketId="editId"
+            @closeDialogCall="closeDialogProcess()"
+            @savedResults="savedResults()"
+            :close_ticket="true"
+          /> -->
+
+          <TechnicianSensorsTesting
+            v-if="selectedCustomer"
+            :customer_id="selectedCustomer.id"
+            :ticket_id="editId"
           />
         </v-card-text>
       </v-card>
@@ -396,12 +483,6 @@
                     </v-btn>
                   </template>
                   <v-list width="120" dense>
-                    <v-list-item @click="responses(item)">
-                      <v-list-item-title style="cursor: pointer">
-                        <v-icon color="secondary" small> mdi-view-list</v-icon>
-                        History
-                      </v-list-item-title>
-                    </v-list-item>
                     <v-list-item
                       @click="addReply(item)"
                       v-if="item.status != 0"
@@ -416,20 +497,60 @@
                         <v-icon color="secondary" small>
                           mdi-information</v-icon
                         >
-                        Customer Info
+                        Ticket Info
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="viewCustomer(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small>
+                          mdi-home-circle</v-icon
+                        >
+                        Customer
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      @click="startJob(item)"
+                      v-if="
+                        userType == 'technician' &&
+                        item.status == 1 &&
+                        item.job_start_datetime == null
+                      "
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="green" small> mdi-button-pointer</v-icon>
+                        Start Job
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      @click="testSensors(item)"
+                      v-if="
+                        userType == 'technician' &&
+                        item.status == 1 &&
+                        item.job_start_datetime != null
+                      "
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="green" small> mdi-button-pointer</v-icon>
+                        Testing
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item
                       v-if="
-                        (userType == 'technician' || userType == 'operator') &&
-                        item.status != 0 &&
+                        userType == 'technician' &&
+                        item.status == 1 &&
                         item.job_start_datetime != null
                       "
                       @click="closeTicket(item)"
                     >
                       <v-list-item-title style="cursor: pointer">
                         <v-icon color="red" small> mdi-close-box</v-icon>
-                        Close
+                        Close Job
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="responses(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-view-list</v-icon>
+                        History
                       </v-list-item-title>
                     </v-list-item>
                     <!-- <v-list-item
@@ -466,6 +587,9 @@ import NewTicket from "../../components/Tickets/NewTicket.vue";
 import ReplyToTicket from "../../components/Tickets/ReplyToTicket.vue";
 import ViewTicket from "../../components/Tickets/TechnicianViewTicket.vue";
 import PrimaryContactsInfo from "../Alarm/TechnicianDashboard/PrimaryContactsInfo.vue";
+import TechnicianCustomerTabsView from "../Alarm/TechnicianDashboard/TechnicianCustomerTabsView.vue";
+import TechnicianSensorsTesting from "../Alarm/TechnicianDashboard/TechnicianSensorsTesting.vue";
+import TicketTestingSensor from "../Alarm/TechnicianDashboard/TicketTestingSensor.vue";
 import TicketResponses from "./TicketResponses.vue";
 
 export default {
@@ -475,6 +599,9 @@ export default {
     ViewTicket,
     TicketResponses,
     PrimaryContactsInfo,
+    TechnicianCustomerTabsView,
+    TicketTestingSensor,
+    TechnicianSensorsTesting,
   },
   props: [
     "canReply",
@@ -486,8 +613,13 @@ export default {
   ],
   data() {
     return {
+      dialogViewCustomer: false,
+      dialogViewStartJob: false,
+      selectedCustomerCounter: 0,
+      selectedTicket: null,
       selectedCustomer: null,
       dialogCloseJob: false,
+      dialogTestingJob: false,
       filterCategoryId: null,
       categoryList: [],
       dialogTicketResponsesList: false,
@@ -539,6 +671,7 @@ export default {
       isPageload: true,
       is_admin: false,
       userType: "",
+      viewCustomerId: null,
     };
   },
   watch: {
@@ -575,18 +708,32 @@ export default {
       this.status;
     },
     closeDialogProcess() {
-      this.key++;
+      this.dialogViewStartJob = false;
       this.dialogCloseJob = false;
       this.getDataFromApi();
-      this.$emit("close_dialog");
+      //this.$emit("close_dialog");
+
+      this.key++;
     },
     closeTicket(ticket) {
       this.key++;
       this.selectedCustomerCounter++;
       this.selectedCustomer = ticket.customer;
+      this.selectedTicket = ticket;
       this.editId = ticket.id;
       this.dialogCloseJob = true;
     },
+
+    testSensors(ticket) {
+      this.key++;
+      this.selectedCustomerCounter++;
+      this.selectedCustomer = ticket.customer;
+      this.selectedTicket = ticket;
+      this.editId = ticket.id;
+
+      this.dialogTestingJob = true;
+    },
+
     verifyCanReply() {
       if (this.canReply != null) {
         return this.canReply;
@@ -659,6 +806,29 @@ export default {
 
       this.getDataFromApi();
     },
+    viewCustomer(item) {
+      this.selectedCustomer = null;
+      this.viewCustomerId = null;
+      this.$axios
+        .get(`customers`, { params: { customer_id: item.customer_id } })
+        .then(({ data }) => {
+          this.selectedCustomer = data.data[0];
+          this.viewCustomerId = item.customer_id;
+          this.dialogViewCustomer = true;
+        });
+    },
+    // closeDialogProcess() {
+    //   this.key++;
+    //   this.dialogViewStartJob = false;
+
+    //   // this.$emit("close_dialog");
+    // },
+    startJob(item) {
+      this.key++;
+      this.selectedCustomer = item.customer;
+      this.selectedTicket = item;
+      this.dialogViewStartJob = true;
+    },
     downloadOptions(option) {
       let filterSensorname = this.tab > 0 ? this.sensorItems[this.tab] : null;
 
@@ -681,6 +851,8 @@ export default {
     },
 
     getDataFromApi() {
+      // console.log("dialogViewStartJob");
+
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
       let sortedBy = sortBy ? sortBy[0] : "";
@@ -713,30 +885,28 @@ export default {
         },
       };
 
-      try {
-        this.$axios.get(`tickets`, options).then(({ data }) => {
-          this.items = data.data;
+      this.$axios.get(`tickets`, options).then(({ data }) => {
+        this.items = data.data;
 
-          this.totalRowsCount = data.total;
+        this.totalRowsCount = data.total;
 
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000);
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000);
 
-          if (this.displayDateFilter == false && this.isPageload) {
-            let today = new Date();
-            if (this.items.length > 0) {
-              today = new Date(this.items[0].created_datetime);
-            }
-
-            let monthObj = this.$dateFormat.monthStartEnd(today);
-            this.date_from = monthObj.first;
-            this.date_to = monthObj.last;
-            this.displayDateFilter = true;
-            this.isPageload = false;
+        if (this.displayDateFilter == false && this.isPageload) {
+          let today = new Date();
+          if (this.items.length > 0) {
+            today = new Date(this.items[0].created_datetime);
           }
-        });
-      } catch (e) {}
+
+          let monthObj = this.$dateFormat.monthStartEnd(today);
+          this.date_from = monthObj.first;
+          this.date_to = monthObj.last;
+          this.displayDateFilter = true;
+          this.isPageload = false;
+        }
+      });
     },
     addItem() {
       this.key += 1;

@@ -76,13 +76,13 @@
               >
             </v-col>
             <v-col cols="3">
-              <v-btn
+              <!-- <v-btn
                 class="btn"
                 color="primary"
                 @click="viewCustomer(editItem)"
                 small
                 >Customer Info</v-btn
-              >
+              > -->
             </v-col>
             <v-col
               cols="3"
@@ -93,9 +93,9 @@
               "
               class="text-right"
             >
-              <v-btn class="btn" @click="startJob()" color="primary" small
+              <!-- <v-btn class="btn" @click="startJob()" color="primary" small
                 >Start Job</v-btn
-              >
+              > -->
             </v-col>
             <v-col
               cols="12"
@@ -212,6 +212,7 @@ export default {
       this.key++;
       this.selectedCustomer = this.editItem.customer;
       this.selectedTicket = this.editItem;
+      this.editId = this.editItem.id;
       this.dialogViewStartJob = true;
     },
     viewCustomer(item) {

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EmailContentDefault;
 use App\Models\Customers\CustomerContacts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerContactsController extends Controller
 {
@@ -90,5 +92,30 @@ class CustomerContactsController extends Controller
         } else
             return $this->response('Contact Details are not Deleted', null, false);
         //
+    }
+
+
+    public function ResendSecretCodeMail(Request $request)
+    {
+
+
+        if ($request->filled("contact_id")) {
+
+            $contact = CustomerContacts::where("id", $request->contact_id)->first();
+
+            $emailData = [
+                'subject' => "Secret Code for Verification - " . $contact["first_name"] . ' ' . $contact["last_name"],
+                'body' =>  "Secret Code for Verification - " . $contact["first_name"] . ' ' . $contact["last_name"] . " is " . $contact["alarm_stop_pin"],
+            ];
+
+            $body_content1 = new EmailContentDefault($emailData);
+
+
+            return Mail::to($contact["email"])
+                ->cc("venuakil2@gmail.com")
+                ->send($body_content1);
+
+            return $this->response("Verification Code shared to email" . $contact["email"], null, true);
+        }
     }
 }

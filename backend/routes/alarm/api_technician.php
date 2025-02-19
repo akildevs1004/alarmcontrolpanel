@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\TechnicianLoginsController;
 use App\Http\Controllers\Customers\TicketCategoriesController;
 use App\Http\Controllers\Customers\TicketResponsesController;
 use App\Http\Controllers\Customers\TicketsController;
+use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\TicketResponses;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +33,5 @@ Route::post("technician_start_job", [TicketsController::class, "TechnicianStartJ
 Route::get("ticket_categories", [TicketsController::class, "TicketCategories"]);
 Route::get("technician_test_sensor", [TicketsController::class, "TechnicianTestSensor"]);
 Route::post("technician_test_results_update", [TicketsController::class, "TechnicianTestResultsUpdate"]);
+
+Route::get("contact_resend_verification_code", [CustomerContactsController::class, "ResendSecretCodeMail"]);
