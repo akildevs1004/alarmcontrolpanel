@@ -262,9 +262,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $sensorType = DeviceZones::where("device_id", $deviceId)
                         ->where("area_code", $areaTesting)
                         ->where("zone_code", $zone)
-                        ->value("sensor_type");
+                        ->pluck("sensor_type");
 
-                    if ($sensorType) {
+                    if (isset($sensorType[0])) {
                         $alarmTypes = [
                             'Water Leakage Sensor' => 'Water',
                             'Fire Sensor' => 'Fire',
@@ -272,8 +272,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             'SOS Sensor' => 'SOS',
                             'Temperature Sensor' => 'Temperature',
                         ];
-                        if ($alarmTypes[$sensorType])
-                            $alarm_type = $alarmTypes[$sensorType];
+                        if ($alarmTypes[$sensorType[0]])
+                            $alarm_type = $alarmTypes[$sensorType[0]];
                     }
 
                     //--------------------------------------
@@ -404,7 +404,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 Device::where("serial_number", $serial_number)->update($device_Data);
             }
-            AlarmLogs::where("serial_number", $serial_number)
+            AlarmLogs::where("serial_number", $serial_number)->where("alarm_status", 1)
                 ->update([
 
                     "alarm_status" => 0
