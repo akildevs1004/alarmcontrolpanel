@@ -49,7 +49,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             ->where("serial_number", "!=", null)->get();
 
 
-        //  $devicesList = Device::where("serial_number", "24000003")->get();
+        //$devicesList = Device::where("serial_number", "XT900021")->get();
         $log[] = $this->updateDuration1($devicesList);
         // $log[] =   $this->updateAlarmEndDatetime2($devicesList);
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
@@ -272,164 +272,164 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         $previousLog = [];
         $currentLog = [];
         foreach ($devicesList as $key => $device) {
-            try {
+            // try {
 
-                $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
-                    ->where("company_id", '>', 0)
-                    ->where("alarm_status", 1)
-                    //->where("event_code", "!=", null)
-                    ->where("verified", false)
-                    ->where("time_duration_seconds", '>=', 5)
+            $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
+                ->where("company_id", '>', 0)
+                ->where("alarm_status", 1)
+                //->where("event_code", "!=", null)
+                ->where("verified", false)
+                ->where("time_duration_seconds", '>=', 5)
 
-                    ->orderBy("log_time", "ASC")->get();
-
-
+                ->orderBy("log_time", "ASC")->get();
 
 
 
-                foreach ($logsArray  as   $logs) {
-
-                    if (isset($logs['log_time'])) {
 
 
-                        $deviceZone =  DeviceZones::where("device_id", $device['id']);
+            foreach ($logsArray  as   $logs) {
 
-                        if ($logs['area'] != '') {
-                            if ($logs['area'] == '00') {
-                                $deviceZone->where("area_code", null);
-                            } else
-                                $deviceZone->where("area_code", $logs['area']);
-                        }
-
-                        $deviceZone->where("zone_code", $logs['zone']);
-
-                        $sensor_name = (clone $deviceZone)->pluck('sensor_name');
-                        $sensor_name = $sensor_name[0] ?? null;
-
-                        $sensor_zone_id = (clone $deviceZone)->pluck('id');
-                        $sensor_zone_id = $sensor_zone_id[0] ?? null;
-                        $alarm_catgory = $logs['alarm_type'] == 'SOS' || $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
+                if (isset($logs['log_time'])) {
 
 
-                        // //verify Device , ZOne and Area - Is any alarm already active
-                        $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
-                            ->where("zone", $logs['zone'])
-                            ->where("area", $logs['area'])
-                            ->where("alarm_type", $logs['alarm_type'])
+                    $deviceZone =  DeviceZones::where("device_id", $device['id']);
+
+                    if ($logs['area'] != '') {
+                        if ($logs['area'] == '00') {
+                            $deviceZone->where("area_code", null);
+                        } else
+                            $deviceZone->where("area_code", $logs['area']);
+                    }
+
+                    $deviceZone->where("zone_code", $logs['zone']);
+
+                    $sensor_name = (clone $deviceZone)->pluck('sensor_name');
+                    $sensor_name = $sensor_name[0] ?? null;
+
+                    $sensor_zone_id = (clone $deviceZone)->pluck('id');
+                    $sensor_zone_id = $sensor_zone_id[0] ?? null;
+                    $alarm_catgory = $logs['alarm_type'] == 'SOS' || $sensor_name == '24H. Zone' || $sensor_name ==  'Emergency zone' ? 1 : 3;
+
+
+                    // //verify Device , ZOne and Area - Is any alarm already active
+                    $activeAlarmZoneCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                        ->where("zone", $logs['zone'])
+                        ->where("area", $logs['area'])
+                        ->where("alarm_type", $logs['alarm_type'])
+                        ->where("alarm_status", 1)->count();
+                    Storage::append("testing.txt", $activeAlarmZoneCount);
+                    if ($activeAlarmZoneCount == 0) {
+
+
+
+                        //verify if OLD alram active count
+
+                        $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
+                            ->whereDate("alarm_start_datetime", date("Y-m-d"))
                             ->where("alarm_status", 1)->count();
 
-                        if ($activeAlarmZoneCount == 0) {
-
-
-
-                            //verify if OLD alram active count
-
-                            $activeAlarmCount = AlarmEvents::where("serial_number", $device['serial_number'])
-                                ->whereDate("alarm_start_datetime", date("Y-m-d"))
-                                ->where("alarm_status", 1)->count();
-
-                            if ($activeAlarmCount >= 3) {
-                                $alarm_catgory = 1;
-                            }
-
-                            $security_name = null;
-                            $security_id = null;
-                            if ($device->customer->mappedsecurity->securityInfo) {
-                                $security_name = $device->customer->mappedsecurity->securityInfo->first_name . ' ' . $device->customer->mappedsecurity->securityInfo->last_name;
-                                $security_id =  $device->customer->mappedsecurity->securityInfo->id;
-                            }
-
-                            $data = [
-                                "company_id" => $logs['company_id'],
-                                "serial_number" => $logs['serial_number'],
-                                "alarm_start_datetime" => $logs['log_time'],
-                                "customer_id" => $logs['customer_id'],
-                                "zone" => $logs['zone'],
-                                "area" => $logs['area'],
-                                "alarm_type" => $logs['alarm_type'],
-                                "alarm_category" => $alarm_catgory,
-                                "sensor_zone_id" => $sensor_zone_id,
-                                "alarm_source" => $logs['alarm_source'],
-                                "security_name" => $security_name,
-                                "security_id" => $security_id,
-                                "created_event_from" => "updateAlarmStartDatetime3",
-                            ];
-
-                            $isTechnicianTesting = false;
-                            try {
-                                if ($device['ticket_id'] > 0) {
-                                    $isTechnicianTesting = true;
-                                }
-                            } catch (\Exception $e) {
-                            }
-
-
-                            if ($isTechnicianTesting) {
-
-                                $technician_id = Tickets::where("id", $device['ticket_id'])->pluck("technician_id")[0];
-
-                                $data = array_merge($data ?? [], [
-                                    "alarm_status" => 1,
-                                    "technician_id" => $technician_id,
-                                    "ticket_id" => $device['ticket_id'] ?? null, // Prevent undefined index error
-                                ]);
-
-                                AlarmEventsTechnician::create($data);
-                            } else {
-                                AlarmEvents::create($data);
-                            }
-
-                            // // try {
-                            // //Alarm whatsapp notification
-                            // $body_content1 = "";
-                            // $body_content1 = "*New Event Notification*\n\n";
-                            // $body_content1 .= "Building: {$device->customer->building_name}\n";
-
-                            // $body_content1 .= "Event Time: {$logs['log_time']}\n";
-                            // $body_content1 .= "Type: {$logs['alarm_type']}\n";
-                            // $body_content1 .= "Zone: {$logs['zone']}\n";
-                            // $body_content1 .= "Area: {$logs['area']}\n";
-                            // $body_content1 .= "Sensor Type: {$logs['zone_data']['sensor_type']}\n";
-                            // $body_content1 .= "Sensor Name: {$logs['zone_data']['sensor_name']}\n";
-
-
-                            // $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$device['customer']['latitude']},{$device['customer']['longitude']} \n\n\n";
-                            // $body_content1 .= "Thanks,\nXtreme Guard\n";
-
-
-
-                            // (new WhatsappController())->sendWhatsappNotification(null, $body_content1, "971552205149", []);
-                            // // } catch (\Exception $e) {
-                            // // }
-
-                            $this->createAlarmEventsJsonFile($logs['company_id']);
-
-                            AlarmLogs::where("id",   $logs["id"])
-
-                                ->where("verified", false)->update(["verified" => true]);
-                            $data = [
-                                "alarm_status" => 1,
-                                "alarm_start_datetime" => $logs['log_time'],
-                                "alarm_end_datetime" => null
-                            ];
-                            Device::where("serial_number", $logs['serial_number'])->update($data);
-                            // DeviceZones::where("device_id", $device['id'])
-                            //     ->where("area_code", $logs['zone'])
-                            //     ->where("zone_code", $logs['area'])
-                            //     ->update($data);
-
-                            (clone  $deviceZone)->update($data);
-
-                            if ($device['alarm_status'] == 1) {
-                                $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
-                            }
-                        } else {
-                            //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
+                        if ($activeAlarmCount >= 3) {
+                            $alarm_catgory = 1;
                         }
+
+                        $security_name = null;
+                        $security_id = null;
+                        if ($device->customer->mappedsecurity && $device->customer->mappedsecurity->securityInfo) {
+                            $security_name = $device->customer->mappedsecurity->securityInfo->first_name . ' ' . $device->customer->mappedsecurity->securityInfo->last_name;
+                            $security_id =  $device->customer->mappedsecurity->securityInfo->id;
+                        }
+
+                        $data = [
+                            "company_id" => $logs['company_id'],
+                            "serial_number" => $logs['serial_number'],
+                            "alarm_start_datetime" => $logs['log_time'],
+                            "customer_id" => $logs['customer_id'],
+                            "zone" => $logs['zone'],
+                            "area" => $logs['area'],
+                            "alarm_type" => $logs['alarm_type'],
+                            "alarm_category" => $alarm_catgory,
+                            "sensor_zone_id" => $sensor_zone_id,
+                            "alarm_source" => $logs['alarm_source'],
+                            "security_name" => $security_name,
+                            "security_id" => $security_id,
+                            "created_event_from" => "updateAlarmStartDatetime3",
+                        ];
+
+                        $isTechnicianTesting = false;
+                        try {
+                            if ($device['ticket_id'] > 0) {
+                                $isTechnicianTesting = true;
+                            }
+                        } catch (\Exception $e) {
+                        }
+
+
+                        if ($isTechnicianTesting) {
+
+                            $technician_id = Tickets::where("id", $device['ticket_id'])->pluck("technician_id")[0];
+
+                            $data = array_merge($data ?? [], [
+                                "alarm_status" => 1,
+                                "technician_id" => $technician_id,
+                                "ticket_id" => $device['ticket_id'] ?? null, // Prevent undefined index error
+                            ]);
+
+                            AlarmEventsTechnician::create($data);
+                        } else {
+                            AlarmEvents::create($data);
+                        }
+
+                        // // try {
+                        // //Alarm whatsapp notification
+                        // $body_content1 = "";
+                        // $body_content1 = "*New Event Notification*\n\n";
+                        // $body_content1 .= "Building: {$device->customer->building_name}\n";
+
+                        // $body_content1 .= "Event Time: {$logs['log_time']}\n";
+                        // $body_content1 .= "Type: {$logs['alarm_type']}\n";
+                        // $body_content1 .= "Zone: {$logs['zone']}\n";
+                        // $body_content1 .= "Area: {$logs['area']}\n";
+                        // $body_content1 .= "Sensor Type: {$logs['zone_data']['sensor_type']}\n";
+                        // $body_content1 .= "Sensor Name: {$logs['zone_data']['sensor_name']}\n";
+
+
+                        // $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$device['customer']['latitude']},{$device['customer']['longitude']} \n\n\n";
+                        // $body_content1 .= "Thanks,\nXtreme Guard\n";
+
+
+
+                        // (new WhatsappController())->sendWhatsappNotification(null, $body_content1, "971552205149", []);
+                        // // } catch (\Exception $e) {
+                        // // }
+
+                        $this->createAlarmEventsJsonFile($logs['company_id']);
+
+                        AlarmLogs::where("id",   $logs["id"])
+
+                            ->where("verified", false)->update(["verified" => true]);
+                        $data = [
+                            "alarm_status" => 1,
+                            "alarm_start_datetime" => $logs['log_time'],
+                            "alarm_end_datetime" => null
+                        ];
+                        Device::where("serial_number", $logs['serial_number'])->update($data);
+                        // DeviceZones::where("device_id", $device['id'])
+                        //     ->where("area_code", $logs['zone'])
+                        //     ->where("zone_code", $logs['area'])
+                        //     ->update($data);
+
+                        (clone  $deviceZone)->update($data);
+
+                        if ($device['alarm_status'] == 1) {
+                            $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+                        }
+                    } else {
+                        //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
                     }
                 }
-            } catch (\Exception $e) {
             }
+            // } catch (\Exception $e) {
+            // }
         }
     }
 
