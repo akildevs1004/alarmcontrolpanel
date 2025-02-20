@@ -257,7 +257,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     //Identify Alarm Type based on zone and sensor type value
 
                     $deviceId = $devices->id;
-                    $areaTesting = $area === '00' ? null : $area;
+                    $areaTesting = $area == '00' ? null : $area;
 
                     $sensorType = DeviceZones::where("device_id", $deviceId)
                         ->where("area_code", $areaTesting)
