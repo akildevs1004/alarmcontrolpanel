@@ -643,7 +643,7 @@ export default {
           fileter_customers_assigned:
             this.FilterassginedSelectedCustomers.length > 0
               ? this.FilterassginedSelectedCustomers
-              : [0],
+              : null,
         },
       };
       if (filter_column != "")

@@ -65,7 +65,7 @@
                 </v-card>
               </v-container>
             </v-col>
-  
+
             <v-col cols="12" md="6">
               <v-container>
                 <v-card outlined>
@@ -123,7 +123,7 @@
                 </v-card>
               </v-container>
             </v-col>
-  
+
             <v-col cols="12" md="6">
               <v-container>
                 <v-card outlined>
@@ -138,7 +138,7 @@
                           }}</v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
-  
+
                       <v-list-item>
                         <v-list-item-content>
                           <v-list-item-title>Address:</v-list-item-title>
@@ -172,7 +172,7 @@
                 </v-card>
               </v-container>
             </v-col>
-  
+
             <v-col cols="12" md="6">
               <v-container>
                 <v-card outlined>
@@ -490,7 +490,7 @@
                   }}
                 </v-col>
                 <v-col style="padding-left: 0px">
-                   
+
                   <span
                     @click="setCustomerLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
@@ -559,7 +559,7 @@
                 :value="value"
               >
                 <img :src="value.image + '?2=2'" style="width: 30px" />
-                
+
               </v-btn>
             </v-btn-toggle>
           </div> -->
@@ -588,7 +588,7 @@
                 v-if="getImageicon(value)"
                 style="width: 20px"
                 :src="getImageicon(value)"
-              /> 
+              />
 
               <div style="font-size: 13px">
                 {{ caps(name) }}
@@ -625,7 +625,7 @@ export default {
     geocoder: null,
     infowindow: null,
     viewCustomerId: null,
-    commonSearch: "",
+    commonSearch: null,
     // perPage: 10,
     cumulativeIndex: 1,
     currentPage: 1,

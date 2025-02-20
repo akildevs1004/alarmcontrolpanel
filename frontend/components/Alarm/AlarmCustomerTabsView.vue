@@ -13,6 +13,7 @@
                     border-radius: 5%;
                     border: 1px solid #ddd;
                     margin: auto;
+                    max-height: 130px;
                   "
                   :src="
                     selectedCustomer && selectedCustomer.primary_contact
@@ -76,10 +77,10 @@
                 <v-img
                   style="
                     width: 60%;
-
                     border-radius: 5%;
                     border: 1px solid #ddd;
                     margin: auto;
+                    max-height: 130px;
                   "
                   :src="
                     selectedCustomer && selectedCustomer.profile_picture
