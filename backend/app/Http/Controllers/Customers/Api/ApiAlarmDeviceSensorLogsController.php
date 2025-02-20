@@ -260,8 +260,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     $areaTesting = $area === '00' ? null : $area;
 
                     $sensorType = DeviceZones::where("device_id", $deviceId)
-                        ->where("area", $areaTesting)
-                        ->where("zone", $zone)
+                        ->where("area_code", $areaTesting)
+                        ->where("area_code", $zone)
                         ->value("sensor_type");
 
                     if ($sensorType) {
