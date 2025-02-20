@@ -48,7 +48,6 @@
                   >
                 </v-col>
                 <v-col cols="12" dense>
-                  {{ payload_security.sensor_type }}
                   <v-autocomplete
                     label="Sensor Type"
                     :items="sensorTypes"

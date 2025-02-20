@@ -808,7 +808,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           security_id: this.security_id,
-          customers_id: this.selectedCustomer.id,
+          customer_id: this.selectedCustomer.id,
         },
       };
 

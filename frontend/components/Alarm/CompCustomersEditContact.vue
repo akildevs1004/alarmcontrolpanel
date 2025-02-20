@@ -131,7 +131,7 @@
                     color="primary"
                     @click="changeAddresss()"
                     ><v-icon>mdi-map-marker-radius</v-icon>Update Address Using
-                    Google Map</v-btn
+                    Map</v-btn
                   >
                 </div>
               </div>
@@ -287,7 +287,7 @@
                     small
                     max="6"
                     outlined
-                    type="number"
+                    type="password"
                     max-length="6"
                     v-model="payload_primary.alarm_stop_pin"
                     hide-details
@@ -312,7 +312,15 @@
                     :readonly="isMapviewOnly"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="6" dense>
+                <v-col
+                  :cols="
+                    contact?.address_type == 'primary' ||
+                    contact?.address_type == 'secondary'
+                      ? 6
+                      : 12
+                  "
+                  dense
+                >
                   <v-text-field
                     label="Distance From Building"
                     dense
