@@ -289,8 +289,8 @@
             <v-list-item-content @click="showPopupAlarmStatus()">
               <v-list-item-title class="black--text align-left text-left">
                 <v-row style="">
-                  <v-col cols="2" class="align-right text-right pr-1"
-                    ><img
+                  <v-col cols="2" class="align-right text-right pr-1">
+                    <img
                       :src="'/device-icons/' + item.icon"
                       style="width: 20px; vertical-align: middle"
                   /></v-col>

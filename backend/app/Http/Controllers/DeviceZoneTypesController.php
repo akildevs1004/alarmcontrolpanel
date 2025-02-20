@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customers\DeviceZoneTypes;
+use App\Models\DeviceSensorTypes;
 use Illuminate\Http\Request;
 
 class DeviceZoneTypesController extends Controller
@@ -22,34 +23,38 @@ class DeviceZoneTypesController extends Controller
     }
     public function sensorTypesList()
     {
-        $sensorNames =  [
-            ["name" => "Fire Sensor", "image" => "fire_sensor.png"],
-            ["name" => "Beam Sensor", "image" => "beam_sensor.png"],
-            ["name" => "Door Sensor", "image" => "door_sensor.png"],
-            ["name" => "Gas Sensor", "image" => "gas_sensor.png"],
-            ["name" => "Glass Break Sensor", "image" => "glass_breake_sensor.png"],
-            ["name" => "Medical Sensor", "image" => "medical_sensor.png"],
-            ["name" => "Motion Sensor", "image" => "motion_sensor.png"],
-            ["name" => "Smoke Sensor", "image" => "smoke_sensor.png"],
-            ["name" => "SOS Sensor", "image" => "sos_sensor.png"],
-            ["name" => "Temperature Sensor", "image" => "temperature_sensor.png"],
-            ["name" => "Vibration Sensor", "image" => "vibration_sensor.png"],
-            ["name" => "Water Leakage Sensor", "image" => "water_leakage_sensor.png"],
-            ["name" => "Other Sensor", "image" => "other_sensor.png"],
+
+        return DeviceSensorTypes::orderBy("name", "asc")->get();
+
+
+        // $sensorNames =  [
+        //     ["name" => "Fire Sensor", "image" => "fire_sensor.png"],
+        //     ["name" => "Beam Sensor", "image" => "beam_sensor.png"],
+        //     ["name" => "Door Sensor", "image" => "door_sensor.png"],
+        //     ["name" => "Gas Sensor", "image" => "gas_sensor.png"],
+        //     ["name" => "Glass Break Sensor", "image" => "glass_breake_sensor.png"],
+        //     ["name" => "Medical Sensor", "image" => "medical_sensor.png"],
+        //     ["name" => "Motion Sensor", "image" => "motion_sensor.png"],
+        //     ["name" => "Smoke Sensor", "image" => "smoke_sensor.png"],
+        //     ["name" => "SOS Sensor", "image" => "sos_sensor.png"],
+        //     ["name" => "Temperature Sensor", "image" => "temperature_sensor.png"],
+        //     ["name" => "Vibration Sensor", "image" => "vibration_sensor.png"],
+        //     ["name" => "Water Leakage Sensor", "image" => "water_leakage_sensor.png"],
+        //     ["name" => "Other Sensor", "image" => "other_sensor.png"],
 
 
 
 
-            // ["name" => "Heat Sensor", "image" => "motion_sensor.png"],
-            // ["name" => "Microwave Sensor", "image" => "beam_sensor.png"],
-            // ["name" => "Shutter Door", "image" => "beam_sensor.png"],
-            // ["name" => "Curtain Sensor", "image" => "beam_sensor.png"],
+        //     // ["name" => "Heat Sensor", "image" => "motion_sensor.png"],
+        //     // ["name" => "Microwave Sensor", "image" => "beam_sensor.png"],
+        //     // ["name" => "Shutter Door", "image" => "beam_sensor.png"],
+        //     // ["name" => "Curtain Sensor", "image" => "beam_sensor.png"],
 
-        ];
+        // ];
 
-        ksort($sensorNames);
+        // ksort($sensorNames);
 
-        return $sensorNames;
+        // return $sensorNames;
     }
 
 

@@ -7,7 +7,9 @@ use App\Http\Controllers\WhatsappController;
 use App\Mail\EmailAlarmForwardMail;
 use App\Mail\EmailContentDefault;
 use App\Models\AlarmEvents;
+use App\Models\AlarmNotificationIcons;
 use App\Models\Customers\CustomerAlarmNotes;
+use App\Models\DeviceSensorTypes;
 use App\Models\ReportNotificationLogs;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
@@ -94,70 +96,89 @@ class AlarmNotificationController extends Controller
     // }
     public function getAlarmNotificationIcons()
     {
-        return   [
-            "Temperature" => "temperature.png",
-            "Burglary" => "burglary.png",
-            "Medical" => "medical.png",
-            "Water" => "water.png",
-            "Fire" => "fire.png",
-            "Humidity" => "humidity.png",
-            "Intruder" => "intruder.png",
-            "Offline" => "offline.png",
-            "Tampered" => "burglary.png",
-            "SOS" => "burglary.png",
-            "AC_off" => "burglary.png",
-            "DC_off" => "burglary.png",
-        ];
-    }
-    public function getPDFAlarmNotificationIcons()
-    {
 
-        return  [
-            "Fire Sensor"  => "fire_sensor.png",
-            "Beam Sensor"  => "beam_sensor.png",
-            "Door Sensor" => "door_sensor.png",
-            "Gas Sensor"  => "gas_sensor.png",
-            "Glass Break Sensor"  => "glass_breake_sensor.png",
-            "Medical Sensor" => "medical_sensor.png",
-            "Motion Sensor"  => "motion_sensor.png",
-            "Smoke Sensor"  => "smoke_sensor.png",
-            "SOS Sensor"  => "sos_sensor.png",
-            "Temperature Sensor"  => "temperature_sensor.png",
-            "Vibration Sensor"  => "vibration_sensor.png",
-            "Water Leakage Sensor"  => "water_leakage_sensor.png",
-            "Other Sensor" => "other_sensor.png"
-        ];
-        return   [
-            "Temperature" => "temperature.png",
-            "Burglary" => "burglary.png",
-            "Medical" => "medical.png",
-            "Water" => "water.png",
-            "Fire" => "fire.png",
-            "Humidity" => "humidity.png",
-            "Intruder" => "intruder.png",
-            "Offline" => "offline.png",
-            "Tampered" => "burglary.png",
-            "SOS" => "burglary.png",
-            "AC_off" => "burglary.png",
-            "DC_off" => "burglary.png",
-        ];
+        return AlarmNotificationIcons::orderBy("notification_type", "asc")->where("image", "!=", null)->pluck("image", "notification_type");;
+        // return   [
+        //     "Temperature" => "temperature.png",
+        //     "Burglary" => "burglary.png",
+        //     "Medical" => "medical.png",
+        //     "Water" => "water.png",
+        //     "Fire" => "fire.png",
+        //     "Humidity" => "humidity.png",
+        //     "Intruder" => "intruder.png",
+        //     "Offline" => "offline.png",
+        //     "Tampered" => "burglary.png",
+        //     "SOS" => "burglary.png",
+        //     "AC_off" => "burglary.png",
+        //     "DC_off" => "burglary.png",
+        // ];
     }
+    // public function getPDFAlarmNotificationIcons()
+    // {
+    //     // $DeviceSensorTypes = DeviceSensorTypes::orderBy("name", "asc")->get();
+    //     // $return = [];
+    //     // foreach ($DeviceSensorTypes as $key => $value) {
+    //     //     $return[] = [$value["name"]  => $value["image"]];
+    //     // }
+
+    //     // return $return;
+
+    //     $DeviceSensorTypes = DeviceSensorTypes::orderBy("name", "asc")->pluck("image", "name");
+    //     return $DeviceSensorTypes;
+
+
+    //     return  [
+    //         "Fire Sensor"  => "fire_sensor.png",
+    //         "Beam Sensor"  => "beam_sensor.png",
+    //         "Door Sensor" => "door_sensor.png",
+    //         "Gas Sensor"  => "gas_sensor.png",
+    //         "Glass Break Sensor"  => "glass_breake_sensor.png",
+    //         "Medical Sensor" => "medical_sensor.png",
+    //         "Motion Sensor"  => "motion_sensor.png",
+    //         "Smoke Sensor"  => "smoke_sensor.png",
+    //         "SOS Sensor"  => "sos_sensor.png",
+    //         "Temperature Sensor"  => "temperature_sensor.png",
+    //         "Vibration Sensor"  => "vibration_sensor.png",
+    //         "Water Leakage Sensor"  => "water_leakage_sensor.png",
+    //         "Other Sensor" => "other_sensor.png"
+    //     ];
+    //     return   [
+    //         "Temperature" => "temperature.png",
+    //         "Burglary" => "burglary.png",
+    //         "Medical" => "medical.png",
+    //         "Water" => "water.png",
+    //         "Fire" => "fire.png",
+    //         "Humidity" => "humidity.png",
+    //         "Intruder" => "intruder.png",
+    //         "Offline" => "offline.png",
+    //         "Tampered" => "burglary.png",
+    //         "SOS" => "burglary.png",
+    //         "AC_off" => "burglary.png",
+    //         "DC_off" => "burglary.png",
+    //     ];
+    // }
     public function getGoogleMapIcons()
     {
-        return   [
-            "intruder" => "/google_map_icons/google_alarm.png",
-            "alarm" => "/google_map_icons/google_alarm.png",
-            "temperature" => "/google_map_icons/google_temperature_alarm.png",
-            "fire" => "/google_map_icons/google_fire_alarm.png",
-            "water" => "/google_map_icons/google_water_alarm.png",
-            "sos" => "/google_map_icons/google_sos_alarm.png",
-            "medical" => "/google_map_icons/google_medical_alarm.png",
-            "offline" => "/google_map_icons/google_offline.png",
-            "ac_off" => "/google_map_icons/google_ac_off.png",
-            "dc_off" => "/google_map_icons/google_dc_off.png",
-            "battery" => "/google_map_icons/google_dc_off.png",
 
-        ];
+
+        return AlarmNotificationIcons::orderBy("notification_type", "asc")->where("google_map_image", "!=", null)->pluck("google_map_image", "notification_type")
+            ->mapWithKeys(fn($image, $name) => [strtolower($name) => $image]);
+
+
+        // return   [
+        //     "intruder" => "/google_map_icons/google_alarm.png",
+        //     "alarm" => "/google_map_icons/google_alarm.png",
+        //     "temperature" => "/google_map_icons/google_temperature_alarm.png",
+        //     "fire" => "/google_map_icons/google_fire_alarm.png",
+        //     "water" => "/google_map_icons/google_water_alarm.png",
+        //     "sos" => "/google_map_icons/google_sos_alarm.png",
+        //     "medical" => "/google_map_icons/google_medical_alarm.png",
+        //     "offline" => "/google_map_icons/google_offline.png",
+        //     "ac_off" => "/google_map_icons/google_ac_off.png",
+        //     "dc_off" => "/google_map_icons/google_dc_off.png",
+        //     "battery" => "/google_map_icons/google_dc_off.png",
+
+        // ];
     }
 
     public function forwardAlarmEventToContactsList($alarm_id, $contacts, $external_cc_email = '', $request = null)
