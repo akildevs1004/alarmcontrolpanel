@@ -321,10 +321,7 @@
                   Find User
                 </v-list-item-title>
               </v-list-item> -->
-              <v-list-item
-                v-if="can('device_edit') && item.device_type == 'Intruder'"
-                @click="editZones(item)"
-              >
+              <v-list-item v-if="can('device_edit')" @click="editZones(item)">
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small>
                     mdi-format-list-bulleted-type
