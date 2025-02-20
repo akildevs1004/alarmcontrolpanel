@@ -906,15 +906,15 @@ class CustomersController extends Controller
     public function deviceModels()
     {
         $data = [
-            "OX-866",
-            "OX-886",
-            "OX-966",
-            "OX-900",
+            // "OX-866",
+            // "OX-886",
+            // "OX-966",
+            // "OX-900",
             "XT-CPANEL",
             "H700-TAB",
-            "XG-808",
-            "XT-FIRE",
-            "XT-WATER"
+            // "XG-808",
+            // "XT-FIRE",
+            // "XT-WATER"
         ];
         return $data;
     }

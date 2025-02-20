@@ -254,6 +254,29 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                     }
 
+                    //Identify Alarm Type based on zone and sensor type value
+
+                    $deviceId = $devices->id;
+                    $areaTesting = $area === '00' ? null : $area;
+
+                    $sensorType = DeviceZones::where("device_id", $deviceId)
+                        ->where("area", $areaTesting)
+                        ->where("zone", $zone)
+                        ->value("sensor_type");
+
+                    if ($sensorType) {
+                        $alarmTypes = [
+                            'Water Leakage Sensor' => 'Water',
+                            'Fire Sensor' => 'Fire',
+                            'Medical Sensor' => 'Medical',
+                            'SOS Sensor' => 'SOS',
+                            'Temperature Sensor' => 'Temperature',
+                        ];
+                        if ($alarmTypes[$sensorType])
+                            $alarm_type = $alarmTypes[$sensorType];
+                    }
+
+                    //--------------------------------------
 
 
 
