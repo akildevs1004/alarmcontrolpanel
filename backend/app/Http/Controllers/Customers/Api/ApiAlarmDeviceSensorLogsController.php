@@ -445,10 +445,14 @@ class ApiAlarmDeviceSensorLogsController extends Controller
         if ($deviceModel) {
             $company_id = $deviceModel->company_id;
             $customer_id = $deviceModel->customer_id;
-            $device_time_zone = $deviceModel->utc_time_zone;
+
+            $timeZone = $deviceModel?->utc_time_zone ?: 'Asia/Dubai';
+
+
+
 
             $log_time = new DateTime($log_time);
-            $log_time->setTimezone(new DateTimeZone($device_time_zone));
+            $log_time->setTimezone(new DateTimeZone($timeZone));
 
             $data = [
                 "company_id" => $company_id,

@@ -580,6 +580,7 @@ class CustomersController extends Controller
             'mobile_number' => 'nullable',
             'email' => 'nullable',
             'alarm_stop_pin' => 'nullable',
+            'distance' => 'nullable',
 
 
         ]);
@@ -610,7 +611,7 @@ class CustomersController extends Controller
         $data["latitude"] = $data1["latitude"] ?? null;
         $data["longitude"] =  $data1["longitude"] ?? null;
         $data["working_hours"] =  $data1["working_hours"] ?? null;
-        $data["distance"] =  $data1["phondistancee2"] ?? null;
+        $data["distance"] =  $data1["distance"] ?? null;
         $data["notes"] =  $data1["notes"] ?? null;
 
 
@@ -710,7 +711,7 @@ class CustomersController extends Controller
         $data["latitude"] = isset($data1["latitude"]) ? $data1["latitude"] : '---';
         $data["longitude"] = isset($data1["longitude"]) ? $data1["longitude"] : '---';
         $data["working_hours"] = isset($data1["working_hours"]) ? $data1["working_hours"] : '---';
-        $data["distance"] = isset($data1["phdistanceone2"]) ? $data1["phondistancee2"] : '---';
+        $data["distance"] = isset($data1["distance"]) ? $data1["distance"] : '---';
         $data["notes"] = isset($data1["notes"]) ? $data1["notes"] : '---';
 
 
@@ -1104,7 +1105,7 @@ class CustomersController extends Controller
         //     ["name" => "Building Security", "display_order" => 4],
         //     ["name" => "Community Security", "display_order" => 5],
         // ];
-        return   $data = CustomerContactTypes::orderBy("name", "asc")->get();
+        return   $data = CustomerContactTypes::orderBy("id", "asc")->get();
 
         // Fetch addressTypes from the database
         $addressTypes = CustomerContacts::where("company_id", $request->company_id)->where("display_order", ">", 0)
