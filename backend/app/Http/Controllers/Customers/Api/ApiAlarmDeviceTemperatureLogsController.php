@@ -50,7 +50,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             ->where("serial_number", "!=", null)->get();
 
 
-        $devicesList = Device::where("serial_number", "W12345")->get();
+
         $log[] = $this->updateDuration1($devicesList);
         // $log[] =   $this->updateAlarmEndDatetime2($devicesList);
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
