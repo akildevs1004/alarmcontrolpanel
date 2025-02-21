@@ -321,7 +321,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         ->where("area", $logs['area'])
                         ->where("alarm_type", $logs['alarm_type'])
                         ->where("alarm_status", 1)->count();
-                    Storage::append("testing.txt", $activeAlarmZoneCount);
+                    //Storage::append("testing.txt", $activeAlarmZoneCount);
                     if ($activeAlarmZoneCount == 0) {
 
 
