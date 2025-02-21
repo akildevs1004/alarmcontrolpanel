@@ -807,7 +807,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 "name" => $contact["first_name"] . ' ' . $contact["last_name"],
                 "company" => $alarmlog["company"], // ["name" => $alarmlog["company"]["name"]],
                 "device" =>  $alarmlog["device"],
-                "devicesensorzones" =>  $alarmlog["devicesensorzones"],
+                "devicesensorzones" =>  $alarmlog["devicesensorzones"] ??  null,
                 "zone_name" => null,
                 "email" => $contact["email"],
                 "company_id" => $company_id,
