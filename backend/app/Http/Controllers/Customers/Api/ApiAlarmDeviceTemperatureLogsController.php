@@ -275,7 +275,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         foreach ($devicesList as $key => $device) {
             // try {
 
-            $logsArray = AlarmLogs::with(["device.company", "devicesensorzones"])->where("serial_number", $device['serial_number'])
+            $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("serial_number", $device['serial_number'])
                 ->where("company_id", '>', 0)
                 ->where("alarm_status", 1)
                 //->where("event_code", "!=", null)
@@ -422,8 +422,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         //     ->update($data);
 
                         (clone  $deviceZone)->update($data);
-
-                        if (!$isTechnicianTesting) {
+                        Storage::append("testing.txt", 'isTechnicianTesting' . $isTechnicianTesting);
+                        //if (!$isTechnicianTesting)
+                        {
                             $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
                         }
                     } else {
@@ -784,17 +785,22 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         $reports = DeviceNotificationsManagers::with(["company.company_mail_content"])
             ->where("company_id", $company_id)
+            ->where("customer_id", $alarmlog['customer_id'])
             ->where("zone_name", $alrm_type)
             ->get();
-
+        //Storage::append("testing.txt", 'reports' . json_encode($reports));
 
         $contacts = CustomerContacts::where("company_id", $company_id)
+
+            ->where("customer_id", $alarmlog['customer_id'])
             ->where(function ($query) {
                 $query->whereRaw("address_type ILIKE 'primary'")
                     ->orWhereRaw("address_type ILIKE 'secondary'");
             })
             ->get()->toArray();;
+        Storage::append("testing.txt", 'contacts' . count($contacts));
 
+        Storage::append("testing.txt", 'company' . $alarmlog["company"]);
 
         foreach ($contacts as $key => $contact) {
             $reports->push([
@@ -807,13 +813,16 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 "company_id" => $company_id,
                 "branch_id" => null,
                 "id" => null,
-                "whatsapp_number" => $contact["whatsapp"],
+                "whatsapp_number" =>  $contact["whatsapp"],
             ]);
         }
-
+        Storage::append("testing.txt", 'reports' . count($reports));
 
         $issue = $alarmlog['alarm_type'];
         foreach ($reports as $value) {
+
+
+
 
             $location = "{$value['device']['customer']['latitude']},{$value['device']['customer']['longitude']}";
 
@@ -845,9 +854,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 = new EmailContentDefault($data);
 
                 if ($value['email'] != '') {
-                    Mail::to($value['email'])
-                        ->send($body_content1);
 
+                    try {
+                        Mail::to($value['email'])
+                            ->send($body_content1);
+                    } catch (\exception $e) {
+                    }
 
                     $data = [
                         "company_id" => $value['company_id'],
@@ -891,8 +903,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                 // if (isset($value['company']['company_whatsapp_content']))
                 //     $body_content1 .= $value['company']['company_whatsapp_content'][0]['content'];
-
-                (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+                try {
+                    (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+                } catch (\exception $e) {
+                }
 
                 $data = [
                     "company_id" => $value['company']['id'],

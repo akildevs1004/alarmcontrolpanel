@@ -27,6 +27,12 @@ class AlarmLogs extends Model
     public function devicesensorzones()
     {
 
+        return $this->belongsTo(DeviceZones::class, "area", "area_code")
+            // ->whereNotNull("area_code") // Ignore records where area_code is NULL
+            ->whereColumn("serial_number", "=", "devices.serial_number")
+            ->whereColumn("zone_code", "=", "devices.zone_code");
+
+
 
         return $this->belongsTo(DeviceZones::class,  "area", "area_code")
             ->whereColumn("serial_number", "=", "device_sensor_zones.serial_number")

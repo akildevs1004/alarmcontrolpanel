@@ -29,6 +29,7 @@ use App\Imports\excelEmployeesData;
 use App\Mail\ReportNotificationMail;
 use App\Models\AlarmEvents;
 use App\Models\AlarmEventsTechnician;
+use App\Models\AlarmLogs;
 use App\Models\Attendance;
 use App\Models\AttendanceLog;
 use App\Models\Company;
@@ -81,6 +82,23 @@ Route::get("testNotification", function (Request $request) {
     return (new CustomersController)->verifyArmedDeviceWithShopTime();
 });
 Route::get("sync_alarm_logs", function (Request $request) {
+
+
+
+
+    $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("serial_number", "W12345")
+        ->where("company_id", '>', 0)
+        ->where("alarm_status", 1)
+        //->where("event_code", "!=", null)
+        ->where("verified", false)
+        ->where("time_duration_seconds", '>=', 5)
+
+        ->orderBy("log_time", "ASC")->get();
+
+    return (new ApiAlarmDeviceTemperatureLogsController)->SendMailWhatsappNotification("intruder", "intruder", "",  $logsArray[0]["device"], date("Y-m-d"),  1,   [],   [], $logsArray[0]);
+
+
+
     return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 });
 Route::get("get_test_alarm", function (Request $request) {

@@ -1,2 +1,5 @@
 0
 0
+contacts1
+company{"id":8,"user_id":1875,"name":"AKIL SECURITY AND ALARM SYSTEMS","member_from":"2022\/11\/25","expiry":"2025\/11\/22","max_employee":100,"max_devices":100,"location":"BURDUBAI11111111","logo":"http:\/\/localhost:8000\/upload\/1724337942.png","p_o_box_no":"1234568\/696311","mol_id":"999999999991","created_at":"15 Dec 2022","company_code":"AE0008","no_branch":false,"max_branches":"10","lat":"1111111","lon":"11111111","contact_number":null,"whatsapp_instance_id":"65772646BBF76","whatsapp_access_token":"a27e1f9ca2347bb766f332b8863ebe9f","enable_whatsapp_otp":0,"is_offline_device_notificaiton_sent":false,"offline_notification_last_sent_at":"2023-11-29 13:52:48","management_company":null,"account_type":"company","status":true,"api_access_token":"70aa0254ebab819b0bc7b6e7ef0ac877","api_datetime":"2024-01-30 16:44:54","display_modules":"{\"access_control\":true,\"community\":true,\"visitors\":true}","utc_time_zone":"Asia\/Dubai","show_member_from":"26 Nov 2022","show_expiry":"23 Nov 2025","logo_raw":"upload\/1724337942.png"}
+reports1
