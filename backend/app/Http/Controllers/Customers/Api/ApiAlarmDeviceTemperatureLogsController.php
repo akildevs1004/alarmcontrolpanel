@@ -291,7 +291,6 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             foreach ($logsArray  as   $logs) {
 
 
-                return   $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], [], [], $logs);
 
                 if (isset($logs['log_time'])) {
 
@@ -425,7 +424,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         (clone  $deviceZone)->update($data);
 
                         if (!$isTechnicianTesting) {
-                            return   $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
+                            $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
                         }
                     } else {
                         //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
