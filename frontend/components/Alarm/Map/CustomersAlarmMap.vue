@@ -486,6 +486,8 @@ export default {
         this.$route.name == "alarm-customersmap"
       )
         this.getCustomers();
+
+      this.mapkeycount++;
     }, 1000 * 30);
     ///this.getBuildingTypes();
 

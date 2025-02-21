@@ -127,7 +127,7 @@ class WhatsappController extends Controller
 
                 // dd($response->status());
 
-                //if ($response->status() == 200) 
+                //if ($response->status() == 200)
                 {
                     // Log::channel('whatsapp_logs')->info($msg);
                     //Log::channel('whatsapp_logs')->info($response);
@@ -157,22 +157,27 @@ class WhatsappController extends Controller
     public function sendWhatsappNotification($company, $message, $number, $attachments = [])
     {
 
-        return false;
-
         // API endpoint URL
-        $url = 'https://backend.mytime2cloud.com/api/send-whatsapp-wessage';
+        $url = 'https://wa.mytime2cloud.com/send-message';
 
         // Data to send in the request
         $data = [
-            'company_id' => 13,
-            'mobile_number' =>  "971552205149", //request("number"),
-            'message' => $message,
+            'clientId' => $company["id"] . "_alarm_xtremeguard",
+            'recipient' =>  $number, //request("number"),
+            'text' => $message,
 
         ];
 
+
+
+        // API endpoint URL
+        //$url = 'https://backend.mytime2cloud.com/api/send-whatsapp-wessage';
+
+
+
         // Sending POST request using Http facade
-        $response = Http::post($url, $data);
-        Http::withoutVerifying()->timeout(30)->get($url, $data);
+        //$response = Http::post($url, $data);
+        return   Http::withoutVerifying()->timeout(30)->post($url, $data);
 
         return false;
 
@@ -180,37 +185,37 @@ class WhatsappController extends Controller
 
 
 
-        $data = [
-            'number' => $number,
-            'type' => 'text',
-            'message' => $message,
-            'instance_id' => $company->whatsapp_instance_id, //'64DB354A9EBCC',
-            'access_token' =>  $company->whatsapp_access_token, //'a27e1f9ca2347bb766f332b8863ebe9f',
-        ];
+        // $data = [
+        //     'number' => $number,
+        //     'type' => 'text',
+        //     'message' => $message,
+        //     'instance_id' => $company->whatsapp_instance_id, //'64DB354A9EBCC',
+        //     'access_token' =>  $company->whatsapp_access_token, //'a27e1f9ca2347bb766f332b8863ebe9f',
+        // ];
 
 
 
-        if (count($attachments)) {
-            $data = [
-                'number' => $number,
-                'type' => 'media',
-                'message' => $message,
-                'instance_id' => $company->whatsapp_instance_id, //'64DB354A9EBCC',
-                'access_token' =>  $company->whatsapp_access_token, //'a27e1f9ca2347bb766f332b8863ebe9f',
-                'media_url' => $attachments['media_url'],
-                'filename' => $attachments['filename'],
-            ];
-        }
+        // if (count($attachments)) {
+        //     $data = [
+        //         'number' => $number,
+        //         'type' => 'media',
+        //         'message' => $message,
+        //         'instance_id' => $company->whatsapp_instance_id, //'64DB354A9EBCC',
+        //         'access_token' =>  $company->whatsapp_access_token, //'a27e1f9ca2347bb766f332b8863ebe9f',
+        //         'media_url' => $attachments['media_url'],
+        //         'filename' => $attachments['filename'],
+        //     ];
+        // }
 
-        $response = Http::withoutVerifying()->timeout(30)->get(env('WHATSAPP_URL'), $data);
+        // $response = Http::withoutVerifying()->timeout(30)->get(env('WHATSAPP_URL'), $data);
 
-        // You can check the response status and get the response content as needed
-        if ($response->successful()) {
-            //Log::channel('whatsapp_logs')->info($response->json());
-        } else {
-            Log::channel('whatsapp_logs')->info($response->body());
-        }
-        return $response->body();
+        // // You can check the response status and get the response content as needed
+        // if ($response->successful()) {
+        //     //Log::channel('whatsapp_logs')->info($response->json());
+        // } else {
+        //     Log::channel('whatsapp_logs')->info($response->body());
+        // }
+        // return $response->body();
     }
     public function prepareSummary($id)
     {

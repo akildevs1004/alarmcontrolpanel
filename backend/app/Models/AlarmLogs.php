@@ -16,9 +16,21 @@ class AlarmLogs extends Model
     protected $casts = [
         'created_at' => 'datetime:d-M-y',
     ];
+    public function company()
+    {
+        return $this->belongsTo(Company::class, "company_id", "id");
+    }
     public function device()
     {
         return $this->belongsTo(Device::class, "serial_number", "serial_number");
+    }
+    public function devicesensorzones()
+    {
+
+
+        return $this->belongsTo(DeviceZones::class,  "area", "area_code")
+            ->whereColumn("serial_number", "=", "device_sensor_zones.serial_number")
+            ->whereColumn("zone_code", "=", "device_sensor_zones.zone_code");
     }
     // public function sensorzones()
     // {

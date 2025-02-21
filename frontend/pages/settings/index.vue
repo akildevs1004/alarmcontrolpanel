@@ -27,6 +27,10 @@
                 <v-icon left> mdi-lock </v-icon>
                 <span>Password</span>
               </v-tab>
+              <v-tab>
+                <v-icon left> mdi-whatsapp </v-icon>
+                <span>Whatsapp</span>
+              </v-tab>
 
               <v-tab-item>
                 <v-card flat>
@@ -261,7 +265,7 @@
                               <v-col cols="6">
                                 <!-- <label class="col-form-label">
                               Contact Person Name
-                            </label> 
+                            </label>
                             <span class="text-danger">*</span>-->
                                 <v-text-field
                                   label="Contact Person Name"
@@ -588,6 +592,9 @@
                   </v-row>
                 </v-container>
               </v-tab-item>
+              <v-tab-item>
+                <Whatsapp />
+              </v-tab-item>
             </v-tabs>
           </v-card>
         </v-col>
@@ -598,9 +605,12 @@
 </template>
 
 <script>
+import Whatsapp from "../../components/Whatsapp.vue";
 import timeZones from "../../defaults/utc_time_zones.json";
 
 export default {
+  components: { Whatsapp },
+
   data: () => ({
     timeZones,
     originalURL: process.env.APP_URL + "register/visitor/walkin/", //`https://mytime2cloud.com/register/visitor/walkin/`,

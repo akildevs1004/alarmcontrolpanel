@@ -259,6 +259,7 @@
 
 <script>
 import ForgotPassword from "../components/ForgotPassword.vue";
+
 export default {
   layout: "login",
   components: { ForgotPassword },
@@ -313,6 +314,29 @@ export default {
     this.$store.dispatch("resetState");
   },
   methods: {
+    requestPermission() {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          getToken(messaging, {
+            vapidKey:
+              "BJuAq3YG9HjVeXbgq_eyM7skgkG5Yunk8UjI9jlkt_DXfuqrfdIWVgqZPk6nBHx-_PYb-D8JQamMRNfn9F2XhH8",
+          })
+            .then((currentToken) => {
+              if (currentToken) {
+                console.log("FCM Token:", currentToken);
+                alert("FCM Token received. Check the console.");
+              } else {
+                console.log("No registration token available.");
+              }
+            })
+            .catch((err) => {
+              console.log("Error retrieving token: ", err);
+            });
+        } else {
+          alert("Notifications denied!");
+        }
+      });
+    },
     openForgotPassword() {
       this.dialogForgotPassword = true;
     },

@@ -147,6 +147,11 @@
           <div>{{ item.device_type }}</div>
           <!-- <div class="secondary-value">{{ item.model_number }}</div> -->
         </template>
+
+        <template v-slot:item.model_number="{ item }">
+          <div>{{ item.model_number }}</div>
+          <div class="secondary-value">{{ item.serial_number }}</div>
+        </template>
         <template v-slot:item.name="{ item }">
           {{ caps(item.name) }}
           <div class="secondary-value">{{ item.short_name }}</div>
@@ -475,12 +480,15 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno", sortable: false },
-      { text: "Customer  Name", value: "customer", sortable: false },
-      { text: "Type", value: "building_type", sortable: false },
-      { text: "Device Category", value: "device_type", sortable: false },
-      { text: "Device Model", value: "model_number", sortable: false },
+      // { text: "Customer  Name", value: "customer", sortable: false },
+      { text: "Name", value: "name", sortable: false },
+      { text: "Location", value: "location", sortable: false },
+
+      // { text: "Type", value: "building_type", sortable: false },
+      { text: "Category", value: "device_type", sortable: false },
+      { text: "Model", value: "model_number", sortable: false },
       // { text: "Zones", value: "zones", align: "left" },
-      { text: "Serial Number", value: "device", sortable: false },
+      // { text: "Serial Number", value: "device", sortable: false },
       // { text: "Location", value: "location" },
 
       // { text: "Delay(Min)", value: "delay" },

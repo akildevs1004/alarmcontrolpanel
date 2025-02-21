@@ -211,7 +211,7 @@
 
 <script>
 export default {
-  props: ["customer_id", "editId", "editable", "item", "deviceId"],
+  props: ["customer_id", "editId", "editable", "item", "deviceId", "device"],
   data: () => ({
     show1: false,
     areaList: [
@@ -358,6 +358,7 @@ export default {
             ...this.payload_security,
             device_zone_id: this.editId,
             device_id: this.deviceId,
+            serial_number: this.device.serial_number,
           },
         };
 
@@ -398,6 +399,7 @@ export default {
             company_id: this.$auth.user.company_id,
             ...this.payload_security,
 
+            serial_number: this.item.serial_number,
             device_id: this.deviceId,
           },
         };

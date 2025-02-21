@@ -228,7 +228,7 @@
             :alarmId="eventId"
             :customer="customer"
             :isPopup="true"
-            :alarm="alarm"
+            :alarm="selecteAlarm"
           />
         </v-card-text>
       </v-card>

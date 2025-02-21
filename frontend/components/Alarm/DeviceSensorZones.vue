@@ -17,13 +17,14 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text>
+        <v-card-text v-if="editDevice">
           <EditDeviceZone
             :key="key"
             :editId="editId"
             :item="item"
             :editable="editable"
             :deviceId="device_id"
+            :device="editDevice"
             @closeDialog="closeSecurityDialog"
           />
         </v-card-text>
@@ -426,12 +427,15 @@ export default {
     //   this.$router.push("/alarm/view-customer/" + item.id);
     // },
     editItem(item) {
-      this.editable = true;
+      console.log("item", item);
+
       this.editId = item.id;
       this.key += 1;
       this.item = item;
+
       this.device_id = this.editDevice.id;
       this.dialogNewZone = true;
+      this.editable = true;
     },
 
     deleteItem(item) {

@@ -16,6 +16,7 @@ use App\Models\AlarmLogs;
 use Illuminate\Http\Request;
 use App\Models\Community\AttendanceLog;
 use App\Models\Company;
+use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\Tickets;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
@@ -49,7 +50,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             ->where("serial_number", "!=", null)->get();
 
 
-        //$devicesList = Device::where("serial_number", "XT900021")->get();
+        $devicesList = Device::where("serial_number", "W12345")->get();
         $log[] = $this->updateDuration1($devicesList);
         // $log[] =   $this->updateAlarmEndDatetime2($devicesList);
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
@@ -274,7 +275,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         foreach ($devicesList as $key => $device) {
             // try {
 
-            $logsArray = AlarmLogs::where("serial_number", $device['serial_number'])
+            $logsArray = AlarmLogs::with(["device.company", "devicesensorzones"])->where("serial_number", $device['serial_number'])
                 ->where("company_id", '>', 0)
                 ->where("alarm_status", 1)
                 //->where("event_code", "!=", null)
@@ -288,6 +289,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
             foreach ($logsArray  as   $logs) {
+
+
+                return   $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], [], [], $logs);
 
                 if (isset($logs['log_time'])) {
 
@@ -420,8 +424,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         (clone  $deviceZone)->update($data);
 
-                        if ($device['alarm_status'] == 1) {
-                            $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], []);
+                        if (!$isTechnicianTesting) {
+                            return   $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
                         }
                     } else {
                         //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
@@ -610,7 +614,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             return $this->response('Device Serial Number or Alarm Type is empty', null, false);
         }
     }
-
+    /*
     public function ApiTemperatureLogs(Request $request)
     {
 
@@ -770,8 +774,143 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         return $this->response('Data error', null, false);
     }
+*/
+    public function SendMailWhatsappNotification($alrm_type, $issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [], $deviceObj = [], $alarmlog = null)
+    {
 
-    public function SendMailWhatsappNotification($alrm_type, $issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [], $deviceObj = [])
+
+
+        $company_id = $model1->company_id;
+
+
+        $reports = DeviceNotificationsManagers::with(["company.company_mail_content"])
+            ->where("company_id", $company_id)
+            ->where("zone_name", $alrm_type)
+            ->get();
+
+
+        $contacts = CustomerContacts::where("company_id", $company_id)
+            ->where(function ($query) {
+                $query->whereRaw("address_type ILIKE 'primary'")
+                    ->orWhereRaw("address_type ILIKE 'secondary'");
+            })
+            ->get()->toArray();;
+
+
+        foreach ($contacts as $key => $contact) {
+            $reports->push([
+                "name" => $contact["first_name"] . ' ' . $contact["last_name"],
+                "company" => $alarmlog["company"], // ["name" => $alarmlog["company"]["name"]],
+                "device" =>  $alarmlog["device"],
+                "devicesensorzones" =>  $alarmlog["devicesensorzones"],
+                "zone_name" => null,
+                "email" => $contact["email"],
+                "company_id" => $company_id,
+                "branch_id" => null,
+                "id" => null,
+                "whatsapp_number" => $contact["whatsapp"],
+            ]);
+        }
+
+
+        $issue = $alarmlog['alarm_type'];
+        foreach ($reports as $value) {
+
+            $location = "{$value['device']['customer']['latitude']},{$value['device']['customer']['longitude']}";
+
+
+            if ($value["email"] != '') {
+
+
+
+
+                $body_content1 = "Hello, {$value['name']} <br/>";
+                $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}<br/>";
+                $body_content1 .= "This is Notifing you about {$issue} event <br/>";
+                $body_content1 .= "DateTime:  $date<br/>";
+                $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}<br/>";
+                $body_content1 .= "Location: {$value['devicesensorzones']['location']}<br/>";
+
+                $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location}<br/> ";
+
+
+                // $body_content1 .= "Branch: {$branch_name}<br/><br/><br/><br/>";
+                $body_content1 .= "*Xtreme Guard*<br/>";
+
+                $data = [
+                    'subject' => "{$issue} Notification",
+                    'body' => $body_content1,
+                ];
+
+
+                $body_content1 = new EmailContentDefault($data);
+
+                if ($value['email'] != '') {
+                    Mail::to($value['email'])
+                        ->send($body_content1);
+
+
+                    $data = [
+                        "company_id" => $value['company_id'],
+                        "branch_id" => $value['branch_id'],
+                        "notification_manager_id" => $value['id'],
+                        "email" => $value['email'],
+                        "subject" => $issue,
+                        "notification_id" => 0,
+                        "created_datetime" => date("Y-m-d H:i:s"),
+                    ];
+
+                    ReportNotificationLogs::create($data);
+                }
+            }
+
+
+
+            if ($value['whatsapp_number'] != '') {
+
+                // $branch_name = $value->branch->branch_name ?? '---';
+
+                $body_content1 = "🚨 *{$issue}* Event Notification 🚨\n\n";
+
+                $body_content1 .= "Hello, *{$value['name']}*\n";
+                $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}\n";
+
+                $body_content1 .= "Alarm Type:  $issue\n";
+
+                // $body_content1 .= "This is Notifing you about *{$issue}* event <br/>";
+                $body_content1 .= "DateTime:  $date\n";
+                $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}\n";
+                $body_content1 .= "Location: {$value['devicesensorzones']['location']}\n";
+
+                $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location}\n\n ";
+
+                // $body_content1 .= "Branch:  {$branch_name}\n";
+                $body_content1 .= "From *Xtreme Guard*\n";
+
+
+
+
+                // if (isset($value['company']['company_whatsapp_content']))
+                //     $body_content1 .= $value['company']['company_whatsapp_content'][0]['content'];
+
+                (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+
+                $data = [
+                    "company_id" => $value['company']['id'],
+                    //"branch_id" => $manager['branch_id,
+                    // "notification_id" => $value['notification_id,
+                    "notification_manager_id" => $value['id'],
+                    "whatsapp_number" => $value['whatsapp_number'],
+                    "subject" => $issue,
+                    "notification_id" => 0,
+                ];
+
+                ReportNotificationLogs::create($data);
+            }
+        } //whatsapp
+    }
+
+    public function SendMailWhatsappNotification5MinutesDelay($alrm_type, $issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [], $deviceObj = [])
     {
 
 
