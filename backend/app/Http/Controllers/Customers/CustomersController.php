@@ -593,18 +593,18 @@ class CustomersController extends Controller
         $data["company_id"] = $data1["company_id"];
         $data["customer_id"] = $data1["customer_id"];
         $data["address_type"] = $data1["address_type"];
-        if ($data1["phone1"])
+        if (isset($data1["phone1"]))
             $data["phone1"] = $data1["phone1"];
 
-        if ($data1["phone2"])
+        if (isset($data1["phone2"]))
             $data["phone2"] = $data1["phone2"];
-        if ($data1["office_phone"])
+        if (isset($data1["office_phone"]))
             $data["office_phone"] = $data1["office_phone"];
 
-        if ($data1["email"])
+        if (isset($data1["email"]))
             $data["email"] = $data1["email"];
 
-        if ($data1["whatsapp"])
+        if (isset($data1["whatsapp"]))
             $data["whatsapp"] = $data1["whatsapp"];
 
 
