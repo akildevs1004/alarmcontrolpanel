@@ -338,7 +338,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         $security_name = null;
                         $security_id = null;
-                        if ($device->customer->mappedsecurity && $device->customer->mappedsecurity->securityInfo) {
+                        if ($device->customer && $device->customer->mappedsecurity && $device->customer->mappedsecurity->securityInfo) {
                             $security_name = $device->customer->mappedsecurity->securityInfo->first_name . ' ' . $device->customer->mappedsecurity->securityInfo->last_name;
                             $security_id =  $device->customer->mappedsecurity->securityInfo->id;
                         }
