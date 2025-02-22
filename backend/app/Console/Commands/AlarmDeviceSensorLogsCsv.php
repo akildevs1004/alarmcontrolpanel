@@ -8,6 +8,7 @@ use App\Http\Controllers\SDKController;
 use App\Models\AccessControlTimeSlot;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log as Logger;
 
 class AlarmDeviceSensorLogsCsv extends Command
 {
@@ -32,11 +33,18 @@ class AlarmDeviceSensorLogsCsv extends Command
      */
     public function handle()
     {
-        // $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+        try {
+            $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
 
 
-        // (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
 
-        // echo  json_encode($result);
+            echo  json_encode($result);
+        } catch (\Exception $e) {
+
+            $this->info($e->getMessage());
+            Logger::error("Cron:  .AlarmDeviceSensorLogsCsv Error Details: " . $e->getMessage());
+            return;
+        }
     }
 }
