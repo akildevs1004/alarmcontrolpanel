@@ -32,7 +32,12 @@ class AlarmLogs extends Model
         //     ->whereColumn("serial_number", "=", "devices.serial_number")
         //     ->whereColumn("zone_code", "=", "devices.zone_code");
 
-
+        return $this->hasOne(DeviceZones::class, 'area_code', 'area')
+            ->whereColumn('serial_number', 'device_sensor_zones.serial_number')
+            ->whereColumn('zone_code', 'device_sensor_zones.zone_code')
+            ->where(function ($query) {
+                $query->whereNull('area_code')->orWhere('area_code', '000');
+            });
 
         return $this->belongsTo(DeviceZones::class,  "area", "area_code")
             ->whereColumn("serial_number", "=", "device_sensor_zones.serial_number")
