@@ -110,11 +110,17 @@ Route::get("sync_alarm_logs", function (Request $request) {
 
     return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 });
-Route::get("get_test_alarm", function (Request $request) {
+Route::get("alarm_device_status", function (Request $request) {
 
 
-    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+    return "AlarmTesting";
 });
+Route::post("alarm_device_status", function (Request $request) {
+
+
+    return "AlarmTesting";
+});
+
 Route::get("create_test_tampred_alarm", function (Request $request) {
 
 
