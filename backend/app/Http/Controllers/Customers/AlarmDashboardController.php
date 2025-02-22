@@ -173,10 +173,10 @@ class AlarmDashboardController extends Controller
                 "technicalCount" => $counts->technicalcount ?? 0,
                 "eventsCount" => $counts->eventscount ?? 0,
                 "mediumCount" => $counts->mediumcount ?? 0,
-                "temperatureCount" => $counts->temperatureCount ?? 0,
-                "waterCount" => $counts->waterCount ?? 0,
-                "medicalCount" => $counts->medicalCount ?? 0,
-                "fireCount" => $counts->fireCount ?? 0,
+                "temperatureCount" => $counts->temperaturecount ?? 0,
+                "waterCount" => $counts->watercount ?? 0,
+                "medicalCount" => $counts->medicalcount ?? 0,
+                "fireCount" => $counts->firecount ?? 0,
 
             ];
         }
