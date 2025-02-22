@@ -81,6 +81,13 @@ Route::get("testNotification", function (Request $request) {
 
     return (new CustomersController)->verifyArmedDeviceWithShopTime();
 });
+Route::get("closealarm", function (Request $request) {
+
+
+    (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+});
+
+
 Route::get("sync_alarm_logs", function (Request $request) {
 
 
