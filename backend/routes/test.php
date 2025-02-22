@@ -84,7 +84,7 @@ Route::get("testNotification", function (Request $request) {
 Route::get("closealarm", function (Request $request) {
 
 
-    (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+    return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
 });
 
 
@@ -204,16 +204,16 @@ Route::get("create_test_alarm", function (Request $request) {
         "alarm_source" => 78,
         "security_name" => "Test",
         "security_id" => 1,
-        "technician_id" => 1,
-        "ticket_id" => 184,
+
+
     ];
 
 
     $offlineDevices[] = $data;
 
 
-    //AlarmEvents::create($data);
-    AlarmEventsTechnician::create($data);
+    AlarmEvents::create($data);
+
     return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 
     return false;
