@@ -29,10 +29,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule
-            ->command('task:alarm_device_sensor_logs_csv')
-            ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log"))->runInBackground(); //
+        // $schedule
+        //     ->command('task:alarm_device_sensor_logs_csv')
+        //     ->everyMinute()
+        //     ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log"))->runInBackground(); //
 
         /*------------------------ */
         $monthYear = date("M-Y");
@@ -46,11 +46,11 @@ class Kernel extends ConsoleKernel
 
         ;;
 
-        /*------------------------ */
-        $schedule->call(function () {
-            (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
-        })->everyMinute();
-        /*------------------------ */
+        // /*------------------------ */
+        // $schedule->call(function () {
+        //     (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+        // })->everyMinute();
+        // /*------------------------ */
 
 
 
