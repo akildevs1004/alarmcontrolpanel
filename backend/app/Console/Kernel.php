@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('task:alarm_device_sensor_logs_csv')
             ->everyMinute()
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log"))->runInBackground(); //
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-alarm-device-sensor-logs-csv.log")); //
 
         /*------------------------ */
         $monthYear = date("M-Y");
@@ -43,13 +43,13 @@ class Kernel extends ConsoleKernel
             ->dailyAt('23:30')
             //->withoutOverlapping()
             ->appendOutputTo(storage_path("kernal_logs/$monthYear-delete-old-logs.log"))
-            ->runInBackground()
+
         ;;
 
         /*------------------------ */
         $schedule->call(function () {
             (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
-        })->everyMinute()->runInBackground();
+        })->everyMinute();
         /*------------------------ */
 
 
@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
         /*------------------------ */
         $schedule->call(function () {
             (new AlramEventsController)->verifyOfflineDevices();
-        })->everyFiveMinutes()->runInBackground();
+        })->everyFiveMinutes();
 
 
         /*------------------------ */
@@ -65,7 +65,7 @@ class Kernel extends ConsoleKernel
             return (new CustomersController)->verifyArmedDeviceWithShopTime();
         })->everyFiveMinutes()
 
-            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"))->runInBackground();
+            ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
 
         /*------------------------ */
         $schedule->call(function () {
