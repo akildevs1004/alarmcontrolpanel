@@ -109,7 +109,7 @@ async function parseMessage(message) {
     const logEntry = `${deviceId},${eventCode},${timestamp},RECORDNUMBER,${area},${zone}`;
     fs.appendFileSync(logFilePath, logEntry + "\n");
     console.log("Event Found ", eventCode);
-    //await sendToBackend(timestamp);
+    await sendToBackend(timestamp);
   } else {
     console.log("logEntry Not Matched");
   }

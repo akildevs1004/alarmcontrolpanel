@@ -99,7 +99,7 @@ async function parseMessage(message) {
       //console.log(match);
       //console.log(logEntry);
     }
-    //await sendToBackend(getTime());
+    await sendToBackend(getTime());
   } else {
     console.log("Event Not found ");
   }
