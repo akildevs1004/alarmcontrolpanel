@@ -102,6 +102,8 @@ Route::get("sync_alarm_logs", function (Request $request) {
 
         ->orderBy("log_time", "ASC")->get();
 
+    $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("id", 10278)->get();
+
     return (new ApiAlarmDeviceTemperatureLogsController)->SendMailWhatsappNotification("intruder", "intruder", "",  $logsArray[0]["device"], date("Y-m-d"),  1,   [],   [], $logsArray[0]);
 
 
@@ -195,7 +197,7 @@ Route::get("create_test_alarm", function (Request $request) {
         "serial_number" => $request->serial_number,
         "alarm_start_datetime" => date("Y-m-d H:i:s"),
         "alarm_status" => 1,
-        "customer_id" => 6,
+        "customer_id" => 24,
         "zone" => $request->zone ?? null,
         "area" =>  $request->area ?? null,
         "alarm_type" => $request->zone ? $request->zone : "SOS",
