@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
+use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
 use App\Http\Controllers\SDKController;
 use App\Models\AccessControlTimeSlot;
 use Illuminate\Console\Command;
@@ -32,6 +33,9 @@ class AlarmDeviceSensorLogsCsv extends Command
     public function handle()
     {
         $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+
+
+        (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
 
         echo  json_encode($result);
     }
