@@ -32,11 +32,11 @@ class AlarmDeviceSensorLogsCsv extends Command
      */
     public function handle()
     {
-        $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
+        // $result = (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
 
 
-        (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
+        // (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
 
-        echo  json_encode($result);
+        // echo  json_encode($result);
     }
 }
