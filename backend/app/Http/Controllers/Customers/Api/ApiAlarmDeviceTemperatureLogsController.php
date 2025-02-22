@@ -424,7 +424,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         (clone  $deviceZone)->update($data);
                         Storage::append("testing.txt", '111SendMailWhatsappNotification');
                         // if (!$isTechnicianTesting) {
-                        //     $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
+                        $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
                         // }
                     } else {
                         //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
