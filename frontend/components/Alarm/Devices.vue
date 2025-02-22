@@ -553,7 +553,7 @@ export default {
       ) {
         this.updateDevicesHealth();
       }
-    }, 1000 * 10);
+    }, 1000 * 60);
   },
   async created() {
     for (let index = 0; index <= 60; index++) {

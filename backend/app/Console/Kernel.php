@@ -57,13 +57,13 @@ class Kernel extends ConsoleKernel
         /*------------------------ */
         $schedule->call(function () {
             (new AlramEventsController)->verifyOfflineDevices();
-        })->everyMinute();
+        })->everyFiveMinutes();
 
 
         /*------------------------ */
         $schedule->call(function () {
             return (new CustomersController)->verifyArmedDeviceWithShopTime();
-        })->everyMinute()
+        })->everyFiveMinutes()
 
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
 
