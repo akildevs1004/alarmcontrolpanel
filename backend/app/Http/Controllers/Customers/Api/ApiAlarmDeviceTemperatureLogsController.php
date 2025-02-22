@@ -422,7 +422,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         //     ->update($data);
 
                         (clone  $deviceZone)->update($data);
-                        //Storage::append("testing.txt", 'isTechnicianTesting' . $isTechnicianTesting);
+                        Storage::append("testing.txt", '111SendMailWhatsappNotification');
                         //if (!$isTechnicianTesting)
                         {
                             $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
@@ -798,9 +798,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     ->orWhereRaw("address_type ILIKE 'secondary'");
             })
             ->get()->toArray();;
-        //  Storage::append("testing.txt", 'contacts' . count($contacts));
+        Storage::append("testing.txt", 'contacts' . count($contacts));
 
-        // Storage::append("testing.txt", 'company' . $alarmlog["company"]);
+        Storage::append("testing.txt", 'company' . $alarmlog["company"]);
 
         foreach ($contacts as $key => $contact) {
             $reports->push([

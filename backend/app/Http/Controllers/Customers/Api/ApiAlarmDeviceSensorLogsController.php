@@ -271,8 +271,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             'Medical Sensor' => 'Medical',
                             'SOS Sensor' => 'SOS',
                             'Temperature Sensor' => 'Temperature',
+
                         ];
-                        if ($alarmTypes[$sensorType[0]])
+                        if (!empty($sensorType) && isset($alarmTypes[$sensorType[0]]))
                             $alarm_type = $alarmTypes[$sensorType[0]];
                     }
 
