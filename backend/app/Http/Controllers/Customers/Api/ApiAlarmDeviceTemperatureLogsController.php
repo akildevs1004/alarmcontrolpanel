@@ -57,7 +57,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             ->where("serial_number", "!=", "Manual")
             ->where("serial_number", "!=", "Mobile")
             ->where("serial_number", "!=", "mobile")
-            ->where("serial_number",    "W12345")
+
             ->where("serial_number", "!=", null)
             ->whereHas("activealarmlogs")
             ->get();
@@ -78,60 +78,60 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
         foreach ($devicesList as $key => $device) {
 
-            try {
+            // try {
 
-                //////////////$message[] = $this->stopOldAlarms($device);
-                $data = AlarmLogs::where("serial_number", $device['serial_number'])
-                    ->where("time_duration_seconds", null)
+            //////////////$message[] = $this->stopOldAlarms($device);
+            $data = AlarmLogs::where("serial_number", $device['serial_number'])
+                ->where("time_duration_seconds", null)
+                ->where("company_id", '>', 0)
+                //->where("created_at", '<=',  date("Y-m-d H:i:s", strtotime("-3 seconds")))
+                ->orderBy("created_at", "DESC")
+                ->get();
+
+            for ($i = 0; $i < count($data); $i++) {
+
+                $currentLog = $data[$i];
+                //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : date("Y-m-d H:i:0", strtotime("-10 minutes"));
+                //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : false;
+                $previousLogTime = false;
+                $fisrtRecord = AlarmLogs::where("serial_number", $device['serial_number'])
                     ->where("company_id", '>', 0)
-                    //->where("created_at", '<=',  date("Y-m-d H:i:s", strtotime("-3 seconds")))
-                    ->orderBy("created_at", "DESC")
-                    ->get();
-
-                for ($i = 0; $i < count($data); $i++) {
-
-                    $currentLog = $data[$i];
-                    //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : date("Y-m-d H:i:0", strtotime("-10 minutes"));
-                    //$previousLogTime = isset($data[$i + 1]) ? $data[$i + 1]['log_time'] : false;
-                    $previousLogTime = false;
-                    $fisrtRecord = AlarmLogs::where("serial_number", $device['serial_number'])
-                        ->where("company_id", '>', 0)
-                        ->orderBy("log_time", "ASC")
-                        ->first();
+                    ->orderBy("log_time", "ASC")
+                    ->first();
+                $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
+                if ($fisrtRecord["id"] == $currentLog["id"]) {
                     $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
-                    if ($fisrtRecord["id"] == $currentLog["id"]) {
-                        $previousLogTime = date("Y-m-d H:i:0", strtotime("-10 minutes"));
-                    } else {
+                } else {
 
-                        $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
-                            ->where("company_id", '>', 0)
-                            ->where("alarm_type",    $currentLog["alarm_type"])
-                            ->where("log_time", "<", $currentLog["log_time"])
-                            ->orderBy("log_time", "DESC")
-                            ->first();
-                        if (isset($previousRecord["log_time"]))
-                            $previousLogTime = $previousRecord["log_time"];
-                    }
-
-
-
-                    if ($previousLogTime) {
-
-                        $latestLogTime = $currentLog['log_time'];
-                        //$previousLogTime = $previousLog['log_time'];
-
-                        $datetime1 = new DateTime($previousLogTime);
-                        $datetime2 = new DateTime($latestLogTime);
-
-                        $interval = $datetime1->diff($datetime2);
-                        $secondsDifference = $interval->s + ($interval->i * 60) + ($interval->h * 3600) + ($interval->days * 86400);
-
-                        //return [$secondsDifference, $latestLogTime, $nextLogTime];
-                        AlarmLogs::where('id', $currentLog['id'])->update(["time_duration_seconds" => $secondsDifference]);
-                    }
+                    $previousRecord = AlarmLogs::where("serial_number", $device['serial_number'])
+                        ->where("company_id", '>', 0)
+                        ->where("alarm_type",    $currentLog["alarm_type"])
+                        ->where("log_time", "<", $currentLog["log_time"])
+                        ->orderBy("log_time", "DESC")
+                        ->first();
+                    if (isset($previousRecord["log_time"]))
+                        $previousLogTime = $previousRecord["log_time"];
                 }
-            } catch (\Exception $e) {
+
+
+
+                if ($previousLogTime) {
+
+                    $latestLogTime = $currentLog['log_time'];
+                    //$previousLogTime = $previousLog['log_time'];
+
+                    $datetime1 = new DateTime($previousLogTime);
+                    $datetime2 = new DateTime($latestLogTime);
+
+                    $interval = $datetime1->diff($datetime2);
+                    $secondsDifference = $interval->s + ($interval->i * 60) + ($interval->h * 3600) + ($interval->days * 86400);
+
+                    //return [$secondsDifference, $latestLogTime, $nextLogTime];
+                    AlarmLogs::where('id', $currentLog['id'])->update(["time_duration_seconds" => $secondsDifference]);
+                }
             }
+            // } catch (\Exception $e) {
+            // }
         }
 
         return  $message;
