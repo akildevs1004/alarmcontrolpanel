@@ -102,6 +102,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     }
     public function readCSVLogFile()
     {
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step1 readCSVLogFile');
 
         set_time_limit(30); // Timeout after 30 seconds
 
@@ -279,13 +280,18 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                     //--------------------------------------
 
-
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarm_type ' . $alarm_type . "-" . $event  . "-" . $zone);
 
 
                     //$area =   $devices->area_code ?? '';
                     if ($alarm_type != '' && $event != '' && $zone != '') {
 
                         $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
+
+
+                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . $count);
+
+
                         if ($count == 0) {
                             $records  = [
                                 "serial_number" => $serial_number,
@@ -299,13 +305,20 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ];
 
                             $insertedRecord = AlarmLogs::create($records);
+                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 insertedRecord');
+
+
                             $message[] =  $this->getMeta("New Alarm Log Is interted With zone", $log_time . "<br/>\n");
                             $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
                         } else {
+
+                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . "Alarm Already Exist", $log_time);
                             $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
                         }
                     }
                 } else if ($zone == ''   && $event != '') {
+
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 Zone Empty');
 
                     // $devices = Device::where('serial_number', $serial_number)->first();;
 
@@ -332,16 +345,17 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     // }
                 } else {
                     $message[] =  $this->getMeta("Information Is not availalbe<br/>", $row);
+
+
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step3 Information Is not availalbe');
                 }
 
                 //----------Update Alarm Duration
-                try {
-                    (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
+                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step3  Update Alarm Duration');
+                (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
-                    $device = Device::where("serial_number", $serial_number)->first();
-                    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
-                } catch (\Exception $e) {
-                }
+                $device = Device::where("serial_number", $serial_number)->first();
+                (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
             }
 
             //update company ids armed logs
@@ -354,6 +368,9 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $this->updateArmedTableCompanyLogs();
             } catch (\Exception $e) {
             }
+
+
+            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2  Logs  message' . json_encode($message));
 
             return $this->getMeta("Sync Attenance Logs", count($message) . json_encode($message));
             //    // } catch (\Throwable $th) {

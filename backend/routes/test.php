@@ -60,6 +60,12 @@ Route::get("testOfflineDevices", function (Request $request) {
     //return (new ApiAlarmDeviceSensorLogsController())->closeOfflineAlarmsBySerialNumber('M014200892110002626');
 });
 
+Route::get("testnotification", function (Request $request) {
+    (new AlramEventsController)->verifyOfflineDevices();
+
+    //return (new ApiAlarmDeviceSensorLogsController())->closeOfflineAlarmsBySerialNumber('M014200892110002626');
+});
+
 
 Route::get("closealarm", function (Request $request) {
     if ($request->filled('serial_number')) {
@@ -76,11 +82,7 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
     (new ApiAlarmDeviceSensorLogsController())->updateDisarmTableCompanyLogs();
 });
 
-Route::get("testNotification", function (Request $request) {
 
-
-    return (new CustomersController)->verifyArmedDeviceWithShopTime();
-});
 Route::get("closealarm", function (Request $request) {
 
 
@@ -88,21 +90,21 @@ Route::get("closealarm", function (Request $request) {
 });
 
 
-Route::get("sync_alarm_logs", function (Request $request) {
+Route::get("testNotification", function (Request $request) {
 
 
 
 
-    $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("serial_number", "W12345")
-        ->where("company_id", '>', 0)
-        ->where("alarm_status", 1)
-        //->where("event_code", "!=", null)
-        ->where("verified", false)
-        ->where("time_duration_seconds", '>=', 5)
+    // $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("serial_number", "W12345")
+    //     ->where("company_id", '>', 0)
+    //     ->where("alarm_status", 1)
+    //     //->where("event_code", "!=", null)
+    //     ->where("verified", false)
+    //     ->where("time_duration_seconds", '>=', 5)
 
-        ->orderBy("log_time", "ASC")->get();
+    //     ->orderBy("log_time", "ASC")->get();
 
-    $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("id", 10278)->get();
+    $logsArray = AlarmLogs::with(["company", "device.company", "devicesensorzones"])->where("id", 10437)->get();
 
     return (new ApiAlarmDeviceTemperatureLogsController)->SendMailWhatsappNotification("intruder", "intruder", "",  $logsArray[0]["device"], date("Y-m-d"),  1,   [],   [], $logsArray[0]);
 
@@ -119,6 +121,31 @@ Route::post("alarm_device_status", function (Request $request) {
 
 
     return "AlarmTesting";
+});
+
+Route::get("create_test_sos_alarm", function (Request $request) {
+
+
+    //return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+
+    $date = date("d-m-Y");
+    $csvPath = "alarm-sensors/sensor-logs-$date.csv";
+
+    $area = '';
+    $zone = '';
+    if ($request->filled("area"))
+        $area  =   $request->area;
+
+    if ($request->filled("area"))
+        $zone  =   $request->zone;
+
+    $content = $request->serial_number . ",9999," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+
+
+
+    Storage::append($csvPath,  $content);
+
+    return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
 });
 
 Route::get("create_test_tampred_alarm", function (Request $request) {
@@ -195,34 +222,44 @@ Route::get("create_test_alarm_technician", function (Request $request) {
     return false;
 });
 
-Route::get("create_test_alarm", function (Request $request) {
+Route::get("create_test_alar11111111111", function (Request $request) {
 
 
-    $data = [
-        "company_id" => 8,
-        "serial_number" => $request->serial_number,
-        "alarm_start_datetime" => date("Y-m-d H:i:s"),
-        "alarm_status" => 1,
-        "customer_id" => 24,
-        "zone" => $request->zone ?? null,
-        "area" =>  $request->area ?? null,
-        "alarm_type" => $request->zone ? $request->zone : "SOS",
-        "alarm_category" => 1,
-        "sensor_zone_id" => null,
-        "alarm_source" => 78,
-        "security_name" => "Test",
-        "security_id" => 1,
+    // $data = [
+    //     "company_id" => 8,
+    //     "serial_number" => $request->serial_number,
+    //     "alarm_start_datetime" => date("Y-m-d H:i:s"),
+    //     "alarm_status" => 1,
+    //     "customer_id" => $request->customer_id,
+    //     "zone" => $request->zone ?? null,
+    //     "area" =>  $request->area ?? null,
+    //     "alarm_type" => $request->zone ? $request->zone : "SOS",
+    //     "alarm_category" => 1,
+    //     "sensor_zone_id" => null,
+    //     "alarm_source" => 78,
+    //     "security_name" => "Test",
+    //     "security_id" => 1,
+    // ];
+    // $offlineDevices[] = $data;
+    // AlarmEvents::create($data);
 
+    // $records  = [
+    //     "serial_number" => $request->serial_number,
+    //     "log_time" => date("Y-m-d H:i:s"),
+    //     "alarm_status" => 1,
+    //     "alarm_type" => $alarm_type,
+    //     "area" => $area,
+    //     "zone" => $zone,
+    //     "alarm_source" => $alarm_source,
+    //     "event_code" => $event,
+    // ];
 
-    ];
+    // $insertedRecord = AlarmLogs::create($records);
 
+    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 
-    $offlineDevices[] = $data;
+    return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
-
-    AlarmEvents::create($data);
-
-    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
 
     return false;
 

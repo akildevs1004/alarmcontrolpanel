@@ -39,22 +39,35 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
     public function updateAlarmResponseTime()
     {
 
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '**********************************************************************************');
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step4 updateDuration1 Create Event Process');
 
 
-        $devicesList = Device::with(["customer.mappedsecurity"])->where("serial_number", "!=", null)
+        // $devicesList = Device::with(["customer.mappedsecurity"])->where("serial_number", "!=", null)
+        //     ->where("device_type", "!=", "Manual")
+        //     ->where("serial_number", "!=", "Manual")
+        //     ->where("serial_number", "!=", "Mobile")
+        //     ->where("serial_number", "!=", "mobile")
+
+        //     ->where("serial_number", "!=", null)->get();
+
+
+        $devicesList = Device::with(["customer.mappedsecurity", "activealarmlogs"])->where("serial_number", "!=", null)
             ->where("device_type", "!=", "Manual")
             ->where("serial_number", "!=", "Manual")
             ->where("serial_number", "!=", "Mobile")
             ->where("serial_number", "!=", "mobile")
-
-            ->where("serial_number", "!=", null)->get();
+            ->where("serial_number",    "W12345")
+            ->where("serial_number", "!=", null)
+            ->whereHas("activealarmlogs")
+            ->get();
 
 
 
         $log[] = $this->updateDuration1($devicesList);
-        // $log[] =   $this->updateAlarmEndDatetime2($devicesList);
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step4 updateDuration1');
         $log[] = $this->updateAlarmStartDatetime3($devicesList);
-        //$log[] =   $this->updateAlarmEndDatetime2($devicesList);
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step5 updateAlarmStartDatetime3End ' . json_encode($log));
 
         return  json_encode($log);
     }
@@ -269,6 +282,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
     public function updateAlarmStartDatetime3($devicesList)
     {
 
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step6 updateAlarmStartDatetime3 ' . count($devicesList));
+
+
+
+
         $counter = 0;
         $previousLog = [];
         $currentLog = [];
@@ -283,6 +301,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 ->where("time_duration_seconds", '>=', 5)
 
                 ->orderBy("log_time", "ASC")->get();
+
+            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step7 updateAlarmStartDatetime3 logsArray count' . count($logsArray));
 
 
 
@@ -321,6 +341,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         ->where("alarm_type", $logs['alarm_type'])
                         ->where("alarm_status", 1)->count();
                     //Storage::append("testing.txt", $activeAlarmZoneCount);
+
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step7 activeAlarmZoneCount  ' . $activeAlarmZoneCount);
+
+
                     if ($activeAlarmZoneCount == 0) {
 
 
@@ -358,6 +382,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             "created_event_from" => "updateAlarmStartDatetime3",
                         ];
 
+                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step8 data  ' . json_encode($data));
+
+
                         $isTechnicianTesting = false;
                         try {
                             if ($device['ticket_id'] > 0) {
@@ -366,8 +393,13 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         } catch (\Exception $e) {
                         }
 
-
+                        $eventId = null;
                         if ($isTechnicianTesting) {
+
+                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step9 Technician data  ' . json_encode($eventId));
+
+
+                            $eventId = AlarmEvents::create($data);
 
                             $technician_id = Tickets::where("id", $device['ticket_id'])->pluck("technician_id")[0];
 
@@ -377,33 +409,17 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                                 "ticket_id" => $device['ticket_id'] ?? null, // Prevent undefined index error
                             ]);
 
-                            AlarmEventsTechnician::create($data);
+                            $eventId =  AlarmEventsTechnician::create($data);
                         } else {
-                            AlarmEvents::create($data);
+
+                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step9 AlarmEvents data  ' . json_encode($eventId));
+
+
+                            $eventId = AlarmEvents::create($data);
                         }
 
-                        // // try {
-                        // //Alarm whatsapp notification
-                        // $body_content1 = "";
-                        // $body_content1 = "*New Event Notification*\n\n";
-                        // $body_content1 .= "Building: {$device->customer->building_name}\n";
+                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step9 AlarmEvents data  ' . json_encode($eventId));
 
-                        // $body_content1 .= "Event Time: {$logs['log_time']}\n";
-                        // $body_content1 .= "Type: {$logs['alarm_type']}\n";
-                        // $body_content1 .= "Zone: {$logs['zone']}\n";
-                        // $body_content1 .= "Area: {$logs['area']}\n";
-                        // $body_content1 .= "Sensor Type: {$logs['zone_data']['sensor_type']}\n";
-                        // $body_content1 .= "Sensor Name: {$logs['zone_data']['sensor_name']}\n";
-
-
-                        // $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$device['customer']['latitude']},{$device['customer']['longitude']} \n\n\n";
-                        // $body_content1 .= "Thanks,\nXtreme Guard\n";
-
-
-
-                        // (new WhatsappController())->sendWhatsappNotification(null, $body_content1, "971552205149", []);
-                        // // } catch (\Exception $e) {
-                        // // }
 
                         $this->createAlarmEventsJsonFile($logs['company_id']);
 
@@ -416,24 +432,31 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                             "alarm_end_datetime" => null
                         ];
                         Device::where("serial_number", $logs['serial_number'])->update($data);
-                        // DeviceZones::where("device_id", $device['id'])
-                        //     ->where("area_code", $logs['zone'])
-                        //     ->where("zone_code", $logs['area'])
-                        //     ->update($data);
+
 
                         (clone  $deviceZone)->update($data);
-                        Storage::append("testing.txt", '111SendMailWhatsappNotification');
-                        // if (!$isTechnicianTesting) {
-                        $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], [], $logs);
-                        // }
+                        Storage::disk('local')->append("notifications/notification_log" . date("Y-m-d") . ".txt", 'Created New Event');
+
+                        if (!$isTechnicianTesting) {
+
+
+                            $this->SendMailWhatsappNotification($logs['alarm_type'], $device['name'] . " - Alarm Started ",   $device['name'],  $device, $logs['log_time'], false, [], [], $logs);
+                        }
                     } else {
                         //Logger::info(" Alarm Log Id " . $logs['id'] . " is already Active.");
+
+                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", " Alarm Log Id " . $logs['id'] . " is already Active.");
                     }
+                } else {
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step7  log_time is not available ');
                 }
             }
+
             // } catch (\Exception $e) {
             // }
         }
+
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '**********************************************************************************');
     }
 
     public function createAlarmEventsJsonFile($companyIdFilter = '')
@@ -776,7 +799,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 */
     public function SendMailWhatsappNotification($alrm_type, $issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [], $deviceObj = [], $alarmlog = null)
     {
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", " step10 SendMailWhatsappNotification started");
 
+        if ($alarmlog == null)
+            return false;
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '- Notification step1');
 
 
         $company_id = $model1->company_id;
@@ -797,9 +824,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     ->orWhereRaw("address_type ILIKE 'secondary'");
             })
             ->get()->toArray();;
-        Storage::append("testing.txt", 'contacts' . count($contacts));
 
-        Storage::append("testing.txt", 'company' . $alarmlog["company"]);
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step2 - count ' . count($contacts));
 
         foreach ($contacts as $key => $contact) {
             $reports->push([
@@ -815,7 +841,6 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 "whatsapp_number" =>  $contact["whatsapp"],
             ]);
         }
-        //Storage::append("testing.txt", 'reports' . count($reports));
 
         $issue = $alarmlog['alarm_type'];
         foreach ($reports as $value) {
@@ -825,13 +850,14 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
             $location = "{$value['device']['customer']['latitude']},{$value['device']['customer']['longitude']}";
 
-
+            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step3 - Email ' . $value["email"]);
             if ($value["email"] != '') {
 
 
 
 
                 $body_content1 = "Hello, {$value['name']} <br/>";
+                $body_content1 .= "Event ID:  #{$alarmlog['id']}<br/>";
                 $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}<br/>";
                 $body_content1 .= "This is Notifing you about {$issue} event <br/>";
                 $body_content1 .= "DateTime:  $date<br/>";
@@ -849,7 +875,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                     'subject' => "{$issue} Notification",
                     'body' => $body_content1,
                 ];
-
+                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step4 - Email Body' . $body_content1);
 
                 $body_content1 = new EmailContentDefault($data);
 
@@ -873,9 +899,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                     ReportNotificationLogs::create($data);
                 }
+            } else {
+                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step3 - Email Not available' . $value["email"]);
             }
 
-
+            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step4 - Whatsapp  ' . $value['whatsapp_number']);
 
             if ($value['whatsapp_number'] != '') {
 
@@ -884,6 +912,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 = "🚨 *{$issue}* Event Notification 🚨\n\n";
 
                 $body_content1 .= "Hello, *{$value['name']}*\n";
+                $body_content1 .= "Event ID:  *#{$alarmlog['id']}*\n";
+
                 $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}\n";
 
                 $body_content1 .= "Alarm Type:  $issue\n";
@@ -900,12 +930,15 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 .= "From *Xtreme Guard*\n";
 
 
-
+                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step5 - Whatsapp Body ' . $body_content1);
 
                 // if (isset($value['company']['company_whatsapp_content']))
                 //     $body_content1 .= $value['company']['company_whatsapp_content'][0]['content'];
                 try {
-                    (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+                    $response = (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+
+
+                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Final - Whatsapp Response ' . $response);
                 } catch (\exception $e) {
                 }
 
@@ -920,8 +953,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 ];
 
                 ReportNotificationLogs::create($data);
+            } else {
+                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step5 - Whatsapp Not available');
             }
         } //whatsapp
+
+        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", '*******************************************************************************');
     }
 
     public function SendMailWhatsappNotification5MinutesDelay($alrm_type, $issue, $room_name, $model1, $date,  $ignore15Minutes, $tempArray = [], $deviceObj = [])

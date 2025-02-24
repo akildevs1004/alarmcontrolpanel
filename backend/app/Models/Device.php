@@ -43,6 +43,11 @@ class Device extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function activealarmlogs()
+    {
+        return $this->hasMany(AlarmLogs::class, "serial_number", "serial_number")->where("alarm_status", 1);
+    }
+
 
 
     public function companyBranch()
