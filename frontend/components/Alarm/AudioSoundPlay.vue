@@ -36,23 +36,23 @@ export default {
   },
   mounted() {
     // Initialize audio object after a delay
-    setTimeout(() => {
-      if (process.env.BACKEND_URL2) {
-        this.audioFile =
-          process.env.BACKEND_URL2 + "/alarm_sounds/alarm-sound1.mp3";
-      }
+    //setTimeout(() => {
+    if (process.env.BACKEND_URL2) {
+      this.audioFile =
+        process.env.BACKEND_URL2 + "/alarm_sounds/alarm-sound1.mp3";
+    }
 
-      console.log(
-        "this.notificationsMenuItemsCount ",
-        this.notificationsMenuItemsCount
-      );
-      if (parseInt(this.notificationsMenuItemsCount) > 0) {
-        this.playAudio();
-      }
-      if (parseInt(this.notificationsMenuItemsCount) == 0) {
-        this.stopAudio();
-      }
-    }, 1000 * 5);
+    console.log(
+      "this.notificationsMenuItemsCount ",
+      this.notificationsMenuItemsCount
+    );
+    if (parseInt(this.notificationsMenuItemsCount) > 0) {
+      this.playAudio();
+    }
+    if (parseInt(this.notificationsMenuItemsCount) == 0) {
+      this.stopAudio();
+    }
+    //   }, 1000 * 5);
     // Ensure user interaction before playing sound
     // window.addEventListener("click", this.playAudioOnUserInteraction, {
     //   once: true,
@@ -64,7 +64,10 @@ export default {
     // window.removeEventListener("click", this.playAudioOnUserInteraction);
   },
 
-  created() {},
+  created() {
+    this.audioFile =
+      process.env.BACKEND_URL2 + "/alarm_sounds/alarm-sound1.mp3";
+  },
   methods: {
     // playAudioOnUserInteraction() {
     //   if (this.audio) {
@@ -83,17 +86,20 @@ export default {
 
     playAudio() {
       const audio = this.$refs.audioPlayer;
-      audio
-        .play()
-        .then(() => {
-          this.isPlaying = true;
-        })
-        .catch((error) => {
-          console.error("Error playing audio:", error);
-          alert(
-            "Please Stay on Dashboard page. Then only Alarm sound will be work."
-          ); // Notify the user
-        });
+
+      setTimeout(() => {
+        audio
+          .play()
+          .then(() => {
+            this.isPlaying = true;
+          })
+          .catch((error) => {
+            console.error("Error playing audio:", error);
+            alert(
+              "Please Stay on Dashboard page. Then only Alarm sound will be work."
+            ); // Notify the user
+          });
+      }, 1000 * 5);
     },
     pauseAudio() {
       if (this.$refs.audioPlayer) {
