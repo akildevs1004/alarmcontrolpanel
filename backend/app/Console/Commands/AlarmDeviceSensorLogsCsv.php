@@ -43,7 +43,7 @@ class AlarmDeviceSensorLogsCsv extends Command
         } catch (\Exception $e) {
 
             $this->info($e->getMessage());
-            Logger::error("Cron:  .AlarmDeviceSensorLogsCsv Error Details: " . $e->getMessage());
+            Logger::error("Cron:  .AlarmDeviceSensorLogsCsv Error Details: " . $e);
             return;
         }
     }
