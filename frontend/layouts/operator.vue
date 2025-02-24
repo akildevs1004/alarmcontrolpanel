@@ -5,6 +5,14 @@
         {{ response }}
       </v-snackbar>
     </div>
+
+    <AudioSoundPlay
+      :key="notificationsMenuItems.length"
+      :AudioSoundPlayCount="AudioSoundPlayCount"
+      :notificationsMenuItemsCount="notificationsMenuItems.length"
+      :dialogPopupStatus="dialogAlarmPopupNotificationStatus ? 'true' : 'false'"
+      :dialogClosedManually="dialogClosedManually"
+    />
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -583,6 +591,7 @@ import controlpanel_top_menu from "../menus/operator_operator_top_menu.json";
 
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
 import TopMenuClock from "../components/Operator/TopMenuClock.vue";
+import AudioSoundPlay from "../components/Alarm/AudioSoundPlay.vue";
 export default {
   head() {
     return {
@@ -597,6 +606,7 @@ export default {
   components: {
     AlarmPopupAllAlarmEvents,
     TopMenuClock,
+    AudioSoundPlay,
   },
   data() {
     return {
@@ -650,6 +660,7 @@ export default {
       socketConnectionStatus: 0,
 
       right: true,
+      AudioSoundPlayCount: 0,
       rightDrawer: false,
       color: "",
       sideBarcolor: "background",
@@ -685,6 +696,7 @@ export default {
       isBackendRequestOpen: false,
       topMenuDisplayName: "",
       companyName: "",
+      dialogClosedManually: "",
     };
   },
   async created() {
@@ -735,8 +747,12 @@ export default {
 
     this.companyName = this.$auth.user.company.name;
   },
-
+  beforeUnmount() {
+    // Use destroyed() in Vue 2
+    document.removeEventListener("click", this.handleClickOutside);
+  },
   mounted() {
+    document.addEventListener("click", this.handleClickOutside);
     // if (!this.$auth.user) {
     //   this.$router.push("/logout");
     //   return;
@@ -809,8 +825,21 @@ export default {
     }, 1000 * 60 * 60);
 
     if (window) window.addEventListener("resize", this.handleResize);
+
+    this.AudioSoundPlayCount = this.notificationsMenuItems.length;
   },
-  watch: {},
+  watch: {
+    // dialogAlarmPopupNotificationStatus: {
+    //   handler() {
+    //     console.log(
+    //       "dialogAlarmPopupNotificationStatus",
+    //       this.dialogAlarmPopupNotificationStatus
+    //     );
+    //     this.AudioSoundPlayCount++;
+    //   },
+    //   deep: true,
+    // },
+  },
   computed: {
     changeColor() {
       return "#ecf0f4"; //this.$store.state.color;
@@ -868,6 +897,10 @@ export default {
     },
   },
   methods: {
+    // handleClickOutside(event) {
+    //   console.log("Clicked anywhere:", event.target);
+    //   // Add your logic here
+    // },
     updateOperatorLiveStatus() {
       if (this.$auth.user?.security) {
         this.$axios.post("operator_live_update", {
@@ -908,6 +941,10 @@ export default {
       }
     },
     closeDialog() {
+      this.dialogClosedManually = "manualclosed";
+
+      //this.dialogClosedManually = true;
+
       this.dialogAlarmPopupNotificationStatus = false;
     },
     Reset5Minutes() {
@@ -921,8 +958,10 @@ export default {
       setTimeout(() => {
         this.wait5Minutes = false;
       }, 1000 * 60 * 5);
+      this.dialogClosedManually = "manualclosed";
 
       this.dialogAlarmPopupNotificationStatus = false;
+      // this.dialogClosedManually = true;
     },
     wait5MinutesNotification() {
       this.wait5Minutes = true;
@@ -1143,8 +1182,11 @@ export default {
           this.pendingNotificationsCount = 0;
           this.notificationAlarmDevicesContent = data;
 
-          if (this.notificationAlarmDevicesContent.length == 0)
+          if (this.notificationAlarmDevicesContent.length == 0) {
             this.dialogAlarmPopupNotificationStatus = false;
+
+            this.dialogClosedManually = "";
+          }
 
           this.key += 1;
 
@@ -1316,6 +1358,7 @@ export default {
             }
           } else {
             this.dialogAlarmPopupNotificationStatus = false;
+            this.dialogClosedManually = false;
           }
         });
     },

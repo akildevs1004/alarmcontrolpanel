@@ -99,7 +99,10 @@
         class="sensorPlottingdevices"
       >
         <v-expansion-panels v-model="panelOpenList" multiple>
-          <v-expansion-panel v-for="device in devices">
+          <v-expansion-panel
+            :key="'panelOpenList' + index"
+            v-for="(device, index) in devices"
+          >
             <v-expansion-panel-header
               style="background-color: rgb(32 56 100); color: #fff"
             >
