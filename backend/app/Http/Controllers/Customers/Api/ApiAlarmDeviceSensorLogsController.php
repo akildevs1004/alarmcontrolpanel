@@ -355,7 +355,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
 
                 $device = Device::where("serial_number", $serial_number)->first();
-                (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
+                if ($device) (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
             }
 
             //update company ids armed logs
