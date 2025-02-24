@@ -104,7 +104,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
     {
         Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step1 readCSVLogFile');
 
-        set_time_limit(30); // Timeout after 30 seconds
+        ///set_time_limit(30); // Timeout after 30 seconds
 
         $date = date("d-m-Y");
         $results = $this->getCSVFileLines($date);

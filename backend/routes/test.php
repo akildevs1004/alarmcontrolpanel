@@ -69,7 +69,10 @@ Route::get("testnotification", function (Request $request) {
 
 Route::get("closealarm", function (Request $request) {
     if ($request->filled('serial_number')) {
-        return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+        (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+
+        $device = Device::where("serial_number", $request->serial_number)->first();
+        (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile($device->company_id);
     }
 });
 
@@ -83,11 +86,11 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
 });
 
 
-Route::get("closealarm", function (Request $request) {
+// Route::get("closealarm", function (Request $request) {
 
 
-    return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
-});
+//     return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
+// });
 
 
 Route::get("testNotification", function (Request $request) {
