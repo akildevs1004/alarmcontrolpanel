@@ -258,7 +258,7 @@
             <div style="">
               <v-card
                 v-if="alarm.device?.customer"
-                :key="index + 55"
+                :key="'eventslist1map1' + index"
                 v-for="(alarm, index) in data"
                 elevation="2"
                 style="border-color: #d3d3d3; margin-top: 5px"

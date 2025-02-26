@@ -88,7 +88,7 @@ class ApiAlarmDeviceSensorLogsController extends Controller
         $result = [
             "date" => $date,
             "totalLines" => $totalLines,
-            "data" => array_slice($data, $currentLength)
+            "data" => array_slice($data, $currentLength, 20)
 
         ];
 

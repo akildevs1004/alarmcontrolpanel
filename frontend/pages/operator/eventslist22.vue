@@ -143,6 +143,7 @@
                           : '1px solid #DDD',
                     }"
                     v-if="alarm.device?.customer"
+                    :key="'eventslist11' + index"
                     v-for="(alarm, index) in data"
                   >
                     <v-card

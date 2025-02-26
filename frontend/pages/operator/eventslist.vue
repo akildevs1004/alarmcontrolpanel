@@ -134,6 +134,7 @@
                 <v-row>
                   <v-col
                     class="pl-0 pr-0 pt-0 pb-2"
+                    :key="'eventslist22' + index"
                     v-for="(alarm, index) in data"
                   >
                     <v-card
