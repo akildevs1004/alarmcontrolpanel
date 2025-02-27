@@ -5,7 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <AudioSoundPlay
+      :key="notificationsMenuItems.length"
+      :notificationsMenuItemsCount="notificationsMenuItems.length"
+    />
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -712,6 +715,7 @@ import controlpanel_top_menu from "../menus/alarm_controlpanel_top_menu.json";
 
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
 import TopMenuClock from "../components/Operator/TopMenuClock.vue";
+import AudioSoundPlay from "../components/Alarm/AudioSoundPlay.vue";
 
 export default {
   head() {
@@ -727,6 +731,7 @@ export default {
   components: {
     AlarmPopupAllAlarmEvents,
     TopMenuClock,
+    AudioSoundPlay,
   },
   data() {
     return {
@@ -935,7 +940,7 @@ export default {
         this.resetTimer();
         this.loadHeaderNotificationMenu();
       }
-    }, 1000 * 20 * 1);
+    }, 1000 * 10 * 1);
 
     let menu_name = this.$route.name;
     let bgColor = "violet";

@@ -860,7 +860,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 .= "Event ID:  #{$alarmlog['id']}<br/>";
                 $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}<br/>";
                 $body_content1 .= "This is Notifing you about {$issue} event <br/>";
-                $body_content1 .= "DateTime:  $date<br/>";
+                $body_content1 .= "DateTime:  {$alarmlog['log_time']}<br/>";
                 if (isset($value['devicesensorzones'])) {
                     $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}<br/>";
                     $body_content1 .= "Location: {$value['devicesensorzones']['location']}<br/>";
@@ -919,7 +919,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 .= "Alarm Type:  $issue\n";
 
                 // $body_content1 .= "This is Notifing you about *{$issue}* event <br/>";
-                $body_content1 .= "DateTime:  $date\n";
+                $body_content1 .= "DateTime:  {$alarmlog['log_time']}\n";
                 if (isset($value['devicesensorzones'])) {
                     $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}\n";
                     $body_content1 .= "Location: {$value['devicesensorzones']['location']}\n";

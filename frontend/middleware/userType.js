@@ -20,7 +20,7 @@ const data = async ({ $auth, redirect }) => {
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
     return redirect("/master");
   }
-  console.log("$auth.user.user_type", $auth.user.user_type);
+  //console.log("$auth.user.user_type", $auth.user.user_type);
 
   redirect(userType[$auth.user.user_type] || "/master");
 };

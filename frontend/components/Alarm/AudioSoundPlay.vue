@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- <br />
-    <br />
-    <br />
-    <br /> -->
-    <!-- Audio element -->
     <audio ref="audioPlayer" :src="audioFile"></audio>
 
     <!-- Controls -->
@@ -18,12 +13,7 @@
 
 <script>
 export default {
-  props: [
-    "dialogPopupStatus",
-    "notificationsMenuItemsCount",
-    "dialogClosedManually",
-    "AudioSoundPlayCount",
-  ],
+  props: ["notificationsMenuItemsCount"],
   data() {
     return {
       audio: null,

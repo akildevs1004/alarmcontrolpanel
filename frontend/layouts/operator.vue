@@ -8,10 +8,7 @@
 
     <AudioSoundPlay
       :key="notificationsMenuItems.length"
-      :AudioSoundPlayCount="AudioSoundPlayCount"
       :notificationsMenuItemsCount="notificationsMenuItems.length"
-      :dialogPopupStatus="dialogAlarmPopupNotificationStatus ? 'true' : 'false'"
-      :dialogClosedManually="dialogClosedManually"
     />
     <v-navigation-drawer
       v-if="items.length > 0"

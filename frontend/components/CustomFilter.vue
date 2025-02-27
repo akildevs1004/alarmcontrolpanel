@@ -81,6 +81,12 @@ export default {
       elementsArray[0].style.width = this.width;
     }
 
+    console.log(
+      "this.default_date_from",
+      this.default_date_from,
+      this.default_date_to
+    );
+
     if (this.default_date_from && this.default_date_to) {
       this.from_date = this.default_date_from;
 

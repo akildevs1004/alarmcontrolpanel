@@ -404,7 +404,7 @@
 
       <!-- <v-card-actions>
           <v-btn color="orange" text> Share </v-btn>
-  
+
           <v-btn color="orange" text> Explore </v-btn>
         </v-card-actions> -->
     </v-card>

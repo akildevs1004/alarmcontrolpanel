@@ -2276,7 +2276,11 @@ button {
   height: 150px;
 }
 </style>
-
+<style>
+main {
+  padding-top: 35px !important;
+}
+</style>
 <!-- <style>
 .ProseMirror {
   margin: 2px !important  ;

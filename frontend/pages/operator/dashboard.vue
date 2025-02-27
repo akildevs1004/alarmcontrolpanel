@@ -583,7 +583,7 @@ export default {
         if (this.$axios.isCancel(error)) {
           console.log("Request canceled:", error.message);
         } else {
-          console.error("API Error:", error);
+          //console.error("API Error:", error);
         }
       } finally {
         this.apiLoading = false; // Reset loading state
@@ -640,7 +640,7 @@ export default {
         if (this.$axios.isCancel(error)) {
           console.log("Request canceled:", error.message);
         } else {
-          console.error("API Error:", error);
+          ////// console.error("API Error:Custom ", error);
         }
       } finally {
         this.apiLoading = false; // End loading state

@@ -240,7 +240,7 @@
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
         <v-row class="mt-0">
-          <v-col v-if="sensorItems.length > 1" cols="4" class="text-left mt-1">
+          <v-col cols="4" class="text-left mt-1">
             <h3 style="color: black; font-weight: normal">Alarm Events</h3>
           </v-col>
 
@@ -697,7 +697,7 @@ export default {
       showTable: true,
       requestStatus: false,
       tab: 0,
-      sensorItems: [],
+      sensorItems: ["All"],
       value: "recent",
       customer_id: null,
       snackbar: false,
@@ -999,6 +999,9 @@ export default {
       url += "?company_id=" + this.$auth.user.company_id;
       url += "&date_from=" + this.date_from;
       url += "&date_to=" + this.date_to;
+
+      url += "&customer_id=" + this.filter_customer_id;
+
       if (this.commonSearch) url += "&common_search=" + this.commonSearch;
       if (this.filterAlarmStatus)
         url += "&alarm_status=" + this.filterAlarmStatus;
