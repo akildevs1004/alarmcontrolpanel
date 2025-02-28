@@ -1346,31 +1346,6 @@ export default {
       this.dialogAlarmPopupNotificationStatus = true;
       //////this.verifyPopupAlarmStatus();
     },
-    //verifyPopupAlarmStatus() {
-    // if (this.isBackendRequestOpen) return false;
-    // this.isBackendRequestOpen = true;
-    // let company_id = this.$auth.user?.company?.id || 0;
-    // if (company_id == 0) {
-    //   return false;
-    // }
-    // let options = {
-    //   params: {
-    //     company_id: company_id,
-    //     pageSource: "layoutcustomer2",
-    //   },
-    // };
-    // this.$axios
-    //   .get(`get_alarm_notification_display11111111111`, options)
-    //   .then(({ data }) => {
-    //     this.isBackendRequestOpen = false;
-    //     if (data.length > 0) {
-    //       this.notificationAlarmDevices = data;
-    //       this.dialogAlarmPopupNotificationStatus = true;
-    //     } else {
-    //       this.dialogAlarmPopupNotificationStatus = false;
-    //     }
-    //   });
-    //},
 
     getBranchName() {
       return this.$auth.user.branch_name;

@@ -489,7 +489,6 @@
 
 <script>
 import DashboardLoginActivities from "../../components/Admin/DashboardLoginActivities.vue";
-import DashboardAlarmEventsMonthlyWiseChart from "../../components/Alarm/customer/DashboardAlarmEventsMonthlyWiseChart.vue";
 
 import AlarmEventStatusCountPieChart from "../../components/Alarm/Dashboard/AlarmEventStatusCountPieChart.vue";
 import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperatorLiveStatus.vue";

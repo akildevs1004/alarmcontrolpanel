@@ -1787,7 +1787,7 @@ class CustomersController extends Controller
         }
 
         $maintenance = Tickets::where("customer_id", $request->customer_id)
-            ->where("category_id", 3)
+            ->where("category_id", 3) //3 is maintenance
             ->orderby("created_datetime", "desc")->first();
 
         if ($maintenance) {
