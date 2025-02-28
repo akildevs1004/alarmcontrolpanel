@@ -863,7 +863,7 @@ export default {
     // }, 1000 * 1);
 
     setInterval(() => {
-      this.loadHeaderNotificationMenu();
+      if (this.$route.name !== "login") this.loadHeaderNotificationMenu();
       /*
       if (!this.$route.name.includes("customer")) return false;
       //if (this.wait5Minutes == false)
