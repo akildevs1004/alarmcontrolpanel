@@ -2,7 +2,9 @@
   <div style="width: 100%">
     <v-row>
       <v-col md="6" style="padding-left: 20px">
-        <h4>{{ display_title }}</h4></v-col
+        <h3 style="color: black; font-weight: normal">
+          {{ display_title }}
+        </h3></v-col
       >
 
       <v-col md="6">
@@ -119,8 +121,6 @@ export default {
 
     let monthObj = this.$dateFormat.monthStartEnd(today);
 
-    console.log("monthObj", monthObj);
-
     // Subtract 7 days from today
     let sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 7);
@@ -190,8 +190,6 @@ export default {
       };
 
       data.forEach((item) => {
-        console.log(item);
-
         this.chartOptions.series[0]["data"][counter] = item.sosCount;
         this.chartOptions.series[1]["data"][counter] = item.criticalCount;
         this.chartOptions.series[2]["data"][counter] = item.mediumCount;

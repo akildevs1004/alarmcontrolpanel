@@ -230,7 +230,7 @@
                     $dateFormat.formatDateMonthYear(item.alarm_start_datetime)
                   }}
                 </div>
-                <div class="secondary-value text-center">
+                <div class="secondary-value">
                   {{
                     item.alarm_end_datetime
                       ? $dateFormat.formatDateMonthYear(item.alarm_end_datetime)
@@ -361,7 +361,7 @@ export default {
 
     AlarmForwardEvent,
   },
-  props: ["showFilters", "alarm_icons", "items"],
+  props: ["showFilters", "alarm_icons", "items", "hide_customer_details"],
   data() {
     return {
       customer: null,
@@ -397,7 +397,6 @@ export default {
         { text: "Customer", value: "building", sortable: false, align: "left" },
         { text: "Primary", value: "customer", sortable: false, align: "left" },
         { text: "Address", value: "address", sortable: false, align: "left" },
-        // { text: "Device", value: "device", sortable: false },
         { text: "Type", value: "sensor", sortable: false, align: "left" },
         { text: "Zone", value: "zonedata", sortable: false, align: "left" },
         {
@@ -407,8 +406,6 @@ export default {
           align: "left",
         },
 
-        //{ text: "Zone/Area", value: "zone", sortable: false },
-        // { text: "Alarm Type", value: "alarm_type" , sortable: false },
         {
           text: "Event Time",
           value: "start_date",
@@ -417,20 +414,6 @@ export default {
         },
 
         { text: "Priority", value: "priority", sortable: false, align: "left" },
-
-        // { text: "End Date", value: "end_date" , sortable: false },
-        // { text: "Resolved Time(H:M)", value: "duration", sortable: false },
-        // { text: "Category", value: "category", sortable: false },
-
-        // { text: "Notes", value: "notes", sortable: false },
-        // {
-        //   text: "Status",
-        //   value: "status",
-        //   sortable: false,
-        //   align: "center",
-        // },
-
-        // { text: "Options", value: "options", sortable: false },
       ],
       // items: [],
       isBackendRequestOpen: false,
@@ -453,15 +436,6 @@ export default {
     },
   },
   created() {
-    // if (
-    //   this.$auth.user.user_type != "security" &&
-    //   this.$auth.user.user_type != "technician"
-    // ) {
-    //   this.headers = [
-    //     ...this.headers, // Spread the existing headers
-    //     { text: "Options", value: "options", sortable: false }, // Add the new header
-    //   ];
-    // }
     if (this.items.count == 0) {
       this.$emit("closeDialog");
     }
@@ -492,6 +466,12 @@ export default {
           });
       }
     }, 5000);
+
+    if (this.hide_customer_details) {
+      this.headers = this.headers.filter(
+        (header) => !["Customer", "Primary", "Address"].includes(header.text)
+      );
+    }
   },
 
   methods: {

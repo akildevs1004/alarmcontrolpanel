@@ -5,6 +5,10 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <AudioSoundPlay
+      :key="notificationsMenuItems.length"
+      :notificationsMenuItemsCount="notificationsMenuItems.length"
+    />
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -448,9 +452,9 @@
         </v-card>
       </v-dialog>
       <v-dialog
-        v-model="alarmPopupNotificationStatus"
+        v-model="dialogAlarmPopupNotificationStatus"
         transition="dialog-top-transition"
-        max-width="1000"
+        max-width="900"
         style="z-index: 9999"
       >
         <!-- <template v-slot:activator="{ on, attrs }">
@@ -482,10 +486,12 @@
             </v-card-title>
             <v-card-text style="padding-left: 0px">
               <AlarmPopupAllAlarmEvents
-                :items="notificationAlarmDevices"
+                v-if="notificationAlarmDevicesContentData"
+                :items="notificationAlarmDevicesContentData"
                 @callwait5MinutesNextNotification="wait5MinutesNotification"
                 :key="popupKey"
                 :alarm_icons="alarm_icons"
+                :hide_customer_details="true"
               />
               <!-- <v-row
                 v-for="(device, index) in notificationAlarmDevices"
@@ -521,14 +527,14 @@
                   color="error"
                   @click="
                     goToPage('/device');
-                    alarmPopupNotificationStatus = false;
+                    dialogAlarmPopupNotificationStatus = false;
                   "
                   >View Devices</v-btn
                 >
               </div> -->
             </v-card-text>
             <!-- <v-card-actions class="justify-end">
-              <v-btn text @click="alarmPopupNotificationStatus = false">Close</v-btn>
+              <v-btn text @click="dialogAlarmPopupNotificationStatus = false">Close</v-btn>
             </v-card-actions> -->
           </v-card>
         </template>
@@ -693,6 +699,7 @@ import employee_top_menu from "../menus/employee_modules_top.json";
 import controlpanel_top_menu from "../menus/customer_top_menu.json";
 
 import AlarmPopupAllAlarmEvents from "../components/Alarm/PopupAllAlarmEvents.vue";
+import AudioSoundPlay from "../components/Alarm/AudioSoundPlay.vue";
 
 export default {
   head() {
@@ -707,9 +714,11 @@ export default {
   },
   components: {
     AlarmPopupAllAlarmEvents,
+    AudioSoundPlay,
   },
   data() {
     return {
+      notificationAlarmDevicesContentData: null,
       popupKey: 1,
       key: 1,
       snackbar: false,
@@ -799,7 +808,7 @@ export default {
       viewing_page_name: "",
 
       inactivityTimeout: null,
-      alarmPopupNotificationStatus: false,
+      dialogAlarmPopupNotificationStatus: false,
       key: 1,
       isBackendRequestOpen: false,
 
@@ -848,12 +857,14 @@ export default {
 
     this.getDeviceModels();
 
-    setTimeout(() => {
-      this.loadHeaderNotificationMenu();
-      this.verifyPopupAlarmStatus();
-    }, 1000 * 1);
+    // setTimeout(() => {
+    //   this.loadHeaderNotificationMenu();
+    //   this.verifyPopupAlarmStatus();
+    // }, 1000 * 1);
 
     setInterval(() => {
+      this.loadHeaderNotificationMenu();
+      /*
       if (!this.$route.name.includes("customer")) return false;
       //if (this.wait5Minutes == false)
       {
@@ -862,27 +873,28 @@ export default {
           this.loadHeaderNotificationMenu();
 
           if (this.$route.name === "customer-dashboard" && !this.wait5Minutes) {
-            const notificationContent = this.notificationAlarmDevicesContent;
+            const notificationContent = this.notificationAlarmDevicesContentData;
 
             if (notificationContent && notificationContent.length > 0) {
               let criticalList = notificationContent.filter(
                 (notification) => notification.alarm_category == 1
               );
               if (criticalList.length > 0) {
-                if (!this.dialogAlarmPopupNotificationStatus) {
+                if (!this.dialogdialogAlarmPopupNotificationStatus) {
                   this.popupKey += 1;
-                  this.dialogAlarmPopupNotificationStatus = true;
+                  this.dialogdialogAlarmPopupNotificationStatus = true;
                 }
               } else {
-                //this.dialogAlarmPopupNotificationStatus = false;
+                //this.dialogdialogAlarmPopupNotificationStatus = false;
               }
             } else {
-              this.dialogAlarmPopupNotificationStatus = false;
+              this.dialogdialogAlarmPopupNotificationStatus = false;
             }
           }
         }
-      }
-    }, 1000 * 5 * 1);
+      } */
+    }, 1000 * 10 * 1);
+
     // setInterval(() => {
     //   if (this.$route.name != "login") {
     //   }
@@ -997,7 +1009,7 @@ export default {
         this.wait5Minutes = false;
       }, 1000 * 60 * 5);
 
-      this.alarmPopupNotificationStatus = false;
+      this.dialogAlarmPopupNotificationStatus = false;
     },
     wait5MinutesNotification() {
       this.wait5Minutes = true;
@@ -1226,7 +1238,7 @@ export default {
           options
         );
 
-        this.notificationAlarmDevicesContent = data;
+        this.notificationAlarmDevicesContentData = data;
         this.pendingNotificationsCount = data.length;
 
         this.notificationsMenuItems = data.map((element) => ({
@@ -1240,6 +1252,15 @@ export default {
           icon: this.alarm_icons[element.alarm_type] ?? "burglary.png",
           key: "leaves",
         }));
+
+        if (
+          this.notificationsMenuItems.length > 0 &&
+          !this.dialogAlarmPopupNotificationStatus &&
+          !this.wait5Minutes
+        ) {
+          this.popupKey += 1;
+          this.dialogAlarmPopupNotificationStatus = true;
+        }
 
         this.key += 1;
       } catch (error) {
@@ -1322,34 +1343,34 @@ export default {
     },
     showPopupAlarmStatus() {
       this.wait5Minutes = false;
-      this.verifyPopupAlarmStatus();
+      this.dialogAlarmPopupNotificationStatus = true;
+      //////this.verifyPopupAlarmStatus();
     },
-    verifyPopupAlarmStatus() {
-      if (this.isBackendRequestOpen) return false;
-      this.isBackendRequestOpen = true;
-      let company_id = this.$auth.user?.company?.id || 0;
-      if (company_id == 0) {
-        return false;
-      }
-      let options = {
-        params: {
-          company_id: company_id,
-          pageSource: "layoutcustomer2",
-        },
-      };
-      this.$axios
-        .get(`get_alarm_notification_display`, options)
-        .then(({ data }) => {
-          this.isBackendRequestOpen = false;
-          if (data.length > 0) {
-            this.notificationAlarmDevices = data;
-
-            this.alarmPopupNotificationStatus = true;
-          } else {
-            this.alarmPopupNotificationStatus = false;
-          }
-        });
-    },
+    //verifyPopupAlarmStatus() {
+    // if (this.isBackendRequestOpen) return false;
+    // this.isBackendRequestOpen = true;
+    // let company_id = this.$auth.user?.company?.id || 0;
+    // if (company_id == 0) {
+    //   return false;
+    // }
+    // let options = {
+    //   params: {
+    //     company_id: company_id,
+    //     pageSource: "layoutcustomer2",
+    //   },
+    // };
+    // this.$axios
+    //   .get(`get_alarm_notification_display11111111111`, options)
+    //   .then(({ data }) => {
+    //     this.isBackendRequestOpen = false;
+    //     if (data.length > 0) {
+    //       this.notificationAlarmDevices = data;
+    //       this.dialogAlarmPopupNotificationStatus = true;
+    //     } else {
+    //       this.dialogAlarmPopupNotificationStatus = false;
+    //     }
+    //   });
+    //},
 
     getBranchName() {
       return this.$auth.user.branch_name;

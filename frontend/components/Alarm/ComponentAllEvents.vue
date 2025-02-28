@@ -678,6 +678,7 @@ export default {
     "compFilterSupervisor",
     "filter_date",
     "filter_alarm_type",
+    "hide_customer_details",
   ],
   data() {
     return {
@@ -833,6 +834,13 @@ export default {
           this.getDataFromApi(0);
       }, 1000 * 20 * 1);
     }, 1000 * 30);
+
+    if (this.hide_customer_details) {
+      this.headers = this.headers.filter(
+        (header) =>
+          !["Customer", "Property", "Options", "Priority"].includes(header.text)
+      );
+    }
   },
 
   methods: {

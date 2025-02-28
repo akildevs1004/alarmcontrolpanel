@@ -12,7 +12,9 @@ use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
 use App\Models\Customers\CustomerContactTypes;
+use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
+use App\Models\Customers\Tickets;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
@@ -20,6 +22,7 @@ use App\Models\MasterDeviceSerialNumbers;
 use App\Models\ReportNotificationLogs;
 use App\Models\SecurityCustomers;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
@@ -1753,5 +1756,58 @@ class CustomersController extends Controller
 
 
         return $body_content1;
+    }
+
+    public function GetCustomerMaintenanceInfo(Request $request)
+    {
+
+
+        $nextMaintenanceDue = null;
+        $lastMaintenanceDate = null;
+        $invoiceDue = 0;
+
+        $customer = Customers::where("id", $request->customer_id)->first();
+
+
+        if ($customer && $customer->start_date != '') {
+
+            $startDate = $customer->start_date;
+
+            $customDate = Carbon::parse($startDate);
+            $currentDate = Carbon::now();
+
+            $monthDifference = $customDate->diffInMonths($currentDate); // Get month difference
+            $newDate = $customDate->addMonths($monthDifference); // Add difference to custom date
+
+            $nextMaintenanceDue = $newDate->toDateString();
+            $daysDifference = $newDate->diffInDays($currentDate);
+            if ($daysDifference > 0) {
+                $nextMaintenanceDue = $newDate->copy()->addMonth()->toDateString();
+            }
+        }
+
+        $maintenance = Tickets::where("customer_id", $request->customer_id)
+            ->where("category_id", 3)
+            ->orderby("created_datetime", "desc")->first();
+
+        if ($maintenance) {
+            $lastMaintenanceDate = $maintenance->created_datetime;
+        }
+
+        $invoice = CustomerPayments::where("customer_id", $request->customer_id)
+            ->where("status", 'Pending')
+
+            ->selectRaw("SUM(amount) as amount")->first();
+
+        if ($invoice) {
+            $invoiceDue = $invoice->amount ?? 0;
+        }
+
+
+        return  [
+            "next_maintenance_due_date" => $nextMaintenanceDue,
+            "last_maintenance_date" => $lastMaintenanceDate,
+            "invoice_due" => $invoiceDue
+        ];
     }
 }

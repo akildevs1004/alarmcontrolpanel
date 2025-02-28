@@ -176,6 +176,7 @@
                       :key="key"
                       :name="'AlarmEventStatusCountPieChart1'"
                       :componentData="chartEventOpenStatistics"
+                      :filter_customers_list="[customer_id]"
                     /> </v-col
                   ><v-col cols="6">
                     <AlarmEventStatusCountPieChart
@@ -183,6 +184,7 @@
                       :key="key + 2"
                       :name="'AlarmEventStatusCountPieChart2'"
                       :componentData="chartEventClosedStatistics"
+                      :filter_customers_list="[customer_id]"
                     />
                   </v-col>
 
@@ -202,9 +204,9 @@
           <v-col cols="3">
             <v-row>
               <v-col cols="12">
-                <v-card style="height: 85px" elevation="2"
+                <v-card elevation="2"
                   ><v-card-text
-                    ><v-row>
+                    ><v-row style="height: 76px">
                       <v-col
                         class="d-flex justify-center"
                         style="
@@ -213,7 +215,7 @@
 
                           color: black;
                         "
-                        >Next Maintanance Due</v-col
+                        >Next Maintanance </v-col
                       ><v-col
                         class="d-flex justify-center"
                         style="
@@ -222,15 +224,16 @@
                           font-weight: bold;
                           color: orange;
                         "
-                        >March 10th 2025</v-col
+                      >
+                        {{ nextMaintenanceDate }}</v-col
                       ></v-row
                     ></v-card-text
                   ></v-card
                 > </v-col
               ><v-col cols="12" class="pt-0">
-                <v-card style="height: 85px" elevation="2"
+                <v-card elevation="2"
                   ><v-card-text
-                    ><v-row>
+                    ><v-row style="height: 76px">
                       <v-col
                         class="d-flex justify-center"
                         style="
@@ -248,16 +251,16 @@
                           font-weight: bold;
                           color: green;
                         "
-                        >March 10th 2025</v-col
+                        >{{ previousMaintenanceDate || "---" }}</v-col
                       ></v-row
                     ></v-card-text
                   ></v-card
                 >
               </v-col>
               <v-col cols="12" class="pt-0">
-                <v-card style="height: 85px" elevation="2"
+                <v-card elevation="2"
                   ><v-card-text
-                    ><v-row>
+                    ><v-row style="height: 76px">
                       <v-col
                         class="d-flex justify-center"
                         style="
@@ -266,7 +269,7 @@
 
                           color: black;
                         "
-                        >Customer Last Login</v-col
+                        >Invoice Due</v-col
                       ><v-col
                         class="d-flex justify-center"
                         style="
@@ -275,7 +278,7 @@
                           font-weight: bold;
                           color: black;
                         "
-                        >March 10th 2025</v-col
+                        >{{ invoiceDue }}</v-col
                       ></v-row
                     ></v-card-text
                   ></v-card
@@ -461,6 +464,7 @@
                   :showFilters="true"
                   :showTabs="false"
                   :filter_customer_id="customer_id"
+                  :hide_customer_details="true"
                   v-if="loadAllEventsTable"
                 /> </v-card-text
             ></v-card>
@@ -520,6 +524,9 @@ export default {
     cancelgetEventsTypeStatsToken: null,
     cancelupdateEventsOpenCountStatusToken: null,
     loadAllEventsTable: false,
+    nextMaintenanceDate: "---",
+    previousMaintenanceDate: "---",
+    invoiceDue: 0,
   }),
   computed: {},
   mounted() {
@@ -532,24 +539,20 @@ export default {
     }, 1000 * 5);
   },
   async created() {
-    // // this._id = this.$route.params.id;
-    // let today = new Date();
-
-    // let monthObj = this.$dateFormat.monthStartEnd(today);
-    // this.date_from = monthObj.first;
-    // this.date_to = monthObj.last;
-
     let today = new Date();
+
     this.date_from = today.toISOString().split("T")[0];
+    this.loadAllEventsTable = true;
     await this.updateEventsOpenCountStatus();
     await this.getEventsTypeStats();
-
     await this.getEventCategoriesStats();
-    this.loadAllEventsTable = true;
+
+    await this.getMaintenanceInfo();
+
     // setTimeout(() => {}, 1000 * 1);
 
     setInterval(async () => {
-      if (this.$route.name == "alarm-dashboard") {
+      if (this.$route.name == "customer-dashboard") {
         this.key++;
         await this.getEventsTypeStats();
         await this.getEventCategoriesStats();
@@ -561,6 +564,26 @@ export default {
   },
   watch: {},
   methods: {
+    async getMaintenanceInfo() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.$auth.user.customer.id,
+        },
+      };
+
+      this.$axios
+        .get("get_customer_maintenanace_info", options)
+        .then((data) => {
+          this.nextMaintenanceDate = this.$dateFormat.formatDate(
+            data.data.next_maintenance_due_date
+          );
+          this.previousMaintenanceDate = this.$dateFormat.formatDate(
+            data.data.last_maintenance_date
+          );
+          this.invoiceDue = data.data.invoice_due;
+        });
+    },
     async getEventCategoriesStats() {
       if (this.cancelgetEventCategoriesStatsToken) {
         this.cancelgetEventCategoriesStatsToken.cancel(
@@ -595,23 +618,6 @@ export default {
         this.apiLoading = false; // Reset loading state
       }
     },
-
-    // async getEventCategoriesStats() {
-    //   //if (this.apiLoading) return false;
-
-    //   this.apiLoading = true;
-    //   let options = {
-    //     params: {
-    //       company_id: this.$auth.user.company_id,
-    //       date_from: this.date_from,
-    //     },
-    //   };
-
-    //   this.$axios.get(`/alarm_statistics`, options).then(({ data }) => {
-    //     this.categoriesStats = data;
-    //     this.apiLoading = false;
-    //   });
-    // },
 
     async getEventsTypeStats() {
       // Cancel any ongoing request

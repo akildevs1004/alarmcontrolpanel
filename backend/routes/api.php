@@ -46,3 +46,4 @@ include('master.php');
 include('alarm/api_alarm.php');
 include('alarm/api_technician.php');
 include('alarm/api_operator.php');
+include('alarm/api_customer.php');
