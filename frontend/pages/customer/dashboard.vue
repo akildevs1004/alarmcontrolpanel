@@ -144,9 +144,9 @@
             <v-card style="height: 275px" elevation="2"
               ><v-card-text>
                 <h3 style="color: black; font-weight: normal">System Status</h3>
-                <AlamDeviceCountPieChart
+                <CustomerDashbaordDeviceCountPieChart
                   :key="key"
-                  :name="'AlamDeviceCountPieChart'"
+                  :name="'CustomerDashbaordDeviceCountPieChart'"
                   style="
                     height: 200px;
 
@@ -493,14 +493,14 @@ import DashboardLoginActivities from "../../components/Admin/DashboardLoginActiv
 import AlarmEventStatusCountPieChart from "../../components/Alarm/Dashboard/AlarmEventStatusCountPieChart.vue";
 import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperatorLiveStatus.vue";
 
-import AlamDeviceCountPieChart from "../../components/Alarm/Customer/AlarmDeviceCountPieChart.vue";
+import CustomerDashbaordDeviceCountPieChart from "../../components/Alarm/Customer/CustomerDashbaordDeviceCountPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
 import CustomerMonthlyChart from "../../components/Alarm/Customer/CustomerMonthlyChart.vue";
 
 export default {
   layout: "customer",
   components: {
-    AlamDeviceCountPieChart,
+    CustomerDashbaordDeviceCountPieChart,
     AllEventsDashboard2,
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
@@ -678,12 +678,10 @@ export default {
       let today = new Date();
       let date = today.toISOString().split("T")[0];
       this.$axios
-        .get("dashboard_statistics_customers", {
+        .get("get_customer_tickets_statistics", {
           params: {
             company_id: this.$auth.user.company_id,
             customer_id: this.$auth.user?.customer?.id || null,
-
-            date: date,
           },
           cancelupdateEventsOpenCountStatusToken:
             this.cancelupdateEventsOpenCountStatusToken.token, // Attach cancel token

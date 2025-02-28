@@ -1758,6 +1758,20 @@ class CustomersController extends Controller
         return $body_content1;
     }
 
+    public function GetCustomerTicketsStatistics(Request $request)
+    {
+
+
+
+        $tickets = Tickets::where("customer_id", $request->customer_id)->get();
+
+        return [
+            "openCount" => $tickets->where("status", 1)->count(),
+            "closedCount" => $tickets->where("status", 0)->count(),
+            "forwardCount" => 0
+        ];
+    }
+
     public function GetCustomerMaintenanceInfo(Request $request)
     {
 

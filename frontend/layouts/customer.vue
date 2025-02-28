@@ -1237,6 +1237,13 @@ export default {
           `get_alarm_notification_display`,
           options
         );
+        //reset if new alarm trigger
+        if (
+          this.notificationAlarmDevicesContentData &&
+          data.length != this.notificationAlarmDevicesContentData.length
+        ) {
+          this.wait5Minutes = false;
+        }
 
         this.notificationAlarmDevicesContentData = data;
         this.pendingNotificationsCount = data.length;

@@ -845,7 +845,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
         $issue = $alarmlog['alarm_type'];
         foreach ($reports as $value) {
 
-
+            if (!isset($value['device']['customer'])) {
+                continue;
+            }
 
 
             $location = "{$value['device']['customer']['latitude']},{$value['device']['customer']['longitude']}";
@@ -872,7 +874,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 $body_content1 .= "*Xtreme Guard*<br/>";
 
                 $data = [
-                    'subject' => "{$issue} Notification",
+                    'subject' => "{$issue} Alarm Notification #{$alarmlog['id']}",
                     'body' => $body_content1,
                 ];
                 Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-Step4 - Email Body' . $body_content1);
