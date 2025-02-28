@@ -475,11 +475,11 @@
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text>
-                <DashboardAlarmEventsMonthlyWiseChart
+                <CustomerMonthlyChart
                   v-if="loadAllEventsTable"
                   :height="'200'"
                   :filter_customers_list="[customer_id]"
-                  name="DashboardAlarmEventsMonthlyWiseChart1" /></v-card-text></v-card
+                  name="CustomerMonthlyChart1111" /></v-card-text></v-card
           ></v-col>
         </v-row>
       </v-col>
@@ -495,6 +495,7 @@ import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperato
 
 import AlamDeviceCountPieChart from "../../components/Alarm/Customer/AlarmDeviceCountPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
+import CustomerMonthlyChart from "../../components/Alarm/Customer/CustomerMonthlyChart.vue";
 
 export default {
   layout: "customer",
@@ -503,7 +504,7 @@ export default {
     AllEventsDashboard2,
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
-    DashboardAlarmEventsMonthlyWiseChart,
+    CustomerMonthlyChart,
   },
   data: () => ({
     customer_id: null,
