@@ -27,6 +27,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\WhatsappController;
 use App\Imports\excelEmployeesData;
 use App\Mail\ReportNotificationMail;
+use App\Mail\TestMail;
 use App\Models\AlarmEvents;
 use App\Models\AlarmEventsTechnician;
 use App\Models\AlarmLogs;
@@ -1176,6 +1177,9 @@ Route::post('/cameratesting', function (Request $request) {
         ->insert([
             'json_content' => $requstJson,
         ]);
+});
+Route::get('/testmail', function () {
+    Mail::to("venuakil2@gmail.com")->send(new TestMail());
 });
 Route::get('/test_attachment', function () {
     $test = new RenderController();
