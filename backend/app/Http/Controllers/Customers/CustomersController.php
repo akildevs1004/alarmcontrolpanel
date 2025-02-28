@@ -1765,9 +1765,40 @@ class CustomersController extends Controller
 
         $tickets = Tickets::where("customer_id", $request->customer_id)->get();
 
+
+        $deviceCounts = Device::where("company_id", $request->company_id)
+
+            // ->whereHas('customer', function ($query) {
+            //     $query->where('deleted', 0);
+            // })
+            ->where("device_type", "!=", "Mobile")
+
+            ->where("device_type", "!=", "Manual")
+            ->where("device_id", "!=", "Manual")
+            ->where("serial_number", "!=", null)
+
+            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                $q->whereIn("customer_id", $request->filter_customers_list);
+            })
+            ->when($request->filled("customer_id"), function ($q) use ($request) {
+                $q->where("customer_id", $request->customer_id);
+            })
+
+
+
+            ->selectRaw("
+        COUNT(CASE WHEN armed_status = 1 THEN 1 END) as armedCount,
+        COUNT(CASE WHEN armed_status = 0 THEN 1 END) as disarmCount,
+        COUNT(CASE WHEN status_id = 1 THEN 1 END) as onlineCount,
+        COUNT(CASE WHEN status_id = 2 THEN 1 END) as offlineCount
+    ")->first();
+
         return [
             "openCount" => $tickets->where("status", 1)->count(),
             "closedCount" => $tickets->where("status", 0)->count(),
+
+            "onlineCount" => $deviceCounts->onlinecount,
+            "offlineCount" => $deviceCounts->offlinecount,
             "forwardCount" => 0
         ];
     }
