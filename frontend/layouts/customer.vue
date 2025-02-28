@@ -1252,8 +1252,9 @@ export default {
           icon: this.alarm_icons[element.alarm_type] ?? "burglary.png",
           key: "leaves",
         }));
-
-        if (
+        if (this.notificationsMenuItems.length == 0) {
+          this.dialogAlarmPopupNotificationStatus = false;
+        } else if (
           this.notificationsMenuItems.length > 0 &&
           !this.dialogAlarmPopupNotificationStatus &&
           !this.wait5Minutes
