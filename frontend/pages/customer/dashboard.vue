@@ -458,9 +458,7 @@
               "
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text
-                >{{ customer_id }}
-
+              ><v-card-text>
                 <AllEventsDashboard2
                   name="AllEvents1"
                   :showFilters="true"
@@ -476,7 +474,7 @@
               :style="'height: ' + tableHeight + 'px'"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text>
+              ><v-card-text style="padding-left: 0px">
                 <CustomerMonthlyChart
                   v-if="loadAllEventsTable"
                   :height="'200'"
