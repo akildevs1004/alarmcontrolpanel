@@ -743,10 +743,20 @@ export default {
       this.getDataFromApi();
     },
     getBuildingTypes() {
-      if (this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
-        this.buildingTypes =
-          this.$store.state.storeAlarmControlPanel.BuildingTypes;
-      }
+      // if (this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
+      //   this.buildingTypes =
+      //     this.$store.state.storeAlarmControlPanel.BuildingTypes;
+      // }
+
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+
+      this.$axios.get("building_types", options).then((data) => {
+        this.buildingTypes = data.data;
+      });
     },
     editItem(item) {
       this.setIntervalLoopstatus = false;
