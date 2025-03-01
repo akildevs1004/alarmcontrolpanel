@@ -863,7 +863,9 @@ export default {
     // }, 1000 * 1);
 
     setInterval(() => {
-      if (this.$route.name != "login") this.loadHeaderNotificationMenu();
+      try {
+        if (this.$route.name != "login") this.loadHeaderNotificationMenu();
+      } catch (e) {}
       /*
       if (!this.$route.name.includes("customer")) return false;
       //if (this.wait5Minutes == false)
@@ -1227,6 +1229,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           alarm_status: this.filterAlarmStatus,
+          filter_customers_list: [this.$auth.user.customer.id],
           pageSource: "layoutcustomer",
         },
         signal, // Attach the abort signal

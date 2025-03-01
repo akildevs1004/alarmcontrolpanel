@@ -533,6 +533,8 @@ class CustomersController extends Controller
                     ];
                 }
             }
+
+
             User::where("id", $request->user_id)->update(
                 $user_data
             );

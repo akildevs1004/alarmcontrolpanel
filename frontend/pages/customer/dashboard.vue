@@ -308,9 +308,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{
-                                categoriesStats ? categoriesStats.techinical : 0
-                              }}
+                              {{ data ? data.technicalCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Technical</div>
                           </v-col>
@@ -333,7 +331,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.events : 0 }}
+                              {{ data ? data.eventsCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Events</div>
                           </v-col>
@@ -359,7 +357,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.water : 0 }}
+                              {{ data ? data.waterCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Water</div>
                           </v-col>
@@ -382,11 +380,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{
-                                categoriesStats
-                                  ? categoriesStats.temperature
-                                  : 0
-                              }}
+                              {{ data ? data.temperatureCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Temperature</div>
                           </v-col>

@@ -310,7 +310,7 @@ export default {
   },
   mounted() {
     if (this.customer) {
-      this.payload.email = this.customer.email;
+      this.payload.email = this.customer.user.email;
       //this.payload.web_login_access = this.customer.user.web_login_access;
       this.web_login_access = this.customer.user?.web_login_access || false;
       //this.payload.account_status = this.customer.account_status;

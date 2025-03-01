@@ -858,7 +858,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                $body_content1 = "Hello, {$value['name']} <br/>";
+                $body_content1 = "Hello, {$value['name']} <br/><br/>";
                 $body_content1 .= "Event ID:  #{$alarmlog['id']}<br/>";
                 $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}<br/>";
                 $body_content1 .= "This is Notifing you about {$issue} event <br/>";
@@ -866,8 +866,8 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                $body_content1 .= "Address: {$value['device']['customer']['address']}<br/>";
-                $body_content1 .= "City: {$value['device']['customer']['city']}  <br/><br/> ";
+                $body_content1 .= "Address: {$value['device']['customer']['house_number']}<br/>";
+                $body_content1 .= "City: {$value['device']['customer']['city']}  <br/>  ";
 
                 if (isset($value['devicesensorzones'])) {
                     $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}<br/>";
@@ -931,7 +931,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
 
-                $body_content1 .= "Address: {$value['device']['customer']['address']}\n";
+                $body_content1 .= "Address: {$value['device']['customer']['house_number']}\n";
                 $body_content1 .= "City: {$value['device']['customer']['city']}  \n ";
 
 
