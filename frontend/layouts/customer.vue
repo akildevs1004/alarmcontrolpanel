@@ -816,6 +816,11 @@ export default {
     };
   },
   created() {
+    if (!this.$auth.user) {
+      this.$router.push("/logout");
+      return;
+    }
+
     if (this.$auth.user.user_type != "customer") {
       try {
         if (window) {
@@ -864,7 +869,7 @@ export default {
 
     setInterval(() => {
       try {
-        if (this.$route.name != "login") this.loadHeaderNotificationMenu();
+        if ($auth.user?.customer?.id) this.loadHeaderNotificationMenu();
       } catch (e) {}
       /*
       if (!this.$route.name.includes("customer")) return false;
@@ -1211,8 +1216,6 @@ export default {
     },
     async loadHeaderNotificationMenu() {
       this.key = this.key + 1;
-
-      let company_id = this.$auth.user?.company?.id || 0;
 
       // Cancel the previous request if it exists
       if (this.abortController) {

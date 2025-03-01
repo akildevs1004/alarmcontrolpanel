@@ -533,6 +533,10 @@ export default {
     }, 1000 * 5);
   },
   async created() {
+    if (!this.$auth.user) {
+      this.$router.push("/logout");
+      return;
+    }
     let today = new Date();
 
     this.date_from = today.toISOString().split("T")[0];

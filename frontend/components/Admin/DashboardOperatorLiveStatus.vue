@@ -166,11 +166,11 @@ export default {
   // },
   mounted() {
     setInterval(() => {
-      this.getRecords();
+      if (this.$auth.user && this.$auth.user.customer) this.getRecords();
     }, 1000 * 45);
 
     setTimeout(() => {
-      this.getRecords();
+      if (this.$auth.user && this.$auth.user.customer) this.getRecords();
     }, 1000 * 8);
 
     // setTimeout(() => {
