@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       loading: false,
-      display_title: "Alarm Events - Monthly",
+      display_title: "Alarm Events - Last 30 days",
       date_from: "",
       date_to: "",
       series: [
@@ -123,13 +123,13 @@ export default {
 
     // Subtract 7 days from today
     let sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(today.getDate() - 7);
+    sevenDaysAgo.setDate(today.getDate() - 30);
 
-    // this.date_to = today.toISOString().split("T")[0];
-    // this.date_from =   sevenDaysAgo.toISOString().split("T")[0];
+    this.date_to = today.toISOString().split("T")[0];
+    this.date_from = sevenDaysAgo.toISOString().split("T")[0];
 
-    this.date_from = monthObj.first;
-    this.date_to = monthObj.last;
+    // this.date_from = monthObj.first;
+    // this.date_to = monthObj.last;
   },
 
   methods: {
@@ -146,7 +146,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
-          customer_id: this.$auth.user.company?.id || null,
+          customer_id: this.$auth.user.customer?.id,
 
           date_from: this.date_from,
           date_to: this.date_to,

@@ -459,13 +459,15 @@
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text
-                ><AllEventsDashboard2
+                >{{ customer_id }}
+
+                <AllEventsDashboard2
                   name="AllEvents1"
                   :showFilters="true"
                   :showTabs="false"
                   :filter_customer_id="customer_id"
                   :hide_customer_details="true"
-                  v-if="loadAllEventsTable"
+                  v-if="loadAllEventsTable && customer_id"
                 /> </v-card-text
             ></v-card>
           </v-col>

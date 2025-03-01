@@ -1061,6 +1061,7 @@ export default {
 
       // Create a new cancel token for this request
       this.cancelTokenSource = this.$axios.CancelToken.source();
+      console.log("this.filter_customer_id", this.filter_customer_id);
 
       let options = {
         params: {
