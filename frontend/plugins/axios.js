@@ -8,6 +8,8 @@ export default ({ app, $axios, store }, inject) => {
     pendingRequests.length = 0; // Clear the array
   };
   $axios.onError((error) => {
+    console.log("error", error);
+
     if (error.response && error.response.status === 401) {
       app.$auth.refreshTokens();
       app.$auth.reset();
