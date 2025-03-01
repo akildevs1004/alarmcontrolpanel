@@ -55,7 +55,7 @@ class SecurityLoginController extends Controller
         $currentDateTime = now(); // Get the current datetime
 
         $company = Company::whereId($request->company_id)->first();
-        $company_time_zone = $company ? $company->utc_time_zone : "Asia/Dubai";
+        $company_time_zone = $company->utc_time_zone ? $company->utc_time_zone : "Asia/Dubai";
 
         // if ($company_time_zone)
 
@@ -96,7 +96,7 @@ class SecurityLoginController extends Controller
     {
 
         $company = Company::whereId($request->company_id)->first();
-        $company_time_zone = $company  ? $company->utc_time_zone : "Asia/Dubai";
+        $company_time_zone = $company->utc_time_zone   ? $company->utc_time_zone : "Asia/Dubai";
 
         if ($company_time_zone)
 
