@@ -146,7 +146,7 @@
                   </div> -->
                   <v-img
                     style="
-                      max-width: 800px;
+                      max-width: 750px;
                       border: 1px solid #ddd;
                       overflow: hidden;
                       margin: auto;
