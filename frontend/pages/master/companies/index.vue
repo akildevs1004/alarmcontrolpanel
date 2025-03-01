@@ -33,8 +33,13 @@
         </v-col>
       </v-row>
       <v-row v-if="can('master')">
-        <v-col md="2" v-for="(item, index) in data" :key="index">
-          <v-card style="min-height: 209px">
+        <v-col
+          md="2"
+          v-for="(item, index) in data"
+          :key="index"
+          style="max-height: 550px; overflow: auto"
+        >
+          <v-card style="max-height: 550px; overflow: auto">
             <v-card-title>
               <v-spacer></v-spacer>
               <v-icon
@@ -56,7 +61,11 @@
               >
             </v-card-title>
 
-            <v-card-text class="text-center" @click="goDetails(item.id)">
+            <v-card-text
+              class="text-center"
+              @click="goDetails(item.id)"
+              style="max-height: 550px; overflow: auto"
+            >
               <div style="height: 200px">
                 <v-img
                   style="
@@ -74,9 +83,9 @@
                 <b>{{ item.name }}</b>
               </div>
 
-              <div>
+              <!-- <div>
                 {{ item.location }}
-              </div>
+              </div> -->
               <div class="bold">Employees: {{ item.employees_count }}</div>
             </v-card-text>
           </v-card>
