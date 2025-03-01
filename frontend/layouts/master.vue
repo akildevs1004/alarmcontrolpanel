@@ -91,12 +91,13 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <label class="px-2" v-bind="attrs" v-on="on">
-            {{ getUser }}
+            {{ caps(getUser) }}
           </label>
 
           <v-btn icon color="yellow" v-bind="attrs" v-on="on">
             <v-avatar size="40">
-              <img :src="`https://via.placeholder.com/40x40?text=${getLogo}`" />
+              <!-- <img class="company_logo" src="no-image.PNG" /> -->
+              <v-img class="company_logo" src="/icon.png"></v-img>
             </v-avatar>
           </v-btn>
         </template>
@@ -302,6 +303,9 @@ export default {
     this.items = this.items.filter((e) => e.permission == true);
   },
   methods: {
+    caps(str) {
+      return str.replace(/\b\w/g, (c) => c.toUpperCase());
+    },
     can(per) {
       return this.$pagePermission.can(per, this);
     },
