@@ -143,7 +143,7 @@ Route::get("create_test_sos_alarm", function (Request $request) {
     if ($request->filled("zone"))
         $zone  =   $request->zone;
 
-    $content = $request->serial_number . ",9999," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+    $content = $request->serial_number . ",9999," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone . '\n';
 
 
 
