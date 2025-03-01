@@ -180,10 +180,10 @@
                       <img
                         width="100%"
                         max-width="100%"
-                        height="600px"
+                        height="500px"
                         :src="item.picture || '/no-business_profile.png'"
                         contain
-                        style="object-fit: contain; max-height: 600px"
+                        style="object-fit: contain; max-height: 500px"
                       />
                     </v-col>
                   </v-row>

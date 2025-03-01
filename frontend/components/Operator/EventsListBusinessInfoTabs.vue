@@ -140,17 +140,19 @@
                 v-for="(item, index) in customer.profile_pictures"
                 :name="item.id"
               >
-                <v-carousel-item style="overflow: auto">
+                <v-carousel-item>
                   <!-- <div style="text-align: Left">
                     {{ index + 1 }}: {{ item.title }}
                   </div> -->
                   <v-img
-                    style="
-                      max-width: 750px;
-                      border: 1px solid #ddd;
-                      overflow: hidden;
-                      margin: auto;
+                    :style="
+                      'height:' +
+                      parseInt(browserHeight - 200) +
+                      'px;width:' +
+                      parseInt(browserWidth - 700) +
+                      'px'
                     "
+                    contain
                     :src="
                       item?.picture ? item.picture : '/no-profile-image.jpg'
                     "
