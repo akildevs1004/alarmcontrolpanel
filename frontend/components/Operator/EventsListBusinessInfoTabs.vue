@@ -140,7 +140,7 @@
                 v-for="(item, index) in customer.profile_pictures"
                 :name="item.id"
               >
-                <v-carousel-item>
+                <v-carousel-item style="overflow: auto">
                   <!-- <div style="text-align: Left">
                     {{ index + 1 }}: {{ item.title }}
                   </div> -->
