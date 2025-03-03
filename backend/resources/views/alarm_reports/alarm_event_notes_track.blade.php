@@ -92,17 +92,15 @@
 <body>
     <!-- Header -->
     @php
-    $title1='Alarm Event Notes Report';
+        $title1 = 'Alarm Event Notes Report';
 
     @endphp
     <header>
 
         @include('alarm_reports.header', [
-
-        'title1' => $title1,
-        'company' => $alarm['device']['company'],
-        'title2' => '',
-
+            'title1' => $title1,
+            'company' => $alarm['device']['company'],
+            'title2' => '',
         ])
 
 
@@ -113,61 +111,60 @@
     <footer>
 
         @include('alarm_reports.footer', [
-
-        'company' => $alarm['device']['company']
+            'company' => $alarm['device']['company'],
         ])
 
     </footer>
     @php
 
-    $customerLogo=getcwd() .'/no-business_profile.png';
-    $companyLogo=getcwd() .'/no-business_profile.png';
-    $securityLogo=getcwd() .'/no-profile-image.jpg';
-    if (env('APP_ENV') !== 'local')
-    {
-
-    if($alarm['device']&&$alarm['device']['customer']&&$alarm['device']['customer']['profile_picture']!='')
-    {
-    $customerLogo=$alarm['device']['customer']['profile_picture'];
-    }
-    if($alarm['device']&&$alarm['device']['company']&&$alarm['device']['company']['logo']!='')
-    {
-    $companyLogo=$alarm['device']['company']['logo'];
-    }
-    if($alarm['security']&&$alarm['security']['picture']&&$alarm['security']['picture'] !='')
-    {
-    $securityLogo=$alarm['security']['picture'];
-    }
-    }
-
-
-
+        $customerLogo = getcwd() . '/no-business_profile.png';
+        $companyLogo = getcwd() . '/no-business_profile.png';
+        $securityLogo = getcwd() . '/no-profile-image.jpg';
+        if (env('APP_ENV') !== 'local') {
+            if (
+                $alarm['device'] &&
+                $alarm['device']['customer'] &&
+                $alarm['device']['customer']['profile_picture'] != ''
+            ) {
+                $customerLogo = $alarm['device']['customer']['profile_picture'];
+            }
+            if ($alarm['device'] && $alarm['device']['company'] && $alarm['device']['company']['logo'] != '') {
+                $companyLogo = $alarm['device']['company']['logo'];
+            }
+            if ($alarm['security'] && $alarm['security']['picture'] && $alarm['security']['picture'] != '') {
+                $securityLogo = $alarm['security']['picture'];
+            }
+        }
 
     @endphp
 
     @php
 
-    function changeDateformat($date)
+        function changeDateformat($date)
+        {
+            if ($date == '') {
+                return '---';
+            }
+            $date = new DateTime($date);
 
-    {
-    if($date=='') return '---';
-    $date = new DateTime($date);
+            // Format the date to the desired format
+            return $date->format('M j, Y') . ' ' . $date->format('H:i');
+        }
+        function minutesToTime($totalMinutes)
+        {
+            if ($totalMinutes == 0) {
+                return '00:00';
+            }
+            if ($totalMinutes == null) {
+                return '---';
+            }
+            // Calculate hours and minutes
+            $hours = intdiv($totalMinutes, 60); // Integer division to get hours
+            $minutes = $totalMinutes % 60; // Remainder to get minutes
 
-    // Format the date to the desired format
-    return $date->format('M j, Y').' '.$date->format('H:i') ;
-    }
-    function minutesToTime($totalMinutes)
-    {
-    if($totalMinutes==0) return '00:00';
-    if($totalMinutes==null) return '---';
-    // Calculate hours and minutes
-    $hours = intdiv($totalMinutes, 60); // Integer division to get hours
-    $minutes = $totalMinutes % 60; // Remainder to get minutes
-
-    // Format hours and minutes to HH:MM
-    return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
-
-    }
+            // Format hours and minutes to HH:MM
+            return $formattedTime = sprintf('%02d:%02d', $hours, $minutes);
+        }
     @endphp
     <main>
 
@@ -180,7 +177,8 @@
                 <td>
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Customer Details</td>
+                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                                Customer Details</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
                             <td rowspan="4" style="width:100px;text-align:center"> <img
@@ -191,15 +189,19 @@
                             <td>: {{ $alarm['device']['customer']['building_name'] }}</td>
 
                             <td style="font-weight:bold">Type</td>
-                            <td>:{{$alarm['device']['customer']['buildingtype']['name']}}</td>
+                            <td>:{{ $alarm['device']['customer']['buildingtype']['name'] }}</td>
 
 
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;">
 
                             <td style="font-weight:bold">Address</td>
-                            <td colspan="3">: <span>{{$alarm->device->customer->house_number ?? "---"}}, {{$alarm->device->customer->street_number ?? "---"}}</span>
-                                <span>{{$alarm->device->customer->area ?? "---"}}, {{$alarm->device->customer->city ?? "---"}} </span> <span>{{$alarm->device->customer->state ?? "---"}}, {{$alarm->device->customer->country ?? "---"}} </span>
+                            <td colspan="3">: <span>{{ $alarm->device->customer->house_number ?? '---' }},
+                                    {{ $alarm->device->customer->street_number ?? '---' }}</span>
+                                <span>{{ $alarm->device->customer->area ?? '---' }},
+                                    {{ $alarm->device->customer->city ?? '---' }} </span>
+                                <span>{{ $alarm->device->customer->state ?? '---' }},
+                                    {{ $alarm->device->customer->country ?? '---' }} </span>
                             </td>
 
 
@@ -209,7 +211,8 @@
 
                             <td style="font-weight:bold">Contact</td>
 
-                            <td colspan=3>: {{$alarm->device->customer?->primary_contact?->first_name ?? "---"}} {{$alarm->device->customer?->primary_contact?->last_name ?? "---"}} </td>
+                            <td colspan=3>: {{ $alarm->device->customer?->primary_contact?->first_name ?? '---' }}
+                                {{ $alarm->device->customer?->primary_contact?->last_name ?? '---' }} </td>
 
 
                         </tr>
@@ -217,10 +220,10 @@
 
                             <td style="font-weight:bold">Phone Number</td>
 
-                            <td>: {{$alarm->device->customer?->primary_contact?->phone1 ?? "---"}}</td>
+                            <td>: {{ $alarm->device->customer?->primary_contact?->phone1 ?? '---' }}</td>
                             <td style="font-weight:bold">Email</td>
 
-                            <td>: {{$alarm->device->customer?->primary_contact?->email ?? "---"}}</td>
+                            <td>: {{ $alarm->device->customer?->primary_contact?->email ?? '---' }}</td>
 
                         </tr>
 
@@ -232,51 +235,54 @@
                 <td>
                     <table class="table-border-top" style="width:100%">
                         <tr>
-                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Event Details</td>
+                            <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
+                                Event Details</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
                             <td rowspan="4" style="width:100px;text-align:center">
 
-                                @if ($alarm->zoneData)
-                                <img
-                                    style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
-                                    src="{{env('BASE_PUBLIC_URL')}}/{{$alarm->zoneData->sensor_type}}" />
-
+                                @if (isset($icons[$alarm->alarm_type]))
+                                    <img style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
+                                        src="{{ env('BASE_PUBLIC_URL') }}/alarm_icons/{{ $icons[$alarm->alarm_type] }}" />
+                                @else
+                                    <img style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
+                                        src="{{ env('BASE_PUBLIC_URL') }}/alarm_icons//event.png" />
                                 @endif
                             </td>
 
                             <td style="font-weight:bold">Event Id</td>
-                            <td style="color:red">#{{ $alarm->id   }}</td>
+                            <td style="color:red">#{{ $alarm->id }}</td>
 
                             <td style="font-weight:bold">Status</td>
 
-                            <td>: @if($alarm->forwarded ==true && $alarm->alarm_status==1)
-                                Forwarded
-                                @elseif($alarm->alarm_status==1)
-                                Open
+                            <td>: @if ($alarm->forwarded == true && $alarm->alarm_status == 1)
+                                    Forwarded
+                                @elseif($alarm->alarm_status == 1)
+                                    Open
                                 @else
-                                Closed
-                                @endif</td>
+                                    Closed
+                                @endif
+                            </td>
 
 
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;">
 
                             <td style="font-weight:bold">Sensor Name</td>
-                            <td>: {{ $alarm->zoneData->sensor_type ?? "---" }}</td>
+                            <td>: {{ $alarm->zoneData->sensor_type ?? '---' }}</td>
 
                             <td style="font-weight:bold">Alarm Zone</td>
-                            <td>: {{ $alarm->zoneData->sensor_name ?? "---" }}</td>
+                            <td>: {{ $alarm->zoneData->sensor_name ?? '---' }}</td>
 
 
                         </tr>
 
                         <tr style="border: 1px solid #8f8f8f;">
                             <td style="font-weight:bold">Alarm Type</td>
-                            <td>: {{ $alarm->alarm_type ?? "---" }}</td>
+                            <td>: {{ $alarm->alarm_type ?? '---' }}</td>
 
                             <td style="font-weight:bold">Alarm Location</td>
-                            <td>: {{ $alarm->zoneData->location ?? "---"   }}</td>
+                            <td>: {{ $alarm->zoneData->location ?? '---' }}</td>
 
 
                         </tr>
@@ -285,14 +291,14 @@
 
 
                             <td style="font-weight:bold">Start</td>
-                            <td>: {{changeDateformatTime($alarm->alarm_start_datetime)}}</td>
+                            <td>: {{ changeDateformatTime($alarm->alarm_start_datetime) }}</td>
 
                             <td style="font-weight:bold">End</td>
                             <td>:
 
 
 
-                                {{changeDateformatTime($alarm->alarm_end_datetime)}}
+                                {{ changeDateformatTime($alarm->alarm_end_datetime) }}
                             </td>
                         </tr>
 
@@ -303,7 +309,7 @@
             <!-- <tr>
                 <td style="width:100%">
                     @include('alarm_reports.include_alarm_event_notes_track_customer1', [
-                    'alarm' => $alarm
+                        'alarm' => $alarm,
                     ])
 
                 </td>
@@ -319,41 +325,33 @@
 
                 <td>
 
-                    @if (count($alarm->notes)==0)
-                    <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
-                        <div style="margin:auto;padding-top:50px">
-                            Operator Notes are not available
+                    @if (count($alarm->notes) == 0)
+                        <div style="width:100%;height:50px;margin:auto;font-size:12px;text-align:center">
+                            <div style="margin:auto;padding-top:50px">
+                                Operator Notes are not available
+                            </div>
+
                         </div>
-
-                    </div>
                     @endif
                 </td>
             </tr>
 
 
-            @foreach ($alarm->notes as $note )
-            <tr>
+            @foreach ($alarm->notes as $note)
+                <tr>
 
-                <td style="padding:0px">@if($note->event_status== 'Forwarded')
-                    @include('alarm_reports.include_alarm_event_notes_track_forward1', [
-                    'note' => $note
-                    ])
-
-                    @elseif($note->event_status != 'Forwarded')
-
-
-                    @include('alarm_reports.include_alarm_event_notes_track_operator_notes', [
-                    'note' => $note
-                    ])
-
-
-                    @endif
-
-
-
-                </td>
-            </tr>
-
+                    <td style="padding:0px">
+                        @if ($note->event_status == 'Forwarded')
+                            @include('alarm_reports.include_alarm_event_notes_track_forward1', [
+                                'note' => $note,
+                            ])
+                        @elseif($note->event_status != 'Forwarded')
+                            @include('alarm_reports.include_alarm_event_notes_track_operator_notes', [
+                                'note' => $note,
+                            ])
+                        @endif
+                    </td>
+                </tr>
             @endforeach
             <tr>
 
@@ -364,14 +362,12 @@
 
 
 
-                    @if($alarm->alarm_end_datetime != '')
-                    <!-- Closed Alarm  -->
+                    @if ($alarm->alarm_end_datetime != '')
+                        <!-- Closed Alarm  -->
 
-                    @include('alarm_reports.include_alarm_event_notes_track_closed', [
-
-                    'alarm' => $alarm
-                    ])
-
+                        @include('alarm_reports.include_alarm_event_notes_track_closed', [
+                            'alarm' => $alarm,
+                        ])
                     @endif
 
                 </td>

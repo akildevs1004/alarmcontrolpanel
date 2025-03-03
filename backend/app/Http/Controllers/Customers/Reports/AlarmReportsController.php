@@ -163,11 +163,13 @@ class AlarmReportsController extends Controller
         $icons = (new AlarmNotificationController())->getGoogleMapIcons();
 
 
-        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_trac', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
+        $pdf = Pdf::loadView('alarm_reports/alarm_event_notes_track', compact('alarm', 'icons'))->setPaper('A4', 'potrait');
         return $pdf->download($request->alarm_id . "_event_track_notes.pdf");
     }
     public function alarmEventsNotesPrintPdf(Request $request)
     {
+
+
 
         if (!$request->filled('alarm_id')) return [];
         $alarm =   AlarmEvents::with([

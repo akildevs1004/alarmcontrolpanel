@@ -1179,6 +1179,9 @@ Route::post('/cameratesting', function (Request $request) {
         ]);
 });
 Route::get('/testmail', function () {
+
+    // abort(500, 'Test error for email');
+
     Mail::to("venuakil2@gmail.com")->send(new TestMail());
 });
 Route::get('/test_attachment', function () {

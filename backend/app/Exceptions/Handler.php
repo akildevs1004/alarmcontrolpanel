@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ErrorOccurred;
+use Exception;
+use PhpOffice\PhpSpreadsheet\Calculation\ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -41,10 +43,32 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    // public function register()
+    // {
+    //     $this->reportable(function (Throwable $e) {
+    //         $this->sendErrorEmail($e);
+    //     });
+    // }
+    public function report(Exception $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+
+        // parent::report($exception);
+
+        $this->sendErrorEmail($exception);
+    }
+
+
+    protected function sendErrorEmail(Exception $exception)
+    {
+        // Prepare the error details
+        $errorDetails = [
+            'exception_message' => $exception->getMessage(),
+            'exception_file' => $exception->getFile(),
+            'exception_line' => $exception->getLine(),
+            'stack_trace' => $exception->getTraceAsString(),
+        ];
+
+        Mail::to('xtremegurad@gmail.com')->send(new ErrorOccurred($errorDetails));
+        Mail::to('venuakil2@gmail.com')->send(new ErrorOccurred($errorDetails));
     }
 }
