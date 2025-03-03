@@ -7,6 +7,7 @@ const data = async ({ $auth, redirect }) => {
     security: "/operator/dashboard",
     technician: "/technician/dashboard",
     //operator: "/technician/dashboard",
+    master: "/master",
   };
 
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
@@ -14,14 +15,14 @@ const data = async ({ $auth, redirect }) => {
   }
 
   if (!$auth.user || !$auth.user.user_type) {
-    return redirect("/master"); // Fallback in case of null values
+    return redirect("/alarm/dashboard"); // Fallback in case of null values
   }
 
-  if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
-    return redirect("/master");
-  }
+  // if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
+  //   return redirect("/master");
+  // }
   //console.log("$auth.user.user_type", $auth.user.user_type);
 
-  redirect(userType[$auth.user.user_type] || "/master");
+  redirect(userType[$auth.user.user_type] || "/alarm/dashboard");
 };
 export default data;

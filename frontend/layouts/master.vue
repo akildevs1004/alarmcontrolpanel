@@ -300,6 +300,12 @@ export default {
     };
   },
   created() {
+    const userType = this.$auth.user.user_type;
+
+    if (userType != "master") {
+      this.$router.push("/alarm/dashboard");
+    }
+
     this.items = this.items.filter((e) => e.permission == true);
   },
   methods: {

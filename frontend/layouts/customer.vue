@@ -6,6 +6,7 @@
       </v-snackbar>
     </div>
     <AudioSoundPlay
+      v-if="activeAudio"
       :key="notificationsMenuItems.length"
       :notificationsMenuItemsCount="notificationsMenuItems.length"
     />
@@ -718,6 +719,7 @@ export default {
   },
   data() {
     return {
+      activeAudio: true,
       notificationAlarmDevicesContentData: null,
       popupKey: 1,
       key: 1,
@@ -1520,6 +1522,7 @@ export default {
     },
 
     logout() {
+      this.activeAudio = false;
       this.$axios.get(`/logout`).then(({ res }) => {
         this.$auth.logout();
       });

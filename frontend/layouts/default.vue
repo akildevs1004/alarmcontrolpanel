@@ -6,6 +6,7 @@
       </v-snackbar>
     </div>
     <AudioSoundPlay
+      v-if="activeAudio"
       :key="notificationsMenuItems.length"
       :notificationsMenuItemsCount="notificationsMenuItems.length"
     />
@@ -735,6 +736,7 @@ export default {
   },
   data() {
     return {
+      activeAudio: true,
       popupKey: 1,
       key: 1,
       snackbar: false,
@@ -905,6 +907,12 @@ export default {
         if (window) window.location.reload();
       } catch (e) {}
     }, 1000 * 60 * 60);
+  },
+  beforeUnmount() {
+    console.log("Component is unmounted!");
+  },
+  onBeforeUnmount() {
+    console.log("Component is unmounted!");
   },
 
   async mounted() {
@@ -1536,6 +1544,7 @@ export default {
     },
 
     logout() {
+      this.activeAudio = false;
       this.$axios.get(`/logout`).then(({ res }) => {
         this.$auth.logout();
       });
