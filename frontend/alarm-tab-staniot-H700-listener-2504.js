@@ -1,6 +1,7 @@
 const net = require("net");
 const fs = require("fs");
 const axios = require("axios");
+const { execSync } = require("child_process");
 
 const port = 2504;
 let isAPIConnected = false;
@@ -107,7 +108,15 @@ async function parseMessage(message) {
     const timestamp = `${year}-${month}-${day} ${time}`;
 
     const logEntry = `${deviceId},${eventCode},${timestamp},RECORDNUMBER,${area},${zone}`;
+
+    if (!fs.existsSync(logFilePath)) {
+      fs.writeFileSync(logFilePath, ""); // Create an empty file if it doesn’t exist
+    }
+    fs.chmodSync(logFilePath, 0o775);
+    execSync(`chown www-data:www-data ${logFilePath}`);
+
     fs.appendFileSync(logFilePath, logEntry + "\n");
+
     console.log("Event Found ", eventCode);
     await sendToBackend(timestamp);
   } else {
