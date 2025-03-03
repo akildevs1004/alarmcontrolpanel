@@ -205,58 +205,58 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
                     $devices = Device::where('serial_number', $serial_number)->first();;
-
-                    $alarm_type = $devices->device_type ?? '';
-                    $device_model = $devices->model_number ?? '';
-
-                    if ($device_model == 'H700-TAB') //H700 Tab
-                    {
-                        if ($event == '1100') {
-                            $alarm_type = 'SOS';
-                        } else if ($event == '1130') {
-                            $alarm_type = 'Tampered';
-                        }
-                    } else  if ($device_model == 'XG-808') //XTream Box
-                    {
-
-                        if ($event == '1120') {
-                            $alarm_type = 'SOS';
-                        } else  if ($event == '1133') {
-                            $alarm_type = '24Hours';
-                        } else  if ($event == '1137') {
-                            $alarm_type = 'Tampered';
-                        } else if ($event == '1301') {
-                            $alarm_type = 'AC_off';
-                        } else if ($event == '1309') {
-                            $alarm_type = 'DC_off';
-                        }
-                        if ($event == '3301') {
-                            $alarm_type = '';
-                            //AC_Power Recovery
-                            $this->closeACOffAlarmsBySerialNumber($serial_number);
-                        }
-                        if ($event == '3309') {
-                            $alarm_type = '';
-                            //AC_Power Recovery
-                            $this->closeDCOffAlarmsBySerialNumber($serial_number);
-                        }
-                        // if ($event == '1132') {
-                        //     $alarm_type = 'Regular Alarm';
-                        // }
-                        //1301 - AC Loss
-                        //1309 - Battery Loss
-                        //1321 - Restart Started
-                        //1351 - Restart End and System is on// Battery Loss
-                        //3301 - AC Recovery
-                        //3309 - DC Recovery
-
-                        //1406 - disam
-                        //1455 - disam
-
-                    }
-
-                    //Identify Alarm Type based on zone and sensor type value
                     if ($devices) {
+                        $alarm_type = $devices->device_type ?? '';
+                        $device_model = $devices->model_number ?? '';
+
+                        if ($device_model == 'H700-TAB') //H700 Tab
+                        {
+                            if ($event == '1100') {
+                                $alarm_type = 'SOS';
+                            } else if ($event == '1130') {
+                                $alarm_type = 'Tampered';
+                            }
+                        } else  if ($device_model == 'XG-808') //XTream Box
+                        {
+
+                            if ($event == '1120') {
+                                $alarm_type = 'SOS';
+                            } else  if ($event == '1133') {
+                                $alarm_type = '24Hours';
+                            } else  if ($event == '1137') {
+                                $alarm_type = 'Tampered';
+                            } else if ($event == '1301') {
+                                $alarm_type = 'AC_off';
+                            } else if ($event == '1309') {
+                                $alarm_type = 'DC_off';
+                            }
+                            if ($event == '3301') {
+                                $alarm_type = '';
+                                //AC_Power Recovery
+                                $this->closeACOffAlarmsBySerialNumber($serial_number);
+                            }
+                            if ($event == '3309') {
+                                $alarm_type = '';
+                                //AC_Power Recovery
+                                $this->closeDCOffAlarmsBySerialNumber($serial_number);
+                            }
+                            // if ($event == '1132') {
+                            //     $alarm_type = 'Regular Alarm';
+                            // }
+                            //1301 - AC Loss
+                            //1309 - Battery Loss
+                            //1321 - Restart Started
+                            //1351 - Restart End and System is on// Battery Loss
+                            //3301 - AC Recovery
+                            //3309 - DC Recovery
+
+                            //1406 - disam
+                            //1455 - disam
+
+                        }
+
+                        //Identify Alarm Type based on zone and sensor type value
+
                         $deviceId = $devices->id;
                         $areaTesting = $area == '00' ? null : $area;
 
