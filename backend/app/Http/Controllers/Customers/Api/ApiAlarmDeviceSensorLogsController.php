@@ -256,66 +256,67 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                     }
 
                     //Identify Alarm Type based on zone and sensor type value
+                    if ($devices) {
+                        $deviceId = $devices->id;
+                        $areaTesting = $area == '00' ? null : $area;
 
-                    $deviceId = $devices->id;
-                    $areaTesting = $area == '00' ? null : $area;
+                        $sensorType = DeviceZones::where("device_id", $deviceId)
+                            ->where("area_code", $areaTesting)
+                            ->where("zone_code", $zone)
+                            ->pluck("sensor_type");
 
-                    $sensorType = DeviceZones::where("device_id", $deviceId)
-                        ->where("area_code", $areaTesting)
-                        ->where("zone_code", $zone)
-                        ->pluck("sensor_type");
+                        if (isset($sensorType[0])) {
+                            $alarmTypes = [
+                                'Water Leakage Sensor' => 'Water',
+                                'Fire Sensor' => 'Fire',
+                                'Medical Sensor' => 'Medical',
+                                'SOS Sensor' => 'SOS',
+                                'Temperature Sensor' => 'Temperature',
 
-                    if (isset($sensorType[0])) {
-                        $alarmTypes = [
-                            'Water Leakage Sensor' => 'Water',
-                            'Fire Sensor' => 'Fire',
-                            'Medical Sensor' => 'Medical',
-                            'SOS Sensor' => 'SOS',
-                            'Temperature Sensor' => 'Temperature',
-
-                        ];
-                        if (!empty($sensorType) && isset($alarmTypes[$sensorType[0]]))
-                            $alarm_type = $alarmTypes[$sensorType[0]];
-                    }
-
-                    //--------------------------------------
-
-                    Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarm_type ' . $alarm_type . "-" . $event  . "-" . $zone);
-
-
-                    //$area =   $devices->area_code ?? '';
-                    if ($alarm_type != '' && $event != '' && $zone != '') {
-
-                        $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
-
-
-                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . $count);
-
-
-                        if ($count == 0) {
-                            $records  = [
-                                "serial_number" => $serial_number,
-                                "log_time" => $log_time,
-                                "alarm_status" => 1,
-                                "alarm_type" => $alarm_type,
-                                "area" => $area,
-                                "zone" => $zone,
-                                "alarm_source" => $alarm_source,
-                                "event_code" => $event,
                             ];
-
-                            $insertedRecord = AlarmLogs::create($records);
-                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 insertedRecord');
-
-
-                            $message[] =  $this->getMeta("New Alarm Log Is interted With zone", $log_time . "<br/>\n");
-                            $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
-                        } else {
-
-                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . "Alarm Already Exist", $log_time);
-                            $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
+                            if (!empty($sensorType) && isset($alarmTypes[$sensorType[0]]))
+                                $alarm_type = $alarmTypes[$sensorType[0]];
                         }
-                    }
+
+                        //--------------------------------------
+
+                        Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarm_type ' . $alarm_type . "-" . $event  . "-" . $zone);
+
+
+                        //$area =   $devices->area_code ?? '';
+                        if ($alarm_type != '' && $event != '' && $zone != '') {
+
+                            $count = AlarmLogs::where("serial_number", $serial_number)->where("log_time", $log_time)->where("zone", $zone)->where("area", $area)->count();
+
+
+                            Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . $count);
+
+
+                            if ($count == 0) {
+                                $records  = [
+                                    "serial_number" => $serial_number,
+                                    "log_time" => $log_time,
+                                    "alarm_status" => 1,
+                                    "alarm_type" => $alarm_type,
+                                    "area" => $area,
+                                    "zone" => $zone,
+                                    "alarm_source" => $alarm_source,
+                                    "event_code" => $event,
+                                ];
+
+                                $insertedRecord = AlarmLogs::create($records);
+                                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 insertedRecord');
+
+
+                                $message[] =  $this->getMeta("New Alarm Log Is interted With zone", $log_time . "<br/>\n");
+                                $this->updateCompanyIds($insertedRecord, $serial_number, $log_time);
+                            } else {
+
+                                Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 alarmcount ' . "Alarm Already Exist", $log_time);
+                                $message[] =  $this->getMeta("Alarm Already Exist", $log_time . "<br/>\n");
+                            }
+                        }
+                    } //device
                 } else if ($zone == ''   && $event != '') {
 
                     Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 Zone Empty');
