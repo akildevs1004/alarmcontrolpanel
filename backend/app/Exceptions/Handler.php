@@ -3,7 +3,10 @@
 
 namespace App\Exceptions;
 
+use App\Mail\ErrorOccurred;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,8 +47,12 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // $this->reportable(function (Throwable $e) {
+
+        // });
+
+        $this->reportable(function (Exception $exception) {
+            $this->sendErrorEmail($exception);
         });
     }
 
@@ -59,17 +66,17 @@ class Handler extends ExceptionHandler
     // }
 
 
-    // protected function sendErrorEmail(\Exception $exception)
-    // {
-    //     // Prepare the error details
-    //     $errorDetails = [
-    //         'exception_message' => $exception->getMessage(),
-    //         'exception_file' => $exception->getFile(),
-    //         'exception_line' => $exception->getLine(),
-    //         'stack_trace' => $exception->getTraceAsString(),
-    //     ];
+    protected function sendErrorEmail(\Exception $exception)
+    {
+        // Prepare the error details
+        $errorDetails = [
+            'exception_message' => $exception->getMessage(),
+            'exception_file' => $exception->getFile(),
+            'exception_line' => $exception->getLine(),
+            'stack_trace' => $exception->getTraceAsString(),
+        ];
 
-    //     Mail::to('xtremegurad@gmail.com')->send(new ErrorOccurred($errorDetails));
-    //     Mail::to('venuakil2@gmail.com')->send(new ErrorOccurred($errorDetails));
-    // }
+        Mail::to('xtremegurad@gmail.com')->send(new ErrorOccurred($errorDetails));
+        Mail::to('venuakil2@gmail.com')->send(new ErrorOccurred($errorDetails));
+    }
 }
