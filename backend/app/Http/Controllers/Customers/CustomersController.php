@@ -1673,8 +1673,8 @@ class CustomersController extends Controller
         $body_content1 .= "Priority: Low<br/><br/>";
         $body_content1 .= "Property: {$device->customer->buildingtype->name}<br/>";
         $body_content1 .= "Address: {$device->customer->street_number}, {$device->customer->area}, {$device->customer->city}, {$device->customer->state}<br/>";
-
-        $body_content1 .= "Contact Number: {$device['customer']['contact_number']}<br/><br/>";
+        if ($contact)
+            $body_content1 .= "Contact Number: {$contact->contact_number}<br/><br/>";
         $body_content1 .= "Google Map Link: <a href='https://maps.google.com/?q={$location}'>View on Google Maps</a><br/><br/><br/>";
         $body_content1 .= "Thanks,<br/>Xtreme Guard<br/>";
 
@@ -1728,8 +1728,8 @@ class CustomersController extends Controller
         $body_content1 .= "Priority: Low\n\n";
         $body_content1 .= "Property: {$device->customer->buildingtype->name}\n";
         $body_content1 .= "Address: {$device->customer->street_number}, {$device->customer->area}, {$device->customer->city}, {$device->customer->state}\n";
-
-        $body_content1 .= "Contact Number: {$device['customer']['contact_number']}\n\n";
+        if ($contact->contact_number)
+            $body_content1 .= "Contact Number: {$contact->contact_number}\n\n";
         $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location} \n\n\n";
         $body_content1 .= "Thanks,\nXtreme Guard\n";
 
