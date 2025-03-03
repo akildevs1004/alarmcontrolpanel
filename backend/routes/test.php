@@ -145,7 +145,8 @@ Route::get("create_test_sos_alarm", function (Request $request) {
 
     $content = $request->serial_number . ",9999," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone . PHP_EOL;;
 
-    chmod(Storage::path($csvPath), 0775);
+    exec("chmod 775 " . escapeshellarg(Storage::path($csvPath)));
+
     Storage::append($csvPath,  $content);
 
     return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();
