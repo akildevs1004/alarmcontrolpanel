@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
     }
 
 
-    protected function sendErrorEmail(Exception $exception)
+    protected function sendErrorEmail(\Exception $exception)
     {
         // Prepare the error details
         $errorDetails = [
