@@ -146,7 +146,7 @@
 
     </footer>
     <main>
-        <hr style="color:#ddd;margin-top:10px " />
+
         <table class="table-border-header" style="width:100%;" cellspacing="0" cellpadding="0">
             <tr>
                 <td colspan="2" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">Customer Details</td>
@@ -157,7 +157,7 @@
 
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
                             <td rowspan="4" style="width:100px;text-align:center"> <img
-                                    style="border-radius: 50%;height: 70px;min-height: 70px;  "
+                                    style="border-radius: 10%;height: 70px;min-height: 70px;  "
                                     src="{{ $customerLogo }}" /> </td>
 
                             <td style="font-weight:bold">Customer/Building Name</td>

@@ -243,10 +243,10 @@
                             <td rowspan="4" style="width:100px;text-align:center">
 
                                 @if (isset($icons[$alarm->alarm_type]))
-                                    <img style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
+                                    <img style=" border-radius: 50%; width: 60px;  max-width: 60px;  "
                                         src="{{ env('BASE_PUBLIC_URL') }}/alarm_icons/{{ $icons[$alarm->alarm_type] }}" />
                                 @else
-                                    <img style=" border-radius: 50%; width: 40px;  max-width: 40px;  "
+                                    <img style=" border-radius: 50%; width: 60px;  max-width: 60px;  "
                                         src="{{ env('BASE_PUBLIC_URL') }}/alarm_icons//event.png" />
                                 @endif
                             </td>
