@@ -113,6 +113,7 @@
             'company' => $alarm['device']['company'],
             'title2' => 'Alarm Urgest',
             'qrcode' => 'qrcode',
+            'alarm_id' => $alarm['id'],
         ])
 
 

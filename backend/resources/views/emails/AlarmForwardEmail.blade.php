@@ -113,6 +113,7 @@
             'company' => $alarm['device']['company'],
             'title2' => 'Alarm Urgest',
             'qrcode' => 'qrcode',
+            'alarm_id' => $alarm['id'],
         ])
 
 
@@ -373,7 +374,6 @@
                             @if (strtolower($contact->address_type) != 'police' &&
                                     strtolower($contact->address_type) != 'medical' &&
                                     strtolower($contact->address_type) != 'fire')
-
                                 <tr>
                                     <td>
                                         {{ ucfirst($contact->address_type) }}
@@ -394,7 +394,6 @@
                                     </td>
 
                                 </tr>
-
                             @endif
                         @endforeach
 
