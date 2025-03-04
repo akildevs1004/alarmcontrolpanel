@@ -402,6 +402,23 @@
     "module": "settings",
     "top_menu_name": "settings"
   },
+
+  {
+    "icon": "mdi-account-details-outline",
+    "title": "Events",
+    "to": "/alarm/customersevents",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
+  {
+    "icon": "mdi-account-group",
+    "title": "Reports",
+    "to": "/alarm/customerseventsgroup",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
   {
     "icon": "mdi-lock-outline",
     "title": "Armed",
@@ -415,22 +432,6 @@
     "icon": "mdi-message-text-lock-outline",
     "title": "Notifications",
     "to": "/alarm/armednotifications",
-    "menu": "device_access",
-    "module": "settings",
-    "top_menu_name": "alarm_reports"
-  },
-  {
-    "icon": "mdi-account-details-outline",
-    "title": "Events",
-    "to": "/alarm/customersevents",
-    "menu": "device_access",
-    "module": "settings",
-    "top_menu_name": "alarm_reports"
-  },
-  {
-    "icon": "mdi-account-group",
-    "title": "Reports",
-    "to": "/alarm/customerseventsgroup",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"

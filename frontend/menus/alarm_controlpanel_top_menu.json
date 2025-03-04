@@ -32,7 +32,7 @@
   {
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Reports",
-    "to": "/alarm/armedreports",
+    "to": "/alarm/customersevents",
     "menu": "alarm_reports",
     "module": "topmenu"
   },
