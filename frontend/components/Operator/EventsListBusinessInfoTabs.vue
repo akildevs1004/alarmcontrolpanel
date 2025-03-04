@@ -24,7 +24,9 @@
       <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
         >System</v-tab
       >
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+      <v-tab
+        v-if="$auth.user"
+        style="font-size: 12px; min-width: 50px !important; color: black"
         >Events</v-tab
       >
       <v-tab-item>
@@ -134,31 +136,23 @@
               hide-arrows-on-hover
               hide-delimiters
               hide-arrows
-              :style="'height:' + parseInt(browserHeight - 200) + 'px'"
+              :height="browserHeight - 210"
             >
-              <template
+              <v-carousel-item
                 v-for="(item, index) in customer.profile_pictures"
-                :name="item.id"
+                :key="i"
+                style="margin: auto"
               >
-                <v-carousel-item>
-                  <!-- <div style="text-align: Left">
-                    {{ index + 1 }}: {{ item.title }}
-                  </div> -->
-                  <v-img
-                    :style="
-                      'height:' +
-                      parseInt(browserHeight - 200) +
-                      'px;width:' +
-                      parseInt(browserWidth - 700) +
-                      'px'
-                    "
-                    contain
-                    :src="
-                      item?.picture ? item.picture : '/no-profile-image.jpg'
-                    "
-                  ></v-img>
-                </v-carousel-item>
-              </template>
+                <v-img
+                  :style="{
+                    height: browserHeight - 200 + 'px',
+                    width: browserWidth - 600 + 'px',
+                    margin: auto,
+                  }"
+                  :src="item?.picture ? item.picture : '/no-profile-image.jpg'"
+                  contain
+                />
+              </v-carousel-item>
             </v-carousel>
           </v-col>
         </v-row>
@@ -298,8 +292,7 @@ export default {
     currentSlide: 0,
     currentCameraSlide: 0,
     imageLoaded: {},
-    // IMG_PLOTTING_WIDTH: process?.env?.IMG_PLOTTING_WIDTH || "500PX",
-    // IMG_PLOTTING_HEIGHT: process?.env?.IMG_PLOTTING_HEIGHT || "500PX",
+
     loadingImagesstatus: false,
     keyPlottings: 1,
     browserWidth: 1200,
@@ -310,6 +303,29 @@ export default {
     setTimeout(() => {
       this.loadingImagesstatus = true;
     }, 1000 * 10);
+
+    // setTimeout(() => {
+    //   // Get all elements with the class .v-carousel__item and .v-carousel
+    //   let carousels = document.querySelectorAll(".v-carousel__item");
+    //   let carousels2 = document.querySelectorAll(".v-carousel");
+
+    //   console.log("carousels", carousels);
+    //   console.log("carousels2", carousels2);
+
+    //   // Check if browserHeight is defined, otherwise get the window height
+    //   let browserHeight =
+    //     window.innerHeight || document.documentElement.clientHeight;
+
+    //   // Loop through each .v-carousel__item element and set its height
+    //   carousels.forEach((carousel) => {
+    //     carousel.style.height = `${browserHeight - 200}px`; // Adding height style
+    //   });
+
+    //   // Loop through each .v-carousel element and set its height
+    //   carousels2.forEach((carousel) => {
+    //     carousel.style.height = `${browserHeight - 200}px`; // Adding height style
+    //   });
+    // }, 1000 * 10); // 5 seconds delay
   },
   created() {
     //if (this.customer) console.log("customer", this.customer);
@@ -327,6 +343,7 @@ export default {
     onResize() {
       try {
         if (window) this.browserWidth = window.innerWidth;
+        // if (window) this.browserHeight = window.innerHeight;
       } catch (e) {}
     },
     getAreaName(area_code) {
