@@ -5,9 +5,7 @@
 </template>
 
 <script>
-import Componentqrcodeevent from "../components/Operator/componentqrcodeevent.vue";
-
-// import ComponentQrcodeEvent from "../components/Operator/ComponentQrcodeEvent.vue";
+import Componentqrcodeevent from "../components/Operator/QrcodeEventComponent.vue";
 
 export default {
   auth: false,
