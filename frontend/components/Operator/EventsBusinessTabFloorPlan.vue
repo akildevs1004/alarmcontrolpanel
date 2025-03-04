@@ -11,44 +11,42 @@
           hide-arrows-on-hover
           hide-delimiters
           hide-arrows
-          :height="parseInt(IMG_PLOTTING_HEIGHT) + 50"
+          :height="
+            browserHeight > 700 ? browserHeight - 210 : browserHeight - 30
+          "
         >
           <v-carousel-item
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
           >
-            <v-card
-              ><v-card-text elevation="2" style="text-align: center">
-                <v-chip
-                  color="#203864"
-                  style="color: #fff; margin-bottom: 2px"
-                  label
-                  >{{ index + 1 }}: {{ item.title }}</v-chip
-                >
-                <div
-                  :style="
-                    'margin: auto;position: relative;width:' +
-                    IMG_PLOTTING_WIDTH
+            <div style="text-align: center">
+              <v-chip
+                color="#203864"
+                style="color: #fff; margin-bottom: 2px"
+                label
+                >{{ index + 1 }}: {{ item.title }}</v-chip
+              >
+              <div
+                :style="
+                  'margin: auto;position: relative;width:' + IMG_PLOTTING_WIDTH
+                "
+              >
+                <img
+                  :id="
+                    'plotting' +
+                      item.photo_plottings[0]?.customer_building_picture_id ?? 0
                   "
-                >
-                  <img
-                    :id="
-                      'plotting' +
-                        item.photo_plottings[0]?.customer_building_picture_id ??
-                      0
-                    "
-                    class="photo-img"
-                    :src="item.picture"
-                    :width="IMG_PLOTTING_WIDTH"
-                    :height="IMG_PLOTTING_HEIGHT"
-                    @load="
-                      onImageLoad(
-                        item.photo_plottings[0]?.customer_building_picture_id ??
-                          0
-                      )
-                    "
-                  />
-                  <!-- <img
+                  class="photo-img"
+                  :src="item.picture"
+                  :width="IMG_PLOTTING_WIDTH"
+                  :height="IMG_PLOTTING_HEIGHT"
+                  @load="
+                    onImageLoad(
+                      item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                    )
+                  "
+                />
+                <!-- <img
               :id="
                 'plotting' +
                   item.photo_plottings[0]?.customer_building_picture_id ?? 0
@@ -64,35 +62,32 @@
                 )
               "
             /> -->
-                  <span
-                    v-if="
-                      item.photo_plottings[0] &&
-                      imageLoaded[
-                        item.photo_plottings[0]?.customer_building_picture_id ??
-                          0
-                      ]
+                <span
+                  v-if="
+                    item.photo_plottings[0] &&
+                    imageLoaded[
+                      item.photo_plottings[0]?.customer_building_picture_id ?? 0
+                    ]
+                  "
+                >
+                  <PlottingIcon
+                    v-if="plottingStatus && item.photo_plottings[0]"
+                    v-for="(plotting, idx) in item.photo_plottings[0].plottings"
+                    :key="'plotting' + idx"
+                    :plotting="plotting"
+                    :picture-id="
+                      item.photo_plottings[0]?.customer_building_picture_id ?? 0
                     "
-                  >
-                    <PlottingIcon
-                      v-if="plottingStatus && item.photo_plottings[0]"
-                      v-for="(plotting, idx) in item.photo_plottings[0]
-                        .plottings"
-                      :key="'plotting' + idx"
-                      :plotting="plotting"
-                      :picture-id="
-                        item.photo_plottings[0]?.customer_building_picture_id ??
-                        0
-                      "
-                      :alarm="alarm"
-                    />
-                  </span>
-                </div> </v-card-text
-            ></v-card>
+                    :alarm="alarm"
+                  />
+                </span>
+              </div>
+            </div>
           </v-carousel-item>
         </v-carousel>
       </v-col>
     </v-row>
-    <!-- <v-row style="margin-top: 0px">
+    <v-row style="margin-top: 0px" v-if="browserHeight - 210 > 550">
       <v-col>
         <div
           style="
@@ -133,7 +128,7 @@
           </div>
         </div>
       </v-col>
-    </v-row> -->
+    </v-row>
     <!-- <v-row>
       <v-col style="width: 600px; overflow: scroll">
         <v-row justify="center" dense>
@@ -211,7 +206,7 @@ export default {
       this.$axios
         .get("device_sensor_types_dropdown", {
           params: {
-            company_id: this.$auth.user.company_id,
+            //company_id: this.$auth.user.company_id,
           },
         })
         .then(({ data }) => {
