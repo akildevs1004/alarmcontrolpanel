@@ -103,7 +103,8 @@
                     src="https://alarmbackend.xtremeguard.org/api/qrcodeevent?content={{ $alarm_id }}" />
             @endif
 
-            <div style="font-size:9px;margin:auto;padding-top:5px">SCAN {{ date('d M Y ') }}</div>
+            <div style="font-size:9px;margin:auto;padding-top:5px"> {{ !empty($alarm_id) ? 'SCAN' : '' }}
+                {{ date('d M Y ') }}</div>
 
 
 
