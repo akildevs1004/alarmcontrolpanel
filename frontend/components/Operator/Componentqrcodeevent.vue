@@ -25,6 +25,7 @@
                 @emitreloadEventNotes3="reloadEventNotes4()"
                 @emitShowCustomerInfoTabs="changeStatusBusinessInfoTabs"
                 :browserHeight="browserHeight"
+                :qrcode="true"
               />
             </div>
           </v-card-text>

@@ -163,6 +163,7 @@
                   :key="contact.address_type"
                   @emitreloadEventNotesStep1="emitreloadEventNotes2"
                   :browserHeight="browserHeight"
+                  :qrcode="qrcode"
                 />
               </v-card-text>
             </v-card>
@@ -178,7 +179,15 @@ import EventCustomerTabContacts from "../../components/Operator/EventCustomerTab
 
 export default {
   components: { EventCustomerTabContacts },
-  props: ["_id", "isPopup", "customer", "alarm", "colorcodes", "browserHeight"],
+  props: [
+    "_id",
+    "isPopup",
+    "customer",
+    "alarm",
+    "colorcodes",
+    "browserHeight",
+    "qrcode",
+  ],
   data: () => ({
     tab: "",
   }),

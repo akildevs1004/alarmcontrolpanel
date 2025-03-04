@@ -95,15 +95,15 @@
             </table>
 
         </td>
-        <td style=" text-align: right; width:200px; ;margin:auto;vertical-align:middle;margin:auto">
+        <td style=" text-align: center; width:90px; ;margin:auto;vertical-align:middle;margin:auto">
 
 
             @if (!empty($alarm_id))
                 <img style="width:80px;   "
-                    src="{{ env('BASE_PUBLIC_URL') }}/api/alarm_notes_print_pdf?company_id=8&alarm_id=212" />
+                    src="https://alarmbackend.xtremeguard.org/api/qrcodeevent?content={{ $alarm_id }}" />
             @endif
 
-            <div style="font-size:9px;margin:auto">SCAN {{ date('Y-m-d ') }}</div>
+            <div style="font-size:9px;margin:auto;padding-top:5px">SCAN {{ date('d M Y ') }}</div>
 
 
 

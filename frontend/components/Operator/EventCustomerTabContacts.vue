@@ -483,7 +483,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="qrcode == null">
           <v-col class="text-center">
             <v-btn
               @click="dialogOperatorNotes = true"
@@ -508,7 +508,14 @@ import AlarmForwardEvent from "../Alarm/AlarmForwardEvent.vue";
 
 export default {
   components: {},
-  props: ["alarmId", "alarm", "customer", "contact_type", "browserHeight"],
+  props: [
+    "alarmId",
+    "alarm",
+    "customer",
+    "contact_type",
+    "browserHeight",
+    "qrcode",
+  ],
   data: () => ({
     responseList: [
       null,

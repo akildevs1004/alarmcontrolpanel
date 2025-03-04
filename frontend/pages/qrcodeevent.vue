@@ -20,7 +20,7 @@ export default {
   created() {
     this.alarm_id = null; //parseInt("209");
     try {
-      this.alarm_id = this.$route.query.eventid;
+      this.alarm_id = parseInt(this.$route.query.eventid) / 9999;
     } catch (e) {}
   },
 };
