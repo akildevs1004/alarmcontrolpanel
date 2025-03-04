@@ -324,10 +324,15 @@ Route::get('get_page_roles_menu_data', [RolePermissionsController::class, 'getPa
 Route::post('create_default_roles', [RolePermissionsController::class, 'createDefaultRoles']);
 
 
-Route::get("qrcode", function (Request $request) {
+Route::get("qrcodeevent", function (Request $request) {
 
     if ($request->filled("content")) {
-        $qrCode = QrCode::size(300)->generate($request->content);
+
+
+        $event_id = $request->content;
+        $content = env("WEBSITE_LINK") . '/qrcodeevent?eventid=' . $event_id;
+
+        $qrCode = QrCode::size(300)->generate($content);
 
         return response($qrCode)->header('Content-Type', 'image/svg+xml');
     }
