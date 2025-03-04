@@ -821,34 +821,13 @@ export default {
     if (window) window.removeEventListener("resize", this.onResize);
   },
   async mounted() {
-    setTimeout(() => {
-      this.onResize();
-    }, 1000 * 5);
-
-    setTimeout(() => {
-      this.onResize();
-    }, 1000 * 10);
-
-    if (window) window.addEventListener("resize", this.onResize);
-
-    // if (window) {
-    //   this.windowHeight = window.innerHeight - 20;
-    //   this.windowWidth = window.innerWidth;
-    // }
     // setTimeout(() => {
-    //   this.getDatafromApi("alarm");
-    // }, 1000 * 2);
-    // await this.getMapKey();
-    // setInterval(async () => {}, 1000 * 8);
-    setInterval(async () => {
-      // if (this.$route.name == "operator-dashboard")
-      {
-        await this.getDatafromApi(this.filterText);
-        //setTimeout(async () => {
-        await this.getCustomersDatafromApi();
-        //}, 1000);
-      }
-    }, 1000 * 5);
+    //   this.onResize();
+    // }, 1000 * 5);
+
+    try {
+      //if (window) window.addEventListener("resize", this.onResize);
+    } catch (e) {}
 
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
@@ -863,6 +842,16 @@ export default {
     await this.getAlarmTypes();
     this.loadStatistics = true;
     // setTimeout(() => {}, 1000 * 2);
+
+    setInterval(async () => {
+      if (this.$route.name == "operator-map") {
+        await this.getDatafromApi(this.filterText);
+        //setTimeout(async () => {
+        await this.getCustomersDatafromApi();
+        //}, 1000);
+      }
+    }, 1000 * 5);
+    this.onResize();
   },
 
   async created() {
@@ -870,7 +859,7 @@ export default {
     this.colorcodesTable = this.$utils.getAlarmIconsNoGoogle();
 
     this.loadCustomersList();
-    this.onResize();
+    //this.onResize();
   },
   watch: {},
   methods: {

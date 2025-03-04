@@ -920,19 +920,25 @@ export default {
           window.innerHeight,
           screen.height
         );
-        if (window)
-          if (
-            window.innerWidth === screen.width
-            //   &&            window.innerHeight === screen.height
-          ) {
-            console.log("Window is maximized!", this.$route.path);
-            // this.$router.replace({
-            //   path: this.$route.path,
-            //   query: this.$route.query,
-            // });
-            // // this.$router.push(this.$route.path);
-            window.location.reload();
-          }
+        console.log("Window is maximized!", this.$route.page, this.$route.path);
+        if (
+          this.$route.page != "operator-map" &&
+          this.$route.path != "/operator/map"
+        ) {
+          if (window)
+            if (
+              window.innerWidth === screen.width
+              //   &&            window.innerHeight === screen.height
+            ) {
+              console.log("Window is maximized!", this.$route.path);
+              // this.$router.replace({
+              //   path: this.$route.path,
+              //   query: this.$route.query,
+              // });
+              // // this.$router.push(this.$route.path);
+              window.location.reload();
+            }
+        }
       } catch (e) {
         console.log(e);
       }

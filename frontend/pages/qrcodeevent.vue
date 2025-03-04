@@ -38,6 +38,8 @@ export default {
     try {
       let id = parseInt(this.$route.query.eventid) / 9999;
 
+      id = parseInt(id);
+
       if (id > 0 && id != NaN) this.alarm_id = parseInt(id);
     } catch (e) {}
   },
