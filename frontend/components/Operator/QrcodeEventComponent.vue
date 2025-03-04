@@ -37,6 +37,20 @@
           <v-card-text
             :style="' padding:0px;height:' + parseInt(browserHeight) + 'px'"
           >
+            <div
+              style="
+                width: 100%;
+                margin: auto;
+                height: 600px;
+                padding-top: 20%;
+                font-weight: bold;
+                text-align: center;
+              "
+              v-if="data.length == 0"
+            >
+              <div>Event Details are Not available.</div>
+            </div>
+
             <EventsListBusinessInfoTabs
               v-if="
                 data &&
@@ -405,10 +419,10 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          eventID: this.filterText,
+          eventID: this.alarm_id ? this.alarm_id : this.filterText,
           filterBuildingType: this.filterBuildingType,
           filterAlarmStatus: this.filterAlarmStatus,
-          eventID: this.alarm_id,
+
           filterAlarmType: this.filterAlarmType,
         },
         cancelToken: this.cancelGetdatafromAPITokenSource.token,

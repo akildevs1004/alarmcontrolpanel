@@ -1,6 +1,24 @@
 <template>
   <div>
-    <Componentqrcodeevent :alarm_id="alarm_id" :key="alarm_id" />
+    <Componentqrcodeevent
+      v-if="alarm_id"
+      :alarm_id="alarm_id"
+      :key="alarm_id"
+    />
+    <div v-else>
+      <div
+        style="
+          width: 100%;
+          margin: auto;
+          height: 600px;
+          padding-top: 20%;
+          font-weight: bold;
+          text-align: center;
+        "
+      >
+        <div>Event Details are Not available.</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +36,9 @@ export default {
   created() {
     this.alarm_id = null; //parseInt("209");
     try {
-      this.alarm_id = parseInt(this.$route.query.eventid) / 9999;
+      let id = parseInt(this.$route.query.eventid) / 9999;
+
+      if (id > 0 && id != NaN) this.alarm_id = parseInt(id);
     } catch (e) {}
   },
 };
