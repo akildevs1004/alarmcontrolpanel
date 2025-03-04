@@ -30,7 +30,7 @@ class ErrorOccurred extends Mailable
      */
     public function build()
     {
-        return $this->subject('Application Error Report' . date("Y-m-d H:i:s"))
+        return $this->subject('Application Error Report - ' . date("Y-m-d H:i:s"))
             ->view('emails.error_report'); // Create this view
     }
 }

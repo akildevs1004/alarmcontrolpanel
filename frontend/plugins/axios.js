@@ -7,18 +7,18 @@ export default ({ app, $axios, store }, inject) => {
     pendingRequests.forEach(({ cancel }) => cancel("Request Canceled ......."));
     pendingRequests.length = 0; // Clear the array
   };
-  $axios.onError((error) => {
-    try {
-      console.log("error", error);
+  // $axios.onError((error) => {
+  //   try {
+  //     console.log("error", error);
 
-      if (error.response && error.response.status === 401) {
-        app.$auth.refreshTokens();
-        app.$auth.reset();
-      }
-      pendingRequests.shift(); // Remove the oldest request from the queue
-      //return Promise.reject(error);
-    } catch (e) {}
-  });
+  //     if (error.response && error.response.status === 401) {
+  //       app.$auth.refreshTokens();
+  //       app.$auth.reset();
+  //     }
+  //     pendingRequests.shift(); // Remove the oldest request from the queue
+  //     //return Promise.reject(error);
+  //   } catch (e) {}
+  // });
   $axios.onRequest(async (config) => {
     if (!config) return config;
     let user = store.state.auth.user;

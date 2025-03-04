@@ -33,11 +33,9 @@ use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
 use App\Models\DeviceArmedLogs;
 use App\Models\MapKey;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::apiResource('customers', CustomersController::class);
 Route::get('customerinfo', [CustomersController::class, "customerinfo"]);
@@ -324,3 +322,13 @@ Route::post('role_update_permission_pages', [RolePermissionsController::class, '
 Route::get('role_get_permission_pages', [RolePermissionsController::class, 'getRolePermissions']);
 Route::get('get_page_roles_menu_data', [RolePermissionsController::class, 'getPageRolesMenuList']);
 Route::post('create_default_roles', [RolePermissionsController::class, 'createDefaultRoles']);
+
+
+Route::get("qrcode", function (Request $request) {
+
+    if ($request->filled("content")) {
+        $qrCode = QrCode::size(300)->generate($request->content);
+
+        return response($qrCode)->header('Content-Type', 'image/svg+xml');
+    }
+});

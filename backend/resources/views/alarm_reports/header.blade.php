@@ -98,8 +98,9 @@
         <td style=" text-align: right; width:200px; ;margin:auto;vertical-align:middle;margin:auto">
 
 
-            @if (!empty($qrcode))
-                <img style="width:80px;   " src="{{ env('BASE_PUBLIC_URL') }}/qrcode.png" />
+            @if (!empty($alarm_id))
+                <img style="width:80px;   "
+                    src="{{ env('BASE_PUBLIC_URL') }}/api/alarm_notes_print_pdf?company_id=8&alarm_id=212" />
             @endif
 
             <div style="font-size:9px;margin:auto">SCAN {{ date('Y-m-d ') }}</div>

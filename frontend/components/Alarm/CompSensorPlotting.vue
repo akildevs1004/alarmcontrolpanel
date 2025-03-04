@@ -342,7 +342,7 @@ export default {
       this.$axios
         .get("device_sensor_types_dropdown", {
           params: {
-            company_id: this.$auth.user.company_id,
+            // company_id: this.$auth.user.company_id,
           },
         })
         .then(({ data }) => {

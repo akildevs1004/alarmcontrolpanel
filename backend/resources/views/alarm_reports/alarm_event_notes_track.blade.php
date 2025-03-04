@@ -101,6 +101,7 @@
             'title1' => $title1,
             'company' => $alarm['device']['company'],
             'title2' => '',
+            'alarm_id' => $alarm['id'],
         ])
 
 

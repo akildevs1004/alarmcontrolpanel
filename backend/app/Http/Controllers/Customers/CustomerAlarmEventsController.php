@@ -598,7 +598,13 @@ class CustomerAlarmEventsController extends Controller
             "device.sensorzones",
             "zoneData"
 
-        ])->where('company_id', $request->company_id)
+        ])
+
+            ->when($request->filled("company_id"), function ($q) use ($request) {
+
+
+                $q->where("company_id", $request->company_id);
+            })
             ->when($request->filled("filterAlarmType"), function ($q) use ($request) {
 
 

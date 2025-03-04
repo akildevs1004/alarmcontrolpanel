@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import EventCustomerTabContacts from "./EventCustomerTabContacts.vue";
+import EventCustomerTabContacts from "../../components/Operator/EventCustomerTabContacts.vue";
 
 export default {
   components: { EventCustomerTabContacts },

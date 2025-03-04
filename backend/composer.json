@@ -19,7 +19,7 @@
         "maatwebsite/excel": "^3.1",
         "opcodesio/log-viewer": "^2.5",
         "sapientpro/image-comparator": "^1.0",
-        "simplesoftwareio/simple-qrcode": "4.2",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
         "techtailor/rpg": "^1.0",
         "webklex/laravel-pdfmerger": "^1.3"

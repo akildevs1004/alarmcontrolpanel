@@ -51,7 +51,11 @@ class Handler extends ExceptionHandler
 
         // });
 
-        $this->reportable(function (Exception $exception) {
+        // $this->reportable(function (Exception $exception) {
+        //     $this->sendErrorEmail($exception);
+        // });
+
+        $this->reportable(function (Throwable $exception) {
             $this->sendErrorEmail($exception);
         });
     }

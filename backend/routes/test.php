@@ -347,6 +347,22 @@ Route::get("test900device2", function (Request $request) {
     $device = Device::where("device_id", "M014200892110002761")->first();
     return  $responseData['data'] = (new DeviceCameraModel2Controller($device->camera_sdk_url))->getSettings($device);
 });
+
+Route::get("testqrcode", function (Request $request) {
+    $qrCode = QrCode::size(300)->generate('Hello, Laravel 11!');
+
+    return response($qrCode)->header('Content-Type', 'image/svg+xml');
+
+
+
+
+    return  QrCode::format('png')->size(300)->generate('https://example.com', public_path('qr-codes/qr_code.png'));
+
+    QrCode::size(500)
+        ->format('png')
+        ->generate('www.google.com', storage_path('app/public/111.png'));
+    exit;
+});
 Route::get("whatsappqrcode", function (Request $request) {
 
     $device = Device::where("device_id", "M014200892110002761")->first();

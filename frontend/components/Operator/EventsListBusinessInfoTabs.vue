@@ -145,8 +145,8 @@
               >
                 <v-img
                   :style="{
-                    height: browserHeight - 200 + 'px',
-                    width: browserWidth - 600 + 'px',
+                    height: browserHeight - 230 + 'px',
+                    width: browserWidth - 700 + 'px',
                     margin: auto,
                   }"
                   :src="item?.picture ? item.picture : '/no-profile-image.jpg'"
@@ -292,6 +292,8 @@ export default {
     currentSlide: 0,
     currentCameraSlide: 0,
     imageLoaded: {},
+    i: null,
+    auto: null,
 
     loadingImagesstatus: false,
     keyPlottings: 1,
