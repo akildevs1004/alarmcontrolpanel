@@ -35,6 +35,7 @@ use App\Models\DeviceArmedLogs;
 use App\Models\MapKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Ramsey\Uuid\Type\Integer;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::apiResource('customers', CustomersController::class);
@@ -329,7 +330,7 @@ Route::get("qrcodeevent", function (Request $request) {
     if ($request->filled("content")) {
 
 
-        $event_id = $request->content;
+        $event_id =  (int)$request->content * 9999;
         $content = env("WEBSITE_LINK") . '/qrcodeevent?eventid=' . $event_id;
 
         $qrCode = QrCode::size(300)->generate($content);
