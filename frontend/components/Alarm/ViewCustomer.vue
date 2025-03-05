@@ -182,21 +182,19 @@
                     <div v-if="customer.devices.length == 0">
                       0 Devices/Sensor
                     </div>
-                    <span style="float: left; width: 60px">
+                    <span
+                      style="float: left; width: 60px"
+                      v-for="sensor in customerSensors"
+                      v-if="sensor"
+                    >
                       <img
-                        v-if="
-                          $dateFormat.verifyDeviceSensorName(
-                            'Burglary',
-                            customer.devices
-                          )
-                        "
-                        title="Burglary"
+                        :title="sensor.name"
                         style="width: 40px; float: left"
-                        src="/device-icons/burglary.png"
+                        :src="'/sensor_type_icons/' + sensor.image"
                       />
                     </span>
 
-                    <span style="float: left; width: 60px">
+                    <!-- <span style="float: left; width: 60px">
                       <img
                         title="Medial"
                         v-if="
@@ -247,7 +245,7 @@
                         style="width: 40px; float: left"
                         src="/device-icons/temperature.png"
                       />
-                    </span>
+                    </span> -->
                   </v-col>
                 </v-row>
               </v-col>
@@ -607,7 +605,7 @@ export default {
 
       try {
         this.$axios
-          .get(`customer_device_types`, this.payloadOptions)
+          .get(`customer_device_sensor_names`, this.payloadOptions)
           .then(({ data }) => {
             this.customerSensors = data;
           });

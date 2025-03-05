@@ -67,6 +67,8 @@ Route::apiResource('customers_building_cameras', CustomerCamerasController::clas
 Route::apiResource('customer_contact', CustomerContactsController::class);
 Route::post('update_customer_settings', [CustomersController::class, 'updateCustomerSettings']);
 Route::get('customer_device_types', [CustomersController::class, 'customerDeviceTypes']);
+Route::get('customer_device_sensor_names', [CustomersController::class, 'customerDeviceSensorNames']);
+
 Route::get('customers_list', [CustomersController::class, 'getCustomersList']);
 Route::post('reset_customer_alarm_pin', [CustomersController::class, 'resetCustomerPin']);
 Route::post("security_customers_update", [CustomersController::class, "SecurityCustomersListUpdate"]);

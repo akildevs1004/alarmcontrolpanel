@@ -25,6 +25,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToArray;
+
+use function PHPSTORM_META\map;
 
 class CustomersController extends Controller
 {
@@ -504,6 +507,30 @@ class CustomersController extends Controller
 
         // Convert to array if needed
         return  $distinctValues = $mergedCollection->toArray();
+    }
+    public function customerDeviceSensorNames(Request $request)
+    {
+
+
+        $sensorNames = DeviceZones::whereHas('device', function ($query) use ($request) {
+            $query->where('company_id', $request->company_id)
+                ->where('customer_id', $request->customer_id);
+        })
+            ->with('sensor_types:id,name,image')
+            ->get();
+
+
+        $sensors = $sensorNames->map(function ($value) {
+            if ($value->sensor_types) {
+                return [
+                    "name" => $value->sensor_types->name,
+                    "image" => $value->sensor_types->image,
+                ];
+            }
+            return null;
+        })->filter()->values();
+
+        return $sensors;
     }
     public function updateCustomerSettings(Request $request)
     {

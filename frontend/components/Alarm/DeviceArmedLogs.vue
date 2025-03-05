@@ -40,10 +40,11 @@
           <v-col></v-col>
           <v-col class="text-right" style="min-width: 500px">
             <v-row>
-              <v-col class="mt-2">
+              <v-col></v-col>
+              <v-col class="mt-2" style="max-width: 100px">
                 <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
               </v-col>
-              <v-col style=""
+              <v-col style="max-width: 250px"
                 ><v-text-field
                   style="padding-top: 7px; width: 200px"
                   height="20"
@@ -59,7 +60,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col style="">
+              <v-col style="max-width: 200px">
                 <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
