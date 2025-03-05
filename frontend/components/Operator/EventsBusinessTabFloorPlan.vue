@@ -18,6 +18,7 @@
           <v-carousel-item
             v-for="(item, index) in customer.photos"
             :key="'imageplotting' + item.id"
+            class="floorplanimage"
           >
             <div style="text-align: center">
               <v-chip
@@ -62,6 +63,7 @@
                 )
               "
             /> -->
+
                 <span
                   v-if="
                     item.photo_plottings[0] &&

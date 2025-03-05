@@ -101,7 +101,8 @@
 <script>
 import AlamAllEvents from "../../Alarm/ComponentAllEvents.vue";
 export default {
-  props: ["name"],
+  props: ["name", "filter_customers_list"],
+
   components: { AlamAllEvents },
   data() {
     return {
@@ -226,6 +227,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          filter_customers_list: this.filter_customers_list,
         },
       };
 

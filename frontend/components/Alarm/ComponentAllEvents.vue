@@ -583,10 +583,7 @@
                             </v-btn>
                           </template>
                           <v-list width="120" dense>
-                            <v-list-item
-                              v-if="can('branch_view')"
-                              @click="viewAlarminfo(item)"
-                            >
+                            <v-list-item @click="viewAlarminfo(item)">
                               <v-list-item-title style="cursor: pointer">
                                 <v-icon color="secondary" small>
                                   mdi-file-tree
@@ -594,10 +591,7 @@
                                 Notes
                               </v-list-item-title>
                             </v-list-item>
-                            <v-list-item
-                              v-if="can('branch_view')"
-                              @click="viewCustomerinfo(item)"
-                            >
+                            <v-list-item @click="viewCustomerinfo(item)">
                               <v-list-item-title style="cursor: pointer">
                                 <v-icon color="secondary" small>
                                   mdi-eye
@@ -606,7 +600,10 @@
                               </v-list-item-title>
                             </v-list-item>
                             <v-list-item
-                              v-if="can('branch_view')"
+                              v-if="
+                                $auth.user.user_type == 'operator' ||
+                                $auth.user.user_type == 'company'
+                              "
                               @click="eventForward(item)"
                             >
                               <v-list-item-title style="cursor: pointer">
@@ -616,15 +613,12 @@
                                 Forward
                               </v-list-item-title>
                             </v-list-item>
-                            <v-list-item
-                              v-if="can('branch_view')"
-                              @click="viewLogs(item)"
-                            >
+                            <v-list-item @click="viewLogs(item)">
                               <v-list-item-title style="cursor: pointer">
                                 <v-icon color="secondary" small>
                                   mdi-format-list-numbered
                                 </v-icon>
-                                Operator
+                                Notes
                               </v-list-item-title>
                             </v-list-item>
                           </v-list>

@@ -2649,4 +2649,11 @@ header {
   color: #fff !important;
 }
 </style>
+
+<style>
+.floorplanimage .v-responsive__content {
+  margin: auto;
+}
+</style>
+
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->

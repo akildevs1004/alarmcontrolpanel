@@ -187,7 +187,6 @@
                     v-if="customer"
                     :alarm="alarm"
                     :customer="customer"
-                    :browserHeight="browserHeight"
                   />
                   <!-- <SecurityBuildingPhotos
                     class="rounded-lg"

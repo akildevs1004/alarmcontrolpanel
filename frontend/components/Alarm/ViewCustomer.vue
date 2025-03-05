@@ -24,7 +24,11 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-card max-width="100%" style="margin-top: 10px">
+    <v-card
+      max-width="100%"
+      :style="'margin-top: 10px;min-height:' + (browserHeight - 80) + 'px'"
+      :height="browserHeight - 80"
+    >
       <div
         style="
           background: linear-gradient(to right, #645af1 60%, #9f77f3);
@@ -40,7 +44,7 @@
             >Customer Type: {{ building_type_name ?? "---" }} </v-col
           ><v-col cols="4" class="text-right" style="padding-right: 40px">
             <!-- <v-btn color="primary" dense small> Edit Profile </v-btn> -->
-            <v-btn @click="gotoCustomers()" color="primary" dense x-small>
+            <!-- <v-btn @click="gotoCustomers()" color="primary" dense x-small>
               Customers
             </v-btn>
             <v-btn
@@ -61,7 +65,7 @@
             </v-icon>
             <v-icon color="white" v-if="isPopup" @click="closePopup()" outlined>
               mdi mdi-close-circle
-            </v-icon>
+            </v-icon> -->
           </v-col>
         </v-row>
       </div>
@@ -187,7 +191,7 @@
                           )
                         "
                         title="Burglary"
-                        style="width: 23px; float: left"
+                        style="width: 40px; float: left"
                         src="/device-icons/burglary.png"
                       />
                     </span>
@@ -201,7 +205,7 @@
                             customer.devices
                           )
                         "
-                        style="width: 25px; float: left"
+                        style="width: 40px; float: left"
                         src="/device-icons/medical.png"
                       />
                     </span>
@@ -214,7 +218,7 @@
                             customer.devices
                           )
                         "
-                        style="width: 20px; float: left"
+                        style="width: 40px; float: left"
                         src="/device-icons/fire.png"
                       />
                     </span>
@@ -227,7 +231,7 @@
                           )
                         "
                         title="Water Leakage"
-                        style="width: 25px; float: left"
+                        style="width: 40px; float: left"
                         src="/device-icons/water.png"
                       />
                     </span>
@@ -240,7 +244,7 @@
                           )
                         "
                         title="Temperature"
-                        style="width: 17px; float: left"
+                        style="width: 40px; float: left"
                         src="/device-icons/temperature.png"
                       />
                     </span>
@@ -274,9 +278,13 @@
               <v-icon>mdi mdi-shield-home-outline</v-icon>
               Devices/Sensor
             </v-tab>
+            <v-tab href="#tab-11">
+              <v-icon>mdi mdi-domain</v-icon>
+              Premises Photos
+            </v-tab>
             <v-tab href="#tab-3">
               <v-icon>mdi mdi-domain</v-icon>
-              Photos
+              Floor Plan
             </v-tab>
             <v-tab href="#tab-6">
               <v-icon>mdi mdi-alarm</v-icon>
@@ -326,14 +334,32 @@
                 /></v-card-text>
               </v-card>
             </v-tab-item>
+            <v-tab-item value="tab-11">
+              <v-card flat>
+                <v-card-text>
+                  <EventBusinessTabPremisesPhotos
+                    v-if="customer"
+                    :customer="customer"
+                    :browserHeight="browserHeight - 330"
+                    :browserWidth="browserWidth"
+                  />
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
             <v-tab-item value="tab-3">
               <v-card flat>
-                <v-card-text
-                  ><AlramPhotos
+                <v-card-text>
+                  <EventsBusinessTabFloorPlan
+                    v-if="customer"
+                    :alarm="null"
+                    :customer="customer"
+                    :browserHeight="browserHeight - 300"
+                  />
+                  <!-- <AlramPhotos
                     :key="keyPhotos"
                     @closeDialog="closeDialog"
                     :customer_id="_id"
-                  />
+                  /> -->
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -425,6 +451,8 @@ import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
 import NewCustomer from "../../components/Alarm/NewCustomer.vue";
 import DeviceArmedLogs from "./DeviceArmedLogs.vue";
 import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
+import EventsBusinessTabFloorPlan from "../Operator/EventsBusinessTabFloorPlan.vue";
+import EventBusinessTabPremisesPhotos from "../Operator/EventBusinessTabPremisesPhotos.vue";
 
 export default {
   components: {
@@ -440,6 +468,8 @@ export default {
     NewCustomer,
     DeviceArmedLogs,
     AlamAllEvents,
+    EventsBusinessTabFloorPlan,
+    EventBusinessTabPremisesPhotos,
   },
   props: ["_id", "isPopup"],
   data: () => ({
@@ -469,6 +499,8 @@ export default {
     customer_secondary_contact: null,
 
     customer: null,
+    browserWidth: 1000,
+    browserHeight: 800,
   }),
   computed: {},
   mounted() {},
@@ -488,6 +520,10 @@ export default {
 
     this.getUniqueDevices();
     this.getCustomerProfilePercentage();
+    try {
+      if (window) this.browserWidth = window.innerWidth;
+      if (window) this.browserHeight = window.innerHeight;
+    } catch (e) {}
   },
   watch: {},
   methods: {

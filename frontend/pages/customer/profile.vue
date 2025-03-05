@@ -13,7 +13,8 @@ export default {
   },
 
   async created() {
-    await this.getDataFromApi(this.$auth.user?.customer?.id || null);
+    if (this.$auth.user?.customer?.id)
+      await this.getDataFromApi(this.$auth.user.customer.id);
   },
   methods: {
     async getDataFromApi(customer_id) {

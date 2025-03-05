@@ -2711,3 +2711,9 @@ td {
   max-height: calc(100% - 55px) !important;
 }
 </style>
+<style>
+.floorplanimage .v-responsive__content {
+  margin: auto;
+}
+</style>
+

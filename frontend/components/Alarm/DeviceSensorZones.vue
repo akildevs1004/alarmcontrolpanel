@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <div>
     <div class="text-center ma-2">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
@@ -213,7 +213,6 @@
       </v-col>
     </v-row>
   </div>
-  <NoAccess v-else />
 </template>
 
 <script>

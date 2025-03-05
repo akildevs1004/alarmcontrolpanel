@@ -9,6 +9,7 @@
               :key="key"
               :name="'AlarmBurglaryPieChart'"
               :compFilterSupervisor="compFilterSupervisor"
+              :filter_customers_list="filter_customers_list"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -20,6 +21,7 @@
               :key="key"
               :name="'AlarmMedicalPieChart'"
               :compFilterSupervisor="compFilterSupervisor"
+              :filter_customers_list="filter_customers_list"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -31,6 +33,7 @@
               :key="key"
               :name="'AlarmWaterPieChart3'"
               :compFilterSupervisor="compFilterSupervisor"
+              :filter_customers_list="filter_customers_list"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -42,6 +45,7 @@
               :key="key"
               :name="'AlarmBFirePieChart4'"
               :compFilterSupervisor="compFilterSupervisor"
+              :filter_customers_list="filter_customers_list"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -53,6 +57,7 @@
               :key="key"
               :name="'AlarmTemperaturePieChart5'"
               :compFilterSupervisor="compFilterSupervisor"
+              :filter_customers_list="filter_customers_list"
           /></v-card-text>
         </v-card>
       </v-col>
@@ -247,7 +252,7 @@
             >
           </v-card>
         </v-col>
-         
+
         <v-col cols="3" style="max-width: 20%">
           <v-card style="height: 35px; padding: 10px" class="elevation-0">
             <v-progress-linear
@@ -316,7 +321,7 @@ import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLiv
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
-  props: ["compFilterSupervisor"],
+  props: ["compFilterSupervisor", "filter_customers_list"],
   components: {
     AlarmBurglaryPieChart,
     AlarmTemperaturePieChart,
@@ -388,6 +393,10 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+
+          filter_customers_list: this.filter_customer_id
+            ? [this.filter_customer_id]
+            : null,
         },
       };
 

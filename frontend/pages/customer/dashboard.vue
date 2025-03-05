@@ -471,7 +471,7 @@
               ><v-card-text style="padding-left: 0px">
                 <CustomerMonthlyChart
                   v-if="loadAllEventsTable"
-                  :height="'200'"
+                  :height="tableHeight - 100"
                   :filter_customers_list="[customer_id]"
                   name="CustomerMonthlyChart1111" /></v-card-text></v-card
           ></v-col>

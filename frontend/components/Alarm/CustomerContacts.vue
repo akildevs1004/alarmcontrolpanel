@@ -75,14 +75,14 @@
     </v-dialog>
 
     <v-row>
-      <v-col cols="12" class="text-right" style="padding-top: 0px">
+      <!-- <v-col cols="12" class="text-right" style="padding-top: 0px">
         <v-btn x-small @click="dialogEditContacts = true" color="primary" dense>
           Edit Contact
         </v-btn>
         <v-btn @click="dialogEditBuilding = true" color="primary" dense x-small>
           Edit Building/Customer
         </v-btn>
-      </v-col>
+      </v-col> -->
 
       <v-col cols="4" style="line-height: 35px">
         <v-row>

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="alarm && plotting.top != '-500px' && plotting.left != '-500px'"
+    v-if="plotting.top != '-500px' && plotting.left != '-500px'"
     class="plotting-icon"
     :style="plottingStyle"
   >
@@ -26,7 +26,7 @@
         <v-icon
           v-else-if="isAlarmOff"
           style="color: red"
-          :title="alarm.alarm_type + ' Alarm OFF'"
+          :title="alarm?.alarm_type + ' Alarm OFF'"
           size="20"
         >
           mdi-circle
@@ -75,7 +75,7 @@ export default {
     },
     isAlarmOn() {
       return (
-        this.plotting.sensor_id == this.alarm.sensor_zone_id &&
+        this.plotting.sensor_id == this.alarm?.sensor_zone_id &&
         this.alarm?.alarm_status == 1
       );
       return (
@@ -87,7 +87,7 @@ export default {
     },
     isAlarmOff() {
       return (
-        this.plotting.sensor_id == this.alarm.sensor_zone_id &&
+        this.plotting.sensor_id == this.alarm?.sensor_zone_id &&
         this.alarm?.alarm_status == 0
       );
       return (

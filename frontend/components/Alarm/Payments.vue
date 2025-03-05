@@ -48,20 +48,22 @@
             "
           >
             <span style="color: green">
+              Start Date :
               {{
                 $dateFormat.format_date_month_name_year(customer?.start_date)
-              }} </span
-            >to
+              }}
+            </span>
+            End Date:
             <span style="color: red"
               >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
             </span></v-col
           >
           <v-col cols="8" class="text-right" style="width: 550px">
             <v-row>
-              <v-col cols="4"
+              <v-col></v-col>
+              <v-col style="max-width: 250px"
                 ><v-text-field
-                  style="padding-top: 7px"
-                  width="200px"
+                  style="padding-top: 7px; width: 200px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"
@@ -75,7 +77,7 @@
                   hide-details
                 ></v-text-field
               ></v-col>
-              <v-col cols="6">
+              <v-col style="max-width: 200px">
                 <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
@@ -86,12 +88,12 @@
                 />
               </v-col>
               <v-col
+                v-if="isEditable"
                 cols="1"
                 style="padding-left: 0px; width: 50px"
                 class="text-left"
               >
                 <v-btn
-                  v-if="isEditable"
                   small
                   dense
                   color="primary"
@@ -105,11 +107,11 @@
                   New
                 </v-btn>
               </v-col>
-              <v-col cols="1" style="width: 50px">
-                <!-- <v-btn icon small dense color="primary" class="ma-2">
+              <!-- <v-col cols="1" style="width: 50px">
+              <v-btn icon small dense color="primary" class="ma-2">
                   <v-icon>mdi mdi-download</v-icon>
-                </v-btn> -->
-              </v-col>
+                </v-btn>
+              </v-col> -->
             </v-row>
           </v-col>
         </v-row>
@@ -197,7 +199,7 @@ export default {
         { text: "#", value: "sno" },
         { text: "Invoice #", value: "invoice_number" },
         { text: "Amount", value: "amount" },
-        { text: "Receieved On", value: "received_date" },
+        { text: "Received On", value: "received_date" },
         { text: "Mode", value: "mode_of_payment" },
 
         { text: "Status", value: "status" },

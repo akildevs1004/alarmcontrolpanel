@@ -71,7 +71,8 @@
 
 <script>
 export default {
-  props: ["name"],
+  props: ["name", "filter_customers_list"],
+
   data() {
     return {
       totalCount: 0,
@@ -191,6 +192,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
+          filter_customers_list: this.filter_customers_list,
         },
       };
 

@@ -125,7 +125,7 @@
       app
       :style="$nuxt.$route.name == 'index' ? 'z-index: 100000' : ''"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
       <span
         class="text-overflow"
         style="cursor: pointer"
@@ -996,6 +996,8 @@ export default {
           return user.employee?.profile_picture || profilePicture;
         case "branch":
           return user.branch_logo || profilePicture;
+        case "customer":
+          return user.customer?.profile_picture || profilePicture;
         default:
           return defaultLogo;
       }
@@ -2301,3 +2303,9 @@ main {
 </style> -->
 
 <!-- <link rel="stylesheet" href="../static/css/textbox-label-style.css" /> -->
+
+<style>
+.floorplanimage .v-responsive__content {
+  margin: auto;
+}
+</style>

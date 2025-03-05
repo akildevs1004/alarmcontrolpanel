@@ -44,7 +44,7 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $model = Customers::with(["photos", "buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact", "cameras"])
+        $model = Customers::with(["photos", "profilePictures", "buildingtype", "mappedsecurity", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact", "cameras"])
             ->where("company_id", $request->company_id);
         //$model->where("deleted", 0);
         $model->when($request->filled("customer_id"), function ($q) use ($request) {

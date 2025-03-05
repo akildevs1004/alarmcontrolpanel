@@ -20,16 +20,7 @@
 
 <script>
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
-// import AlarmEventNotesListView from "../../components/Alarm/AlarmEventsNotesList.vue";
 
-// import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
-// import AlarmMedicalPieChart from "../../components/Alarm/SecurityDashboard/AlarmMedicalPieChart.vue";
-// import AlarmTemperaturePieChart from "../../components/Alarm/SecurityDashboard/AlarmTemperaturePieChart.vue";
-
-// import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFirePieChart.vue";
-
-// import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
-// import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
 import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashboardStatistics.vue";
 
 export default {

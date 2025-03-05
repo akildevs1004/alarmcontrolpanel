@@ -1,6 +1,5 @@
 <template>
-  <NoAccess v-if="!$pagePermission.can('devices_view', this)" />
-  <div v-else style="width: 100%; margin-top: -20px">
+  <div style="width: 100%; margin-top: -20px">
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}
@@ -43,7 +42,7 @@
     <v-dialog v-model="dialogZones" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Intruder - Sensors </span>
+          <span style="color: black">Device Sensors </span>
           <v-spacer></v-spacer>
           <v-icon style="color: black" @click="dialogZones = false" outlined>
             mdi mdi-close-circle
@@ -326,7 +325,7 @@
                   Find User
                 </v-list-item-title>
               </v-list-item> -->
-              <v-list-item v-if="can('device_edit')" @click="editZones(item)">
+              <v-list-item @click="editZones(item)">
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small>
                     mdi-format-list-bulleted-type
