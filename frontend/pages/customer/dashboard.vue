@@ -262,7 +262,7 @@
                   ><v-card-text
                     ><v-row style="height: 76px">
                       <v-col
-                        class="d-flex justify-center"
+                        class="text-left"
                         style="
                           font-size: 15px;
                           margin: auto;

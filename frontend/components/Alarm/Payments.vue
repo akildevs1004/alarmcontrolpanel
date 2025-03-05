@@ -53,6 +53,7 @@
                 $dateFormat.format_date_month_name_year(customer?.start_date)
               }}
             </span>
+            <br />
             End Date:
             <span style="color: red"
               >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
