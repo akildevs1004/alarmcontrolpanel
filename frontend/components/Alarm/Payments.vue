@@ -139,6 +139,12 @@
                 : "-"
             }}
           </template>
+          <template v-slot:item.invoice_number="{ item, index }">
+            {{ item.invoice_number }}
+            <div class="secondary-value">
+              {{ item.invoice_date }}
+            </div>
+          </template>
 
           <template v-slot:item.options="{ item }">
             <v-menu bottom left v-if="isEditable">
@@ -148,14 +154,14 @@
                 </v-btn>
               </template>
               <v-list width="120" dense>
-                <v-list-item v-if="can('branch_edit')" @click="editItem(item)">
+                <v-list-item v-if="!item.received_date" @click="editItem(item)">
                   <v-list-item-title style="cursor: pointer">
                     <v-icon color="secondary" small> mdi-pencil </v-icon>
                     Edit
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item
-                  v-if="can('branch_edit')"
+                  v-if="!item.received_date"
                   @click="deleteItem(item.id)"
                 >
                   <v-list-item-title style="cursor: pointer">

@@ -10,19 +10,19 @@
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black"
-            >Alarm Event Track #{{ selecteAlarm?.id }}</span
+            >Alarm Event Track #{{ selectedAlarm?.id }}</span
           >
           <v-spacer></v-spacer
           ><v-icon
             style="padding-right: 20px; color: black"
-            @click="alarmNotesPrint(selecteAlarm?.id, 'download')"
+            @click="alarmNotesPrint(selectedAlarm?.id, 'download')"
             outlined
           >
             mdi-download-box-outline
           </v-icon>
           <v-icon
             style="padding-right: 20px; color: black"
-            @click="alarmNotesPrint(selecteAlarm?.id, 'print')"
+            @click="alarmNotesPrint(selectedAlarm?.id, 'print')"
             outlined
           >
             mdi-printer-outline
@@ -39,8 +39,8 @@
         <v-card-text style="padding: 0px">
           <v-container style="min-height: 100px; padding-left: 0px">
             <AlarmNotesFormatView
-              v-if="selecteAlarm"
-              :alarm="selecteAlarm"
+              v-if="selectedAlarm"
+              :alarm="selectedAlarm"
               :key="key"
             />
           </v-container>
@@ -51,7 +51,7 @@
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black"
-            >Operator Logs #{{ selecteAlarm?.id }}</span
+            >Operator Logs #{{ selectedAlarm?.id }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
@@ -203,33 +203,40 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogTabViewCustomer" width="80%">
+    <v-dialog v-model="dialogTabViewCustomer" width="1400" height="700">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
-            @click="
-              closeDialog();
-              dialogTabViewCustomer = false;
-            "
+            @click="dialogTabViewCustomer = false"
             outlined
           >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
 
-        <v-card-text style="padding: 0px; overflow: hidden">
-          <AlarmEventCustomerContactsTabView
+        <v-card-text>
+          <TechnicianCustomerTabsView
+            v-if="selectedAlarm?.device?.customer"
+            :key="key"
+            :_id="viewCustomerId"
+            :selectedCustomer="selectedAlarm?.device?.customer"
+            :isPopup="true"
+            :isEditable="false"
+            :selectedAlarm="selectedAlarm"
+          />
+
+          <!-- <AlarmEventCustomerContactsTabView
             @closeCustomerDialog="closeCustomerDialog()"
             :key="key"
             :_customerID="viewCustomerId"
             :alarmId="eventId"
             :customer="customer"
             :isPopup="true"
-            :alarm="selecteAlarm"
-          />
+            :alarm="selectedAlarm"
+          /> -->
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -596,7 +603,7 @@
                                 <v-icon color="secondary" small>
                                   mdi-eye
                                 </v-icon>
-                                Contacts
+                                Customer
                               </v-list-item-title>
                             </v-list-item>
                             <v-list-item
@@ -650,6 +657,7 @@ import AlarmEventCustomerContactsTabView from "../../components/Alarm/AlarmEvent
 import AlarmForwardEvent from "../../components/Alarm/AlarmForwardEvent.vue";
 import SecurityAlarmNotes from "./SecurityDashboard/SecurityAlarmNotes.vue";
 import AlarmNotesFormatView from "./Reports/AlarmNotesFormatView.vue";
+import TechnicianCustomerTabsView from "./TechnicianDashboard/TechnicianCustomerTabsView.vue";
 
 export default {
   components: {
@@ -660,6 +668,7 @@ export default {
     AlarmForwardEvent,
     SecurityAlarmNotes,
     AlarmNotesFormatView,
+    TechnicianCustomerTabsView,
   },
   props: [
     "popup",
@@ -677,7 +686,7 @@ export default {
   data() {
     return {
       allEventsList: [],
-      selecteAlarm: null,
+      selectedAlarm: null,
       dialogViewAlarmFormat: false,
       customer: null,
       dialogViewLogs: false,
@@ -863,7 +872,7 @@ export default {
     },
     viewAlarminfo(alarm) {
       this.key++;
-      this.selecteAlarm = alarm;
+      this.selectedAlarm = alarm;
       this.dialogViewAlarmFormat = true;
     },
     viewCustomerinfo(item) {
@@ -879,6 +888,7 @@ export default {
           " -  Priority " +
           item.category.name;
         this.key += 1;
+
         this.viewCustomerId = item.customer_id;
         this.eventId = item.id;
         this.selectedAlarm = item;

@@ -168,6 +168,17 @@ class CustomersController extends Controller
 
 
                 if ($record) {
+
+                    //generate Invoices
+
+
+
+
+
+
+
+
+
                     return $this->response('Customer New Account is created.', $record, true);
                 } else {
                     return $this->response('Customer New Account can not create ', null, false);
@@ -1153,7 +1164,7 @@ class CustomersController extends Controller
         //     ["name" => "Building Security", "display_order" => 4],
         //     ["name" => "Community Security", "display_order" => 5],
         // ];
-        return   $data = CustomerContactTypes::orderBy("id", "asc")->get();
+        return   $data = CustomerContactTypes::orderBy("name", "asc")->get();
 
         // Fetch addressTypes from the database
         $addressTypes = CustomerContacts::where("company_id", $request->company_id)->where("display_order", ">", 0)

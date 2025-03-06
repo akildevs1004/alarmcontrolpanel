@@ -160,7 +160,7 @@
     </div>
     <v-row>
       <v-col>
-        <v-card elevation="0" class="mt-2">
+        <v-card elevation="0" class="mt-2" :height="browserHeight - 200">
           <v-toolbar
             v-if="!eventFilter"
             class="mb-2 white--text"
@@ -493,6 +493,7 @@ export default {
     CompCustomersDashboardStatistics,
   },
   data: () => ({
+    browserHeight: 900,
     setIntervalLoopstatus: true,
     error_messages: "",
     showCustomerOTP: false,
@@ -665,6 +666,9 @@ export default {
     this.getDataFromApi();
   },
   async created() {
+    try {
+      if (window) this.browserHeight = window.innerHeight;
+    } catch (e) {}
     this.loading = true;
 
     this.getSecurityList();

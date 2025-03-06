@@ -2715,5 +2715,9 @@ td {
 .floorplanimage .v-responsive__content {
   margin: auto;
 }
-</style>
 
+.floorplancarousel,
+.floorplancarousel .v-carousel__item {
+  min-height: 570px !important;
+}
+</style>

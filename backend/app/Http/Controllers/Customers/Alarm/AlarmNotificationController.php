@@ -290,6 +290,7 @@ class AlarmNotificationController extends Controller
         $property_type = $alarm['device']['customer']['buildingtype']['name'];
         $address = $alarm['device']['customer']['area'];
         $city = $alarm['device']['customer']['city'];
+
         $location = $alarm['device']['customer']['latitude'] . ',' . $alarm['device']['customer']['longitude'];
 
         $alarm_type = $alarm['alarm_type'];
@@ -298,7 +299,18 @@ class AlarmNotificationController extends Controller
         $company_name = $alarm['device']['company']['name'];
 
         $primary_contact = 'User';
-        $primary_contact = 'User';
+
+
+        $city = ucfirst($city);
+        $location = ucfirst($location);
+        $building_name = ucfirst($building_name);
+        $property_type = ucfirst($property_type);
+
+
+
+
+
+
         if ($alarm['device']['customer']['primary_contact']) {
 
 
@@ -407,6 +419,14 @@ class AlarmNotificationController extends Controller
         $location = $alarm['device']['customer']['latitude'] . ',' . $alarm['device']['customer']['longitude'];
 
         $primary_contact = 'User';
+
+
+        $city = ucfirst($city);
+        $location = ucfirst($location);
+        $building_name = ucfirst($building_name);
+        $property_type = ucfirst($property_type);
+
+
         if ($alarm['device']['customer']['primary_contact'])
             $primary_contact = $alarm['device']['customer']['primary_contact']["first_name"] . ' ' . $alarm['device']['customer']['primary_contact']["flast_name"];;;;
 

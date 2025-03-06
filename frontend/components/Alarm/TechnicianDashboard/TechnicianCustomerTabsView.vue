@@ -379,7 +379,7 @@
                   </v-col>
                 </v-row>
               </v-tab-item>
-              <v-tab-item style="height: 560px; margin-top: -20px">
+              <v-tab-item style="margin-top: -20px">
                 <EventsBusinessTabFloorPlan
                   v-if="customer"
                   :alarm="alarm"
@@ -485,7 +485,14 @@ export default {
     EventsBusinessTabFloorPlan,
     AlarmCustomerEventsLog,
   },
-  props: ["_id", "isPopup", "isMapviewOnly", "isEditable", "selectedCustomer"],
+  props: [
+    "_id",
+    "isPopup",
+    "isMapviewOnly",
+    "isEditable",
+    "selectedCustomer",
+    "selectedAlarm",
+  ],
   data: () => ({
     keySelectedItem: 1,
     currentCameraSlide: 0,
@@ -548,7 +555,11 @@ export default {
       }
     }
 
-    this.alarm = { device: { customer: this.selectedCustomer } };
+    if (selectedAlarm) {
+      this.alarm = this.selectedAlarm;
+    } else {
+      this.alarm = { device: { customer: this.selectedCustomer } };
+    }
   },
   // watch: {
   //   "selectedCustomer.alarm_status": function () {

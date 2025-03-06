@@ -351,7 +351,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card elevation="3" class="mt-3">
+    <v-card elevation="3" class="mt-3" :height="browserHeight - 370">
       <v-card-text>
         <v-row>
           <v-col>
@@ -672,6 +672,7 @@ export default {
       is_admin: false,
       userType: "",
       viewCustomerId: null,
+      browserHeight: 900,
     };
   },
   watch: {
@@ -698,6 +699,10 @@ export default {
     //   if (this.dialogViewTicket == false && this.dialogReply == false)
     //     this.getDataFromApi();
     // }, 1000 * 30);
+
+    try {
+      if (window) this.browserHeight = window.innerHeight;
+    } catch (e) {}
   },
 
   methods: {

@@ -11,6 +11,7 @@
           hide-arrows-on-hover
           hide-delimiters
           hide-arrows
+          class="floorplancarousel"
           :height="
             browserHeight > 700 ? browserHeight - 210 : browserHeight - 30
           "

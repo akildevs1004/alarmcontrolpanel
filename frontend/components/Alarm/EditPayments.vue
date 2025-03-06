@@ -27,6 +27,43 @@
               >
             </v-col>
             <v-col cols="6" dense>
+              <v-menu
+                style="z-index: 9999"
+                v-model="invoice_date_menu"
+                :close-on-content-click="false"
+                :nudge-left="145"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    style="z-index: 9999; height: 10px"
+                    outlined
+                    v-model="payload_primary.invoice_date"
+                    v-bind="attrs"
+                    v-on="on"
+                    dense
+                    x-small
+                    hide-details
+                    class="custom-text-box shadow-none"
+                    label="Invoice Date"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  no-title
+                  scrollable
+                  v-model="payload_primary.invoice_date"
+                  @input="invoice_date_menu = false"
+                ></v-date-picker>
+              </v-menu>
+              <span
+                v-if="primary_errors && primary_errors.invoice_date"
+                class="text-danger mt-2"
+                >{{ primary_errors.invoice_date[0] }}</span
+              >
+            </v-col>
+            <v-col cols="6" dense>
               <v-text-field
                 label="Amount"
                 dense
@@ -40,6 +77,22 @@
                 v-if="primary_errors && primary_errors.amount"
                 class="text-danger mt-2"
                 >{{ primary_errors.amount[0] }}</span
+              >
+            </v-col>
+            <v-col cols="6" dense>
+              <v-select
+                label="Payment Status"
+                :items="['Pending', 'Received', 'Cancelled']"
+                v-model="payload_primary.status"
+                dense
+                outlined
+                hide-details
+                small
+              ></v-select>
+              <span
+                v-if="primary_errors && primary_errors.status"
+                class="text-danger mt-2"
+                >{{ primary_errors.status[0] }}</span
               >
             </v-col>
             <v-col cols="6" dense>
@@ -77,22 +130,6 @@
                 v-if="primary_errors && primary_errors.received_date"
                 class="text-danger mt-2"
                 >{{ primary_errors.received_date[0] }}</span
-              >
-            </v-col>
-            <v-col cols="6" dense>
-              <v-select
-                label="Payment Status"
-                :items="['Pending', 'Received', 'Cancelled']"
-                v-model="payload_primary.status"
-                dense
-                outlined
-                hide-details
-                small
-              ></v-select>
-              <span
-                v-if="primary_errors && primary_errors.status"
-                class="text-danger mt-2"
-                >{{ primary_errors.status[0] }}</span
               >
             </v-col>
 
@@ -145,6 +182,8 @@ export default {
   props: ["editItem", "editId", "customer_id"],
   data: () => ({
     from_menu: false,
+    invoice_date_menu: false,
+
     show1: false,
     devicesList: [],
     zonesList: [],
@@ -187,6 +226,8 @@ export default {
       this.payload_primary.invoice_number = this.editItem.invoice_number;
       this.payload_primary.amount = this.editItem.amount;
       this.payload_primary.received_date = this.editItem.received_date;
+      this.payload_primary.invoice_date = this.editItem.invoice_date;
+
       this.payload_primary.mode_of_payment = this.editItem.mode_of_payment;
       this.payload_primary.status = this.editItem.status;
       this.payload_primary.customer_id = this.editItem.customer_id;

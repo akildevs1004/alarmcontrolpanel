@@ -437,6 +437,15 @@
     "top_menu_name": "alarm_reports"
   },
   {
+    "icon": "mdi-currency-usd",
+    "title": "Payment",
+    "to": "/alarm/payments",
+    "menu": "device_access",
+    "module": "settings",
+    "top_menu_name": "alarm_reports"
+  },
+
+  {
     "icon": "mdi-web-box",
     "title": "Admin Users",
     "open_menu": false,

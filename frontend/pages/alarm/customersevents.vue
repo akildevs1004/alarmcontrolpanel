@@ -407,7 +407,7 @@
 
         <v-row v-if="sensorItems.length > 0">
           <v-col cols="12" style="margin-top: 0px">
-            <v-card elevation="2"
+            <v-card elevation="2" :height="browserHeight - 180"
               ><v-card-text>
                 <v-tabs
                   v-if="sensorItems.length > 1"
@@ -775,6 +775,7 @@ export default {
   ],
   data() {
     return {
+      browserHeight: 900,
       filter_customer_id: null,
       customersList: [],
       showFilters: true,
@@ -872,6 +873,9 @@ export default {
     // },
   },
   created() {
+    try {
+      if (window) this.browserHeight = window.innerHeight;
+    } catch (e) {}
     this.allEventsList = [];
 
     this.allEventsList = [

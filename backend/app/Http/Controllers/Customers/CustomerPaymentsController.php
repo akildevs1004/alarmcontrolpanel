@@ -15,13 +15,30 @@ class CustomerPaymentsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = CustomerPayments::where('company_id', $request->company_id)
+        $model = CustomerPayments::with("customer")->where('company_id', $request->company_id)
             ->when(
                 $request->filled("customer_id"),
-                fn ($q) => $q->where("customer_id", $request->customer_id)
+                fn($q) => $q->where("customer_id", $request->customer_id)
+            )->when(
+                $request->filled("filter_status"),
+                fn($q) => $q->where("status", $request->filter_status)
+            )->when(
+                $request->filled("filter_mode_of_payment"),
+                fn($q) => $q->where("mode_of_payment", $request->filter_mode_of_payment)
+            )->when(
+                $request->filled("filter_customer_id"),
+                fn($q) => $q->where("customer_id", $request->filter_customer_id)
+            )->when(
+                $request->filled("common_search"),
+                fn($q) => $q->where("invoice_number", "ILIKE", "%" . $request->common_search . "%")
             )
+
+
+
+
+
             ->whereBetween(
-                'received_date',
+                'created_at',
                 [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']
             );
 
@@ -36,7 +53,7 @@ class CustomerPaymentsController extends Controller
             });
         });
 
-        $model->orderBy("received_date", "asc");
+        $model->orderBy("created_at", "DESC");
         return $model->orderByDesc('id')->paginate($request->perPage ?? 10);;
     }
 
@@ -58,19 +75,30 @@ class CustomerPaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
 
+        $rules = [
             'company_id' => 'required|integer',
             'customer_id' => 'required|integer',
             'invoice_number' => 'required',
             'amount' => 'required',
-            'received_date' => 'required',
-            'mode_of_payment' => 'required',
             'status' => 'required',
-            'paymant_id' => 'nullable',
+            'payment_id' => 'nullable', // Fixed typo from 'paymant_id'
+            'received_date' => 'nullable',
+            'mode_of_payment' => 'nullable',
+            'invoice_date' => 'nullable',
 
 
-        ]);
+
+
+        ];
+
+        // If received_date is present, make it required instead of nullable
+        if ($request->status == 'Received') {
+            $rules['received_date'] = 'required';
+            $rules['mode_of_payment'] = 'required';
+        }
+
+        $request->validate($rules);
         try {
 
 

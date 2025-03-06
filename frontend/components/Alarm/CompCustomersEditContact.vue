@@ -138,6 +138,12 @@
             </v-col>
             <v-col cols="8"
               ><v-row
+                v-if="
+                  (contact_id &&
+                    payload_primary.address_type != 'primary' &&
+                    payload_primary.address_type != 'secondary') ||
+                  !contact_id
+                "
                 ><v-col cols="6" dense>
                   <v-combobox
                     label="Contact  Type"
@@ -152,6 +158,8 @@
                   ></v-combobox
                 ></v-col>
                 <v-col cols="6" dense></v-col>
+              </v-row>
+              <v-row>
                 <v-col cols="6" dense>
                   <v-text-field
                     :readonly="isMapviewOnly"
@@ -379,7 +387,13 @@
             <v-col cols="10" class="text-right">
               <v-btn
                 small
-                v-if="!isMapviewOnly && isEditable && payload_primary.id"
+                v-if="
+                  payload_primary.address_type != 'primary' &&
+                  payload_primary.address_type != 'secondary' &&
+                  !isMapviewOnly &&
+                  isEditable &&
+                  payload_primary.id
+                "
                 :loading="loading"
                 color="error"
                 @click="deleteContact(payload_primary)"
@@ -417,6 +431,7 @@ export default {
     "isMapviewOnly",
     "isEditable",
     "contact",
+    "contact_id",
   ],
   data: () => ({
     mapkey: 1,
@@ -486,7 +501,18 @@ export default {
     // this.getBranchesList();
     if (this.$store.state.storeAlarmControlPanel?.AddressTypes) {
       this.addressTypes = this.$store.state.storeAlarmControlPanel.AddressTypes;
+
       this.addressTypes = this.addressTypes.map((item) => item.name);
+
+      if (this.customer_contacts) {
+        let addressTypesAlreadyAddeed = this.customer_contacts.map((item) =>
+          item.address_type.toLowerCase()
+        );
+
+        this.addressTypes = this.addressTypes.filter(
+          (e) => !addressTypesAlreadyAddeed.includes(e.toLowerCase())
+        );
+      }
     }
     if (this.customer && this.contact) {
       this.payload_primary = this.contact;

@@ -64,6 +64,7 @@
               :isMapviewOnly="isMapviewOnly"
               :isEditable="isEditable"
               :key="key"
+              :customer_contacts="customer_contacts"
             />
           </v-container>
         </v-card-text>
@@ -102,14 +103,7 @@
       <v-row>
         <v-col cols="12">
           <v-tabs right show-arrows class="tabswidthalignment">
-            <v-tab
-              v-for="(item, index) in customer_contacts"
-              :key="item.id"
-              v-if="
-                item.address_type != 'primary' &&
-                item.address_type != 'secondary'
-              "
-            >
+            <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
               {{ item.address_type }}</v-tab
             >
             <v-tab-item
@@ -126,6 +120,8 @@
                   :isMapviewOnly="isMapviewOnly"
                   :isEditable="isEditable"
                   :key="item.id"
+                  :contact_id="item.id"
+                  :customer_contacts="customer_contacts"
                 />
                 <!-- <v-row>
                   <v-col cols="10">
