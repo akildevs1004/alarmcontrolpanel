@@ -3,7 +3,11 @@
     <!-- <v-dialog v-model="dialog" max-width="200px">TTTTTTTTTTT</v-dialog> -->
     <div
       :id="'mapCustomer' + contact_id"
-      :style="'height:' + mapheight || '210px' + ' ; width: 100%'"
+      :style="
+        'border-radious:10%; height:' +
+        (mapheight ? mapheight : '210px') +
+        ' ; width: 100%'
+      "
     ></div>
 
     <!-- <v-btn

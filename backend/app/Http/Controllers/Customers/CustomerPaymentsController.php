@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customers\CustomerPayments;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerPaymentsController extends Controller
@@ -174,5 +175,69 @@ class CustomerPaymentsController extends Controller
             $modelEvent->delete();
 
         return $this->response('Payment Deleted successfully', null, true);
+    }
+
+    public function CustomerProductInvoiceSubmition(Request $request)
+    {
+
+
+        $request->validate(
+            [
+                'company_id' => 'required|integer',
+                'customer_id' => 'required|integer',
+                'device_service_id' => 'required|integer',
+                'end_date' => 'required',
+                'start_date' => 'required',
+                'payment_type' => 'required',
+                'product_discount_price' => 'required|numeric',
+                'product_final_price' => 'required|numeric|gt:0',
+                'product_price' => 'required|numeric|gt:0',
+
+
+            ]
+        );
+
+        $invoiceFormat = "INV000001";
+        if ($request->payment_type == 'Yearly') {
+
+            $date1 = Carbon::parse($request->start_date); // Start date
+            $date2 = Carbon::parse($request->end_date); // End date
+
+            $diffYears = $date1->diff($date2)->y;  // Difference in years
+            $diffMonths = $date1->diff($date2)->m; // Remaining months
+
+            $totalInvoiceCount = 1;
+            if ($diffYears > 0 &&  $diffMonths > 1)
+                $totalInvoiceCount = $diffYears + 1;
+
+
+            $maxId = CustomerPayments::query()->orderBy("id", "desc")->value("id");
+            //$invoiceFormat = sprintf("INV%06d", $maxId);
+            $invoiceFormat = sprintf("INV%d%06d", $request->company_id, $maxId + 1);
+            for ($i = 1; $i <= $totalInvoiceCount; $i++) {
+
+
+                $date = Carbon::parse($request->start_date); // Current date
+                $invoice_date = $date->addDays(365 * ($i - 1))->format('Y-m-d'); // Add 365 days
+
+                $data = [
+                    "company_id" => $request->company_id,
+                    "customer_id" => $request->customer_id,
+                    "invoice_number" => $invoiceFormat,
+                    "amount" => $request->product_final_price,
+                    "status" => "Pending",
+                    "invoice_date" => $invoice_date,
+
+                ];
+
+                CustomerPayments::create($data);
+            }
+
+
+            return  $this->response("Invoices created sucsessfully.", null, true);
+        }
+
+
+        return  $this->response("Error Occured", null, false);
     }
 }

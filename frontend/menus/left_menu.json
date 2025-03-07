@@ -388,14 +388,14 @@
   },
   {
     "icon": "mdi-briefcase-account",
-    "title": "Supervisor/Forward Events",
+    "title": "Forward",
     "to": "/alarm/supervisorevents",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "settings"
   },
   {
-    "icon": "mdi-briefcase-account",
+    "icon": "mdi-account-wrench",
     "title": "Technicians",
     "to": "/alarm/technicians",
     "menu": "device_access",
@@ -404,17 +404,17 @@
   },
 
   {
-    "icon": "mdi-account-details-outline",
-    "title": "Events",
-    "to": "/alarm/customersevents",
+    "icon": "mdi-account-group",
+    "title": "Reports",
+    "to": "/alarm/customerseventsgroup",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"
   },
   {
-    "icon": "mdi-account-group",
-    "title": "Reports",
-    "to": "/alarm/customerseventsgroup",
+    "icon": "mdi-bell-ring",
+    "title": "Events",
+    "to": "/alarm/customersevents",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"
@@ -446,7 +446,7 @@
   },
 
   {
-    "icon": "mdi-web-box",
+    "icon": "mdi-account-star",
     "title": "Admin Users",
     "open_menu": false,
     "to": "/settings/users",
@@ -454,7 +454,7 @@
     "top_menu_name": "settings"
   },
   {
-    "icon": "mdi-web-box",
+    "icon": "mdi-playlist-check",
     "title": "Roles",
     "open_menu": false,
     "to": "/settings/role",
@@ -462,10 +462,18 @@
     "top_menu_name": "settings"
   },
   {
-    "icon": "mdi-web-box",
+    "icon": "mdi-format-list-bulleted-square",
     "title": "Web Logs",
     "open_menu": false,
     "to": "/web_login_logs",
+    "module": "settings",
+    "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-account-star",
+    "title": "Services",
+    "open_menu": false,
+    "to": "/settings/products",
     "module": "settings",
     "top_menu_name": "settings"
   }

@@ -178,6 +178,7 @@
             Account
             <v-icon> mdi-currency-usd</v-icon>
           </v-tab>
+
           <v-tab
             class="customer-tab"
             style="max-width: 50px"
@@ -185,6 +186,14 @@
           >
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
+          </v-tab>
+          <v-tab
+            class="customer-tab"
+            style="max-width: 50px"
+            v-if="!isMapviewOnly"
+          >
+            Products
+            <v-icon> mdi-clipboard-list-outline</v-icon>
           </v-tab>
         </v-tabs>
       </v-col>
@@ -316,7 +325,7 @@
               </v-card-text>
             </v-card> </v-tab-item
           ><v-tab-item>
-            <v-card flat>
+            <v-card>
               <v-card-text elevation="2" class="pl-0">
                 <AlarmSettings
                   v-if="_id"
@@ -326,6 +335,22 @@
                   :customer="customer"
                   :isMapviewOnly="isMapviewOnly"
                   :isEditable="isEditable"
+                />
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card>
+              <v-card-text elevation="2" class="pl-0" style="height: 650px">
+                <Services
+                  v-if="_id"
+                  @closeDialog="closeDialog"
+                  :key="keySettings"
+                  :customer_id="_id"
+                  :customer="customer"
+                  :isMapviewOnly="isMapviewOnly"
+                  :isEditable="isEditable"
+                  @callInvoiceTab="OpenInvoiceTab"
                 />
               </v-card-text>
             </v-card>
@@ -345,6 +370,7 @@ import AlarmDashboardHumidityChart1 from "../../components/Alarm/CustomerDashboa
 import AlarmDashboardTemparatureChart2 from "../../components/Alarm/CustomerDashboardTemparatureChart2.vue";
 import CustomerAlarmEvents from "../../components/Alarm/CustomerAlarmEvents.vue";
 import AlarmSettings from "../../components/Alarm/Settings.vue";
+
 import CustomerDashboard from "../../components/Alarm/CustomerDashboard.vue";
 // import NewCustomer from "../../components/Alarm/NewCustomer.vue";
 import DeviceArmedLogs from "./DeviceArmedLogs.vue";
@@ -352,6 +378,7 @@ import AlamAllEvents from "../Alarm/ComponentAllEvents.vue";
 import AlarmEditContact from "../../components/Alarm/EditContacts.vue";
 import BuildingPhotos from "./BuildingPhotos.vue";
 import CameraList from "./CameraList.vue";
+import Services from "../../components/Alarm/Services.vue";
 
 export default {
   components: {
@@ -370,6 +397,7 @@ export default {
     AlarmEditContact,
     BuildingPhotos,
     CameraList,
+    Services,
   },
   props: ["_id", "isPopup", "isMapviewOnly", "isEditable", "selectedCustomer"],
   data: () => ({
@@ -431,6 +459,10 @@ export default {
     gotoCustomers() {
       this.$router.push("/alarm/customers");
       return;
+    },
+
+    OpenInvoiceTab() {
+      this.tab = 6;
     },
     changeTab() {
       if (this.tab == "tab-1") {

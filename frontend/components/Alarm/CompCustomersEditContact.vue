@@ -114,7 +114,6 @@
 
               <div>
                 <CompGoogleMapLatLan
-                  v-if="payload_primary"
                   :latitude="payload_primary.latitude"
                   :longitude="payload_primary.longitude"
                   :title="
@@ -122,7 +121,9 @@
                   "
                   :contact_id="payload_primary.id"
                   :key="mapkey"
+                  mapheight="200px"
                 />
+                <br />
                 <div class="text-center">
                   <v-btn
                     v-if="isEditable || isMapviewOnly"

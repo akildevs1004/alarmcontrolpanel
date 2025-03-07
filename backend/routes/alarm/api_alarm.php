@@ -24,6 +24,7 @@ use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
+use App\Http\Controllers\DeviceProductServicesController;
 use App\Http\Controllers\DeviceZonesController;
 use App\Http\Controllers\DeviceZoneTypesController;
 use App\Http\Controllers\PlottingController;
@@ -32,6 +33,7 @@ use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
 use App\Models\DeviceArmedLogs;
+use App\Models\DeviceProductServices;
 use App\Models\MapKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +89,8 @@ Route::get('building_types', [CustomersController::class, 'buildingTypes']);
 Route::get('alarm_types', [CustomersController::class, 'alarmTypes']);
 
 Route::get('address_types', [CustomersController::class, 'addressTypes']);
+
+
 Route::get('device_models', [CustomersController::class, 'deviceModels']);
 Route::get('device_types', [CustomersController::class, 'deviceTypes']);
 Route::post('device_zones_update', [CustomersController::class, 'updateDeviceZones']);
@@ -219,6 +223,7 @@ Route::delete('delete-automation', [DeviceNotificationsManagersController::class
 
 Route::apiResource('customer_payments', CustomerPaymentsController::class);
 Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);
+Route::post('customer_product_invoice_submition',  [CustomerPaymentsController::class, 'CustomerProductInvoiceSubmition']);
 
 
 Route::get('plotting', [PlottingController::class, "index"]);
@@ -327,11 +332,17 @@ Route::get('get_page_roles_menu_data', [RolePermissionsController::class, 'getPa
 Route::post('create_default_roles', [RolePermissionsController::class, 'createDefaultRoles']);
 
 
+Route::apiResource('device_product_services',  DeviceProductServicesController::class);
+Route::get('device_product_services_group',  [DeviceProductServicesController::class, 'DeviceProductServicesGroup']);
+
+
+
+
+
+
 Route::get("qrcodeevent", function (Request $request) {
 
     if ($request->filled("content")) {
-
-
         $event_id =  (int)$request->content * 9999;
         $content = env("WEBSITE_LINK") . '/qrcodeevent?eventid=' . $event_id;
 

@@ -2243,7 +2243,18 @@ button {
 .employee-schedule-cropdown .mdi-menu-down {
   padding-top: 7px;
 }
-
+.small-dropdown .v-input__slot {
+  min-height: 30px !important;
+}
+.small-dropdown .v-label {
+  line-height: 11px !important;
+}
+.small-dropdown .v-input__icon {
+  height: 17px !important;
+}
+.small-dropdown {
+  height: 20px;
+}
 .employee-schedule-search-box .v-input__slot {
   min-height: 30px !important;
 }
@@ -2719,5 +2730,153 @@ td {
 .floorplancarousel,
 .floorplancarousel .v-carousel__item {
   min-height: 570px !important;
+}
+
+.greenborder {
+  border-left: 1px solid black;
+
+  border-right: 1px solid black;
+}
+.yellowborder {
+  border-right: 1px solid black;
+}
+.blackborder {
+  border-right: 1px solid black;
+}
+
+.pricing-container {
+  display: flex;
+  gap: 20px;
+}
+
+.pricing-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 250px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-container .header {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+}
+
+.basic .header {
+  background: #4a49da;
+}
+.standard .header {
+  background: #f4c000;
+}
+.premium .header {
+  background: #e91e63;
+}
+
+.price {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+
+  text-align: left;
+}
+
+.check {
+  font-size: 18px;
+}
+
+.basic .check {
+  color: #4a49da;
+}
+.standard .check {
+  color: #f4c000;
+}
+.premium .check {
+  color: #e91e63;
+}
+.disabled {
+  color: #ccc;
+}
+
+.buy-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.basic .buy-button {
+  background: #4a49da;
+}
+.standard .buy-button {
+  background: #f4c000;
+}
+.premium .buy-button {
+  background: #e91e63;
+}
+.services-table td {
+  text-align: left;
+}
+.services-table .v-data-table__wrapper {
+  min-height: 200px;
+}
+.custom-header-background {
+  background-color: #1976d2 !important; /* Change to your preferred color */
+  color: white !important; /* Text color */
+}
+
+#table-services {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table-services td,
+#table-services th {
+  border-top: 1px solid #ddd;
+  padding: 6px;
+}
+
+#table-services tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#table-services tr:hover {
+  background-color: #ddd;
+}
+#table-services td {
+  text-align: left;
+}
+#table-services th {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: left;
+  background-color: #203864;
+  color: white;
+  font-weight: normal;
+}
+
+#table-services .v-radio {
+  margin: auto;
 }
 </style>

@@ -25,17 +25,17 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="newSecurityDialog" max-width="700px">
+    <v-dialog v-model="newProductDialog" max-width="300px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense> {{ editId ? "Update" : "New" }} Operator Account</span>
+          <span dense> {{ editId ? "Update" : "New" }} Product Service</span>
           <v-spacer></v-spacer>
-          <v-icon @click="newSecurityDialog = false" outlined>
+          <v-icon @click="newProductDialog = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <AlarmNewSecurity
+          <EditProduct
             :key="key"
             :editId="editId"
             :item="item"
@@ -55,7 +55,9 @@
         >
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
-              <span style="color: black"> Operators</span></v-toolbar-title
+              <span style="color: black">
+                Product Services</span
+              ></v-toolbar-title
             >
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
@@ -134,66 +136,7 @@
                   : ""
               }}
             </template>
-            <template
-              v-slot:item.first_name="{ item, index }"
-              style="width: 300px"
-            >
-              <v-row no-gutters>
-                <v-col
-                  style="
-                    padding: 5px;
-                    padding-left: 0px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                >
-                  <v-img
-                    style="
-                      border-radius: 50%;
-                      height: 50px;
-                      width: 50px;
-                      max-width: 50px;
-                    "
-                    :src="
-                      item.picture ? item.picture : '/no-business_profile.png'
-                    "
-                  >
-                  </v-img>
-                </v-col>
-                <v-col style="padding: 10px">
-                  <div style="font-size: 13px">
-                    {{
-                      item.first_name
-                        ? item.first_name + " " + item.last_name
-                        : ""
-                    }}
-                  </div>
-                </v-col>
-              </v-row>
-            </template>
-            <template v-slot:item.customers="{ item }">
-              {{ item.customers_assigned?.length || "0" }}
-            </template>
-            <template v-slot:item.contact_number="{ item }">
-              {{ item.contact_number }}
-            </template>
-            <template v-slot:item.email="{ item }">
-              {{ item.user?.email || "---" }}
-            </template>
-            <template v-slot:item.status="{ item }">
-              <img
-                v-if="item.user?.web_login_access == 1"
-                title="Active"
-                style="width: 60px"
-                src="/on.png"
-              />
-              <img
-                v-else-if="item.user?.web_login_access == 0"
-                title="Inactive"
-                style="width: 60px"
-                src="/off.png"
-              />
-            </template>
+
             <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">
@@ -211,17 +154,7 @@
                       View
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
-                    v-if="can('operators_view')"
-                    @click="viewCustomers(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small>
-                        mdi-account-multiple
-                      </v-icon>
-                      Customers
-                    </v-list-item-title>
-                  </v-list-item>
+
                   <v-list-item
                     @click="editItem(item)"
                     v-if="can('operators_edit')"
@@ -254,12 +187,14 @@
 import AlarmNewSecurity from "../../components/Alarm/EditSecurity.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
+import EditProduct from "../../components/Alarm/EditProduct.vue";
 
 export default {
   components: {
     AlarmNewSecurity,
     AlarmCustomerView,
     SecurityCustomersList,
+    EditProduct,
   },
   data: () => ({
     dialogSecurityCustomers: false,
@@ -277,7 +212,7 @@ export default {
     tableHeight: 750,
     id: "",
 
-    newSecurityDialog: false,
+    newProductDialog: false,
     dialogViewCustomer: false,
     totalRowsCount: 0,
 
@@ -287,7 +222,7 @@ export default {
     departments: [],
     Model: "Log",
     security_id: null,
-    endpoint: "security",
+    endpoint: "device_product_services",
     payload: {},
     loading: true,
     browserHeight: 700,
@@ -300,26 +235,24 @@ export default {
       },
       {
         text: "Name",
-        value: "first_name",
+        value: "name",
       },
       {
-        text: "Contact Number",
-        value: "contact_number",
+        text: "Max Sensor Count",
+        value: "sensor_count",
       },
       {
-        text: "Email",
-        value: "email",
+        text: "Yearly Amount",
+        value: "year_amount",
       },
       {
-        text: "Customers",
-        value: "customers",
+        text: "Quarter Amount",
+        value: "quarter_amount",
       },
-
       {
-        text: "Status",
-        value: "status",
+        text: "Monthly Amount",
+        value: "month_amount",
       },
-
       {
         text: "Options",
         value: "options",
@@ -412,7 +345,7 @@ export default {
       }
     },
     closeSecurityDialog() {
-      this.newSecurityDialog = false;
+      this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
     },
@@ -428,7 +361,7 @@ export default {
       this.key += 1;
       this.item = null;
       this.viewCustomerId = null;
-      this.newSecurityDialog = true;
+      this.newProductDialog = true;
     },
     viewItem(item) {
       this.editId = item.id;
@@ -436,7 +369,7 @@ export default {
       this.viewCustomerId = item.id;
       this.key += 1;
       this.item = item;
-      this.newSecurityDialog = true;
+      this.newProductDialog = true;
     },
     // viewItem2(item) {
     //   this.$router.push("/alarm/view-customer/" + item.id);
@@ -446,7 +379,7 @@ export default {
       this.editId = item.id;
       this.key += 1;
       this.item = item;
-      this.newSecurityDialog = true;
+      this.newProductDialog = true;
     },
 
     deleteItem(item) {
@@ -459,12 +392,14 @@ export default {
           },
         };
 
-        this.$axios.delete(`security/${item.id}`).then(({ data }) => {
-          this.snackbar = true;
-          this.response = "Security Deleted Successfully";
-          this.getDataFromApi();
-          this.loading = false;
-        });
+        this.$axios
+          .delete(`device_product_services/${item.id}`)
+          .then(({ data }) => {
+            this.snackbar = true;
+            this.response = "Product Service Deleted Successfully";
+            this.getDataFromApi();
+            this.loading = false;
+          });
       }
     },
 
