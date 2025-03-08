@@ -190,6 +190,7 @@ export default {
       this.payload.year_amount = this.item.year_amount;
       this.payload.quarter_amount = this.item.quarter_amount;
       this.payload.month_amount = this.item.month_amount;
+      this.payload.sensor_count = this.item.sensor_count;
     }
 
     for (let i = 1; i <= 100; i++) {
