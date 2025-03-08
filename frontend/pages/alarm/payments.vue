@@ -258,9 +258,9 @@
           </template>
           <template v-slot:item.invoice_number="{ item, index }">
             {{ item.invoice_number }}
-            <div class="secondary-value">
-              {{ item.invoice_date }}
-            </div>
+          </template>
+          <template v-slot:item.invoice_date="{ item, index }">
+            {{ item.invoice_date }}
           </template>
           <template v-slot:item.customer="{ item, index }">
             {{ item.customer.building_name }}
@@ -368,6 +368,8 @@ export default {
       headers: [
         { text: "#", value: "sno", sortable: false },
         { text: "Invoice #", value: "invoice_number", sortable: false },
+        { text: "Date", value: "invoice_date", sortable: false },
+
         { text: "Customer", value: "customer", sortable: false },
 
         { text: "Amount", value: "amount", sortable: false },
@@ -375,6 +377,7 @@ export default {
         { text: "Mode", value: "mode_of_payment", sortable: false },
 
         { text: "Status", value: "status", sortable: false },
+        { text: "Notes", value: "cancel_notes", sortable: false },
 
         { text: "Options", value: "options", sortable: false },
       ],

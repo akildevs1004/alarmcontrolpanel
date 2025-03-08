@@ -264,7 +264,7 @@ export default {
     },
     submit_primary() {
       this.payload_primary.company_id = this.$auth.user.company_id;
-      this.payload_primary.customer_id = this.customer_id;
+      if (this.customer_id) this.payload_primary.customer_id = this.customer_id;
 
       if (this.editId) {
         this.$axios

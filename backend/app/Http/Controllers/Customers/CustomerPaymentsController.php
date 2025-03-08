@@ -81,7 +81,7 @@ class CustomerPaymentsController extends Controller
 
         $rules = [
             'company_id' => 'required|integer',
-            'customer_id' => 'required|integer',
+            'customer_id' => 'nullable',
             'invoice_number' => 'required',
             'amount' => 'required',
             'status' => 'required',
@@ -115,6 +115,8 @@ class CustomerPaymentsController extends Controller
 
 
             if ($request->filled("editId")) {
+
+                unset($data['customer_id']);
 
                 $record = CustomerPayments::where("id", $request->editId)->update($data);
 
