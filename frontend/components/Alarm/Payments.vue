@@ -50,13 +50,19 @@
             <span style="color: green">
               Start Date :
               {{
-                $dateFormat.format_date_month_name_year(customer?.start_date)
+                $dateFormat.format_date_month_name_year(
+                  filter_start_date ? filter_start_date : customer?.start_date
+                )
               }}
             </span>
             <br />
             End Date:
             <span style="color: red"
-              >{{ $dateFormat.format_date_month_name_year(customer?.end_date) }}
+              >{{
+                $dateFormat.format_date_month_name_year(
+                  filter_end_date ? filter_end_date : customer?.end_date
+                )
+              }}
             </span></v-col
           >
           <v-col cols="8" class="text-right" style="width: 550px">
@@ -145,6 +151,9 @@
               {{ item.invoice_date }}
             </div>
           </template>
+          <template v-slot:item.amount="{ item, index }">
+            ${{ item.amount }}
+          </template>
 
           <template v-slot:item.options="{ item }">
             <v-menu bottom left v-if="isEditable">
@@ -160,7 +169,43 @@
                     Edit
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item
+                <v-list-item @click="invoicePrint(item.id, 'print')">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-row>
+                      <v-col cols="3"
+                        ><img
+                          style="padding-top: 5px"
+                          src="/icons/icon_print.png"
+                          class="iconsize"
+                      /></v-col>
+                      <v-col
+                        cols="9"
+                        style="padding-left: 10px; padding-top: 19px"
+                      >
+                        Print
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="invoicePrint(item.id, 'download')">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-row>
+                      <v-col cols="3"
+                        ><img
+                          style="padding-top: 5px"
+                          src="/icons/icon_pdf.png"
+                          class="iconsize"
+                      /></v-col>
+                      <v-col
+                        cols="9"
+                        style="padding-left: 10px; padding-top: 19px"
+                      >
+                        PDF
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
+                </v-list-item>
+                <!-- <v-list-item
                   v-if="!item.received_date"
                   @click="deleteItem(item.id)"
                 >
@@ -168,7 +213,7 @@
                     <v-icon color="red" small> mdi-delete </v-icon>
                     Delete
                   </v-list-item-title>
-                </v-list-item>
+                </v-list-item> -->
               </v-list>
             </v-menu>
           </template>
@@ -183,7 +228,13 @@ import AlarmEditPayments from "../../components/Alarm/EditPayments.vue";
 
 export default {
   components: { AlarmEditPayments },
-  props: ["customer_id", "customer", "isEditable"],
+  props: [
+    "customer_id",
+    "customer",
+    "isEditable",
+    "filter_start_date",
+    "filter_end_date",
+  ],
   data() {
     return {
       snackbar: false,
@@ -225,11 +276,22 @@ export default {
     },
   },
   created() {
-    if (this.customer_id) {
+    if (this.customer) {
       let today = new Date();
       let monthObj = this.$dateFormat.monthStartEnd(today);
-      this.date_from = monthObj.first;
-      this.date_to = monthObj.last;
+
+      if (this.filter_start_date) {
+        if (this.customer?.start_date == null)
+          this.date_from = this.filter_start_date;
+        else this.date_from = this.customer?.start_date;
+        this.date_to = this.filter_end_date;
+      } else if (this.customer?.start_date) {
+        this.date_from = this.customer?.start_date;
+        this.date_to = this.customer?.end_date;
+      } else {
+        this.date_from = monthObj.first;
+        this.date_to = monthObj.last;
+      }
       //this.getDataFromApi();
 
       this.getDevicesList();
@@ -254,6 +316,20 @@ export default {
       this.key = this.key + 1;
       this.editItemobject = item;
       this.dialogEditAutomation = true;
+    },
+    invoicePrint(invoice_id, option) {
+      //let option = "print";
+
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/invoice_print_pdf";
+      if (option == "excel") url += "/invoice_print_pdf";
+      if (option == "download") url += "/invoice_print_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+
+      url += "&invoice_id=" + invoice_id;
+      url += "&type=" + option;
+
+      window.open(url, "_blank");
     },
     getDevicesList() {
       this.$axios

@@ -6,13 +6,7 @@
     "menu": "alarm_dashboard",
     "module": "topmenu"
   },
-  {
-    "icon": "mdi-clock-outline",
-    "title": "Alarms",
-    "to": "/alarm/allevents",
-    "menu": "alarm_allevents",
-    "module": "topmenu"
-  },
+
   {
     "icon": "mdi-clipboard-text-clock",
     "title": "Map",

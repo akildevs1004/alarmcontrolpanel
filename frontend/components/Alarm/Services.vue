@@ -9,9 +9,9 @@
     <v-row>
       <v-col md="12" sm="12" cols="12" dense>
         <v-row style="margin-top: 15px">
-          <v-col> <h3>Customer Packages</h3></v-col>
+          <v-col> <h3>Customer Invoice Generate</h3></v-col>
 
-          <v-col style="max-width: 200px">
+          <v-col style="max-width: 170px">
             <v-menu
               v-model="startDateMenuOpen"
               :close-on-content-click="false"
@@ -47,7 +47,8 @@
               ></v-date-picker>
             </v-menu>
           </v-col>
-          <v-col style="max-width: 200px">
+
+          <v-col style="max-width: 170px">
             <v-menu
               v-model="endDateMenuOpen"
               :close-on-content-click="false"
@@ -69,7 +70,7 @@
                   dense
                   v-bind="attrs"
                   v-on="on"
-                  :disabled="!isEditable"
+                  disabled
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -81,8 +82,20 @@
               ></v-date-picker>
             </v-menu>
           </v-col>
+          <v-col style="max-width: 120px">
+            <v-select
+              height="20"
+              class="employee-schedule-search-box"
+              label="Total Years"
+              outlined
+              dense
+              v-model="licence_duration_years"
+              :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+              @change="updateCartPrice()"
+            ></v-select>
+          </v-col>
 
-          <v-col style="max-width: 200px">
+          <v-col style="max-width: 160px">
             <v-select
               height="20"
               class="employee-schedule-search-box"
@@ -259,6 +272,11 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col class="pull-right text-right align-right">
+            Total Invoice Count : {{ total_invoice_count }}
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -269,6 +287,8 @@ export default {
   props: ["customer", "isEditable"],
 
   data: () => ({
+    licence_duration_years: 1,
+    total_invoice_count: 0,
     startDateMenuOpen: "",
     endDateMenuOpen: "",
     start_date: "",
@@ -466,6 +486,8 @@ export default {
             payment_type: this.payment_type,
             start_date: this.start_date,
             end_date: this.end_date,
+            licence_duration_years: this.licence_duration_years,
+            total_invoice_count: this.total_invoice_count,
           },
         };
 
@@ -477,7 +499,7 @@ export default {
               this.response = "Invoices Created Successfully";
 
               setTimeout(() => {
-                this.$emit("callInvoiceTab");
+                this.$emit("callInvoiceTab", this.start_date, this.end_date);
               }, 1000);
             } else {
               this.snackbar = true;
@@ -489,9 +511,13 @@ export default {
     updateEnddate() {
       let today = new Date(this.start_date);
 
+      console.log(this.start_date);
+
       // Get the end date after 365 days
-      let nextYear = new Date();
+      let nextYear = new Date(this.start_date);
       nextYear.setDate(today.getDate() + 364);
+
+      console.log(nextYear);
 
       let formatDate = (date) => {
         let dd = String(date.getDate()).padStart(2, "0");
@@ -501,15 +527,43 @@ export default {
       };
 
       this.end_date = formatDate(nextYear);
+
+      console.log(this.end_date);
     },
     updateCartPrice() {
+      let formatDate = (date) => {
+        let dd = String(date.getDate()).padStart(2, "0");
+        let mm = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+        let yyyy = date.getFullYear();
+        return `${yyyy}-${mm}-${dd}`;
+      };
       if (this.selectedItem) {
         if (this.payment_type == "Yearly") {
           this.product_price = this.selectedItem.year_amount;
+
+          this.total_invoice_count = this.licence_duration_years;
+          const endDate = new Date(this.start_date);
+          endDate.setDate(
+            endDate.getDate() + 365 * this.licence_duration_years
+          );
+          this.end_date = formatDate(endDate);
         } else if (this.payment_type == "Monthly") {
           this.product_price = this.selectedItem.month_amount;
+
+          this.total_invoice_count = this.licence_duration_years * 12;
+          const endDate = new Date(this.start_date);
+          endDate.setDate(
+            endDate.getDate() + 365 * this.licence_duration_years
+          );
+          this.end_date = formatDate(endDate);
         } else if (this.payment_type == "Quarter") {
           this.product_price = this.selectedItem.quarter_amount;
+          this.total_invoice_count = this.licence_duration_years * 4;
+          const endDate = new Date(this.start_date);
+          endDate.setDate(
+            endDate.getDate() + 365 * this.licence_duration_years
+          );
+          this.end_date = formatDate(endDate);
         }
       }
 

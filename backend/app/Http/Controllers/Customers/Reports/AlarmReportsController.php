@@ -15,6 +15,7 @@ use App\Models\AlarmLogs;
 use App\Models\AttendanceLog;
 use App\Models\Company;
 use App\Models\Customers\CustomerAlarmEvents;
+use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
 use App\Models\TicketSensorTest;
@@ -142,6 +143,26 @@ class AlarmReportsController extends Controller
         $file_name =  'Device Armed Reports from ' . $request->date_from . ' to ' . $request->date_to . ' .xlsx';
 
         return Excel::download((new DeviceArmedExport($reports)), $file_name);
+    }
+    public function invoicePrintPdf(Request $request)
+    {
+
+
+
+        if (!$request->filled('invoice_id')) return [];
+        $invoice =   CustomerPayments::with(["company", "customer.primary_contact", "customer_product_services.device_product_service"])->where("id", $request->invoice_id)->first();
+
+
+        $company =  $invoice->company;
+        $customer =  $invoice->customer;
+
+
+        $pdf = Pdf::loadView('alarm_reports/customer_invoice', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
+
+        if ($request->type == 'print')
+            return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
+        else
+            return $pdf->download($request->alarm_id . "_event_track_notes.pdf");
     }
     public function alarmEventsNotesDownload(Request $request)
     {

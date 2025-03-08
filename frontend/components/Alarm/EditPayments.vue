@@ -19,6 +19,7 @@
                 type="text"
                 v-model="payload_primary.invoice_number"
                 hide-details
+                :disabled="editItem ? true : false"
               ></v-text-field>
               <span
                 v-if="primary_errors && primary_errors.invoice_number"
@@ -48,6 +49,7 @@
                     hide-details
                     class="custom-text-box shadow-none"
                     label="Invoice Date"
+                    :disabled="editItem ? true : false"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -72,6 +74,7 @@
                 type="number"
                 v-model="payload_primary.amount"
                 hide-details
+                :disabled="editItem ? true : false"
               ></v-text-field>
               <span
                 v-if="primary_errors && primary_errors.amount"
@@ -95,7 +98,7 @@
                 >{{ primary_errors.status[0] }}</span
               >
             </v-col>
-            <v-col cols="6" dense>
+            <v-col cols="6" dense v-if="payload_primary.status != 'Cancelled'">
               <v-menu
                 style="z-index: 9999"
                 v-model="from_menu"
@@ -133,7 +136,7 @@
               >
             </v-col>
 
-            <v-col cols="6" dense>
+            <v-col cols="6" dense v-if="payload_primary.status != 'Cancelled'">
               <v-select
                 label="Payment Mode"
                 :items="['Cash', 'Online', 'Cheque']"
@@ -147,6 +150,22 @@
                 v-if="primary_errors && primary_errors.mode_of_payment"
                 class="text-danger mt-2"
                 >{{ primary_errors.mode_of_payment[0] }}</span
+              >
+            </v-col>
+
+            <v-col cols="12" dense v-if="payload_primary.status == 'Cancelled'">
+              <v-text-field
+                label="Cancel Notes"
+                dense
+                small
+                outlined
+                v-model="payload_primary.cancel_notes"
+                hide-details
+              ></v-text-field>
+              <span
+                v-if="primary_errors && primary_errors.cancel_notes"
+                class="text-danger mt-2"
+                >{{ primary_errors.cancel_notes[0] }}</span
               >
             </v-col>
           </v-row>
@@ -246,15 +265,19 @@ export default {
         this.$axios
           .put("/customer_payments/" + this.editId, this.payload_primary)
           .then(({ data }) => {
-            this.loading = false;
-            this.$emit("closeDialog");
             if (!data.status) {
               this.primary_errors = data.errors;
               return;
             }
+            console.log("data", data);
 
             this.snackbar = data.status;
             this.response = data.message;
+
+            this.loading = false;
+            setTimeout(() => {
+              this.$emit("closeDialog");
+            }, 500);
           })
           .catch((e) => console.log(e));
       } else {
@@ -267,9 +290,14 @@ export default {
               this.primary_errors = data.errors;
               return;
             }
+            console.log("data", data);
+
             this.snackbar = data.status;
             this.response = data.message;
-            this.$emit("closeDialog");
+            //this.$emit("closeDialog");
+            setTimeout(() => {
+              this.$emit("closeDialog");
+            }, 500);
           })
           .catch((e) => {
             if (e.response.data.errors) {

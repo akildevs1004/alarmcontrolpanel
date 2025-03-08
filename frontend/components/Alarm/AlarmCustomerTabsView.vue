@@ -175,7 +175,7 @@
             style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Account
+            Payments
             <v-icon> mdi-currency-usd</v-icon>
           </v-tab>
 
@@ -192,7 +192,7 @@
             style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Products
+            Invoice
             <v-icon> mdi-clipboard-list-outline</v-icon>
           </v-tab>
         </v-tabs>
@@ -321,6 +321,8 @@
                   :customer_id="_id"
                   :isMapviewOnly="isMapviewOnly"
                   :isEditable="isEditable"
+                  :filter_start_date="filter_start_date"
+                  :filter_end_date="filter_end_date"
                 />
               </v-card-text>
             </v-card> </v-tab-item
@@ -401,6 +403,8 @@ export default {
   },
   props: ["_id", "isPopup", "isMapviewOnly", "isEditable", "selectedCustomer"],
   data: () => ({
+    filter_start_date: null,
+    filter_end_date: null,
     dialogEditBuilding: false,
     messages: [],
     customerSensors: [],
@@ -461,8 +465,12 @@ export default {
       return;
     },
 
-    OpenInvoiceTab() {
+    OpenInvoiceTab(start_date, end_date) {
+      this.filter_start_date = start_date;
+      this.filter_end_date = end_date;
+
       this.tab = 6;
+      this.keyPayments = this.keyPayments + 1;
     },
     changeTab() {
       if (this.tab == "tab-1") {

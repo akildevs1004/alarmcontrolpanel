@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerProductServices;
 use App\Models\Customers\CustomerPayments;
+use App\Models\Customers\Customers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -39,7 +41,7 @@ class CustomerPaymentsController extends Controller
 
 
             ->whereBetween(
-                'created_at',
+                'invoice_date',
                 [$request->date_from . ' 00:00:00', $request->date_to . ' 23:59:59']
             );
 
@@ -87,6 +89,8 @@ class CustomerPaymentsController extends Controller
             'received_date' => 'nullable',
             'mode_of_payment' => 'nullable',
             'invoice_date' => 'nullable',
+            'cancel_notes' => 'nullable',
+
 
 
 
@@ -113,6 +117,8 @@ class CustomerPaymentsController extends Controller
             if ($request->filled("editId")) {
 
                 $record = CustomerPayments::where("id", $request->editId)->update($data);
+
+                return $this->response('Payment Details are Updated.', $record, true);
             } else {
                 $record = CustomerPayments::create($data);
             }
@@ -197,47 +203,54 @@ class CustomerPaymentsController extends Controller
             ]
         );
 
-        $invoiceFormat = "INV000001";
-        if ($request->payment_type == 'Yearly') {
+        $data = [
+            "company_id" => $request->company_id,
+            "customer_id" => $request->customer_id,
+            "device_product_service_id" => $request->device_service_id,
+            "payment_type" => $request->payment_type,
+            "discount" =>  $request->product_discount_price,
+            "amount" =>  $request->product_final_price,
+            "created_datetime" =>  date("Y-m-d H:i:s"),
 
-            $date1 = Carbon::parse($request->start_date); // Start date
-            $date2 = Carbon::parse($request->end_date); // End date
+        ];
+        $record = CustomerProductServices::create($data);
 
-            $diffYears = $date1->diff($date2)->y;  // Difference in years
-            $diffMonths = $date1->diff($date2)->m; // Remaining months
-
-            $totalInvoiceCount = 1;
-            if ($diffYears > 0 &&  $diffMonths > 1)
-                $totalInvoiceCount = $diffYears + 1;
-
-
-            $maxId = CustomerPayments::query()->orderBy("id", "desc")->value("id");
-            //$invoiceFormat = sprintf("INV%06d", $maxId);
-            $invoiceFormat = sprintf("INV%d%06d", $request->company_id, $maxId + 1);
-            for ($i = 1; $i <= $totalInvoiceCount; $i++) {
+        $totalInvoiceCount = $request->total_invoice_count;
+        $maxId = CustomerPayments::where("company_id", $request->company_id)
+            ->orderBy("invoice_count", "desc")
+            ->value("invoice_count") ?? 0; // Default to 0 if no records exist
 
 
-                $date = Carbon::parse($request->start_date); // Current date
-                $invoice_date = $date->addDays(365 * ($i - 1))->format('Y-m-d'); // Add 365 days
+        $daysToAdd = ($request->payment_type == 'Yearly') ? 365 : (($request->payment_type == 'Quarter') ? 90 : 30);
 
-                $data = [
-                    "company_id" => $request->company_id,
-                    "customer_id" => $request->customer_id,
-                    "invoice_number" => $invoiceFormat,
-                    "amount" => $request->product_final_price,
-                    "status" => "Pending",
-                    "invoice_date" => $invoice_date,
+        $date = Carbon::parse($request->start_date);
 
-                ];
+        $invoices = [];
+        for ($i = 1; $i <= $totalInvoiceCount; $i++) {
 
-                CustomerPayments::create($data);
-            }
+            $invoiceFormat = sprintf("INV%d%06d", $request->company_id, $maxId + $i);
+            $invoice_date = $date->copy()->addDays($daysToAdd * ($i - 1))->format('Y-m-d');
+            $invoices[] = [
+                "company_id" => $request->company_id,
+                "customer_id" => $request->customer_id,
+                "invoice_number" => $invoiceFormat,
+                "amount" => $request->product_final_price,
+                "status" => "Pending",
+                "invoice_date" => $invoice_date,
+                "invoice_count" => $maxId + $i,
+                "created_at" =>  date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s"),
+                "customer_product_service_id" => $record->id,
 
-
-            return  $this->response("Invoices created sucsessfully.", null, true);
+            ];
         }
 
 
-        return  $this->response("Error Occured", null, false);
+        CustomerPayments::insert($invoices);
+        Customers::where("id", $request->customer_id)->where("start_date", null)->update(["start_date" => $request->start_date]);
+        Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date]);
+
+
+        return $this->response("Invoices created successfully.", null, true);
     }
 }

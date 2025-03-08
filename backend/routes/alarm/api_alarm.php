@@ -321,6 +321,8 @@ Route::get('technician_test_results_download_pdf', [AlarmReportsController::clas
 Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesPrintPdf']);
 Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);
 
+Route::get('invoice_print_pdf', [AlarmReportsController::class, 'invoicePrintPdf']);
+
 
 Route::get('alarm_notes_summary_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesSummaryPrintPdf']);
 Route::get('alarm_notes_summary_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesSummaryDownload']);
