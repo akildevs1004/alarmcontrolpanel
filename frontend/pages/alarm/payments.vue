@@ -5,7 +5,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <!-- <v-dialog v-model="dialogEditAutomation" width="600px">
+    <v-dialog v-model="dialogEditAutomation" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black">Payment Information </span>
@@ -34,7 +34,7 @@
           </v-container>
         </v-card-text>
       </v-card>
-    </v-dialog> -->
+    </v-dialog>
     <v-row>
       <v-col>
         <v-row class="mt-0">
@@ -279,7 +279,43 @@
                     Edit
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item
+                <v-list-item @click="invoicePrint(item.id, 'print')">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-row>
+                      <v-col cols="3"
+                        ><img
+                          style="padding-top: 5px"
+                          src="/icons/icon_print.png"
+                          class="iconsize"
+                      /></v-col>
+                      <v-col
+                        cols="9"
+                        style="padding-left: 10px; padding-top: 19px"
+                      >
+                        Print
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="invoicePrint(item.id, 'download')">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-row>
+                      <v-col cols="3"
+                        ><img
+                          style="padding-top: 5px"
+                          src="/icons/icon_pdf.png"
+                          class="iconsize"
+                      /></v-col>
+                      <v-col
+                        cols="9"
+                        style="padding-left: 10px; padding-top: 19px"
+                      >
+                        PDF
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
+                </v-list-item>
+                <!-- <v-list-item
                   v-if="!item.received_date"
                   @click="deleteItem(item.id)"
                 >
@@ -287,7 +323,7 @@
                     <v-icon color="red" small> mdi-delete </v-icon>
                     Delete
                   </v-list-item-title>
-                </v-list-item>
+                </v-list-item> -->
               </v-list>
             </v-menu>
           </template>
@@ -396,7 +432,20 @@ export default {
       this.editItemobject = item;
       this.dialogEditAutomation = true;
     },
+    invoicePrint(invoice_id, option) {
+      //let option = "print";
 
+      let url = process.env.BACKEND_URL;
+      if (option == "print") url += "/invoice_print_pdf";
+      if (option == "excel") url += "/invoice_print_pdf";
+      if (option == "download") url += "/invoice_print_pdf";
+      url += "?company_id=" + this.$auth.user.company_id;
+
+      url += "&invoice_id=" + invoice_id;
+      url += "&type=" + option;
+
+      window.open(url, "_blank");
+    },
     deleteItem(id) {
       if (confirm("Are you sure want to delete Payment  ?")) {
         this.loading = true;

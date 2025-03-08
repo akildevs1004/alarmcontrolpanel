@@ -91,6 +91,7 @@
                 outlined
                 hide-details
                 small
+                @change="updateStatus(payload_primary.status)"
               ></v-select>
               <span
                 v-if="primary_errors && primary_errors.status"
@@ -98,7 +99,7 @@
                 >{{ primary_errors.status[0] }}</span
               >
             </v-col>
-            <v-col cols="6" dense v-if="payload_primary.status != 'Cancelled'">
+            <v-col cols="6" dense v-if="payload_primary_status != 'Cancelled'">
               <v-menu
                 style="z-index: 9999"
                 v-model="from_menu"
@@ -136,7 +137,7 @@
               >
             </v-col>
 
-            <v-col cols="6" dense v-if="payload_primary.status != 'Cancelled'">
+            <v-col cols="6" dense v-if="payload_primary_status != 'Cancelled'">
               <v-select
                 label="Payment Mode"
                 :items="['Cash', 'Online', 'Cheque']"
@@ -153,7 +154,7 @@
               >
             </v-col>
 
-            <v-col cols="12" dense v-if="payload_primary.status == 'Cancelled'">
+            <v-col cols="12" dense v-if="payload_primary_status == 'Cancelled'">
               <v-text-field
                 label="Cancel Notes"
                 dense
@@ -227,6 +228,7 @@ export default {
     errors: [],
     selectedItem: null,
     items: ["Apple", "Banana", "Orange"],
+    payload_primary_status: null,
   }),
   created() {
     this.payload_primary = { received_date: "" };
@@ -256,7 +258,10 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-
+    updateStatus(status) {
+      console.log(status);
+      this.payload_primary_status = status;
+    },
     submit_primary() {
       this.payload_primary.company_id = this.$auth.user.company_id;
       this.payload_primary.customer_id = this.customer_id;
