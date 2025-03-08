@@ -94,7 +94,7 @@
                   :height="'40px'"
                 />
               </v-col>
-              <v-col
+              <!-- <v-col
                 v-if="isEditable"
                 cols="1"
                 style="padding-left: 0px; width: 50px"
@@ -113,7 +113,7 @@
                 >
                   New
                 </v-btn>
-              </v-col>
+              </v-col> -->
               <!-- <v-col cols="1" style="width: 50px">
               <v-btn icon small dense color="primary" class="ma-2">
                   <v-icon>mdi mdi-download</v-icon>
