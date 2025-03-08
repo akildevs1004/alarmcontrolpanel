@@ -583,7 +583,7 @@ export default {
           discount = discountPrice;
         }
       } else {
-        this.product_discount_price - 0;
+        this.product_discount_price = 0;
       }
 
       this.product_discount_price_amount = discount;
