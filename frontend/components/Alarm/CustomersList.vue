@@ -160,7 +160,7 @@
     </div>
     <v-row>
       <v-col>
-        <v-card elevation="0" class="mt-2" :height="browserHeight - 200">
+        <v-card elevation="0" class="mt-2">
           <v-toolbar
             v-if="!eventFilter"
             class="mb-2 white--text"
@@ -659,9 +659,9 @@ export default {
   }),
   computed: {},
   async mounted() {
-    this.tableHeight = window.innerHeight - 270;
+    this.tableHeight = window.innerHeight - 400;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 270;
+      this.tableHeight = window.innerHeight - 400;
     });
     this.getDataFromApi();
   },

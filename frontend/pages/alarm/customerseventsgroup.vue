@@ -450,6 +450,7 @@
                             itemsPerPageOptions: [10, 50, 100, 500, 1000],
                           }"
                           class="elevation-0"
+                          :height="tableHeight"
                         >
                           <template v-slot:item.sno="{ item, index }">
                             <!-- {{
@@ -840,6 +841,7 @@ export default {
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
+      tableHeight: 500,
     };
   },
   watch: {
@@ -857,6 +859,12 @@ export default {
     //   },
     //   deep: true,
     // },
+  },
+  async mounted() {
+    this.tableHeight = window.innerHeight - 270;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 270;
+    });
   },
   created() {
     this.allEventsList = [];

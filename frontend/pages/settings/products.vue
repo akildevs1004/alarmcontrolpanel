@@ -48,11 +48,7 @@
 
     <v-row>
       <v-col>
-        <v-card
-          elevation="2"
-          class="mt-0"
-          :style="'height:' + (browserHeight - 20) + 'px'"
-        >
+        <v-card elevation="0" class="mt-0">
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
               <span style="color: black">
@@ -283,9 +279,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 270;
+    this.tableHeight = window.innerHeight - 200;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 270;
+      this.tableHeight = window.innerHeight - 200;
     });
 
     this.getBuildingTypes();

@@ -237,85 +237,90 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :server-items-length="totalRowsCount"
-          :loading="loading"
-          :options.sync="options"
-          :footer-props="{
-            itemsPerPageOptions: [10, 50, 100, 500, 1000],
-          }"
-          class="elevation-0"
-        >
-          <template v-slot:item.sno="{ item, index }">
-            {{
-              currentPage
-                ? (currentPage - 1) * perPage +
-                  (cumulativeIndex + items.indexOf(item))
-                : "-"
-            }}
-          </template>
-          <template v-slot:item.invoice_number="{ item, index }">
-            {{ item.invoice_number }}
-          </template>
-          <template v-slot:item.invoice_date="{ item, index }">
-            {{ item.invoice_date }}
-          </template>
-          <template v-slot:item.customer="{ item, index }">
-            {{ item.customer.building_name }}
-          </template>
-          <template v-slot:item.options="{ item }">
-            <v-menu bottom left v-if="isEditable">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
+        <v-card :height="browserHeight - 200"
+          ><v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              :server-items-length="totalRowsCount"
+              :loading="loading"
+              :options.sync="options"
+              :footer-props="{
+                itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              }"
+              class="elevation-0"
+            >
+              <template v-slot:item.sno="{ item, index }">
+                {{
+                  currentPage
+                    ? (currentPage - 1) * perPage +
+                      (cumulativeIndex + items.indexOf(item))
+                    : "-"
+                }}
               </template>
-              <v-list width="120" dense>
-                <v-list-item v-if="!item.received_date" @click="editItem(item)">
-                  <v-list-item-title style="cursor: pointer">
-                    <v-icon color="secondary" small> mdi-pencil </v-icon>
-                    Edit
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="invoicePrint(item.id, 'print')">
-                  <v-list-item-title style="cursor: pointer">
-                    <v-row>
-                      <v-col cols="3"
-                        ><img
-                          style="padding-top: 5px"
-                          src="/icons/icon_print.png"
-                          class="iconsize"
-                      /></v-col>
-                      <v-col
-                        cols="9"
-                        style="padding-left: 10px; padding-top: 19px"
-                      >
-                        Print
-                      </v-col>
-                    </v-row>
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="invoicePrint(item.id, 'download')">
-                  <v-list-item-title style="cursor: pointer">
-                    <v-row>
-                      <v-col cols="3"
-                        ><img
-                          style="padding-top: 5px"
-                          src="/icons/icon_pdf.png"
-                          class="iconsize"
-                      /></v-col>
-                      <v-col
-                        cols="9"
-                        style="padding-left: 10px; padding-top: 19px"
-                      >
-                        PDF
-                      </v-col>
-                    </v-row>
-                  </v-list-item-title>
-                </v-list-item>
-                <!-- <v-list-item
+              <template v-slot:item.invoice_number="{ item, index }">
+                {{ item.invoice_number }}
+              </template>
+              <template v-slot:item.invoice_date="{ item, index }">
+                {{ item.invoice_date }}
+              </template>
+              <template v-slot:item.customer="{ item, index }">
+                {{ item.customer.building_name }}
+              </template>
+              <template v-slot:item.options="{ item }">
+                <v-menu bottom left v-if="isEditable">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list width="120" dense>
+                    <v-list-item
+                      v-if="!item.received_date"
+                      @click="editItem(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="secondary" small> mdi-pencil </v-icon>
+                        Edit
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="invoicePrint(item.id, 'print')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="3"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_print.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="9"
+                            style="padding-left: 10px; padding-top: 19px"
+                          >
+                            Print
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="invoicePrint(item.id, 'download')">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-row>
+                          <v-col cols="3"
+                            ><img
+                              style="padding-top: 5px"
+                              src="/icons/icon_pdf.png"
+                              class="iconsize"
+                          /></v-col>
+                          <v-col
+                            cols="9"
+                            style="padding-left: 10px; padding-top: 19px"
+                          >
+                            PDF
+                          </v-col>
+                        </v-row>
+                      </v-list-item-title>
+                    </v-list-item>
+                    <!-- <v-list-item
                   v-if="!item.received_date"
                   @click="deleteItem(item.id)"
                 >
@@ -324,10 +329,12 @@
                     Delete
                   </v-list-item-title>
                 </v-list-item> -->
-              </v-list>
-            </v-menu>
-          </template>
-        </v-data-table>
+                  </v-list>
+                </v-menu>
+              </template>
+            </v-data-table>
+          </v-card-text></v-card
+        >
       </v-col>
     </v-row>
   </div>
@@ -341,6 +348,8 @@ export default {
 
   data() {
     return {
+      browserHeight: 900,
+
       customer: null,
       customer_id: null,
       filter_customer_id: null,
@@ -399,6 +408,9 @@ export default {
     this.date_to = monthObj.last;
     //this.getDataFromApi();
     this.getCustomersList();
+    try {
+      if (window) this.browserHeight = window.innerHeight;
+    } catch (e) {}
   },
 
   methods: {

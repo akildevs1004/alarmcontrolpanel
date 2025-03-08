@@ -15,7 +15,7 @@
 
       <v-row>
         <v-col>
-          <v-card class="mt-2">
+          <v-card class="mt-2" :height="tableHeight">
             <v-tabs class="pt-3" :vertical="vertical">
               <v-tabs-slider color="violet"></v-tabs-slider>
               <v-tab>
@@ -630,7 +630,7 @@ export default {
     upload: {
       name: "",
     },
-
+    tableHeight: 600,
     company_payload: {
       name: "",
       logo: "",
@@ -680,6 +680,12 @@ export default {
     response: "",
     snackbar: false,
   }),
+  async mounted() {
+    this.tableHeight = window.innerHeight - 90;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 90;
+    });
+  },
   async created() {
     try {
       this.getDataFromApi();
