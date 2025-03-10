@@ -104,7 +104,7 @@ class AlramEventsController extends Controller
             if ($device->last_live_datetime) {
                 $timeDifference = Carbon::parse($device->last_live_datetime)->diffInSeconds($nowInTimeZone);
 
-                if ($timeDifference > 60) {
+                if ($timeDifference > 60 * 5) {
 
                     if ($device->status_id == 1) {
 
