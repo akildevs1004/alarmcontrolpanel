@@ -20,6 +20,7 @@ use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\DeviceArmedLogs;
 use App\Models\DeviceNotificationsManagers;
+use App\Models\DeviceSensorTypes;
 use App\Models\ReportNotification;
 use App\Models\ReportNotificationLogs;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -157,15 +158,15 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 //-----------Alarm Control panel - Wifi Model
 
-                // if ($event == 'HEARTBEAT' || $event == '1351') {
-                //     Device::where("serial_number", $serial_number)->update(
-                //         ["status_id" => 1, "last_live_datetime" => $log_time]
-                //     );
+                if ($event == 'HEARTBEAT' || $event == '1351') {
+                    Device::where("serial_number", $serial_number)->update(
+                        ["status_id" => 1, "last_live_datetime" => $log_time]
+                    );
 
-                //     $this->closeOfflineAlarmsBySerialNumber($serial_number);
+                    $this->closeOfflineAlarmsBySerialNumber($serial_number);
 
-                //     $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
-                // } else
+                    $message[] = $this->getMeta("Device HeartBeat", $log_time . "<br/>\n");
+                }
 
 
                 if ($event == '1401' || $event == '1406' || $event == '1407'  || $event == '1455' || $event == '1137') //disarm button  // 1401,000=device //1407=remote //1406
@@ -266,14 +267,19 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                             ->pluck("sensor_type");
 
                         if (isset($sensorType[0])) {
-                            $alarmTypes = [
-                                'Water Leakage Sensor' => 'Water',
-                                'Fire Sensor' => 'Fire',
-                                'Medical Sensor' => 'Medical',
-                                'SOS Sensor' => 'SOS',
-                                'Temperature Sensor' => 'Temperature',
+                            // $alarmTypes = [
+                            //     'Water Leakage Sensor' => 'Water',
+                            //     'Fire Sensor' => 'Fire',
+                            //     'Medical Sensor' => 'Medical',
+                            //     'SOS Sensor' => 'SOS',
+                            //     'Temperature Sensor' => 'Temperature',
+                            //     'Gas Sensor' => 'Gas',
 
-                            ];
+                            // ];
+
+                            $alarmTypes = DeviceSensorTypes::pluck("alarm_type", "name");
+
+
                             if (!empty($sensorType) && isset($alarmTypes[$sensorType[0]]))
                                 $alarm_type = $alarmTypes[$sensorType[0]];
                         }
