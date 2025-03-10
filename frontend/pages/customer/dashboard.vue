@@ -537,6 +537,16 @@ export default {
       this.$router.push("/logout");
       return;
     }
+
+    if (window) {
+      if (window) {
+        console.log("window.innerWidth ", window.innerWidth);
+
+        if (window.innerWidth < 700) {
+          this.$router.push("/customer/customermobile"); // Fallback in case of null values
+        }
+      }
+    }
     let today = new Date();
 
     this.date_from = today.toISOString().split("T")[0];

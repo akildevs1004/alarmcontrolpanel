@@ -439,18 +439,37 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' and alarm_status=1 THEN 1   END), 0) AS medical,
             COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' and alarm_status=1 THEN 1   END), 0) AS temperature,
             COALESCE(SUM(CASE WHEN alarm_type = \'Water\' and alarm_status=1 THEN 1 END), 0) AS water,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Power\' and alarm_status=1 THEN 1 END), 0) AS power,
+            COALESCE(SUM(CASE WHEN alarm_type = \'Gas\' and alarm_status=1 THEN 1 END), 0) AS gas,
+
+
             COALESCE(SUM(CASE WHEN alarm_type = \'Fire\' and alarm_status=1 THEN 1 END), 0) AS fire,
             COALESCE(SUM(CASE WHEN alarm_type = \'SOS\' and alarm_status=1 THEN 1   END), 0) AS sos,
             COALESCE(SUM(CASE WHEN alarm_category = \'1\' and alarm_status=1 THEN 1   END), 0) AS critical,
  COALESCE(SUM(CASE WHEN alarm_type = \'Offline\' and alarm_status=1  THEN 1 END), 0) AS techinical,
-            COALESCE(SUM(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != \'SOS\'   AND alarm_category != 1 and alarm_status=1 THEN 1 END), 0) AS events
 
 
+
+             COALESCE(SUM(CASE WHEN   alarm_status=1 THEN 1   END), 0) AS all_alarms
 
 
 
         ')
             ->first();
+        $statistics = (array) $statistics;;
+
+        $statistics["events"] = $statistics["all_alarms"] - (
+            $statistics["burglary"]
+            + $statistics["medical"]
+            + $statistics["temperature"]
+            + $statistics["water"]
+            + $statistics["power"]
+            + $statistics["gas"]
+            + $statistics["fire"]
+            + $statistics["sos"]
+            + $statistics["critical"]
+            + $statistics["techinical"]);
+
 
         return response()->json($statistics);
     }

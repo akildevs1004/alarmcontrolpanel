@@ -163,7 +163,21 @@
             ></v-card>
           </v-col>
         </v-row>
-
+        <!-- <v-row>
+          <v-col>
+            <v-card
+              style="height: 500px"
+              elevation="2"
+              class="eventslistscroll table-font12"
+              ><v-card-text>
+                <CustomersAlarmMap
+                  :displayTable="false"
+                  mapid="dashboardmap"
+                  height="500"
+                /> </v-card-text
+            ></v-card>
+          </v-col>
+        </v-row> -->
         <v-row>
           <v-col>
             <v-card
@@ -209,6 +223,37 @@
                       color: red;
                     "
                     >{{ data ? data.fireCount : 0 }}</v-col
+                  ></v-row
+                ></v-card-text
+              ></v-card
+            >
+          </v-col>
+          <v-col>
+            <v-card elevation="2"
+              ><v-card-text
+                ><v-row>
+                  <v-col class="d-flex justify-center" style="max-width: 40px">
+                    <img src="/dashboard_icons/water.png" style="width: 40px" />
+                  </v-col>
+
+                  <v-col
+                    class="d-flex justify-center"
+                    style="
+                      font-size: 25px;
+                      margin: auto;
+
+                      color: black;
+                    "
+                    >Water</v-col
+                  ><v-col
+                    class="d-flex justify-center"
+                    style="
+                      font-size: 40px;
+                      margin: auto;
+                      font-weight: bold;
+                      color: red;
+                    "
+                    >{{ data ? data.waterCount : 0 }}</v-col
                   ></v-row
                 ></v-card-text
               ></v-card
@@ -327,39 +372,18 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/water.png"
+                              src="/dashboard_icons/power.png"
                               style="width: 45px"
                             />
                           </v-col>
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.water : 0 }}
+                              {{ categoriesStats ? categoriesStats.power : 0 }}
                             </div>
-                            <div style="padding-top: 5px">Water</div>
+                            <div style="padding-top: 5px">Power</div>
                           </v-col>
                         </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px"
-                            ><img
-                              src="/dashboard_icons/water.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{ categoriesStats ? categoriesStats.water : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Water</div>
-                          </v-col>
-                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -387,39 +411,39 @@
                             <div style="padding-top: 5px">Temperature</div>
                           </v-col>
                         </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px"
-                            ><img
-                              src="/dashboard_icons/temperature.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{
-                                categoriesStats
-                                  ? categoriesStats.temperature
-                                  : 0
-                              }}
-                            </div>
-                            <div style="padding-top: 5px">Temperature</div>
-                          </v-col>
-                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
                 </v-row>
-                <v-row
-                  ><v-col style="padding: 0px; padding-top: 5px">
-                    <v-card style="height: 85px" elevation="2"
-                      ><v-card-text>
+                <v-row>
+                  <v-col
+                    style="padding: 5px; padding-left: 0px; padding-top: 8px"
+                  >
+                    <v-card style="height: 85px" elevation="2">
+                      <v-card-text class="m-0 p-0">
+                        <v-row>
+                          <v-col style="max-width: 45px; margin: auto">
+                            <img
+                              src="/dashboard_icons/gas.png"
+                              style="width: 45px"
+                            />
+                          </v-col>
+
+                          <v-col style="text-align: center">
+                            <div style="font-size: 40px">
+                              {{ categoriesStats ? categoriesStats.gas : 0 }}
+                            </div>
+                            <div style="padding-top: 5px">Gas</div>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                  <v-col
+                    style="padding: 5px; padding-right: 0px; padding-top: 8px"
+                  >
+                    <v-card style="height: 85px" elevation="2">
+                      <v-card-text class="m-0 p-0">
                         <v-row>
                           <v-col style="padding: 5px"
                             ><div style="font-size: 18px">Device</div></v-col
@@ -519,6 +543,7 @@ import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperato
 
 import AlamDeviceCountPieChart from "../../components/Alarm/Dashboard/AlarmDeviceCountPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
+import CustomersAlarmMap from "../../components/Alarm/Map/CustomersAlarmMap.vue";
 
 export default {
   components: {
@@ -527,6 +552,7 @@ export default {
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
     DashboardAlarmEventsHourWiseChart,
+    CustomersAlarmMap,
   },
   data: () => ({
     windowHeight: 1000,

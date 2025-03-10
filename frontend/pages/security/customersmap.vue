@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CustomersAlarmMap />
+    <CustomersAlarmMap :displayTable="true" />
   </div>
 </template>
 

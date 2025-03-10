@@ -192,7 +192,7 @@
             style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Invoice
+            Subscription
             <v-icon> mdi-clipboard-list-outline</v-icon>
           </v-tab>
         </v-tabs>

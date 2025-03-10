@@ -121,6 +121,24 @@ export default ({ app }, inject) => {
 
       return `${hours}:${minutes} `;
     },
+    formatTimeDateTime: (inputdate) => {
+      if (!inputdate || inputdate === "--") return "---";
+
+      const currentDate = new Date(inputdate);
+
+      // Format time components
+      const hours = currentDate.getHours().toString().padStart(2, "0");
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+      // Format date components
+      const day = currentDate.getDate().toString().padStart(2, "0");
+      const month = currentDate.toLocaleString("en-US", { month: "short" });
+      const year = currentDate.getFullYear();
+
+      // Combine time and date
+      return `${hours}:${minutes}, ${month}, ${day},  ${year}`;
+    },
     formatTimeDateMonthYear: (inputdate) => {
       if (!inputdate || inputdate === "--") return "---";
 

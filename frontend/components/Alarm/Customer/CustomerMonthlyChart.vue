@@ -24,11 +24,11 @@
 
 <script>
 export default {
-  props: ["name", "height", "filter_customers_list"],
+  props: ["name", "height", "filter_customers_list", "daterange"],
   data() {
     return {
       loading: false,
-      display_title: "Alarm Events - Last 30 days",
+      display_title: "Alarm Events",
       date_from: "",
       date_to: "",
       series: [
@@ -123,7 +123,8 @@ export default {
 
     // Subtract 7 days from today
     let sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(today.getDate() - 30);
+    if (this.daterange) sevenDaysAgo.setDate(today.getDate() - 7);
+    else sevenDaysAgo.setDate(today.getDate() - 30);
 
     this.date_to = today.toISOString().split("T")[0];
     this.date_from = sevenDaysAgo.toISOString().split("T")[0];
@@ -180,7 +181,7 @@ export default {
           data: [],
         },
         {
-          name: "Low",
+          name: "Water",
           data: [],
         },
       ];
@@ -193,7 +194,7 @@ export default {
         this.chartOptions.series[0]["data"][counter] = item.sosCount;
         this.chartOptions.series[1]["data"][counter] = item.criticalCount;
         this.chartOptions.series[2]["data"][counter] = item.mediumCount;
-        this.chartOptions.series[3]["data"][counter] = item.lowCount;
+        this.chartOptions.series[3]["data"][counter] = item.waterCount;
         this.chartOptions.xaxis.categories[counter] = item.date.split("-")[2];
 
         counter++;

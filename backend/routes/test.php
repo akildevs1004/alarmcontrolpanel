@@ -34,8 +34,10 @@ use App\Models\AlarmLogs;
 use App\Models\Attendance;
 use App\Models\AttendanceLog;
 use App\Models\Company;
+use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Device;
 use App\Models\DeviceActivesettings;
+use App\Models\DeviceSensorTypes;
 use App\Models\Employee;
 use App\Models\ReportNotification;
 use App\Models\SecurityCustomers;
@@ -228,6 +230,16 @@ Route::get("create_test_alarm_technician", function (Request $request) {
 
 Route::get("create_test_alar11111111111", function (Request $request) {
 
+
+    return [DeviceSensorTypes::pluck("alarm_type", "name"), [
+        'Water Leakage Sensor' => 'Water',
+        'Fire Sensor' => 'Fire',
+        'Medical Sensor' => 'Medical',
+        'SOS Sensor' => 'SOS',
+        'Temperature Sensor' => 'Temperature',
+        'Gas Sensor' => 'Gas',
+
+    ]];
 
     // $data = [
     //     "company_id" => 8,

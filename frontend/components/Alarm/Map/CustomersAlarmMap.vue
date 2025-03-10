@@ -51,7 +51,8 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols="9">
+      <v-col :cols="displayTable == 'true' ? 9 : 12">
+        {{ displayTable }}
         <v-card elevation="2"
           ><v-card-text style="padding: 0px">
             <div
@@ -91,7 +92,11 @@
           </v-card-text></v-card
         >
       </v-col>
-      <v-col cols="3" style="padding: 0px; padding-top: 10px">
+      <v-col
+        cols="3"
+        v-if="displayTable == 'true'"
+        style="padding: 0px; padding-top: 10px"
+      >
         <v-card
           elevation="2"
           :style="
@@ -157,7 +162,7 @@
             </template>
             <template v-slot:item.building_name="{ item, index }">
               <v-card
-                @click="setCustomerLocationOnMap(item)"
+                @click="setCustomerCenterLocationOnMap(item)"
                 :key="index + 55"
                 elevation="5"
                 style="border-bottom: 0px solid black; margin: 6px"
@@ -263,7 +268,7 @@
                 <v-col style="padding-left: 0px">
 
                   <span
-                    @click="setCustomerLocationOnMap(item)"
+                    @click="setCustomerCenterLocationOnMap(item)"
                     style="font-size: 13px; margin-bottom: 15px"
                   >
                     {{ item.building_name || "" }} ,{{ item.city }}
@@ -379,6 +384,7 @@ import google_map_style_regular from "../../../google/google_style_regular.json"
 import AlarmCustomerTabsView from "../../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmEventCustomerContactsTabView from "../../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 export default {
+  props: ["displayTable"],
   components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
 
   data: () => ({
@@ -460,10 +466,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    // setTimeout(() => {
-    //   this.getCustomers("alarm");
-    // }, 1000 * 2);
-    // await this.getMapKey();
+    setTimeout(() => {
+      this.getCustomers("alarm");
+    }, 1000 * 2);
 
     setTimeout(() => {
       this.plotLocations(true);
@@ -481,19 +486,22 @@ export default {
     // this.getGoogleicons();
 
     setInterval(() => {
-      if (
-        this.$route.name == "security-customersmap" ||
-        this.$route.name == "alarm-customersmap"
-      )
-        this.getCustomers();
+      // if (
+      //   this.$route.name == "security-customersmap" ||
+      //   this.$route.name == "alarm-customersmap" ||
+      //   this.$route.name == "alarm-dashboard"
+      // )
+      this.getCustomers();
 
-      this.mapkeycount++;
-    }, 1000 * 30);
+      //this.mapkeycount++;
+    }, 1000 * 15);
     ///this.getBuildingTypes();
 
     try {
       if (window) this.browserHeight = window.innerHeight - 70;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   },
   watch: {
     options: {
@@ -520,7 +528,7 @@ export default {
       this.map.setOptions({ styles: newStyle });
     },
     viewAlarmInformation(alarm) {
-      this.setCustomerLocationOnMap(alarm);
+      this.setCustomerCenterLocationOnMap(alarm);
       this.popupEventText =
         "#" +
         alarm.id +
@@ -561,7 +569,7 @@ export default {
       let { data } = await this.$axios.get(`get-map-key`);
       this.mapKey = data;
       if (this.mapKey && this.loading == false) {
-        this.loadGoogleMapsScript(this.initMap);
+        await this.loadGoogleMapsScript(this.initMap);
       }
     },
 
@@ -604,29 +612,20 @@ export default {
           this.loading = false;
           //this.mapkeycount++;
 
-          this.mapMarkersList.forEach((marker) => {
-            if (marker) {
-              marker.visible = false;
-              marker.setMap(null);
-              marker = null;
-              this.mapMarkersList[index] = null;
-            }
-          });
-          this.mapMarkersList = [];
-
-          // // Call plotLocations to replot markers
-          // this.plotLocations();
-
           this.getMapKey().then(() => {
+            this.plotLocations();
             if (
               this.data.length > 0 &&
               this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
             ) {
-              this.setCustomerLocationOnMap(this.data[0]);
+              this.setCustomerCenterLocationOnMap(this.data[0]);
+              setTimeout(() => {}, 1000 * 5);
             }
           });
         });
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
 
       // let config = {
       //   params: {
@@ -739,7 +738,7 @@ export default {
 
       return armedArray ? armedArray.length : 0;
     },
-    loadGoogleMapsScript(callback) {
+    async loadGoogleMapsScript(callback) {
       if (window.google && window.google.maps) {
         callback();
         return;
@@ -752,7 +751,7 @@ export default {
       document.head.appendChild(script);
     },
 
-    setCustomerLocationOnMap(item) {
+    setCustomerCenterLocationOnMap(item) {
       this.selectedCustomer = item;
       try {
         if (item.latitude && item.longitude) {
@@ -768,11 +767,13 @@ export default {
           this.map.panTo(position);
           this.map.setZoom(12);
 
-          let infowindow = this.mapInfowindowsList[item.id];
-          let marker = this.mapMarkersList[item.id];
-          if (infowindow) infowindow.open(this.map, marker);
+          //////////let infowindow = this.mapInfowindowsList[item.id];
+          ////////let marker = this.mapMarkersList[item.id];
+          //////////if (infowindow) infowindow.open(this.map, marker);
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     },
     initMap() {
       if (!this.map) {
@@ -808,7 +809,7 @@ export default {
       }
       this.geocoder = new google.maps.Geocoder();
       // this.infowindow = new google.maps.InfoWindow();
-      this.plotLocations();
+      ////////////this.plotLocations();
     },
     plotLocations(changeMap = false) {
       if (
@@ -816,66 +817,86 @@ export default {
         changeMap &&
         this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
       ) {
-        this.setCustomerLocationOnMap(this.data[0]);
-      }
-      this.data.forEach((item) => {
-        const customerId = item.id;
-
-        // Check if a marker already exists for this customer
-        if (this.mapMarkersList[customerId]) {
-          // Skip if marker already exists with alarm_status = 1 (high priority)
-          if (
-            item.latest_alarm_event &&
-            item.latest_alarm_event.alarm_status == 1 &&
-            this.mapMarkersList[customerId].alarm_status != "1"
-          )
-            this.mapMarkersList[customerId].setMap(null);
+        try {
+          this.setCustomerCenterLocationOnMap(this.data[0]);
+        } catch (e) {
+          setTimeout(() => {
+            this.plotLocations(false);
+          }, 1000);
         }
+      }
 
-        // Determine if we should load a marker for this customer
-        let loadMarker =
-          item.latest_alarm_event?.alarm_status == "1" ||
-          !this.mapMarkersList[customerId];
-        if (loadMarker) {
-          try {
-            const position = {
-              lat: parseFloat(item.latitude),
-              lng: parseFloat(item.longitude),
-            };
+      //clear previous
+      this.mapMarkersList.forEach((marker, index) => {
+        if (marker) {
+          marker.visible = false;
+          marker.setMap(null);
+          marker = null;
+          this.mapMarkersList[index] = null;
+        }
+      });
+      this.mapMarkersList = [];
+      this.data.forEach((item) => {
+        try {
+          const customerId = item.id;
 
-            let iconURL =
-              process.env.BACKEND_APP_URL +
-              "/google_map_icons/google_online.png";
+          // Check if a marker already exists for this customer
+          if (this.mapMarkersList[customerId]) {
+            // Skip if marker already exists with alarm_status = 1 (high priority)
+            if (
+              item.latest_alarm_event &&
+              item.latest_alarm_event.alarm_status == 1 &&
+              this.mapMarkersList[customerId].alarm_status != "1"
+            )
+              this.mapMarkersList[customerId].setMap(null);
+          }
 
-            let colorObject = this.getAlarmColorObject(item.latest_alarm_event);
-            if (colorObject) iconURL = colorObject.image;
+          // Determine if we should load a marker for this customer
+          let loadMarker =
+            item.latest_alarm_event?.alarm_status == "1" ||
+            !this.mapMarkersList[customerId];
+          if (loadMarker) {
+            try {
+              const position = {
+                lat: parseFloat(item.latitude),
+                lng: parseFloat(item.longitude),
+              };
 
-            const icon = {
-              url: iconURL + "?1=1",
-              scaledSize: new google.maps.Size(28, 34),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(25, 25),
-            };
+              let iconURL =
+                process.env.BACKEND_APP_URL +
+                "/google_map_icons/google_online.png";
 
-            const marker = new google.maps.Marker({
-              position,
-              map: this.map,
-              title: item.name,
-              icon: icon,
-            });
+              let colorObject = this.getAlarmColorObject(
+                item.latest_alarm_event
+              );
+              if (colorObject) iconURL = colorObject.image;
 
-            let alarmHtmlLink = "";
-            let customerHtmlLink = "";
-            if (item.latest_alarm_event)
-              alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+              const icon = {
+                url: iconURL + "?1=1",
+                scaledSize: new google.maps.Size(28, 34),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+              };
 
-            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+              const marker = new google.maps.Marker({
+                position,
+                map: this.map,
+                title: item.name,
+                icon: icon,
+              });
 
-            let profile_picture =
-              "https://alarm.xtremeguard.org/no-business_profile.png";
-            if (item.profile_picture) profile_picture = item.profile_picture;
+              let alarmHtmlLink = "";
+              let customerHtmlLink = "";
+              if (item.latest_alarm_event)
+                alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-            let html = `
+              customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+
+              let profile_picture =
+                "https://alarm.xtremeguard.org/no-business_profile.png";
+              if (item.profile_picture) profile_picture = item.profile_picture;
+
+              let html = `
     <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
       <tr>
         <td style="width:100px; vertical-align: top;">
@@ -899,26 +920,27 @@ export default {
       </td>
         </tr>
     </table>`;
-            let googleDirectionIcon =
-              process.env.APP_URL + "/icons/google-directions.png";
-            let googleInfoIcon = process.env.APP_URL + "/icons/google-info.png";
-            // Create content for the infowindow
-            alarmHtmlLink = "";
-            customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
+              let googleDirectionIcon =
+                process.env.APP_URL + "/icons/google-directions.png";
+              let googleInfoIcon =
+                process.env.APP_URL + "/icons/google-info.png";
+              // Create content for the infowindow
+              alarmHtmlLink = "";
+              customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-            customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
+              customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
 
-            if (item.latest_alarm_event?.alarm_start_datetime) {
-              // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
+              if (item.latest_alarm_event?.alarm_start_datetime) {
+                // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-              alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:16px;"/>`;
-            }
+                alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:16px;"/>`;
+              }
 
-            profile_picture =
-              item.profile_picture ||
-              "https://alarm.xtremeguard.org/no-business_profile.png";
+              profile_picture =
+                item.profile_picture ||
+                "https://alarm.xtremeguard.org/no-business_profile.png";
 
-            html = `
+              html = `
             <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
 
                <tr>
@@ -952,65 +974,68 @@ export default {
 
             </table>`;
 
-            const infowindow = new google.maps.InfoWindow({
-              content: html,
-              map: this.map,
-              position: position,
-            });
-            infowindow.close();
-
-            this.mapInfowindowsList[item.id] = infowindow;
-            this.mapMarkersList[item.id] = marker;
-            if (item.latest_alarm_event?.alarm_status == 1)
-              marker.setAnimation(google.maps.Animation.BOUNCE);
-
-            marker.addListener("mouseover", () => {
-              this.mapInfowindowsList.forEach((oldinfowindow) => {
-                oldinfowindow.close();
+              const infowindow = new google.maps.InfoWindow({
+                content: html,
+                map: this.map,
+                position: position,
               });
-              infowindow.open(this.map, marker);
-            });
+              infowindow.close();
 
-            google.maps.event.addListener(infowindow, "domready", () => {
-              let btnObject = document.getElementById(
-                "alarmInfowindow-btn-" + item.id
-              );
-              if (btnObject)
-                btnObject.addEventListener("click", () => {
-                  this.viewAlarmInformation(item.latest_alarm_event);
+              this.mapInfowindowsList[item.id] = infowindow;
+              this.mapMarkersList[item.id] = marker;
+              if (item.latest_alarm_event?.alarm_status == 1)
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+
+              marker.addListener("mouseover", () => {
+                this.mapInfowindowsList.forEach((oldinfowindow) => {
+                  oldinfowindow.close();
                 });
-
-              let btnObject2 = document.getElementById(
-                "customerInfowindow-btn-" + item.id
-              );
-              if (btnObject2)
-                btnObject2.addEventListener("click", () => {
-                  this.dialog = true;
-                  this.key += 1;
-                  this.customerInfo = item;
-                });
-
-              const infowindowContent = document.getElementById(
-                "infowindow-content-" + item.id
-              );
-
-              infowindowContent.addEventListener("mouseout", (e) => {
-                // Close only if the mouse has left the entire infowindow div (and not just a child element)
-                if (!infowindowContent.contains(e.relatedTarget)) {
-                  infowindow.close();
-                }
+                infowindow.open(this.map, marker);
               });
-            });
 
-            // Open Vue dialog on marker click
-            marker.addListener("click", () => {
-              this.dialog = true;
-              this.key += 1;
-              this.customerInfo = item;
-            });
-          } catch (e) {
-            console.log(e);
+              google.maps.event.addListener(infowindow, "domready", () => {
+                let btnObject = document.getElementById(
+                  "alarmInfowindow-btn-" + item.id
+                );
+                if (btnObject)
+                  btnObject.addEventListener("click", () => {
+                    this.viewAlarmInformation(item.latest_alarm_event);
+                  });
+
+                let btnObject2 = document.getElementById(
+                  "customerInfowindow-btn-" + item.id
+                );
+                if (btnObject2)
+                  btnObject2.addEventListener("click", () => {
+                    this.dialog = true;
+                    this.key += 1;
+                    this.customerInfo = item;
+                  });
+
+                const infowindowContent = document.getElementById(
+                  "infowindow-content-" + item.id
+                );
+                if (infowindowContent)
+                  infowindowContent.addEventListener("mouseout", (e) => {
+                    // Close only if the mouse has left the entire infowindow div (and not just a child element)
+                    if (!infowindowContent.contains(e.relatedTarget)) {
+                      infowindow.close();
+                    }
+                  });
+              });
+
+              // Open Vue dialog on marker click
+              marker.addListener("click", () => {
+                this.dialog = true;
+                this.key += 1;
+                this.customerInfo = item;
+              });
+            } catch (e) {
+              console.log(e);
+            }
           }
+        } catch (e) {
+          console.log(e);
         }
       });
     },

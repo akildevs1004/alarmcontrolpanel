@@ -10,6 +10,19 @@ const data = async ({ $auth, redirect }) => {
     master: "/master",
   };
 
+  if ($auth.user.user_type == "customer") {
+    if (window) {
+      if (window) {
+        console.log("window.innerWidth ", window.innerWidth);
+
+        if (window.innerWidth < 700) {
+          return redirect("/customer/customermobile"); // Fallback in case of null values
+        }
+      }
+    }
+    return redirect("/customer/dashboard"); // Fallback in case of null values
+  }
+
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
     return redirect("/master");
   }

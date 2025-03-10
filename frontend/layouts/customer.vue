@@ -10,6 +10,7 @@
       :key="notificationsMenuItems.length"
       :notificationsMenuItemsCount="notificationsMenuItems.length"
     />
+
     <v-navigation-drawer
       v-if="items.length > 0"
       expand-on-hover
@@ -143,11 +144,12 @@
       <span class="header-menu">
         <template
           v-if="
-            getLoginType == 'company' ||
-            getLoginType == 'branch' ||
-            getLoginType == 'department' ||
-            ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
-              $auth.user?.role?.role_type?.toLowerCase() != 'host')
+            displayTopMenu &&
+            (getLoginType == 'company' ||
+              getLoginType == 'branch' ||
+              getLoginType == 'department' ||
+              ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
+                $auth.user?.role?.role_type?.toLowerCase() != 'host'))
           "
         >
           <v-row align="center" justify="space-around" class="header-menu-row">
@@ -719,6 +721,7 @@ export default {
   },
   data() {
     return {
+      displayTopMenu: false,
       activeAudio: true,
       notificationAlarmDevicesContentData: null,
       popupKey: 1,
@@ -952,6 +955,16 @@ export default {
     // setTimeout(() => {
     //   this.$router.push(`/dashboard2`);
     // }, 1000 * 60 * 15); //15 minutes
+
+    if (window) {
+      if (window) {
+        console.log("window.innerWidth ", window.innerWidth);
+
+        if (window.innerWidth < 700) {
+          this.displayTopMenu = false;
+        } else this.displayTopMenu = true;
+      }
+    }
   },
   watch: {},
   computed: {

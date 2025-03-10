@@ -131,7 +131,7 @@
           </div>
           <div style="color: #fff; text-align: left" class="pt-8">
             <v-form
-              style="padding: 20px"
+              :style="'padding: 20px;' + bgcolor"
               ref="form"
               method="post"
               v-model="valid"
@@ -264,6 +264,7 @@ export default {
   layout: "login",
   components: { ForgotPassword },
   data: () => ({
+    bgcolor: "",
     dialogForgotPassword: false,
     maskMobileNumber: "",
     whatsappFormValid: true,
@@ -312,6 +313,12 @@ export default {
 
     this.$store.dispatch("dashboard/resetState");
     this.$store.dispatch("resetState");
+
+    if (window) {
+      if (window.innerWidth < 700) {
+        this.bgcolor = "background-color: #797979f0";
+      }
+    }
   },
   methods: {
     requestPermission() {

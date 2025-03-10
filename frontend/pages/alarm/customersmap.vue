@@ -1,7 +1,7 @@
 <template>
   <NoAccess v-if="!$pagePermission.can('map_view', this)" />
   <div v-else>
-    <CustomersAlarmMap />
+    <CustomersAlarmMap :displayTable="true" />
   </div>
 </template>
 

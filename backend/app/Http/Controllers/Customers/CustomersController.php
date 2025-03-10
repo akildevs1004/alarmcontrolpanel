@@ -1851,7 +1851,7 @@ class CustomersController extends Controller
         $lastMaintenanceDate = null;
         $invoiceDue = 0;
 
-        $customer = Customers::where("id", $request->customer_id)->first();
+        $customer = Customers::with(["devices"])->where("id", $request->customer_id)->first();
 
 
         if ($customer && $customer->start_date != '') {
@@ -1892,7 +1892,8 @@ class CustomersController extends Controller
         return  [
             "next_maintenance_due_date" => $nextMaintenanceDue,
             "last_maintenance_date" => $lastMaintenanceDate,
-            "invoice_due" => $invoiceDue
+            "invoice_due" => $invoiceDue,
+            "devices" =>  $customer->devices
         ];
     }
 }

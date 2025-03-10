@@ -85,9 +85,9 @@ export default {
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
-            alert(
-              "Please Stay on Dashboard page. Then only Alarm sound will be work."
-            ); // Notify the user
+            // alert(
+            //   "Please Stay on Dashboard page. Then only Alarm sound will be work."
+            // ); // Notify the user
           });
       }, 1000 * 5);
     },
