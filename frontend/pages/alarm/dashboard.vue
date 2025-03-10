@@ -604,6 +604,16 @@ export default {
         await this.updateEventsOpenCountStatus();
       }
     }, 1000 * 20);
+
+    if (window) {
+      if (window) {
+        console.log("window.innerWidth ", window.innerWidth);
+
+        if (window.innerWidth < 700) {
+          this.$router.push("/alarm/mobiledashboard");
+        }
+      }
+    }
   },
   watch: {},
   methods: {

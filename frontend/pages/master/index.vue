@@ -42,16 +42,17 @@
 
 <script>
 export default {
-  layout({ $auth }) {
-    let { user_type } = $auth.user;
-    if (user_type == "master") {
-      return "master";
-    } else if (user_type == "employee") {
-      return "employee";
-    } else if (user_type == "master") {
-      return "default";
-    }
-  },
+  // layout({ $auth }) {
+  //   let { user_type } = $auth.user;
+  //   if (user_type == "master") {
+  //     return "master";
+  //   } else if (user_type == "employee") {
+  //     return "employee";
+  //   } else {
+  //     return "master";
+  //   }
+  // },
+  layout: "master",
   data() {
     return {
       tota4l_items: [],

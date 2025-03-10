@@ -77,6 +77,8 @@ class AlarmDashboardController extends Controller
 
             ->first();
 
+        $oneDevice = Device::where("company_id", $request->company_id)->first();
+
 
         return  [
             "customersCount" => $totalCustomers,
@@ -89,6 +91,8 @@ class AlarmDashboardController extends Controller
             "openCount" => $alarmCounts->opencount - $alarmCounts->forwardcount,
             "closedCount" => $alarmCounts->closedcount,
             "forwardCount" => $alarmCounts->forwardcount ??  0,
+            "oneDevice" => $oneDevice,
+
         ];
     }
     public function dashboardStatisctsHourlyRange(Request $request)

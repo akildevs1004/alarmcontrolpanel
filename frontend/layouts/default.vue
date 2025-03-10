@@ -125,7 +125,10 @@
       app
       :style="$nuxt.$route.name == 'index' ? 'z-index: 100000' : ''"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon
+        v-if="displayTopMenu"
+        @click.stop="drawer = !drawer"
+      />
       <span
         class="text-overflow"
         style="cursor: pointer"
@@ -143,11 +146,12 @@
       <span class="header-menu">
         <template
           v-if="
-            getLoginType == 'company' ||
-            getLoginType == 'branch' ||
-            getLoginType == 'department' ||
-            ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
-              $auth.user?.role?.role_type?.toLowerCase() != 'host')
+            displayTopMenu &&
+            (getLoginType == 'company' ||
+              getLoginType == 'branch' ||
+              getLoginType == 'department' ||
+              ($auth.user?.role?.role_type?.toLowerCase() != 'guard' &&
+                $auth.user?.role?.role_type?.toLowerCase() != 'host'))
           "
         >
           <v-row align="center" justify="space-around" class="header-menu-row">
@@ -246,7 +250,9 @@
       </span>
 
       <v-spacer></v-spacer>
-      <span class="pl-5"><TopMenuClock></TopMenuClock></span>
+      <span class="pl-5"
+        ><TopMenuClock v-if="displayTopMenu"></TopMenuClock
+      ></span>
       <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
         {{ $auth.user.name }}
       </div>
@@ -335,7 +341,9 @@
         <v-list light nav dense style="z-index: 9999">
           <v-list-item-group color="primary">
             <v-list-item
-              v-if="$auth && $auth.user?.user_type == 'company'"
+              v-if="
+                displayTopMenu && $auth && $auth.user?.user_type == 'company'
+              "
               @click="goToCompany()"
             >
               <v-list-item-icon>
@@ -736,6 +744,7 @@ export default {
   },
   data() {
     return {
+      displayTopMenu: false,
       activeAudio: true,
       popupKey: 1,
       key: 1,
@@ -962,6 +971,17 @@ export default {
         if (window) window.location.reload();
       } catch (e) {}
     }, 1000 * 60 * 60);
+    try {
+      if (window) {
+        if (window) {
+          console.log("window.innerWidth ", window.innerWidth);
+
+          if (window.innerWidth < 700) {
+            this.displayTopMenu = false;
+          } else this.displayTopMenu = true;
+        }
+      }
+    } catch (e) {}
   },
   watch: {},
   computed: {
