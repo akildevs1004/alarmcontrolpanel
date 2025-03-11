@@ -1325,6 +1325,8 @@ class CustomersController extends Controller
         $model = Customers::with(["alarm_events", "devicesOffline", "devicesOnline", "latest_alarm_event.device.customer", "devices.sensorzones", "contacts", "primary_contact", "secondary_contact"])
             //->whereHas("alarm_events")
             ->where("company_id", $request->company_id);
+        //->where("id", 6);
+
         $model->withCount("alarm_events");
         // $model->has("alarm_events", '>', 0);
 

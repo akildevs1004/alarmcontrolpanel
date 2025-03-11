@@ -701,6 +701,9 @@ export default {
       else return false;
     },
     getAlarmColorObject(alarm, customer = null) {
+      console.log(alarm);
+      console.log("customer", customer);
+
       if (alarm) {
         if (this.colorcodes[alarm.alarm_type.toLowerCase()])
           return this.colorcodes[alarm.alarm_type.toLowerCase()];
@@ -718,6 +721,11 @@ export default {
       //   return this.colorcodes.armed;
       // }
       else if (customer) {
+        console.log(
+          "this.findAnyDeviceisOffline(customer.devices) ",
+          this.findAnyDeviceisOffline(customer.devices)
+        );
+
         if (this.findAnyDeviceisOffline(customer.devices) > 0) {
           return this.colorcodes.offline;
         } else if (this.findanyArmedDevice(customer.devices)) {
@@ -734,25 +742,25 @@ export default {
 
       return this.colorcodes.offline;
     },
-    getCustomerColorObject(item) {
-      // console.log(
-      //   "findAnyDeviceisOffline",
-      //   this.findAnyDeviceisOffline(item.devices)
-      // );
+    // getCustomerColorObject(item) {
+    //   // console.log(
+    //   //   "findAnyDeviceisOffline",
+    //   //   this.findAnyDeviceisOffline(item.devices)
+    //   // );
 
-      if (item.latest_alarm_event) {
-        return this.colorcodes.alarm;
-      } else if (this.findanyArmedDevice(item.devices)) {
-        return this.colorcodes.armed;
-      }
-      if (this.findAnyDeviceisOffline(item.devices) > 0) {
-        return this.colorcodes.offline;
-      } else if (this.findanyDisamrDevice(item.devices)) {
-        return this.colorcodes.disarm;
-      }
+    //   if (item.latest_alarm_event) {
+    //     return this.colorcodes.alarm;
+    //   } else if (this.findanyArmedDevice(item.devices)) {
+    //     return this.colorcodes.armed;
+    //   }
+    //   if (this.findAnyDeviceisOffline(item.devices) > 0) {
+    //     return this.colorcodes.offline;
+    //   } else if (this.findanyDisamrDevice(item.devices)) {
+    //     return this.colorcodes.disarm;
+    //   }
 
-      return this.colorcodes.offline;
-    },
+    //   return this.colorcodes.offline;
+    // },
     findAnyDeviceisOffline(devices) {
       let offlineArray = devices.filter((device) => device.status_id == 2);
       // console.log("offlineArray", offlineArray);
@@ -908,7 +916,8 @@ export default {
                 "/google_map_icons/google_online.png";
 
               let colorObject = this.getAlarmColorObject(
-                item.latest_alarm_event
+                item.latest_alarm_event,
+                item
               );
               if (colorObject) iconURL = colorObject.image;
 
