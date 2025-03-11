@@ -2,7 +2,9 @@
   <div>
     <v-row>
       <v-col md="10">
-        <h4 class="pl-2">Operator Login Activities</h4>
+        <h3 style="color: black; font-weight: normal" class="pl-2">
+          Operator Login Activities
+        </h3>
       </v-col>
       <v-col md="2" class="text-end">
         <v-menu bottom left>
@@ -39,7 +41,7 @@
           <v-col style="padding-left: 0px; width: 25px; max-width: 25px">
             <v-img
               style="
-                border-radius: 50%;
+                border-radius: 10%;
                 height: auto;
                 width: 25px;
                 max-width: 25px;

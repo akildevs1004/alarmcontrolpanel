@@ -10,7 +10,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/sos.png"
+                      src="/notification_icons/sos.png"
                       style="width: 40px; margin: auto"
                     />
                   </v-col>
@@ -44,7 +44,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/critical.png"
+                      src="/notification_icons/critical.png"
                       style="width: 40px"
                     />
                   </v-col>
@@ -78,7 +78,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/medical.png"
+                      src="/notification_icons/medical.png"
                       style="width: 40px"
                     />
                   </v-col>
@@ -112,7 +112,10 @@
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img src="/dashboard_icons/fire.png" style="width: 40px" />
+                    <img
+                      src="/notification_icons/fire.png"
+                      style="width: 40px"
+                    />
                   </v-col>
 
                   <v-col
@@ -301,7 +304,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/technical.png"
+                              src="/notification_icons/technical.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -324,7 +327,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/event.png"
+                              src="/notification_icons/event.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -350,7 +353,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/water.png"
+                              src="/notification_icons/water.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -373,7 +376,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/temperature.png"
+                              src="/notification_icons/temperature.png"
                               style="width: 50px"
                             />
                           </v-col>

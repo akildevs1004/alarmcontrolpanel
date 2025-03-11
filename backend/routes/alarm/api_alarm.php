@@ -126,55 +126,6 @@ Route::delete('delete_sensor_type', [AlarmSensorTypesController::class, 'destroy
 
 
 
-//dashboard
-// Route::get('get_device_armed_logs', [CustomerAlarmEventsController::class, 'getAlarmLogs']);
-Route::apiResource('device_armed_logs', DeviceArmedLogsController::class);
-Route::get('device_armed_stats', [AlarmDashboardController::class, 'getDeviceArmedStatistics']);
-Route::get('device_live_stats', [AlarmDashboardController::class, 'getDeviceLiveStatistics']);
-Route::get('security_device_live_stats_groupby', [AlarmDashboardController::class, 'getDeviceLiveStatisticsGroupBy']);
-
-Route::get('customer_contract_stats', [AlarmDashboardController::class, 'getCustomerContractStatistics']);
-Route::get('device_sensors_stats', [AlarmDashboardController::class, 'getDeviceSensorStatistics']);
-
-Route::get('customer_profile_completion_percentage', [CustomersController::class, "customerProfileCompletionPercentage"]);
-Route::get('alarm_response_statistics', [AlarmDashboardController::class, "alarmResponseStatistics"]);
-Route::get('alarm_customer_statistics', [AlarmDashboardController::class, "alarmCustomerStatistics"]);
-
-Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistics"]);
-Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
-Route::get('dashboard_statistics_date_range', [AlarmDashboardController::class, "dashboardStatisctsDateRange"]);
-Route::get('dashboard_statistics_date_range_history', [AlarmDashboardController::class, "dashboardStatisctsDateRangeHistory"]);
-Route::get('dashboard_events_statistics_date_range_history', [AlarmDashboardController::class, "dashboardEventsStatisctsDateRangeHistory"]);
-
-
-
-
-
-
-
-Route::get('dashboard_statistics_hourly_range', [AlarmDashboardController::class, "dashboardStatisctsHourlyRange"]);
-
-
-
-Route::get('dashboard_statistics_customers', [AlarmDashboardController::class, "dashboardStatisctsCustomers"]);
-
-// Route::get('dashboard_today_statistics', [AlarmDashboardController::class, "dashboardStatisctsToday"]);
-
-
-
-
-
-
-
-
-
-Route::get('customer_contract_expin30days_stats', [CustomersController::class, "customerContractExpin30daysStats"]);
-Route::get('customer_devices_types_stats', [CustomersController::class, "customerDevicesStats"]);
-
-
-
-
-
 //api alarm logs
 Route::get('api_temperature_logs',  [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
 Route::post('api_temperature_logs', [ApiAlarmDeviceTemperatureLogsController::class, 'ApiTemperatureLogs']);
@@ -290,10 +241,12 @@ Route::get('/sample_pdf_print', [AlarmReportsController::class, 'sample_pdf_page
 
 
 //notifications
+// alarm_notification_icons
+// device_sensor_types
 
 Route::post("alarm_forward_notification", [AlarmNotificationController::class, "sendAlarmForwardNotification"]);
 Route::get("alarm_notification_icons", [AlarmNotificationController::class, "getAlarmNotificationIcons"]);
-Route::get("get_google_icons", [AlarmNotificationController::class, "getGoogleIcons"]);
+// Route::get("get_google_icons", [AlarmNotificationController::class, "getGoogleIcons"]);
 
 
 //operator

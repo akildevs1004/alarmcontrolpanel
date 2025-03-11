@@ -97,6 +97,9 @@ class AlarmNotificationController extends Controller
     public function getAlarmNotificationIcons()
     {
 
+        // alarm_notification_icons
+        // device_sensor_types
+
         return AlarmNotificationIcons::orderBy("notification_type", "asc")->where("image", "!=", null)->pluck("image", "notification_type");;
         // return   [
         //     "Temperature" => "temperature.png",

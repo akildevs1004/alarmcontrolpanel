@@ -2,15 +2,15 @@
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
   <div v-else>
     <v-row class="padding:0px">
-      <v-col cols="9"
-        ><v-row>
+      <v-col cols="9">
+        <v-row>
           <v-col>
             <v-card elevation="2"
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/sos.png"
+                      src="/notification_icons/sos.png"
                       style="width: 40px; margin: auto"
                     />
                   </v-col>
@@ -44,7 +44,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/critical.png"
+                      src="/notification_icons/critical.png"
                       style="width: 40px"
                     />
                   </v-col>
@@ -78,7 +78,7 @@
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
                     <img
-                      src="/dashboard_icons/medical.png"
+                      src="/notification_icons/medical.png"
                       style="width: 40px"
                     />
                   </v-col>
@@ -163,21 +163,23 @@
             ></v-card>
           </v-col>
         </v-row>
-        <!-- <v-row>
+        <v-row>
           <v-col>
-            <v-card
+            <!-- <v-card
               style="height: 500px"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text>
-                <CustomersAlarmMap
-                  :displayTable="false"
-                  mapid="dashboardmap"
-                  height="500"
-                /> </v-card-text
-            ></v-card>
+              ><v-card-text> -->
+            <CustomersAlarmMap
+              :displayTable="false"
+              mapid="dashboardmap"
+              mapHeight="600"
+            />
+            <!--</v-card-text
+            >
+           </v-card> -->
           </v-col>
-        </v-row> -->
+        </v-row>
         <v-row>
           <v-col>
             <v-card
@@ -202,7 +204,10 @@
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img src="/dashboard_icons/fire.png" style="width: 40px" />
+                    <img
+                      src="/notification_icons/fire.png"
+                      style="width: 40px"
+                    />
                   </v-col>
 
                   <v-col
@@ -233,7 +238,10 @@
               ><v-card-text
                 ><v-row>
                   <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img src="/dashboard_icons/water.png" style="width: 40px" />
+                    <img
+                      src="/notification_icons/water.png"
+                      style="width: 40px"
+                    />
                   </v-col>
 
                   <v-col
@@ -277,7 +285,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/technical.png"
+                              src="/notification_icons/technical.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -294,7 +302,7 @@
                         <!-- <v-row
                           ><v-col style="height: 20px">
                             <img
-                              src="/dashboard_icons/technical.png"
+                              src="/notification_icons/technical.png"
                               style="width: 30px"
                           /></v-col>
                         </v-row>
@@ -325,7 +333,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/event.png"
+                              src="/notification_icons/event.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -340,7 +348,7 @@
                         <!-- <v-row
                           ><v-col style="height: 20px"
                             ><img
-                              src="/dashboard_icons/event.png"
+                              src="/notification_icons/event.png"
                               style="width: 30px"
                           /></v-col>
                         </v-row>
@@ -372,7 +380,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/power.png"
+                              src="/notification_icons/power.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -395,7 +403,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/temperature.png"
+                              src="/notification_icons/temperature.png"
                               style="width: 50px"
                             />
                           </v-col>
@@ -424,7 +432,7 @@
                         <v-row>
                           <v-col style="max-width: 45px; margin: auto">
                             <img
-                              src="/dashboard_icons/gas.png"
+                              src="/notification_icons/gas.png"
                               style="width: 45px"
                             />
                           </v-col>
@@ -495,40 +503,46 @@
         <v-row style="margin-top: 0px"
           ><v-col style="padding-top: 0px">
             <v-card
-              style="height: 500px"
+              style="height: 300px"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text
-                ><DashboardOperatorLiveStatus
-                  v-if="loadAllEventsTable" /></v-card-text
+              ><v-card-text>
+                <DashboardAlarmEventsHourWiseChart
+                  v-if="loadAllEventsTable"
+                  :height="'220'"
+                  name="DashboardAlarmEventsHourWiseChart2" /></v-card-text
             ></v-card>
           </v-col>
         </v-row>
-      </v-col>
-    </v-row>
-    <v-row
-      ><v-col>
-        <v-card
-          style="height: 350px"
-          elevation="2"
-          class="eventslistscroll1 table-font121"
-          ><v-card-text>
-            <DashboardLoginActivities
-              v-if="loadAllEventsTable"
-              :filter_user_type="'security'"
-            /> </v-card-text
-        ></v-card> </v-col
-      ><v-col>
-        <v-card
-          style="height: 350px"
-          elevation="2"
-          class="eventslistscroll table-font12"
-          ><v-card-text>
-            <DashboardAlarmEventsHourWiseChart
-              v-if="loadAllEventsTable"
-              :height="'300'"
-              name="DashboardAlarmEventsHourWiseChart1" /></v-card-text
-        ></v-card>
+        <v-row class="mt-0"
+          ><v-col class="mt-0">
+            <v-card
+              style="height: 280px"
+              elevation="2"
+              class="eventslistscroll table-font12"
+              ><v-card-text>
+                <h3 style="color: black; font-weight: normal">Active Events</h3>
+
+                <DashboardOpenEvents /> </v-card-text
+            ></v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col
+            ><v-card
+              style="height: 500px; overflow-y: auto; overflow-x: hidden"
+              elevation="2"
+              class="eventslistscroll table-font12"
+              ><v-card-text>
+                <DashboardLoginActivities
+                  v-if="loadAllEventsTable"
+                  :filter_user_type="'security'"
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -544,6 +558,7 @@ import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperato
 import AlamDeviceCountPieChart from "../../components/Alarm/Dashboard/AlarmDeviceCountPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
 import CustomersAlarmMap from "../../components/Alarm/Map/CustomersAlarmMap.vue";
+import DashboardOpenEvents from "../../components/Admin/DashboardOpenEvents.vue";
 
 export default {
   components: {
@@ -552,6 +567,7 @@ export default {
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
     DashboardAlarmEventsHourWiseChart,
+    DashboardOpenEvents,
     CustomersAlarmMap,
   },
   data: () => ({
@@ -568,7 +584,7 @@ export default {
     apiLoading: false,
     cancelgetEventCategoriesStatsToken: null,
     cancelgetEventsTypeStatsToken: null,
-    cancelupdateEventsOpenCountStatusToken: null,
+    cancelgetEventsOpenCountStatusToken: null,
     loadAllEventsTable: false,
   }),
   computed: {},
@@ -587,7 +603,7 @@ export default {
 
     let today = new Date();
     this.date_from = today.toISOString().split("T")[0];
-    await this.updateEventsOpenCountStatus();
+    await this.getEventsOpenCountStatus();
     await this.getEventsTypeStats();
 
     await this.getEventCategoriesStats();
@@ -601,7 +617,7 @@ export default {
         this.key++;
         await this.getEventsTypeStats();
         await this.getEventCategoriesStats();
-        await this.updateEventsOpenCountStatus();
+        await this.getEventsOpenCountStatus();
       }
     }, 1000 * 20);
 
@@ -709,16 +725,16 @@ export default {
       }
     },
 
-    async updateEventsOpenCountStatus() {
+    async getEventsOpenCountStatus() {
       // Cancel any ongoing request
-      if (this.cancelupdateEventsOpenCountStatusToken) {
-        this.cancelupdateEventsOpenCountStatusToken.cancel(
+      if (this.cancelgetEventsOpenCountStatusToken) {
+        this.cancelgetEventsOpenCountStatusToken.cancel(
           "Previous request canceled."
         );
       }
 
       // Create a new cancel token
-      this.cancelupdateEventsOpenCountStatusToken =
+      this.cancelgetEventsOpenCountStatusToken =
         this.$axios.CancelToken.source();
 
       //if (this.apiLoading) return false;
@@ -732,8 +748,8 @@ export default {
             company_id: this.$auth.user.company_id,
             date: date,
           },
-          cancelupdateEventsOpenCountStatusToken:
-            this.cancelupdateEventsOpenCountStatusToken.token, // Attach cancel token
+          cancelgetEventsOpenCountStatusToken:
+            this.cancelgetEventsOpenCountStatusToken.token, // Attach cancel token
         })
         .then(({ data }) => {
           if (data) {

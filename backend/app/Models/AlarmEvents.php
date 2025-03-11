@@ -16,7 +16,7 @@ class AlarmEvents extends Model
     use HasFactory;
     protected $guarded = [];
     protected $appends = ["alarm_forwarded",];
-    protected $with = ["category", "device"];
+    protected $with = ["category", "device", "notificationicon"];
 
 
     public function customer()
@@ -42,6 +42,10 @@ class AlarmEvents extends Model
     public function notes()
     {
         return $this->hasMany(CustomerAlarmNotes::class, "alarm_id", "id")->orderBy("created_datetime", "ASC");
+    }
+    public function notificationicon()
+    {
+        return $this->belongsTo(AlarmNotificationIcons::class, "alarm_type", "notification_type");
     }
     // public function zoneData()
     // {

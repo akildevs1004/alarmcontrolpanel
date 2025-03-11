@@ -325,13 +325,16 @@
                             max-width="800"
                             height="400"
                             class="mx-auto border"
-                            :src="item?.picture || '/no-profile-image.jpg'"
+                            :src="item?.picture || '/noimage.png'"
                             contain
-                            lazy-src="/no-profile-image.jpg"
+                            lazy-src="/noimage.png"
                           ></v-img>
                         </v-carousel-item>
                       </template>
                     </v-carousel>
+                    <div v-if="customer.profile_pictures.length == 0">
+                      No data is available
+                    </div>
                   </v-col>
                 </v-row>
                 <v-row v-if="customer">
@@ -396,7 +399,7 @@
               <v-tab-item style="height: 530px">
                 <div v-if="customer" style="padding-top: 20px">
                   <table
-                    if="customer.devices"
+                    v-if="customer && customer.devices && customer.devices[0]"
                     class="operatorcustomerTop1"
                     style="width: 100%; line-height: 40px"
                   >
@@ -428,6 +431,7 @@
                       <td>{{ sensor.wired }}</td>
                     </tr>
                   </table>
+                  <div v-else>No data is available</div>
                 </div>
               </v-tab-item>
               <v-tab-item style="height: 530px">
@@ -555,7 +559,7 @@ export default {
       }
     }
 
-    if (selectedAlarm) {
+    if (this.selectedAlarm) {
       this.alarm = this.selectedAlarm;
     } else {
       this.alarm = { device: { customer: this.selectedCustomer } };

@@ -52,19 +52,19 @@
             </div> -->
                 <div style="border-top: 0px solid #ddd">
                   <v-icon size="13">mdi-phone</v-icon>
-                  {{ selectedCustomer.primary_contact?.phone1 || "---" }}
+                  {{ selectedCustomer?.primary_contact?.phone1 || "---" }}
                 </div>
                 <div style="border-top: 1px solid #ddd">
                   <v-icon size="13">mdi-phone-classic</v-icon>
-                  {{ selectedCustomer.primary_contact?.phone2 || "---" }}
+                  {{ selectedCustomer?.primary_contact?.phone2 || "---" }}
                 </div>
                 <div style="border-top: 1px solid #ddd">
                   <v-icon size="13">mdi-whatsapp</v-icon>
-                  {{ selectedCustomer.primary_contact?.whatsapp || "---" }}
+                  {{ selectedCustomer?.primary_contact?.whatsapp || "---" }}
                 </div>
                 <div style="border-top: 1px solid #ddd">
                   <v-icon size="13">mdi-at</v-icon>
-                  {{ selectedCustomer.primary_contact?.email || "---" }}
+                  {{ selectedCustomer?.primary_contact?.email || "---" }}
                 </div>
               </v-col>
             </v-row>

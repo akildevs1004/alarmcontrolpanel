@@ -247,17 +247,16 @@
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
         <v-row class="mt-0">
-          <v-col cols="4" class="text-left mt-1">
+          <v-col class="text-left mt-1" :cols="sensorItems.length > 1 ? 4 : 4">
             <h3 style="color: black; font-weight: normal">Alarm Events</h3>
           </v-col>
 
           <v-col
-            :cols="sensorItems.length > 1 ? 8 : 12"
-            class="text-right"
+            :cols="sensorItems.length > 1 ? 8 : 8"
             style="width: 600px; padding: 0px"
           >
             <v-row v-if="showFilters == 'true'">
-              <v-col cols="7">
+              <v-col>
                 <v-icon
                   loading="true"
                   @click="getDataFromApi(0)"
@@ -306,7 +305,7 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-              <v-col cols="2" style="min-width: 100px; padding-right: 0px">
+              <v-col style="max-width: 150px; padding-right: 0px">
                 <v-select
                   class="employee-schedule-search-box"
                   style="
@@ -325,7 +324,7 @@
                   item-value="id"
                 ></v-select>
               </v-col>
-              <v-col cols="2">
+              <v-col style="max-width: 200px">
                 <CustomFilter
                   style="float: left; padding-top: 5px; z-index: 999"
                   @filter-attr="filterAttr"
@@ -334,6 +333,7 @@
                   :defaultFilterType="1"
                   :height="'30px'"
               /></v-col>
+              <v-col style="max-width: 50px"></v-col>
               <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>
                       <template v-slot:activator="{ on, attrs }">
@@ -407,7 +407,7 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="sensorItems.length > 0" style="margin-top: 0px">
+        <v-row v-if="sensorItems?.length > 0" style="margin-top: 0px">
           <v-col cols="12" style="margin-top: 0px">
             <v-tabs
               v-if="sensorItems.length > 1"
@@ -473,14 +473,28 @@
                       <template v-slot:item.city="{ item }"> </template>
 
                       <template v-slot:item.sensor="{ item }">
-                        <div>
+                        <img
+                          :src="
+                            '/notification_icons/' +
+                              item.notificationicon?.image ||
+                            '/no-business_profile.png'
+                          "
+                          style="
+                            width: 100%;
+
+                            width: 30px;
+                            margin: auto;
+                            vertical-align: middle;
+                          "
+                        />
+                        <!-- <div>
                           {{ item.alarm_type }}
                         </div>
                         <div class="secondary-value">
                           <div class="secondary-value">
                             {{ item.zone_data?.location ?? "---" }}
                           </div>
-                        </div>
+                        </div> -->
                       </template>
                       <template v-slot:item.property="{ item }">
                         {{ item.device?.customer?.buildingtype?.name ?? "---" }}
@@ -497,10 +511,18 @@
                         <div class="secondary-value">{{ item.area }}</div>
                       </template>
                       <template v-slot:item.alarm_source="{ item }">
-                        <div>{{ item.alarm_source ?? "---" }}</div>
+                        <div>
+                          {{ item.alarm_type }}
+                        </div>
+                        <div class="secondary-value">
+                          <div class="secondary-value">
+                            {{ item.zone_data?.location ?? "---" }}
+                          </div>
+                        </div>
+                        <!-- <div>{{ item.alarm_source ?? "---" }}</div>
                         <div class="secondary-value">
                           {{ item.zone_data?.wired ?? "---" }}
-                        </div>
+                        </div> -->
                       </template>
                       <template v-slot:item.zonedata="{ item }">
                         <div>
@@ -548,39 +570,63 @@
                       </template>
 
                       <template v-slot:item.alarm_category="{ item }">
-                        <div>{{ item.category?.name || "---" }}</div>
+                        <!-- <div>{{ item.category?.name || "---" }}</div> -->
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-if="item.category?.name == 'Low'"
+                          color="#d7db47"
+                          label
+                          >{{ item.category?.name || "---" }}</v-chip
+                        >
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-else-if="item.category?.name == 'Medium'"
+                          color="#d1630f"
+                          label
+                          >{{ item.category?.name || "---" }}</v-chip
+                        >
+
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-else
+                          color="#ff0000"
+                          label
+                          >{{ item.category?.name || "---" }}</v-chip
+                        >
                       </template>
 
                       <template v-slot:item.status="{ item }">
-                        <div v-if="item.forwarded === true">Forwarded</div>
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-if="item.alarm_status == 1"
+                          color="#ff0000"
+                          label
+                          >OPEN</v-chip
+                        >
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-else-if="item.forwarded == 1"
+                          color="#0046ff"
+                          label
+                          >FWD</v-chip
+                        >
+
+                        <v-chip
+                          style="width: 60px; color: #fff; height: 25px"
+                          v-else
+                          color="#07af50"
+                          label
+                          >Closed</v-chip
+                        >
+                        <!-- <div v-if="item.forwarded === true">Forwarded</div>
                         <div v-else-if="item.alarm_status == 1">
                           Open
-                          <!-- <v-icon class="alarm1111111" style="color: red"
-                            >mdi mdi-alarm-light</v-icon
-                          > -->
-                          <!-- <br />
-                          <v-btn
-                            class="text--red"
-                            color="red"
-                            title="Click to Stop Alarm "
-                            @click="UpdateAlarmStatus(item, 0)"
-                            outlined
-                            x-small
-                            dense
-                            >Stop</v-btn
-                          > -->
+
                         </div>
                         <div v-else-if="item.alarm_status == 0">
                           Closed
-                          <!-- <v-icon title="Now Alaram is OFF"
-                            >mdi mdi-alarm-light-outline</v-icon
-                          >
-                          <div class="secondary-value">
-                            {{
-                              item.alarm_end_manually == 1 ? "Manually" : "Auto"
-                            }}
-                          </div> -->
-                        </div>
+
+                        </div> -->
                       </template>
                       <template v-slot:item.options="{ item }">
                         <v-menu bottom left>
@@ -625,7 +671,7 @@
                                 <v-icon color="secondary" small>
                                   mdi-format-list-numbered
                                 </v-icon>
-                                Notes
+                                Logs
                               </v-list-item-title>
                             </v-list-item>
                           </v-list>
@@ -720,7 +766,7 @@ export default {
       currentPage: 1,
       totalRowsCount: 0,
       headers: [
-        { text: "Event Id", value: "sno", sortable: false },
+        { text: "Event #", value: "sno", sortable: false },
         // { text: "Building", value: "building", sortable: false },
 
         { text: "Customer", value: "customer", sortable: false },
@@ -730,7 +776,7 @@ export default {
         // { text: "City", value: "city", sortable: false },
 
         // { text: "Device", value: "device", sortable: false },
-        { text: "Type", value: "sensor", sortable: false },
+        { text: "Type", value: "sensor", sortable: false, align: "center" },
         { text: "Zone", value: "zonedata", sortable: false },
         { text: "Source", value: "alarm_source", sortable: false },
 

@@ -135,6 +135,23 @@ class AlarmDashboardController extends Controller
 
         return $finalarray;
     }
+
+    public function dashboardOpenAlarmList(Request $request)
+    {
+        return AlarmEvents::with(["customer", "notificationicon"])->where("company_id", $request->company_id)
+            ->where("alarm_status", 1)
+            ->when($request->filled("customer_id"), function ($q) use ($request) {
+                $q->where("customer_id", $request->customer_id);
+            })
+            ->when($request->filled("customer_id"), function ($q) use ($request) {
+                $q->where("customer_id", $request->customer_id);
+            })
+            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                $model->whereIn('customer_id', $request->filter_customers_list);
+            })
+            ->orderBy("alarm_start_datetime", "desc")->limit(10)
+            ->get();
+    }
     public function dashboardEventsStatisctsDateRangeHistory(Request $request)
     {
         $finalarray = [];
@@ -497,7 +514,7 @@ class AlarmDashboardController extends Controller
             COALESCE(SUM(CASE WHEN alarm_type = \'Medical\' and alarm_status=1 THEN 1   END), 0) AS medical,
             COALESCE(SUM(CASE WHEN alarm_type = \'Temperature\' and alarm_status=1 THEN 1   END), 0) AS temperature,
             COALESCE(SUM(CASE WHEN alarm_type = \'Water\' and alarm_status=1 THEN 1 END), 0) AS water,
-            COALESCE(SUM(CASE WHEN alarm_type = \'Power\' and alarm_status=1 THEN 1 END), 0) AS power,
+            COALESCE(SUM(CASE WHEN alarm_type = \'AC_off\' and alarm_status=1 THEN 1 END), 0) AS power,
             COALESCE(SUM(CASE WHEN alarm_type = \'Gas\' and alarm_status=1 THEN 1 END), 0) AS gas,
 
 

@@ -9,7 +9,10 @@
               <v-card-text class="m-0 p-0">
                 <v-row>
                   <v-col style="margin: auto">
-                    <img src="/dashboard_icons/water.png" style="width: 45px" />
+                    <img
+                      src="/notification_icons/water.png"
+                      style="width: 45px"
+                    />
                   </v-col>
 
                   <v-col style="text-align: center; margin: auto">
@@ -64,7 +67,7 @@
                 <v-row>
                   <v-col style="margin: auto; text-align: center">
                     <img
-                      src="/dashboard_icons/critical.png"
+                      src="/notification_icons/critical.png"
                       style="width: 60%"
                     />
                   </v-col>

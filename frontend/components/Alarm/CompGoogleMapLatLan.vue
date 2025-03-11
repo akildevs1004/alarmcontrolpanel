@@ -47,7 +47,9 @@ export default {
     //   if (this.alarm) this.alarm_status = this.alarm.alarm_status;
     // }, 1000 * 5);
   },
-  created() {},
+  created() {
+    this.colorcodes = this.$utils.getAlarmIcons();
+  },
   watch: {
     // alarm_status: function () {
     //   console.log("alarm_status", this.alarm_status);
@@ -121,6 +123,8 @@ export default {
       this.plotLocations();
     },
     async plotLocations() {
+      console.log("his.alarm", this.alarm);
+
       if (!isNaN(this.latitude) && !isNaN(this.longitude)) {
         const position = {
           lat: parseFloat(this.latitude),
@@ -129,12 +133,18 @@ export default {
 
         let colorcodes = this.$utils.getAlarmIcons();
 
+        // let iconURL =
+        //   process.env.BACKEND_URL2 + "/google_map_icons/google_customer.png";
+        // if (this.alarm?.alarm_type) {
+        //   const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
+        //   if (colorObject) iconURL = colorObject.image;
+        // }
+
         let iconURL =
-          process.env.BACKEND_URL2 + "/google_map_icons/google_customer.png";
-        if (this.alarm?.alarm_type) {
-          const colorObject = colorcodes[this.alarm.alarm_type.toLowerCase()];
-          if (colorObject) iconURL = colorObject.image;
-        }
+          process.env.BACKEND_APP_URL + "/google_map_icons/google_online.png";
+
+        let colorObject = this.getAlarmColorObject(this.alarm);
+        if (colorObject) iconURL = colorObject.image;
 
         const icon = {
           url: iconURL + "?5=5",
@@ -201,6 +211,9 @@ export default {
           infowindow.close();
 
           this.map.panTo(position);
+
+          console.log("this.alarm?.alarm_status", this.alarm?.alarm_status);
+
           if (this.alarm?.alarm_status == 1)
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
@@ -208,6 +221,33 @@ export default {
             infowindow.open(this.map, this);
           });
         }
+      }
+    },
+    getAlarmColorObject(alarm, customer = null) {
+      try {
+        if (alarm) {
+          if (this.colorcodes[alarm.alarm_type.toLowerCase()])
+            return this.colorcodes[alarm.alarm_type.toLowerCase()];
+          if (alarm.alarm_status == 1) {
+            return this.colorcodes.alarm;
+          }
+        } else if (customer) {
+          if (this.findAnyDeviceisOffline(customer.devices) > 0) {
+            return this.colorcodes.offline;
+          } else if (this.findanyArmedDevice(customer.devices)) {
+            return this.colorcodes.armed;
+          } else if (this.findanyDisamrDevice(customer.devices) > 0) {
+            return this.colorcodes.disarm;
+          }
+        }
+
+        return this.colorcodes.offline;
+      } catch (e) {
+        console.log(this.colorcodes);
+
+        if (alarm.alarm_status == 1) {
+          return this.colorcodes.alarm;
+        } else return this.colorcodes.offline;
       }
     },
     openInGoogleMaps() {

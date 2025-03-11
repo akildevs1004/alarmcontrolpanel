@@ -2899,4 +2899,22 @@ td {
 #table-services .v-radio {
   margin: auto;
 }
+
+.simpletable table,
+.simpletable th,
+.simpletable td {
+  border-top: 1px solid black;
+  border-collapse: collapse;
+}
+.simpletable tr:last-child td {
+  border-bottom: 1px solid black;
+  border-collapse: collapse;
+}
+.simpletable td {
+  height: 50px;
+  inline-size: 100px;
+  overflow: hidden;
+  color: black;
+  vertical-align: middle;
+}
 </style>

@@ -16,7 +16,7 @@
       /></v-col>
     </v-row>
 
-    <div :id="name" style="width: 100%"></div>
+    <div :id="name" style="width: 100%" :height="height"></div>
   </div>
 </template>
 

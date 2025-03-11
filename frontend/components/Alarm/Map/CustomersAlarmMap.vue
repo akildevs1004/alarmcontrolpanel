@@ -21,6 +21,37 @@
       </v-card>
     </v-dialog>
     <v-dialog
+      v-model="dialogViewCustomer"
+      width="1200px"
+      height="700px"
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">Customer Information</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogViewCustomer = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #e9e9e9">
+          <TechnicianCustomerTabsView
+            v-if="selectedCustomer"
+            :key="key"
+            :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
+            :isPopup="true"
+            :isEditable="false"
+            :selectedAlarm="selectedAlarm"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
       v-model="dialogAlarmEventCustomerContactsTabView"
       width="1000px"
       style="overflow: visible"
@@ -51,17 +82,16 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col :cols="displayTable == 'true' ? 9 : 12">
-        {{ displayTable }}
-        <v-card elevation="2"
-          ><v-card-text style="padding: 0px">
+      <v-col :cols="displayTable == true ? 9 : 12">
+        <v-card elevation="2">
+          <v-card-text style="padding: 0px">
             <div
               :key="mapkeycount"
               id="map"
-              :style="'height:' + (browserHeight - 10) + 'px'"
+              :style="'height:' + (browserMapHeight - 10) + 'px'"
             ></div>
 
-            <div style="position: absolute; top: 14px; left: 140px">
+            <div style="position: absolute; top: 5px; left: 140px">
               <v-btn-toggle
                 v-model="mapStyle"
                 height="20"
@@ -94,7 +124,7 @@
       </v-col>
       <v-col
         cols="3"
-        v-if="displayTable == 'true'"
+        v-if="displayTable == true"
         style="padding: 0px; padding-top: 10px"
       >
         <v-card
@@ -383,11 +413,17 @@ import google_map_style_regular from "../../../google/google_style_regular.json"
 
 import AlarmCustomerTabsView from "../../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmEventCustomerContactsTabView from "../../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
+import TechnicianCustomerTabsView from "../TechnicianDashboard/TechnicianCustomerTabsView.vue";
 export default {
-  props: ["displayTable"],
-  components: { AlarmCustomerTabsView, AlarmEventCustomerContactsTabView },
+  props: ["displayTable", "mapHeight"],
+  components: {
+    AlarmCustomerTabsView,
+    AlarmEventCustomerContactsTabView,
+    TechnicianCustomerTabsView,
+  },
 
   data: () => ({
+    selectedAlarm: null,
     currentCustomer: null,
     mapStyle: "map",
     mapkeycount: 1,
@@ -463,6 +499,7 @@ export default {
     google_map_style_regular,
     selectedCustomer: null,
     browserHeight: 700,
+    browserMapHeight: 700,
   }),
   computed: {},
   mounted() {
@@ -496,11 +533,14 @@ export default {
       //this.mapkeycount++;
     }, 1000 * 15);
     ///this.getBuildingTypes();
-
-    try {
-      if (window) this.browserHeight = window.innerHeight - 70;
-    } catch (e) {
-      console.log(e);
+    if (this.mapHeight) {
+      this.browserMapHeight = this.mapHeight;
+    } else {
+      try {
+        if (typeof window !== "undefined")
+          this.browserHeight = window.innerHeight - 70;
+        this.browserMapHeight = window.innerHeight - 70;
+      } catch (e) {}
     }
   },
   watch: {
@@ -555,13 +595,13 @@ export default {
           this.$store.state.storeAlarmControlPanel.BuildingTypes;
       }
     },
-    viewItem(item) {
-      this.viewCustomerId = item.id;
-      this.dialogViewCustomer = true;
-    },
-    viewItem2(item) {
-      this.$router.push("/alarm/view-customer/" + item.id);
-    },
+    // viewItem(item) {
+    //   this.viewCustomerId = item.id;
+    //   this.dialogViewCustomer = true;
+    // },
+    // viewItem2(item) {
+    //   this.$router.push("/alarm/view-customer/" + item.id);
+    // },
     can(per) {
       return this.$pagePermission.can(per, this);
     },
@@ -587,7 +627,7 @@ export default {
       let sortedDesc = sortDesc ? sortDesc[0] : "";
       this.perPage = itemsPerPage;
       if (page > 1) this.currentPage = page - 1;
-      if (!page > 0) return false;
+      //if (!page > 0) return false;
       let options = {
         params: {
           page: page,
@@ -1007,9 +1047,16 @@ export default {
                 );
                 if (btnObject2)
                   btnObject2.addEventListener("click", () => {
-                    this.dialog = true;
+                    // this.dialog = true;
+                    // this.key += 1;
+                    // this.customerInfo = item;
+
+                    this.selectedCustomer = item;
+                    this.viewCustomerId = item.id;
+                    this.dialogViewCustomer = true;
+                    this.selectedAlarm = item.latest_alarm_event || null;
+
                     this.key += 1;
-                    this.customerInfo = item;
                   });
 
                 const infowindowContent = document.getElementById(
@@ -1026,9 +1073,16 @@ export default {
 
               // Open Vue dialog on marker click
               marker.addListener("click", () => {
-                this.dialog = true;
+                // this.dialog = true;
+                // this.key += 1;
+                // this.customerInfo = item;
+
+                this.selectedCustomer = item;
+                this.viewCustomerId = item.id;
+                this.dialogViewCustomer = true;
+                this.selectedAlarm = item.latest_alarm_event || null;
+
                 this.key += 1;
-                this.customerInfo = item;
               });
             } catch (e) {
               console.log(e);
