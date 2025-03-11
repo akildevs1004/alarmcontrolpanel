@@ -156,21 +156,21 @@ export default {
       ],
     };
   },
-  // watch: {
-  //   options: {
-  //     handler() {
-  //       this.getRecords();
-  //     },
-  //     deep: true,
-  //   },
-  // },
+  watch: {
+    options: {
+      handler() {
+        this.getRecords();
+      },
+      deep: true,
+    },
+  },
   mounted() {
     setInterval(() => {
-      if (this.$auth.user && this.$auth.user.customer) this.getRecords();
+      if (this.$auth.user) this.getRecords();
     }, 1000 * 45);
 
     setTimeout(() => {
-      if (this.$auth.user && this.$auth.user.customer) this.getRecords();
+      if (this.$auth.user) this.getRecords();
     }, 1000 * 8);
 
     // setTimeout(() => {
@@ -178,7 +178,9 @@ export default {
     //   this.triggerFirstPage(); // Trigger initial actions
     // }, 1000 * 20); // Example delay for loading
   },
-  created() {},
+  created() {
+    this.getRecords();
+  },
   computed: {
     employees() {
       return this.$store.state.employeeList.map((e) => ({
