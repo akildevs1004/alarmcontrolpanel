@@ -867,10 +867,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                 $body_content1 .= "Address: {$value['device']['customer']['house_number']}<br/>";
-                $body_content1 .= "City: {$value['device']['customer']['city']}<br/>  ";
+                $body_content1 .= "City: {$value['device']['customer']['city']}<br/>";
 
                 if (isset($value['devicesensorzones'])) {
-                    $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}<br/>";
+                    $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_type']}<br/>";
                     $body_content1 .= "Location: {$value['devicesensorzones']['location']}<br/>";
                 }
                 $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location}<br/> ";
@@ -932,12 +932,12 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                 $body_content1 .= "Address: {$value['device']['customer']['house_number']}\n";
-                $body_content1 .= "City: {$value['device']['customer']['city']}\n ";
+                $body_content1 .= "City: {$value['device']['customer']['city']}\n";
 
 
 
                 if (isset($value['devicesensorzones'])) {
-                    $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_name']}\n";
+                    $body_content1 .= "Sensor: {$value['devicesensorzones']['sensor_type']}\n";
                     $body_content1 .= "Location: {$value['devicesensorzones']['location']}\n";
                 }
                 $body_content1 .= "Google Map Link:  https://maps.google.com/?q={$location}\n\n ";
