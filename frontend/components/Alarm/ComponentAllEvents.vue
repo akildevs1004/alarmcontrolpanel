@@ -487,6 +487,7 @@
 
                           <template v-slot:item.sensor="{ item }">
                             <img
+                              :title="item.alarm_type"
                               :src="
                                 '/notification_icons/' +
                                   item.notificationicon?.image ||

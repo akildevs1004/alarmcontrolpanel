@@ -39,6 +39,7 @@
         <td>{{ event.customer.building_name }}</td>
         <td style="width: 40px">
           <img
+            :title="event.alarm_type"
             :src="
               '/notification_icons/' + event.notificationicon?.image ||
               '/no-business_profile.png'
