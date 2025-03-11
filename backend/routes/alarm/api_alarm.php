@@ -144,6 +144,10 @@ Route::get('alarm_statistics', [AlarmDashboardController::class, "alarmStatistic
 Route::get('alarm_event_statistics', [AlarmDashboardController::class, "alarmEventStatistics"]);
 Route::get('dashboard_statistics_date_range', [AlarmDashboardController::class, "dashboardStatisctsDateRange"]);
 Route::get('dashboard_statistics_date_range_history', [AlarmDashboardController::class, "dashboardStatisctsDateRangeHistory"]);
+Route::get('dashboard_events_statistics_date_range_history', [AlarmDashboardController::class, "dashboardEventsStatisctsDateRangeHistory"]);
+
+
+
 
 
 

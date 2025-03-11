@@ -121,6 +121,35 @@ export default ({ app }, inject) => {
 
       return `${hours}:${minutes} `;
     },
+    formatDateTime: (inputdate) => {
+      if (!inputdate || inputdate === "--") return "---";
+
+      const currentDate = new Date(inputdate);
+      if (isNaN(currentDate.getTime())) return "---"; // Handle invalid dates
+
+      // Format time in 12-hour format with AM/PM
+      let hours = currentDate.getHours();
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+      const amPm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12; // Convert to 12-hour format, treating 0 as 12
+
+      // Format date components
+      const day = currentDate.getDate();
+      const month = currentDate.toLocaleString("en-US", { month: "short" });
+      const year = currentDate.getFullYear();
+
+      // Add ordinal suffix (st, nd, rd, th)
+      const getOrdinalSuffix = (day) => {
+        if (day > 3 && day < 21) return "th"; // Handle 11th-19th
+        const suffixes = ["th", "st", "nd", "rd"];
+        return suffixes[day % 10] || "th";
+      };
+
+      return `${hours}:${minutes} ${amPm}, ${day}${getOrdinalSuffix(
+        day
+      )} ${month} ${year}`;
+    },
+
     formatTimeDateTime: (inputdate) => {
       if (!inputdate || inputdate === "--") return "---";
 

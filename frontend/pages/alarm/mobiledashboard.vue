@@ -45,7 +45,7 @@
                     {{
                       customerStatusData
                         ? customerStatusData.oneDevice
-                          ? $dateFormat.formatTimeDateTime(
+                          ? $dateFormat.formatDateTime(
                               customerStatusData.oneDevice.last_live_datetime
                             )
                           : "---"
@@ -83,7 +83,7 @@
                     {{
                       customerStatusData
                         ? customerStatusData.oneDevice
-                          ? $dateFormat.formatTimeDateTime(
+                          ? $dateFormat.formatDateTime(
                               customerStatusData.oneDevice.alarm_start_datetime
                             )
                           : "---"
@@ -143,7 +143,7 @@
           <v-col class="pt-0">
             <v-card style="height: 280px" elevation="2"
               ><v-card-text>
-                <h3 style="color: black; font-weight: normal">Alarm Status</h3>
+                <h3 style="color: black; font-weight: normal">Today Alarms</h3>
                 <CustomerDashbaordAlarmPieChart
                   v-if="customerStatusData"
                   :key="key"
@@ -160,13 +160,14 @@
 
                 <v-row style="font-weight: bold; color: green" class="pt-0">
                   <v-col
-                    >Device Online :
+                    >Last Alarm :
                     <!-- {{ customerData?.devices[0]?.last_live_datetime }} -->
                     {{
                       customerStatusData
-                        ? customerStatusData.oneDevice
-                          ? $dateFormat.formatTimeDateTime(
-                              customerStatusData.oneDevice.last_live_datetime
+                        ? customerStatusData.recentAlarm
+                          ? $dateFormat.formatDateTime(
+                              customerStatusData.recentAlarm
+                                .alarm_start_datetime
                             )
                           : "---"
                         : "---"
@@ -185,7 +186,7 @@
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text>
-                <CustomerMonthlyChart
+                <DashboardEventChart
                   v-if="loadAllEventsTable"
                   :height="300"
                   daterange="week"
@@ -234,7 +235,8 @@ import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperato
 
 import CustomerDashbaordAlarmPieChart from "../../components/Alarm/Customer/CustomerDashbaordAlarmPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
-import CustomerMonthlyChart from "../../components/Alarm/Customer/CustomerMonthlyChart.vue";
+// import CustomerMonthlyChart from "../../components/Alarm/Customer/CustomerMonthlyChart.vue";
+import DashboardEventChart from "../../components/Alarm/Customer/DashboardEventChart.vue";
 
 export default {
   layout: "default",
@@ -243,7 +245,8 @@ export default {
     AllEventsDashboard2,
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
-    CustomerMonthlyChart,
+    // CustomerMonthlyChart,
+    DashboardEventChart,
   },
   data: () => ({
     customer_id: null,
