@@ -11,15 +11,15 @@ const data = async ({ $auth, redirect }) => {
   };
 
   if ($auth.user.user_type == "company") {
-    if (window) {
-      if (window) {
+    try {
+      if (typeof window !== "undefined") {
         console.log("window.innerWidth ", window.innerWidth);
 
         if (window.innerWidth < 700) {
-          return redirect("/alarm/mobiledashboard"); // Fallback in case of null values
+          window.location.href = "/alarm/mobiledashboard"; // Redirect for client-side navigation
         }
       }
-    }
+    } catch (e) {}
     return redirect("/customer/dashboard"); // Fallback in case of null values
   }
 

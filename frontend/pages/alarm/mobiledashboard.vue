@@ -145,10 +145,11 @@
               ><v-card-text>
                 <h3 style="color: black; font-weight: normal">Alarm Status</h3>
                 <CustomerDashbaordAlarmPieChart
+                  v-if="customerStatusData"
                   :key="key"
                   :name="'CustomerDashbaordAlarmPieChart'"
-                  :activeAlarmCount="5"
-                  :closedAlarmCount="10"
+                  :activeAlarmCount="customerStatusData.openCount"
+                  :closedAlarmCount="customerStatusData.closedCount"
                   style="
                     height: 200px;
 
