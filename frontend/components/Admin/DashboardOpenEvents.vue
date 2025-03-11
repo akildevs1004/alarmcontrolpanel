@@ -54,28 +54,28 @@
         </td>
 
         <td style="width: 60px">
-          <v-chip
-            style="width: 60px; color: #fff; height: 25px"
+          <div
+            style="width: 60px; color: #fff; height: 25px; color: #ff0000"
             v-if="event.alarm_status == 1"
-            color="#ff0000"
             label
-            >OPEN</v-chip
           >
-          <v-chip
-            style="width: 60px; color: #fff; height: 25px"
-            v-else-if="event.forwarded == 1"
-            color="#0046ff"
+            OPEN
+          </div>
+          <div
+            style="width: 60px; color: #fff; height: 25px; color: #0046ff"
+            v-else-if="event.forwarded == true"
             label
-            >FWD</v-chip
           >
+            FWD
+          </div>
 
-          <v-chip
-            style="width: 60px; color: #fff; height: 25px"
+          <div
+            style="width: 60px; color: #fff; height: 25px; color: black"
             v-else
-            color="#07af50"
             label
-            >Closed</v-chip
           >
+            Closed
+          </div>
         </td>
         <td>
           {{

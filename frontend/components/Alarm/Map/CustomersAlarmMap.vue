@@ -91,12 +91,12 @@
               :style="'height:' + (browserMapHeight - 10) + 'px'"
             ></div>
 
-            <div style="position: absolute; top: 5px; left: 140px">
+            <div style="position: absolute; top: 0px; left: 140px">
               <v-btn-toggle
                 v-model="mapStyle"
                 height="20"
                 tile
-                color="black white "
+                color="deep-purple accent-3"
                 group
               >
                 <v-btn
@@ -115,6 +115,7 @@
                   small
                   dense
                   @click="changeGoogleMapColor('map')"
+                  fill
                   >Regular</v-btn
                 >
               </v-btn-toggle>
@@ -156,9 +157,9 @@
                 <v-row>
                   <v-col cols="5" style="font-size: 12px; padding-top: 17px"
                     >Customers List
-                    <span v-if="filterText != ''"
+                    <!-- <span v-if="filterText != ''"
                       >({{ caps(filterText) }})</span
-                    >
+                    > -->
                   </v-col>
                   <v-col>
                     <v-row>
@@ -492,7 +493,7 @@ export default {
 
     mapMarkersList: [],
     mapInfowindowsList: [],
-    filterText: "",
+    filterText: null,
 
     google_map_style_bandw,
 
@@ -504,7 +505,7 @@ export default {
   computed: {},
   mounted() {
     setTimeout(() => {
-      this.getCustomers("alarm");
+      this.getCustomers();
     }, 1000 * 2);
 
     setTimeout(() => {
@@ -613,7 +614,7 @@ export default {
       }
     },
 
-    getCustomers(filterText = "") {
+    getCustomers(filterText = null) {
       this.filterText = filterText;
 
       //console.log(this.filterText);
@@ -640,7 +641,7 @@ export default {
           // date_from: this.date_from,
           // date_to: this.date_to,
           common_search: this.commonSearch,
-          filter_text: filterText == "all" ? "" : filterText,
+          filter_text: filterText == "all" ? null : filterText,
         },
       };
 

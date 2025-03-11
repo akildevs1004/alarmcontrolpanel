@@ -49,7 +49,7 @@ export default {
       ],
 
       chartOptions: {
-        colors: ["#FF0000", "#894F24", "#FFB600", "#2196F3", "#14B012"],
+        colors: ["#FF0000", "#894F24", "#FFB600", "#06b050"],
         chart: {
           toolbar: {
             show: false,

@@ -1,6 +1,153 @@
 <template>
   <div>
     <v-row>
+      <v-col style="height: 80px">
+        <v-card elevation="2" style="height: 80px"
+          ><v-card-text
+            ><v-row>
+              <v-col class="d-flex1 justify-center" style="max-width: 80px">
+                <v-icon fill color="red" size="40" style="clear: both"
+                  >mdi-folder-open</v-icon
+                >
+                <div style="color: red">OPEN</div>
+              </v-col>
+
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+                "
+                >{{ alarmStatistics.open }}</v-col
+              ></v-row
+            ></v-card-text
+          ></v-card
+        >
+      </v-col>
+      <v-col>
+        <v-card elevation="2" style="height: 80px"
+          ><v-card-text
+            ><v-row>
+              <v-col class="d-flex1 justify-center" style="max-width: 80px">
+                <v-icon fill color="#07af50" size="40" style="clear: both"
+                  >mdi-lock</v-icon
+                >
+                <div style="color: #07af50">CLOSED</div>
+              </v-col>
+
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+                "
+                >{{ alarmStatistics.closed }}</v-col
+              ></v-row
+            ></v-card-text
+          ></v-card
+        >
+      </v-col>
+      <v-col>
+        <v-card elevation="2" style="height: 80px"
+          ><v-card-text
+            ><v-row>
+              <v-col class="d-flex1 justify-center" style="max-width: 80px">
+                <v-icon fill color="#0046ff" size="40" style="clear: both"
+                  >mdi-lock-open-variant</v-icon
+                >
+                <div style="color: #0046ff">Forward</div>
+              </v-col>
+
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+                "
+                >{{ alarmStatistics.forwarded }}</v-col
+              ></v-row
+            ></v-card-text
+          ></v-card
+        >
+      </v-col>
+      <v-col cols="5" style="height: 80px">
+        <v-card elevation="2" style="height: 80px; margin: auto"
+          ><v-card-text
+            ><v-row style="margin: auto">
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 25px;
+                  margin: auto;
+
+                  color: black;
+                "
+                >High</v-col
+              ><v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: red;
+                  border-right: 1px solid #ddd;
+                "
+              >
+                {{ alarmStatistics.high }}</v-col
+              >
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 25px;
+                  margin: auto;
+
+                  color: black;
+                "
+                >Medium</v-col
+              ><v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: red;
+                  border-right: 1px solid #ddd;
+                "
+              >
+                {{ alarmStatistics.medium }}</v-col
+              >
+              <v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 25px;
+                  margin: auto;
+
+                  color: black;
+                "
+                >Low</v-col
+              ><v-col
+                class="d-flex justify-center"
+                style="
+                  font-size: 40px;
+                  margin: auto;
+                  font-weight: bold;
+                  color: red;
+                "
+              >
+                {{ alarmStatistics.low }}</v-col
+              ></v-row
+            ></v-card-text
+          ></v-card
+        >
+      </v-col>
+    </v-row>
+    <!-- <v-row>
       <v-col cols="3" class="pr-0" style="max-width: 20%">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>
@@ -61,7 +208,7 @@
           /></v-card-text>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <!-- <v-row style="margin-top: 0px">
         <v-col cols="3" class="pr-0" style="max-width: 20%">
@@ -310,25 +457,25 @@
 </template>
 
 <script>
-import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
-import AlarmMedicalPieChart from "../../components/Alarm/SecurityDashboard/AlarmMedicalPieChart.vue";
-import AlarmTemperaturePieChart from "../../components/Alarm/SecurityDashboard/AlarmTemperaturePieChart.vue";
+// import AlarmBurglaryPieChart from "../../components/Alarm/SecurityDashboard/AlarmBurglaryPieChart.vue";
+// import AlarmMedicalPieChart from "../../components/Alarm/SecurityDashboard/AlarmMedicalPieChart.vue";
+// import AlarmTemperaturePieChart from "../../components/Alarm/SecurityDashboard/AlarmTemperaturePieChart.vue";
 
-import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFirePieChart.vue";
+// import AlarmFirePieChart from "../../components/Alarm/SecurityDashboard/AlarmFirePieChart.vue";
 
-import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
-import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
+// import AlarmWaterPieChart from "../../components/Alarm/SecurityDashboard/AlarmWaterPieChart.vue";
+// import AlarmLivePieChart from "../../components/Alarm/SecurityDashboard/AlarmLivePieChart.vue";
 // import AlamAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 export default {
   props: ["compFilterSupervisor", "filter_customers_list"],
   components: {
-    AlarmBurglaryPieChart,
-    AlarmTemperaturePieChart,
-    AlarmMedicalPieChart,
-    AlarmFirePieChart,
-    AlarmWaterPieChart,
-    AlarmLivePieChart,
+    // AlarmBurglaryPieChart,
+    // AlarmTemperaturePieChart,
+    // AlarmMedicalPieChart,
+    // AlarmFirePieChart,
+    // AlarmWaterPieChart,
+    // AlarmLivePieChart,
     // AlamAllEvents,
   },
   data: () => ({
@@ -345,6 +492,15 @@ export default {
       Fire: { online: 0, offline: 0 },
       Temperature: { online: 0, offline: 0 },
       Medical: { online: 0, offline: 0 },
+    },
+
+    alarmStatistics: {
+      open: 0,
+      closed: 0,
+      forwarded: 0,
+      high: 0,
+      medium: 0,
+      low: 0,
     },
 
     key: false,
@@ -389,6 +545,23 @@ export default {
 
       return test;
     },
+    // getDatafromApi() {
+    //   let options = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+
+    //       filter_customers_list: this.filter_customer_id
+    //         ? [this.filter_customer_id]
+    //         : null,
+    //     },
+    //   };
+
+    //   this.$axios
+    //     .get(`/security_device_live_stats_groupby`, options)
+    //     .then(({ data }) => {
+    //       this.onlineStats = data;
+    //     });
+    // },
     getDatafromApi() {
       let options = {
         params: {
@@ -401,9 +574,9 @@ export default {
       };
 
       this.$axios
-        .get(`/security_device_live_stats_groupby`, options)
+        .get(`/dashboard_alarm_statistics`, options)
         .then(({ data }) => {
-          this.onlineStats = data;
+          this.alarmStatistics = data;
         });
     },
   },

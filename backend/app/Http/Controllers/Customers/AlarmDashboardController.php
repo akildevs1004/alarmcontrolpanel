@@ -135,11 +135,29 @@ class AlarmDashboardController extends Controller
 
         return $finalarray;
     }
+    public function dashboardAlarmStatistics(Request $request)
+    {
+        $statistics = DB::table('alarm_events')
+            ->where('company_id', $request->company_id)
+            ->when($request->filled('customer_id'), function ($query) use ($request) {
+                $query->where('customer_id', $request->customer_id);
+            })
+            ->selectRaw('
+            COUNT(CASE WHEN alarm_status = 1 AND forwarded = false THEN 1 END) AS open ,
+            COUNT(CASE WHEN alarm_status = 1 AND forwarded = true THEN 1 END) AS forwarded,
+            COUNT(CASE WHEN alarm_status = 0 THEN 1 END) AS closed,
+            COUNT(CASE WHEN alarm_category = 1 THEN 1 END) AS high,
+            COUNT(CASE WHEN alarm_category = 2 THEN 1 END) AS medium,
+            COUNT(CASE WHEN alarm_category = 3 THEN 1 END) AS low
+        ')
+            ->first();
 
+        return $statistics;
+    }
     public function dashboardOpenAlarmList(Request $request)
     {
         return AlarmEvents::with(["customer", "notificationicon"])->where("company_id", $request->company_id)
-            ->where("alarm_status", 1)
+            //->where("alarm_status", 1)
             ->when($request->filled("customer_id"), function ($q) use ($request) {
                 $q->where("customer_id", $request->customer_id);
             })

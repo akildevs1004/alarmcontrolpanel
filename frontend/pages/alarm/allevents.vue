@@ -7,14 +7,8 @@
       </v-snackbar>
     </div>
     <CompAlarmDashboardStatistics />
-    <v-card class="elevation-2">
-      <v-card-text class="mt-5">
-        <AllEventsDashboard2
-          name="AllEvents1"
-          showFilters="true"
-          showTabs="true"
-        /> </v-card-text
-    ></v-card>
+
+    <AllEventsDashboard2 name="AllEvents1" showFilters="true" showTabs="true" />
   </div>
 </template>
 
