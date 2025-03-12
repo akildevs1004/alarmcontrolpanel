@@ -670,7 +670,8 @@ export default {
               this.data.length > 0 &&
               this.data[0].devices[0]?.utc_time_zone != "Asia/Dubai"
             ) {
-              this.setCustomerCenterLocationOnMap(this.data[0]);
+              if (!this.selectedCustomer)
+                this.setCustomerCenterLocationOnMap(this.data[0]);
               setTimeout(() => {}, 1000 * 5);
             }
           });
