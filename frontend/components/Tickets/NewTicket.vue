@@ -10,7 +10,7 @@
       <v-col md="12" sm="12" cols="12" dense>
         <v-card class="elevation-0 p-2" style="padding: 5px">
           <v-row>
-            <v-col cols="12" style="height: 300px">
+            <v-col cols="12">
               <v-row class="pt-0">
                 <v-col :cols="is_admin ? 6 : 12" dense>
                   <v-text-field
@@ -63,11 +63,17 @@
                   </v-autocomplete
                 ></v-col>
                 <v-col cols="12" dense>
-                  <ClientOnly style-="height:600px">
+                  <ClientOnly style="height: 600px; overflow: scroll">
                     <tiptap-vuetify
                       class="tiptap-icon ma-1"
                       v-model="payload_ticket.description"
                       :extensions="extensions"
+                      height="450"
+                      style="
+                        height: 450px;
+                        overflow: auto;
+                        border: 1px solid black;
+                      "
                       v-scroll.self="onScroll"
                       :toolbar-attributes="{
                         color: 'background red--text',
@@ -170,7 +176,7 @@
                 color="primary"
                 @click="save_documents"
               >
-                Submit
+                Create Ticket
               </v-btn></v-col
             >
           </v-row>

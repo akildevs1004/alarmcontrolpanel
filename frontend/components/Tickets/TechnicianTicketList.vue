@@ -160,7 +160,7 @@
     <v-dialog v-model="dialogReply" max-width="700px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense> Reply to Ticket - {{ editItem?.created_datetime }}</span>
+          <span dense> Reply to Ticket </span>
           <v-spacer></v-spacer>
           <v-icon @click="dialogReply = false" outlined>
             mdi mdi-close-circle
@@ -232,7 +232,25 @@
               :defaultFilterType="1"
               :height="'40px'"
           /></v-col>
-          <v-col style="max-width: 250px" class="pt-5">
+
+          <v-col style="max-width: 200px" class="pt-5">
+            <v-autocomplete
+              @change="getDataFromApi()"
+              clearable
+              style="width: 200px"
+              class="reports-events-autocomplete bgwhite"
+              v-model="filter_customer_id"
+              :items="customersList"
+              dense
+              placeholder="Customers"
+              outlined
+              item-value="id"
+              item-text="building_name"
+              hide-details
+            >
+            </v-autocomplete>
+          </v-col>
+          <v-col style="max-width: 200px" class="pt-5">
             <v-select
               @change="getDataFromApi()"
               clearable
@@ -250,7 +268,7 @@
             >
             </v-select>
           </v-col>
-          <v-col style="max-width: 160px" class="pt-5">
+          <v-col style="max-width: 100px" class="pt-5">
             <v-select
               @change="getDataFromApi()"
               :items="[
@@ -270,7 +288,7 @@
           <v-col
             v-if="technician_id == null"
             class="pt-5"
-            style="max-width: 80px"
+            style="max-width: 50px"
           >
             <v-btn
               title="Add Ticket"
@@ -452,20 +470,45 @@
               <template v-slot:item.status="{ item }">
                 <div :class="getIsReadStatus(item) ? '' : 'bold'">
                   <div v-if="item.status == 0" style="color: red">
-                    Closed <br />{{
-                      $dateFormat.formatDateMonthYear(item.last_active_datetime)
-                    }}
+                    <v-chip label color="green" style="color: #fff"
+                      >Closed</v-chip
+                    >
                   </div>
-                  <div v-else-if="item.job_start_datetime != null">
-                    in-Process
-                    <div class="secondary-value">
-                      {{ item.technician?.first_name }}
-                      {{ item.technician?.last_name || "---" }}
-                    </div>
+                  <div
+                    v-else-if="
+                      item.status == 1 && item.job_start_datetime != null
+                    "
+                  >
+                    <v-chip label color="green" style="color: #fff"
+                      >Process</v-chip
+                    >
                   </div>
-                  <div v-else-if="item.status == 1" style="color: green">
-                    New
+                  <div
+                    v-else-if="
+                      item.status == 1 &&
+                      item.job_start_datetime == null &&
+                      item.responses.length > 0
+                    "
+                  >
+                    <v-chip label color="yellow" style="color: black"
+                      >Open</v-chip
+                    >
                   </div>
+                  <div
+                    v-else-if="
+                      item.status == 1 && item.job_start_datetime == null
+                    "
+                    style="color: green"
+                  >
+                    <v-chip label color="red" style="color: #fff">New</v-chip>
+                  </div>
+                </div>
+              </template>
+
+              <template v-slot:item.technician="{ item }">
+                <div class="secondary-value">
+                  {{ item.technician?.first_name }}
+                  {{ item.technician?.last_name || "---" }}
                 </div>
               </template>
               <template v-slot:item.closed_datetime="{ item }">
@@ -476,6 +519,12 @@
                   {{
                     $dateFormat.formatDateMonthYear(item.last_active_datetime)
                   }}
+                </div>
+                <div v-else>---</div>
+              </template>
+              <template v-slot:item.job_start_datetime="{ item }">
+                <div v-if="item.job_start_datetime != null">
+                  {{ $dateFormat.formatDateMonthYear(item.job_start_datetime) }}
                 </div>
                 <div v-else>---</div>
               </template>
@@ -501,7 +550,7 @@
                         <v-icon color="secondary" small>
                           mdi-information</v-icon
                         >
-                        Ticket Info
+                        View Ticket
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="viewCustomer(item)">
@@ -617,6 +666,8 @@ export default {
   ],
   data() {
     return {
+      customersList: [],
+      filter_customer_id: null,
       dialogViewCustomer: false,
       dialogViewStartJob: false,
       selectedCustomerCounter: 0,
@@ -653,8 +704,8 @@ export default {
       headers: [
         { text: "Ticket ID", value: "id", sortable: false },
 
-        { text: "Created By", value: "customer", sortable: false },
         { text: "Subject", value: "subject", sortable: false },
+        { text: "Created By", value: "customer", sortable: false },
 
         { text: "Category", value: "category_id", sortable: false },
 
@@ -667,7 +718,10 @@ export default {
         },
 
         { text: "Status", value: "status", sortable: false },
+
+        { text: "Job Date", value: "job_start_datetime", sortable: false },
         { text: "Requested Date", value: "created_datetime", sortable: false },
+        { text: "Closed Date", value: "closed_datetime", sortable: false },
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
@@ -707,6 +761,7 @@ export default {
     try {
       if (window) this.browserHeight = window.innerHeight;
     } catch (e) {}
+    this.getCustomersList();
   },
 
   methods: {
@@ -732,7 +787,19 @@ export default {
       this.editId = ticket.id;
       this.dialogCloseJob = true;
     },
-
+    async getCustomersList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/customers_list`, options).then(({ data }) => {
+        this.customersList = [
+          { id: null, building_name: "All Customers" },
+          ...data,
+        ];
+      });
+    },
     testSensors(ticket) {
       this.key++;
       this.selectedCustomerCounter++;
@@ -806,6 +873,8 @@ export default {
     },
     closeDialog() {
       this.dialogAddCustomerNotes = false;
+      this.isPageload = true;
+      this.displayDateFilter = true;
       this.getDataFromApi();
       this.$emit("closeDialog");
     },
@@ -891,6 +960,7 @@ export default {
 
           //status: this.status ?? null,
           filterWord: this.filterWord ?? null,
+          filter_customer_id: this.filter_customer_id,
         },
       };
 

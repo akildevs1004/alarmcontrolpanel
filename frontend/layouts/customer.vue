@@ -2300,9 +2300,9 @@ button {
   height: 17px !important;
 }
 
-.tiptap-vuetify-editor__content p {
+/* .tiptap-vuetify-editor__content p {
   height: 150px;
-}
+} */
 </style>
 <style>
 main {

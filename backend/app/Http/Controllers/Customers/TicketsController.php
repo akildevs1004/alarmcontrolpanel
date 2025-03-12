@@ -37,6 +37,9 @@ class TicketsController extends Controller
         $model->when($request->filled("category_id"), function ($query) use ($request) {
             $query->where("category_id", $request->category_id);
         });
+        $model->when($request->filled("filter_customer_id"), function ($query) use ($request) {
+            $query->where("customer_id", $request->filter_customer_id);
+        });
 
         $model->when($request->filled("common_search"), function ($query) use ($request) {
 

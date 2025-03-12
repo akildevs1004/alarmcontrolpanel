@@ -2927,4 +2927,19 @@ td {
 .table-header-color th {
   color: #4b9eff !important;
 }
+.tiptap-vuetify-editor__btn-icon,
+.tiptap-vuetify-editor__action-render-btn .v-icon {
+  color: #fff !important;
+}
+.tiptap-vuetify-editor__content p {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+.ProseMirror {
+  height: 500px !important;
+}
+.v-data-table-header th {
+  color: #4b9eff !important;
+}
 </style>
