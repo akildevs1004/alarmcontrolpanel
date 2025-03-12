@@ -502,7 +502,7 @@ export default {
 
     mapMarkersList: [],
     mapInfowindowsList: [],
-    filterText: "All",
+    filterText: "Alarms",
 
     google_map_style_bandw,
 
@@ -539,7 +539,7 @@ export default {
       //   this.$route.name == "alarm-customersmap" ||
       //   this.$route.name == "alarm-dashboard"
       // )
-      /////////this.getCustomers();
+      this.getCustomers();
       //this.mapkeycount++;
     }, 1000 * 15);
     ///this.getBuildingTypes();
