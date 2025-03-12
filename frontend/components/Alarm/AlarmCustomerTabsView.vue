@@ -193,7 +193,7 @@
             style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Subscription
+            Subscript
             <v-icon> mdi-clipboard-list-outline</v-icon>
           </v-tab>
         </v-tabs>
