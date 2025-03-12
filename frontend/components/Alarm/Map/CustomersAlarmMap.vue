@@ -504,9 +504,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    setTimeout(() => {
-      this.getCustomers();
-    }, 1000 * 2);
+    // setTimeout(() => {
+    //   this.getCustomers();
+    // }, 1000 * 2);
 
     setTimeout(() => {
       this.plotLocations(true);
@@ -514,6 +514,7 @@ export default {
   },
 
   created() {
+    this.getCustomers();
     //////this._id = 4; //this.$route.params.id;
     this.colorcodes = this.$utils.getAlarmIcons();
     if (this.$auth.user.branch_id) {
@@ -615,45 +616,45 @@ export default {
     },
 
     getCustomers(filterText = null) {
-      this.filterText = filterText;
+      this.getMapKey().then(() => {
+        this.filterText = filterText;
 
-      //console.log(this.filterText);
+        //console.log(this.filterText);
 
-      // if (this.loading == true) return false;
-      this.loading = true;
+        // if (this.loading == true) return false;
+        this.loading = true;
 
-      let { sortBy, sortDesc, page, itemsPerPage } = this.options;
+        let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-      let sortedBy = sortBy ? sortBy[0] : "";
-      let sortedDesc = sortDesc ? sortDesc[0] : "";
-      this.perPage = itemsPerPage;
-      if (page > 1) this.currentPage = page - 1;
-      //if (!page > 0) return false;
-      let options = {
-        params: {
-          page: page,
-          sortBy: sortedBy,
-          sortDesc: sortedDesc,
-          perPage: itemsPerPage,
-          pagination: true,
-          company_id: this.$auth.user.company_id,
-          customer_id: this.customer_id,
-          // date_from: this.date_from,
-          // date_to: this.date_to,
-          common_search: this.commonSearch,
-          filter_text: filterText == "all" ? null : filterText,
-        },
-      };
+        let sortedBy = sortBy ? sortBy[0] : "";
+        let sortedDesc = sortDesc ? sortDesc[0] : "";
+        this.perPage = itemsPerPage;
+        if (page > 1) this.currentPage = page - 1;
+        //if (!page > 0) return false;
+        let options = {
+          params: {
+            page: page,
+            sortBy: sortedBy,
+            sortDesc: sortedDesc,
+            perPage: itemsPerPage,
+            pagination: true,
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+            // date_from: this.date_from,
+            // date_to: this.date_to,
+            common_search: this.commonSearch,
+            filter_text: filterText == "all" ? null : filterText,
+          },
+        };
 
-      try {
-        this.$axios.get(`customers_for_map`, options).then(({ data }) => {
-          this.data = data; //data.data;
+        try {
+          this.$axios.get(`customers_for_map`, options).then(({ data }) => {
+            this.data = data; //data.data;
 
-          //  this.totalRowsCount = data.total;
-          this.loading = false;
-          //this.mapkeycount++;
+            //  this.totalRowsCount = data.total;
+            this.loading = false;
+            //this.mapkeycount++;
 
-          this.getMapKey().then(() => {
             this.plotLocations();
             if (
               this.data.length > 0 &&
@@ -663,11 +664,10 @@ export default {
               setTimeout(() => {}, 1000 * 5);
             }
           });
-        });
-      } catch (e) {
-        console.log(e);
-      }
-
+        } catch (e) {
+          console.log(e);
+        }
+      });
       // let config = {
       //   params: {
       //     company_id: this.$auth.user.company_id,
@@ -701,8 +701,8 @@ export default {
       else return false;
     },
     getAlarmColorObject(alarm, customer = null) {
-      console.log(alarm);
-      console.log("customer", customer);
+      // console.log(alarm);
+      // console.log("customer", customer);
 
       if (alarm) {
         if (this.colorcodes[alarm.alarm_type.toLowerCase()])
@@ -721,10 +721,10 @@ export default {
       //   return this.colorcodes.armed;
       // }
       else if (customer) {
-        console.log(
-          "this.findAnyDeviceisOffline(customer.devices) ",
-          this.findAnyDeviceisOffline(customer.devices)
-        );
+        // console.log(
+        //   "this.findAnyDeviceisOffline(customer.devices) ",
+        //   this.findAnyDeviceisOffline(customer.devices)
+        // );
 
         if (this.findAnyDeviceisOffline(customer.devices) > 0) {
           return this.colorcodes.offline;
