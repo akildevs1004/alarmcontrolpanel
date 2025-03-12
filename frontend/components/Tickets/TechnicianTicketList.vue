@@ -470,7 +470,7 @@
               <template v-slot:item.status="{ item }">
                 <div :class="getIsReadStatus(item) ? '' : 'bold'">
                   <div v-if="item.status == 0" style="color: red">
-                    <v-chip label color="green" style="color: #fff"
+                    <v-chip label color="green" style="color: #fff; width: 70px"
                       >Closed</v-chip
                     >
                   </div>
@@ -479,7 +479,10 @@
                       item.status == 1 && item.job_start_datetime != null
                     "
                   >
-                    <v-chip label color="green" style="color: #fff"
+                    <v-chip
+                      label
+                      color="#4b9eff"
+                      style="color: #fff; width: 70px"
                       >Process</v-chip
                     >
                   </div>
@@ -490,7 +493,10 @@
                       item.responses.length > 0
                     "
                   >
-                    <v-chip label color="yellow" style="color: black"
+                    <v-chip
+                      label
+                      color="yellow"
+                      style="color: black; width: 70px"
                       >Open</v-chip
                     >
                   </div>
@@ -500,7 +506,9 @@
                     "
                     style="color: green"
                   >
-                    <v-chip label color="red" style="color: #fff">New</v-chip>
+                    <v-chip label color="red" style="color: #fff; width: 70px"
+                      >New</v-chip
+                    >
                   </div>
                 </div>
               </template>
