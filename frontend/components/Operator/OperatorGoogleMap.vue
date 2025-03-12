@@ -106,7 +106,8 @@ export default {
 
         const icon = {
           url: this.mapimage, // Path to the customer image
-          scaledSize: new google.maps.Size(25, 30),
+          // scaledSize: new google.maps.Size(25, 30),
+          scaledSize: new google.maps.Size(55, 55),
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
         };

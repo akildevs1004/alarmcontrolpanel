@@ -5,7 +5,11 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogNewTicket" max-width="700px" style="z-index: 9999">
+    <v-dialog
+      v-model="dialogNewTicket"
+      max-width="1000px"
+      style="z-index: 9999"
+    >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense> New Ticket</span>

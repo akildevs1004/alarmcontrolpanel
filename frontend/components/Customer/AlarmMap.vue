@@ -566,6 +566,7 @@ export default {
           const icon = {
             url: this.$utils.getRelaventMarkers(item.alarm), // Path to the customer image
             scaledSize: new google.maps.Size(75, 75), // Adjust the size as needed
+
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
           };

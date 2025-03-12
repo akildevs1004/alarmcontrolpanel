@@ -155,7 +155,7 @@
             <template v-slot:top>
               <v-container>
                 <v-row>
-                  <v-col cols="5" style="font-size: 12px; padding-top: 17px"
+                  <v-col cols="3" style="font-size: 14px; padding-top: 17px"
                     >Customers List
                     <!-- <span v-if="filterText != ''"
                       >({{ caps(filterText) }})</span
@@ -163,15 +163,24 @@
                   </v-col>
                   <v-col>
                     <v-row>
-                      <v-col cols="2">
+                      <v-col cols="4">
+                        <v-checkbox
+                          class="mt-0"
+                          v-model="filterText"
+                          value="Alarm"
+                          label="Alarms"
+                          @click="getCustomers()"
+                        ></v-checkbox>
+                      </v-col>
+                      <!-- <v-col cols="2">
                         <v-icon
                           @click="getCustomers('all')"
                           title="Display All Customers"
                           >mdi-reload</v-icon
                         >
-                      </v-col>
+                      </v-col> -->
 
-                      <v-col cols="10">
+                      <v-col cols="8">
                         <v-text-field
                           class="small-custom-textbox"
                           @input="getCustomers()"
@@ -416,7 +425,7 @@ import AlarmCustomerTabsView from "../../../components/Alarm/AlarmCustomerTabsVi
 import AlarmEventCustomerContactsTabView from "../../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 import TechnicianCustomerTabsView from "../TechnicianDashboard/TechnicianCustomerTabsView.vue";
 export default {
-  props: ["displayTable", "mapHeight"],
+  props: ["displayTable", "mapHeight", "isWithOutAlarms"],
   components: {
     AlarmCustomerTabsView,
     AlarmEventCustomerContactsTabView,
@@ -493,7 +502,7 @@ export default {
 
     mapMarkersList: [],
     mapInfowindowsList: [],
-    filterText: null,
+    filterText: "All",
 
     google_map_style_bandw,
 
@@ -530,8 +539,7 @@ export default {
       //   this.$route.name == "alarm-customersmap" ||
       //   this.$route.name == "alarm-dashboard"
       // )
-      this.getCustomers();
-
+      /////////this.getCustomers();
       //this.mapkeycount++;
     }, 1000 * 15);
     ///this.getBuildingTypes();
@@ -616,8 +624,10 @@ export default {
     },
 
     getCustomers(filterText = null) {
+      if (this.isWithOutAlarms) this.filterText = null;
+
       this.getMapKey().then(() => {
-        this.filterText = filterText;
+        //this.filterText = filterText;
 
         //console.log(this.filterText);
 
@@ -643,7 +653,7 @@ export default {
             // date_from: this.date_from,
             // date_to: this.date_to,
             common_search: this.commonSearch,
-            filter_text: filterText == "all" ? null : filterText,
+            filter_text: this.filterText == "all" ? null : this.filterText,
           },
         };
 
@@ -923,7 +933,7 @@ export default {
 
               const icon = {
                 url: iconURL + "?1=1",
-                scaledSize: new google.maps.Size(28, 34),
+                scaledSize: new google.maps.Size(55, 55),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),
               };
@@ -978,7 +988,7 @@ export default {
               alarmHtmlLink = "";
               customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-              customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
+              customerHtmlLink = `<img title="Customer Info"    id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:30px;cursor:pointer"/>`;
 
               if (item.latest_alarm_event?.alarm_start_datetime) {
                 // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
@@ -1013,7 +1023,7 @@ export default {
                   <div>Landmark: ${item.landmark}</div>
                 </td>
 <td style=" vertical-align: middle;text-align:right">
- <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:20px" src="${googleDirectionIcon}"/></a>
+ <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:30px" src="${googleDirectionIcon}"/></a>
 
  <span>
  ${customerHtmlLink}   ${alarmHtmlLink}

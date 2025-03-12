@@ -261,7 +261,7 @@
                 style="width: 600px; padding: 0px"
               >
                 <v-row v-if="showFilters == 'true'">
-                  <v-col>
+                  <v-col style="margin: auto">
                     <v-icon
                       loading="true"
                       @click="getDataFromApi(0)"
@@ -273,9 +273,8 @@
                       style="padding-top: 7px; float: right; width: 300px"
                       height="20"
                       class="employee-schedule-search-box"
-                      @input="getDataFromApi(0)"
                       v-model="commonSearch"
-                      label="Common Search(All Content)"
+                      label="Search"
                       placeholder="ID,Name,location etc..."
                       dense
                       outlined
@@ -310,26 +309,52 @@
                       item-value="id"
                     ></v-select>
                   </v-col> -->
-                  <v-col style="max-width: 150px; padding-right: 0px">
+                  <v-col
+                    style="max-width: 200px; padding-right: 0px; margin: auto"
+                  >
+                    <v-select
+                      label="Event Type"
+                      class="employee-schedule-search-box"
+                      style="
+                        padding-top: 7px;
+                        z-index: 999;
+                        min-width: 100%;
+                        width: 200px;
+                      "
+                      height="25px"
+                      outlined
+                      v-model="filterAlarmType"
+                      dense
+                      :items="AlarmTypeNotificationIcons"
+                      item-text="notification_type"
+                      clearable
+                      item-value="notification_type"
+                      hide-details
+                    ></v-select>
+                  </v-col>
+                  <v-col
+                    style="max-width: 200px; padding-right: 0px; margin: auto"
+                  >
                     <v-select
                       class="employee-schedule-search-box"
                       style="
                         padding-top: 7px;
                         z-index: 999;
                         min-width: 100%;
-                        width: 150px;
+                        width: 200px;
                       "
                       height="25px"
                       outlined
-                      @change="getDataFromApi(0)"
                       v-model="filterAlarmStatus"
                       dense
                       :items="allEventsList"
                       item-text="name"
                       item-value="id"
+                      clearable
+                      hide-details
                     ></v-select>
                   </v-col>
-                  <v-col style="max-width: 200px">
+                  <v-col style="max-width: 200px; margin: auto">
                     <CustomFilter
                       style="float: left; padding-top: 5px; z-index: 999"
                       @filter-attr="filterAttr"
@@ -338,6 +363,17 @@
                       :defaultFilterType="1"
                       :height="'30px'"
                   /></v-col>
+                  <v-col
+                    style="max-width: 100px; padding-top: 18px; margin: auto"
+                  >
+                    <v-btn
+                      desne
+                      small
+                      color="primary"
+                      @click="getDataFromApi(0)"
+                      >Submit</v-btn
+                    >
+                  </v-col>
                   <v-col style="max-width: 50px"></v-col>
                   <!-- <v-col cols="2" style="margin-top: 10px; margin-left: -16px">
                     <v-menu bottom right>
@@ -454,7 +490,7 @@
                           :footer-props="{
                             itemsPerPageOptions: [10, 50, 100, 500, 1000],
                           }"
-                          class="elevation-0"
+                          class="elevation-0 table-header-color"
                         >
                           <template v-slot:item.sno="{ item, index }">
                             {{ item.id }}
@@ -843,6 +879,8 @@ export default {
       ],
       items: [],
       selectedAlarm: null,
+      AlarmTypeNotificationIcons: [],
+      filterAlarmType: "All",
     };
   },
   watch: {
@@ -868,12 +906,32 @@ export default {
         this.tableHeight = window.innerHeight - 350;
       });
     }
+
+    let options = {
+      params: {
+        company_id: this.$auth.user.company_id,
+      },
+    };
+    this.$axios.get(`alarm_notification_icons`, options).then(({ data }) => {
+      this.AlarmTypeNotificationIcons = data;
+      const excludedKeys = ["AC_off", "DC_off"];
+
+      const array = Object.entries(this.AlarmTypeNotificationIcons)
+
+        .filter(([key]) => !excludedKeys.includes(key)) // Exclude specific keys
+        .map(([key, value]) => ({ notification_type: key, image: value }));
+
+      this.AlarmTypeNotificationIcons = [
+        { notification_type: "All", image: "All" },
+        ...array,
+      ];
+    });
   },
   created() {
     this.allEventsList = [];
 
     this.allEventsList = [
-      { id: null, name: "All Events" },
+      { id: null, name: "All" },
       { id: 1, name: "Open" },
 
       { id: 0, name: "Closed" },
@@ -1054,7 +1112,7 @@ export default {
       this.date_from = data.from;
       this.date_to = data.to;
 
-      this.getDataFromApi(0);
+      //this.getDataFromApi(0);
     },
     UpdateAlarmStatus(item, status) {
       if (status == 0) {
@@ -1156,7 +1214,9 @@ export default {
 
       // Create a new cancel token for this request
       this.cancelTokenSource = this.$axios.CancelToken.source();
-      console.log("this.filter_customer_id", this.filter_customer_id);
+
+      if (this.filterAlarmType == "All") this.filterAlarmType = null;
+      // if (this.filterAlarmStatus == "All") this.filterAlarmStatus = null;
 
       let options = {
         params: {
@@ -1178,7 +1238,9 @@ export default {
           sortDesc: "DESC",
 
           filter_date: this.filter_date,
-          filter_alarm_type: this.filter_alarm_type,
+          filter_alarm_type: this.filterAlarmType
+            ? this.filterAlarmType
+            : this.filter_alarm_type,
         },
         cancelToken: this.cancelTokenSource.token, // Assign the cancel token
       };

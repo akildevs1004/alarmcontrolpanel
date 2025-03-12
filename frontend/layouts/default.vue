@@ -880,7 +880,6 @@ export default {
   created() {
     // console.log("company auth", this.$auth);
     // console.log("company", this.$auth.user);
-    console.log("default-logout");
 
     if (this.$auth.user.user_type != "company") {
       try {
@@ -982,6 +981,8 @@ export default {
         }
       }
     } catch (e) {}
+
+    this.loadAlarmNotificationIcons();
   },
   watch: {},
   computed: {
@@ -1134,6 +1135,11 @@ export default {
       };
       this.$axios.get(`alarm_notification_icons`, options).then(({ data }) => {
         this.alarm_icons = data;
+
+        this.$store.commit(
+          "storeAlarmControlPanel/AlarmTypeNotificationIcons",
+          data
+        );
       });
     },
     async getBuildingTypes() {
@@ -2916,5 +2922,9 @@ td {
   overflow: hidden;
   color: black;
   vertical-align: middle;
+}
+
+.table-header-color th {
+  color: #4b9eff !important;
 }
 </style>

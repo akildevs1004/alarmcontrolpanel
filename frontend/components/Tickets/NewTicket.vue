@@ -38,7 +38,7 @@
                     v-model="filter_customer_id"
                     :items="customersList"
                     dense
-                    placeholder="All Customers"
+                    placeholder="Select Customer"
                     outlined
                     item-value="id"
                     item-text="building_name"
@@ -63,17 +63,7 @@
                   </v-autocomplete
                 ></v-col>
                 <v-col cols="12" dense>
-                  <v-textarea
-                    style="width: 100%"
-                    label="Description"
-                    dense
-                    outlined
-                    type="text"
-                    v-model="payload_ticket.description"
-                    hide-details
-                    rows="8"
-                  ></v-textarea>
-                  <!-- <ClientOnly style-="height:600px">
+                  <ClientOnly style-="height:600px">
                     <tiptap-vuetify
                       class="tiptap-icon ma-1"
                       v-model="payload_ticket.description"
@@ -84,9 +74,20 @@
                       }"
                     />
                     <template #placeholder> Loading... </template>
-                  </ClientOnly> -->
+                  </ClientOnly>
+                  <!-- <v-textarea
+                    style="width: 100%"
+                    label="Description"
+                    dense
+                    outlined
+                    type="text"
+                    v-model="payload_ticket.description"
+                    hide-details
+                    rows="8"
+                  ></v-textarea> -->
                 </v-col>
               </v-row>
+
               <span
                 v-if="errors && errors.description"
                 class="text-danger mt-2"
@@ -180,23 +181,23 @@
 </template>
 
 <script>
-// import {
-//   TiptapVuetify,
-//   Heading,
-//   Bold,
-//   Italic,
-//   Strike,
-//   Underline,
-//   Paragraph,
-//   BulletList,
-//   OrderedList,
-//   ListItem,
-//   Blockquote,
-//   History,
-// } from "tiptap-vuetify";
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Blockquote,
+  History,
+} from "tiptap-vuetify";
 export default {
   props: ["customer_id", "security_id", "editId", "editItem", "editable"],
-  // components: { TiptapVuetify },
+  components: { TiptapVuetify },
   data: () => ({
     category_id: null,
     TitleRules: [(v) => !!v || "Title is required"],
@@ -204,24 +205,24 @@ export default {
     filter_customer_id: null,
     categoryList: [],
     extensions: [
-      // History,
-      // Blockquote,
-      // Underline,
-      // Strike,
-      // Italic,
-      // ListItem,
-      // BulletList,
-      // OrderedList,
-      // [
-      //   Heading,
-      //   {
-      //     options: {
-      //       levels: [1, 2, 3],
-      //     },
-      //   },
-      // ],
-      // Bold,
-      // Paragraph,
+      History,
+      Blockquote,
+      Underline,
+      Strike,
+      Italic,
+      ListItem,
+      BulletList,
+      OrderedList,
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3],
+          },
+        },
+      ],
+      Bold,
+      Paragraph,
     ],
     documents: false,
 
@@ -337,7 +338,7 @@ export default {
     save_documents() {
       //if (!this.$auth?.user?.customer) return false;
 
-      if (this.customer_id || this.security_id) {
+      if (this.customer_id || this.security_id || this.filter_customer_id) {
       } else {
         this.snackbar = true;
         this.response = "Operator or Customer Details are not available";

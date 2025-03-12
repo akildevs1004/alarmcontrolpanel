@@ -8,6 +8,7 @@ export const state = () => ({
 
   SensorTypes: null,
   ZoneTypes: null,
+  AlarmTypeNotificationIcons: null,
 });
 
 export const mutations = {
@@ -34,6 +35,9 @@ export const mutations = {
   },
   DeviceModels(state, data) {
     state.DeviceModels = data;
+  },
+  AlarmTypeNotificationIcons(state, data) {
+    state.AlarmTypeNotificationIcons = data;
   },
 };
 

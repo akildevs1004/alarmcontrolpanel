@@ -1426,7 +1426,8 @@ export default {
 
               const icon = {
                 url: iconURL + "?5=5",
-                scaledSize: new google.maps.Size(28, 34),
+                // scaledSize: new google.maps.Size(28, 34),
+                scaledSize: new google.maps.Size(55, 55),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),
               };
@@ -1449,12 +1450,12 @@ export default {
               let alarmHtmlLink = "";
               let customerHtmlLink = `<button class="primary v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="customerInfowindow-btn-${item.id}">View</button>`;
 
-              customerHtmlLink = `<img  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:20px;"/>`;
+              customerHtmlLink = `<img title="Customer Info"  id="customerInfowindow-btn-${item.id}" src="${googleInfoIcon}" style="width:30px; cursor:pointer"/>`;
 
               if (item.latest_alarm_event?.alarm_start_datetime) {
                 // alarmHtmlLink = `<button class="error v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--x-small" id="alarmInfowindow-btn-${item.id}">Alarm</button>`;
 
-                alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:16px;"/>`;
+                alarmHtmlLink = `<img id="alarmInfowindow-btn-${item.id}" src="${iconURL}" style="width:20px;"/>`;
               }
 
               let profile_picture =
@@ -1484,7 +1485,7 @@ export default {
                   <div>Landmark: ${item.landmark}</div>
                 </td>
 <td style=" vertical-align: middle;text-align:right">
- <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:20px" src="${googleDirectionIcon}"/></a>
+ <a  title="Directions"  target="_blank" href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"><img title="Directions" style="width:30px" src="${googleDirectionIcon}"/></a>
 
  <span>
  ${customerHtmlLink}   ${alarmHtmlLink}

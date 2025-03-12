@@ -763,7 +763,8 @@ export default {
 
           const icon = {
             url: iconURL + "?1=1",
-            scaledSize: new google.maps.Size(28, 34),
+            // scaledSize: new google.maps.Size(28, 34),
+            scaledSize: new google.maps.Size(55, 55),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(25, 25),
           };

@@ -174,6 +174,7 @@
               :displayTable="false"
               mapid="dashboardmap"
               mapHeight="600"
+              isWithOutAlarms="true"
             />
             <!--</v-card-text
             >
