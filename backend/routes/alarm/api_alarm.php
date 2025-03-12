@@ -179,6 +179,8 @@ Route::delete('delete-automation', [DeviceNotificationsManagersController::class
 Route::apiResource('customer_payments', CustomerPaymentsController::class);
 Route::delete('delete-payment', [CustomerPaymentsController::class, "destroy"]);
 Route::post('customer_product_invoice_submition',  [CustomerPaymentsController::class, 'CustomerProductInvoiceSubmition']);
+Route::get('get_customer_sensor_payment_package_details',  [CustomerPaymentsController::class, 'GetCustomerSensorsPaymentPackage']);
+
 
 
 Route::get('plotting', [PlottingController::class, "index"]);

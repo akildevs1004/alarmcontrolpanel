@@ -58,6 +58,7 @@
               :editId="editId"
               :editDevice="editDevice"
               :isEditable="isEditable"
+              :invoicePackageData="invoicePackageData"
             />
           </v-container>
         </v-card-text>
@@ -513,6 +514,7 @@ export default {
     downloadProfileLink: null,
     editDevice: null,
     dialogZones: false,
+    invoicePackageData: null,
   }),
 
   computed: {
@@ -585,6 +587,8 @@ export default {
     if (this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
       this.deviceTypes = this.$store.state.storeAlarmControlPanel.DeviceTypes;
     }
+
+    this.getSensorLimitFromPayments();
   },
 
   methods: {
@@ -602,6 +606,19 @@ export default {
       this.key = this.key + 1;
       this.editDevice = item;
       this.dialogZones = true;
+    },
+    getSensorLimitFromPayments() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.customer_id,
+        },
+      };
+      this.$axios
+        .get(`/get_customer_sensor_payment_package_details`, options)
+        .then(({ data }) => {
+          this.invoicePackageData = data;
+        });
     },
     getAlarmStatus(item) {},
     copyToProfileimage(faceImage, userId) {

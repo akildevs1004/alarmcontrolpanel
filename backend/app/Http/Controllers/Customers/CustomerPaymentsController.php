@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomerProductServices;
 use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
+use App\Models\Deivices\DeviceZones;
+use App\Models\Device;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -184,6 +186,31 @@ class CustomerPaymentsController extends Controller
 
         return $this->response('Payment Deleted successfully', null, true);
     }
+    public function GetCustomerSensorsPaymentPackage(Request $request)
+    {
+
+
+        $request->validate(
+            [
+                'company_id' => 'required|integer',
+                'customer_id' => 'required|integer',
+            ]
+        );
+
+        $customerProductService = CustomerProductServices::with("device_product_service")
+            ->where("customer_id", $request->customer_id)
+
+            ->orderBy("created_datetime", "DESC")->first()->toArray();
+
+
+        $customerTotalSensors =   DeviceZones::whereHas('device', function ($query) use ($request) {
+            $query->where('customer_id', $request->customer_id);
+        })->count();;
+
+        $customerProductService["customerTotalSensors"] = $customerTotalSensors;
+
+        return  $customerProductService;
+    }
 
     public function CustomerProductInvoiceSubmition(Request $request)
     {
@@ -204,7 +231,7 @@ class CustomerPaymentsController extends Controller
 
             ]
         );
-
+        $totalInvoiceCount = $request->total_invoice_count;
         $data = [
             "company_id" => $request->company_id,
             "customer_id" => $request->customer_id,
@@ -213,11 +240,14 @@ class CustomerPaymentsController extends Controller
             "discount" =>  $request->product_discount_price,
             "amount" =>  $request->product_final_price,
             "created_datetime" =>  date("Y-m-d H:i:s"),
+            "start_date" =>  $request->start_date,
+            "end_date" => $request->end_date,
+            "invoices_count" => $totalInvoiceCount,
 
         ];
         $record = CustomerProductServices::create($data);
 
-        $totalInvoiceCount = $request->total_invoice_count;
+
         $maxId = CustomerPayments::where("company_id", $request->company_id)
             ->orderBy("invoice_count", "desc")
             ->value("invoice_count") ?? 0; // Default to 0 if no records exist
@@ -250,7 +280,7 @@ class CustomerPaymentsController extends Controller
 
         CustomerPayments::insert($invoices);
         Customers::where("id", $request->customer_id)->where("start_date", null)->update(["start_date" => $request->start_date]);
-        Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date]);
+        Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date, "customer_product_service_id" => $record->id]);
 
 
         return $this->response("Invoices created successfully.", null, true);

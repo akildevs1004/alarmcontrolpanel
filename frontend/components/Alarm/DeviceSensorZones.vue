@@ -36,7 +36,7 @@
         <v-card elevation="0" class="mt-0">
           <v-toolbar class="mb-0 white--text" color="white" dense flat>
             <v-toolbar-title>
-              <span style="color: black"> Sensors List</span></v-toolbar-title
+              <span style="color: black"> Sensors List </span></v-toolbar-title
             >
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
@@ -73,9 +73,21 @@
               ></v-text-field
             > -->
             </span>
-
+            <!-- <span style="color: black"
+              >Max Sensors Allowed :
+              {{
+                invoicePackageData?.device_product_service?.sensor_count ||
+                "---"
+              }}</span
+            > -->
             <v-btn
-              v-if="isEditable"
+              v-if="
+                isEditable &&
+                invoicePackageData &&
+                invoicePackageData.device_product_service &&
+                invoicePackageData.customerTotalSensors <
+                  invoicePackageData.device_product_service.sensor_count
+              "
               title="Change Request"
               x-small
               :ripple="false"
@@ -84,6 +96,10 @@
             >
               <v-icon class="">mdi mdi-plus-circle</v-icon>
             </v-btn>
+            <div v-else style="color: red">
+              Max Sensor count Reached or Package is not Active
+              <v-icon class="" color="red">mdi mdi-plus-circle</v-icon>
+            </div>
           </v-toolbar>
 
           <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
@@ -221,7 +237,7 @@ import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
 
 export default {
-  props: ["employeeId", "editDevice", "isEditable"],
+  props: ["employeeId", "editDevice", "isEditable", "invoicePackageData"],
   components: {
     EditDeviceZone,
     AlarmCustomerView,

@@ -9,10 +9,100 @@
     <v-row>
       <v-col cols="12">
         <v-tabs v-model="tab">
+          <v-tab> Subscription </v-tab>
           <v-tab> Timings </v-tab>
           <v-tab v-if="isEditable"> Password </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-row>
+              <v-col>
+                <v-card>
+                  <v-card-text>
+                    <h3>Subscription Package</h3>
+                    <br />
+                    <v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >Package Name</v-col
+                      >
+                      <v-col
+                        >:
+                        {{
+                          invoicePackageData
+                            ? invoicePackageData.device_product_service.name
+                            : "---"
+                        }}</v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >Max Sensor Count</v-col
+                      >
+                      <v-col>
+                        :
+                        {{
+                          invoicePackageData
+                            ? invoicePackageData.device_product_service
+                                .sensor_count
+                            : "---"
+                        }}</v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >Invoice Price(After Discount)</v-col
+                      >
+                      <v-col>
+                        : $
+                        {{
+                          invoicePackageData ? invoicePackageData.amount : "---"
+                        }}</v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >Start Date</v-col
+                      >
+                      <v-col>
+                        :
+                        {{
+                          invoicePackageData
+                            ? invoicePackageData.start_date
+                            : "---"
+                        }}</v-col
+                      > </v-row
+                    ><v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >End Date</v-col
+                      >
+                      <v-col>
+                        :
+                        {{
+                          invoicePackageData
+                            ? invoicePackageData.end_date
+                            : "---"
+                        }}</v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col class="bold" style="max-width: 300px"
+                        >Created Date</v-col
+                      >
+                      <v-col>
+                        :
+                        {{
+                          invoicePackageData
+                            ? invoicePackageData.created_datetime
+                            : "---"
+                        }}</v-col
+                      >
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-tab-item>
+
           <v-tab-item>
             <v-card>
               <v-card-text>
@@ -306,6 +396,7 @@ export default {
       tab: 0,
       e1: 1,
       errors: [],
+      invoicePackageData: null,
     };
   },
   mounted() {
@@ -323,7 +414,9 @@ export default {
 
     this.timmingArray = this.generateTimingArray();
   },
-  created() {},
+  created() {
+    if (this.customer) this.getSensorLimitFromPayments();
+  },
 
   methods: {
     can(per) {
@@ -339,6 +432,19 @@ export default {
         }
       }
       return times;
+    },
+    getSensorLimitFromPayments() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.customer.id,
+        },
+      };
+      this.$axios
+        .get(`/get_customer_sensor_payment_package_details`, options)
+        .then(({ data }) => {
+          this.invoicePackageData = data;
+        });
     },
     update_setting() {
       this.payload.company_id = this.$auth.user.company_id;

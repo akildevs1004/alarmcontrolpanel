@@ -589,6 +589,10 @@ export default {
       this.product_discount_price_amount = discount;
 
       this.product_final_price = this.product_price - discount;
+
+      if (this.product_final_price < 0) {
+        alert("Invalid Invoice amount");
+      }
     },
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
       if (this.isBackendRequestOpen) return false;
