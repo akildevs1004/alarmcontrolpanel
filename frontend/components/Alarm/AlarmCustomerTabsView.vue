@@ -183,6 +183,7 @@
             class="customer-tab"
             style="max-width: 50px"
             v-if="!isMapviewOnly"
+            @click="keySettings++"
           >
             Settings
             <v-icon>mdi mdi-briefcase-account</v-icon>
