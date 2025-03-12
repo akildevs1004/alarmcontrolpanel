@@ -502,7 +502,7 @@ export default {
 
     mapMarkersList: [],
     mapInfowindowsList: [],
-    filterText: "Alarms",
+    filterText: "Alarm",
 
     google_map_style_bandw,
 
