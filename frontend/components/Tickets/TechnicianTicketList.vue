@@ -523,6 +523,7 @@
                 <div
                   v-if="item.status == 0"
                   :class="getIsReadStatus(item) ? '' : 'bold'"
+                  style="color: green"
                 >
                   {{
                     $dateFormat.formatDateMonthYear(item.last_active_datetime)
@@ -531,7 +532,10 @@
                 <div v-else>---</div>
               </template>
               <template v-slot:item.job_start_datetime="{ item }">
-                <div v-if="item.job_start_datetime != null">
+                <div
+                  v-if="item.job_start_datetime != null"
+                  style="color: #4b9eff"
+                >
                   {{ $dateFormat.formatDateMonthYear(item.job_start_datetime) }}
                 </div>
                 <div v-else>---</div>
