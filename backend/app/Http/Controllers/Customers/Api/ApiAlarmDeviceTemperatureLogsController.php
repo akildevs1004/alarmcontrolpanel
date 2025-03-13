@@ -890,8 +890,10 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 if ($value['email'] != '') {
 
                     try {
-                        Mail::to($value['email'])
-                            ->send($body_content1);
+                        // Mail::to($value['email'])
+                        //     ->send($body_content1);
+
+                        Mail::to($value['email'])->queue($body_content1);
                     } catch (\exception $e) {
                     }
 

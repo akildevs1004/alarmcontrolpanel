@@ -1206,6 +1206,16 @@ Route::post('/cameratesting', function (Request $request) {
             'json_content' => $requstJson,
         ]);
 });
+Route::get('test-email2', function () {
+
+    return Mail::to('venuakil2@gmail.com')->queue(new TestMail());
+
+
+    Mail::raw('This is a test email from Laravel using Gmail SMTP.', function ($message) {
+        $message->to('venuakil2@gmail.com')->subject('Test Email');
+    });
+    return 'Test email sent!';
+});
 Route::get('/testmail', function () {
 
     // abort(500, 'Test error for email');

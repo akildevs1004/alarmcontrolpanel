@@ -157,6 +157,7 @@ class WhatsappController extends Controller
     public function sendWhatsappNotification($company, $message, $number, $attachments = [])
     {
 
+
         // API endpoint URL
         $url = 'https://wa.mytime2cloud.com/send-message';
 
