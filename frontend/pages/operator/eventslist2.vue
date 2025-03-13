@@ -958,7 +958,7 @@ export default {
               if (colorObject) iconURL = colorObject.image;
 
               const icon = {
-                url: iconURL + "?3=3",
+                url: iconURL + "?4=4",
                 scaledSize: new google.maps.Size(28, 34),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),
