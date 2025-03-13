@@ -1194,6 +1194,7 @@ Route::get('/verifyDuplicate', function () {
 Route::get('/nightshift', function () {
     // return (new NightShiftController)->render();
 });
+
 Route::post('/cameratesting', function (Request $request) {
 
     $requestData = $request->all();
@@ -1206,6 +1207,11 @@ Route::post('/cameratesting', function (Request $request) {
             'json_content' => $requstJson,
         ]);
 });
+Route::get('testqueuemail', function () {
+
+    return Mail::to('venuakil2@gmail.com')->queue(new TestMail());
+});
+
 Route::get('test-email2', function () {
 
     return Mail::to('venuakil2@gmail.com')->queue(new TestMail());
