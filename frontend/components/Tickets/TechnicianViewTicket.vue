@@ -68,7 +68,7 @@
               <v-row class="pt-0">
                 <v-col>
                   <h3>Subject: {{ payload_ticket.subject }}</h3>
-                  <span
+                  <span style="color: #9ba5ca"
                     >Created On:
                     {{
                       $dateFormat.formatDateMonthYear(
