@@ -638,12 +638,12 @@
                         Close Job
                       </v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="responses(item)">
+                    <!-- <v-list-item @click="responses(item)">
                       <v-list-item-title style="cursor: pointer">
                         <v-icon color="secondary" small> mdi-view-list</v-icon>
                         History
                       </v-list-item-title>
-                    </v-list-item>
+                    </v-list-item> -->
                     <!-- <v-list-item
                       v-if="can('branch_view')"
                       @click="editTicket(item)"

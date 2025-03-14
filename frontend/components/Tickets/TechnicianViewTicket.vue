@@ -412,27 +412,32 @@
                 </v-col>
               </v-row>
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Ticket ID </v-col> <v-col cols="2">: </v-col
+                <v-col style="max-width: 130px">Ticket ID </v-col>
+                <v-col cols="1">:</v-col
                 ><v-col cols="5"> #{{ editItem.id }}</v-col></v-row
               ><v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Created By </v-col> <v-col cols="2">: </v-col
+                <v-col style="max-width: 130px">Created By </v-col>
+                <v-col cols="1">:</v-col
                 ><v-col cols="5">
                   <div v-if="editItem.category_id > 0">Admin</div>
                   <div v-else>Customer</div>
                 </v-col></v-row
               >
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Customer </v-col> <v-col cols="2">: </v-col
+                <v-col style="max-width: 130px">Customer </v-col>
+                <v-col cols="1">:</v-col
                 ><v-col cols="5">
                   {{ editItem.customer.building_name }}</v-col
                 ></v-row
               >
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Category </v-col> <v-col cols="2">: </v-col>
+                <v-col style="max-width: 130px">Category </v-col>
+                <v-col cols="1">:</v-col>
                 <v-col cols="5"> {{ editItem.category?.name || "---" }}</v-col>
               </v-row>
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Status </v-col> <v-col cols="2">: </v-col>
+                <v-col style="max-width: 130px">Status </v-col>
+                <v-col cols="1">:</v-col>
                 <v-col cols="5">
                   <div v-if="editItem.status == 0" style="color: red">
                     <div label color="green" style="width: 60px; color: red">
@@ -491,17 +496,18 @@
                 </v-col>
               </v-row>
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Created Date </v-col> <v-col cols="2">: </v-col>
-                <v-col cols="5">
+                <v-col style="max-width: 130px">Created Date </v-col>
+                <v-col cols="1">:</v-col>
+                <v-col>
                   {{
                     $dateFormat.formatDateMonthYear(editItem.created_datetime)
                   }}</v-col
                 >
               </v-row>
               <v-row style="border-bottom: 1px solid #ddd">
-                <v-col cols="5">Job Started Date </v-col>
-                <v-col cols="2">: </v-col>
-                <v-col cols="5">
+                <v-col style="max-width: 130px">Job Started Date </v-col>
+                <v-col cols="1">:</v-col>
+                <v-col>
                   {{
                     editItem.job_start_datetime
                       ? $dateFormat.formatDateMonthYear(
@@ -512,7 +518,8 @@
                 >
               </v-row>
               <v-row style="border-bottom: 0px solid #ddd">
-                <v-col cols="5">Closed </v-col> <v-col cols="2">: </v-col>
+                <v-col style="max-width: 130px">Closed Date </v-col>
+                <v-col cols="1">:</v-col>
                 <v-col cols="5">
                   {{
                     editItem.end_datetime
