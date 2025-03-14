@@ -1,13 +1,177 @@
 <template>
   <div>
     <v-row>
-      <v-col>Today Tickets</v-col>
-      <v-col>Assigned Tickets</v-col>
-      <v-col>Open Tickets</v-col>
-      <v-col>Closed Tickets</v-col>
+      <v-col cols="3" class="pr-0">
+        <v-card class="elevation-2">
+          <v-card-text>
+            <v-row
+              ><v-col style="max-width: 100px">
+                <div
+                  style="
+                    border-radius: 10px;
+                    background-color: #3366ff38;
+                    text-align: center;
+                    margin: auto;
+                    padding: 10px;
+                    width: 50px;
+                  "
+                >
+                  <v-icon size="25" color="#3366ff">mdi-ticket-outline</v-icon>
+                </div>
+              </v-col>
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+
+                  font-size: 35px;
+                "
+                ><div>{{ ticketStats.today_tickets }}</div></v-col
+              >
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+
+                  font-size: 20px;
+                "
+                ><div>Today Tickets</div></v-col
+              ></v-row
+            >
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0">
+        <v-card class="elevation-2">
+          <v-card-text>
+            <v-row
+              ><v-col style="max-width: 100px">
+                <div
+                  style="
+                    border-radius: 10px;
+                    background-color: #00800054;
+                    text-align: center;
+                    margin: auto;
+                    padding: 10px;
+                    width: 50px;
+                  "
+                >
+                  <v-icon size="25" color="green">mdi-ticket-outline</v-icon>
+                </div>
+              </v-col>
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+
+                  font-size: 35px;
+                "
+                ><div>{{ ticketStats.assigned_tickets }}</div></v-col
+              >
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+
+                  font-size: 20px;
+                "
+                ><div>Assined Tickets</div></v-col
+              ></v-row
+            >
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="pr-0">
+        <v-card class="elevation-2">
+          <v-card-text>
+            <v-row
+              ><v-col style="max-width: 100px">
+                <div
+                  style="
+                    border-radius: 10px;
+                    background-color: #a2b11738;
+                    text-align: center;
+                    margin: auto;
+                    padding: 10px;
+                    width: 50px;
+                  "
+                >
+                  <v-icon size="25" color="#a2b117">mdi-ticket-outline</v-icon>
+                </div>
+              </v-col>
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+
+                  font-size: 35px;
+                "
+                ><div>{{ ticketStats.open_tickets }}</div></v-col
+              >
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+
+                  font-size: 20px;
+                "
+                ><div>Open Tickets</div></v-col
+              ></v-row
+            >
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="3" class="pr-0">
+        <v-card class="elevation-2">
+          <v-card-text>
+            <v-row
+              ><v-col style="max-width: 100px">
+                <div
+                  style="
+                    border-radius: 10px;
+                    background-color: #ff000021;
+                    text-align: center;
+                    margin: auto;
+                    padding: 10px;
+                    width: 50px;
+                  "
+                >
+                  <v-icon size="25" color="red">mdi-ticket-outline</v-icon>
+                </div>
+              </v-col>
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+                  font-weight: bold;
+                  color: black;
+                  font-size: 35px;
+                "
+                ><div>{{ ticketStats.closed_tickets }}</div></v-col
+              >
+              <v-col
+                style="
+                  text-align: center;
+                  margin: auto;
+
+                  font-size: 20px;
+                "
+                ><div>Closed Tickets</div></v-col
+              ></v-row
+            >
+          </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
 
-    <v-row>
+    <!-- <v-row>
       <v-col cols="3" class="pr-0" style="max-width: 20%">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>
@@ -67,9 +231,9 @@
           </v-card-text>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
 
-    <v-row class="mt-5">
+    <v-row class="mt-1">
       <v-col cols="12">
         <TechnicianTicketList
           :canReply="canReply"
@@ -103,6 +267,12 @@ export default {
     TechnicianTicketList,
   },
   data: () => ({
+    ticketStats: {
+      today_tickets: 0,
+      assigned_tickets: 0,
+      open_tickets: 0,
+      closed_tickets: 0,
+    },
     dialogEventsList: false,
     technician_id: null,
     // burglaryOnline: { offline: 0, online: 0 },
@@ -176,12 +346,23 @@ export default {
         },
       };
 
-      this.$axios
-        .get(`/security_device_live_stats_groupby`, options)
-        .then(({ data }) => {
-          this.onlineStats = data;
-        });
+      this.$axios.get(`/admin_tickets_statistics`, options).then(({ data }) => {
+        this.ticketStats = data;
+      });
     },
+    // getDatafromApi() {
+    //   let options = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+    //     },
+    //   };
+
+    //   this.$axios
+    //     .get(`/security_device_live_stats_groupby`, options)
+    //     .then(({ data }) => {
+    //       this.onlineStats = data;
+    //     });
+    // },
   },
 };
 </script>

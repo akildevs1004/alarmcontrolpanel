@@ -543,4 +543,20 @@ class TicketsController extends Controller
 
         return $this->response("Ticket Sensor results saved", null, true);
     }
+
+    public function adminTicketsStatistics(Request $request)
+    {
+
+
+
+
+        return Tickets::where("company_id", $request->company_id)
+            ->selectRaw('
+            COUNT(CASE WHEN DATE(created_datetime) = CURRENT_DATE THEN 1 END) AS today_tickets,
+            COUNT(CASE WHEN job_start_datetime IS NOT NULL AND status = 1 THEN 1 END) AS assigned_tickets,
+            COUNT(CASE WHEN status = 1 THEN 1 END) AS open_tickets,
+            COUNT(CASE WHEN status = 0 THEN 1 END) AS closed_tickets
+        ')
+            ->first();
+    }
 }

@@ -966,6 +966,7 @@ export default {
     this.setupInactivityDetection();
 
     setInterval(() => {
+      this.verifyCompanyEndDateValidaty();
       try {
         if (window) window.location.reload();
       } catch (e) {}
@@ -1062,6 +1063,26 @@ export default {
       setTimeout(() => {
         this.wait5Minutes = false;
       }, 1000 * 60 * 60);
+    },
+    verifyCompanyEndDateValidaty() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios
+        .get(`get_company_validate_details`, options)
+        .then(({ data }) => {
+          let companyEndDate = new Date(data.expiry);
+
+          let now = new Date();
+
+          if (companyEndDate < now) {
+            this.$router.push("/logout");
+
+            return false;
+          }
+        });
     },
     setTopmenuHilighterOnPageReload() {
       const routeMap = {

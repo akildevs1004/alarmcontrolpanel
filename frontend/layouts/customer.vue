@@ -871,8 +871,14 @@ export default {
     //   this.loadHeaderNotificationMenu();
     //   this.verifyPopupAlarmStatus();
     // }, 1000 * 1);
-
     setInterval(() => {
+      this.verifyCustomerEndDateValidaty();
+      try {
+        if (window) window.location.reload();
+      } catch (e) {}
+    }, 1000 * 60 * 60);
+    setInterval(() => {
+      this.verifyCustomerEndDateValidaty();
       try {
         if ($auth.user?.customer?.id) this.loadHeaderNotificationMenu();
       } catch (e) {}
@@ -1024,6 +1030,25 @@ export default {
     },
   },
   methods: {
+    verifyCustomerEndDateValidaty() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: this.$auth.user.customer.id,
+        },
+      };
+      this.$axios.get(`customerinfo`, options).then(({ data }) => {
+        let companyEndDate = new Date(data.end_date);
+
+        let now = new Date();
+
+        if (companyEndDate < now) {
+          this.$router.push("/logout");
+
+          return false;
+        }
+      });
+    },
     wait5MinutesNextNotification() {
       this.snackbar = true;
       this.response = "New Alarm will be Display after 5 minutes";

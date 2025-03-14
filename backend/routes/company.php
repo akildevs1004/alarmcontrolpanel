@@ -60,6 +60,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/get-company-id-by-device', [DeviceController::class, 'get_company_id_by_device']);
+Route::get('/get_company_validate_details', [CompanyController::class, 'getCompanyValidateDetails']);
+
+
+
 
 
 

@@ -23,6 +23,7 @@ use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
+use App\Http\Controllers\Customers\TicketsController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\DeviceProductServicesController;
 use App\Http\Controllers\DeviceZonesController;
@@ -295,6 +296,7 @@ Route::post('create_default_roles', [RolePermissionsController::class, 'createDe
 
 Route::apiResource('device_product_services',  DeviceProductServicesController::class);
 Route::get('device_product_services_group',  [DeviceProductServicesController::class, 'DeviceProductServicesGroup']);
+Route::get('admin_tickets_statistics',  [TicketsController::class, 'adminTicketsStatistics']);
 
 
 

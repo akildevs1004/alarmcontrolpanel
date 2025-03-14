@@ -187,7 +187,7 @@ class CompanyController extends Controller
             $record->pass = $randPass;
 
 
-            //create roles 
+            //create roles
             (new RolePermissionsController())->createCompanyDefaultRoles($company->id);
 
             if (!$this->addDefaults($company->id)) {
@@ -279,7 +279,10 @@ class CompanyController extends Controller
     {
         return Device::where('company_id', $id)->with(['status'])->orderByDesc('id')->paginate(100);
     }
-
+    public function getCompanyValidateDetails(Request $request)
+    {
+        return Company::where("id", $request->company_id)->first("expiry");
+    }
     public function update_log($request, $id)
     {
         $file = $request->file('logo');
