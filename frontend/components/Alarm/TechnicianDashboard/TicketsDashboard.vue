@@ -1,6 +1,13 @@
 <template>
   <div>
     <v-row>
+      <v-col>Today Tickets</v-col>
+      <v-col>Assigned Tickets</v-col>
+      <v-col>Open Tickets</v-col>
+      <v-col>Closed Tickets</v-col>
+    </v-row>
+
+    <v-row>
       <v-col cols="3" class="pr-0" style="max-width: 20%">
         <v-card class="elevation-2" style="height: 180px">
           <v-card-text>

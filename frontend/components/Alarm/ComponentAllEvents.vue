@@ -532,7 +532,7 @@
                               style="
                                 width: 100%;
 
-                                width: 30px;
+                                width: 22px;
                                 margin: auto;
                                 vertical-align: middle;
                               "
@@ -626,24 +626,42 @@
                           <template v-slot:item.alarm_category="{ item }">
                             <!-- <div>{{ item.category?.name || "---" }}</div> -->
                             <v-chip
-                              style="width: 60px; color: #fff; height: 25px"
+                              style="
+                                width: 60px;
+                                color: #fff;
+                                height: 18px;
+                                text-align: center;
+                              "
+                              class="alarmevents"
                               v-if="item.category?.name == 'Low'"
-                              color="#d7db47"
+                              color="#a2b117"
                               label
                               >{{ item.category?.name || "---" }}</v-chip
                             >
                             <v-chip
-                              style="width: 60px; color: #fff; height: 25px"
+                              style="
+                                width: 60px;
+                                color: #fff;
+                                height: 18px;
+                                text-align: center;
+                              "
+                              class="alarmevents"
                               v-else-if="item.category?.name == 'Medium'"
-                              color="#d1630f"
+                              color="#1e71c3"
                               label
-                              >{{ item.category?.name || "---" }}</v-chip
+                              >Med</v-chip
                             >
 
                             <v-chip
-                              style="width: 60px; color: #fff; height: 25px"
+                              style="
+                                width: 60px;
+                                color: #fff;
+                                height: 18px;
+                                text-align: center;
+                              "
+                              class="alarmevents"
                               v-else
-                              color="#ff0000"
+                              color="#a70000"
                               label
                               >{{ item.category?.name || "---" }}</v-chip
                             >
@@ -660,7 +678,7 @@
                               v-if="item.alarm_status == 1"
                               label
                             >
-                              OPEN
+                              Open
                             </div>
                             <div
                               style="
@@ -680,7 +698,7 @@
                                 width: 60px;
                                 color: #fff;
                                 height: 25px;
-                                color: black;
+                                color: green;
                               "
                               v-else
                               label
@@ -860,7 +878,7 @@ export default {
         { text: "Priority", value: "alarm_category", sortable: false },
         // { text: "End Date", value: "end_date" , sortable: false },
         {
-          text: "Resolved Time(H:M)",
+          text: "Duration",
           value: "duration",
           sortable: false,
           align: "center",

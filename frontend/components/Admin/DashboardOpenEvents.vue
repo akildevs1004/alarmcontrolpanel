@@ -23,7 +23,7 @@
     </v-row> -->
     <table style="width: 100%" class="simpletable mt-5">
       <tr v-for="event in logs">
-        <td style="width: 30px">#{{ event.id }}</td>
+        <!-- <td style="width: 30px">#{{ event.id }}</td> -->
         <td style="width: 50px">
           <img
             :src="event.customer?.profile_picture || '/no-business_profile.png'"
@@ -47,7 +47,7 @@
             style="
               width: 100%;
 
-              width: 30px;
+              width: 20px;
               margin: auto;
               vertical-align: middle;
             "
@@ -71,7 +71,7 @@
           </div>
 
           <div
-            style="width: 60px; color: #fff; height: 25px; color: black"
+            style="width: 60px; color: #fff; height: 25px; color: green"
             v-else
             label
           >

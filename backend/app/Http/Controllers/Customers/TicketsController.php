@@ -335,6 +335,8 @@ class TicketsController extends Controller
         ]);
 
         $subject = '';
+        $subject1 = '';
+
         if ($request->filled("contact_type")) {
 
 
@@ -350,6 +352,8 @@ class TicketsController extends Controller
                 ];
             } else {
                 $subject = "#" . $request->tikcet_id . ":Technician Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+                $subject1 = "Technician Accepted Job with Customer Verification-" . $contactModel[0]["address_type"];
+
                 $device = Device::where("customer_id", $request->customer_id)->first();
                 $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
                 $dateObj  = new DateTime("now", new DateTimeZone($timeZone));
@@ -366,6 +370,8 @@ class TicketsController extends Controller
                     $data2["status"] = 0;
 
                     $subject = "#" . $request->tikcet_id . ":Technican Closed Ticket with Customer Verification-" . $contactModel[0]["address_type"];
+                    $subject1 = "Technican Closed Ticket with Customer Verification-" . $contactModel[0]["address_type"];
+
 
                     //upadate technicain id
                     Device::where("customer_id", $request->customer_id)->update(["ticket_id" => null]);
@@ -394,7 +400,7 @@ class TicketsController extends Controller
             "company_id" => $request->company_id,
             "ticket_id" => $request->tikcet_id,
             "technician_id" => $request->technician_id,
-            "description" => $subject,
+            "description" => $subject1,
             "created_datetime" => date("Y-m-d H:i:s")
         ];
 

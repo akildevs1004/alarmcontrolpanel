@@ -38,7 +38,7 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">View Customer Information</span>
+          <span dense style="color: black">Ticket Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -157,7 +157,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogReply" max-width="700px" style="z-index: 9999">
+    <v-dialog v-model="dialogReply" max-width="1000px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense> Reply to Ticket </span>
@@ -178,10 +178,10 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogViewTicket" width="700px" style="z-index: 9999">
+    <v-dialog v-model="dialogViewTicket" width="1200px" style="z-index: 9999">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense> Technician View Ticket</span>
+          <span dense> Technician - Ticket Information</span>
           <v-spacer></v-spacer>
           <v-icon @click="dialogViewTicket = false" outlined>
             mdi mdi-close-circle
@@ -470,7 +470,15 @@
               <template v-slot:item.status="{ item }">
                 <div :class="getIsReadStatus(item) ? '' : 'bold'">
                   <div v-if="item.status == 0" style="color: red">
-                    <v-chip label color="green" style="color: #fff; width: 70px"
+                    <v-chip
+                      label
+                      color="green"
+                      style="
+                        width: 60px;
+                        color: #fff;
+                        height: 18px;
+                        text-align: center;
+                      "
                       >Closed</v-chip
                     >
                   </div>
@@ -481,8 +489,13 @@
                   >
                     <v-chip
                       label
-                      color="#4b9eff"
-                      style="color: #fff; width: 70px"
+                      color="#a2b117"
+                      style="
+                        width: 60px;
+                        color: #fff;
+                        height: 18px;
+                        text-align: center;
+                      "
                       >Process</v-chip
                     >
                   </div>
@@ -495,8 +508,13 @@
                   >
                     <v-chip
                       label
-                      color="yellow"
-                      style="color: black; width: 70px"
+                      color="#1e71c3"
+                      style="
+                        width: 60px;
+                        color: #fff;
+                        height: 18px;
+                        text-align: center;
+                      "
                       >Open</v-chip
                     >
                   </div>
@@ -506,7 +524,15 @@
                     "
                     style="color: green"
                   >
-                    <v-chip label color="red" style="color: #fff; width: 70px"
+                    <v-chip
+                      label
+                      color="#a70000"
+                      style="
+                        width: 60px;
+                        color: #fff;
+                        height: 18px;
+                        text-align: center;
+                      "
                       >New</v-chip
                     >
                   </div>
@@ -899,12 +925,12 @@ export default {
     viewCustomer(item) {
       this.selectedCustomer = null;
       this.viewCustomerId = null;
+      this.dialogViewCustomer = true;
       this.$axios
         .get(`customers`, { params: { customer_id: item.customer_id } })
         .then(({ data }) => {
           this.selectedCustomer = data.data[0];
           this.viewCustomerId = item.customer_id;
-          this.dialogViewCustomer = true;
         });
     },
     // closeDialogProcess() {

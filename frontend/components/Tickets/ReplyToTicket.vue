@@ -16,7 +16,7 @@
                   <h3>Subject: {{ payload_ticket.subject }}</h3>
                 </v-col>
                 <v-col cols="12" dense>
-                  <v-textarea
+                  <!-- <v-textarea
                     style="width: 100%"
                     label="Description"
                     dense
@@ -25,7 +25,25 @@
                     v-model="payload_ticket.description"
                     hide-details
                     rows="4"
-                  ></v-textarea>
+                  ></v-textarea> -->
+                  <ClientOnly style="height: 600px; overflow: scroll">
+                    <tiptap-vuetify
+                      class="tiptap-icon ma-1"
+                      v-model="payload_ticket.description"
+                      :extensions="extensions"
+                      :height="450"
+                      :style="
+                        'height:' +
+                        setEditorHeight +
+                        'px;overflow: auto;border: 1px solid black'
+                      "
+                      v-scroll.self="onScroll"
+                      :toolbar-attributes="{
+                        color: 'background red--text',
+                      }"
+                    />
+                    <template #placeholder> Loading... </template>
+                  </ClientOnly>
                   <!-- <ClientOnly style-="height:600px">
                     <tiptap-vuetify
                       class="tiptap-icon"
@@ -77,6 +95,7 @@
                         v-model="d.file"
                         placeholder="Upload your file"
                         accept=".jpg,.png,.pdf"
+                        :rules="FileRules"
                       >
                         <template v-slot:selection="{ text }">
                           <v-chip v-if="text" small label color="primary">
@@ -150,48 +169,48 @@
 </template>
 
 <script>
-// import {
-//   TiptapVuetify,
-//   Heading,
-//   Bold,
-//   Italic,
-//   Strike,
-//   Underline,
-//   Paragraph,
-//   BulletList,
-//   OrderedList,
-//   ListItem,
-//   Blockquote,
-//   History,
-// } from "tiptap-vuetify";
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Blockquote,
+  History,
+} from "tiptap-vuetify";
 import TicketResponses from "./TicketResponses.vue";
 export default {
-  props: ["editItem", "editId", "messageReply"],
+  props: ["editItem", "editId", "messageReply", "editorHeight"],
   components: {
-    // TiptapVuetify,
+    TiptapVuetify,
     TicketResponses,
   },
   data: () => ({
     TitleRules: [(v) => !!v || "Title is required"],
     extensions: [
-      // History,
-      // Blockquote,
-      // Underline,
-      // Strike,
-      // Italic,
-      // ListItem,
-      // BulletList,
-      // OrderedList,
-      // [
-      //   Heading,
-      //   {
-      //     options: {
-      //       levels: [1, 2, 3],
-      //     },
-      //   },
-      // ],
-      // Bold,
-      // Paragraph,
+      History,
+      Blockquote,
+      Underline,
+      Strike,
+      Italic,
+      ListItem,
+      BulletList,
+      OrderedList,
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3],
+          },
+        },
+      ],
+      Bold,
+      Paragraph,
     ],
     documents: false,
 
@@ -221,7 +240,7 @@ export default {
         }
       },
     ],
-
+    setEditorHeight: 450,
     show1: false,
     contactTypes: [],
     branchesList: [],
@@ -276,6 +295,7 @@ export default {
       this.payload_ticket.subject = this.editItem.subject;
       //this.payload_ticket.description = this.editItem.description;
     }
+    if (this.editorHeight) this.setEditorHeight = this.editorHeight;
   },
 
   methods: {
@@ -301,10 +321,16 @@ export default {
     save_documents() {
       if (!this.editId) alert("Ticket Id is missing");
 
-      if (this.customer_id || this.security_id) {
+      if (
+        this.$auth.user.user_type == "company" ||
+        this.customer_id ||
+        this.security_id
+      ) {
       } else {
         this.snackbar = true;
         this.response = "Operator or Customer Details are not available";
+
+        return false;
       }
       this.errors = {};
       if (!this.$refs.form.validate()) {

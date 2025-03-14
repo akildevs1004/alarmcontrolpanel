@@ -7,9 +7,9 @@
             ><v-row>
               <v-col class="d-flex1 justify-center" style="max-width: 80px">
                 <v-icon fill color="red" size="40" style="clear: both"
-                  >mdi-folder-open</v-icon
+                  >mdi-folder-open-outline</v-icon
                 >
-                <div style="color: red">OPEN</div>
+                <div style="color: black">OPEN</div>
               </v-col>
 
               <v-col
@@ -32,9 +32,9 @@
             ><v-row>
               <v-col class="d-flex1 justify-center" style="max-width: 80px">
                 <v-icon fill color="#07af50" size="40" style="clear: both"
-                  >mdi-lock</v-icon
+                  >mdi-lock-outline</v-icon
                 >
-                <div style="color: #07af50">CLOSED</div>
+                <div style="color: black">CLOSED</div>
               </v-col>
 
               <v-col
@@ -57,9 +57,9 @@
             ><v-row>
               <v-col class="d-flex1 justify-center" style="max-width: 80px">
                 <v-icon fill color="#0046ff" size="40" style="clear: both"
-                  >mdi-lock-open-variant</v-icon
+                  >mdi-lock-open-variant-outline</v-icon
                 >
-                <div style="color: #0046ff">Forward</div>
+                <div style="color: black">Forward</div>
               </v-col>
 
               <v-col
@@ -95,7 +95,7 @@
                   font-size: 40px;
                   margin: auto;
                   font-weight: bold;
-                  color: red;
+                  color: #a70000;
                   border-right: 1px solid #ddd;
                 "
               >
@@ -116,7 +116,7 @@
                   font-size: 40px;
                   margin: auto;
                   font-weight: bold;
-                  color: red;
+                  color: #1e71c3;
                   border-right: 1px solid #ddd;
                 "
               >
@@ -137,7 +137,7 @@
                   font-size: 40px;
                   margin: auto;
                   font-weight: bold;
-                  color: red;
+                  color: #a2b117;
                 "
               >
                 {{ alarmStatistics.low }}</v-col

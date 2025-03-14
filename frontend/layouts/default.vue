@@ -2941,5 +2941,21 @@ td {
 }
 .v-data-table-header th {
   color: #4b9eff !important;
+  font-weight: normal;
+  font-size: 15px !important;
+}
+.v-data-table-header tr {
+  border-top: 1px solid #ddd;
+}
+.alarmevents .v-chip__content {
+  margin: auto;
+}
+.pharagrah-content p {
+  margin-bottom: 5px;
+}
+
+.tiptap-vuetify-editor .tiptap-vuetify-editor__content p {
+  margin-top: 0px !important;
+  margin-bottom: 5px !important;
 }
 </style>
