@@ -414,11 +414,11 @@
               <v-row style="border-bottom: 1px solid #ddd">
                 <v-col style="max-width: 130px">Ticket ID </v-col>
                 <v-col cols="1">:</v-col
-                ><v-col cols="5"> #{{ editItem.id }}</v-col></v-row
+                ><v-col> #{{ editItem.id }}</v-col></v-row
               ><v-row style="border-bottom: 1px solid #ddd">
                 <v-col style="max-width: 130px">Created By </v-col>
                 <v-col cols="1">:</v-col
-                ><v-col cols="5">
+                ><v-col>
                   <div v-if="editItem.category_id > 0">Admin</div>
                   <div v-else>Customer</div>
                 </v-col></v-row
@@ -426,19 +426,17 @@
               <v-row style="border-bottom: 1px solid #ddd">
                 <v-col style="max-width: 130px">Customer </v-col>
                 <v-col cols="1">:</v-col
-                ><v-col cols="5">
-                  {{ editItem.customer.building_name }}</v-col
-                ></v-row
+                ><v-col> {{ editItem.customer.building_name }}</v-col></v-row
               >
               <v-row style="border-bottom: 1px solid #ddd">
                 <v-col style="max-width: 130px">Category </v-col>
                 <v-col cols="1">:</v-col>
-                <v-col cols="5"> {{ editItem.category?.name || "---" }}</v-col>
+                <v-col> {{ editItem.category?.name || "---" }}</v-col>
               </v-row>
               <v-row style="border-bottom: 1px solid #ddd">
                 <v-col style="max-width: 130px">Status </v-col>
                 <v-col cols="1">:</v-col>
-                <v-col cols="5">
+                <v-col>
                   <div v-if="editItem.status == 0" style="color: red">
                     <div label color="green" style="width: 60px; color: red">
                       Closed
@@ -520,7 +518,7 @@
               <v-row style="border-bottom: 0px solid #ddd">
                 <v-col style="max-width: 130px">Closed Date </v-col>
                 <v-col cols="1">:</v-col>
-                <v-col cols="5">
+                <v-col>
                   {{
                     editItem.end_datetime
                       ? $dateFormat.formatDateMonthYear(editItem.end_datetime)
