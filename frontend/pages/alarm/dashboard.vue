@@ -173,9 +173,10 @@
             <CustomersAlarmMap
               :displayTable="false"
               mapid="dashboardmap"
-              mapHeight="600"
+              :mapHeight="mapHeight"
               isWithOutAlarms="true"
             />
+
             <!--</v-card-text
             >
            </v-card> -->
@@ -213,21 +214,20 @@
 
                   <v-col
                     class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
-
-                      color: black;
-                    "
+                    :style="{
+                      fontSize: mapHeight < 300 ? '15px' : '25px',
+                      margin: 'auto',
+                      color: 'black',
+                    }"
                     >Fire</v-col
                   ><v-col
                     class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
+                    :style="{
+                      fontSize: mapHeight < 300 ? '30px' : '40px',
+                      fontWeight: 'bold',
+                      margin: 'auto',
+                      color: 'red',
+                    }"
                     >{{ data ? data.fireCount : 0 }}</v-col
                   ></v-row
                 ></v-card-text
@@ -247,21 +247,23 @@
 
                   <v-col
                     class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
+                    :style="{
+                      fontSize: mapHeight < 300 ? '15px' : '25px',
+                      margin: 'auto',
+                      color: 'black',
+                    }"
+                  >
+                    Water
+                  </v-col>
 
-                      color: black;
-                    "
-                    >Water</v-col
-                  ><v-col
+                  <v-col
                     class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
+                    :style="{
+                      fontSize: mapHeight < 300 ? '30px' : '40px',
+                      fontWeight: 'bold',
+                      margin: 'auto',
+                      color: 'red',
+                    }"
                     >{{ data ? data.waterCount : 0 }}</v-col
                   ></v-row
                 ></v-card-text
@@ -504,21 +506,27 @@
         <v-row style="margin-top: 0px"
           ><v-col style="padding-top: 0px">
             <v-card
-              style="height: 300px"
+              :style="
+                'height: ' +
+                (mapHeight < 300 ? mapHeight : (mapHeight - 20) / 2) +
+                'px;overflow:hidden'
+              "
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text>
                 <DashboardAlarmEventsHourWiseChart
                   v-if="loadAllEventsTable"
-                  :height="'220'"
+                  :height="
+                    mapHeight < 300 ? mapHeight - 110 : (mapHeight - 150) / 2
+                  "
                   name="DashboardAlarmEventsHourWiseChart2" /></v-card-text
             ></v-card>
           </v-col>
         </v-row>
-        <v-row class="mt-0"
+        <v-row class="mt-0" v-if="mapHeight > 300"
           ><v-col class="mt-0">
             <v-card
-              style="height: 280px"
+              :style="'height: ' + (mapHeight - 20) / 2 + 'px'"
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text>
@@ -572,6 +580,7 @@ export default {
     CustomersAlarmMap,
   },
   data: () => ({
+    mapHeight: 500,
     windowHeight: 1000,
     key: 1,
     date_from: "",
@@ -590,11 +599,21 @@ export default {
   }),
   computed: {},
   mounted() {
-    setTimeout(() => {
-      if (window) this.windowHeight = window.innerHeight;
-    }, 1000 * 5);
+    //setTimeout(() => {
+    // if (typeof window !== "undefined") {
+    //   this.windowHeight = window.innerHeight;
+    //   this.mapHeight = this.windowHeight - 700;
+    //   console.log(" this.mapHeight", this.mapHeight);
+    // }
+    //}, 1000 * 2);
   },
   async created() {
+    if (typeof window !== "undefined") {
+      this.windowHeight = window.innerHeight;
+      this.mapHeight = this.windowHeight - 460;
+
+      console.log(" this.mapHeight", this.mapHeight);
+    }
     // // this._id = this.$route.params.id;
     // let today = new Date();
 

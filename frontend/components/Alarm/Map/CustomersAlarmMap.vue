@@ -520,6 +520,15 @@ export default {
     setTimeout(() => {
       this.plotLocations(true);
     }, 1000 * 2);
+    if (this.mapHeight) {
+      this.browserMapHeight = this.mapHeight;
+    } else {
+      try {
+        if (typeof window !== "undefined")
+          this.browserHeight = window.innerHeight - 70;
+        this.browserMapHeight = window.innerHeight - 70;
+      } catch (e) {}
+    }
   },
 
   created() {
@@ -543,15 +552,6 @@ export default {
       //this.mapkeycount++;
     }, 1000 * 15);
     ///this.getBuildingTypes();
-    if (this.mapHeight) {
-      this.browserMapHeight = this.mapHeight;
-    } else {
-      try {
-        if (typeof window !== "undefined")
-          this.browserHeight = window.innerHeight - 70;
-        this.browserMapHeight = window.innerHeight - 70;
-      } catch (e) {}
-    }
   },
   watch: {
     options: {

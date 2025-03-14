@@ -201,7 +201,7 @@
     <v-card elevation="3" class="mt-1">
       <v-card-text>
         <v-row>
-          <v-col class="pl-4"><h3>Technician Tickets</h3></v-col>
+          <v-col class="pl-4"><h3>Tickets</h3></v-col>
 
           <v-col style="max-width: 40px; padding-top: 20px">
             <v-icon @click="getDataFromApi()">mdi-refresh</v-icon>
@@ -373,7 +373,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card elevation="3" class="mt-3" :height="browserHeight - 370">
+    <v-card elevation="3" class="mt-3" :height="browserHeight - 250">
       <v-card-text>
         <v-row>
           <v-col>
