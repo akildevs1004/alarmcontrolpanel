@@ -12,10 +12,55 @@
         <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
       </template>
     </v-snackbar>
+    <!-- <v-dialog v-model="dialogSerialNumbers" width="600px"> -->
+    <v-navigation-drawer
+      v-model="dialogSerialNumbers"
+      bottom
+      temporary
+      right
+      fixed
+      style="width: 350px"
+    >
+      <v-toolbar class="popup_background" dense>
+        {{ editId == null ? "New " : "Edit " }} Device
+        <v-spacer></v-spacer>
+
+        <v-icon @click="dialogSerialNumbers = false" outlined dark>
+          mdi mdi-close-circle
+        </v-icon>
+      </v-toolbar>
+      <v-card elevation="0">
+        <!-- <v-card-title dense class="popup_background_noviolet">
+          <span style="color: black">New Device Information </span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="dialogSerialNumbers = false"
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title> -->
+
+        <v-card-text>
+          <v-container style="min-height: 100px">
+            <DeviceSerialNumber
+              :key="key"
+              :customer_id="customer_id"
+              :editId="editId"
+              :item="editDevice"
+              :editable="isEditable"
+              @closeDialog="closeDialog"
+            />
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-navigation-drawer>
+    <!-- </v-dialog> -->
     <v-dialog v-model="dialogEditDevice" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Device Information </span>
+          <span style="color: black">Update Device Information </span>
           <v-spacer></v-spacer>
           <v-icon
             style="color: black"
@@ -57,7 +102,7 @@
               @closeDialog="closeDialog"
               :editId="editId"
               :editDevice="editDevice"
-              :isEditable="isEditable"
+              :editable="isEditable"
               :invoicePackageData="invoicePackageData"
             />
           </v-container>
@@ -68,12 +113,12 @@
     <v-card elevation="0">
       <v-toolbar class="rounded-md" dense flat v-if="!eventFilter">
         <v-row
-          ><v-col cols="8"></v-col>
-          <v-col cols="4">
-            <v-row class="pt-5"
-              ><v-col cols="2" class="text-right pull-right"
+          ><v-col></v-col>
+          <v-col style="max-width: 600px">
+            <v-row>
+              <v-col></v-col>
+              <v-col style="max-width: 60px" class="text-right pull-right pt-5"
                 ><v-btn
-                  class="pt-5"
                   x-small
                   :ripple="false"
                   text
@@ -82,7 +127,7 @@
                 >
                   <v-icon dark white>mdi-cached</v-icon>
                 </v-btn></v-col
-              ><v-col :cols="!customer_id ? 5 : 10"
+              ><v-col style="max-width: 200px"
                 ><v-text-field
                   clearable
                   style="padding-top: 7px; width: 170px"
@@ -99,7 +144,7 @@
                 ></v-text-field
               ></v-col>
 
-              <v-col cols="5">
+              <!-- <v-col cols="5">
                 <v-select
                   v-if="!customer_id"
                   @change="getDataFromApi()"
@@ -118,8 +163,14 @@
                   ]"
                 >
                 </v-select
-              ></v-col> </v-row
-          ></v-col>
+              ></v-col>  -->
+              <v-col v-if="!customer_id" style="max-width: 50px" class="pt-5">
+                <v-icon @click="addNewSerialNumber()" size="25" color="black"
+                  >mdi-plus-circle</v-icon
+                >
+              </v-col>
+            </v-row></v-col
+          >
         </v-row>
       </v-toolbar>
 
@@ -388,11 +439,14 @@ import timeZones from "../../defaults/utc_time_zones.json";
 
 import AlarmEditDevice from "../../components/Alarm/EditDevice.vue";
 import DeviceSensorZones from "../../components/Alarm/DeviceSensorZones.vue";
+import DeviceSerialNumber from "./DeviceSerialNumber.vue";
 
 export default {
-  components: { AlarmEditDevice, DeviceSensorZones },
+  components: { AlarmEditDevice, DeviceSensorZones, DeviceSerialNumber },
   props: ["customer_id", "eventFilter", "isMapviewOnly", "isEditable"],
   data: () => ({
+    customersList: [],
+    dialogSerialNumbers: false,
     commonSearch: "",
     filterCustomersMapped: "",
     editId: null,
@@ -480,7 +534,7 @@ export default {
     deviceResponse: "",
     headers: [
       { text: "#", value: "sno", sortable: false },
-      // { text: "Customer  Name", value: "customer", sortable: false },
+      { text: "Customer  Name", value: "customer", sortable: false },
       { text: "Name", value: "name", sortable: false },
       { text: "Location", value: "location", sortable: false },
 
@@ -519,7 +573,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New device" : "Edit device";
+      return this.editId === -1 ? "New device" : "Edit device";
     },
   },
 
@@ -595,7 +649,16 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    addNewSerialNumber() {
+      this.key++;
+      this.editId = null;
+      this.editDevice = null;
+      this.isEditable = true;
+
+      this.dialogSerialNumbers = true;
+    },
     closeDialog() {
+      this.dialogSerialNumbers = false;
       this.dialogEditDevice = false;
       this.dialogZones = false;
       this.getDataFromApi();
@@ -608,17 +671,19 @@ export default {
       this.dialogZones = true;
     },
     getSensorLimitFromPayments() {
-      let options = {
-        params: {
-          company_id: this.$auth.user.company_id,
-          customer_id: this.customer_id,
-        },
-      };
-      this.$axios
-        .get(`/get_customer_sensor_payment_package_details`, options)
-        .then(({ data }) => {
-          this.invoicePackageData = data;
-        });
+      if (this.customer_id) {
+        let options = {
+          params: {
+            company_id: this.$auth.user.company_id,
+            customer_id: this.customer_id,
+          },
+        };
+        this.$axios
+          .get(`/get_customer_sensor_payment_package_details`, options)
+          .then(({ data }) => {
+            this.invoicePackageData = data;
+          });
+      }
     },
     getAlarmStatus(item) {},
     copyToProfileimage(faceImage, userId) {
@@ -1207,7 +1272,8 @@ export default {
       this.payload = {};
       this.editDevice = item;
       this.editId = item.id;
-      this.dialogEditDevice = true;
+      // this.dialogEditDevice = true;
+      this.dialogSerialNumbers = true;
     },
     showDeviceSettings(item) {
       this.errors = [];

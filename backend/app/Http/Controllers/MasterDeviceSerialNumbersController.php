@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Device;
 use App\Models\MasterDeviceSerialNumbers;
 use Illuminate\Http\Request;
@@ -77,22 +78,30 @@ class MasterDeviceSerialNumbersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'company_id' => 'nullable',
-            'device_type' => 'nullable',
+            'company_id' => 'required',
+            'device_type' => 'required',
+
             'new_serial_number' => 'required',
+
             'model_number' => 'required',
             'device_description' => 'nullable',
             'picture' => 'nullable',
+            'name' => 'required',
+            'location' => 'required',
+            'utc_time_zone' => 'required',
+            'customer_id' => 'required',
+
         ]);
 
 
         $data = $request->all();
 
 
+
         $data["serial_number"] = $data["new_serial_number"];
         unset($data["new_serial_number"]);
         $data["assigned_datetime"] = date("Y-m-d H:i:s");
-        $data["status_id"] = 1;
+
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
@@ -119,6 +128,29 @@ class MasterDeviceSerialNumbersController extends Controller
             }
         } else {
             if ($isExist === null) {
+
+
+                $company = Company::find($request->company_id);
+                $maxDevices = $company->max_devices;
+
+                $totalAvailable = Device::where("company_id", $request->company_id)
+
+                    ->where("model_number", "!=", "Manual")
+                    ->where("model_number",  'not like', "%Mobile%")
+                    ->where("name",  'not like', "%Manual%")
+                    ->where("name",  'not like', "%manual%")
+                    ->count();
+
+                if ($maxDevices - $totalAvailable <= 0 && $company->account_type == "company") {
+                    return $this->response('Device limit reached. Max Devices :' . $maxDevices, null, false);
+                }
+
+
+
+
+
+
+
                 $record = Device::create($data);
                 return $this->response('New Serial Number is created Successfully.', $record, true);
             } else {

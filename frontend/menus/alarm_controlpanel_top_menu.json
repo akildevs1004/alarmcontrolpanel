@@ -43,6 +43,13 @@
     "menu": "alarm_tickets",
     "module": "topmenu"
   },
+  {
+    "icon": "mdi mdi-calendar-star-four-points",
+    "title": "Sales",
+    "to": "/alarm/inquiry",
+    "menu": "alarm_inquiry",
+    "module": "topmenu"
+  },
 
   {
     "icon": "mdi-bell",

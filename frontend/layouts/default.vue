@@ -1612,6 +1612,16 @@ export default {
   },
 };
 </script>
+<style>
+/* body {
+  min-width: 1400px !important;
+  overflow: scroll !important;
+} */
+/* .v-card {
+  min-width: 1400px !important;
+  overflow-x: scroll !important;
+} */
+</style>
 <style scoped>
 .btn-text-size {
   font-size: 15px !important;

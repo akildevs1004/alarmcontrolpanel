@@ -1207,10 +1207,10 @@ Route::post('/cameratesting', function (Request $request) {
             'json_content' => $requstJson,
         ]);
 });
-Route::get('test', function () {
+// Route::get('test', function () {
 
-    return "Hello";
-});
+//     return "Hello";
+// });
 Route::get('testqueuemail', function () {
 
     return Mail::to('venuakil2@gmail.com')->queue(new TestMail());

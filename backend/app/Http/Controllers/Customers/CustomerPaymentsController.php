@@ -190,12 +190,12 @@ class CustomerPaymentsController extends Controller
     {
 
 
-        $request->validate(
-            [
-                'company_id' => 'required|integer',
-                'customer_id' => 'required|integer',
-            ]
-        );
+        // return  $request->validate(
+        //     [
+        //         'company_id' => 'required|integer',
+        //         'customer_id' => 'required|integer',
+        //     ]
+        // );
 
         $customerProductService = CustomerProductServices::with("device_product_service")
             ->where("customer_id", $request->customer_id)
