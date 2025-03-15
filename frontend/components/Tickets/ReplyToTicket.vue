@@ -321,17 +321,17 @@ export default {
     save_documents() {
       if (!this.editId) alert("Ticket Id is missing");
 
-      if (
-        this.$auth.user.user_type == "company" ||
-        this.customer_id ||
-        this.security_id
-      ) {
-      } else {
-        this.snackbar = true;
-        this.response = "Operator or Customer Details are not available";
+      // if (
+      //   this.$auth.user.user_type == "company" ||
+      //   this.customer_id ||
+      //   this.$auth?.user.technician.id
+      // ) {
+      // } else {
+      //   this.snackbar = true;
+      //   this.response = "Operator or Customer Details are not available";
 
-        return false;
-      }
+      //   return false;
+      // }
       this.errors = {};
       if (!this.$refs.form.validate()) {
         alert("Enter required fields!");
