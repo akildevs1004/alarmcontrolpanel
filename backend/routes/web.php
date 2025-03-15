@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotifyIfLogsDoesNotGenerate;
 
-// Route::redirect('/', 'api/test');
+Route::redirect('/', 'api/test');
 
 
 Route::get('/notifyFailure', function () {
