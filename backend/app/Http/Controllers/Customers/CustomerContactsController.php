@@ -113,7 +113,7 @@ class CustomerContactsController extends Controller
 
 
             //tanjore mail settings
-            $data["to"] = $contact["email"];
+            $emailData["to"] = $contact["email"];
             $response = Http::timeout(30)
                 ->withoutVerifying()
                 ->asForm()
