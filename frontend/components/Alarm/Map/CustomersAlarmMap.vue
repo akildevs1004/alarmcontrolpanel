@@ -550,7 +550,7 @@ export default {
       // )
       this.getCustomers();
       //this.mapkeycount++;
-    }, 1000 * 15);
+    }, 1000 * 10);
     ///this.getBuildingTypes();
   },
   watch: {

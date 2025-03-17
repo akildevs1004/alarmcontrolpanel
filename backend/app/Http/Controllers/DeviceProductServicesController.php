@@ -87,7 +87,7 @@ class DeviceProductServicesController extends Controller
         unset($data['editId']);
         if ($request->filled("editId")) {
 
-            $isExist = DeviceProductServices::where("name", $request->name)->where("id", "!=", $request->editId)->count();
+            $isExist = DeviceProductServices::where("company_id", $request->company_id)->where("name", $request->name)->where("id", "!=", $request->editId)->count();
             if ($isExist == 0)
 
                 $record = DeviceProductServices::where("id", $request->editId)->update($data);
@@ -98,7 +98,7 @@ class DeviceProductServicesController extends Controller
         } else {
 
 
-            $isExist = DeviceProductServices::where("name", $request->name)->count();
+            $isExist = DeviceProductServices::where("company_id", $request->company_id)->where("name", $request->name)->count();
             if ($isExist == 0)
                 $record = DeviceProductServices::create($data);
             else

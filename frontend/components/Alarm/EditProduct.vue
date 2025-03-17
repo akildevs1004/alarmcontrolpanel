@@ -87,7 +87,7 @@
                 </v-col>
                 <v-col cols="12" dense>
                   <v-select
-                    lable="Max Sensor Count"
+                    label="Max Sensor Count"
                     dense
                     small
                     outlined
