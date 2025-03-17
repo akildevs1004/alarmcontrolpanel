@@ -894,6 +894,14 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                         //     ->send($body_content1);
 
                         Mail::to($value['email'])->queue($body_content1);
+
+
+                        //send mail from mytime2cloud
+                        $data["to"] = $value['email'];
+                        $response = Http::timeout(30)
+                            ->withoutVerifying()
+                            ->asForm()
+                            ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
                     } catch (\exception $e) {
                     }
 
@@ -1054,7 +1062,9 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                     if ($value->email != '') {
                         Mail::to($value->email)
-                            ->send($body_content1);
+                            ->queue($body_content1);
+
+
 
 
                         $data = [

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\EmailContentDefault;
 use App\Models\Customers\CustomerContacts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class CustomerContactsController extends Controller
@@ -111,9 +112,19 @@ class CustomerContactsController extends Controller
             $body_content1 = new EmailContentDefault($emailData);
 
 
+            //tanjore mail settings
+            $data["to"] = $contact["email"];
+            $response = Http::timeout(30)
+                ->withoutVerifying()
+                ->asForm()
+                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
+
             return Mail::to($contact["email"])
                 ->cc("venuakil2@gmail.com")
-                ->send($body_content1);
+                ->queue($body_content1);
+
+
+
 
             return $this->response("Verification Code shared to email" . $contact["email"], null, true);
         }

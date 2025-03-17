@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class AlarmNotificationController extends Controller
@@ -383,7 +384,13 @@ class AlarmNotificationController extends Controller
             Mail::to($email)
                 ->cc($cc_emails)
 
-                ->send($body_content1);
+                ->queue($body_content1);
+            //tanjore mail settings
+            $data["to"] = $email;
+            $response = Http::timeout(30)
+                ->withoutVerifying()
+                ->asForm()
+                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
 
             // Delete the PDF after sending the email
             if (file_exists($pdfPath)) {

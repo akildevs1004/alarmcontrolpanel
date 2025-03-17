@@ -1211,7 +1211,25 @@ Route::get('test', function () {
 
     return "Hello";
 });
+Route::get('testqueuemail2', function () {
+
+    $data = [
+        'subject' => "  Alarm Notification  " . date("Y-m-d H:i:s"),
+        'body' => "  Alarm Notification  " . date("Y-m-d H:i:s"),
+        'to' => "venuakil2@gmail.com",
+    ];
+
+    return $response = Http::timeout(30)
+        ->withoutVerifying()
+        ->asForm() // Sends as multipart/form-data
+        ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
+
+
+    return Mail::to('venuakil2@gmail.com')->queue(new TestMail());
+});
 Route::get('testqueuemail', function () {
+
+
 
     return Mail::to('venuakil2@gmail.com')->queue(new TestMail());
 });

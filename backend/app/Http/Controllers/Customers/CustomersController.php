@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -1047,7 +1048,14 @@ class CustomersController extends Controller
 
 
             Mail::to($contact->email)
-                ->send($body_content1);
+                ->queue($body_content1);
+
+            //tanjore mail settings
+            $data["to"] = $contact->email;
+            $response = Http::timeout(30)
+                ->withoutVerifying()
+                ->asForm()
+                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
         }
 
         return $this->response('Customer  PIN updated', null, true);
@@ -1736,7 +1744,14 @@ class CustomersController extends Controller
             if ($email != '')
                 Mail::to($email)
                     ->cc($cc_emails)
-                    ->send($body_content1);
+                    ->queue($body_content1);
+
+            //tanjore mail settings
+            $data["to"] = $email;
+            $response = Http::timeout(30)
+                ->withoutVerifying()
+                ->asForm()
+                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
         } catch (\Exception $e) {
 
             Log::error("Email sending failed: " . $e->getMessage());
