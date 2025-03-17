@@ -476,5 +476,13 @@
     "to": "/settings/products",
     "module": "settings",
     "top_menu_name": "settings"
+  },
+  {
+    "icon": "mdi-account-star",
+    "title": "Inquiry",
+    "open_menu": false,
+    "to": "/alarm/inquiry",
+    "module": "sales",
+    "top_menu_name": "sales"
   }
 ]

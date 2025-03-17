@@ -30,6 +30,8 @@ use App\Http\Controllers\DeviceZonesController;
 use App\Http\Controllers\DeviceZoneTypesController;
 use App\Http\Controllers\PlottingController;
 use App\Http\Controllers\RolePermissionsController;
+use App\Http\Controllers\SalesBusinessSourceTypesController;
+use App\Http\Controllers\SalesInquiryController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
@@ -297,6 +299,13 @@ Route::post('create_default_roles', [RolePermissionsController::class, 'createDe
 Route::apiResource('device_product_services',  DeviceProductServicesController::class);
 Route::get('device_product_services_group',  [DeviceProductServicesController::class, 'DeviceProductServicesGroup']);
 Route::get('admin_tickets_statistics',  [TicketsController::class, 'adminTicketsStatistics']);
+
+
+//sales
+Route::get('get_sales_business_types',  [SalesInquiryController::class, 'GetBusinessSourceTypes']);
+Route::apiResource('sales_inquiry',   SalesInquiryController::class);
+
+
 
 
 

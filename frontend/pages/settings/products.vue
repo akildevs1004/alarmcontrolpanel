@@ -6,25 +6,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-dialog v-model="dialogSecurityCustomers" max-width="800px">
-      <v-card>
-        <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Customers List</span>
-          <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="closeSecurityDialog()" outlined>
-            mdi mdi-close-circle
-          </v-icon>
-        </v-card-title>
-        <v-card-text>
-          <SecurityCustomersList
-            :key="key"
-            :security_id="security_id"
-            :security="item"
-            @closeDialog="closeSecurityDialog"
-          />
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+
     <v-dialog v-model="newProductDialog" max-width="300px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -40,7 +22,7 @@
             :editId="editId"
             :item="item"
             :editable="editable"
-            @closeDialog="closeSecurityDialog"
+            @closeDialog="closeProductDialog"
           />
         </v-card-text>
       </v-card>
@@ -180,16 +162,10 @@
 </template>
 
 <script>
-import AlarmNewSecurity from "../../components/Alarm/EditSecurity.vue";
-import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
-import SecurityCustomersList from "../../components/Alarm/SecurityCustomersList.vue";
 import EditProduct from "../../components/Alarm/EditProduct.vue";
 
 export default {
   components: {
-    AlarmNewSecurity,
-    AlarmCustomerView,
-    SecurityCustomersList,
     EditProduct,
   },
   data: () => ({
@@ -284,7 +260,6 @@ export default {
       this.tableHeight = window.innerHeight - 200;
     });
 
-    this.getBuildingTypes();
     this.getDataFromApi();
   },
   created() {
@@ -320,37 +295,13 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-    viewCustomers(item) {
-      this.security_id = item.id;
-      this.item = item;
-      this.key += 1;
-      this.dialogSecurityCustomers = true;
-    },
-    getExpiryDatesCountColor(date) {
-      const today = new Date();
 
-      const targetDate = new Date(date);
-
-      const diffTime = targetDate - today;
-
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays < 0) {
-        return "red";
-      } else if (diffDays <= 30) {
-        return "orange";
-      }
-    },
-    closeSecurityDialog() {
+    closeProductDialog() {
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
     },
-    getBuildingTypes() {
-      if (this.$store.state.storeAlarmControlPanel?.BuildingTypes) {
-        this.buildingTypes =
-          this.$store.state.storeAlarmControlPanel.BuildingTypes;
-      }
-    },
+
     addItem() {
       this.editId = null;
       this.editable = true;

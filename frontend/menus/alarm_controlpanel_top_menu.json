@@ -47,7 +47,7 @@
     "icon": "mdi mdi-calendar-star-four-points",
     "title": "Sales",
     "to": "/alarm/inquiry",
-    "menu": "alarm_inquiry",
+    "menu": "sales",
     "module": "topmenu"
   },
 
