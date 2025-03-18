@@ -880,8 +880,10 @@ export default {
   created() {
     // console.log("company auth", this.$auth);
     // console.log("company", this.$auth.user);
-
-    if (this.$auth.user.user_type != "company") {
+    if (!this.$auth.user) {
+      this.$router.push("/login", true);
+    }
+    if (this.$auth.user?.user_type != "company") {
       try {
         if (window) {
           if (this.$route.name != "logout") window.location.href = "../logout";
@@ -896,7 +898,7 @@ export default {
 
     this.updateTopmenu();
 
-    this.$store.commit("loginType", this.$auth.user.user_type);
+    this.$store.commit("loginType", this.$auth.user?.user_type);
     this.getCompanyDetails();
 
     //console.log("top", this.$route.name);

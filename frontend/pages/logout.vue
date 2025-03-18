@@ -14,7 +14,8 @@ export default {
       // this.$auth.setToken("local", null); // Clear the token
       console.log("logout page", this.$auth.user);
       // Redirect to login or another route
-      this.$router.push("/login", true);
+      //this.$router.push("/login", true);
+      this.$router.push("/login");
     } catch (error) {
       console.error("Error during logout:", error);
     }
