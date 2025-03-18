@@ -43,21 +43,46 @@ export default {
       mapKey: null,
     };
   },
-  async mounted() {
-    await this.getMapKey();
+  // async mounted() {
+  //   await this.getMapKey();
 
-    this.loadGoogleMapsScript().then(() => {
+  //   this.loadGoogleMapsScript().then(() => {
+  //     this.initMap();
+  //   });
+  // },
+
+  async mounted() {
+    try {
+      await this.getMapKey(); // Ensure this completes before proceeding
+      await this.loadGoogleMapsScript();
       this.initMap();
-    });
+    } catch (error) {
+      console.error("Error loading map key or script:", error);
+    }
   },
+
   methods: {
+    // async getMapKey() {
+    //   let { data } = await this.$axios.get(`get-map-key`);
+    //   this.mapKey = data;
+    //   if (this.mapKey) {
+    //     this.loadGoogleMapsScript(this.initMap);
+    //   }
+    // },
     async getMapKey() {
-      let { data } = await this.$axios.get(`get-map-key`);
-      this.mapKey = data;
-      if (this.mapKey) {
-        this.loadGoogleMapsScript(this.initMap);
+      try {
+        let { data } = await this.$axios.get("get-map-key");
+
+        if (data && !this.mapKey) {
+          // Avoid reassigning mapKey if it's already set
+          this.mapKey = data;
+          this.loadGoogleMapsScript().then(() => this.initMap());
+        }
+      } catch (error) {
+        console.error("Error fetching map key:", error);
       }
     },
+
     getCurrentLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
