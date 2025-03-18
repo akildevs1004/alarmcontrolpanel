@@ -21,4 +21,9 @@ class SalesInquiry extends Model
     {
         return $this->belongsTo(CustomersBuildingTypes::class, "building_type_id", "id");
     }
+
+    public function quotation()
+    {
+        return $this->belongsTo(SalesQuotations::class, "id", "inquiry_id");
+    }
 }

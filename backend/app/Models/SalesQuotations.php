@@ -13,7 +13,7 @@ class SalesQuotations extends Model
 
     public function BuildingType()
     {
-        return $this->belongsTo(CustomersBuildingTypes::class, "business_type_id", "id");
+        return $this->belongsTo(CustomersBuildingTypes::class, "building_type_id", "id");
     }
 
     public function ProductService()

@@ -73,7 +73,7 @@ export default {
     async getMapKey() {
       let { data } = await this.$axios.get(`get-map-key`);
       this.mapKey = data;
-      if (this.mapKey) {
+      if (this.mapKey && typeof window !== "undefined") {
         this.loadGoogleMapsScript(this.initMap);
       }
     },

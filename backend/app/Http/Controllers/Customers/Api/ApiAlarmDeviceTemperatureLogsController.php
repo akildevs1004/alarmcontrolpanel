@@ -859,6 +859,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
 
                 $body_content1 = "Hello, {$value['name']} <br/><br/>";
+                $body_content1 .= "Company:  {$value['company']['name']}<br/><br/>";
                 $body_content1 .= "Event ID:  #{$alarmlog['id']}<br/>";
                 $body_content1 .= "Customer:  {$value['device']['customer']['building_name']}<br/>";
                 $body_content1 .= "This is Notifing you about {$issue} event <br/>";
@@ -928,6 +929,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
                 // $branch_name = $value->branch->branch_name ?? '---';
 
                 $body_content1 = "🚨 *{$issue}* Event Notification 🚨\n\n";
+                $body_content1 .= "Company:  {$value['company']['name']}\n";
 
                 $body_content1 .= "Hello, *{$value['name']}*\n";
                 $body_content1 .= "Event ID:  *#{$alarmlog['id']}*\n";

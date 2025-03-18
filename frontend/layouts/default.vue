@@ -823,6 +823,10 @@ export default {
           elevation: 0,
           selected: "",
         },
+        sales: {
+          elevation: 0,
+          selected: "",
+        },
       },
 
       topMenu_Selected: "dashboard",
@@ -1141,8 +1145,8 @@ export default {
           path: "/settings",
         },
         sales: {
-          name: "alarm_sales",
-          path: "/alarm/sales",
+          name: "alarm_inquiry",
+          path: "/alarm/inquiry",
         },
       };
 

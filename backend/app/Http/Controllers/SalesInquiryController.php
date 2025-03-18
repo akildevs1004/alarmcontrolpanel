@@ -15,7 +15,7 @@ class SalesInquiryController extends Controller
      */
     public function index(Request $request)
     {
-        $model = SalesInquiry::with(["businessSource", "buildingType"])->where("company_id", $request->company_id);
+        $model = SalesInquiry::with(["quotation", "businessSource", "buildingType"])->where("company_id", $request->company_id);
 
 
 
@@ -103,6 +103,8 @@ class SalesInquiryController extends Controller
 
 
         if ($request->editId) {
+            $data["updated_datetime"] = date("Y-m-d H:i:s");
+
             SalesInquiry::where("id", $request->editId)->update($data);
             return $this->response("Inquiry Updated Successfully", null, true);
         } else {

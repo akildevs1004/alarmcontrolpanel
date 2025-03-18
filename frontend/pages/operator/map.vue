@@ -1060,8 +1060,7 @@ export default {
         params: {
           company_id: this.$auth.user.company_id,
           customer_id: this.customer_id,
-          // date_from: this.date_from,
-          // date_to: this.date_to,
+
           common_search: this.commonSearch,
           eventID: this.filterText,
           filterBuildingType: this.filterBuildingType,
@@ -1082,18 +1081,6 @@ export default {
             this.loading = false;
             if (this.customersData) this.plotLocations();
             if (this.data.length == 0) this.displayRightcontant = false;
-            // this.mapMarkersList.forEach((marker, index) => {
-            //   if (marker) {
-            //     marker.visible = false;
-            //     marker.setMap(null);
-            //     marker = null;
-            //     this.mapMarkersList[index] = null;
-            //   }
-            // });
-            // this.mapMarkersList = [];
-            // setTimeout(() => {
-            //   this.plotLocations();
-            // }, 1000 * 5);
           });
       } catch (e) {}
     },

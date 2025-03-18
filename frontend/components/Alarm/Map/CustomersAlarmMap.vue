@@ -620,7 +620,11 @@ export default {
         let { data } = await this.$axios.get(`get-map-key`);
         this.mapKey = data;
       }
-      if (this.mapKey && this.loading == false) {
+      if (
+        this.mapKey &&
+        this.loading == false &&
+        typeof window !== "undefined"
+      ) {
         await this.loadGoogleMapsScript(this.initMap);
       }
     },

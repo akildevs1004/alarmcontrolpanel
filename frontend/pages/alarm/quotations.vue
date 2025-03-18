@@ -7,7 +7,7 @@
       </v-snackbar>
     </div>
 
-    <v-dialog v-model="newProductDialog" max-width="800px">
+    <v-dialog v-model="newProductDialog" max-width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense>
@@ -145,6 +145,20 @@
               {{ item.contact_number }}
               <div class="secondary-value">{{ item.whatsapp_number }}</div>
             </template>
+
+            <template v-slot:item.payment_type="{ item }">
+              {{ item.payment_type }}
+              <div class="secondary-value">{{ item.total_years }} Year(s)</div>
+            </template>
+            <template v-slot:item.package="{ item }">
+              {{ item.product_service.name }}
+              <div class="secondary-value">
+                {{ item.product_service.sensor_count }} Max Sensors
+              </div>
+            </template>
+            <template v-slot:item.inquiry="{ item }">
+              {{ item.inquiry_id ? "#" + item.inquiry_id : "---" }}
+            </template>
             <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">
@@ -243,14 +257,15 @@ export default {
 
     data: [],
     headers: [
+      // {
+      //   text: "#",
+      //   value: "sno",
+      // },
       {
         text: "#",
-        value: "sno",
+        value: "quotation_id",
       },
-      {
-        text: "Business Source",
-        value: "business_source.name",
-      },
+
       {
         text: "Cusotmer Name",
         value: "first_name",
@@ -260,7 +275,7 @@ export default {
         value: "device_type",
       },
       {
-        text: "Sensor Count",
+        text: "Required Sensors",
         value: "sensor_count",
       },
       {
@@ -288,6 +303,19 @@ export default {
         value: "address",
       },
       {
+        text: "Payment",
+        value: "payment_type",
+      },
+      {
+        text: "Package",
+        value: "package",
+      },
+      {
+        text: "Amount",
+        value: "amount",
+      },
+
+      {
         text: "Date",
         value: "created_datetime",
       },
@@ -299,6 +327,14 @@ export default {
       //   text: "Customer Remarks",
       //   value: "month_amount",
       // },
+      {
+        text: "Inquiry",
+        value: "inquiry",
+      },
+      {
+        text: "Invoice",
+        value: "invoice",
+      },
       {
         text: "Options",
         value: "options",
@@ -369,7 +405,7 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-    convertToQuotation() {},
+
     filterAttr(data) {
       this.date_from = data.from;
       this.date_to = data.to;
@@ -381,7 +417,9 @@ export default {
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
     },
-
+    convertInquirtyToQuotation(item) {
+      this.inquiry_to_quotation = item;
+    },
     addItem() {
       this.editId = null;
       this.editable = true;
@@ -464,7 +502,7 @@ export default {
       this.perPage = itemsPerPage;
       try {
         this.$axios
-          .get("sales_inquiry", this.payloadOptions)
+          .get("sales_quotations", this.payloadOptions)
           .then(({ data }) => {
             this.isBackendRequestOpen = false;
             this.data = data.data;
@@ -479,6 +517,7 @@ export default {
 
             let monthObj = this.$dateFormat.monthStartEnd(today);
             this.date_from = monthObj.first;
+
             this.date_to = monthObj.last;
             this.displayDateFilter = true;
             this.isPageload = false;

@@ -6,7 +6,27 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-dialog v-model="dialogInquiryToQuotation" max-width="1000px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> Inquiry To Quotation</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogInquiryToQuotation = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <EditQuotation
+            :key="key"
+            :editId="editId"
+            :inquiry_to_quotation="inquiry_to_quotation"
+            :item="item"
+            :editable="editable"
+            @closeDialog="closeProductDialog"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="newProductDialog" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -145,6 +165,10 @@
               {{ item.contact_number }}
               <div class="secondary-value">{{ item.whatsapp_number }}</div>
             </template>
+            <template v-slot:item.quotation="{ item }">
+              {{ item.quotation ? item.quotation.quotation_id : "---" }}
+              <div class="secondary-value">{{ item.updated_datetime }}</div>
+            </template>
             <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">
@@ -152,7 +176,7 @@
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </template>
-                <v-list width="120" dense>
+                <v-list width="150" dense>
                   <v-list-item
                     v-if="can('operators_view')"
                     @click="viewItem(item)"
@@ -178,7 +202,7 @@
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="blue" small> mdi-cash </v-icon>
-                      Convert to QTN
+                      Convert QTN
                     </v-list-item-title>
                   </v-list-item>
                   <!-- <v-list-item
@@ -202,12 +226,16 @@
 
 <script>
 import EditInquiry from "../../components/Alarm/EditInquiry.vue";
+import EditQuotation from "../../components/Alarm/EditQuotation.vue";
 
 export default {
   components: {
     EditInquiry,
+    EditQuotation,
   },
   data: () => ({
+    inquiry_to_quotation: null,
+    dialogInquiryToQuotation: false,
     displayDateFilter: false,
     date_from: null,
     date_to: null,
@@ -291,6 +319,11 @@ export default {
         text: "Date",
         value: "created_datetime",
       },
+      {
+        text: "Quotation",
+        value: "quotation",
+      },
+
       // {
       //   text: "Receiption Remarks",
       //   value: "month_amount",
@@ -369,7 +402,7 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
-    convertToQuotation() {},
+
     filterAttr(data) {
       this.date_from = data.from;
       this.date_to = data.to;
@@ -377,6 +410,7 @@ export default {
       this.getDataFromApi();
     },
     closeProductDialog() {
+      this.dialogInquiryToQuotation = false;
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
@@ -388,6 +422,8 @@ export default {
       this.key += 1;
       this.item = null;
       this.viewCustomerId = null;
+      this.inquiry_to_quotation = null;
+
       this.newProductDialog = true;
     },
     viewItem(item) {
@@ -396,6 +432,8 @@ export default {
       this.viewCustomerId = item.id;
       this.key += 1;
       this.item = item;
+      this.inquiry_to_quotation = null;
+
       this.newProductDialog = true;
     },
     // viewItem2(item) {
@@ -406,7 +444,19 @@ export default {
       this.editId = item.id;
       this.key += 1;
       this.item = item;
+      this.inquiry_to_quotation = null;
       this.newProductDialog = true;
+    },
+
+    convertToQuotation(item) {
+      this.editId = null;
+      this.editable = true;
+      this.key += 1;
+      this.item = null;
+      this.viewCustomerId = null;
+
+      this.inquiry_to_quotation = item;
+      this.dialogInquiryToQuotation = true;
     },
 
     deleteItem(item) {

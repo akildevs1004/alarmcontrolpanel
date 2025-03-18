@@ -174,7 +174,7 @@
                   small
                   @change="updateCartPrice()"
                   v-model="discount_type"
-                  :items="['None', 'Percentage', 'Amount']"
+                  :items="['Percentage', 'Amount']"
                 ></v-select>
               </v-col>
               <v-col style="max-width: 150px">
@@ -249,7 +249,8 @@ export default {
     product_discount_price: 0,
     product_final_price: 0,
     product_service_id: null,
-    discount_type: null,
+    discount_type: "Percentage",
+
     product_discount_price_amount: 0,
 
     payment_type: "Yearly",
@@ -543,6 +544,8 @@ export default {
 
       if (this.product_final_price < 0) {
         alert("Invalid Invoice amount");
+        this.product_discount_price = 0;
+        this.updateCartPrice();
       }
     },
     getDataFromApi(url = "", filter_column = "", filter_value = "") {

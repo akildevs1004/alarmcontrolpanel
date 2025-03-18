@@ -54,7 +54,7 @@
   {
     "icon": "mdi-bell",
     "title": "Settings",
-    "to": "/Settings",
+    "to": "/settings",
     "menu": "settings",
     "module": "topmenu"
   }

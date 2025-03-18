@@ -32,6 +32,7 @@ use App\Http\Controllers\PlottingController;
 use App\Http\Controllers\RolePermissionsController;
 use App\Http\Controllers\SalesBusinessSourceTypesController;
 use App\Http\Controllers\SalesInquiryController;
+use App\Http\Controllers\SalesQuotationsController;
 use App\Models\AlarmLogs;
 use App\Models\Customers\Customers;
 use App\Models\Customers\SecurityLogin;
@@ -304,6 +305,8 @@ Route::get('admin_tickets_statistics',  [TicketsController::class, 'adminTickets
 //sales
 Route::get('get_sales_business_types',  [SalesInquiryController::class, 'GetBusinessSourceTypes']);
 Route::apiResource('sales_inquiry',   SalesInquiryController::class);
+Route::apiResource('sales_quotations',   SalesQuotationsController::class);
+
 
 
 
