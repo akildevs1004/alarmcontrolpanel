@@ -39,7 +39,9 @@ class SalesInquiryController extends Controller
                 $q->Orwhere('email', 'ILIKE', '$request->common_search%');
                 $q->Orwhere('address', 'ILIKE', '$request->common_search%');
                 $q->Orwhere('device_type', 'ILIKE', '$request->common_search%');
-                $q->Orwhere('sensor_count',   $request->common_search);
+
+                $count = (int)$request->common_search;
+                $q->Orwhere('sensor_count',   $count);
                 $q->Orwhere('building_name', 'ILIKE', '$request->common_search%');
                 $q->Orwhere('receiption_remarks', 'ILIKE', '$request->common_search%');
                 $q->Orwhere('customer_request', 'ILIKE', '$request->common_search%');

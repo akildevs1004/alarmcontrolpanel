@@ -13,45 +13,6 @@
             <v-col cols="12">
               <v-row class="pt-0">
                 <v-col cols="6" dense>
-                  <v-select
-                    label="Business Source"
-                    dense
-                    small
-                    outlined
-                    type="text"
-                    v-model="payload.business_source_id"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                    :items="business_source_list"
-                    item-text="name"
-                    item-value="id"
-                  ></v-select>
-                  <span
-                    v-if="primary_errors && primary_errors.business_source_id"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.business_source_id[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="6" dense>
-                  <v-text-field
-                    label="Source Name/Details"
-                    dense
-                    small
-                    outlined
-                    type="text"
-                    v-model="payload.business_source_info"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.business_source_info"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.business_source_info[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="6" dense>
                   <v-text-field
                     label="First Name"
                     dense
@@ -226,7 +187,7 @@
                   > </v-col
                 ><v-col cols="6" dense>
                   <v-select
-                    label="Expecting Sensor Count"
+                    label="Total Sensor Count"
                     dense
                     small
                     outlined
@@ -247,41 +208,127 @@
                     >{{ primary_errors.sensor_count[0] }}</span
                   >
                 </v-col>
-                <v-col cols="6" style="height: 150px">
-                  <v-textarea
-                    style="height: 20px; width: 100%"
-                    label="Receiption Remarks"
-                    dense
-                    outlined
-                    type="text"
-                    v-model="payload.receiption_remarks"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-textarea>
-                  <span
-                    v-if="errors && errors.receiption_remarks"
-                    class="text-danger mt-2"
-                    >{{ errors.receiption_remarks[0] }}</span
-                  > </v-col
-                ><v-col cols="6" style="height: 150px">
-                  <v-textarea
-                    style="height: 20px; width: 100%"
-                    label="Customer Request"
-                    dense
-                    outlined
-                    type="text"
-                    v-model="payload.customer_request"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-textarea>
-                  <span
-                    v-if="errors && errors.customer_request"
-                    class="text-danger mt-2"
-                    >{{ errors.customer_request[0] }}</span
-                  >
+                <v-col cols="6" dense>
+                  <v-col style="max-width: 160px">
+                    <v-select
+                      height="20"
+                      class="employee-schedule-search-box"
+                      label="Payment Type"
+                      outlined
+                      dense
+                      v-model="payload.payment_type"
+                      :items="['Yearly', 'Quarter', 'Monthly']"
+                    ></v-select
+                  ></v-col>
                 </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" class="text-right mt-0 pt-0">
+              <table id="table-services">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Sensor Count</th>
+                  <th>{{ payment_type }} - Price</th>
+                  <th>Options</th>
+                </tr>
+                <tr v-for="(service, index) in data">
+                  <td>{{ ++index }}</td>
+                  <td>{{ service.name }}</td>
+                  <td>{{ service.sensor_count }}</td>
+                  <td>
+                    <div v-if="payment_type == 'Yearly'">
+                      ${{ service.year_amount }}
+                    </div>
+                    <div v-else-if="payment_type == 'Monthly'">
+                      ${{ service.month_amount }}
+                    </div>
+                    <div v-else-if="payment_type == 'Quarter'">
+                      ${{ service.quarter_amount }}
+                    </div>
+                  </td>
+
+                  <td style="">
+                    <v-radio-group v-model="selectedItem">
+                      <v-radio :value="service"></v-radio>
+                    </v-radio-group>
+                  </td>
+                </tr>
+              </table>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col> </v-col>
+            <v-col>
+              <v-row>
+                <v-col style="text-align: right"
+                  >Product
+                  <span style="font-weight: bold">{{ payment_type }}</span>
+                  Amount</v-col
+                >
+                <v-col
+                  style="
+                    max-width: 100px;
+                    text-align: right;
+                    padding-right: 25px;
+                    font-weight: bold;
+                  "
+                  >$ {{ product_price }}</v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col><hr /></v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-select
+                    height="20"
+                    class="employee-schedule-search-box"
+                    label="Discount Type"
+                    outlined
+                    dense
+                    small
+                    @change="updateCartPrice()"
+                    v-model="discount_type"
+                    :items="['None', 'Percentage', 'Amount']"
+                  ></v-select>
+                </v-col>
+                <v-col style="max-width: 150px">
+                  <v-text-field
+                    class="small-custom-textbox"
+                    label="Discount Value"
+                    outlined
+                    dense
+                    small
+                    v-model="product_discount_price"
+                    @keyup="updateCartPrice()"
+                  ></v-text-field> </v-col
+                ><v-col
+                  style="
+                    max-width: 100px;
+                    color: red;
+                    text-align: right;
+                    padding-right: 25px;
+                  "
+                >
+                  - $ {{ product_discount_price_amount.toFixed(2) }}
+                </v-col>
+              </v-row>
+              <hr />
+              <v-row style="font-weight: bold">
+                <v-col> </v-col>
+                <v-col style="text-align: right">Final Amount</v-col>
+                <v-col
+                  style="
+                    max-width: 100px;
+                    text-align: right;
+                    padding-right: 25px;
+                  "
+                  >$ {{ product_final_price.toFixed(2) }}</v-col
+                >
               </v-row>
             </v-col>
           </v-row>

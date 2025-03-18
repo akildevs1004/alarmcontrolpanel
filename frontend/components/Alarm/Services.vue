@@ -138,55 +138,6 @@
                 </td>
               </tr>
             </table>
-
-            <!-- <v-data-table
-              hide-default-footer
-              :headers="headersUpdated"
-              :items="data"
-              :loading="loading"
-              class="elevation-0 services-table"
-              :server-items-length="totalRowsCount"
-              fixed-header
-              :disable-sort="true"
-            >
-              <template v-slot:item="{ item, index }">
-                <tr>
-                  <td>{{ ++index }}</td>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.sensor_count }}</td>
-                  <td
-                    style="
-                      text-align: right;
-                      width: 150px;
-                      padding-right: 50px;
-                      font-weight: bold;
-                    "
-                  >
-                    ${{
-                      payment_type === "Yearly"
-                        ? item.year_amount
-                        : payment_type === "Quarter"
-                        ? item.quarter_amount
-                        : item.month_amount
-                    }}
-                  </td>
-
-                  <td
-                    style="
-                      text-align: right;
-
-                      font-weight: bold;
-                      float: right;
-                    "
-                  >
-                    <v-radio-group v-model="selectedItem" column hide-details>
-                      <v-radio :value="item.id"></v-radio>
-                    </v-radio-group>
-                  </td>
-                </tr>
-              </template>
-
-            </v-data-table> -->
           </v-col>
         </v-row>
 

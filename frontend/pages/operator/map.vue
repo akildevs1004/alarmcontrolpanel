@@ -818,7 +818,7 @@ export default {
   computed: {},
 
   beforeDestroy() {
-    if (window) window.removeEventListener("resize", this.onResize);
+    // if (window) window.removeEventListener("resize", this.onResize);
   },
   async mounted() {
     // setTimeout(() => {

@@ -526,7 +526,7 @@ export default {
     invoiceDue: 0,
   }),
   computed: {},
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       if (window) {
         this.windowHeight = window.innerHeight;
@@ -534,6 +534,16 @@ export default {
         this.tableHeight = window.innerHeight - 450;
       }
     }, 1000 * 5);
+
+    let today = new Date();
+
+    this.date_from = today.toISOString().split("T")[0];
+    this.loadAllEventsTable = true;
+    await this.updateEventsOpenCountStatus();
+    await this.getEventsTypeStats();
+    await this.getEventCategoriesStats();
+
+    await this.getMaintenanceInfo();
   },
   async created() {
     if (!this.$auth.user) {
@@ -550,15 +560,6 @@ export default {
     //     }
     //   }
     // }
-    let today = new Date();
-
-    this.date_from = today.toISOString().split("T")[0];
-    this.loadAllEventsTable = true;
-    await this.updateEventsOpenCountStatus();
-    await this.getEventsTypeStats();
-    await this.getEventCategoriesStats();
-
-    await this.getMaintenanceInfo();
 
     // setTimeout(() => {}, 1000 * 1);
 
@@ -570,8 +571,8 @@ export default {
         await this.updateEventsOpenCountStatus();
       }
     }, 1000 * 20);
-
-    this.customer_id = this.$auth.user.customer.id;
+    if (this.$auth.user.customer)
+      this.customer_id = this.$auth.user.customer.id;
   },
   watch: {},
   methods: {
@@ -579,7 +580,7 @@ export default {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
-          customer_id: this.$auth.user.customer.id,
+          customer_id: this.$auth.user.customer?.id || null,
         },
       };
 

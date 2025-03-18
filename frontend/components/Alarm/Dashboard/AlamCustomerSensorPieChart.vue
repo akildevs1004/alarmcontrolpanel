@@ -205,7 +205,7 @@ export default {
         document.querySelector("#" + this.name),
         this.chartOptions
       );
-      this.chart.render();
+      if (this.chart) this.chart.render();
     },
   },
   created() {

@@ -11,7 +11,7 @@
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense>
-            {{ editId ? "Update" : "New" }} Inquiry Information</span
+            {{ editId ? "Update" : "New" }} Quotation Information</span
           >
           <v-spacer></v-spacer>
           <v-icon @click="newProductDialog = false" outlined>
@@ -19,7 +19,7 @@
           </v-icon>
         </v-card-title>
         <v-card-text>
-          <EditInquiry
+          <EditQuotation
             :key="key"
             :editId="editId"
             :item="item"
@@ -36,7 +36,7 @@
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
               <span style="color: black">
-                Customer Inquiries</span
+                Customer Quotations</span
               ></v-toolbar-title
             >
             <!-- <v-tooltip top color="primary">
@@ -201,11 +201,11 @@
 </template>
 
 <script>
-import EditInquiry from "../../components/Alarm/EditInquiry.vue";
+import EditQuotation from "../../components/Alarm/EditQuotation.vue";
 
 export default {
   components: {
-    EditInquiry,
+    EditQuotation,
   },
   data: () => ({
     displayDateFilter: false,

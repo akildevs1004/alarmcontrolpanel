@@ -1137,6 +1137,10 @@ export default {
           name: "settings",
           path: "/settings",
         },
+        sales: {
+          name: "alarm_sales",
+          path: "/alarm/sales",
+        },
       };
 
       const defaultRoute = {

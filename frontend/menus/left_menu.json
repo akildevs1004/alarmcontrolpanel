@@ -484,5 +484,13 @@
     "to": "/alarm/inquiry",
     "module": "sales",
     "top_menu_name": "sales"
+  },
+  {
+    "icon": "mdi-cash",
+    "title": "Quotations",
+    "open_menu": false,
+    "to": "/alarm/quotations",
+    "module": "sales",
+    "top_menu_name": "sales"
   }
 ]

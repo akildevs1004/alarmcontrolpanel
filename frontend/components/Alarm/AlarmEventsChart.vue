@@ -294,7 +294,7 @@ export default {
           document.querySelector("#" + this.name),
           this.chartOptions2
         );
-        this.chart.render();
+        if (this.chart) this.chart.render();
       } catch (error) {}
 
       // setTimeout(() => {
