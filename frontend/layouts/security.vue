@@ -515,14 +515,14 @@
                     Device Location :{{ device?.branch?.location }}
                   </div>
                 </v-col>
-              </v-row> 
+              </v-row>
 
               <div></div>-->
               <!-- <div>
                  <div style="color: green">
                   <strong>Note: </strong>All Branch Level Doors are Opened
                 </div>
-                <br />  
+                <br />
                 Check Devices list and Turn off Alarm to Close this popup.
 
                 <v-btn
@@ -1534,12 +1534,14 @@ export default {
       return this.$pagePermission.can(per, this);
     },
 
-    logout() {
-      console.log("security-logout");
-
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+    async logout() {
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
     GlobalSearchResultsUpdated(value) {
       if (value > 0) this.globalSearchPopupWidth = "1400px";

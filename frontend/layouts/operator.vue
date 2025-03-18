@@ -1572,20 +1572,14 @@ export default {
     },
 
     async logout() {
-      console.log("operator-logout");
-
-      await this.$auth.logout();
-      // Call the logout endpoint
-      this.$router.push("/logout", true);
-
-      // try {
-      //   await this.$auth.logout();
-      //   // Call the logout endpoint
-      //   await this.$axios.get(`/logout`);
-      //   // Logout the user using the authentication plugin
-      // } catch (error) {
-      //   console.error("Logout failed:", error);
-      // }
+      this.activeAudio = false;
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
 
     GlobalSearchResultsUpdated(value) {

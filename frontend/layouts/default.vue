@@ -878,19 +878,20 @@ export default {
     };
   },
   created() {
-    // console.log("company auth", this.$auth);
+    //console.log("company auth", this.$auth);
     // console.log("company", this.$auth.user);
     if (!this.$auth.user) {
-      this.$router.push("/login", true);
+      this.$router.push("/logout");
     }
     if (this.$auth.user?.user_type != "company") {
       try {
         if (window) {
-          if (this.$route.name != "logout") window.location.href = "../logout";
+          this.logout();
+          //if (this.$route.name != "logout") window.location.href = "../login";
           //window.location.reload();
         }
       } catch (e) {}
-      this.$router.push("/login", true);
+      this.$router.push("/login");
 
       return false;
     }
@@ -1080,7 +1081,7 @@ export default {
           let now = new Date();
 
           if (companyEndDate < now) {
-            this.$router.push("/logout");
+            this.$router.push("/logoutget_company_validate_details");
 
             return false;
           }
@@ -1596,11 +1597,15 @@ export default {
       return this.$pagePermission.can(per, this);
     },
 
-    logout() {
+    async logout() {
       this.activeAudio = false;
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
 
     GlobalSearchResultsUpdated(value) {

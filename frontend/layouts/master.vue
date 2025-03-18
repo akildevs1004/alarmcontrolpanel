@@ -315,14 +315,14 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    logout() {
-      console.log("master logout");
-
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
-
-      this.$router.push("/logout");
+    async logout() {
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
   },
   computed: {

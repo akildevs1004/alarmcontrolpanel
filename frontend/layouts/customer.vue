@@ -1561,11 +1561,15 @@ export default {
       return this.$pagePermission.can(per, this);
     },
 
-    logout() {
+    async logout() {
       this.activeAudio = false;
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
     GlobalSearchResultsUpdated(value) {
       if (value > 0) this.globalSearchPopupWidth = "1400px";

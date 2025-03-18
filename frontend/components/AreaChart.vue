@@ -72,7 +72,7 @@ export default {
         document.querySelector("#areaChart"),
         this.options
       );
-      chart.render();
+      if (chart) chart.render();
     } catch (error) {}
   },
 };

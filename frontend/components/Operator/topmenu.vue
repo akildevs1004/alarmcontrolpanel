@@ -75,7 +75,7 @@
         >
       </v-col>
       <!-- <v-col
-        class="text-right  " 
+        class="text-right  "
         style="max-width: 85px; padding-left: 0px"
       >
         <v-icon
@@ -268,10 +268,15 @@ export default {
         INACTIVITY_TIME
       );
     },
-    logout() {
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+    async logout() {
+      this.activeAudio = false;
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
     getLogo() {
       const { user } = this.$auth;

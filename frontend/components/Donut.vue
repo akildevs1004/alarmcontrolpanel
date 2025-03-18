@@ -58,7 +58,7 @@ export default {
         document.querySelector("#donut"),
         this.options
       );
-      chart.render();
+      if (chart) chart.render();
     } catch (e) {}
   },
   methods: {

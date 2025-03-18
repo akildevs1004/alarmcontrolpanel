@@ -120,11 +120,11 @@
           style="width: 150px;max-height: 30px !important;"
           max-height="10px"
           class="mt-1 custom-text-field-height   global-search-textbox111111"
-          
+
           outlined
           dense
           height:="20px"
-           
+
           append-icon="mdi-magnify"
           v-model="globalsearch"
         ></v-text-field> -->
@@ -322,10 +322,15 @@ export default {
         INACTIVITY_TIME
       );
     },
-    logout() {
-      this.$axios.get(`/logout`).then(({ res }) => {
-        this.$auth.logout();
-      });
+    async logout() {
+      this.activeAudio = false;
+      try {
+        await this.$axios.get(`/logout`);
+        await this.$auth.logout();
+        window.location.href = "../login";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
     getLogo() {
       const { user } = this.$auth;
