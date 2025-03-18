@@ -33,7 +33,7 @@ class ErrorOccurred extends Mailable
     {
 
         $emailData = [
-            'subject' => 'Application Error Report - ' . date("Y-m-d H:i:s"),
+            'subject' =>  env('APP_ENV') . ' - Application Error Report - ' . date("Y-m-d H:i:s"),
             'body' =>  $this->errorDetails['exception_message'],
         ];
 
