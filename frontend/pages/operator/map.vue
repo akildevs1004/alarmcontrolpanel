@@ -1033,10 +1033,13 @@ export default {
       return this.$pagePermission.can(per, this);
     },
     async getMapKey() {
-      let { data } = await this.$axios.get(`get-map-key`);
-      this.mapKey = data;
+      if (!this.mapKey) {
+        let { data } = await this.$axios.get(`get-map-key`);
+        this.mapKey = data;
+      }
       if (this.mapKey && this.loading == false) {
-        this.loadGoogleMapsScript(this.initMap);
+        // this.loadGoogleMapsScript(this.initMap);
+        await this.loadGoogleMapsScript(this.initMap);
       }
     },
 
@@ -1140,14 +1143,14 @@ export default {
           this.loading = false;
 
           // setTimeout(() => {
-          this.mapMarkersList.forEach((marker, index) => {
-            if (marker) {
-              marker.visible = false;
-              marker.setMap(null);
-              marker = null;
-              this.mapMarkersList[index] = null;
-            }
-          });
+          // this.mapMarkersList.forEach((marker, index) => {
+          //   if (marker) {
+          //     marker.visible = false;
+          //     marker.setMap(null);
+          //     marker = null;
+          //     this.mapMarkersList[index] = null;
+          //   }
+          // });
           this.plotLocations();
           //}, 1000 * 5);
         });
@@ -1271,7 +1274,7 @@ export default {
 
       return armedArray ? armedArray.length : 0;
     },
-    loadGoogleMapsScript(callback) {
+    async loadGoogleMapsScript(callback) {
       if (window.google && window.google.maps) {
         callback();
         return;
@@ -1387,6 +1390,15 @@ export default {
       //   }
       // };
       // myoverlay.setMap(this.map); // Add overlay to the map
+
+      this.mapMarkersList.forEach((marker, index) => {
+        if (marker) {
+          marker.visible = false;
+          marker.setMap(null);
+          marker = null;
+          this.mapMarkersList[index] = null;
+        }
+      });
 
       this.customersData.forEach((item) => {
         if (item) {

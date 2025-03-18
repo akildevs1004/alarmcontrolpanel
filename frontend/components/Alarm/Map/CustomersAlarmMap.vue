@@ -616,8 +616,10 @@ export default {
       return this.$pagePermission.can(per, this);
     },
     async getMapKey() {
-      let { data } = await this.$axios.get(`get-map-key`);
-      this.mapKey = data;
+      if (!this.mapKey) {
+        let { data } = await this.$axios.get(`get-map-key`);
+        this.mapKey = data;
+      }
       if (this.mapKey && this.loading == false) {
         await this.loadGoogleMapsScript(this.initMap);
       }
