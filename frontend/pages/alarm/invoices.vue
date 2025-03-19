@@ -439,6 +439,7 @@ export default {
 
         { text: "Status", value: "status", sortable: false },
         { text: "Notes", value: "cancel_notes", sortable: false },
+        { text: "Created", value: "created_datetime", sortable: false },
 
         { text: "Options", value: "options", sortable: false },
       ],

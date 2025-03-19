@@ -113,6 +113,7 @@ class CustomerPaymentsController extends Controller
 
 
             unset($data['editId']);
+            $data["updated_datetime"] = date("Y-m-d H:i:s");
 
 
 
@@ -124,6 +125,7 @@ class CustomerPaymentsController extends Controller
 
                 return $this->response('Payment Details are Updated.', $record, true);
             } else {
+                $data["created_datetime"] = date("Y-m-d H:i:s");
                 $record = CustomerPayments::create($data);
             }
 
@@ -272,6 +274,9 @@ class CustomerPaymentsController extends Controller
                 "invoice_count" => $maxId + $i,
                 "created_at" =>  date("Y-m-d H:i:s"),
                 "updated_at" => date("Y-m-d H:i:s"),
+
+                "created_datetime" =>  date("Y-m-d H:i:s"),
+                "updated_datetime" => date("Y-m-d H:i:s"),
                 "customer_product_service_id" => $record->id,
 
             ];
