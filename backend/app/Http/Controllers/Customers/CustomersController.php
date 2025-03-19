@@ -20,6 +20,7 @@ use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\MasterDeviceSerialNumbers;
 use App\Models\ReportNotificationLogs;
+use App\Models\SalesQuotations;
 use App\Models\SecurityCustomers;
 use App\Models\User;
 use Carbon\Carbon;
@@ -121,11 +122,29 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest  $request)
+    public function store(Request  $request)
     {
 
         try {
-            $data = $request->validated();
+            $data = $request->validate([
+                'company_id' => "required",
+                "building_type_id" => "required",
+                'building_name' => "required",
+                'house_number' => 'nullable',
+                'street_number' => "nullable",
+                'city' => "required",
+                'state' => "required",
+                'country' => "required",
+                'landmark' => "nullable",
+                'latitude' => "nullable",
+                'longitude' => "nullable",
+                'start_date' => "nullable",
+                'end_date' => "nullable",
+                'email' => "required",
+                'password' => "required",
+                'area' => "nullable",
+
+            ]);
 
             $isExist = Customers::where('email', '=', $request->email)->first();
             if ($isExist == null) {
@@ -170,8 +189,29 @@ class CustomersController extends Controller
 
                 if ($record) {
 
-                    //generate Invoices
+                    //create primary contact
+                    if ($request->filled("first_name") && $request->first_name != ''  && $request->first_name != 'null') {
+                        $contact = [
+                            "company_id" => $request->company_id,
+                            "customer_id" => $record->id,
+                            "address_type" => "primary",
+                            "email" => $request->email,
+                            "first_name" => $request->first_name,
+                            "last_name" => $request->last_name,
+                            "phone1" => $request->contact_number,
+                            "whatsapp" => $request->whatsapp,
+                        ];
 
+                        CustomerContacts::create($contact);
+                    }
+                    if ($request->filled("quotation_id") && $request->quotation_id != ''  && $request->quotation_id != 'null') {
+                        $data = [
+                            "customer_id" =>  $record->id,
+                            "updated_datetime" => date("Y-m-d H:i:s")
+                        ];
+
+                        SalesQuotations::where("id", $request->quotation_id)->update($data);
+                    }
 
 
 

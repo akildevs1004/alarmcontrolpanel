@@ -39,6 +39,9 @@ class SalesQuotationsController extends Controller
                 $q->Orwhere('payment_type', 'ILIKE', '%' . $request->common_search . '%');
                 $q->Orwhere('amount', 'ILIKE', '%' . $request->common_search . '%');
 
+                $q->Orwhere('inquiry_id', 'ILIKE', '%' . $request->common_search . '%');
+                $q->Orwhere('customer_id', 'ILIKE', '%' . $request->common_search . '%');
+
 
                 $count = (int)$request->common_search;
                 $q->Orwhere('sensor_count',   $count);

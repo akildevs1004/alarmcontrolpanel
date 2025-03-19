@@ -11,6 +11,7 @@ class SalesInquiry extends Model
 
     protected $guarded = [];
 
+
     public function businessSource()
     {
 

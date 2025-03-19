@@ -5,6 +5,27 @@
         {{ response }}
       </v-snackbar>
     </div>
+    <v-dialog v-model="dialogQuotationToInvoice" max-width="1000px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> New Cusotmer Invoice</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogQuotationToInvoice = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <QuotationToInvoice
+            :key="key"
+            :editId="null"
+            :item="null"
+            :editable="true"
+            :isNewInvoice="true"
+            @closeDialog="closeDialog()"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogEditAutomation" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
@@ -44,10 +65,7 @@
                 <v-row>
                   <v-col class="text-left"><h3>Invoices/Payments</h3></v-col>
                   <v-col style="max-width: 30px"
-                    ><v-icon
-                      loading="true"
-                      @click="getDataFromApi(0)"
-                      class="mt-2 mr-2"
+                    ><v-icon loading="true" class="mt-2 mr-2"
                       >mdi-reload</v-icon
                     ></v-col
                   >
@@ -56,7 +74,6 @@
                       style="padding-top: 7px; float: right"
                       height="20"
                       class="employee-schedule-search-box"
-                      @input="getDataFromApi(0)"
                       v-model="commonSearch"
                       label="Invoice Number"
                       placeholder="Invoice Number"
@@ -79,7 +96,6 @@
                       "
                       height="20px"
                       outlined
-                      @change="getDataFromApi(0)"
                       v-model="filter_customer_id"
                       dense
                       :items="[
@@ -103,7 +119,6 @@
                       "
                       height="20px"
                       outlined
-                      @change="getDataFromApi(0)"
                       v-model="filter_mode_of_payment"
                       dense
                       :items="[
@@ -129,7 +144,6 @@
                       "
                       height="20px"
                       outlined
-                      @change="getDataFromApi(0)"
                       v-model="filter_status"
                       dense
                       :items="[
@@ -144,7 +158,7 @@
                     ></v-select>
                   </v-col>
 
-                  <v-col style="max-width: 250px">
+                  <v-col style="max-width: 210px">
                     <CustomFilter
                       style="float: left; padding-top: 5px; z-index: 999"
                       @filter-attr="filterAttr"
@@ -153,6 +167,34 @@
                       :defaultFilterType="1"
                       :height="'30px'"
                   /></v-col>
+                  <v-col
+                    style="
+                      max-width: 80px;
+                      padding-top: 20px;
+                      text-align: center;
+                    "
+                  >
+                    <v-btn
+                      small
+                      dense
+                      color="primary"
+                      @click="getDataFromApi(0)"
+                      >Submit</v-btn
+                    >
+                  </v-col>
+
+                  <v-col
+                    style="max-width: 50px; padding-top: 20px; text-align: left"
+                    ><v-btn
+                      title="Add"
+                      x-small
+                      :ripple="false"
+                      text
+                      @click="addItem()"
+                    >
+                      <v-icon class="">mdi mdi-plus-circle</v-icon>
+                    </v-btn></v-col
+                  >
                   <!-- <v-col
                     style="
                       margin-top: 10px;
@@ -261,6 +303,13 @@
               <template v-slot:item.invoice_number="{ item, index }">
                 {{ item.invoice_number }}
               </template>
+              <template v-slot:item.amount="{ item, index }">
+                <div
+                  style="text-align: right; padding-right: 40px; width: 100px"
+                >
+                  ${{ item.amount }}.00
+                </div>
+              </template>
               <template v-slot:item.invoice_date="{ item, index }">
                 {{ item.invoice_date }}
               </template>
@@ -341,13 +390,16 @@
 </template>
 
 <script>
+import QuotationToInvoice from "../../components/Alarm/QuotationToInvoice.vue";
+
 // import AlarmEditPayments from "../../../components/Alarm/EditPayments.vue";
 
 export default {
-  // components: { AlarmEditPayments },
+  components: { QuotationToInvoice },
 
   data() {
     return {
+      dialogQuotationToInvoice: false,
       browserHeight: 900,
 
       customer: null,
@@ -417,6 +469,10 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    addItem() {
+      this.key++;
+      this.dialogQuotationToInvoice = true;
+    },
     getCustomersList() {
       this.payloadOptions = {
         params: {
@@ -433,14 +489,15 @@ export default {
       } catch (e) {}
     },
     closeDialog() {
-      this.getDataFromApi();
       this.dialogEditAutomation = false;
+      this.dialogQuotationToInvoice = false;
+      this.getDataFromApi();
     },
     filterAttr(data) {
       this.date_from = data.from;
       this.date_to = data.to;
 
-      this.getDataFromApi();
+      // this.getDataFromApi();
     },
     editItem(item) {
       this.key = this.key + 1;

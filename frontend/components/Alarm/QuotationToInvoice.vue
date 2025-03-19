@@ -12,7 +12,7 @@
           <v-row>
             <v-col cols="12">
               <v-row class="pt-0">
-                <v-col cols="4" dense>
+                <v-col cols="3" dense v-if="!isNewInvoice">
                   <v-text-field
                     label="First Name"
                     dense
@@ -30,7 +30,7 @@
                     >{{ primary_errors.first_name[0] }}</span
                   >
                 </v-col>
-                <v-col cols="4" dense>
+                <v-col cols="3" dense v-if="!isNewInvoice">
                   <v-text-field
                     label="Last Name"
                     dense
@@ -48,84 +48,7 @@
                     >{{ primary_errors.last_name[0] }}</span
                   >
                 </v-col>
-                <v-col cols="4" dense>
-                  <v-text-field
-                    label="Contact Number"
-                    dense
-                    small
-                    outlined
-                    clearable
-                    autocomplete="off"
-                    v-model="payload.contact_number"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.contact_number"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.contact_number[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="4" dense>
-                  <v-text-field
-                    label="Whatsapp Number"
-                    dense
-                    small
-                    outlined
-                    clearable
-                    autocomplete="off"
-                    v-model="payload.whatsapp_number"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.whatsapp_number"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.whatsapp_number[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="4" dense>
-                  <v-text-field
-                    label="Email"
-                    type="email"
-                    dense
-                    small
-                    outlined
-                    clearable
-                    autocomplete="off"
-                    v-model="payload.email"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.email"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.email[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="4" dense>
-                  <v-text-field
-                    label="Address/Location"
-                    dense
-                    small
-                    outlined
-                    clearable
-                    autocomplete="off"
-                    v-model="payload.address"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.address"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.address[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="4" dense>
+                <v-col cols="3" dense v-if="!isNewInvoice">
                   <v-text-field
                     label="Business/Building Name"
                     dense
@@ -142,8 +65,9 @@
                     v-if="primary_errors && primary_errors.building_name"
                     class="text-danger mt-2"
                     >{{ primary_errors.building_name[0] }}</span
-                  > </v-col
-                ><v-col cols="4" dense>
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
                   <v-select
                     label="Type of Business/Customer"
                     dense
@@ -165,7 +89,218 @@
                     >{{ primary_errors.building_type_id[0] }}</span
                   >
                 </v-col>
-                <v-col cols="4" dense>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="House Number"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.house_numner"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.house_numner"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.house_numner[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Street Number"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.street_number"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.street_number"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.street_number[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Area"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.area"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.area"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.area[0] }}</span
+                  > </v-col
+                ><v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="City"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.city"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.city"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.city[0] }}</span
+                  > </v-col
+                ><v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="State"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.state"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.state"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.state[0] }}</span
+                  > </v-col
+                ><v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Country"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.country"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.country"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.country[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Contact Number"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.contact_number"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.contact_number"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.contact_number[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Whatsapp Number"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.whatsapp_number"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.whatsapp_number"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.whatsapp_number[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Email"
+                    type="email"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.email"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.email"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.email[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="!isNewInvoice">
+                  <v-text-field
+                    label="Password(New customer)"
+                    type="password"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.password"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.password"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.password[0] }}</span
+                  >
+                </v-col>
+                <v-col cols="3" dense v-if="isNewInvoice">
+                  <v-select
+                    label="Customer"
+                    dense
+                    small
+                    outlined
+                    clearable
+                    autocomplete="off"
+                    v-model="payload.customer_id"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                    :items="customersList"
+                    item-text="building_name"
+                    item-value="id"
+                  ></v-select>
+                  <span
+                    v-if="primary_errors && primary_errors.customer_id"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.customer_id[0] }}</span
+                  >
+                </v-col>
+                <!-- <v-col cols="3" dense>
                   <v-select
                     label="Alarm Type"
                     dense
@@ -186,7 +321,7 @@
                     class="text-danger mt-2"
                     >{{ primary_errors.device_type[0] }}</span
                   > </v-col
-                ><v-col cols="4" dense>
+                ><v-col cols="3" dense>
                   <v-select
                     label="Required Sensor Count"
                     dense
@@ -208,9 +343,45 @@
                     class="text-danger mt-2"
                     >{{ primary_errors.sensor_count[0] }}</span
                   >
+                </v-col> -->
+                <v-col md="3" sm="12" cols="12">
+                  <v-menu
+                    v-model="startDateMenuOpen"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        label="Licence Start Date"
+                        hide-details
+                        v-model="payload.start_date"
+                        persistent-hint
+                        append-icon="mdi-calendar"
+                        readonly
+                        outlined
+                        dense
+                        v-bind="attrs"
+                        v-on="on"
+                        :disabled="!editable"
+                      ></v-text-field>
+                      <span
+                        v-if="errors && errors.start_date"
+                        class="text-danger mt-2"
+                        >{{ errors.start_date[0] }}</span
+                      >
+                    </template>
+                    <v-date-picker
+                      style="min-height: 320px"
+                      v-model="payload.start_date"
+                      no-title
+                      @input="startDateMenuOpen = false"
+                    ></v-date-picker>
+                  </v-menu>
                 </v-col>
-
-                <v-col cols="4" dense>
+                <v-col cols="3" dense>
                   <v-select
                     dense
                     small
@@ -225,7 +396,7 @@
                     :filled="!editable"
                   ></v-select>
                 </v-col>
-                <v-col cols="4" dense>
+                <v-col cols="3" dense>
                   <v-select
                     dense
                     small
@@ -363,7 +534,10 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" class="text-right">
+            <v-col cols="9" class="text-right" style="color: red">{{
+              response
+            }}</v-col>
+            <v-col cols="3" class="text-right">
               <v-btn
                 v-if="editable"
                 small
@@ -383,10 +557,10 @@
 
 <script>
 export default {
-  props: ["editId", "item", "editable", "inquiry_to_quotation"],
+  props: ["editId", "item", "editable", "inquiry_to_quotation", "isNewInvoice"],
   data: () => ({
     data: [],
-
+    customersList: [],
     licence_duration_years: 1,
     total_invoice_count: 0,
     startDateMenuOpen: "",
@@ -462,11 +636,12 @@ export default {
       immediate: true, // Optional: Runs on component mount
     },
   },
-  created() {
+  async created() {
     this.primary_previewImage = null;
     this.payload = {};
     this.payload.licence_duration_years = 1;
     this.preloader = false;
+
     // this.getBranchesList();
 
     if (this.$store.state.storeAlarmControlPanel?.AddressTypes) {
@@ -502,10 +677,12 @@ export default {
       this.qtyList.push(i);
     }
     this.selectedItem = null;
-    this.getDataFromApi();
-    this.getBusinessTypes();
-    this.getAlarmTypes();
-    this.getBuildingTypes();
+    await this.getDataFromApi();
+    await this.getBusinessTypes();
+    await this.getAlarmTypes();
+    await this.getBuildingTypes();
+    this.payload.start_date = new Date().toISOString().slice(0, 10);
+    await this.getCustomersList();
   },
   methods: {
     can(per) {
@@ -554,7 +731,7 @@ export default {
           this.product_price = this.selectedItem.year_amount;
 
           this.total_invoice_count = this.licence_duration_years;
-          const endDate = new Date(this.start_date);
+          const endDate = new Date(this.payload.start_date);
           endDate.setDate(
             endDate.getDate() + 365 * this.licence_duration_years
           );
@@ -563,7 +740,7 @@ export default {
           this.product_price = this.selectedItem.month_amount;
 
           this.total_invoice_count = this.licence_duration_years * 12;
-          const endDate = new Date(this.start_date);
+          const endDate = new Date(this.payload.start_date);
           endDate.setDate(
             endDate.getDate() + 365 * this.licence_duration_years
           );
@@ -571,7 +748,7 @@ export default {
         } else if (this.payment_type == "Quarter") {
           this.product_price = this.selectedItem.quarter_amount;
           this.total_invoice_count = this.licence_duration_years * 4;
-          const endDate = new Date(this.start_date);
+          const endDate = new Date(this.payload.start_date);
           endDate.setDate(
             endDate.getDate() + 365 * this.licence_duration_years
           );
@@ -609,7 +786,7 @@ export default {
         this.updateCartPrice();
       }
     },
-    getDataFromApi(url = "", filter_column = "", filter_value = "") {
+    async getDataFromApi(url = "", filter_column = "", filter_value = "") {
       if (this.isBackendRequestOpen) return false;
       this.isBackendRequestOpen = true;
 
@@ -660,21 +837,21 @@ export default {
         this.loading = false;
       }
     },
-    getBusinessTypes() {
+    async getBusinessTypes() {
       let options = { params: { company_id: this.$auth.user.company_id } };
 
       this.$axios.get("get_sales_business_types", options).then((data) => {
         this.business_source_list = data.data;
       });
     },
-    getAlarmTypes() {
+    async getAlarmTypes() {
       let options = { params: { company_id: this.$auth.user.company_id } };
 
       this.$axios.get("device_types", options).then((data) => {
         this.device_type_list = data.data;
       });
     },
-    getBuildingTypes() {
+    async getBuildingTypes() {
       this.$axios
         .get(`building_types`, {
           params: {
@@ -685,7 +862,28 @@ export default {
           this.buildingTypes = data;
         });
     },
+    async getCustomersList() {
+      this.payloadOptions = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+
+      try {
+        this.$axios
+          .get("customers-all", this.payloadOptions)
+          .then(({ data }) => {
+            this.customersList = data;
+          });
+      } catch (e) {}
+    },
     submit_primary() {
+      if (this.isNewInvoice) {
+        this.generateCusotmerInvoices(this.payload.customer_id);
+
+        return false;
+      }
+
       let customer = new FormData();
 
       for (const key in this.payload) {
@@ -695,15 +893,26 @@ export default {
       }
       if (this.editId) customer.append("editId", this.editId);
       customer.append("company_id", this.$auth.user.company_id);
-      customer.append("payment_type", this.payment_type);
-      customer.append("device_product_service_id", this.selectedItem.id);
+      customer.append("quotation_id", this.item.id);
 
-      customer.append("discount", this.product_discount_price_amount);
-      customer.append("amount", this.product_final_price);
-      customer.append("total_years", this.licence_duration_years);
+      // customer.append("payment_type", this.payment_type);
+      // customer.append("device_service_id", this.selectedItem.id);
+      // customer.append("start_date", this.payload.start_date);
+      // customer.append("end_date", this.end_date);
+
+      // customer.append(
+      //   "product_discount_price",
+      //   this.product_discount_price_amount
+      // );
+      // customer.append("product_final_price", this.product_final_price);
+      // customer.append(
+      //   "product_price",
+      //   parseFloat(this.product_final_price) +
+      //     parseFloat(this.product_discount_price_amount)
+      // );
 
       this.$axios
-        .post("/sales_quotations", customer)
+        .post("/customers", customer)
         .then(({ data }) => {
           //this.loading = false;
 
@@ -719,13 +928,66 @@ export default {
             this.primary_errors = [];
             this.snackbar = true;
             this.response = data.message;
+
+            let new_customer_id = data.record.id;
+            //generate Invoices
+
+            let invoiceStatus = this.generateCusotmerInvoices(new_customer_id);
+
+            console.log("invoiceStatus", invoiceStatus);
+
+            // setTimeout(() => {
+            //   this.$emit("closeDialog");
+
+            //   if (this.inquiry_to_quotation) {
+            //     this.$router.push("/alarm/quotations");
+            //   }
+            // }, 1000);
+          }
+        })
+        .catch((e) => {
+          if (e.response.data.errors) {
+            this.primary_errors = e.response.data.errors;
+            this.color = "red";
+
+            this.snackbar = true;
+            this.response = e.response.data.message;
+          }
+        });
+    },
+
+    generateCusotmerInvoices(customer_id) {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: customer_id,
+          device_service_id: this.selectedItem.id,
+          product_price: this.product_price,
+          product_discount_price: this.product_discount_price,
+          product_final_price: this.product_final_price,
+          payment_type: this.payment_type,
+          start_date: this.payload.start_date,
+          end_date: this.end_date,
+          licence_duration_years: this.licence_duration_years,
+          total_invoice_count: this.total_invoice_count,
+        },
+      };
+
+      this.$axios
+        .post("customer_product_invoice_submition", options.params)
+        .then((data) => {
+          if (data.status) {
+            this.snackbar = true;
+            this.response = "Invoices Created Successfully";
             setTimeout(() => {
               this.$emit("closeDialog");
-
-              if (this.inquiry_to_quotation) {
-                this.$router.push("/alarm/quotations");
-              }
             }, 1000);
+            return true;
+          } else {
+            this.snackbar = true;
+            this.response = "Error Occured";
+
+            return false;
           }
         })
         .catch((e) => {

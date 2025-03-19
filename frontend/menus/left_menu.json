@@ -438,8 +438,8 @@
   },
   {
     "icon": "mdi-currency-usd",
-    "title": "Payment",
-    "to": "/alarm/payments",
+    "title": "Invoice",
+    "to": "/alarm/invoices",
     "menu": "device_access",
     "module": "settings",
     "top_menu_name": "alarm_reports"
@@ -490,6 +490,14 @@
     "title": "Quotations",
     "open_menu": false,
     "to": "/alarm/quotations",
+    "module": "sales",
+    "top_menu_name": "sales"
+  },
+  {
+    "icon": "mdi-currency-usd",
+    "title": "Invoices",
+    "open_menu": false,
+    "to": "/alarm/invoices",
     "module": "sales",
     "top_menu_name": "sales"
   }

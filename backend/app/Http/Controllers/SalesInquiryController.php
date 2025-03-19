@@ -15,7 +15,7 @@ class SalesInquiryController extends Controller
      */
     public function index(Request $request)
     {
-        $model = SalesInquiry::with(["quotation", "businessSource", "buildingType"])->where("company_id", $request->company_id);
+        $model = SalesInquiry::with(["quotation.ProductService", "businessSource", "buildingType"])->where("company_id", $request->company_id);
 
 
 
@@ -54,6 +54,9 @@ class SalesInquiryController extends Controller
 
                 $q->orWhereHas('buildingType', function ($query) use ($request) {
                     $query->where('name', 'ILIKE', "%$request->common_search%");
+                });
+                $q->orWhereHas('quotation', function ($query) use ($request) {
+                    $query->where('quotation_id', 'ILIKE', "%$request->common_search%");
                 });
             });
         });

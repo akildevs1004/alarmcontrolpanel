@@ -166,7 +166,12 @@
               <div class="secondary-value">{{ item.whatsapp_number }}</div>
             </template>
             <template v-slot:item.quotation="{ item }">
-              {{ item.quotation ? item.quotation.quotation_id : "---" }}
+              <div
+                @click="viewQuotation(item)"
+                style="color: blue; cursor: pointer"
+              >
+                {{ item.quotation ? item.quotation.quotation_id : "---" }}
+              </div>
               <div class="secondary-value">{{ item.updated_datetime }}</div>
             </template>
             <template v-slot:item.options="{ item }">
@@ -198,7 +203,7 @@
                   </v-list-item>
                   <v-list-item
                     @click="convertToQuotation(item)"
-                    v-if="can('operators_edit')"
+                    v-if="can('operators_edit') && !item.quotation"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="blue" small> mdi-cash </v-icon>
@@ -234,6 +239,7 @@ export default {
     EditQuotation,
   },
   data: () => ({
+    dialogQuotation: false,
     inquiry_to_quotation: null,
     dialogInquiryToQuotation: false,
     displayDateFilter: false,
@@ -414,6 +420,17 @@ export default {
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
+    },
+
+    viewQuotation(item) {
+      this.editId = item.quotation.id;
+      this.editable = false;
+      this.key += 1;
+      this.item = item.quotation;
+      this.viewCustomerId = null;
+
+      this.inquiry_to_quotation = null;
+      this.dialogInquiryToQuotation = true;
     },
 
     addItem() {

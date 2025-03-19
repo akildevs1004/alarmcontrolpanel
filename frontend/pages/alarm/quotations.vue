@@ -6,7 +6,26 @@
         {{ response }}
       </v-snackbar>
     </div>
-
+    <v-dialog v-model="dialogQuotationToInvoice" max-width="1000px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> Quotation To Invoice</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogQuotationToInvoice = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <QuotationToInvoice
+            :key="key"
+            :editId="editId"
+            :item="item"
+            :editable="editable"
+            @closeDialog="closeProductDialog"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="newProductDialog" max-width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
@@ -159,6 +178,13 @@
             <template v-slot:item.inquiry="{ item }">
               {{ item.inquiry_id ? "#" + item.inquiry_id : "---" }}
             </template>
+            <template v-slot:item.customer="{ item }">
+              {{ item.customer_id ? "#" + item.customer_id : "---" }}
+              <div class="secondary-value" v-if="item.customer_id">
+                {{ item.updated_datetime }}
+              </div>
+            </template>
+
             <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">
@@ -166,7 +192,7 @@
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </template>
-                <v-list width="120" dense>
+                <v-list width="150" dense>
                   <v-list-item
                     v-if="can('operators_view')"
                     @click="viewItem(item)"
@@ -179,7 +205,7 @@
 
                   <v-list-item
                     @click="editItem(item)"
-                    v-if="can('operators_edit')"
+                    v-if="can('operators_edit') && !item.customer_id"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
@@ -187,12 +213,12 @@
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    @click="convertToQuotation(item)"
-                    v-if="can('operators_edit')"
+                    @click="convertToInvoice(item)"
+                    v-if="can('operators_edit') && !item.customer_id"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="blue" small> mdi-cash </v-icon>
-                      Convert to QTN
+                      Convert to INV
                     </v-list-item-title>
                   </v-list-item>
                   <!-- <v-list-item
@@ -216,12 +242,15 @@
 
 <script>
 import EditQuotation from "../../components/Alarm/EditQuotation.vue";
+import QuotationToInvoice from "../../components/Alarm/QuotationToInvoice.vue";
 
 export default {
   components: {
     EditQuotation,
+    QuotationToInvoice,
   },
   data: () => ({
+    dialogQuotationToInvoice: false,
     displayDateFilter: false,
     date_from: null,
     date_to: null,
@@ -328,12 +357,12 @@ export default {
       //   value: "month_amount",
       // },
       {
-        text: "Inquiry",
+        text: "Inquiry #",
         value: "inquiry",
       },
       {
-        text: "Invoice",
-        value: "invoice",
+        text: "Customer #",
+        value: "customer",
       },
       {
         text: "Options",
@@ -405,7 +434,14 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+    convertToInvoice(item) {
+      this.editId = null;
+      this.item = item;
 
+      this.editable = true;
+      this.key++;
+      this.dialogQuotationToInvoice = true;
+    },
     filterAttr(data) {
       this.date_from = data.from;
       this.date_to = data.to;
@@ -413,6 +449,7 @@ export default {
       this.getDataFromApi();
     },
     closeProductDialog() {
+      this.dialogQuotationToInvoice = false;
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
