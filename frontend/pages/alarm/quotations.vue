@@ -179,7 +179,16 @@
               {{ item.inquiry_id ? "#" + item.inquiry_id : "---" }}
             </template>
             <template v-slot:item.customer="{ item }">
-              {{ item.customer_id ? "#" + item.customer_id : "---" }}
+              <a
+                v-if="item.invoice_id"
+                :href="getInvlicePdfUrl(item)"
+                target="_blank"
+              >
+                {{ item.customer_id ? "#" + item.customer_id : "---" }}</a
+              >
+              <div else>
+                {{ item.customer_id ? "#" + item.customer_id : "---" }}
+              </div>
               <div class="secondary-value" v-if="item.customer_id">
                 {{ item.updated_datetime }}
               </div>
@@ -433,6 +442,16 @@ export default {
         let res = str.toString();
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
+    },
+    getInvlicePdfUrl(item) {
+      return (
+        process.env.BACKEND_URL +
+        "/invoice_print_pdf?company_id=" +
+        this.$auth.user.company_id +
+        "&invoice_id=" +
+        item.invoice_id +
+        "&type=print"
+      );
     },
     convertToInvoice(item) {
       this.editId = null;

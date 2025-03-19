@@ -171,14 +171,20 @@ export default {
     viewLogs() {
       this.$router.push("/attendance_report");
     },
-    getDataFromApi() {
+    async getDataFromApi() {
       if (!this.device_serial_number) return;
 
       try {
-        new ApexCharts(
+        // new ApexCharts(
+        //   document.querySelector("#" + this.name),
+        //   this.chartOptions
+        // ).render();
+
+        let chart = await new ApexCharts(
           document.querySelector("#" + this.name),
           this.chartOptions
-        ).render();
+        );
+        if (chart) chart.render();
       } catch (error) {}
       this.key = 1;
       // const data = await this.$store.dispatch("dashboard/every_hour_count");
@@ -206,7 +212,7 @@ export default {
           this.key = this.key + 1;
         });
     },
-    renderChart(data) {
+    async renderChart(data) {
       let counter = 0;
 
       data.forEach((item) => {
@@ -218,10 +224,16 @@ export default {
         counter++;
       });
       try {
-        new ApexCharts(
+        // new ApexCharts(
+        //   document.querySelector("#" + this.name),
+        //   this.chartOptions
+        // ).render();
+
+        let chart = await new ApexCharts(
           document.querySelector("#" + this.name),
           this.chartOptions
-        ).render();
+        );
+        if (chart) chart.render();
       } catch (error) {}
     },
   },

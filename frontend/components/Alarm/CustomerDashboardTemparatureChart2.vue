@@ -174,7 +174,7 @@ export default {
     const today = new Date();
     this.date_from = today.toISOString().slice(0, 10);
   },
-  mounted() {
+  async mounted() {
     this.chartOptions.chart.height = this.height;
     this.chartOptions.series = this.series;
     // setTimeout(() => {
@@ -192,10 +192,16 @@ export default {
     //   this.from_date
     // );
     try {
-      new ApexCharts(
+      // new ApexCharts(
+      //   document.querySelector("#" + this.name),
+      //   this.chartOptions
+      // ).render();
+
+      let chart = await new ApexCharts(
         document.querySelector("#" + this.name),
         this.chartOptions
-      ).render();
+      );
+      if (chart) chart.render();
     } catch (error) {}
     // this.getDataFromApi();
     // setTimeout(() => {
@@ -267,7 +273,7 @@ export default {
           // }, 1000);
         });
     },
-    renderChart(data) {
+    async renderChart(data) {
       let counter = 0;
 
       let IsDataAvailable = false;
@@ -283,11 +289,18 @@ export default {
         IsDataAvailable = true;
       });
       try {
-        if (IsDataAvailable)
-          new ApexCharts(
+        if (IsDataAvailable) {
+          // new ApexCharts(
+          //   document.querySelector("#" + this.name),
+          //   this.chartOptions
+          // ).render();
+
+          let chart = await new ApexCharts(
             document.querySelector("#" + this.name),
             this.chartOptions
-          ).render();
+          );
+          if (chart) chart.render();
+        }
       } catch (error) {}
     },
   },

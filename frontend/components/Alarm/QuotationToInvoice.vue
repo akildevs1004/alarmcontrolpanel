@@ -546,8 +546,8 @@
                 @click="submit_primary"
               >
                 Submit
-              </v-btn></v-col
-            >
+              </v-btn>
+            </v-col>
           </v-row>
         </v-card>
       </v-col>
@@ -970,6 +970,7 @@ export default {
           end_date: this.end_date,
           licence_duration_years: this.licence_duration_years,
           total_invoice_count: this.total_invoice_count,
+          quotation_id: this.item.id,
         },
       };
 

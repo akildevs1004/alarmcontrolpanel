@@ -8,6 +8,7 @@ use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
+use App\Models\SalesQuotations;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -260,11 +261,12 @@ class CustomerPaymentsController extends Controller
         $date = Carbon::parse($request->start_date);
 
         $invoices = [];
+        $invoice_id = null;
         for ($i = 1; $i <= $totalInvoiceCount; $i++) {
 
             $invoiceFormat = sprintf("INV%d%06d", $request->company_id, $maxId + $i);
             $invoice_date = $date->copy()->addDays($daysToAdd * ($i - 1))->format('Y-m-d');
-            $invoices[] = [
+            $invoices  = [
                 "company_id" => $request->company_id,
                 "customer_id" => $request->customer_id,
                 "invoice_number" => $invoiceFormat,
@@ -280,10 +282,18 @@ class CustomerPaymentsController extends Controller
                 "customer_product_service_id" => $record->id,
 
             ];
+
+            $insertedId =  CustomerPayments::create($invoices);
+            if ($i == 1)  $invoice_id = $insertedId->id;
         }
 
 
-        CustomerPayments::insert($invoices);
+        //updae quotationtable invoiceId
+        if ($request->quotation_id && $request->quotation_id != 'null' && $invoice_id)
+            SalesQuotations::where("id", $request->quotation_id)->update(["invoice_id" => $invoice_id]);
+
+
+        ///////CustomerPayments::insert($invoices);
         Customers::where("id", $request->customer_id)->where("start_date", null)->update(["start_date" => $request->start_date]);
         Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date, "customer_product_service_id" => $record->id]);
 
