@@ -44,7 +44,7 @@ class ErrorOccurred extends Mailable
             ->asForm()
             ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
 
-        return $this->subject('Application Error Report - ' . date("Y-m-d H:i:s"))
+        return $this->subject(env('APP_ENV') . 'Application Error Report - ' . date("Y-m-d H:i:s"))
             ->view('emails.error_report'); // Create this view
     }
 }

@@ -23,6 +23,7 @@ use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\Customers\Reports\AlarmReportsController;
 use App\Http\Controllers\Customers\SecurityLoginController;
+use App\Http\Controllers\Customers\TechnicianLoginsController;
 use App\Http\Controllers\Customers\TicketsController;
 use App\Http\Controllers\DeviceNotificationsManagersController;
 use App\Http\Controllers\DeviceProductServicesController;
@@ -150,6 +151,9 @@ Route::get('get_alarm_logs', [CustomerAlarmEventsController::class, 'getAlarmLog
 
 Route::get('get_alarm_events', [CustomerAlarmEventsController::class, 'getAlarmEvents']);
 Route::get('get_alarm_events_technician', [CustomerAlarmEventsController::class, 'getAlarmEventsTechnician']);
+
+Route::get('technicians_list', [TechnicianLoginsController::class, 'getTechniciansList']);
+
 
 
 
@@ -299,7 +303,7 @@ Route::post('create_default_roles', [RolePermissionsController::class, 'createDe
 
 Route::apiResource('device_product_services',  DeviceProductServicesController::class);
 Route::get('device_product_services_group',  [DeviceProductServicesController::class, 'DeviceProductServicesGroup']);
-Route::get('admin_tickets_statistics',  [TicketsController::class, 'adminTicketsStatistics']);
+
 
 
 //sales
@@ -308,6 +312,9 @@ Route::apiResource('sales_inquiry',   SalesInquiryController::class);
 Route::apiResource('sales_quotations',   SalesQuotationsController::class);
 
 
+//tickets
+Route::get('admin_tickets_statistics',  [TicketsController::class, 'adminTicketsStatistics']);
+Route::post('ticket_update_technician',  [TicketsController::class, 'updateTicketTechnician']);
 
 
 

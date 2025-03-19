@@ -198,6 +198,54 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="dialogAssignTechnician"
+      width="300px"
+      style="overflow: visible"
+    >
+      <v-card :key="key">
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black"> Assign Technician</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              dialogAssignTechnician = false;
+              closeDialogProcess();
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <v-select
+            v-model="assignTechnicianId"
+            label="Select Technician"
+            height="20"
+            class="employee-schedule-search-box11111111 pt-8"
+            outlined
+            dense
+            :items="techniciansList"
+            item-text="full_name"
+            item-value="id"
+            clearable
+          >
+          </v-select>
+
+          <v-col cols="12" class="text-center pt-5"
+            ><v-btn
+              dense
+              class="primary"
+              @click="updateTicketTechnicianId()"
+              small
+              >Submit</v-btn
+            ></v-col
+          >
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-card elevation="3" class="mt-1">
       <v-card-text>
         <v-row>
@@ -540,7 +588,7 @@
               </template>
 
               <template v-slot:item.technician="{ item }">
-                <div class="secondary-value">
+                <div>
                   {{ item.technician?.first_name }}
                   {{ item.technician?.last_name || "---" }}
                 </div>
@@ -566,6 +614,7 @@
                 </div>
                 <div v-else>---</div>
               </template>
+
               <template v-slot:item.options="{ item }">
                 <v-menu bottom left>
                   <template v-slot:activator="{ on, attrs }">
@@ -593,10 +642,17 @@
                     </v-list-item>
                     <v-list-item @click="viewCustomer(item)">
                       <v-list-item-title style="cursor: pointer">
-                        <v-icon color="secondary" small>
-                          mdi-home-circle</v-icon
-                        >
+                        <v-icon color="blue" small> mdi-home-circle</v-icon>
                         Customer
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="userType == 'company' && item.status == 1"
+                      @click="showTichnician(item)"
+                    >
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="green" small> mdi-account-tie</v-icon>
+                        Technician
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item
@@ -704,6 +760,9 @@ export default {
   ],
   data() {
     return {
+      techniciansList: [],
+      dialogAssignTechnician: false,
+      assignTechnicianId: false,
       customersList: [],
       filter_customer_id: null,
       dialogViewCustomer: false,
@@ -758,6 +817,8 @@ export default {
         { text: "Status", value: "status", sortable: false },
 
         { text: "Job Date", value: "job_start_datetime", sortable: false },
+        { text: "Technician", value: "technician", sortable: false },
+
         { text: "Requested Date", value: "created_datetime", sortable: false },
         { text: "Closed Date", value: "closed_datetime", sortable: false },
         { text: "Options", value: "options", sortable: false },
@@ -779,14 +840,14 @@ export default {
       deep: true,
     },
   },
-  created() {
+  async created() {
     // let today = new Date();
     // let monthObj = this.$dateFormat.monthStartEnd(today);
     // this.date_from = null; //monthObj.first;
     // this.date_to = null; // monthObj.last;
 
-    this.getDataFromApi();
-    this.getCategoriesList();
+    await this.getDataFromApi();
+    await this.getCategoriesList();
     if (this.$auth.user.user_type == "company") this.is_admin = true;
 
     this.userType = this.$auth.user.user_type;
@@ -799,7 +860,8 @@ export default {
     try {
       if (window) this.browserHeight = window.innerHeight;
     } catch (e) {}
-    this.getCustomersList();
+    await this.getCustomersList();
+    await this.getTechniciansList();
   },
 
   methods: {
@@ -838,6 +900,16 @@ export default {
         ];
       });
     },
+    async getTechniciansList() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+      this.$axios.get(`/technicians_list`, options).then(({ data }) => {
+        this.techniciansList = data;
+      });
+    },
     testSensors(ticket) {
       this.key++;
       this.selectedCustomerCounter++;
@@ -870,6 +942,25 @@ export default {
         this.categoryList = data;
       });
     },
+
+    updateTicketTechnicianId() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          technician_id: this.assignTechnicianId,
+          ticket_id: this.editItem.id,
+        },
+      };
+
+      this.$axios
+        .post("ticket_update_technician", options.params)
+        .then((data) => {
+          this.getDataFromApi();
+          this.dialogAssignTechnician = false;
+          this.snackbar = true;
+          this.response = "Technican is updated successfully";
+        });
+    },
     getIsReadStatus(item) {
       if (this.$auth.user.user_type == "technician") {
         return item.is_technician_read;
@@ -887,6 +978,12 @@ export default {
       this.editItem = item;
       this.key += 1;
       this.dialogViewTicket = true;
+    },
+    showTichnician(item) {
+      this.assignTechnicianId = item.technician_id;
+      this.editItem = item;
+      this.key += 1;
+      this.dialogAssignTechnician = true;
     },
     close_dialog_reaction() {
       this.getDataFromApi();
@@ -966,7 +1063,7 @@ export default {
       window.open(url, "_blank");
     },
 
-    getDataFromApi() {
+    async getDataFromApi() {
       // console.log("dialogViewStartJob");
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;

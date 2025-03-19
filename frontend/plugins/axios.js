@@ -37,22 +37,24 @@ export default ({ app, $axios, store }, inject) => {
           branch_id: user.employee.branch_id,
         };
       }
-    }
-    if (user && user.branch_id && user.branch_id > 0) {
+    } else if (user && user.branch_id && user.branch_id > 0) {
       config.params = {
         ...config.params,
         branch_id: user && user.branch_id,
       };
-    }
-
-    if (user && user.user_type == "department") {
+    } else if (user && user.user_type == "department") {
       config.params = {
         ...config.params,
         department_id: user && user.department_id,
         user_type: user && user.user_type,
       };
-    }
-    if (user && user.user_type == "security") {
+    } else if (user && user.user_type == "technician") {
+      config.params = {
+        ...config.params,
+
+        technician_id: user.technician.id,
+      };
+    } else if (user && user.user_type == "security") {
       if (!user.security) return config;
       let customersList = user.security.customers_assigned.map(
         (e) => e.customer_id

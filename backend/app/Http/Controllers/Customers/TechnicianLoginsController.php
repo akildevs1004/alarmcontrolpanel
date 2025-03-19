@@ -35,6 +35,12 @@ class TechnicianLoginsController extends Controller
         return $model->orderByDesc('id')->paginate($request->perPage);;
     }
 
+    public function getTechniciansList(Request $request)
+    {
+
+        return TechnicianLogins::where("company_id", $request->company_id)->orderBy("first_name", "ASC")->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

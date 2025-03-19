@@ -33,7 +33,9 @@ class TicketsController extends Controller
     {
         $model = Tickets::with(["customer", "category", "technician"])->where("company_id", $request->company_id);
 
-
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
         $model->when($request->filled("category_id"), function ($query) use ($request) {
             $query->where("category_id", $request->category_id);
         });
@@ -242,6 +244,10 @@ class TicketsController extends Controller
 
         $model = Tickets::where("company_id", $request->company_id)->where("status", 1);
 
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
+
         $total = $model->clone()->count();
         $security_count = $model->clone()->whereNotNull("security_id")->count();
         $customer_count = $model->clone()->whereNotNull("customer_id")->count();
@@ -255,6 +261,9 @@ class TicketsController extends Controller
         $start_datetime = $monthYear . '-01 00:00:00';
         $end_datetime = (new DateTime($monthYear . '-01'))->modify('last day of this month')->format('Y-m-d 23:59:59');
         $model = Tickets::where("company_id", $request->company_id)->whereBetween("created_datetime", [$start_datetime, $end_datetime]);
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
         $pending_count = (clone $model)->where("status", 1)->count();
         $resolved_count = (clone $model)->where("status", 0)->count();
         return ["total" => $pending_count + $resolved_count, "pending_count" => $pending_count, "resolved_count" => $resolved_count];
@@ -266,6 +275,9 @@ class TicketsController extends Controller
         $start_datetime = $monthYear . ' 00:00:00';
         $end_datetime = $monthYear . ' 23:59:59';
         $model = Tickets::where("company_id", $request->company_id)->whereBetween("created_datetime", [$start_datetime, $end_datetime]);
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
         $pending_count = (clone $model)->where("status", 1)->count();
         $resolved_count = (clone $model)->where("status", 0)->count();
         return ["total" => $pending_count + $resolved_count, "pending_count" => $pending_count, "resolved_count" => $resolved_count];
@@ -278,7 +290,9 @@ class TicketsController extends Controller
         $model = Tickets::where("company_id", $request->company_id)
             ->where("status", 1)
             ->where("created_datetime", "<", now()->subDays($pendingDays));
-
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
         $total = $model->clone()->count();
         $security_count = $model->clone()->whereNotNull("security_id")->count();
         $customer_count = $model->clone()->whereNotNull("customer_id")->count();
@@ -287,6 +301,10 @@ class TicketsController extends Controller
     public function ticketsUnreadNotifications(Request $request)
     {
         $model = Tickets::where("company_id", $request->company_id);
+
+        $model->when($request->filled("technician_id"), function ($query) use ($request) {
+            $query->where("technician_id", $request->technician_id);
+        });
 
         if ($request->filled("technician_id")) {
 
@@ -313,6 +331,23 @@ class TicketsController extends Controller
 
 
         return [];
+    }
+
+    public function updateTicketTechnician(Request $request)
+    {
+
+        $request->validate([
+
+            'company_id' => 'required|integer',
+            'ticket_id' => 'required|integer',
+            'technician_id' => 'required|integer',
+
+        ]);
+
+
+        Tickets::where("company_id", $request->company_id)->where("id", $request->ticket_id)->update(["technician_id" => $request->technician_id]);
+
+        return $this->response("Technician Updated Successfully", null, true);
     }
 
     public function TechnicianStartJob(Request $request)
@@ -551,6 +586,10 @@ class TicketsController extends Controller
 
 
         return Tickets::where("company_id", $request->company_id)
+
+            ->when($request->filled("technician_id"), function ($query) use ($request) {
+                $query->where("technician_id", $request->technician_id);
+            })
             ->selectRaw('
             COUNT(CASE WHEN DATE(created_datetime) = CURRENT_DATE THEN 1 END) AS today_tickets,
             COUNT(CASE WHEN job_start_datetime IS NOT NULL AND status = 1 THEN 1 END) AS assigned_tickets,

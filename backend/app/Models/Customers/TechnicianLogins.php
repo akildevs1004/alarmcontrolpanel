@@ -11,7 +11,7 @@ class TechnicianLogins extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $appends = ['profile_picture'];
+    protected $appends = ['profile_picture', "full_name"];
     public function user()
     {
         return $this->belongsTo(User::class, "user_id", "id");
@@ -21,5 +21,10 @@ class TechnicianLogins extends Model
     public function getProfilePictureAttribute($value)
     {
         return asset('technicians/' . $this->picture);
+    }
+
+    public function getFullNameAttribute($value)
+    {
+        return $this->first_name . " " . $this->last_name;
     }
 }
