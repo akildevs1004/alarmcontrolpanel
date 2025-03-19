@@ -186,7 +186,7 @@
               >
                 {{ item.customer_id ? "#" + item.customer_id : "---" }}</a
               >
-              <div else>
+              <div v-else>
                 {{ item.customer_id ? "#" + item.customer_id : "---" }}
               </div>
               <div class="secondary-value" v-if="item.customer_id">
