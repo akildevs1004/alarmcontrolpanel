@@ -366,7 +366,7 @@ class AlarmDashboardController extends Controller
 
         return  $finalarray;
     }
-    public function dashboardStatisctsOpenClose(Request $request)
+    public function dashboardStatisctsAllCounts(Request $request)
     {
         $finalarray = [];
         $dateStrings = [];
@@ -391,14 +391,16 @@ class AlarmDashboardController extends Controller
             ->when($request->filled("customer_id"), function ($q) use ($request) {
                 $q->where("customer_id", $request->customer_id);
             })
-
+            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                $model->whereIn('customer_id', $request->filter_customers_list);
+            })
 
             ->selectRaw("
                 COUNT(CASE WHEN alarm_type = 'SOS' AND alarm_status =1  THEN 1 END) as sosCount,
                COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
 
                 COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
-                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+              --  COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
                 COUNT(CASE WHEN alarm_category = 2 AND alarm_status =1 THEN 1 END) as mediumCount,
                 COUNT(CASE WHEN alarm_category = 3 AND alarm_status =1 THEN 1 END) as lowCount,
 
@@ -407,6 +409,11 @@ class AlarmDashboardController extends Controller
                 COUNT(CASE WHEN alarm_type = 'Medical' AND alarm_status =1 THEN 1 END) as medicalCount,
                 COUNT(CASE WHEN alarm_type = 'Fire' AND alarm_status =1 THEN 1 END) as fireCount,
 
+                COUNT(CASE WHEN alarm_type = 'Gas' AND alarm_status =1 THEN 1 END) as gasCount,
+
+                COUNT(CASE WHEN alarm_type = 'Power' AND alarm_status =1 THEN 1 END) as powerCount,
+
+
  COUNT(CASE WHEN alarm_status = 1 THEN 1 END) as openCount,
     COUNT(CASE WHEN alarm_status = 0 THEN 1 END) as closedCount,
     COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
@@ -414,9 +421,7 @@ class AlarmDashboardController extends Controller
             ")
             //->whereDate("alarm_start_datetime", $date)
 
-            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
-                $model->whereIn('customer_id', $request->filter_customers_list);
-            })
+
 
 
             ->first();
@@ -436,6 +441,11 @@ class AlarmDashboardController extends Controller
             "openCount" => $counts->opencount ?? 0,
             "closedCount" => $counts->closedcount ?? 0,
             "forwardCount" => $counts->forwardcount ?? 0,
+
+            "gasCount" => $counts->gascount ?? 0,
+
+            "powerCount" => $counts->powercount ?? 0,
+
 
 
         ];

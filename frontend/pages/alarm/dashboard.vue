@@ -295,9 +295,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{
-                                categoriesStats ? categoriesStats.techinical : 0
-                              }}
+                              {{ data ? data.technicalCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Technical</div>
                           </v-col>
@@ -343,7 +341,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.events : 0 }}
+                              {{ data ? data.eventsCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Events</div>
                           </v-col>
@@ -390,7 +388,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.power : 0 }}
+                              {{ data ? data.powerCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Power</div>
                           </v-col>
@@ -413,11 +411,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{
-                                categoriesStats
-                                  ? categoriesStats.temperature
-                                  : 0
-                              }}
+                              {{ data ? data.temperatureCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Temperature</div>
                           </v-col>
@@ -442,7 +436,7 @@
 
                           <v-col style="text-align: center">
                             <div style="font-size: 40px">
-                              {{ categoriesStats ? categoriesStats.gas : 0 }}
+                              {{ data ? data.gasCount : 0 }}
                             </div>
                             <div style="padding-top: 5px">Gas</div>
                           </v-col>
@@ -632,14 +626,14 @@ export default {
       this.loadAllEventsTable = true;
     }, 1000 * 3);
 
-    // setInterval(async () => {
-    //   if (this.$route.name == "alarm-dashboard") {
-    //     this.key++;
-    //     await this.getEventsTypeStats();
-    //     await this.getEventCategoriesStats();
-    //     await this.getEventsOpenCountStatus();
-    //   }
-    // }, 1000 * 15);
+    setInterval(async () => {
+      if (this.$route.name == "alarm-dashboard") {
+        this.key++;
+        await this.getEventsTypeStats();
+        await this.getEventCategoriesStats();
+        await this.getEventsOpenCountStatus();
+      }
+    }, 1000 * 15);
 
     if (window) {
       if (window) {
@@ -718,7 +712,7 @@ export default {
 
       try {
         const response = await this.$axios.get(
-          "dashboard_statistics_open_close_count",
+          "dashboard_statistics_all_statistics",
           {
             params: {
               company_id: this.$auth.user.company_id,
