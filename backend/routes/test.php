@@ -4,6 +4,7 @@
 use App\Http\Controllers\Alarm\DeviceSensorLogsController;
 use App\Http\Controllers\AlarmLogsController;
 use App\Http\Controllers\AlramEventsController;
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\CameraController;
@@ -1218,6 +1219,7 @@ Route::get('testqueuemail2', function () {
         'body' => "  Alarm Notification  " . date("Y-m-d H:i:s"),
         'to' => "venuakil2@gmail.com",
     ];
+    return (new ClientController())->sendExternalMail($data);
 
     return $response = Http::timeout(30)
         ->withoutVerifying()

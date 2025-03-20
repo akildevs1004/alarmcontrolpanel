@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
 use App\Mail\EmailContentDefault;
 use App\Models\Customers\CustomerContacts;
@@ -114,10 +115,9 @@ class CustomerContactsController extends Controller
 
             //tanjore mail settings
             $emailData["to"] = $contact["email"];
-            $response = Http::timeout(30)
-                ->withoutVerifying()
-                ->asForm()
-                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
+
+
+            (new ClientController())->sendExternalMail($emailData);
 
             return Mail::to($contact["email"])
                 ->cc("venuakil2@gmail.com")

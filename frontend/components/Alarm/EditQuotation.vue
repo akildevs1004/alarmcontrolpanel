@@ -722,9 +722,9 @@ export default {
             setTimeout(() => {
               this.$emit("closeDialog");
 
-              if (this.inquiry_to_quotation) {
-                this.$router.push("/alarm/quotations");
-              }
+              // if (this.inquiry_to_quotation) {
+              //   this.$router.push("/alarm/quotations");
+              // }
             }, 1000);
           }
         })

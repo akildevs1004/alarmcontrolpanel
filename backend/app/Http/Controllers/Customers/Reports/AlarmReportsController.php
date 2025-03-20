@@ -18,6 +18,7 @@ use App\Models\Customers\CustomerAlarmEvents;
 use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
+use App\Models\SalesQuotations;
 use App\Models\TicketSensorTest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
@@ -143,6 +144,26 @@ class AlarmReportsController extends Controller
         $file_name =  'Device Armed Reports from ' . $request->date_from . ' to ' . $request->date_to . ' .xlsx';
 
         return Excel::download((new DeviceArmedExport($reports)), $file_name);
+    }
+    public function quotationPrintPdf(Request $request)
+    {
+
+
+
+        if (!$request->filled('quotation_id')) return [];
+        $invoice =   SalesQuotations::with(["company",   "ProductService"])->where("id", $request->quotation_id)->first();
+
+
+        $company =  $invoice->company;
+        $customer =  $invoice;
+
+
+        $pdf = Pdf::loadView('alarm_reports/sales_quotation', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
+
+        if ($request->type == 'print')
+            return $pdf->stream($request->alarm_id . "_event_track_notes.pdf");
+        else
+            return $pdf->download($request->alarm_id . "_event_track_notes.pdf");
     }
     public function invoicePrintPdf(Request $request)
     {

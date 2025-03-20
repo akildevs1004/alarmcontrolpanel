@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Invoice</title>
+    <title>Sales Quotation</title>
     <style>
         .table-border table {
             width: 100%;
@@ -72,7 +72,7 @@
     <!-- Header -->
     <header>
 
-        @include('alarm_reports.header_invoice', [
+        @include('alarm_reports.header_quotation', [
             'company' => $company,
             'invoice' => $invoice,
         ])
@@ -104,7 +104,7 @@
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
 
 
-                            <td> {{ $customer['building_name'] }}</td>
+                            <td> {{ $customer['first_name'] }} {{ $customer['last_name'] }}</td>
 
 
 
@@ -113,42 +113,32 @@
                         <tr style="border: 1px solid #8f8f8f;">
 
 
-                            <td> <span>{{ $customer->house_number ?? '---' }},
-                                    {{ $customer->street_number ?? '---' }}</span>
-                                <span>{{ $customer->area ?? '---' }},<br />
-                                    {{ $customer->city ?? '---' }} </span>
-                                <span>{{ $customer->state ?? '---' }},
-                                    {{ $customer->country ?? '---' }} </span>
+                            <td> <span>{{ $customer->building_name ?? '---' }},
+                                </span>
+
+                            </td>
+
+
+                        </tr>
+                        <tr style="border: 1px solid #8f8f8f;">
+
+                            building_name
+                            <td> <span>{{ $customer->address ?? '---' }},
+                                </span>
+
                             </td>
 
 
                         </tr>
 
+
                         <tr style="border: 1px solid #8f8f8f;">
-
-
-
-                            <td>{{ $customer?->primary_contact?->first_name ?? '---' }}
-                                {{ $customer?->primary_contact?->last_name ?? '---' }} </td>
-
-
+                            <td>Phone1: {{ $customer->contact_number ?? '---' }}</td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;">
-
-
-
-                            <td>Phone: {{ $customer?->primary_contact?->phone1 ?? '---' }}</td>
-
-
+                            <td>Phone1: {{ $customer->whatsapp_number ?? '---' }}</td>
                         </tr>
-                        <tr style="border: 1px solid #8f8f8f;">
 
-
-
-
-                            <td>Email: {{ $customer?->primary_contact?->email ?? '---' }}</td>
-
-                        </tr>
                     </table>
                 </td>
             </tr>
@@ -174,43 +164,31 @@
                             <tr style=" vertical-align: top;">
                                 <td style="width: 50%; height: 400px;text-align:center;padding:10px;">1</td>
                                 <td style="width: 50%; height: 200px;padding:10px; ">
-                                    Package: {{ $invoice->customer_product_services?->device_product_service?->name }}
-                                    <p>Payment Mode: {{ $invoice->customer_product_services?->payment_type }}</p>
+                                    Package: <strong>{{ $invoice->ProductService->name }}</strong>
+
                                     <p>Sensor Count:
-                                        {{ $invoice->customer_product_services?->device_product_service?->sensor_count }}
-                                    </p>
-                                    <p>Time Period:
-                                        {{ date('d-m-Y', strtotime($invoice->invoice_date)) }} to
-
-                                        @if ($invoice->customer_product_services?->payment_type == 'Monthly')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +30 days')) }}
-                                        @elseif ($invoice->customer_product_services?->payment_type == 'Quarter')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +90 days')) }}
-                                        @elseif ($invoice->customer_product_services?->payment_type == 'Yearly')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +365 days')) }}
-                                        @endif
-
+                                        <strong> {{ $invoice->ProductService?->sensor_count }} </strong>
                                     </p>
 
+                                    <p>Payment/Invoice Type:
+                                        <strong> {{ $invoice->payment_type }} </strong>
+                                    </p>
                                 </td>
                                 <td style="width: 25%; height: 200px;text-align:center;padding:10px;">1</td>
                                 <td style="width: 25%; height: 200px;text-align:right;padding:10px;">
-                                    ${{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
-                                </td>
+                                    ${{ number_format(round($invoice->amount + $invoice->discount), 2, '.', '') }}</td>
                                 <td style="width: 25%; height: 200px;text-align:right;padding:10px;">
-                                    ${{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
-                                </td>
+                                    ${{ number_format(round($invoice->amount + $invoice->discount), 2, '.', '') }}</td>
 
                             </tr>
-                            @if ($invoice->customer_product_services->discount > 0)
+                            @if ($invoice->discount > 0)
                                 <tr style="height: 25px;;font-weight:bold">
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 25%; height: 25px;"> </td>
                                     <td style="width: 25%; height: 25px;text-align:center;color:red"> Discount </td>
-                                    <td style="width: 25%; height: 25px;text-align:right;padding:10px;;color:red">
-                                        ${{ number_format(round($invoice->customer_product_services->discount), 2, '.', '') }}
-                                    </td>
+                                    <td style="width: 25%; height: 25px;text-align:right;padding:10px;color:red">
+                                        - ${{ number_format(round($invoice->discount), 2, '.', '') }}</td>
 
                                 </tr>
                             @endif
@@ -218,7 +196,8 @@
                                 <td style="width: 50%; height: 25px;"> </td>
                                 <td style="width: 50%; height: 25px;"> </td>
                                 <td style="width: 25%; height: 25px;"> </td>
-                                <td style="width: 25%; height: 25px;text-align:center"> Total(including Tax) </td>
+                                <td style="width: 25%; height: 25px;text-align:center;"> Total(Including Tax)
+                                </td>
                                 <td style="width: 25%; height: 25px;text-align:right;padding:10px;">
                                     ${{ number_format(round($invoice->amount), 2, '.', '') }}</td>
 

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\API\ClientController;
 use App\Mail\EmailContentDefault;
 use App\Models\Company;
 use App\Models\Customers\CustomerContacts;
+use App\Models\Customers\Customers;
+use App\Models\CustomersBuildingTypes;
 use App\Models\SalesBusinessSourceTypes;
 use App\Models\SalesInquiry;
 use Illuminate\Http\Request;
@@ -85,37 +88,40 @@ class SalesInquiryController extends Controller
      */
     public function store(Request $request)
     {
-        // $validate = [
-        //     "company_id" => "required",
-        //     "business_source_id" => "required",
-        //     "business_source_info" => "required",
-        //     "first_name" => "required",
-        //     "last_name" => "required",
-        //     "contact_number" => "required",
-        //     "whatsapp_number" => "nullable",
-        //     "email" => "required",
-        //     "address" => "required",
-        //     "building_name" => "nullable",
-        //     "building_type_id" => "nullable",
-        //     "device_type" => "required",
-        //     "sensor_count" => "required",
+        $validate = [
+            "company_id" => "required",
+            "business_source_id" => "required",
+            "business_source_info" => "required",
+            "first_name" => "required",
+            "last_name" => "required",
+            "contact_number" => "required",
+            "whatsapp_number" => "nullable",
+            "email" => "required",
+            "address" => "required",
+            "building_name" => "nullable",
+            "building_type_id" => "nullable",
+            "device_type" => "required",
+            "sensor_count" => "required",
 
 
-        //     "receiption_remarks" => "nullable",
-        //     "customer_request" => "nullable",
-        // ];
-        // $data =  $request->validate($validate);
+            "receiption_remarks" => "nullable",
+            "customer_request" => "nullable",
+        ];
+        $data =  $request->validate($validate);
+        $subject = "New Inquiry received from " . $request->first_name . ' ' . $request->last_name;
+        $business = "";
+        if ($request->building_type_id > 0)
+            $business = CustomersBuildingTypes::where("id", $request->building_type_id)->pluck("name")[0];
+        $data["created_datetime"] = date("Y-m-d H:i:s");
 
-        // $data["created_datetime"] = date("Y-m-d H:i:s");
 
-
-        // if ($request->editId) {
-        //     $data["updated_datetime"] = date("Y-m-d H:i:s");
-        //     SalesInquiry::where("id", $request->editId)->update($data);
-        //     return $this->response("Inquiry Updated Successfully", null, true);
-        // } else {
-        //     SalesInquiry::create($data);
-        // }
+        if ($request->editId) {
+            $data["updated_datetime"] = date("Y-m-d H:i:s");
+            SalesInquiry::where("id", $request->editId)->update($data);
+            $subject = "Inquiry Updated by Team -  from " . $request->first_name . ' ' . $request->last_name;
+        } else {
+            SalesInquiry::create($data);
+        }
 
 
         //mail
@@ -131,24 +137,34 @@ class SalesInquiryController extends Controller
 
             <table class="email-table">
 
-                <tr><td>Contact Number</td><td>: ' . $request->contact_number . '</td></tr>
-                <tr><td>WhatsApp Number</td><td>: ' . $request->whatsapp_number . '</td></tr>
-                <tr><td>Email</td><td>: ' . $request->email . '</td></tr>
-                <tr><td>Building Name</td><td>: ' . $request->building_name . '</td></tr>
-                <tr><td>Alarm Type</td><td>: ' . $request->device_type . '</td></tr>
-                <tr><td>Sensors</td><td>: ' . $request->sensor_count . '</td></tr>
-                <tr><td>Reception Notes</td><td>: ' . $request->receiption_remarks . '</td></tr>
-                <tr><td>Customer Requests</td><td>: ' . $request->customer_request . '</td></tr>
+                <tr><td>Contact Number</td><td>: <strong>' . $request->contact_number . '</strong></td></tr>
+                <tr><td>WhatsApp Number</td><td>: <strong>' . $request->whatsapp_number . '</strong></td></tr>
+                <tr><td>Email</td><td>: <strong>' . $request->email . '</strong></td></tr>
+                <tr><td>Building Name</td><td>: <strong>' . $request->building_name . '</strong></td></tr>
+                <tr><td>Type Of Business</td><td>: <strong>' . $business . '</strong></td></tr>
+                <tr><td>Alarm Type</td><td>:<strong> ' . $request->device_type . '</strong></td></tr>
+                <tr><td>Sensors</td><td>: <strong>' . $request->sensor_count . '</strong></td></tr>
+                <tr><td>Reception Notes</td><td>: <strong>' . $request->receiption_remarks . '</strong></td></tr>
+                <tr><td>Customer Requests</td><td>: <strong>' . $request->customer_request . '</strong></td></tr>
             </table>
+<br/><br/>
+            <p>Regards, <br/>
+             ' . env("MAIL_FROM_NAME") . '</p>
         </div>';
             $data = [
-                'subject' => "New Inquiry received from " . $request->first_name . ' ' . $request->last_name,
+                'subject' => $subject,
                 'body' => $body_content,
+                'to' => $company->user->email,
             ];
 
+
+            (new ClientController())->sendExternalMail($data);
             Mail::to($company->user->email)->queue(new EmailContentDefault($data));
         }
 
+
+        if ($request->editId)
+            return $this->response("Inquiry Updated Successfully", null, true);
         return $this->response("Inquiry Created Successfully", null, true);
     }
 

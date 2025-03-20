@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers\Api;
 
 use App\Http\Controllers\AlarmEventsTechnicianController;
+use App\Http\Controllers\API\ClientController;
 use Illuminate\Support\Facades\Log as Logger;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
@@ -899,10 +900,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
 
                         //send mail from mytime2cloud
                         $data["to"] = $value['email'];
-                        $response = Http::timeout(30)
-                            ->withoutVerifying()
-                            ->asForm()
-                            ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
+                        (new ClientController())->sendExternalMail($data);
                     } catch (\exception $e) {
                     }
 

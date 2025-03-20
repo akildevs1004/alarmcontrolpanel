@@ -167,11 +167,13 @@
             </template>
             <template v-slot:item.quotation="{ item }">
               <div
+                v-if="item.quotation"
                 @click="viewQuotation(item)"
                 style="color: blue; cursor: pointer"
               >
                 {{ item.quotation ? item.quotation.quotation_id : "---" }}
               </div>
+              <div v-else>---</div>
               <div class="secondary-value">{{ item.updated_datetime }}</div>
             </template>
             <template v-slot:item.options="{ item }">
@@ -194,7 +196,7 @@
 
                   <v-list-item
                     @click="editItem(item)"
-                    v-if="can('operators_edit')"
+                    v-if="can('operators_edit') && !item.quotation"
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
@@ -423,14 +425,23 @@ export default {
     },
 
     viewQuotation(item) {
-      this.editId = item.quotation.id;
-      this.editable = false;
-      this.key += 1;
-      this.item = item.quotation;
-      this.viewCustomerId = null;
+      // this.editId = item.quotation.id;
+      // this.editable = false;
+      // this.key += 1;
+      // this.item = item.quotation;
+      // this.viewCustomerId = null;
 
-      this.inquiry_to_quotation = null;
-      this.dialogInquiryToQuotation = true;
+      // this.inquiry_to_quotation = null;
+      // this.dialogInquiryToQuotation = true;
+      if (item.quotation.id) {
+        let url = process.env.BACKEND_URL;
+
+        url += "/quotation_print_pdf?company_id=" + this.$auth.user.company_id;
+        url += "&type=print";
+        url += "&quotation_id=" + item.quotation.id;
+
+        window.open(url, "_blank");
+      }
     },
 
     addItem() {

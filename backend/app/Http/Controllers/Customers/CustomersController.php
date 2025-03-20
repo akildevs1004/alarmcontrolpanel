@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
 use App\Http\Requests\Customer\UpdateRequest;
@@ -1092,10 +1093,7 @@ class CustomersController extends Controller
 
             //tanjore mail settings
             $data["to"] = $contact->email;
-            $response = Http::timeout(30)
-                ->withoutVerifying()
-                ->asForm()
-                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
+            (new ClientController())->sendExternalMail($data);
         }
 
         return $this->response('Customer  PIN updated', null, true);
@@ -1787,11 +1785,8 @@ class CustomersController extends Controller
                     ->queue($body_content1);
 
             //tanjore mail settings
-            $data["to"] = $email;
-            $response = Http::timeout(30)
-                ->withoutVerifying()
-                ->asForm()
-                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
+            $emailData["to"] = $email;
+            (new ClientController())->sendExternalMail($emailData);
         } catch (\Exception $e) {
 
             Log::error("Email sending failed: " . $e->getMessage());

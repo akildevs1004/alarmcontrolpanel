@@ -289,6 +289,8 @@ Route::get('alarm_notes_print_pdf', [AlarmReportsController::class, 'alarmEvents
 Route::get('alarm_notes_download_pdf', [AlarmReportsController::class, 'alarmEventsNotesDownload']);
 
 Route::get('invoice_print_pdf', [AlarmReportsController::class, 'invoicePrintPdf']);
+Route::get('quotation_print_pdf', [AlarmReportsController::class, 'quotationPrintPdf']);
+
 
 
 Route::get('alarm_notes_summary_print_pdf', [AlarmReportsController::class, 'alarmEventsNotesSummaryPrintPdf']);

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Http\Controllers\API\ClientController;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -39,11 +40,7 @@ class ErrorOccurred extends Mailable
 
         //tanjore mail settings
         $emailData["to"] = "venuakil2@gmail.com";
-        $response = Http::timeout(30)
-            ->withoutVerifying()
-            ->asForm()
-            ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
-
+        (new ClientController())->sendExternalMail($emailData);
         return $this->subject(env('APP_ENV') . ' - Application Error Report - ' . date("Y-m-d H:i:s"))
             ->view('emails.error_report'); // Create this view
     }

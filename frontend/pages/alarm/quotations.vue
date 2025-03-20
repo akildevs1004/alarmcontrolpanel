@@ -207,8 +207,19 @@
                     @click="viewItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-eye </v-icon>
-                      View
+                      <v-row>
+                        <v-col cols="5" style="padding-top: 19px"
+                          ><v-icon color="secondary" small>
+                            mdi-eye
+                          </v-icon></v-col
+                        >
+                        <v-col
+                          cols="7"
+                          style="padding-left: 0px; padding-top: 19px"
+                        >
+                          View
+                        </v-col></v-row
+                      >
                     </v-list-item-title>
                   </v-list-item>
 
@@ -217,8 +228,18 @@
                     v-if="can('operators_edit') && !item.customer_id"
                   >
                     <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-pencil </v-icon>
-                      Edit
+                      <v-row>
+                        <v-col cols="5" style="padding-top: 19px"
+                          ><v-icon color="secondary" small>
+                            mdi-pencil
+                          </v-icon></v-col
+                        >
+                        <v-col
+                          cols="7"
+                          style="padding-left: 0px; padding-top: 19px"
+                          >Edit
+                        </v-col></v-row
+                      >
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
@@ -228,6 +249,42 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="blue" small> mdi-cash </v-icon>
                       Convert to INV
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="downloadOptions('print', item.id)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-row>
+                        <v-col cols="5"
+                          ><img
+                            style="padding-top: 5px"
+                            src="/icons/icon_print.png"
+                            class="iconsize"
+                        /></v-col>
+                        <v-col
+                          cols="7"
+                          style="padding-left: 0px; padding-top: 19px"
+                        >
+                          Print
+                        </v-col>
+                      </v-row>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="downloadOptions('pdf', item.id)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-row>
+                        <v-col cols="5"
+                          ><img
+                            style="padding-top: 5px"
+                            src="/icons/icon_pdf.png"
+                            class="iconsize"
+                        /></v-col>
+                        <v-col
+                          cols="7"
+                          style="padding-left: 0px; padding-top: 19px"
+                        >
+                          PDF
+                        </v-col>
+                      </v-row>
                     </v-list-item-title>
                   </v-list-item>
                   <!-- <v-list-item
@@ -460,6 +517,15 @@ export default {
       this.editable = true;
       this.key++;
       this.dialogQuotationToInvoice = true;
+    },
+    downloadOptions(option, id) {
+      let url = process.env.BACKEND_URL;
+
+      url += "/quotation_print_pdf?company_id=" + this.$auth.user.company_id;
+      url += "&type=" + option;
+      url += "&quotation_id=" + id;
+
+      window.open(url, "_blank");
     },
     filterAttr(data) {
       this.date_from = data.from;

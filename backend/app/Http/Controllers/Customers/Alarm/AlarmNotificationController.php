@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers\Alarm;
 
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
 use App\Mail\EmailAlarmForwardMail;
@@ -387,10 +388,7 @@ class AlarmNotificationController extends Controller
                 ->queue($body_content1);
             //tanjore mail settings
             $data["to"] = $email;
-            $response = Http::timeout(30)
-                ->withoutVerifying()
-                ->asForm()
-                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $data);
+            (new ClientController())->sendExternalMail($data);
 
             // Delete the PDF after sending the email
             if (file_exists($pdfPath)) {
