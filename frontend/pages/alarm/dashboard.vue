@@ -632,14 +632,14 @@ export default {
       this.loadAllEventsTable = true;
     }, 1000 * 3);
 
-    setInterval(async () => {
-      if (this.$route.name == "alarm-dashboard") {
-        this.key++;
-        await this.getEventsTypeStats();
-        await this.getEventCategoriesStats();
-        await this.getEventsOpenCountStatus();
-      }
-    }, 1000 * 20);
+    // setInterval(async () => {
+    //   if (this.$route.name == "alarm-dashboard") {
+    //     this.key++;
+    //     await this.getEventsTypeStats();
+    //     await this.getEventCategoriesStats();
+    //     await this.getEventsOpenCountStatus();
+    //   }
+    // }, 1000 * 15);
 
     if (window) {
       if (window) {
@@ -718,7 +718,7 @@ export default {
 
       try {
         const response = await this.$axios.get(
-          "dashboard_statistics_date_range",
+          "dashboard_statistics_open_close_count",
           {
             params: {
               company_id: this.$auth.user.company_id,

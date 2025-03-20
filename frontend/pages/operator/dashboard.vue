@@ -554,7 +554,7 @@ export default {
         await this.getEventCategoriesStats();
         await this.updateEventsOpenCountStatus();
       }
-    }, 1000 * 10);
+    }, 1000 * 15);
   },
   watch: {},
   methods: {
@@ -572,7 +572,7 @@ export default {
         const options = {
           params: {
             company_id: this.$auth.user.company_id,
-            date_from: this.date_from,
+            //date_from: this.date_from,
           },
           cancelgetEventCategoriesStatsToken:
             this.cancelgetEventCategoriesStatsToken.token, // Attach cancel token
@@ -623,7 +623,7 @@ export default {
 
       try {
         const response = await this.$axios.get(
-          "dashboard_statistics_date_range",
+          "dashboard_statistics_open_close_count",
           {
             params: {
               company_id: this.$auth.user.company_id,

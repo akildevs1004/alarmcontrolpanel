@@ -67,7 +67,7 @@ class AlarmDashboardController extends Controller
     COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
 ")
 
-            ->whereDate("alarm_start_datetime", $request->date)
+            //->whereDate("alarm_start_datetime", $request->date)
 
             ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
                 $q->whereIn("customer_id", $request->filter_customers_list);
@@ -336,7 +336,7 @@ class AlarmDashboardController extends Controller
 
 
             ")
-                //->whereDate("alarm_start_datetime", $date)
+                ->whereDate("alarm_start_datetime", $date)
 
                 ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
                     $model->whereIn('customer_id', $request->filter_customers_list);
@@ -362,6 +362,84 @@ class AlarmDashboardController extends Controller
 
             ];
         }
+
+
+        return  $finalarray;
+    }
+    public function dashboardStatisctsOpenClose(Request $request)
+    {
+        $finalarray = [];
+        $dateStrings = [];
+        // if ($request->has("date_from") && $request->has("date_to")) {
+        //     // Usage example:
+        //     $startDate = new DateTime($request->date_from . ' 00:00:00');
+        //     $endDate = new DateTime($request->date_to . ' 23:59:59');
+
+        //     $dateStrings = $this->createDateRangeArray($startDate, $endDate);
+        // } else {
+        //     for ($i = 6; $i >= 0; $i--) {
+        //         $dateStrings[] = date('Y-m-d', strtotime(date('Y-m-d') . '-' . $i . ' days'));
+        //     }
+        // }
+
+
+        // foreach ($dateStrings as $key => $date) {
+
+        $counts = AlarmEvents::where("company_id", $request->company_id)
+
+
+            ->when($request->filled("customer_id"), function ($q) use ($request) {
+                $q->where("customer_id", $request->customer_id);
+            })
+
+
+            ->selectRaw("
+                COUNT(CASE WHEN alarm_type = 'SOS' AND alarm_status =1  THEN 1 END) as sosCount,
+               COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
+
+                COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
+                COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+                COUNT(CASE WHEN alarm_category = 2 AND alarm_status =1 THEN 1 END) as mediumCount,
+                COUNT(CASE WHEN alarm_category = 3 AND alarm_status =1 THEN 1 END) as lowCount,
+
+  COUNT(CASE WHEN alarm_type = 'Temperature' AND alarm_status =1 THEN 1 END) as temperatureCount,
+                COUNT(CASE WHEN alarm_type = 'Water' AND alarm_status =1 THEN 1 END) as waterCount,
+                COUNT(CASE WHEN alarm_type = 'Medical' AND alarm_status =1 THEN 1 END) as medicalCount,
+                COUNT(CASE WHEN alarm_type = 'Fire' AND alarm_status =1 THEN 1 END) as fireCount,
+
+ COUNT(CASE WHEN alarm_status = 1 THEN 1 END) as openCount,
+    COUNT(CASE WHEN alarm_status = 0 THEN 1 END) as closedCount,
+    COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
+
+            ")
+            //->whereDate("alarm_start_datetime", $date)
+
+            ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
+                $model->whereIn('customer_id', $request->filter_customers_list);
+            })
+
+
+            ->first();
+        $finalarray[] = [
+            //"date" => $date,
+            "sosCount" => $counts->soscount ?? 0,
+            "highCount" => $counts->criticalcount ?? 0,
+            "criticalCount" => $counts->criticalcount ?? 0,
+            "technicalCount" => $counts->technicalcount ?? 0,
+            "eventsCount" => $counts->eventscount ?? 0,
+            "mediumCount" => $counts->mediumcount ?? 0,
+            "temperatureCount" => $counts->temperaturecount ?? 0,
+            "waterCount" => $counts->watercount ?? 0,
+            "medicalCount" => $counts->medicalcount ?? 0,
+            "fireCount" => $counts->firecount ?? 0,
+            "lowCount" => $counts->lowcount ?? 0,
+            "openCount" => $counts->opencount ?? 0,
+            "closedCount" => $counts->closedcount ?? 0,
+            "forwardCount" => $counts->forwardcount ?? 0,
+
+
+        ];
+        // }
 
 
         return  $finalarray;

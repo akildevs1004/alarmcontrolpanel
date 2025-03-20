@@ -34,12 +34,14 @@
         >
           0%
         </div>
-        <div
-          :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
-          :id="name"
-          :name="name"
-          style="width: 320px; margin: 0 auto; text-align: left"
-        ></div>
+        <div style="width: 150px; margin: auto; text-align: cener">
+          <div
+            :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
+            :id="name"
+            :name="name"
+            style="width: 150px; margin: 0 auto; text-align: cener"
+          ></div>
+        </div>
       </v-col>
     </v-row>
 
