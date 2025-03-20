@@ -444,11 +444,12 @@ export default {
     submit_primary() {
       let customer = new FormData();
 
-      for (const key in this.payload) {
-        if (this.payload[key] != "")
-          if (this.payload[key] != null)
-            customer.append(key, this.payload[key]);
-      }
+      Object.entries(this.payload).forEach(([key, value]) => {
+        if (value !== "" && value !== null) {
+          customer.append(key, value);
+        }
+      });
+
       if (this.editId) customer.append("editId", this.editId);
       customer.append("company_id", this.$auth.user.company_id);
 

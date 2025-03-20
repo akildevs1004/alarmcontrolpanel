@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SalesBusinessSourceTypes;
 use App\Models\SalesInquiry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class SalesInquiryController extends Controller
 {
@@ -107,12 +108,16 @@ class SalesInquiryController extends Controller
 
         if ($request->editId) {
             $data["updated_datetime"] = date("Y-m-d H:i:s");
-
             SalesInquiry::where("id", $request->editId)->update($data);
             return $this->response("Inquiry Updated Successfully", null, true);
         } else {
             SalesInquiry::create($data);
         }
+
+
+        //mail
+        $body = $this->view('emails.report')->with(["body" => "Test Mail" . date("Y-m-d H:i:s")]);
+        Mail::to('venuakil2@gmail.com')->queue($body);
 
 
         return $this->response("Inquiry Created Successfully", null, true);

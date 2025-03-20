@@ -531,8 +531,8 @@ export default {
     }
   },
 
-  created() {
-    this.getCustomers();
+  async created() {
+    await this.getCustomers();
     //////this._id = 4; //this.$route.params.id;
     this.colorcodes = this.$utils.getAlarmIcons();
     if (this.$auth.user.branch_id) {
@@ -542,21 +542,21 @@ export default {
     }
     // this.getGoogleicons();
 
-    setInterval(() => {
+    setInterval(async () => {
       // if (
       //   this.$route.name == "security-customersmap" ||
       //   this.$route.name == "alarm-customersmap" ||
       //   this.$route.name == "alarm-dashboard"
       // )
-      this.getCustomers();
+      await this.getCustomers();
       //this.mapkeycount++;
     }, 1000 * 10);
     ///this.getBuildingTypes();
   },
   watch: {
     options: {
-      handler() {
-        this.getCustomers();
+      async handler() {
+        await this.getCustomers();
       },
       deep: true,
     },
@@ -629,7 +629,7 @@ export default {
       }
     },
 
-    getCustomers(filterText = null) {
+    async getCustomers(filterText = null) {
       if (this.isWithOutAlarms) this.filterText = null;
 
       this.getMapKey().then(() => {

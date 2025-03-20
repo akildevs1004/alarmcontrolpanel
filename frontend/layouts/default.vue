@@ -1387,6 +1387,10 @@ export default {
           });
 
           this.pendingNotificationsCount = data.length;
+          if (this.$route.name == "alarm-dashboard") {
+            if (this.notificationsMenuItems.length > 0)
+              this.dialogAlarmPopupNotificationStatus = true;
+          }
         })
         .catch((error) => {
           if (this.$axios.isCancel(error)) {
