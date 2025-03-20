@@ -446,7 +446,7 @@ class AlarmDashboardController extends Controller
 
             "powerCount" => $counts->powercount ?? 0,
 
-            "eventsCount" =>  $counts->opencount - $counts->soscount - $counts->criticalcount - $counts->technicalcount - $counts->temperaturecount - $counts->watercount - $counts->firecount,
+            "eventsCount" =>  $counts->opencount - $counts->soscount - $counts->criticalcount - $counts->technicalcount - $counts->temperaturecount - $counts->watercount - $counts->firecount - $counts->medicalcount,
 
 
 
