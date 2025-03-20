@@ -336,7 +336,7 @@ class AlarmDashboardController extends Controller
 
 
             ")
-                ->whereDate("alarm_start_datetime", $date)
+                //->whereDate("alarm_start_datetime", $date)
 
                 ->when($request->filled("filter_customers_list"), function ($model) use ($request) {
                     $model->whereIn('customer_id', $request->filter_customers_list);
