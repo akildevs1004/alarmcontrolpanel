@@ -400,7 +400,7 @@ class AlarmDashboardController extends Controller
                COUNT(CASE WHEN alarm_category = 1 AND alarm_type != 'SOS' AND alarm_status =1 THEN 1 END) as criticalCount,
 
                 COUNT(CASE WHEN alarm_type = 'Offline' AND alarm_status =1 THEN 1 END) as technicalCount,
-              --  COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
+               COUNT(CASE WHEN alarm_type IS NOT NULL  AND alarm_type != 'SOS' AND alarm_status =1 AND alarm_category != 1 THEN 1 END) as eventsCount,
                 COUNT(CASE WHEN alarm_category = 2 AND alarm_status =1 THEN 1 END) as mediumCount,
                 COUNT(CASE WHEN alarm_category = 3 AND alarm_status =1 THEN 1 END) as lowCount,
 
@@ -431,7 +431,7 @@ class AlarmDashboardController extends Controller
             "highCount" => $counts->criticalcount ?? 0,
             "criticalCount" => $counts->criticalcount ?? 0,
             "technicalCount" => $counts->technicalcount ?? 0,
-            "eventsCount" => $counts->eventscount ?? 0,
+
             "mediumCount" => $counts->mediumcount ?? 0,
             "temperatureCount" => $counts->temperaturecount ?? 0,
             "waterCount" => $counts->watercount ?? 0,
@@ -445,6 +445,8 @@ class AlarmDashboardController extends Controller
             "gasCount" => $counts->gascount ?? 0,
 
             "powerCount" => $counts->powercount ?? 0,
+
+            "eventsCount" =>  $counts->opencount - $counts->soscount - $counts->criticalcount - $counts->technicalcount - $counts->temperaturecount - $counts->watercount - $counts->firecount,
 
 
 

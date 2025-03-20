@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailContentDefault;
+use App\Models\Company;
+use App\Models\Customers\CustomerContacts;
 use App\Models\SalesBusinessSourceTypes;
 use App\Models\SalesInquiry;
 use Illuminate\Http\Request;
@@ -82,43 +85,69 @@ class SalesInquiryController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = [
-            "company_id" => "required",
-            "business_source_id" => "required",
-            "business_source_info" => "required",
-            "first_name" => "required",
-            "last_name" => "required",
-            "contact_number" => "required",
-            "whatsapp_number" => "nullable",
-            "email" => "required",
-            "address" => "required",
-            "building_name" => "nullable",
-            "building_type_id" => "nullable",
-            "device_type" => "required",
-            "sensor_count" => "required",
+        // $validate = [
+        //     "company_id" => "required",
+        //     "business_source_id" => "required",
+        //     "business_source_info" => "required",
+        //     "first_name" => "required",
+        //     "last_name" => "required",
+        //     "contact_number" => "required",
+        //     "whatsapp_number" => "nullable",
+        //     "email" => "required",
+        //     "address" => "required",
+        //     "building_name" => "nullable",
+        //     "building_type_id" => "nullable",
+        //     "device_type" => "required",
+        //     "sensor_count" => "required",
 
 
-            "receiption_remarks" => "nullable",
-            "customer_request" => "nullable",
-        ];
-        $data =  $request->validate($validate);
+        //     "receiption_remarks" => "nullable",
+        //     "customer_request" => "nullable",
+        // ];
+        // $data =  $request->validate($validate);
 
-        $data["created_datetime"] = date("Y-m-d H:i:s");
+        // $data["created_datetime"] = date("Y-m-d H:i:s");
 
 
-        if ($request->editId) {
-            $data["updated_datetime"] = date("Y-m-d H:i:s");
-            SalesInquiry::where("id", $request->editId)->update($data);
-            return $this->response("Inquiry Updated Successfully", null, true);
-        } else {
-            SalesInquiry::create($data);
-        }
+        // if ($request->editId) {
+        //     $data["updated_datetime"] = date("Y-m-d H:i:s");
+        //     SalesInquiry::where("id", $request->editId)->update($data);
+        //     return $this->response("Inquiry Updated Successfully", null, true);
+        // } else {
+        //     SalesInquiry::create($data);
+        // }
 
 
         //mail
-        $body = $this->view('emails.report')->with(["body" => "Test Mail" . date("Y-m-d H:i:s")]);
-        Mail::to('venuakil2@gmail.com')->queue($body);
+        $company = Company::where("id", $request->company_id)
+            ->with("user")
+            ->first();
+        if ($company) {
 
+
+            $body_content = ' <div class="email-body">
+            <p>Hello <strong>' . $company->name . '</strong>,</p>
+            <p>You have received a new inquiry from <strong>' . $request->first_name . ' ' . $request->last_name . '</strong>.</p>
+
+            <table class="email-table">
+
+                <tr><td>Contact Number</td><td>: ' . $request->contact_number . '</td></tr>
+                <tr><td>WhatsApp Number</td><td>: ' . $request->whatsapp_number . '</td></tr>
+                <tr><td>Email</td><td>: ' . $request->email . '</td></tr>
+                <tr><td>Building Name</td><td>: ' . $request->building_name . '</td></tr>
+                <tr><td>Alarm Type</td><td>: ' . $request->device_type . '</td></tr>
+                <tr><td>Sensors</td><td>: ' . $request->sensor_count . '</td></tr>
+                <tr><td>Reception Notes</td><td>: ' . $request->receiption_remarks . '</td></tr>
+                <tr><td>Customer Requests</td><td>: ' . $request->customer_request . '</td></tr>
+            </table>
+        </div>';
+            $data = [
+                'subject' => "New Inquiry received from " . $request->first_name . ' ' . $request->last_name,
+                'body' => $body_content,
+            ];
+
+            Mail::to($company->user->email)->queue(new EmailContentDefault($data));
+        }
 
         return $this->response("Inquiry Created Successfully", null, true);
     }

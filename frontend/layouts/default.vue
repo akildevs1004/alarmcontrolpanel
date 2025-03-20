@@ -1390,6 +1390,7 @@ export default {
           if (this.$route.name == "alarm-dashboard") {
             if (this.notificationsMenuItems.length > 0)
               this.dialogAlarmPopupNotificationStatus = true;
+            else this.dialogAlarmPopupNotificationStatus = false;
           }
         })
         .catch((error) => {
