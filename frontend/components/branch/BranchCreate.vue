@@ -414,7 +414,7 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
-    
+
     onpick_attachment() {
       this.$refs.attachment_input.click();
     },

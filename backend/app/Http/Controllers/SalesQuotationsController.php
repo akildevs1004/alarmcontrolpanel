@@ -20,7 +20,7 @@ class SalesQuotationsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = SalesQuotations::with(["ProductService", "BuildingType", "invoice"])->where("company_id", $request->company_id);
+        $model = SalesQuotations::with(["fallowups.user", "ProductService", "BuildingType", "invoice"])->where("company_id", $request->company_id);
 
 
 
@@ -44,6 +44,7 @@ class SalesQuotationsController extends Controller
                 $q->Orwhere('quotation_id', 'ILIKE', '%' . $request->common_search . '%');
                 $q->Orwhere('payment_type', 'ILIKE', '%' . $request->common_search . '%');
                 $q->Orwhere('amount', 'ILIKE', '%' . $request->common_search . '%');
+                $q->Orwhere('fallowup_status', 'ILIKE', '%' . $request->common_search . '%');
 
                 $q->Orwhere('inquiry_id', 'ILIKE', '%' . $request->common_search . '%');
                 $q->Orwhere('customer_id', 'ILIKE', '%' . $request->common_search . '%');

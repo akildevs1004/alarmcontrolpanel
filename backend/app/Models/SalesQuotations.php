@@ -12,6 +12,12 @@ class SalesQuotations extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function fallowups()
+    {
+        return $this->hasMany(SalesQuotationFallowups::class, "quotation_id", "id")->orderBy("created_datetime", "desc");
+    }
+
     public function Company()
     {
         return $this->belongsTo(Company::class, "company_id", "id");

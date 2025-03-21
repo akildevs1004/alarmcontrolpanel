@@ -48,6 +48,41 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogFallowup" max-width="500px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> Fallow Up Notes</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogFallowup = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <EditFallowUp
+            :key="key"
+            :item="item"
+            @closeDialog="closeProductDialog"
+          />
+        </v-card-text>
+      </v-card> </v-dialog
+    ><v-dialog v-model="dialogFallowupContent" max-width="500px">
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense> Fallow Up Notes List</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialogFallowupContent = false" outlined>
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text>
+          <FallowUpListPopup
+            :key="key"
+            :fallowupList="fallowupList"
+            @closeDialog="closeProductDialog"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <v-row class="mt-0 pt-0">
       <v-col class="mt-0 pt-0">
@@ -170,6 +205,13 @@
               <div class="secondary-value">{{ item.whatsapp_number }}</div>
             </template>
 
+            <template v-slot:item.device_type="{ item }">
+              {{ item.device_type }}
+              <div class="secondary-value">
+                Sensors : {{ item.sensor_count }}
+              </div>
+            </template>
+
             <template v-slot:item.payment_type="{ item }">
               {{ item.payment_type }}
               <div class="secondary-value">{{ item.total_years }} Year(s)</div>
@@ -199,6 +241,15 @@
               <div class="secondary-value" v-if="item.customer_id">
                 {{ item.updated_datetime }}
               </div>
+            </template>
+
+            <template v-slot:item.fallowup="{ item }">
+              <v-icon
+                @click="showFallowupContentList(item)"
+                v-if="item.fallowups.length > 0"
+                color="blue"
+                >mdi-clock-outline</v-icon
+              >
             </template>
 
             <template v-slot:item.options="{ item }">
@@ -258,6 +309,21 @@
                       Convert to INV
                     </v-list-item-title>
                   </v-list-item>
+                  <v-list-item @click="fallowupQuotation(item)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-row>
+                        <v-col cols="5" style="padding-top: 19px">
+                          <v-icon color="blue" small> mdi-clock </v-icon>
+                        </v-col>
+                        <v-col
+                          cols="7"
+                          style="padding-left: 0px; padding-top: 19px"
+                        >
+                          Fallow Up</v-col
+                        ></v-row
+                      >
+                    </v-list-item-title>
+                  </v-list-item>
                   <v-list-item @click="downloadOptions('print', item.id)">
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
@@ -314,15 +380,23 @@
 </template>
 
 <script>
+import EditFallowUp from "../../components/Alarm/EditFallowUp.vue";
 import EditQuotation from "../../components/Alarm/EditQuotation.vue";
+import FallowUpListPopup from "../../components/Alarm/FallowUpListPopup.vue";
+
 import QuotationToInvoice from "../../components/Alarm/QuotationToInvoice.vue";
 
 export default {
   components: {
     EditQuotation,
     QuotationToInvoice,
+    EditFallowUp,
+    FallowUpListPopup,
   },
   data: () => ({
+    dialogFallowupContent: false,
+    fallowupList: [],
+    dialogFallowup: false,
     dialogQuotationToInvoice: false,
     displayDateFilter: false,
     date_from: null,
@@ -376,14 +450,14 @@ export default {
         text: "Alarm Type",
         value: "device_type",
       },
-      {
-        text: "Required Sensors",
-        value: "sensor_count",
-      },
-      {
-        text: "Business/Building Name",
-        value: "building_name",
-      },
+      // {
+      //   text: "Required Sensors",
+      //   value: "sensor_count",
+      // },
+      // {
+      //   text: "Business/Building Name",
+      //   value: "building_name",
+      // },
       // {
       //   text: "Type of Business",
       //   value: "building_type.name",
@@ -396,18 +470,18 @@ export default {
       //   text: "Whatsapp Number",
       //   value: "whatsapp_number",
       // },
-      {
-        text: "Email",
-        value: "email",
-      },
+      // {
+      //   text: "Email",
+      //   value: "email",
+      // },
       {
         text: "Location",
         value: "address",
       },
-      {
-        text: "Payment",
-        value: "payment_type",
-      },
+      // {
+      //   text: "Payment",
+      //   value: "payment_type",
+      // },
       {
         text: "Package",
         value: "package",
@@ -436,6 +510,15 @@ export default {
       {
         text: "Invoice #",
         value: "customer",
+      },
+      {
+        text: "Status",
+        value: "fallowup_status",
+      },
+      {
+        text: "Fallowup",
+        value: "fallowup",
+        align: "center",
       },
       {
         text: "Options",
@@ -507,6 +590,12 @@ export default {
         return res.replace(/\b\w/g, (c) => c.toUpperCase());
       }
     },
+
+    showFallowupContentList(item) {
+      this.key++;
+      this.fallowupList = item.fallowups;
+      this.dialogFallowupContent = true;
+    },
     getInvlicePdfUrl(item) {
       return (
         process.env.BACKEND_URL +
@@ -516,6 +605,12 @@ export default {
         item.invoice_id +
         "&type=print"
       );
+    },
+
+    fallowupQuotation(item) {
+      this.key++;
+      this.item = item;
+      this.dialogFallowup = true;
     },
     convertToInvoice(item) {
       this.editId = null;
@@ -541,6 +636,7 @@ export default {
       this.getDataFromApi();
     },
     closeProductDialog() {
+      this.dialogFallowup = false;
       this.dialogQuotationToInvoice = false;
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
