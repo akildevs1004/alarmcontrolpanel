@@ -203,7 +203,11 @@ class CustomerPaymentsController extends Controller
         $customerProductService = CustomerProductServices::with("device_product_service")
             ->where("customer_id", $request->customer_id)
 
-            ->orderBy("created_datetime", "DESC")->first()->toArray();
+            ->orderBy("created_datetime", "DESC")->first();
+
+        if ($customerProductService)
+            $customerProductService =   $customerProductService->toArray();
+        else return null;
 
 
         $customerTotalSensors =   DeviceZones::whereHas('device', function ($query) use ($request) {

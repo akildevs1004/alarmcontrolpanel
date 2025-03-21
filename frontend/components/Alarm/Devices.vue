@@ -102,7 +102,7 @@
               @closeDialog="closeDialog"
               :editId="editId"
               :editDevice="editDevice"
-              :editable="isEditable"
+              :isEditable="isEditable"
               :invoicePackageData="invoicePackageData"
             />
           </v-container>
@@ -641,8 +641,7 @@ export default {
     if (this.$store.state.storeAlarmControlPanel?.DeviceTypes) {
       this.deviceTypes = this.$store.state.storeAlarmControlPanel.DeviceTypes;
     }
-
-    this.getSensorLimitFromPayments();
+    if (this.customer_id) this.getSensorLimitFromPayments();
   },
 
   methods: {
@@ -665,25 +664,27 @@ export default {
       this.$emit("closeDialog");
     },
     editZones(item) {
+      this.customer_id = item.customer_id;
+      this.getSensorLimitFromPayments(item.customer_id);
+      this.isEditable = true;
       this.editId = item.id;
       this.key = this.key + 1;
       this.editDevice = item;
       this.dialogZones = true;
     },
-    getSensorLimitFromPayments() {
-      if (this.customer_id) {
-        let options = {
-          params: {
-            company_id: this.$auth.user.company_id,
-            customer_id: this.customer_id,
-          },
-        };
-        this.$axios
-          .get(`/get_customer_sensor_payment_package_details`, options)
-          .then(({ data }) => {
-            this.invoicePackageData = data;
-          });
-      }
+    getSensorLimitFromPayments(customer_id) {
+      if (!customer_id) customer_id = this.customer_id;
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          customer_id: customer_id,
+        },
+      };
+      this.$axios
+        .get(`/get_customer_sensor_payment_package_details`, options)
+        .then(({ data }) => {
+          this.invoicePackageData = data;
+        });
     },
     getAlarmStatus(item) {},
     copyToProfileimage(faceImage, userId) {

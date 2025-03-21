@@ -374,7 +374,7 @@ export default {
         let sortedDesc = sortDesc ? sortDesc[0] : "";
         this.perPage = itemsPerPage;
         this.currentPage = page;
-        if (!page > 0) return false;
+
         let options = {
           params: {
             page: page,

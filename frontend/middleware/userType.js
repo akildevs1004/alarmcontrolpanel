@@ -1,7 +1,7 @@
 const data = async ({ $auth, redirect }) => {
   let userType = {
     user: "/alarm/dashboard",
-    company: "/alarm/dashboard",
+    company: "/alarm/devices",
     customer: "/customer/dashboard",
     //security: "/security/dashboard",
     security: "/operator/dashboard",

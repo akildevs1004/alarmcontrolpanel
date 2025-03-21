@@ -74,32 +74,42 @@
             > -->
             </span>
             <!-- <span style="color: black"
-              >Max Sensors Allowed :
+              >
+              Max Sensors Allowed :
               {{
                 invoicePackageData?.device_product_service?.sensor_count ||
                 "---"
               }}</span
             > -->
-            <v-btn
-              v-if="
-                isEditable &&
-                invoicePackageData &&
-                invoicePackageData.device_product_service &&
-                invoicePackageData.customerTotalSensors <
-                  invoicePackageData.device_product_service.sensor_count
-              "
-              title="Change Request"
-              x-small
-              :ripple="false"
-              text
-              @click="addItem()"
-            >
-              <v-icon class="">mdi mdi-plus-circle</v-icon>
-            </v-btn>
-            <div v-else style="color: red">
-              Max Sensor count Reached or Package is not Active
-              <v-icon class="" color="red">mdi mdi-plus-circle</v-icon>
+            <!-- {{ invoicePackageData?.customerTotalSensors || 0 }}
+            {{ invoicePackageData?.device_product_service?.sensor_count || 0 }}
+            {{ invoicePackageData }}   -->
+
+            <div style="color: black" v-if="!invoicePackageData && !loading">
+              Invoice package is not avaialbe.
             </div>
+            <div v-if="isEditable">
+              <v-btn
+                v-if="
+                  invoicePackageData &&
+                  invoicePackageData.device_product_service &&
+                  invoicePackageData.customerTotalSensors <
+                    invoicePackageData.device_product_service.sensor_count
+                "
+                title="Change Request"
+                x-small
+                :ripple="false"
+                text
+                @click="addItem()"
+              >
+                <v-icon class="">mdi mdi-plus-circle</v-icon>
+              </v-btn>
+              <div v-else-if="!loading" style="color: red">
+                Max Sensor count Reached or Package is not Active
+                <v-icon class="" color="red">mdi mdi-plus-circle</v-icon>
+              </div>
+            </div>
+            <div v-else>No</div>
           </v-toolbar>
 
           <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
@@ -359,6 +369,8 @@ export default {
     this.getDataFromApi();
   },
   created() {
+    console.log("invoicePackageData", this.invoicePackageData);
+
     this._id = 4; //this.$route.params.id;
 
     if (this.$auth.user.branch_id) {
