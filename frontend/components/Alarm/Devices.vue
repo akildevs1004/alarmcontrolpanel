@@ -98,7 +98,7 @@
           <v-container style="min-height: 100px">
             <DeviceSensorZones
               :key="key"
-              :customer_id="customer_id"
+              :customer_id="zone_customer_id"
               @closeDialog="closeDialog"
               :editId="editId"
               :editDevice="editDevice"
@@ -445,6 +445,7 @@ export default {
   components: { AlarmEditDevice, DeviceSensorZones, DeviceSerialNumber },
   props: ["customer_id", "eventFilter", "isMapviewOnly", "isEditable"],
   data: () => ({
+    zone_customer_id: null,
     customersList: [],
     dialogSerialNumbers: false,
     commonSearch: "",
@@ -664,7 +665,7 @@ export default {
       this.$emit("closeDialog");
     },
     editZones(item) {
-      this.customer_id = item.customer_id;
+      this.zone_customer_id = item.customer_id;
       this.getSensorLimitFromPayments(item.customer_id);
       this.isEditable = true;
       this.editId = item.id;
