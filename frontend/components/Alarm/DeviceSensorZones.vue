@@ -85,10 +85,10 @@
             {{ invoicePackageData?.device_product_service?.sensor_count || 0 }}
             {{ invoicePackageData }}   -->
 
-            <div style="color: black" v-if="!invoicePackageData && !loading">
-              Invoice package is not avaialbe.
+            <div style="color: red" v-if="!invoicePackageData && !loading">
+              Customer Invoice package is not avaialbe.
             </div>
-            <div v-if="isEditable">
+            <div v-else-if="isEditable">
               <v-btn
                 v-if="
                   invoicePackageData &&
