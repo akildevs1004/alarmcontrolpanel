@@ -320,7 +320,7 @@ class CustomerPaymentsController extends Controller
             $customer =  $invoice->customer;
 
 
-            $subject = "Customer Incoice Is generated";
+            $subject = "Customer Invoice Is generated -" . $invoice->invoice_number;
 
             $body_content = ' <div class="email-body">
             <p>Hello <strong>' .  $customer->building_name . '</strong>,</p>

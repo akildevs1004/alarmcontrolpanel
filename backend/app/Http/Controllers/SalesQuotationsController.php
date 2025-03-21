@@ -132,6 +132,8 @@ class SalesQuotationsController extends Controller
             $data["quotation_count"] = $maxId + 1;
             $record = SalesQuotations::create($data);
             $quotation_id = $record->id;
+
+            $subject = $quotationFormat . " - " . $subject;
         }
 
         //mail

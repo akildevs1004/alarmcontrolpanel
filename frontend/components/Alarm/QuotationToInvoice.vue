@@ -933,6 +933,7 @@ export default {
 
             let new_customer_id = data.record.id;
             //generate Invoices
+            this.loading = true;
 
             let invoiceStatus = this.generateCusotmerInvoices(new_customer_id);
 
@@ -961,6 +962,8 @@ export default {
     },
 
     generateCusotmerInvoices(customer_id) {
+      this.loading = true;
+
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
@@ -981,6 +984,8 @@ export default {
       this.$axios
         .post("customer_product_invoice_submition", options.params)
         .then((data) => {
+          this.loading = false;
+
           if (data.status) {
             this.snackbar = true;
             this.response = "Invoices Created Successfully";
@@ -996,6 +1001,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.loading = false;
+
           if (e.response.data.errors) {
             this.primary_errors = e.response.data.errors;
             this.color = "red";

@@ -279,14 +279,21 @@ class ClientController extends Controller
 
             // ];
 
+            if (isset($emailData["file_path"])) {
+                return   $response = Http::timeout(30)
+                    ->withoutVerifying()
+                    ->asMultipart()
+                    ->retry(3, 1000)
+                    ->attach('attachment', file_get_contents($emailData["file_path"]), $emailData["file_name"]) // Attach file
+                    ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
+            } else {
+                return   $response = Http::timeout(30)
+                    ->withoutVerifying()
+                    ->asMultipart()
+                    ->retry(3, 1000)
 
-
-            return   $response = Http::timeout(30)
-                ->withoutVerifying()
-                ->asMultipart() // Ensure multipart request for file uploads
-                ->retry(3, 1000) // Retry 3 times with 1-second intervals
-                ->attach('attachment', file_get_contents($emailData["file_path"]), $emailData["file_name"]) // Attach file
-                ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
+                    ->post("https://tanjore.hyderspark.com/xtremeguard_mail.php", $emailData);
+            }
         } catch (Exception $e) {
         }
     }

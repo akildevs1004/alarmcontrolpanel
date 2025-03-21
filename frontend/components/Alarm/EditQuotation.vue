@@ -686,6 +686,8 @@ export default {
         });
     },
     submit_primary() {
+      this.loading = true;
+
       let customer = new FormData();
 
       for (const key in this.payload) {
@@ -705,7 +707,7 @@ export default {
       this.$axios
         .post("/sales_quotations", customer)
         .then(({ data }) => {
-          //this.loading = false;
+          this.loading = false;
 
           if (!data.status) {
             this.primary_errors = [];
@@ -729,6 +731,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.loading = false;
+
           if (e.response.data.errors) {
             this.primary_errors = e.response.data.errors;
             this.color = "red";

@@ -443,6 +443,7 @@ export default {
     },
     submit_primary() {
       let customer = new FormData();
+      this.loading = true;
 
       Object.entries(this.payload).forEach(([key, value]) => {
         if (value !== "" && value !== null) {
@@ -456,7 +457,7 @@ export default {
       this.$axios
         .post("/sales_inquiry", customer)
         .then(({ data }) => {
-          //this.loading = false;
+          this.loading = false;
 
           if (!data.status) {
             this.primary_errors = [];
@@ -476,6 +477,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.loading = false;
+
           if (e.response.data.errors) {
             this.primary_errors = e.response.data.errors;
             this.color = "red";

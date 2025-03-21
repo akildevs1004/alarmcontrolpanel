@@ -174,21 +174,29 @@
                             <tr style=" vertical-align: top;">
                                 <td style="width: 50%; height: 400px;text-align:center;padding:10px;">1</td>
                                 <td style="width: 50%; height: 200px;padding:10px; ">
-                                    Package: {{ $invoice->customer_product_services?->device_product_service?->name }}
-                                    <p>Payment Mode: {{ $invoice->customer_product_services?->payment_type }}</p>
+                                    Package:
+                                    <strong>{{ $invoice->customer_product_services?->device_product_service?->name }}
+                                    </strong>
+                                    <p>Payment Mode: <strong> {{ $invoice->customer_product_services?->payment_type }}
+                                        </strong>
+                                    </p>
                                     <p>Sensor Count:
-                                        {{ $invoice->customer_product_services?->device_product_service?->sensor_count }}
+                                        <strong>
+                                            {{ $invoice->customer_product_services?->device_product_service?->sensor_count }}
+                                        </strong>
                                     </p>
                                     <p>Time Period:
-                                        {{ date('d-m-Y', strtotime($invoice->invoice_date)) }} to
+                                        <strong> {{ date('d-m-Y', strtotime($invoice->invoice_date)) }} to
 
-                                        @if ($invoice->customer_product_services?->payment_type == 'Monthly')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +30 days')) }}
-                                        @elseif ($invoice->customer_product_services?->payment_type == 'Quarter')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +90 days')) }}
-                                        @elseif ($invoice->customer_product_services?->payment_type == 'Yearly')
-                                            {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +365 days')) }}
-                                        @endif
+                                            @if ($invoice->customer_product_services?->payment_type == 'Monthly')
+                                                {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +30 days')) }}
+                                            @elseif ($invoice->customer_product_services?->payment_type == 'Quarter')
+                                                {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +90 days')) }}
+                                            @elseif ($invoice->customer_product_services?->payment_type == 'Yearly')
+                                                {{ date('d-m-Y', strtotime($invoice->invoice_date . ' +365 days')) }}
+                                            @endif
+
+                                        </strong>
 
                                     </p>
 

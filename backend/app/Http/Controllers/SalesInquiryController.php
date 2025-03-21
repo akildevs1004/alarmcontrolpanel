@@ -125,7 +125,7 @@ class SalesInquiryController extends Controller
 
 
         //mail
-        $company = Company::where("id", $request->company_id)
+        $company = Company::with("user")->where("id", $request->company_id)
             ->with("user")
             ->first();
         if ($company) {
