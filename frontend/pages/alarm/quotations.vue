@@ -1,7 +1,7 @@
 <template>
   <NoAccess v-if="!can('operators_view')" />
   <div v-else>
-    <div class="text-center ma-2">
+    <div class="text-center mt-0">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
       </v-snackbar>
@@ -49,9 +49,9 @@
       </v-card>
     </v-dialog>
 
-    <v-row>
-      <v-col>
-        <v-card elevation="0" class="mt-0">
+    <v-row class="mt-0 pt-0">
+      <v-col class="mt-0 pt-0">
+        <v-card elevation="2" class="mt-0">
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
               <span style="color: black">
@@ -120,7 +120,12 @@
               <v-icon class="">mdi mdi-plus-circle</v-icon>
             </v-btn>
           </v-toolbar>
-
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="mt-0">
+      <v-col>
+        <v-card elevation="2" class="mt-0">
           <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
 
@@ -135,7 +140,7 @@
             :loading="loading"
             :options.sync="options"
             :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
+              itemsPerPageOptions: [10, 18, 20, 50, 100, 500, 1000],
             }"
             class="elevation-1"
             :server-items-length="totalRowsCount"
@@ -180,11 +185,13 @@
             </template>
             <template v-slot:item.customer="{ item }">
               <a
-                v-if="item.invoice_id"
+                v-if="item.invoice"
                 :href="getInvlicePdfUrl(item)"
                 target="_blank"
               >
-                {{ item.customer_id ? "#" + item.customer_id : "---" }}</a
+                {{
+                  item.invoice ? "#" + item.invoice.invoice_number : "---"
+                }}</a
               >
               <div v-else>
                 {{ item.customer_id ? "#" + item.customer_id : "---" }}
@@ -427,7 +434,7 @@ export default {
         value: "inquiry",
       },
       {
-        text: "Customer #",
+        text: "Invoice #",
         value: "customer",
       },
       {
@@ -460,9 +467,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 200;
+    this.tableHeight = window.innerHeight - 210;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 200;
+      this.tableHeight = window.innerHeight - 210;
     });
 
     this.getDataFromApi();
@@ -595,6 +602,8 @@ export default {
       url = this.endpoint;
 
       this.newCustomerDialog = false;
+
+      if (this.browserHeight > 600) this.options.itemsPerPage = 18;
 
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 

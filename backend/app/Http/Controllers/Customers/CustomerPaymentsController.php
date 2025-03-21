@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
+use App\Mail\EmailContentDefault;
 use App\Models\CustomerProductServices;
 use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\SalesQuotations;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerPaymentsController extends Controller
 {
@@ -301,7 +306,58 @@ class CustomerPaymentsController extends Controller
         Customers::where("id", $request->customer_id)->where("start_date", null)->update(["start_date" => $request->start_date]);
         Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date, "customer_product_service_id" => $record->id]);
 
+        $this->sendMail($invoice_id);
+
 
         return $this->response("Invoices created successfully.", null, true);
+    }
+
+    public function sendMail($invoice_id)
+    {
+        try {
+            $invoice =   CustomerPayments::with(["company", "customer.primary_contact", "customer.user", "customer_product_services.device_product_service"])->where("id", $invoice_id)->first();
+            $company =  $invoice->company;
+            $customer =  $invoice->customer;
+
+
+            $subject = "Customer Incoice Is generated";
+
+            $body_content = ' <div class="email-body">
+            <p>Hello <strong>' .  $customer->building_name . '</strong>,</p>
+            <p>Attached Invoice for your reference</p>
+<br/><br/>
+            <p>Regards, <br/>
+             ' . env("MAIL_FROM_NAME") . '</p>
+        </div>';
+
+
+
+            $pdf = Pdf::loadView('alarm_reports/customer_invoice', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
+            $fileName = $invoice_id . 'INV.' . "pdf";
+            $folderPath = public_path('temp/');
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath);
+            }
+
+            $pdfPath = public_path('temp/' . $fileName);
+            $pdf->save($pdfPath);
+
+
+            $data = [
+                'subject' => $subject,
+                'body' => $body_content,
+                'to' => $customer->user->email,
+                'file_path' => $pdfPath,
+                'file_name' => $fileName,
+
+            ];
+
+            (new ClientController())->sendExternalMail($data);
+
+            Mail::to($customer->user->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
+
+            unlink($pdfPath);
+        } catch (Exception $e) {
+        }
     }
 }

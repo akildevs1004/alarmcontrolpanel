@@ -175,7 +175,7 @@
             style="max-width: 50px"
             v-if="!isMapviewOnly"
           >
-            Payments
+            Invoices
             <v-icon> mdi-currency-usd</v-icon>
           </v-tab>
 

@@ -20,7 +20,7 @@ class SalesQuotationsController extends Controller
      */
     public function index(Request $request)
     {
-        $model = SalesQuotations::with(["ProductService", "BuildingType"])->where("company_id", $request->company_id);
+        $model = SalesQuotations::with(["ProductService", "BuildingType", "invoice"])->where("company_id", $request->company_id);
 
 
 
@@ -135,14 +135,21 @@ class SalesQuotationsController extends Controller
         }
 
         //mail
+        $this->sendMail($request, $quotation_id, $subject);
+
+
+        if ($request->editId)
+            return $this->response("Quotation Updated Successfully", null, true);
+
+        else return $this->response("Quotation Created Successfully", null, true);
+    }
+
+    public function sendMail($request, $quotation_id, $subject)
+    {
         try {
-            $company = Company::where("id", $request->company_id)
-                ->with("user")
-                ->first();
-            if ($company) {
 
 
-                $body_content = ' <div class="email-body">
+            $body_content = ' <div class="email-body">
             <p>Hello <strong>' . $request->first_name . ' ' . $request->last_name . '</strong>,</p>
             <p>Attached Quotation for your reference</p>
 <br/><br/>
@@ -151,45 +158,35 @@ class SalesQuotationsController extends Controller
         </div>';
 
 
-
-
-
-
-                $invoice =   SalesQuotations::with(["company",   "ProductService"])->where("id",  $quotation_id)->first();
-                $company =  $invoice->company;
-                $customer =  $invoice;
-                $pdf = Pdf::loadView('alarm_reports/sales_quotation', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
-                $fileName = $quotation_id . '.' . "pdf";
-                $folderPath = public_path('temp/');
-                if (!is_dir($folderPath)) {
-                    mkdir($folderPath);
-                }
-
-                $pdfPath = public_path('temp/' . $fileName);
-                $pdf->save($pdfPath);
-
-
-                $data = [
-                    'subject' => $subject,
-                    'body' => $body_content,
-                    'to' => $request->email,
-                    'file_path' => $pdfPath,
-                    'file_name' => $fileName,
-
-                ];
-
-                (new ClientController())->sendExternalMail($data);
-
-                Mail::to($request->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
+            $invoice =   SalesQuotations::with(["company",   "ProductService"])->where("id",  $quotation_id)->first();
+            $company =  $invoice->company;
+            $customer =  $invoice;
+            $pdf = Pdf::loadView('alarm_reports/sales_quotation', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
+            $fileName = $quotation_id . '.' . "pdf";
+            $folderPath = public_path('temp/');
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath);
             }
+
+            $pdfPath = public_path('temp/' . $fileName);
+            $pdf->save($pdfPath);
+
+
+            $data = [
+                'subject' => $subject,
+                'body' => $body_content,
+                'to' => $request->email,
+                'file_path' => $pdfPath,
+                'file_name' => $fileName,
+
+            ];
+
+            (new ClientController())->sendExternalMail($data);
+
+            Mail::to($request->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
+            unlink($pdfPath);
         } catch (Exception $e) {
         }
-
-
-        if ($request->editId)
-            return $this->response("Quotation Updated Successfully", null, true);
-
-        else return $this->response("Quotation Created Successfully", null, true);
     }
 
     /**

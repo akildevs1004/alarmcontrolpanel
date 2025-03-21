@@ -71,9 +71,9 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <div v-if="!loading && building_photos.length == 0" class="text-center">
+    <!-- <div v-if="!loading && building_photos.length == 0" class="text-center">
       No Photos Available
-    </div>
+    </div> -->
 
     <v-row>
       <v-col

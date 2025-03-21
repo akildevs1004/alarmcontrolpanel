@@ -878,8 +878,10 @@ export default {
       } catch (e) {}
     },
     submit_primary() {
+      this.loading = true;
       if (this.isNewInvoice) {
         this.generateCusotmerInvoices(this.payload.customer_id);
+        this.loading = false;
 
         return false;
       }
@@ -914,7 +916,7 @@ export default {
       this.$axios
         .post("/customers", customer)
         .then(({ data }) => {
-          //this.loading = false;
+          this.loading = false;
 
           if (!data.status) {
             this.primary_errors = [];
@@ -946,6 +948,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.loading = false;
+
           if (e.response.data.errors) {
             this.primary_errors = e.response.data.errors;
             this.color = "red";
@@ -970,7 +974,7 @@ export default {
           end_date: this.end_date,
           licence_duration_years: this.licence_duration_years,
           total_invoice_count: this.total_invoice_count,
-          quotation_id: this.item.id,
+          quotation_id: this.item?.id,
         },
       };
 

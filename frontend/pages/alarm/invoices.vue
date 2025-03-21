@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <NoAccess v-if="!can('operators_view')" />
+
+  <div v-else class="mt-0 pt-0">
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}
@@ -56,22 +58,24 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row>
-      <v-col>
-        <v-row class="mt-0">
+    <v-row class="mt-0 pt-0">
+      <v-col class="mt-0 pt-0">
+        <v-row class="mt-0 pt-0">
           <v-col cols="12" class="text-right" style="width: 600px">
             <v-card elevation="2" style="z-index: 9"
               ><v-card-text>
                 <v-row>
-                  <v-col class="text-left"><h3>Invoices/Payments</h3></v-col>
+                  <v-col class="text-left"
+                    ><h3 style="color: black">Invoices/Payments</h3></v-col
+                  >
                   <v-col style="max-width: 30px"
-                    ><v-icon loading="true" class="mt-2 mr-2"
+                    ><v-icon loading="true" class="mr-2"
                       >mdi-reload</v-icon
                     ></v-col
                   >
                   <v-col style="max-width: 250px">
                     <v-text-field
-                      style="padding-top: 7px; float: right"
+                      style="float: right"
                       height="20"
                       class="employee-schedule-search-box"
                       v-model="commonSearch"
@@ -89,7 +93,6 @@
                     <v-autocomplete
                       class="employee-schedule-search-box"
                       style="
-                        padding-top: 7px;
                         z-index: 999;
 
                         min-width: 100%;
@@ -112,7 +115,6 @@
                       label="Mode"
                       class="employee-schedule-search-box"
                       style="
-                        padding-top: 7px;
                         z-index: 999;
 
                         min-width: 100%;
@@ -137,7 +139,6 @@
                       label="Status"
                       class="employee-schedule-search-box"
                       style="
-                        padding-top: 7px;
                         z-index: 999;
 
                         min-width: 100%;
@@ -160,7 +161,7 @@
 
                   <v-col style="max-width: 210px">
                     <CustomFilter
-                      style="float: left; padding-top: 5px; z-index: 999"
+                      style="float: left; z-index: 999"
                       @filter-attr="filterAttr"
                       :default_date_from="date_from"
                       :default_date_to="date_to"
@@ -170,7 +171,7 @@
                   <v-col
                     style="
                       max-width: 80px;
-                      padding-top: 20px;
+
                       text-align: center;
                     "
                   >
@@ -183,8 +184,7 @@
                     >
                   </v-col>
 
-                  <v-col
-                    style="max-width: 50px; padding-top: 20px; text-align: left"
+                  <v-col style="max-width: 50px; text-align: left"
                     ><v-btn
                       title="Add"
                       x-small
@@ -277,20 +277,21 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <v-card :height="browserHeight - 200"
-          ><v-card-text>
+    <v-row class="mt-0">
+      <v-col class="mt-0">
+        <v-card elevation="2" class="mt-0"
+          ><v-card-text class="mt-0 pa-0">
             <v-data-table
+              :height="browserHeight - 230"
               :headers="headers"
               :items="items"
               :server-items-length="totalRowsCount"
               :loading="loading"
               :options.sync="options"
               :footer-props="{
-                itemsPerPageOptions: [10, 50, 100, 500, 1000],
+                itemsPerPageOptions: [10, 13, 20, 50, 100, 500, 1000],
               }"
-              class="elevation-0"
+              class="elevation-1"
             >
               <template v-slot:item.sno="{ item, index }">
                 {{
@@ -434,13 +435,13 @@ export default {
         { text: "Customer", value: "customer", sortable: false },
 
         { text: "Amount", value: "amount", sortable: false },
-        { text: "Received On", value: "received_date", sortable: false },
-        { text: "Mode", value: "mode_of_payment", sortable: false },
 
         { text: "Status", value: "status", sortable: false },
-        { text: "Notes", value: "cancel_notes", sortable: false },
-        { text: "Created", value: "created_datetime", sortable: false },
 
+        { text: "Created", value: "created_datetime", sortable: false },
+        { text: "Notes", value: "cancel_notes", sortable: false },
+        { text: "Received On", value: "received_date", sortable: false },
+        { text: "Mode", value: "mode_of_payment", sortable: false },
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
@@ -541,6 +542,7 @@ export default {
     },
     getDataFromApi() {
       this.loading = true;
+      if (this.browserHeight > 600) this.options.itemsPerPage = 13;
 
       let { sortBy, sortDesc, page, itemsPerPage } = this.options;
 

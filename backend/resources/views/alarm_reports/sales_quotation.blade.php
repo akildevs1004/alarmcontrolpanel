@@ -99,7 +99,7 @@
                     <table class="table-border-top" style="width:100%">
                         <tr>
                             <td colspan="5" style="background-color:#8f8f8f;height:20px;color:#FFF;font-size:16px">
-                                Bill To: </td>
+                                Quotation To: </td>
                         </tr>
                         <tr style="border: 1px solid #8f8f8f;border-top:0px">
 
@@ -182,7 +182,7 @@
 
                             </tr>
                             @if ($invoice->discount > 0)
-                                <tr style="height: 25px;;font-weight:bold">
+                                <tr style="height: 25px;; ">
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 25%; height: 25px;"> </td>

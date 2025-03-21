@@ -203,7 +203,7 @@
 
                             </tr>
                             @if ($invoice->customer_product_services->discount > 0)
-                                <tr style="height: 25px;;font-weight:bold">
+                                <tr style="height: 25px;; ">
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 50%; height: 25px;"> </td>
                                     <td style="width: 25%; height: 25px;"> </td>
