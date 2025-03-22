@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\WhatsappController;
 use App\Mail\EmailContentDefault;
+use App\Models\Company;
 use App\Models\CustomerProductServices;
 use App\Models\Customers\CustomerPayments;
 use App\Models\Customers\Customers;
@@ -306,13 +308,13 @@ class CustomerPaymentsController extends Controller
         Customers::where("id", $request->customer_id)->where("start_date", null)->update(["start_date" => $request->start_date]);
         Customers::where("id", $request->customer_id)->update(["end_date" => $request->end_date, "customer_product_service_id" => $record->id]);
 
-        $this->sendMail($invoice_id);
+        $this->sendMail($invoice_id, $request->company_id);
 
 
         return $this->response("Invoices created successfully.", null, true);
     }
 
-    public function sendMail($invoice_id)
+    public function sendMail($invoice_id, $company_id)
     {
         try {
             $invoice =   CustomerPayments::with(["company", "customer.primary_contact", "customer.user", "customer_product_services.device_product_service"])->where("id", $invoice_id)->first();
@@ -320,7 +322,7 @@ class CustomerPaymentsController extends Controller
             $customer =  $invoice->customer;
 
 
-            $subject = "Customer Invoice Is generated -" . $invoice->invoice_number;
+            $subject = "Customer Invoice Is generated For " . $customer->building_name . " -" . $invoice->invoice_number;
 
             $body_content = ' <div class="email-body">
             <p>Hello <strong>' .  $customer->building_name . '</strong>,</p>
@@ -333,7 +335,7 @@ class CustomerPaymentsController extends Controller
 
 
             $pdf = Pdf::loadView('alarm_reports/customer_invoice', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
-            $fileName = $invoice_id . 'INV.' . "pdf";
+            $fileName = $invoice->invoice_number . "pdf";
             $folderPath = public_path('temp/');
             if (!is_dir($folderPath)) {
                 mkdir($folderPath);
@@ -356,8 +358,110 @@ class CustomerPaymentsController extends Controller
 
             Mail::to($customer->user->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
 
-            unlink($pdfPath);
+
+            CustomerPayments::where("id", $invoice_id)->update(["mail_sent_datetime" => date("Y-m-d H:i:s")]);
+
+            //whatsapp
+
+
+            $body_content = "Hello *" . $company->name . "*\n\n" .
+                $subject . "\n\n" .
+                "Regards,\n" . env("MAIL_FROM_NAME");
+
+            $response = (new WhatsappController())->sendWhatsappNotification(
+                $company,
+                $body_content,
+                $company->contact_number,
+                []
+            );
+
+
+            //   unlink($pdfPath);
         } catch (Exception $e) {
         }
+    }
+
+    public function sendReminderMail($invoice)
+    {
+
+
+
+        $company =  $invoice->company;
+        $customer =  $invoice->customer;
+
+
+        $subject = "Reminder Customer Invoice For " . $customer->building_name . " -" . $invoice->invoice_number;
+
+
+
+        $body_content = "<p>Dear  <strong>{$customer->building_name}</strong>,</p>
+
+        I hope this email finds you well. This is a   reminder that invoice {$invoice->invoice_number}, dated {$invoice->invoice_date}, for {$invoice->amount}, is due on {$invoice->invoice_date}.<br/><br/>
+
+    We appreciate your prompt attention to this matter. For your convenience, you can find the invoice details attached. If payment has already been made, please ignore this message.<br/><br/>
+
+    If you have any questions or need any assistance, feel free to reach out to us .<br/><br/>
+
+    Thank you for your continued business.<br/><br/><br/>
+     Regards,<br/>" . $company->name;
+
+
+
+
+
+        $pdf = Pdf::loadView('alarm_reports/customer_invoice', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
+        $fileName = $invoice->invoice_number  . "."  . "pdf";
+        $folderPath = public_path('temp/');
+        if (!is_dir($folderPath)) {
+            mkdir($folderPath);
+        }
+
+        $pdfPath = public_path('temp\\' . $fileName);
+        $pdf->save($pdfPath);
+
+
+        $data = [
+            'subject' => $subject,
+            'body' => $body_content,
+            'to' => $customer->user->email,
+            'file_path' => $pdfPath,
+            'file_name' => $fileName,
+
+        ];
+
+        (new ClientController())->sendExternalMail($data);
+
+        Mail::to($customer->user->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
+        CustomerPayments::where("id", $invoice->id)->update(["mail_sent_datetime" => date("Y-m-d H:i:s")]);
+
+
+        // //whatsapp
+
+        // $body_content = "Hello *" . $company->name . "*\n\n" .
+        //     $subject . "\n\n" .
+        //     "Regards,\n" . env("MAIL_FROM_NAME");
+
+        // $response = (new WhatsappController())->sendWhatsappNotification(
+        //     $company,
+        //     $body_content,
+
+        //     $company->contact_number,
+        //     []
+        // );
+
+
+        //unlink($pdfPath);
+
+
+        return;
+    }
+
+    public function CustomerInvoiceReminderMail(Request $request)
+    {
+
+        $invoice = CustomerPayments::with(["customer", "company"])->where("id", $request->invoice_id)->first();
+        $this->sendReminderMail($invoice);
+
+        return $this->response("Mail sent successfully", null, true);
     }
 }

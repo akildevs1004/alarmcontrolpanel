@@ -138,7 +138,18 @@ class SalesQuotationsController extends Controller
         }
 
         //mail
-        $this->sendMail($request, $quotation_id, $subject);
+        $this->sendMail($record, $quotation_id, $subject);
+
+
+        //whatsapp
+
+        $company = Company::where("id", $request->company_id)->first();
+        $body_content = 'Hello *' . $request->first_name . ' ' . $request->last_name . '*\n\n
+         ' . $subject . '\n\n
+
+        Regards,
+         ' . env("MAIL_FROM_NAME") . ' ';
+        $response = (new WhatsappController())->sendWhatsappNotification($company, $body_content, $company->contact_number, []);
 
 
         if ($request->editId)
@@ -147,13 +158,21 @@ class SalesQuotationsController extends Controller
         else return $this->response("Quotation Created Successfully", null, true);
     }
 
-    public function sendMail($request, $quotation_id, $subject)
+    public function sendMail($quotation_id, $subject)
     {
         try {
 
 
+            $invoice =   SalesQuotations::with(["company",   "ProductService"])->where("id",  $quotation_id)->first();
+            $company =  $invoice->company;
+            $customer =  $invoice;
+            $quotation = $invoice;
+
+            if ($subject == '')
+                $subject =  "Created  Quotation   for " . $quotation->first_name . ' ' . $quotation->last_name;
+
             $body_content = ' <div class="email-body">
-            <p>Hello <strong>' . $request->first_name . ' ' . $request->last_name . '</strong>,</p>
+            <p>Hello <strong>' . $quotation->first_name . ' ' . $quotation->last_name . '</strong>,</p>
             <p>Attached Quotation for your reference</p>
 <br/><br/>
             <p>Regards, <br/>
@@ -161,9 +180,7 @@ class SalesQuotationsController extends Controller
         </div>';
 
 
-            $invoice =   SalesQuotations::with(["company",   "ProductService"])->where("id",  $quotation_id)->first();
-            $company =  $invoice->company;
-            $customer =  $invoice;
+
             $pdf = Pdf::loadView('alarm_reports/sales_quotation', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
             $fileName = $quotation_id . '.' . "pdf";
             $folderPath = public_path('temp/');
@@ -178,7 +195,7 @@ class SalesQuotationsController extends Controller
             $data = [
                 'subject' => $subject,
                 'body' => $body_content,
-                'to' => $request->email,
+                'to' => $quotation->email,
                 'file_path' => $pdfPath,
                 'file_name' => $fileName,
 
@@ -186,10 +203,34 @@ class SalesQuotationsController extends Controller
 
             (new ClientController())->sendExternalMail($data);
 
-            Mail::to($request->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
-            unlink($pdfPath);
+            Mail::to($quotation->email)->queue(new EmailContentDefault($data, $pdfPath, $fileName));
+
+            // //whatsapp
+
+            // if ($quotation->whatsapp_number != '') {
+
+            //     $body_content = "Hello *" . $quotation->first_name . ' ' . $quotation->last_name . "*\n\n" .
+            //         $subject . "\n\n" .
+            //         "Regards,\n" . env("MAIL_FROM_NAME");
+
+            //     $response = (new WhatsappController())->sendWhatsappNotification(
+            //         $company,
+            //         $body_content,
+            //         $quotation->whatsapp_number,
+            //         []
+            //     );
+            // }
+
+            //  unlink($pdfPath);
         } catch (Exception $e) {
         }
+    }
+
+    public function CustomerQuotationReminderMail(Request $request)
+    {
+
+        $this->sendMail($request->quotation_id, '');
+        return $this->response("Mail sent successfully", null, true);
     }
 
     /**

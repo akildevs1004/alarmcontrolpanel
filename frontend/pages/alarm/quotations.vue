@@ -266,13 +266,13 @@
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
-                        <v-col cols="5" style="padding-top: 19px"
+                        <v-col cols="4" style="padding-top: 19px"
                           ><v-icon color="secondary" small>
                             mdi-eye
                           </v-icon></v-col
                         >
                         <v-col
-                          cols="7"
+                          cols="8"
                           style="padding-left: 0px; padding-top: 19px"
                         >
                           View
@@ -287,13 +287,13 @@
                   >
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
-                        <v-col cols="5" style="padding-top: 19px"
+                        <v-col cols="4" style="padding-top: 19px"
                           ><v-icon color="secondary" small>
                             mdi-pencil
                           </v-icon></v-col
                         >
                         <v-col
-                          cols="7"
+                          cols="8"
                           style="padding-left: 0px; padding-top: 19px"
                           >Edit
                         </v-col></v-row
@@ -305,18 +305,41 @@
                     v-if="can('operators_edit') && !item.customer_id"
                   >
                     <v-list-item-title style="cursor: pointer">
-                      <v-icon color="blue" small> mdi-cash </v-icon>
-                      Convert to INV
+                      <v-row>
+                        <v-col cols="4" style="padding-top: 19px">
+                          <v-icon color="blue" small> mdi-cash</v-icon>
+                        </v-col>
+                        <v-col
+                          cols="8"
+                          style="padding-left: 0px; padding-top: 19px"
+                          >Convert to INV</v-col
+                        ></v-row
+                      >
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="sendReminderMail(item)">
+                    <v-list-item-title style="cursor: pointer">
+                      <v-row>
+                        <v-col cols="4" style="padding-top: 19px">
+                          <v-icon color="blue" small> mdi-mail </v-icon>
+                        </v-col>
+                        <v-col
+                          cols="8"
+                          style="padding-left: 0px; padding-top: 19px"
+                        >
+                          Mail to Cust</v-col
+                        ></v-row
+                      >
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="fallowupQuotation(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
-                        <v-col cols="5" style="padding-top: 19px">
+                        <v-col cols="4" style="padding-top: 19px">
                           <v-icon color="blue" small> mdi-clock </v-icon>
                         </v-col>
                         <v-col
-                          cols="7"
+                          cols="8"
                           style="padding-left: 0px; padding-top: 19px"
                         >
                           Fallow Up</v-col
@@ -327,14 +350,14 @@
                   <v-list-item @click="downloadOptions('print', item.id)">
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
-                        <v-col cols="5"
+                        <v-col cols="4"
                           ><img
                             style="padding-top: 5px"
                             src="/icons/icon_print.png"
                             class="iconsize"
                         /></v-col>
                         <v-col
-                          cols="7"
+                          cols="8"
                           style="padding-left: 0px; padding-top: 19px"
                         >
                           Print
@@ -345,14 +368,14 @@
                   <v-list-item @click="downloadOptions('pdf', item.id)">
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
-                        <v-col cols="5"
+                        <v-col cols="4"
                           ><img
                             style="padding-top: 5px"
                             src="/icons/icon_pdf.png"
                             class="iconsize"
                         /></v-col>
                         <v-col
-                          cols="7"
+                          cols="8"
                           style="padding-left: 0px; padding-top: 19px"
                         >
                           PDF
@@ -606,7 +629,23 @@ export default {
         "&type=print"
       );
     },
+    sendReminderMail(item) {
+      this.snackbar = true;
+      this.response = "Quotation mail is processing....";
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          quotation_id: item.id,
+        },
+      };
 
+      this.$axios
+        .post("customer_quotation_reminder_mail", options.params)
+        .then((data) => {
+          this.snackbar = true;
+          this.response = "Quotation Sent to client successfully";
+        });
+    },
     fallowupQuotation(item) {
       this.key++;
       this.item = item;

@@ -314,6 +314,14 @@ Route::get('get_sales_business_types',  [SalesInquiryController::class, 'GetBusi
 Route::apiResource('sales_inquiry',   SalesInquiryController::class);
 Route::apiResource('sales_quotations',   SalesQuotationsController::class);
 Route::apiResource('quotation_fallowup',   SalesQuotationFallowupsController::class);
+Route::post('customer_invoice_reminder_mail',   [CustomerPaymentsController::class, "CustomerInvoiceReminderMail"]);
+Route::post('customer_quotation_reminder_mail',   [SalesQuotationsController::class, "CustomerQuotationReminderMail"]);
+
+
+
+
+
+
 
 
 

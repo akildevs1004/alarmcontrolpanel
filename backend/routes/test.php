@@ -11,6 +11,7 @@ use App\Http\Controllers\CameraController;
 use App\Http\Controllers\Customers\Alarm\AlarmNotificationController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceSensorLogsController;
 use App\Http\Controllers\Customers\Api\ApiAlarmDeviceTemperatureLogsController;
+use App\Http\Controllers\Customers\CustomerPaymentsController;
 use App\Http\Controllers\Customers\CustomersController;
 use App\Http\Controllers\DeviceCameraController;
 use App\Http\Controllers\DeviceCameraModel2Controller;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Shift\SingleShiftController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\WhatsappController;
 use App\Imports\excelEmployeesData;
+use App\Mail\EmailContentDefault;
 use App\Mail\ReportNotificationMail;
 use App\Mail\TestMail;
 use App\Models\AlarmEvents;
@@ -36,6 +38,7 @@ use App\Models\Attendance;
 use App\Models\AttendanceLog;
 use App\Models\Company;
 use App\Models\Customers\AlarmSensorTypes;
+use App\Models\Customers\CustomerPayments;
 use App\Models\Device;
 use App\Models\DeviceActivesettings;
 use App\Models\DeviceSensorTypes;
@@ -43,7 +46,7 @@ use App\Models\Employee;
 use App\Models\ReportNotification;
 use App\Models\SecurityCustomers;
 use App\Models\Shift;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -56,6 +59,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Document\Security;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
+use Illuminate\Support\Facades\Log;
 
 
 Route::get("testOfflineDevices", function (Request $request) {
@@ -1209,6 +1213,57 @@ Route::post('/cameratesting', function (Request $request) {
         ]);
 });
 Route::get('test', function () {
+
+    return "Hello";
+});
+Route::get('testgetpendinginvoice', function () {
+
+
+
+
+
+    //monthly invoices remind before 5 days
+    $date = date("Y-m-d", strtotime("+5 day", strtotime(date("Y-m-d"))));
+
+    $invoices1 = CustomerPayments::with(["customer.user", "company", "customer.primary_contact", "customer_product_services"])
+        ->where("invoice_date", $date)
+        ->where("status", "Pending")
+        ->whereHas("customer_product_services", function ($q) use ($date) {
+            $q->where("payment_type", "Monthly");
+        })
+
+        ->get();
+
+
+    //$this->callMails($invoices1);
+
+    //quaterly invoice 10 days before
+    $date = date("Y-m-d", strtotime("+10 day", strtotime(date("Y-m-d"))));
+    $invoices2 = CustomerPayments::with(["customer.user", "company", "customer.primary_contact", "customer_product_services"])
+        ->where("invoice_date", $date)
+        ->where("status", "Pending")
+        ->whereHas("customer_product_services", function ($q) use ($date) {
+            $q->where("payment_type", "Quarter");
+        })->get();
+    //$this->callMails($invoices2);
+
+    //yearly invoice 30 days before
+    $date = date("Y-m-d", strtotime("+30 day", strtotime(date("Y-m-d"))));
+    $invoices3 = CustomerPayments::with(["customer.user", "company", "customer.primary_contact", "customer_product_services"])
+        ->where("invoice_date", $date)
+        ->where("status", "Pending")
+        ->whereHas("customer_product_services", function ($q) use ($date) {
+            $q->where("payment_type", "Yearly");
+        })->get();
+
+
+
+
+    return (new CustomerPaymentsController())->sendReminderMail($invoices1[0]);
+
+
+
+
 
     return "Hello";
 });

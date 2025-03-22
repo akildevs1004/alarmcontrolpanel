@@ -74,7 +74,7 @@ class ReportNotificationCrons extends Command
                 echo "[" . $date . "] Cron: $script_name. No emails are configured";
             }
 
-            //wahtsapp with attachments
+            //whatsapp with attachments
             if (in_array("Whatsapp", $model->mediums ?? [])) {
 
                 foreach ($model->managers as $key => $manager) {
@@ -112,7 +112,7 @@ class ReportNotificationCrons extends Command
 
                                 ReportNotificationLogs::create($data);
                             }
-                        } //for 
+                        } //for
 
 
                         $body_content1 = "*Hello, {$manager->name}*\n\n";

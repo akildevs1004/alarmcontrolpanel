@@ -169,6 +169,20 @@
                     Edit
                   </v-list-item-title>
                 </v-list-item>
+                <!-- <v-list-item @click="sendReminderMail(item)">
+                  <v-list-item-title style="cursor: pointer">
+                    <v-row>
+                      <v-col cols="5" style="padding-top: 19px">
+                        <v-icon color="blue" small> mdi-clock </v-icon>
+                      </v-col>
+                      <v-col
+                        cols="7"
+                        style="padding-left: 0px; padding-top: 19px"
+                        >Send Mail to Cust</v-col
+                      ></v-row
+                    >
+                  </v-list-item-title>
+                </v-list-item> -->
                 <v-list-item @click="invoicePrint(item.id, 'print')">
                   <v-list-item-title style="cursor: pointer">
                     <v-row>
@@ -363,6 +377,23 @@ export default {
           });
         } catch (e) {}
       }
+    },
+    sendReminderMail(item) {
+      this.snackbar = true;
+      this.response = "Invoice mail is processing....";
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          invoice_id: item.invoice_id,
+        },
+      };
+
+      this.$axios
+        .post("customer_invoice_reminder_mail", options.params)
+        .then((data) => {
+          this.snackbar = true;
+          this.response = "Invoice Sent to client successfully";
+        });
     },
     getDataFromApi() {
       if (this.customer_id) {

@@ -317,6 +317,7 @@
               <template v-slot:item.customer="{ item, index }">
                 {{ item.customer.building_name }}
               </template>
+
               <template v-slot:item.options="{ item }">
                 <v-menu bottom left v-if="isEditable">
                   <template v-slot:activator="{ on, attrs }">
@@ -332,6 +333,12 @@
                       <v-list-item-title style="cursor: pointer">
                         <v-icon color="secondary" small> mdi-pencil </v-icon>
                         Edit
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="sendReminderMail(item)">
+                      <v-list-item-title style="cursor: pointer">
+                        <v-icon color="blue" small> mdi-mail </v-icon>
+                        Mail to Cust
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="invoicePrint(item.id, 'print')">
@@ -489,6 +496,23 @@ export default {
             this.customersList = data;
           });
       } catch (e) {}
+    },
+    sendReminderMail(item) {
+      this.snackbar = true;
+      this.response = "Invoice mail is processing....";
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+          invoice_id: item.id,
+        },
+      };
+
+      this.$axios
+        .post("customer_invoice_reminder_mail", options.params)
+        .then((data) => {
+          this.snackbar = true;
+          this.response = "Invoice Sent to client successfully";
+        });
     },
     closeDialog() {
       this.dialogEditAutomation = false;

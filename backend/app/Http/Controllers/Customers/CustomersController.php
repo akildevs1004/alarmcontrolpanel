@@ -9,6 +9,7 @@ use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Mail\EmailContentDefault;
 use App\Models\AlarmEvents;
+use App\Models\Company;
 use App\Models\Customers\AlarmSensorTypes;
 use App\Models\Customers\CustomerBuildingPictures;
 use App\Models\Customers\CustomerContacts;
@@ -1094,6 +1095,23 @@ class CustomersController extends Controller
             //tanjore mail settings
             $data["to"] = $contact->email;
             (new ClientController())->sendExternalMail($data);
+
+            //whatsapp
+            $company = Company::where("id", $request->company_id)->first();
+
+            $body_content = " Hello, *{$contact->first_name}* \n";
+            $body_content .= "This is Notifing you about Alarm Pin Reset status \n\n";
+            $body_content .= "New PIN :  *{$pin}*\n\n";
+            $body_content .= "Date:  $date<br/>\n\n";
+            $body_content .=
+                "Regards,\n" . env("MAIL_FROM_NAME");
+
+            $response = (new WhatsappController())->sendWhatsappNotification(
+                $company,
+                $body_content,
+                $contact->whatsapp,
+                []
+            );
         }
 
         return $this->response('Customer  PIN updated', null, true);
@@ -1787,6 +1805,31 @@ class CustomersController extends Controller
             //tanjore mail settings
             $emailData["to"] = $email;
             (new ClientController())->sendExternalMail($emailData);
+
+
+            //whatsapp
+            $company = Company::where("id", $device->company_id)->first();
+            $body_content = "Hello, *{$contact->first_name} {$contact->last_name}*\n";
+            $body_content .= "Building: {$device->customer->building_name}\n";
+            $body_content .= "*This is notifying you that the device armed is not active*\n";
+            $body_content .= "Scheduled Store Close/Armed Time: {$device->customer->close_time}\n";
+            $body_content .= "Event Time: {$currentDateTime}\n";
+            $body_content .= "Priority: Low\n";
+            $body_content .= "Property: {$device->customer->buildingtype->name}\n";
+            $body_content .= "Address: {$device->customer->street_number}, {$device->customer->area}, {$device->customer->city}, {$device->customer->state}\n";
+            if ($contact)
+                $body_content .= "Contact Number: {$contact->phone1}\n";
+            $body_content .= "Google Map Link: <a href='https://maps.google.com/?q={$location}'>View on Google Maps</a>\n\n";
+
+            $body_content .=
+                "Regards,\n" . env("MAIL_FROM_NAME");
+
+            $response = (new WhatsappController())->sendWhatsappNotification(
+                $company,
+                $body_content,
+                $contact->whatsapp,
+                []
+            );
         } catch (\Exception $e) {
 
             Log::error("Email sending failed: " . $e->getMessage());

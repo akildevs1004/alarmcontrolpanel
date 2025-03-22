@@ -160,6 +160,24 @@ class SalesInquiryController extends Controller
 
             (new ClientController())->sendExternalMail($data);
             Mail::to($company->user->email)->queue(new EmailContentDefault($data));
+
+
+            //whatsapp
+            $body_content = 'Hello, Company Name:' . $company->name . '\n
+            You have received a new Inquiry from *' . $request->first_name . ' ' . $request->last_name . '*\n\n
+                Contact Number: *' . $request->contact_number . '*\n
+                WhatsApp Number: *' . $request->whatsapp_number . '*\n
+                Email: *' . $request->email . '*\n
+                Building Name: *' . $request->building_name . '*\n
+                Type Of Business: *' . $business . '*\n
+                Alarm Type: *' . $request->device_type . '*\n
+                Sensors: *' . $request->sensor_count . '*\n
+                Reception Notes: *' . $request->receiption_remarks . '*\n
+                Customer Requests: *' . $request->customer_request . '*\n\n\n
+
+            Regards, \n
+             ' . env("MAIL_FROM_NAME");
+            $response = (new WhatsappController())->sendWhatsappNotification($company, $body_content, $company->contact_number, []);
         }
 
 

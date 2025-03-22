@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\WhatsappController;
 use App\Mail\EmailContentDefault;
+use App\Models\Company;
 use App\Models\Customers\CustomerContacts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -119,9 +121,20 @@ class CustomerContactsController extends Controller
 
             (new ClientController())->sendExternalMail($emailData);
 
-            return Mail::to($contact["email"])
+            Mail::to($contact["email"])
                 ->cc("venuakil2@gmail.com")
                 ->queue($body_content1);
+
+            //whatsapp
+
+            $company = Company::where("id", $request->company_id)->first();
+            $body_content = $emailData["body"] . '\n' .
+                '\n\n
+
+        Regards,
+         ' . env("MAIL_FROM_NAME") . ' ';
+            $response = (new WhatsappController())->sendWhatsappNotification($company, $body_content, $contact["whatsapp"], []);
+
 
 
 

@@ -38,6 +38,11 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             Log::error('An error occurred: ' . $e->getMessage());
         });
+
+        // if (config('app.debug')) {
+        //     ini_set('display_errors', 1);  // Enable PHP error display
+        //     error_reporting(E_ALL);        // Report all types of errors
+        // }
     }
 
     protected function sendErrorEmail(Throwable $exception)

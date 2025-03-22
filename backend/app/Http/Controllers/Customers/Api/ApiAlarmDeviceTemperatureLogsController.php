@@ -1085,7 +1085,7 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             //     echo "[" . $date . "] Cron: $script_name. No emails are configured";
             // }
 
-            //wahtsapp with attachments
+            //whatsapp with attachments
             /*
             // if (in_array("Whatsapp", $model->mediums))
             {

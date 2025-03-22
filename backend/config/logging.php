@@ -88,6 +88,11 @@ return [
             'path' => storage_path('logs/custom.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
+        'laravel' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
 
         'single' => [
             'driver' => 'single',

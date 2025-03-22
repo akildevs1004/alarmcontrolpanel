@@ -392,7 +392,7 @@ class AlarmNotificationController extends Controller
 
             // Delete the PDF after sending the email
             if (file_exists($pdfPath)) {
-                unlink($pdfPath);
+                //  unlink($pdfPath);
             }
         } catch (\Exception $e) {
 

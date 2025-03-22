@@ -158,6 +158,8 @@ class WhatsappController extends Controller
     {
 
 
+        if (!$company) return "Company Id is Empty";
+
         // API endpoint URL
         $url = 'https://wa.mytime2cloud.com/send-message';
 
@@ -169,6 +171,9 @@ class WhatsappController extends Controller
 
         ];
 
+        return   Http::withoutVerifying()->timeout(30)->post($url, $data);
+
+        return false;
 
 
         // API endpoint URL
@@ -178,12 +183,6 @@ class WhatsappController extends Controller
 
         // Sending POST request using Http facade
         //$response = Http::post($url, $data);
-        return   Http::withoutVerifying()->timeout(30)->post($url, $data);
-
-        return false;
-
-
-
 
 
         // $data = [

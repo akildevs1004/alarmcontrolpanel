@@ -45,6 +45,14 @@ class Kernel extends ConsoleKernel
             ->appendOutputTo(storage_path("kernal_logs/$monthYear-delete-old-logs.log"))
 
         ;;
+        //send invoice mails
+        $schedule
+            ->command("task:customer-invoice-reminder-notifications")
+            ->dailyAt('13:00')
+            //->withoutOverlapping()
+            ->appendOutputTo(storage_path("kernal_logs/$monthYear-invoice_reminders.log"))
+
+        ;;
 
         /*------------------------ */
         $schedule->call(function () {
