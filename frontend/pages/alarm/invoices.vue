@@ -453,6 +453,7 @@ export default {
         { text: "Notes", value: "cancel_notes", sortable: false },
         { text: "Received On", value: "received_date", sortable: false },
         { text: "Mode", value: "mode_of_payment", sortable: false },
+        { text: "Mail Sent", value: "mail_sent_datetime", sortable: false },
         { text: "Options", value: "options", sortable: false },
       ],
       items: [],
