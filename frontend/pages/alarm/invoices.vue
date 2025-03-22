@@ -331,13 +331,17 @@
                       @click="editItem(item)"
                     >
                       <v-list-item-title style="cursor: pointer">
-                        <v-icon color="secondary" small> mdi-pencil </v-icon>
+                        <v-icon color="secondary" size="22">
+                          mdi-pencil
+                        </v-icon>
                         Edit
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="sendReminderMail(item)">
                       <v-list-item-title style="cursor: pointer">
-                        <v-icon color="blue" small> mdi-mail </v-icon>
+                        <v-icon color="blue" size="22">
+                          mdi-email-outline
+                        </v-icon>
                         Mail to Cust
                       </v-list-item-title>
                     </v-list-item>

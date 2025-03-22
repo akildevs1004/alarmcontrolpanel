@@ -267,7 +267,7 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
                         <v-col cols="4" style="padding-top: 19px"
-                          ><v-icon color="secondary" small>
+                          ><v-icon color="secondary" size="22">
                             mdi-eye
                           </v-icon></v-col
                         >
@@ -288,7 +288,7 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
                         <v-col cols="4" style="padding-top: 19px"
-                          ><v-icon color="secondary" small>
+                          ><v-icon color="secondary" size="22">
                             mdi-pencil
                           </v-icon></v-col
                         >
@@ -307,7 +307,7 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
                         <v-col cols="4" style="padding-top: 19px">
-                          <v-icon color="blue" small> mdi-cash</v-icon>
+                          <v-icon color="blue" size="22"> mdi-cash</v-icon>
                         </v-col>
                         <v-col
                           cols="8"
@@ -321,7 +321,9 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
                         <v-col cols="4" style="padding-top: 19px">
-                          <v-icon color="blue" small> mdi-mail </v-icon>
+                          <v-icon color="blue" size="22">
+                            mdi-email-outline
+                          </v-icon>
                         </v-col>
                         <v-col
                           cols="8"
@@ -336,7 +338,9 @@
                     <v-list-item-title style="cursor: pointer">
                       <v-row>
                         <v-col cols="4" style="padding-top: 19px">
-                          <v-icon color="blue" small> mdi-clock </v-icon>
+                          <v-icon color="blue" size="22">
+                            mdi-clock-outline
+                          </v-icon>
                         </v-col>
                         <v-col
                           cols="8"

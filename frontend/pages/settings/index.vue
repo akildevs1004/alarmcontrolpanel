@@ -37,7 +37,11 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="3">
-                        <v-card class="ml-1 mr-1" style="text-align: center">
+                        <v-card
+                          elevation="0"
+                          class="ml-1 mr-1"
+                          style="text-align: center"
+                        >
                           <v-card-title>Profile Picture</v-card-title>
                           <div style="width: 100%; text-align: center">
                             <div class="pb-2">
