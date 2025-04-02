@@ -81,6 +81,20 @@ class Kernel extends ConsoleKernel
         })->dailyAt('00:00')
 
             ->appendOutputTo(storage_path("kernal_logs/" . date("d-M-Y") . "-notification-armed-with-shop-time.log"));
+
+
+        if (env("APP_ENV") == "production") {
+            $schedule
+                ->command('task:db_backup')
+                ->dailyAt('6:00')
+                ->emailOutputOnFailure(env("ADMIN_MAIL_RECEIVERS"));
+
+
+
+            $schedule
+                ->command('restart_sdk')
+                ->dailyAt('4:00');
+        }
     }
 
     /**
