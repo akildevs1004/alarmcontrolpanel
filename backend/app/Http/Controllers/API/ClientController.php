@@ -268,6 +268,8 @@ class ClientController extends Controller
 
     public function sendExternalMail($emailData)
     {
+
+        return false;
         try {
 
             // $data = [
