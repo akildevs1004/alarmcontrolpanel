@@ -602,6 +602,15 @@ export default {
     //}, 1000 * 2);
   },
   async created() {
+    if (window) {
+      if (window) {
+        console.log("window.innerWidth ", window.innerWidth);
+
+        if (window.innerWidth < 700) {
+          this.$router.push("/alarm/mobiledashboard");
+        }
+      }
+    }
     if (typeof window !== "undefined") {
       this.windowHeight = window.innerHeight;
       this.mapHeight = this.windowHeight - 460;
@@ -634,16 +643,6 @@ export default {
         await this.getEventsOpenCountStatus();
       }
     }, 1000 * 15);
-
-    if (window) {
-      if (window) {
-        console.log("window.innerWidth ", window.innerWidth);
-
-        if (window.innerWidth < 700) {
-          this.$router.push("/alarm/mobiledashboard");
-        }
-      }
-    }
   },
   watch: {},
   methods: {

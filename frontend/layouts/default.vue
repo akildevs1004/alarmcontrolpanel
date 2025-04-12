@@ -882,10 +882,16 @@ export default {
     };
   },
   created() {
+    if (typeof window !== "undefined" && window.innerWidth < 700) {
+      console.log("window.innerWidth", window.innerWidth);
+      this.$router.push("/alarm/mobiledashboard");
+    }
+
     //console.log("company auth", this.$auth);
     // console.log("company", this.$auth.user);
     if (!this.$auth.user) {
       this.$router.push("/logout");
+      return false;
     }
     if (this.$auth.user?.user_type != "company") {
       try {

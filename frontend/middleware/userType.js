@@ -10,14 +10,11 @@ const data = async ({ $auth, redirect }) => {
     master: "/master",
   };
 
-  if ($auth.user.user_type == "company") {
+  if (userType == "company") {
     try {
-      if (typeof window !== "undefined") {
-        console.log("window.innerWidth ", window.innerWidth);
-
-        if (window.innerWidth < 700) {
-          window.location.href = "/alarm/mobiledashboard"; // Redirect for client-side navigation
-        }
+      if (typeof window !== "undefined" && window.innerWidth < 700) {
+        console.log("window.innerWidth", window.innerWidth);
+        this.$router.push("/alarm/mobiledashboard");
       }
     } catch (e) {}
     return redirect("/customer/dashboard"); // Fallback in case of null values
