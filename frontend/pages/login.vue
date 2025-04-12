@@ -373,6 +373,12 @@ export default {
                 //operator: "/technician/dashboard",
               };
 
+              if (typeof window !== "undefined" && window.innerWidth < 700) {
+                console.log("window.innerWidth", window.innerWidth);
+                this.$router.push("/alarm/mobiledashboard");
+                return false;
+              }
+
               this.$router.push(
                 userType[this.$auth.user.user_type] || "/master"
               );

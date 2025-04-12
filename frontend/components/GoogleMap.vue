@@ -121,28 +121,29 @@ export default {
       });
     },
     initMap() {
-      this.map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 25.276987, lng: 55.296249 },
-        zoom: 12,
-        styles: [
-          {
-            featureType: "administrative",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "administrative",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "landscape",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "poi",
-            stylers: [{ visibility: "off" }],
-          },
-        ],
-      });
+      if (document.getElementById("map"))
+        this.map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 25.276987, lng: 55.296249 },
+          zoom: 12,
+          styles: [
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "administrative",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "poi",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
+        });
     },
     searchLocation() {
       if (!this.searchQuery) return;

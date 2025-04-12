@@ -842,7 +842,7 @@ export default {
       }
     },
     initMap() {
-      if (!this.map) {
+      if (!this.map && document.getElementById("map")) {
         this.map = new google.maps.Map(document.getElementById("map"), {
           // mapTypeControl: true, // Enables satellite/roadmap controls
           // mapTypeControlOptions: {

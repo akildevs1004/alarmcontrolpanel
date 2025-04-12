@@ -1,6 +1,6 @@
 <template>
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
-  <div v-else>
+  <div v-else-if="!isMobileDevice">
     <v-row class="padding:0px">
       <v-col cols="9">
         <v-row>
@@ -574,6 +574,7 @@ export default {
     CustomersAlarmMap,
   },
   data: () => ({
+    isMobileDevice: true,
     mapHeight: 500,
     windowHeight: 1000,
     key: 1,
@@ -602,15 +603,13 @@ export default {
     //}, 1000 * 2);
   },
   async created() {
-    if (window) {
-      if (window) {
-        console.log("window.innerWidth ", window.innerWidth);
-
-        if (window.innerWidth < 700) {
-          this.$router.push("/alarm/mobiledashboard");
-        }
-      }
+    if (typeof window !== "undefined" && window.innerWidth < 700) {
+      console.log("window.innerWidth", window.innerWidth);
+      this.$router.push("/alarm/mobiledashboard");
     }
+
+    this.isMobileDevice = false;
+
     if (typeof window !== "undefined") {
       this.windowHeight = window.innerHeight;
       this.mapHeight = this.windowHeight - 460;

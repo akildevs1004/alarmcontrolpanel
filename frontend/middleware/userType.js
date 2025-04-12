@@ -1,6 +1,6 @@
 const data = async ({ $auth, redirect }) => {
   let userType = {
-    user: "/alarm/dashboard",
+    user: "/alarm/dashboard111111111",
     company: "/alarm/devices",
     customer: "/customer/dashboard",
     //security: "/security/dashboard",
@@ -15,9 +15,10 @@ const data = async ({ $auth, redirect }) => {
       if (typeof window !== "undefined" && window.innerWidth < 700) {
         console.log("window.innerWidth", window.innerWidth);
         this.$router.push("/alarm/mobiledashboard");
+        return false;
       }
     } catch (e) {}
-    return redirect("/customer/dashboard"); // Fallback in case of null values
+    // return redirect("/customer/dashboard"); // Fallback in case of null values
   }
 
   if ($auth.user.user_type === "master" || $auth.user.is_master === true) {
