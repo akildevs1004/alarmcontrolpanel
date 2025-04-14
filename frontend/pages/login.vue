@@ -362,7 +362,7 @@ export default {
           .loginWith("local", { data: this.credentials })
           .then((data) => {
             try {
-              console.log("user_type", this.$auth.user.user_type);
+              console.log("user_type login page", this.$auth.user.user_type);
               let userType = {
                 user: "/alarm/dashboard",
                 company: "/alarm/dashboard",

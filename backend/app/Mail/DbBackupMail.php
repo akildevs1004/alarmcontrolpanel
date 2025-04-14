@@ -29,7 +29,16 @@ class DbBackupMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $this->attach($this->data['file']);
-        return $this->view('emails.dbBackup')->with(["body" => $this->data['body'], 'date' => $this->data['date']]);
+        $email = $this->view('emails.dbBackup')
+            ->with([
+                'body' => $this->data['body'],
+                'date' => $this->data['date'],
+            ]);
+
+        if (!empty($this->data['file'])) {
+            $email->attach($this->data['file']);
+        }
+
+        return $email;
     }
 }
