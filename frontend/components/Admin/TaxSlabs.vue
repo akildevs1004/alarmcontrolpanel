@@ -12,12 +12,12 @@
     </div>
     <v-dialog v-model="newItemDialog" max-width="400">
       <v-card>
-        <v-toolbar flat dense class="primary white--text">
+        <v-toolbar flat dense class="popup_background_noviolet">
           <span v-if="viewMode">View Tax Slab Info </span>
           <span v-else-if="editedItemIndex == -1">Add Tax Slab </span>
           <span v-else>Edit Tax Slab Info </span>
           <v-spacer></v-spacer>
-          <v-icon @click="newItemDialog = false" outlined dark color="white">
+          <v-icon @click="newItemDialog = false" outlined dark color="black">
             mdi-close
           </v-icon>
         </v-toolbar>
@@ -133,21 +133,16 @@
           <span>Filter</span>
         </v-tooltip> -->
         <v-spacer></v-spacer>
-        <v-tooltip top color="primary">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              dark
-              class="blue"
-              small
-              v-bind="attrs"
-              v-on="on"
-              @click="AddNewRoom()"
-            >
-              <v-icon color="white" small>mdi-plus</v-icon> Tax Slab
-            </v-btn>
-          </template>
-          <span>Add New Tax</span>
-        </v-tooltip>
+        <v-btn
+          dark
+          class="blue"
+          small
+          v-bind="attrs"
+          v-on="on"
+          @click="AddNewRoom()"
+        >
+          <v-icon color="white" small>mdi-plus</v-icon> Tax Slab
+        </v-btn>
       </v-toolbar>
       <v-row>
         <v-col cols="12">
@@ -190,14 +185,7 @@
               }}
             </template>
 
-            <template
-              v-slot:item.options="{ item }"
-              v-if="
-                can('setting_tax_view') ||
-                can('setting_tax_edit') ||
-                can('setting_tax_delete')
-              "
-            >
+            <template v-slot:item.options="{ item }">
               <v-menu bottom left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn dark-2 icon v-bind="attrs" v-on="on">
@@ -205,28 +193,19 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
-                    v-if="can('setting_tax_view')"
-                    @click="editItem(item, true)"
-                  >
+                  <v-list-item @click="editItem(item, true)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="primary" small> mdi-eye </v-icon>
                       View
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
-                    v-if="can('setting_tax_edit')"
-                    @click="editItem(item, false)"
-                  >
+                  <v-list-item @click="editItem(item, false)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="secondary" small> mdi-pencil </v-icon>
                       Edit
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item
-                    v-if="can('setting_tax_delete')"
-                    @click="deleteItem(item)"
-                  >
+                  <v-list-item @click="deleteItem(item)">
                     <v-list-item-title style="cursor: pointer">
                       <v-icon color="error" small> mdi-delete </v-icon>
                       Delete

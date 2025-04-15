@@ -1142,7 +1142,7 @@
                               small
                               :loading="loading_password"
                               color="primary"
-                              @click="update_setting"
+                              @click="update_company_currency()"
                             >
                               Update
                             </v-btn>
@@ -1277,7 +1277,23 @@ export default {
     can(per) {
       return this.$pagePermission.can(per, this);
     },
+    update_company_currency() {
+      this.$axios
+        .post(`/company/${this.$auth?.user?.company?.id}/update_currency`, {
+          currency: this.company_payload.currency,
+        })
+        .then(({ data }) => {
+          this.loading = false;
 
+          if (!data.status) {
+            this.errors = data.errors;
+          } else {
+            this.snackbar = true;
+            this.response = "Currency updated successfully";
+          }
+        })
+        .catch((e) => console.log(e));
+    },
     update_setting() {
       this.$axios
         .post(

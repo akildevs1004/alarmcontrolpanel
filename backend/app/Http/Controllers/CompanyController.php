@@ -87,7 +87,15 @@ class CompanyController extends Controller
             'message' => null,
         ], 200);
     }
+    public function updateCompanyCurrency(Request $request, $id)
+    {
 
+        if ($id > 0) {
+            $company = Company::where("id", $id)->update(["currency" => $request->currency]);
+            return $this->response('Currency Details are Updated', null, true);
+        }
+        return $this->response('Currency Details are Not Updated', null, false);
+    }
     public function store(StoreRequest $request)
     {
         $randPass = RPG::Generate("luds", 8, 0, 0);

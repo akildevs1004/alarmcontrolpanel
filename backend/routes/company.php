@@ -52,6 +52,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ShiftTypeController;
 use App\Http\Controllers\SubDepartmentController;
+use App\Http\Controllers\TaxSlabsController;
 use App\Http\Controllers\TimeTableController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaController;
@@ -327,3 +328,7 @@ Route::get('company-documents/{id}', [CompanyDocumentsController::class, "docume
 Route::post('company-documents/{id}', [CompanyDocumentsController::class, "documentUpdate"]);
 Route::get('company-documents', [CompanyDocumentsController::class, "documentList"]);
 Route::delete('company-documents/{id}', [CompanyDocumentsController::class, "documentDestroy"]);
+
+
+Route::apiResource('/tax_slabs', TaxSlabsController::class);
+// Route::get('getTaxSlab', [BookingController::class, 'getTaxSlab']);

@@ -63,6 +63,8 @@ Route::post('company/{id}/update/whatsapp_settings', [CompanyController::class, 
 Route::post('company/{id}/update/modules_settings', [CompanyController::class, 'updateCompanyModulesSettings']);
 
 Route::post('company/{id}/update_business_license', [CompanyController::class, 'updateCompanyBusinessLicense']);
+Route::post('company/{id}/update_currency', [CompanyController::class, 'updateCompanyCurrency']);
+
 
 
 
