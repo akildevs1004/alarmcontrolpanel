@@ -28,6 +28,7 @@ class DbBackupMail extends Mailable implements ShouldQueue
      * @return $this
      */
     public function build()
+
     {
         $email = $this->view('emails.dbBackup')
             ->with([
@@ -35,7 +36,7 @@ class DbBackupMail extends Mailable implements ShouldQueue
                 'date' => $this->data['date'],
             ]);
 
-        if (!empty($this->data['file'])) {
+        if (!empty($this->data['file']) && isset($this->data['file'])) {
             $email->attach($this->data['file']);
         }
 
