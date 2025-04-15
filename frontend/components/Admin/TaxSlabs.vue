@@ -405,6 +405,21 @@ export default {
                 this.snackbarResponse = data.message;
               }
             }
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 422) {
+              this.errors = error.response.data.errors || {};
+              this.snackbar = true;
+              this.snackbarColor = "red";
+              this.snackbarResponse =
+                error.response.data.message || "Validation failed.";
+            } else {
+              this.errors = {};
+              this.snackbar = true;
+              this.snackbarColor = "red";
+              this.snackbarResponse = "An unexpected error occurred.";
+              console.error(error);
+            }
           });
       } else {
         let options = {
@@ -437,6 +452,21 @@ export default {
                 this.snackbarColor = "red";
                 this.snackbarResponse = data.message;
               }
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 422) {
+              this.errors = error.response.data.errors || {};
+              this.snackbar = true;
+              this.snackbarColor = "red";
+              this.snackbarResponse =
+                error.response.data.message || "Validation failed.";
+            } else {
+              this.errors = {};
+              this.snackbar = true;
+              this.snackbarColor = "red";
+              this.snackbarResponse = "An unexpected error occurred.";
+              console.error(error);
             }
           });
       }

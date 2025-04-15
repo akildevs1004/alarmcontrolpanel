@@ -77,7 +77,7 @@ class TaxSlabsController extends Controller
                 'company_id' => 'required',
                 'start_price' => 'required',
                 'end_price' => 'required',
-                'tax' => 'nullable',
+                'tax' => 'required',
 
             ]);
 
