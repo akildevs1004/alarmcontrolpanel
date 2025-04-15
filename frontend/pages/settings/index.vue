@@ -851,7 +851,7 @@
                               v-model="
                                 company_payload.business_license_expiry_date
                               "
-                              label="License Start"
+                              label="License End"
                               append-icon="mdi-calendar"
                               readonly
                               v-bind="attrs"
@@ -1120,6 +1120,7 @@
                             small
                             v-model="company_payload.currency"
                             :items="[
+                              { text: 'AED', value: 'AED' },
                               { text: 'INR ₹', value: '₹' },
                               { text: 'US $', value: '$' },
                             ]"
