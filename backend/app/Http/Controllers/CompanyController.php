@@ -295,7 +295,34 @@ class CompanyController extends Controller
         }
         return $this->response('Logo successfully updated.', $company, true);
     }
+    public function updateCompanyBusinessLicense(Request $request,  $id)
+    {
 
+
+        $data = $request->validate([
+
+            "business_license" => "nullable",
+            "business_license_type" => "nullable",
+            "business_emirati" => "nullable",
+            "business_license_issue_date" => "nullable",
+            "business_license_expiry_date" => "nullable",
+            "business_makeem_number" => "nullable",
+
+
+        ]);
+
+
+
+        if ($id > 0) {
+            $company = Company::find($id)->update($data);
+            if (!$company) {
+                return $this->response('Company cannot updated.', null, false);
+            }
+        } else  return $this->response('Company cannot updated.', null, false);
+
+
+        return $this->response('Company successfully updated.', $company, true);
+    }
     public function updateCompany(CompanyUpdateRequest $request, $id)
     {
 
@@ -334,6 +361,7 @@ class CompanyController extends Controller
 
     public function updateContact(ContactRequest $request, $id)
     {
+
         $contact = CompanyContact::where('company_id', $id)->update($request->validated());
 
         if (!$contact) {

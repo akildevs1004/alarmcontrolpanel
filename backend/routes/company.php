@@ -9,6 +9,7 @@ use App\Http\Controllers\AutoShiftController;
 use App\Http\Controllers\BankInfoController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyDocumentsController;
 use App\Http\Controllers\CountController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\DepartmentController;
@@ -319,3 +320,10 @@ Route::get('leave-group-list', [LeaveGroupsController::class, 'dropdownList']);
 
 
 Route::post('register', [RegisterController::class, 'store']);
+
+
+Route::post('company-documents', [CompanyDocumentsController::class, "documentStore"]);
+Route::get('company-documents/{id}', [CompanyDocumentsController::class, "documentShow"]);
+Route::post('company-documents/{id}', [CompanyDocumentsController::class, "documentUpdate"]);
+Route::get('company-documents', [CompanyDocumentsController::class, "documentList"]);
+Route::delete('company-documents/{id}', [CompanyDocumentsController::class, "documentDestroy"]);

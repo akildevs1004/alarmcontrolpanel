@@ -62,6 +62,11 @@ Route::post('company/{id}/update/user_whatsapp', [CompanyController::class, 'upd
 Route::post('company/{id}/update/whatsapp_settings', [CompanyController::class, 'updateCompanyWhatsappSettings']);
 Route::post('company/{id}/update/modules_settings', [CompanyController::class, 'updateCompanyModulesSettings']);
 
+Route::post('company/{id}/update_business_license', [CompanyController::class, 'updateCompanyBusinessLicense']);
+
+
+
+
 
 Route::post('company/{id}/update/geographic', [CompanyController::class, 'updateCompanyGeographic']);
 Route::post('company/validate', [CompanyController::class, 'validateCompany']);
@@ -131,3 +136,8 @@ Route::get('reset_file/{token}/{file}', [CommonController::class, 'destroy']);
 
 Route::get('downloadfiles', [SdkLogcsvfileController::class, 'list']);
 Route::get('download/{key}', [SdkLogcsvfileController::class, 'download']);
+
+
+Route::get('tax_slabs',  function () {
+    return [];
+});
