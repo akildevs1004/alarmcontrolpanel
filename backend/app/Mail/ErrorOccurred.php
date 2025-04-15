@@ -62,7 +62,7 @@ class ErrorOccurred extends Mailable
         );
 
 
-        return $this->subject(env('APP_ENV') . '-' .  env('APP_NAME') .  ' - New Application Error Report - ' . date("Y-m-d H:i:s"))
+        return $this->subject(env('APP_ENV') . '-' .  env('APP_NAME') .  ' - New Application Error Report2 - ' . date("Y-m-d H:i:s"))
             ->view('emails.error_report'); // Create this view
     }
 }

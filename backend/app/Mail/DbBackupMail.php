@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -30,15 +31,19 @@ class DbBackupMail extends Mailable implements ShouldQueue
     public function build()
 
     {
-        $email = $this->view('emails.dbBackup')
-            ->with([
-                'body' => $this->data['body'],
-                'date' => $this->data['date'],
-            ]);
+        try {
+            $email = $this->view('emails.dbBackup')
+                ->with([
+                    'body' => $this->data['body'],
+                    'date' => $this->data['date'],
+                ]);
 
-        if (!empty($this->data['file']) && isset($this->data['file'])) {
-            $email->attach($this->data['file']);
+            if (!empty($this->data['file']) && isset($this->data['file'])) {
+                $email->attach($this->data['file']);
+            }
+        } catch (Exception $e) {
         }
+
 
         return $email;
     }
