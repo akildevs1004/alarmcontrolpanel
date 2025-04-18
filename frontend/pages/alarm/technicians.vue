@@ -25,12 +25,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="newSecurityDialog" max-width="700px">
+    <v-dialog v-model="newTechnicianDialog" max-width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense> {{ editId ? "Update" : "New" }} Technician Account</span>
           <v-spacer></v-spacer>
-          <v-icon @click="newSecurityDialog = false" outlined>
+          <v-icon @click="newTechnicianDialog = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -262,7 +262,7 @@ export default {
     tableHeight: 750,
     id: "",
 
-    newSecurityDialog: false,
+    newTechnicianDialog: false,
     dialogViewCustomer: false,
     totalRowsCount: 0,
 
@@ -385,7 +385,7 @@ export default {
       }
     },
     closeSecurityDialog() {
-      this.newSecurityDialog = false;
+      this.newTechnicianDialog = false;
       this.dialogSecurityCustomers = false;
       this.getDataFromApi();
     },
@@ -401,7 +401,7 @@ export default {
       this.key += 1;
       this.item = null;
       this.viewCustomerId = null;
-      this.newSecurityDialog = true;
+      this.newTechnicianDialog = true;
     },
     viewItem(item) {
       this.editId = item.id;
@@ -409,7 +409,7 @@ export default {
       this.viewCustomerId = item.id;
       this.key += 1;
       this.item = item;
-      this.newSecurityDialog = true;
+      this.newTechnicianDialog = true;
     },
     // viewItem2(item) {
     //   this.$router.push("/alarm/view-customer/" + item.id);
@@ -419,7 +419,7 @@ export default {
       this.editId = item.id;
       this.key += 1;
       this.item = item;
-      this.newSecurityDialog = true;
+      this.newTechnicianDialog = true;
     },
 
     deleteItem(item) {

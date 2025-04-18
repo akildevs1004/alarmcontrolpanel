@@ -17,30 +17,33 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
+                readonly="true"
+                filled="true"
                 outlined
                 dense
                 hide-details
-                readonly
                 v-model="payload.name"
                 label="Name"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
+                readonly="true"
+                filled="true"
                 outlined
                 dense
                 hide-details
-                readonly
                 v-model="payload.number"
                 label="Number"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
+                readonly="true"
+                filled="true"
                 outlined
                 dense
                 hide-details
-                readonly
                 v-model="payload.description"
                 label="Description"
               ></v-text-field>

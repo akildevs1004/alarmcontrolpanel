@@ -214,8 +214,12 @@
               </v-row>
             </v-card>
           </v-tab-item>
-          <v-tab-item> <UserContacts :user_id="item.user_id" /></v-tab-item>
-          <v-tab-item> <UserDocuments :user_id="item.user_id" /> </v-tab-item>
+          <v-tab-item>
+            <UserContacts :user_id="item.user_id" :editable="editable"
+          /></v-tab-item>
+          <v-tab-item>
+            <UserDocuments :user_id="item.user_id" :editable="editable" />
+          </v-tab-item>
         </v-tabs-items>
       </v-col>
     </v-row>

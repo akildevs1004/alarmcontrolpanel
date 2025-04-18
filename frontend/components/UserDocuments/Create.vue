@@ -32,7 +32,7 @@
                   dense
                   hide-details
                   v-model="payload.description"
-                  label="description"
+                  label="Description"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">

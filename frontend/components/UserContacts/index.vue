@@ -10,7 +10,7 @@
         <v-spacer></v-spacer>
 
         <UserContactsCreate
-          v-if="user_id"
+          v-if="user_id && editable"
           :user_id="user_id"
           :model="Model"
           :endpoint="endpoint"
@@ -60,7 +60,7 @@
                 />
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item v-if="editable">
               <v-list-item-title>
                 <UserContactsEdit
                   :user_id="user_id"
@@ -71,7 +71,7 @@
                 />
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item v-if="editable">
               <v-list-item-title>
                 <UserContactsDelete
                   :id="item.id"
@@ -96,7 +96,7 @@ let y = date.getFullYear();
 let currentDate = y + "-" + m + "-" + d;
 
 export default {
-  props: ["user_id"],
+  props: ["user_id", "editable"],
 
   data: () => ({
     Model: "Contact",
