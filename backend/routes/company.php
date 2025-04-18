@@ -346,4 +346,8 @@ Route::delete('user-contacts/{id}', [UserContactsController::class, "contactDest
 
 
 Route::apiResource('/tax_slabs', TaxSlabsController::class);
+Route::post("update_settings_notifications", [CompanyController::class, "updateNotificationSettings"]);
+
+
+
 // Route::get('getTaxSlab', [BookingController::class, 'getTaxSlab']);

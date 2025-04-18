@@ -70,6 +70,13 @@ class CompanyController extends Controller
         return $model->where("account_type", "company")->with(['user', 'contact', 'modules', 'trade_license'])->withCount('employees')->paginate($request->per_page);
     }
 
+    public function updateNotificationSettings(Request $request)
+    {
+        if ($request->filled("company_id")) {
+            Company::where("id", $request->company_id)->update(["notification_popup_pause_minutes" => $request->minutes]);
+        }
+    }
+
     public function getMasterDashboardCounts()
     {
         $companiesCount = Company::query()->count();

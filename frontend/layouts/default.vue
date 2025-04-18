@@ -1058,13 +1058,19 @@ export default {
   },
   methods: {
     wait5MinutesNextNotification() {
-      // this.snackbar = true;
-      // this.response = "New Alarm will be Display after 5 minutes";
-      // // alert("New Alarm will be Display after 5 minutes");
-      // this.wait5Minutes = true;
-      // setTimeout(() => {
-      //   this.wait5Minutes = false;
-      // }, 1000 * 60 * 5);
+      console.log(this.$auth.user.company.notification_popup_pause_minutes);
+
+      let minutes =
+        this.$auth.user.company.notification_popup_pause_minutes ?? 1;
+
+      this.snackbar = true;
+      this.response = `New Alarm will be Display after  ${minutes} minutes`;
+      alert(`New Alarm will be Display after  ${minutes} minutes`);
+      this.wait5Minutes = true;
+
+      setTimeout(() => {
+        this.wait5Minutes = false;
+      }, 1000 * 60 * minutes);
 
       this.dialogAlarmPopupNotificationStatus = false;
     },
@@ -1075,7 +1081,7 @@ export default {
       this.wait5Minutes = true;
       setTimeout(() => {
         this.wait5Minutes = false;
-      }, 1000 * 60 * 60);
+      }, 1000 * 60 * 1);
     },
     verifyCompanyEndDateValidaty() {
       let options = {
@@ -1394,7 +1400,7 @@ export default {
 
           this.pendingNotificationsCount = data.length;
           if (this.$route.name == "alarm-dashboard") {
-            if (this.notificationsMenuItems.length > 0)
+            if (this.notificationsMenuItems.length > 0 && !this.wait5Minutes)
               this.dialogAlarmPopupNotificationStatus = true;
             else this.dialogAlarmPopupNotificationStatus = false;
           }

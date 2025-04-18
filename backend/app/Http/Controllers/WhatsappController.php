@@ -180,17 +180,17 @@ class WhatsappController extends Controller
             $clientId = null; // or handle as needed
         }
 
+        if ($clientId) {
+            // Data to send in the request
+            $data = [
+                'clientId' => $clientId, //$company["id"] . "_alarm_xtremeguard",
+                'recipient' =>  $number, //request("number"),
+                'text' => $message,
 
-        // Data to send in the request
-        $data = [
-            'clientId' => $clientId, //$company["id"] . "_alarm_xtremeguard",
-            'recipient' =>  $number, //request("number"),
-            'text' => $message,
+            ];
 
-        ];
-
-        return   Http::withoutVerifying()->timeout(30)->post($url, $data);
-
+            return   Http::withoutVerifying()->timeout(30)->post($url, $data);
+        }
         return false;
 
 

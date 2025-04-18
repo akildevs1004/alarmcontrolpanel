@@ -43,7 +43,9 @@
               <v-tab>
                 <span>Whatsapp</span>
               </v-tab>
-
+              <v-tab>
+                <span>Settings</span>
+              </v-tab>
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>
@@ -1160,6 +1162,11 @@
               <v-tab-item>
                 <Whatsapp />
               </v-tab-item>
+              <v-tab-item>
+                <NotificationSettings
+                  :minutes="company_payload.notification_popup_pause_minutes"
+                />
+              </v-tab-item>
             </v-tabs>
           </v-card>
         </v-col>
@@ -1171,11 +1178,12 @@
 
 <script>
 import TaxSlabs from "../../components/Admin/TaxSlabs.vue";
+import NotificationSettings from "../../components/Alarm/NotificationSettings.vue";
 import Whatsapp from "../../components/Whatsapp.vue";
 import timeZones from "../../defaults/utc_time_zones.json";
 
 export default {
-  components: { Whatsapp, TaxSlabs },
+  components: { Whatsapp, TaxSlabs, NotificationSettings },
 
   data: () => ({
     contact_payload_update: {},
