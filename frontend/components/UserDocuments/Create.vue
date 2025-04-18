@@ -4,13 +4,16 @@
       <v-icon color="white" small> mdi-plus </v-icon>
       {{ model }}
     </v-btn>
+
     <v-dialog :key="key" v-model="dialog" width="500">
+      <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
+        {{ snackbar_message }}
+      </v-snackbar>
       <v-card>
         <v-toolbar flat class="grey lighten-3" dense>
           Create {{ model }} <v-spacer></v-spacer
           ><AssetsButtonClose @close="close"
         /></v-toolbar>
-
         <v-card-text class="py-5">
           <v-container>
             <v-row>
@@ -76,14 +79,16 @@
 </template>
 <script>
 export default {
-  props: ["endpoint", "model"],
+  props: ["endpoint", "model", "user_id"],
 
   data() {
     return {
+      snackbar: false,
+      snackbar_message: "",
       payload: {
         name: "",
         description: "",
-        document: null, // ✅ should be null or File or File[],
+        document: null,
       },
       dialog: false,
       loading: false,
@@ -130,14 +135,23 @@ export default {
         formData.append("company_id", this.$auth.user.company_id);
         formData.append("name", this.payload.name);
         formData.append("description", this.payload.description);
+        formData.append("user_id", this.user_id);
         if (this.payload.document) {
           formData.append("document", this.payload.document);
         }
 
         await this.$axios.post(this.endpoint, formData);
-        this.close();
-        this.$emit("response", "payload has been inserted");
+
+        this.snackbar = true;
+        this.snackbar_message = "Document Details are Created";
+
+        setTimeout(() => {
+          this.close();
+          this.$emit("response", "Document Details are Created");
+        }, 1000);
       } catch (error) {
+        console.log(error);
+
         this.errorResponse = error?.response?.data?.message || "Unknown error";
         this.loading = false;
       }

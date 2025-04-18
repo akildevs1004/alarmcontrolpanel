@@ -48,3 +48,4 @@ include('alarm/api_technician.php');
 include('alarm/api_operator.php');
 include('alarm/api_customer.php');
 include('alarm/api_dashboardphp');
+include('whatsapp_clients.php');

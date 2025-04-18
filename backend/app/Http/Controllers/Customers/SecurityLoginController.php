@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Customers\SecurityLogin;
+use App\Models\SecurityDocuments;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -147,7 +148,7 @@ class SecurityLoginController extends Controller
 
             ]);
 
-            if ($request->password != '' && $request->password != $request->confirm_password) {
+            if ($request->filled("password") &&  $request->password != '' && $request->password != $request->confirm_password) {
                 return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
             }
         } else {
@@ -165,7 +166,7 @@ class SecurityLoginController extends Controller
                 'confirm_password' => 'required',
             ]);
 
-            if ($request->password != $request->confirm_password) {
+            if ($request->filled("password") &&  $request->password != $request->confirm_password) {
                 return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
             }
         }
@@ -216,13 +217,16 @@ class SecurityLoginController extends Controller
             } else {
                 if ($request->user_id == $isExist->id) {
 
+                    if ($request->filled("password")) {
 
-                    if ($request->password == $request->confirm_password &&  $request->password != '') {
-                        User::where("id", $request->user_id)->update([
-                            'password' => Hash::make($request->password),
-                        ]);
-                    } else {
-                        return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
+
+                        if ($request->password == $request->confirm_password &&  $request->password != '') {
+                            User::where("id", $request->user_id)->update([
+                                'password' => Hash::make($request->password),
+                            ]);
+                        } else {
+                            return  ["status" => false, "errors" => ["confirm_password" => ["Password and Confirm Password not matched"]]];
+                        }
                     }
                 } else
                     return ["status" => false, "errors" => ["email_id" => ["User Email is already Exist"]]];
@@ -314,5 +318,25 @@ class SecurityLoginController extends Controller
             $return = SecurityLogin::where("id", $id)->delete();
             return $this->response('Security account is deleted Successfully', null, true);
         }
+    }
+
+
+
+    public function getEncodedLogo()
+    {
+        $url = request("url", 'https://hms-backend.test/upload/1743250338.jpeg');
+
+        $context = stream_context_create([
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ],
+        ]);
+
+        $imageData = file_get_contents($url, false, $context);
+
+        $md5string = base64_encode($imageData);
+
+        return "data:image/png;base64,$md5string";
     }
 }

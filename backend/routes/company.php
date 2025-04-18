@@ -54,7 +54,9 @@ use App\Http\Controllers\ShiftTypeController;
 use App\Http\Controllers\SubDepartmentController;
 use App\Http\Controllers\TaxSlabsController;
 use App\Http\Controllers\TimeTableController;
+use App\Http\Controllers\UserContactsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserDocumentsController;
 use App\Http\Controllers\VisaController;
 use App\Models\DeviceNotifications;
 use App\Models\ReportNotificationLogs;
@@ -328,6 +330,19 @@ Route::get('company-documents/{id}', [CompanyDocumentsController::class, "docume
 Route::post('company-documents/{id}', [CompanyDocumentsController::class, "documentUpdate"]);
 Route::get('company-documents', [CompanyDocumentsController::class, "documentList"]);
 Route::delete('company-documents/{id}', [CompanyDocumentsController::class, "documentDestroy"]);
+
+
+Route::post('user-documents', [UserDocumentsController::class, "documentStore"]);
+Route::get('user-documents/{id}', [UserDocumentsController::class, "documentShow"]);
+Route::post('user-documents/{id}', [UserDocumentsController::class, "documentUpdate"]);
+Route::get('user-documents', [UserDocumentsController::class, "documentList"]);
+Route::delete('user-documents/{id}', [UserDocumentsController::class, "documentDestroy"]);
+
+Route::post('user-contacts', [UserContactsController::class, "contactStore"]);
+Route::get('user-contacts/{id}', [UserContactsController::class, "contactShow"]);
+Route::post('user-contacts/{id}', [UserContactsController::class, "contactUpdate"]);
+Route::get('user-contacts', [UserContactsController::class, "contactList"]);
+Route::delete('user-contacts/{id}', [UserContactsController::class, "contactDestroy"]);
 
 
 Route::apiResource('/tax_slabs', TaxSlabsController::class);

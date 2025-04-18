@@ -1,47 +1,174 @@
 <template>
-  <v-card elevation="0">
-    <v-card-text class="mt-4 text-center" style="margin: auto">
-      <div v-if="statusMessage">
-        <v-badge dense :color="statusColor" offset-y="5" class="mr-5"></v-badge
-        ><span> Info: {{ statusMessage }}</span>
-      </div>
-      <div v-if="qrCodeDisplay == true" style="text-align: center">
-        <v-img
-          :src="qrCodePath"
-          max-width="200"
-          max-height="200"
-          style="margin: auto"
-        ></v-img>
-
-        <div>
-          Info: Scan Above QR code from Whatsapp Mobile app Linked Devices
-        </div>
-      </div>
-      <div v-else-if="qrCodeDisplay == false && statusMessage == null">
-        Info: No Response from Server <br />
-
-        <v-btn class="pa-2" x-small color="primary" @click="connect">
-          Connect
-        </v-btn>
-      </div>
-      <div v-else-if="statusMessage != 'Online'">
-        <v-btn class="pa-2" x-small color="primary" @click="connect">
-          <v-icon small class="mr-1">mdi-whatsapp</v-icon>
-          <!-- {{ statusMessage !== "Online" ? "Connect" : "Check Online" }} -->
-          Connect
-        </v-btn>
-      </div>
-
-      <!-- <div class="mt-5">
-        <v-btn
-          x-small
-          v-if="disconnectButton"
-          color="error"
-          @click="disconnect"
+  <v-card elevation="2" class="pa-4">
+    <v-card-text>
+      <!-- Accounts Display -->
+      <div style="display: flex; gap: 12px" v-if="can('whatsapp_view')">
+        <v-card
+          outlined
+          v-for="(account, index) in accounts"
+          :key="index"
+          style="display: flex"
+          max-width="250"
         >
-          <v-icon small class="mr-1">mdi-whatsapp</v-icon> Disconnect
-        </v-btn>
-      </div> -->
+          <v-card-text class="pa-2">
+            <div style="width: 100%; display: flex; align-items: center">
+              <div
+                style="width: 100%"
+                class="text-h6 text--primary text-center mb-1"
+              >
+                <v-text-field
+                  :placeholder="account.label || 'Enter Title'"
+                  dense
+                  v-model="account.label"
+                  hide-details
+                ></v-text-field>
+              </div>
+
+              <div>
+                <v-icon
+                  title="Disconnect and Delete"
+                  small
+                  color="red"
+                  @click="deleteItem(index)"
+                  >mdi-close</v-icon
+                >
+              </div>
+            </div>
+
+            <div v-if="!whatsappSocketClosed">
+              <div v-if="account.qrCodeDisplay">
+                <v-img
+                  max-width="250"
+                  max-height="250"
+                  :src="account.qrCodePath"
+                ></v-img>
+              </div>
+              <div v-else style="max-width: 250px; padding: 15px">
+                <v-img :src="account.placeHolderImage"></v-img>
+              </div>
+
+              <div class="text-center">
+                <v-btn
+                  :loading="account.loading"
+                  v-if="account.statusMessage"
+                  block
+                  small
+                  color="#139c4a"
+                  class="white--text"
+                  style="cursor: text"
+                >
+                  {{ account.statusMessage }}
+                </v-btn>
+
+                <br />
+                <v-btn
+                  :loading="account.loading"
+                  v-if="account.statusMessage == 'Online'"
+                  block
+                  small
+                  color="red"
+                  class="white--text"
+                  @click="deleteItem(index)"
+                >
+                  Click to Disconnect
+                </v-btn>
+
+                <v-btn
+                  :loading="account.loading"
+                  v-else-if="account.connectButton"
+                  block
+                  small
+                  color="primary"
+                  class="white--text"
+                  @click="connect(account.clientId, index)"
+                >
+                  Scan QR code and Reconnect
+                </v-btn>
+                <v-btn
+                  :loading="account.loading"
+                  v-else-if="
+                    account.client_id != '' &&
+                    account.statusMessage != 'Connecting to WhatsApp...'
+                  "
+                  block
+                  small
+                  color="green"
+                  @click="connect(account.clientId, index)"
+                >
+                  Click to Connect Wahtsapp
+                </v-btn>
+
+                <br />
+                <v-btn
+                  :loading="account.loading"
+                  v-if="
+                    !account.statusMessage && account.statusMessage == 'Online'
+                  "
+                  block
+                  small
+                  color="red"
+                  class="white--text"
+                  @click="deleteItem(index, account.client_id)"
+                >
+                  Delete
+                </v-btn>
+
+                <div v-if="account.qrCodePath" style="color: blue">
+                  <div v-if="!qrCodeScanned">
+                    <v-btn
+                      block
+                      v-if="!qrCodeScanned"
+                      @click="qrCodeScanned = true"
+                      small
+                      color="green"
+                      class="white--text"
+                    >
+                      Click here after QR Scanned
+                    </v-btn>
+
+                    Step2: Scan QR Code and click Button
+                  </div>
+                  <div v-else>Step3: Verifieng QR Code.....<br /></div>
+
+                  <br />
+                  <v-btn
+                    block
+                    small
+                    color="red"
+                    class="white--text"
+                    @click="connect(account.clientId, index)"
+                  >
+                    Re-Generate QR Code
+                  </v-btn>
+                </div>
+
+                <div
+                  v-else-if="
+                    account.statusMessage == 'Connecting to WhatsApp...'
+                  "
+                >
+                  Status: Connecting to Whatsapp Server.....
+                </div>
+
+                <!-- {{ account }} -->
+              </div>
+            </div>
+            <div v-else>
+              <!-- {{ account }} -->
+              <br />
+              <v-btn
+                block
+                small
+                color="red"
+                class="white--text"
+                @click="connect(account.clientId, index)"
+              >
+                Disconnected. Connect Again
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -52,120 +179,188 @@ import QRCode from "qrcode";
 export default {
   data() {
     return {
-      clientId: null, // Input field model for client ID
-      ws: null, // WebSocket instance
-      statusMessage: null, // Message for status updates
-      qrCodePath: null, // QR code image path
-      qrCodeDisplay: false,
-      disconnectButton: false,
-      connectButton: false,
-      statusColor: null,
+      accounts: [],
+      qrCodeScanned: false,
+      whatsappSocketClosed: false,
     };
   },
   async mounted() {
-    setTimeout(() => {
-      this.connect();
-    }, 1000 * 2);
+    await this.getWhatsappAccount(this.$auth.user.company_id);
   },
+
   methods: {
-    async connect() {
-      await this.connectWebSocket(
-        this.$auth?.user?.company?.id + "_alarm_xtremeguard" ||
-          Math.random() + "_alarm_xtremeguard"
-      );
+    can(per) {
+      return this.$pagePermission.can(per, this);
     },
-    async disconnect() {
-      this.statusMessage = null;
-      this.disconnectButton = false;
-      this.connectButton = false;
-      this.statusColor = "error";
 
-      let payload = {
-        clientId:
-          this.$auth?.user?.company?.id + "_alarm_xtremeguard" ||
-          Math.random() + "_alarm_xtremeguard",
-      };
+    async getWhatsappAccount(company_id) {
+      let { data } = await this.$axios.get(
+        `whatsapp-client-json/${company_id}`
+      );
+      if (data?.accounts?.length) {
+        this.accounts = data.accounts.map((acc) => ({
+          ...acc,
+          loading: false,
+        }));
 
-      try {
-        let { data } = await this.$axios.post(
-          `https://wa.mytime2cloud.com/whatsapp-destroy`,
-          payload
-        );
-        this.statusMessage = data.data;
-        this.connectButton = true;
-      } catch (error) {
-        this.statusMessage = error.message;
-        this.disconnectButton = true;
+        //connect clients - for re-verifications and trigger the whatsapp server
+        for (const [index, element] of data.accounts.entries()) {
+          // await this.connect(element.clientId, index);
+          const wsUrl = `wss://wa.mytime2cloud.com/ws/?clientId=${element.clientId}`;
+          let socketResponse = new WebSocket(wsUrl);
+          console.log(socketResponse);
+          if (socketResponse)
+            socketResponse.onmessage = async (event) => {
+              const data = JSON.parse(event.data);
+
+              if (data.event === "status") {
+              } else if (data.event === "ready") {
+              } else if (data.event === "qr") {
+                this.whatsappSocketClosed = true;
+              }
+            };
+        }
+      } else {
+        await this.addAccount();
       }
     },
 
-    async connectWebSocket(clientId) {
-      this.clientId = clientId;
-      const wsUrl = `wss://wa.mytime2cloud.com/ws/?clientId=${this.clientId}`;
-      this.ws = new WebSocket(wsUrl);
+    async addAccount() {
+      let clientId = `temperature_xtremeguard_${Date.now()}`;
+      this.accounts.push({
+        clientId,
+        ws: null,
+        statusMessage: null,
+        placeHolderImage: `/whatsapp-sleep.png`,
+        qrCodePath: null,
+        qrCodeDisplay: false,
+        disconnectButton: false,
+        connectButton: false,
+        statusColor: null,
+        label: "Whatsapp Linked Account",
+        loading: false,
+      });
 
-      this.ws.onopen = () => {
-        this.statusMessage = `Connected to the WebSocket server with clientId: ${this.clientId}`;
-      };
-      let onlineCheckcounter = 1;
-      this.ws.onmessage = async (event) => {
-        //this.qrCodePath = null;
-        //this.qrCodeDisplay = false;
+      await this.insertAccountIntoDB(); // Auto-save on add
+    },
 
-        this.statusMessage = null;
-        this.disconnectButton = false;
-        this.connectButton = false;
-        this.statusColor = "";
+    async deleteItem(index, client_id = "") {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this account?"
+      );
+      if (!confirmDelete) return;
 
-        const data = JSON.parse(event.data);
-        console.log("🚀 ~ this.ws.onmessage= ~ data onmessage:", data);
+      this.accounts.splice(index, 1);
 
-        if (event.data == 1) {
-          //   this.connect();
+      try {
+        await this.insertAccountIntoDB();
+        await this.getWhatsappAccount(this.$auth.user.company_id);
+      } catch (error) {
+        console.error("Error deleting account:", error);
+      }
+    },
+
+    async insertAccountIntoDB() {
+      try {
+        let payload = {
+          company_id: this.$auth.user.company_id,
+          accounts: this.accounts,
+        };
+
+        if (process.env.NODE_ENV !== "production") {
+          //console.log("🚀 ~ Sending payload:", payload);
         }
 
-        if (data.event === "status") {
-          this.statusMessage = data.data;
-        } else if (data == "1" || data.event == "Buffer") {
-          this.statusMessage = "Online";
-          this.disconnectButton = true;
-          this.statusColor = "success";
-          this.qrCodePath = null;
-          this.qrCodeDisplay = false;
-          onlineCheckcounter++;
-        } else if (data.event === "ready" || data.event == "Buffer") {
-          onlineCheckcounter++;
+        await this.$axios.post(`whatsapp-client-json`, payload);
+      } catch (error) {
+        console.error("Error inserting account:", error);
+      }
+    },
 
-          if (onlineCheckcounter >= 3) {
-            this.statusMessage = data.data;
-            this.disconnectButton = true;
-            this.statusColor = "success";
-            this.qrCodePath = null;
-            this.qrCodeDisplay = false;
-          } else {
-          }
+    async connect(clientId, index) {
+      this.whatsappSocketClosed = false;
+      this.accounts[index].loading = true;
+      await this.connectWebSocket(clientId, index);
+    },
+
+    async connectWebSocket(clientId, index) {
+      this.qrCodeScanned = false;
+      const account = this.accounts[index];
+
+      if (!account) return;
+
+      const wsUrl = `wss://wa.mytime2cloud.com/ws/?clientId=${clientId}`;
+      account.ws = new WebSocket(wsUrl);
+      let reconnectAttempts = 0;
+
+      account.ws.onopen = () => {
+        account.statusMessage = `Connected to the WebSocket server with clientId: ${clientId}`;
+      };
+
+      account.ws.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+        account.statusMessage = null;
+        account.qrCodePath = null;
+        account.qrCodeDisplay = false;
+        account.disconnectButton = false;
+        account.connectButton = false;
+        account.statusColor = "";
+
+        if (data.event === "status") {
+          account.statusMessage = data.data;
+          account.loading = true;
+        } else if (data.event === "ready") {
+          clearTimeout(account.connectTimeout); // Clear connect timeout if success
+          account.statusMessage = data.data;
+          account.placeHolderImage = `/whatsapp.jpeg`;
+          account.disconnectButton = true;
+          account.statusColor = "success";
+          account.loading = false;
+          await this.insertAccountIntoDB();
         } else if (data.event === "qr") {
-          onlineCheckcounter = 0;
-          const qrCodeData = data.data;
           try {
-            // Generate a QR code as a data URL
-            const qrCodePath = await QRCode.toDataURL(qrCodeData, {
+            const qrCodePath = await QRCode.toDataURL(data.data, {
               color: {
-                dark: "#000000", // Black QR code
-                light: "#ffffff", // White background
+                dark: "#000000",
+                light: "#ffffff",
               },
             });
 
-            // Update the path to display the QR code
-            this.qrCodePath = qrCodePath;
-            this.qrCodeDisplay = true;
+            account.qrCodePath = qrCodePath;
+            account.qrCodeDisplay = true;
+            account.statusMessage = "Connecting to WhatsApp...";
+            //account.loading = true;
+
+            // ⏱️ Timeout after 60 seconds if not ready
+            account.connectTimeout = setTimeout(() => {
+              account.loading = false;
+              account.statusMessage = "Timeout. Please retry.";
+              account.connectButton = true;
+            }, 1000 * 60 * 5); // 60 seconds
           } catch (error) {
-            this.statusMessage = `Error generating QR code: ${error.message}`;
+            account.statusMessage = `Error generating QR code: ${error.message}`;
+            account.loading = false;
           }
         } else if (data.event === "destroy") {
-          this.statusMessage = data.data;
-          this.connectButton = true;
-          this.statusColor = "error";
+          clearTimeout(account.connectTimeout);
+          account.placeHolderImage = `/whatsapp-sleep.png`;
+          account.statusMessage = data.data;
+          account.connectButton = true;
+          account.statusColor = "error";
+          account.loading = false;
+        }
+      };
+
+      account.ws.onclose = () => {
+        if (reconnectAttempts < 3) {
+          setTimeout(() => {
+            this.connectWebSocket(clientId, index);
+          }, 2000);
+          reconnectAttempts++;
+        } else {
+          account.statusMessage = "WebSocket disconnected. Please reconnect.";
+          account.connectButton = true;
+          account.loading = false;
         }
       };
     },

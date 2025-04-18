@@ -25,7 +25,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="newSecurityDialog" max-width="700px">
+    <v-dialog v-model="newSecurityDialog" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
           <span dense> {{ editId ? "Update" : "New" }} Operator Account</span>
@@ -211,6 +211,16 @@
                       View
                     </v-list-item-title>
                   </v-list-item>
+
+                  <v-list-item
+                    @click="editItem(item)"
+                    v-if="can('operators_edit')"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-pencil </v-icon>
+                      Edit
+                    </v-list-item-title>
+                  </v-list-item>
                   <v-list-item
                     v-if="can('operators_view')"
                     @click="viewCustomers(item)"
@@ -220,15 +230,6 @@
                         mdi-account-multiple
                       </v-icon>
                       Customers
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    @click="editItem(item)"
-                    v-if="can('operators_edit')"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-pencil </v-icon>
-                      Edit
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item

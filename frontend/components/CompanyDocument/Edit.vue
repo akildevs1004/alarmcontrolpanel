@@ -1,83 +1,91 @@
 <template>
-  <v-dialog v-model="dialog" width="700">
-    <template v-slot:activator="{ on, attrs }">
-      <div v-bind="attrs" v-on="on">
-        <v-icon color="blue" small> mdi-pencil </v-icon>
-        Edit
-      </div>
-    </template>
+  <div>
+    <v-dialog v-model="dialog" width="700">
+      <template v-slot:activator="{ on, attrs }">
+        <div v-bind="attrs" v-on="on">
+          <v-icon color="blue" small> mdi-pencil </v-icon>
+          Edit
+        </div>
+      </template>
 
-    <v-card>
-      <v-toolbar flat class="grey lighten-3" dense>
-        Edit {{ model }} <v-spacer></v-spacer
-        ><AssetsButtonClose @close="close" /></v-toolbar
-      >
+      <v-card>
+        <v-toolbar flat class="grey lighten-3" dense>
+          Edit {{ model }} <v-spacer></v-spacer
+          ><AssetsButtonClose @close="close"
+        /></v-toolbar>
 
-      <v-card-text class="py-5">
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                outlined
-                dense
-                hide-details
-                v-model="payload.name"
-                label="Title"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                outlined
-                dense
-                hide-details
-                v-model="payload.description"
-                label="description"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-file-input
-                prepend-icon=""
-                append-icon="mdi-paperclip"
-                outlined
-                dense
-                hide-details
-                v-model="payload.document"
-                label="Document"
-              ></v-file-input>
-            </v-col>
-            <v-col cols="12" v-if="errorResponse">
-              <span class="red--text">{{ errorResponse }}</span>
-            </v-col>
-            <v-col cols="12" class="text-right">
-              <v-btn small color="grey" class="white--text" dark @click="close">
-                Close
-              </v-btn>
-              <v-btn
-                :loading="loading"
-                small
-                color="blue"
-                class="white--text"
-                dark
-                @click="submit"
-              >
-                Submit
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+        <v-card-text class="py-5">
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  outlined
+                  dense
+                  hide-details
+                  v-model="payload.name"
+                  label="Title"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  outlined
+                  dense
+                  hide-details
+                  v-model="payload.description"
+                  label="description"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input
+                  prepend-icon=""
+                  append-icon="mdi-paperclip"
+                  outlined
+                  dense
+                  hide-details
+                  v-model="payload.document"
+                  label="Document"
+                ></v-file-input>
+              </v-col>
+              <v-col cols="12" v-if="errorResponse">
+                <span class="red--text">{{ errorResponse }}</span>
+              </v-col>
+              <v-col cols="12" class="text-right">
+                <v-btn
+                  small
+                  color="grey"
+                  class="white--text"
+                  dark
+                  @click="close"
+                >
+                  Close
+                </v-btn>
+                <v-btn
+                  :loading="loading"
+                  small
+                  color="blue"
+                  class="white--text"
+                  dark
+                  @click="submit"
+                >
+                  Submit
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 <script>
 export default {
-  props: ["item", "endpoint", "model"],
+  props: ["item", "endpoint", "model", "security_id"],
   data() {
     return {
       payload: {
         name: "",
         description: "",
-        document: "",
+        document: null,
       },
       dialog: false,
       loading: false,
@@ -89,6 +97,7 @@ export default {
     this.payload = {
       name: this.item.name,
       description: this.item.description,
+      document: null,
     };
   },
   methods: {
@@ -102,6 +111,8 @@ export default {
       let formData = new FormData();
       formData.append("name", this.payload.name);
       formData.append("description", this.payload.description);
+      formData.append("security_id", this.security_id);
+
       if (this.payload.document) {
         formData.append("document", this.payload.document);
       }

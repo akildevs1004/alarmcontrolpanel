@@ -386,14 +386,7 @@
     "module": "settings",
     "top_menu_name": "settings"
   },
-  {
-    "icon": "mdi-briefcase-account",
-    "title": "Forward",
-    "to": "/alarm/supervisorevents",
-    "menu": "device_access",
-    "module": "settings",
-    "top_menu_name": "settings"
-  },
+
   {
     "icon": "mdi-account-wrench",
     "title": "Technicians",

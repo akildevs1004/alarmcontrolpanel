@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Company;
 use App\Models\Device;
 use App\Models\Employee;
+use App\Models\WhatsappClients;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -163,9 +164,26 @@ class WhatsappController extends Controller
         // API endpoint URL
         $url = 'https://wa.mytime2cloud.com/send-message';
 
+        $clientId = null;
+
+        $companyData = WhatsappClients::where('company_id',  $company["id"])->first();
+
+        if ($companyData && $companyData->accounts) {
+            $accounts = $companyData->accounts;
+
+            if (!empty($accounts)) {
+                $clientId = $accounts[0]['clientId'];
+            } else {
+                $clientId = null; // or handle as needed
+            }
+        } else {
+            $clientId = null; // or handle as needed
+        }
+
+
         // Data to send in the request
         $data = [
-            'clientId' => $company["id"] . "_alarm_xtremeguard",
+            'clientId' => $clientId, //$company["id"] . "_alarm_xtremeguard",
             'recipient' =>  $number, //request("number"),
             'text' => $message,
 
