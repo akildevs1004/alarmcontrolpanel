@@ -244,11 +244,13 @@
             </template>
 
             <template v-slot:item.amount="{ item, index }">
-              <div style="text-align: right; padding-right: 40px; width: 100px">
+              <div style="text-align: right; padding-right: 40px; width: 150px">
                 {{ getCurrency() }}
                 {{
                   item.tax_amount !== null && item.tax_amount !== undefined
-                    ? parseFloat(item.tax_amount) + parseFloat(item.amount)
+                    ? parseFloat(
+                        parseFloat(item.tax_amount) + parseFloat(item.amount)
+                      ).toFixed(2)
                     : item.amount
                 }}
               </div>

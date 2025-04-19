@@ -306,7 +306,7 @@
               </template>
               <template v-slot:item.amount="{ item, index }">
                 <div
-                  style="text-align: right; padding-right: 40px; width: 100px"
+                  style="text-align: right; padding-right: 40px; width: 150px"
                 >
                   {{ getCurrency() }}
                   {{
@@ -452,7 +452,7 @@ export default {
 
         { text: "Customer", value: "customer", sortable: false },
 
-        { text: "Amount", value: "amount", sortable: false },
+        { text: "Amount", value: "amount", sortable: false, width: "200px" },
 
         { text: "Status", value: "status", sortable: false },
 
