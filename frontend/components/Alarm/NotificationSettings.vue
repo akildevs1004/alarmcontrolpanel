@@ -85,25 +85,21 @@ export default {
           } else {
             this.snackbar = true;
             this.response =
-              "Alarm Settings updated successfully and Page will reload to Take effect the Changes";
+              "Alarm Settings updated successfully. Page will reload to apply the changes.";
 
-            this.upload.name = "";
+            // this.upload.name = "";
             this.errors = [];
+
+            // Redirect to dashboard after 4 seconds
+            // setTimeout(() => {
+            //   window.location.href = "/alarm/dashboard";
+            // }, 2000);
           }
         })
-        .catch((e) => console.log(e));
-      setTimeout(() => {
-        // this.$router.push("/alarm/dashboard");
-        window.location.href = "/alarm/dashboard";
-        // this.$router.push("/alarm/dashboard").then(() => {
-        //   // window.location.reload();
-
-        //   setTimeout(() => {
-        //     window.location.reload();
-        //   }, 1000);
-        // });
-      }, 1000 * 4);
-      // this.$router.push("/alarm/dashboard");
+        .catch((error) => {
+          this.loading = false;
+          console.error("Update failed:", error);
+        });
     },
   },
 };
