@@ -95,6 +95,7 @@
 
             <span style="width: 200px; margin-left: 10px">
               <CustomFilter
+                @filter-attr="filterAttr"
                 v-if="displayDateFilter"
                 style="float: right; padding-top: 5px; z-index: 9"
                 :default_date_from="date_from"
@@ -420,7 +421,7 @@ export default {
       this.date_from = data.from;
       this.date_to = data.to;
 
-      this.getDataFromApi();
+      //this.getDataFromApi();
     },
     closeProductDialog() {
       this.dialogInquiryToQuotation = false;
@@ -512,6 +513,8 @@ export default {
     },
 
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
+      console.log(this.date_from, this.date_to);
+
       if (this.isBackendRequestOpen) return false;
       this.isBackendRequestOpen = true;
 
