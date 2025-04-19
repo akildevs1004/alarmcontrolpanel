@@ -113,7 +113,6 @@
               ><v-card-text>
                 <h3 style="color: black; font-weight: normal">System Status</h3>
                 <AlamDeviceCountPieChart
-                  :key="key"
                   :name="'AlamDeviceCountPieChart'"
                   style="
                     height: 230px;
@@ -145,22 +144,19 @@
                 <v-row
                   ><v-col cols="4">
                     <AlarmEventStatusCountPieChart
-                      v-if="chartEventOpenStatistics"
-                      :key="key"
+                      :key="Openkey"
                       :name="'AlarmEventStatusCountPieChart1'"
                       :componentData="chartEventOpenStatistics"
                     /> </v-col
                   ><v-col cols="4">
                     <AlarmEventStatusCountPieChart
-                      v-if="chartEventClosedStatistics"
-                      :key="key + 2"
+                      :key="Closedkey"
                       :name="'AlarmEventStatusCountPieChart2'"
                       :componentData="chartEventClosedStatistics"
                     /> </v-col
                   ><v-col cols="4">
                     <AlarmEventStatusCountPieChart
-                      v-if="chartEventForwardStatistics"
-                      :key="key + 4"
+                      :key="Forwardkey"
                       :name="'AlarmEventStatusCountPieChart3'"
                       :componentData="chartEventForwardStatistics"
                     /> </v-col
@@ -579,6 +575,10 @@ export default {
     CustomersAlarmMap,
   },
   data: () => ({
+    Openkey: 1,
+    Closedkey: 1,
+    Forwardkey: 1,
+
     isMobileDevice: true,
     mapHeight: 500,
     windowHeight: 1000,
@@ -596,8 +596,34 @@ export default {
     cancelgetEventsTypeStatsToken: null,
     cancelgetEventsOpenCountStatusToken: null,
     loadAllEventsTable: false,
+    interval: null,
   }),
   computed: {},
+  watch: {
+    chartEventOpenStatistics: {
+      deep: true,
+      handler(newVal, oldVal) {
+        console.log(
+          newVal.series[0],
+          newVal.series[1],
+          newVal.series[2],
+          oldVal.series[0],
+          oldVal.series[1],
+          oldVal.series[2]
+        );
+
+        // if (
+        //   newVal.series[0] != oldVal.series[0] ||
+        //   newVal.series[1] != oldVal.series[1] ||
+        //   newVal.series[2] != oldVal.series[2]
+        // )
+        //   this.renderChartComponent();
+      },
+    },
+  },
+  beforeDestroy() {
+    if (this.interval) clearInterval(this.interval);
+  },
   mounted() {
     //setTimeout(() => {
     // if (typeof window !== "undefined") {
@@ -635,11 +661,15 @@ export default {
 
     await this.getEventCategoriesStats();
 
+    this.Openkey++;
+    this.Closedkey++;
+    this.Forwardkey++;
+
     setTimeout(() => {
       this.loadAllEventsTable = true;
     }, 1000 * 3);
 
-    setInterval(async () => {
+    this.interval = setInterval(async () => {
       if (this.$route.name == "alarm-dashboard") {
         this.key++;
         await this.getEventsTypeStats();
@@ -647,9 +677,24 @@ export default {
         await this.getEventsOpenCountStatus();
         this.key++;
       }
-    }, 1000 * 15);
+    }, 1000 * 10);
   },
-  watch: {},
+  watch: {
+    chartEventOpenStatistics: {
+      deep: true,
+      handler(newVal, oldVal) {
+        if (oldVal && newVal && newVal.series[0] != oldVal.series[0]) {
+          this.Openkey++;
+        }
+        if (oldVal && newVal && newVal.series[1] != oldVal.series[1]) {
+          this.Closedkey++;
+        }
+        if (oldVal && newVal && newVal.series[2] != oldVal.series[2]) {
+          this.Forwardkey++;
+        }
+      },
+    },
+  },
   methods: {
     async getEventCategoriesStats() {
       if (this.cancelgetEventCategoriesStatsToken) {

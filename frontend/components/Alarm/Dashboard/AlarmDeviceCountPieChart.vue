@@ -244,13 +244,36 @@ export default {
           },
         ],
       },
+      statsInterval: null,
     };
   },
+  beforeDestroy() {
+    if (this.statsInterval) clearInterval(this.statsInterval); // Clean up
+  },
   mounted() {
-    // setInterval(() => {
-    //   if (this.$route.name == "alarm-dashboard") this.loadDevicesStatistics();
-    // }, 1000 * 20);
+    this.statsInterval = setInterval(() => {
+      if (this.$route.name === "alarm-dashboard") {
+        this.loadDevicesStatistics();
+      }
+    }, 1000 * 10); // 10 seconds
     this.loadDevicesStatistics();
+    this.renderChart1(this.categories);
+  },
+  watch: {
+    categories: {
+      deep: true,
+      handler(newVal, oldVal) {
+        const keysToCheck = ["armed", "disarm", "others", "total"];
+
+        const hasChanged = keysToCheck.some(
+          (key) => newVal[key] !== oldVal[key]
+        );
+
+        if (hasChanged) {
+          this.renderChart1(newVal);
+        }
+      },
+    },
   },
   methods: {
     showDialogEvents() {
@@ -259,6 +282,7 @@ export default {
     },
     applyFilter() {
       this.loadDevicesStatistics();
+      this.renderChart1(this.categories);
     },
     loadDevicesStatistics() {
       let options = {
@@ -269,7 +293,7 @@ export default {
 
       this.$axios.get(`/device_armed_stats`, options).then(({ data }) => {
         this.categories = data;
-        this.renderChart1(data);
+        // this.renderChart1(data);
       });
     },
 
