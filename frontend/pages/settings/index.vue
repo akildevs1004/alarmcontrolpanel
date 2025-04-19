@@ -1165,6 +1165,9 @@
               <v-tab-item>
                 <NotificationSettings
                   :minutes="company_payload.notification_popup_pause_minutes"
+                  :dashboard_alarm_open_count_days="
+                    company_payload.dashboard_alarm_open_count_days
+                  "
                 />
               </v-tab-item>
             </v-tabs>

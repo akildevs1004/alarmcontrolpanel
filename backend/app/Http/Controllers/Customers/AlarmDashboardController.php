@@ -12,6 +12,7 @@ use App\Models\CustomersBuildingTypes;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,10 @@ class AlarmDashboardController extends Controller
 
     public function dashboardStatisctsCustomers(Request $request)
     {
+
+        $oneDevice = Device::with("company")->where("company_id", $request->company_id)->first();
+
+
         $totalCustomers = Customers::where("company_id", $request->company_id)->where("deleted", 0)
 
             ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
@@ -61,7 +66,9 @@ class AlarmDashboardController extends Controller
         COUNT(CASE WHEN status_id = 2 THEN 1 END) as offlineCount
     ")->first();
 
-        $alarmCounts = AlarmEvents::where("company_id", $request->company_id)->selectRaw("
+        $alarmCounts = AlarmEvents::where("company_id", $request->company_id)
+            ->where('created_at', '>=', Carbon::now()->subDays($oneDevice->company->dashboard_alarm_open_count_days))
+            ->selectRaw("
     COUNT(CASE WHEN alarm_status = 1 THEN 1 END) as openCount,
     COUNT(CASE WHEN alarm_status = 0 THEN 1 END) as closedCount,
     COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
@@ -77,7 +84,7 @@ class AlarmDashboardController extends Controller
 
             ->first();
 
-        $oneDevice = Device::where("company_id", $request->company_id)->first();
+
         $recentAlarm = AlarmEvents::where("company_id", $request->company_id)->orderby("alarm_start_datetime", "desc")->first();
 
 

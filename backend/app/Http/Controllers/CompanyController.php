@@ -73,7 +73,9 @@ class CompanyController extends Controller
     public function updateNotificationSettings(Request $request)
     {
         if ($request->filled("company_id")) {
-            Company::where("id", $request->company_id)->update(["notification_popup_pause_minutes" => $request->minutes]);
+            Company::where("id", $request->company_id)->update(["notification_popup_pause_minutes" => $request->minutes, "dashboard_alarm_open_count_days" => $request->dashboard_alarm_open_count_days]);
+
+            return $this->response("Settings Updated Successfully", null, true);
         }
     }
 

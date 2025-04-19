@@ -22,6 +22,21 @@
               >
               </v-select>
             </div>
+            <div class="form-group">
+              <label class="col-form-label"
+                >Dashboard Alarm Open Count - Days
+              </label>
+              <span class="error--text">*</span>
+              <v-select
+                style="width: 250px"
+                outlined
+                dense
+                small
+                v-model="payload.dashboard_alarm_open_count_days"
+                :items="[5, 10, 30, 60, 90, 120]"
+              >
+              </v-select>
+            </div>
             <v-col cols="12" style="width: 250px">
               <div class="text-right">
                 <v-btn
@@ -43,9 +58,9 @@
 </template>
 <script>
 export default {
-  props: ["minutes"],
+  props: ["minutes", "dashboard_alarm_open_count_days"],
   data: () => ({
-    payload: { minutes: 1 },
+    payload: { minutes: 1, dashboard_alarm_open_count_days: 30 },
     loading: false,
     snackbar: false,
     response: "",
@@ -53,6 +68,8 @@ export default {
   async mounted() {},
   async created() {
     this.payload.minutes = this.minutes;
+    this.payload.dashboard_alarm_open_count_days =
+      this.dashboard_alarm_open_count_days;
   },
   methods: {
     submit() {
@@ -67,13 +84,26 @@ export default {
             this.errors = data.errors;
           } else {
             this.snackbar = true;
-            this.response = "Alarm Settings updated successfully";
+            this.response =
+              "Alarm Settings updated successfully and Page will reload to Take effect the Changes";
 
             this.upload.name = "";
             this.errors = [];
           }
         })
         .catch((e) => console.log(e));
+      setTimeout(() => {
+        // this.$router.push("/alarm/dashboard");
+        window.location.href = "/alarm/dashboard";
+        // this.$router.push("/alarm/dashboard").then(() => {
+        //   // window.location.reload();
+
+        //   setTimeout(() => {
+        //     window.location.reload();
+        //   }, 1000);
+        // });
+      }, 1000 * 4);
+      // this.$router.push("/alarm/dashboard");
     },
   },
 };

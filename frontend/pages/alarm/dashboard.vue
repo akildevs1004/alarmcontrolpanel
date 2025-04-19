@@ -134,7 +134,12 @@
                     padding-bottom: 10px;
                   "
                 >
-                  Alarm Status
+                  Alarm Status({{
+                    $auth
+                      ? $auth.user.company.dashboard_alarm_open_count_days
+                      : 30
+                  }}
+                  Days)
                 </h3>
 
                 <v-row
@@ -640,6 +645,7 @@ export default {
         await this.getEventsTypeStats();
         await this.getEventCategoriesStats();
         await this.getEventsOpenCountStatus();
+        this.key++;
       }
     }, 1000 * 15);
   },
