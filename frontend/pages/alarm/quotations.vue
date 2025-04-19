@@ -243,6 +243,17 @@
               </div>
             </template>
 
+            <template v-slot:item.amount="{ item, index }">
+              <div style="text-align: right; padding-right: 40px; width: 100px">
+                {{ getCurrency() }}
+                {{
+                  item.tax_amount !== null && item.tax_amount !== undefined
+                    ? parseFloat(item.tax_amount) + parseFloat(item.amount)
+                    : item.amount
+                }}
+              </div>
+            </template>
+
             <template v-slot:item.fallowup="{ item }">
               <v-icon
                 @click="showFallowupContentList(item)"
@@ -574,6 +585,7 @@ export default {
     buildingTypes: [],
     _id: null,
     isBackendRequestOpen: false,
+    dateFilter: true,
   }),
   computed: {},
   mounted() {
@@ -683,7 +695,9 @@ export default {
       this.dialogQuotationToInvoice = false;
       this.newProductDialog = false;
       this.dialogSecurityCustomers = false;
+      this.dateFilter = false;
       this.getDataFromApi();
+      this.dateFilter = true;
     },
     convertInquirtyToQuotation(item) {
       this.inquiry_to_quotation = item;
@@ -733,7 +747,9 @@ export default {
         });
       }
     },
-
+    getCurrency() {
+      return this.$auth.user.company.currency;
+    },
     getDataFromApi(url = "", filter_column = "", filter_value = "") {
       if (this.isBackendRequestOpen) return false;
       this.isBackendRequestOpen = true;
@@ -757,8 +773,8 @@ export default {
           per_page: itemsPerPage,
           company_id: this.$auth.user.company_id,
           common_search: this.commonSearch || null,
-          date_from: this.date_from,
-          date_to: this.date_to,
+          date_from: this.dateFilter ? this.date_from : null,
+          date_to: this.dateFilter ? this.date_to : null,
 
           // branch_id: this.branch_id,
           ...this.payload,

@@ -152,7 +152,14 @@
             </div>
           </template>
           <template v-slot:item.amount="{ item, index }">
-            ${{ item.amount }}
+            {{ getCurrency() }}
+            {{
+              item.tax_amount !== null && item.tax_amount !== undefined
+                ? parseFloat(
+                    parseFloat(item.tax_amount) + parseFloat(item.amount)
+                  ).toFixed(2)
+                : parseFloat(item.amount).toFixed(2)
+            }}
           </template>
 
           <template v-slot:item.options="{ item }">
@@ -319,6 +326,9 @@ export default {
     closeDialog() {
       this.getDataFromApi();
       this.dialogEditAutomation = false;
+    },
+    getCurrency() {
+      return this.$auth.user.company.currency;
     },
     filterAttr(data) {
       this.date_from = data.from;

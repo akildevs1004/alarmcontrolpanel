@@ -7,6 +7,7 @@ use App\Models\CustomerCameras;
 use App\Models\CustomersBuildingTypes;
 use App\Models\Device;
 use App\Models\SecurityCustomers;
+use App\Models\TaxSlabs;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

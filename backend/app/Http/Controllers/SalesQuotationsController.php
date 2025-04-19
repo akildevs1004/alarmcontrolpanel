@@ -6,6 +6,7 @@ use App\Http\Controllers\API\ClientController;
 use App\Mail\EmailContentDefault;
 use App\Models\Company;
 use App\Models\SalesQuotations;
+use App\Models\TaxSlabs;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
@@ -108,6 +109,35 @@ class SalesQuotationsController extends Controller
 
         ];
         $data =  $request->validate($validate);
+
+
+        // Calculate the bill amount before discount
+        $billAmountBeforeDiscount = $request->amount + $request->discount;
+
+
+        $taxSlab = TaxSlabs::where('company_id', $request->company_id)
+            ->where('start_price', '<=', $request->amount)
+            ->where('end_price', '>=', $request->amount)
+            ->orderByDesc('start_price')
+            ->first();
+
+
+        $taxPercentage = 0;
+        $taxAmount = 0;
+
+        if ($taxSlab) {
+            $taxPercentage = $taxSlab->tax;
+            $taxAmount = $request->amount * $taxPercentage / 100;
+        }
+
+
+        $data = [
+            ...$data,
+            'tax_percentage' => $taxPercentage,
+            'tax_amount' => $taxAmount,
+            'bill_amount_before_discount' => $billAmountBeforeDiscount,
+        ];
+
 
 
 

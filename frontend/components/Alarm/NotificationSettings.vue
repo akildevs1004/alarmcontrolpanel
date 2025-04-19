@@ -44,7 +44,12 @@
 <script>
 export default {
   props: ["minutes"],
-  data: () => ({ payload: {}, loading: false, snackbar: false, response: "" }),
+  data: () => ({
+    payload: { minutes: 1 },
+    loading: false,
+    snackbar: false,
+    response: "",
+  }),
   async mounted() {},
   async created() {
     this.payload.minutes = this.minutes;

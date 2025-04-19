@@ -13,6 +13,7 @@ use App\Models\Customers\Customers;
 use App\Models\Deivices\DeviceZones;
 use App\Models\Device;
 use App\Models\SalesQuotations;
+use App\Models\TaxSlabs;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
@@ -259,6 +260,32 @@ class CustomerPaymentsController extends Controller
             "invoices_count" => $totalInvoiceCount,
 
         ];
+        // Calculate the bill amount before discount
+        $billAmountBeforeDiscount = $request->product_final_price + $request->discount;
+        $taxSlab = TaxSlabs::where('company_id', $request->company_id)
+            ->where('start_price', '<=', $request->product_final_price)
+            ->where('end_price', '>=', $request->product_final_price)
+            ->orderByDesc('start_price')
+            ->first();
+
+        $taxPercentage = 0;
+        $taxAmount = 0;
+
+        if ($taxSlab) {
+            $taxPercentage = $taxSlab->tax;
+            $taxAmount = $request->product_final_price * $taxPercentage / 100;
+        }
+
+
+        $data = [
+            ...$data,
+            'tax_percentage' => $taxPercentage,
+            'tax_amount' => $taxAmount,
+            'bill_amount_before_discount' => $billAmountBeforeDiscount,
+        ];
+
+
+
         $record = CustomerProductServices::create($data);
 
 
@@ -282,6 +309,10 @@ class CustomerPaymentsController extends Controller
                 "customer_id" => $request->customer_id,
                 "invoice_number" => $invoiceFormat,
                 "amount" => $request->product_final_price,
+                'tax_percentage' => $taxPercentage,
+                'tax_amount' => $taxAmount,
+
+
                 "status" => "Pending",
                 "invoice_date" => $invoice_date,
                 "invoice_count" => $maxId + $i,

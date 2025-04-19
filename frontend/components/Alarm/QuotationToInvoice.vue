@@ -261,7 +261,6 @@
                 <v-col cols="3" dense v-if="!isNewInvoice">
                   <v-text-field
                     label="Password(New customer)"
-                    type="password"
                     dense
                     small
                     outlined
@@ -605,6 +604,7 @@ export default {
       title: "",
       display_order: "",
       licence_duration_years: 1,
+      password: "password",
     },
 
     e1: 1,
@@ -638,7 +638,7 @@ export default {
   },
   async created() {
     this.primary_previewImage = null;
-    this.payload = {};
+    this.payload = { password: "welcome" };
     this.payload.licence_duration_years = 1;
     this.preloader = false;
 
@@ -652,6 +652,8 @@ export default {
     //console.log(this.editAddressType);
     if (this.editId != "" && this.item) {
       this.payload = this.item;
+
+      this.payload.password = "welcome";
 
       this.payment_type = this.item.payment_type;
 

@@ -155,4 +155,8 @@ class Company extends Model
             set: fn($value) => $value,
         );
     }
+    public function taxslabs()
+    {
+        return $this->hasmany(TaxSlabs::class, 'company_id', 'id')->orderby("tax", "ASC");
+    }
 }

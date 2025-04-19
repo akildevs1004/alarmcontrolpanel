@@ -202,11 +202,13 @@
 
                                 </td>
                                 <td style="width: 25%; height: 200px;text-align:center;padding:10px;">1</td>
-                                <td style="width: 25%; height: 200px;text-align:right;padding:10px;">
-                                    ${{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
+                                <td style="width: 40%; height: 200px;text-align:right;padding:10px;">
+                                    {{ $company->currency ?? '$' }}
+                                    {{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
                                 </td>
-                                <td style="width: 25%; height: 200px;text-align:right;padding:10px;">
-                                    ${{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
+                                <td style="width: 40%; height: 200px;text-align:right;padding:10px;">
+                                    {{ $company->currency ?? '$' }}
+                                    {{ number_format(round($invoice->amount + $invoice->customer_product_services->discount), 2, '.', '') }}
                                 </td>
 
                             </tr>
@@ -217,7 +219,22 @@
                                     <td style="width: 25%; height: 25px;"> </td>
                                     <td style="width: 25%; height: 25px;text-align:center;color:red"> Discount </td>
                                     <td style="width: 25%; height: 25px;text-align:right;padding:10px;;color:red">
-                                        ${{ number_format(round($invoice->customer_product_services->discount), 2, '.', '') }}
+                                        - {{ $company->currency ?? '$' }}
+                                        {{ number_format(round($invoice->customer_product_services->discount), 2, '.', '') }}
+                                    </td>
+
+                                </tr>
+                            @endif
+                            @if ($invoice->customer_product_services->tax_amount > 0)
+                                <tr style="height: 25px;; ">
+                                    <td style="width: 50%; height: 25px;"> </td>
+                                    <td style="width: 50%; height: 25px;"> </td>
+                                    <td style="width: 25%; height: 25px;"> </td>
+                                    <td style="width: 25%; height: 25px;text-align:center; "> Tax
+                                        ({{ $invoice->customer_product_services->tax_percentage }}%) </td>
+                                    <td style="width: 25%; height: 25px;text-align:right;padding:10px; ">
+                                        {{ $company->currency ?? '$' }}
+                                        {{ $invoice->customer_product_services->tax_amount }}
                                     </td>
 
                                 </tr>
@@ -226,9 +243,11 @@
                                 <td style="width: 50%; height: 25px;"> </td>
                                 <td style="width: 50%; height: 25px;"> </td>
                                 <td style="width: 25%; height: 25px;"> </td>
-                                <td style="width: 25%; height: 25px;text-align:center"> Total(including Tax) </td>
+                                <td style="width: 25%; height: 25px;text-align:center"> Total </td>
                                 <td style="width: 25%; height: 25px;text-align:right;padding:10px;">
-                                    ${{ number_format(round($invoice->amount), 2, '.', '') }}</td>
+                                    {{ $company->currency ?? '$' }}
+                                    {{ number_format(round($invoice->amount + $invoice->tax_amount), 2, '.', '') }}
+                                </td>
 
                             </tr>
                         </tbody>

@@ -308,7 +308,14 @@
                 <div
                   style="text-align: right; padding-right: 40px; width: 100px"
                 >
-                  ${{ item.amount }}.00
+                  {{ getCurrency() }}
+                  {{
+                    item.tax_amount !== null && item.tax_amount !== undefined
+                      ? parseFloat(
+                          parseFloat(item.tax_amount) + parseFloat(item.amount)
+                        ).toFixed(2)
+                      : parseFloat(item.amount).toFixed(2)
+                  }}
                 </div>
               </template>
               <template v-slot:item.invoice_date="{ item, index }">
@@ -501,6 +508,9 @@ export default {
             this.customersList = data;
           });
       } catch (e) {}
+    },
+    getCurrency() {
+      return this.$auth.user.company.currency;
     },
     sendReminderMail(item) {
       this.snackbar = true;

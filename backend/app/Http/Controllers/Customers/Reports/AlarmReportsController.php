@@ -158,6 +158,10 @@ class AlarmReportsController extends Controller
         $customer =  $invoice;
 
 
+
+
+
+
         $pdf = Pdf::loadView('alarm_reports/sales_quotation', compact('invoice',  "company",  "customer"))->setPaper('A4', 'potrait');
 
         if ($request->type == 'print')
