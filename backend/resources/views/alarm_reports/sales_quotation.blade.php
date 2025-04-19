@@ -219,7 +219,7 @@
                                 </td>
                                 <td style="width: 25%; height: 25px;text-align:right;padding:10px;">
                                     {{ $company->currency ?? '$' }}
-                                    {{ number_format(round($invoice->amount + $invoice->tax_amount), 2, '.', '') }}
+                                    {{ number_format(round($invoice->amount + $invoice->tax_amount, 2), 2, '.', '') }}
                                 </td>
 
                             </tr>
