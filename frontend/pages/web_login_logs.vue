@@ -59,23 +59,33 @@
         }"
         :server-items-length="totalRowsCount"
       >
+        <template v-slot:item.sno="{ item, index }">
+          {{
+            currentPage
+              ? (currentPage - 1) * perPage +
+                (cumulativeIndex + logs.indexOf(item))
+              : "-"
+          }}
+        </template>
+
         <template v-slot:item.employee.pic="{ item, index }">
           <v-row no-gutters>
             <v-col
               style="
                 padding: 5px;
                 padding-left: 0px;
-                width: 30px;
-                max-width: 30px;
+                width: 50px;
+                max-width: 50px;
               "
             >
               <v-img
                 v-if="item.model_type == 'company' && item.user.role_id > 1"
                 style="
                   border-radius: 50%;
-                  height: auto;
-                  width: 30px;
-                  max-width: 30px;
+                  height: 45px;
+                  min-height: 45px;
+                  width: 45px;
+                  max-width: 45px;
                 "
                 :src="
                   item.user.profile_picture
@@ -88,9 +98,10 @@
                 v-else-if="item.model_type == 'security'"
                 style="
                   border-radius: 50%;
-                  height: auto;
-                  width: 30px;
-                  max-width: 30px;
+                  height: 45px;
+                  min-height: 45px;
+                  width: 45px;
+                  max-width: 45px;
                 "
                 :src="
                   item.user.security
@@ -103,9 +114,10 @@
                 v-else-if="item.model_type == 'technician'"
                 style="
                   border-radius: 50%;
-                  height: auto;
-                  width: 30px;
-                  max-width: 30px;
+                  height: 45px;
+                  min-height: 45px;
+                  width: 45px;
+                  max-width: 45px;
                 "
                 :src="
                   item.user.technician
@@ -120,9 +132,10 @@
                 "
                 style="
                   border-radius: 50%;
-                  height: auto;
-                  width: 30px;
-                  max-width: 30px;
+                  height: 45px;
+                  min-height: 45px;
+                  width: 45px;
+                  max-width: 45px;
                 "
                 :src="
                   item.company.logo
@@ -132,7 +145,7 @@
               >
               </v-img>
             </v-col>
-            <!-- <v-col style="padding: 10px">
+            <v-col style="padding: 10px">
               <div v-if="item.model_type == 'company' && item.user.role_id > 1">
                 {{ item.user.first_name }} {{ item.user.last_name }}
               </div>
@@ -149,7 +162,7 @@
                     item.user.security.last_name
                   : ""
               }}{{ item.user.customer ? item.user.customer.building_name : "" }}
-            </v-col> -->
+            </v-col>
           </v-row>
         </template>
 
@@ -222,6 +235,10 @@
 export default {
   data() {
     return {
+      cumulativeIndex: 1,
+
+      currentPage: 1,
+      totalRowsCount: 0,
       cancelTokenSource: null,
       filterText: "",
       date_from: "",
@@ -238,6 +255,14 @@ export default {
       total: 0,
       options: {},
       headers: [
+        {
+          text: "#",
+          align: "left",
+          sortable: false,
+          filterable: true,
+
+          value: "sno",
+        },
         {
           text: "Profile",
           align: "left",
@@ -376,6 +401,9 @@ export default {
         const { sortBy, sortDesc, page = 1, itemsPerPage = 10 } = this.options;
         this.loading = page === 1;
 
+        this.perPage = itemsPerPage;
+        this.currentPage = page;
+
         const params = {
           branch_id: this.branch_id,
           page,
@@ -399,6 +427,8 @@ export default {
         // Process and assign data
         this.totalRowsCount = data.total;
         this.logs = data.data;
+
+        this.totalRowsCount = data.total;
       } catch (error) {
         if (this.$axios.isCancel(error)) {
           console.log("Request canceled", error.message);
