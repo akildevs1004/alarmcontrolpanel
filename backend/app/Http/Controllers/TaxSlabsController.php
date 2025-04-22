@@ -94,12 +94,14 @@ class TaxSlabsController extends Controller
                     $record = TaxSlabs::create($data);
 
                     if ($record) {
+                        (new ActivityController())->recordNewActivity($request, "create", "Company Taxslab is created", $record->id,  "tax_slabs", null, null);
+
                         return $this->response('TaxSlabs details are successfully created', $record, true);
                     } else {
                         return $this->response('TaxSlabs details not created', $record, false);
                     }
                 } else {
-                    return $this->response($request->start_price . '-' . $request->end_price  . ' : TaxSlabs number is already exist. ', $data, false);
+                    return $this->response($request->start_price . '-' . $request->end_price  . ' : TaxSlabs number Range is  already exist. ', $data, false);
                 }
             } else {
                 return $this->response('Data is not validated', $data, false);
@@ -119,9 +121,11 @@ class TaxSlabsController extends Controller
     {
         return TaxSlabs::where('id', $id)->first();
     }
-    public function destroy(TaxSlabs $lostAndFoundItems, $id)
+    public function destroy(Request $request, $id)
     {
         if (TaxSlabs::find($id)->delete()) {
+            (new ActivityController())->recordNewActivity($request, "delete", "Company Taxslab is Deleted", $id,  "tax_slabs", null, null);
+
 
             return $this->response('Record    successfully deleted.', null, true);
         } else {
@@ -176,6 +180,8 @@ class TaxSlabsController extends Controller
                 }
                 $status = TaxSlabs::whereId($id)->update($data);
                 if ($status) {
+                    (new ActivityController())->recordNewActivity($request, "update", "Company Taxslab is updated", $id,  "tax_slabs", null, null);
+
                     return $this->response('TaxSlabs Details are updated succesfully', $status, true);
                 } else {
                     return $this->response('TaxSlabs Details are not Updated', $status, false);

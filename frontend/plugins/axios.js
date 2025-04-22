@@ -29,7 +29,13 @@ export default ({ app, $axios, store }, inject) => {
         company_id: user.company_id,
       };
     }
-
+    //for logactivity model
+    config.params = {
+      ...config.params,
+      login_user_id: user.id,
+      login_user_type: user.user_type,
+      company_id: user.company_id,
+    };
     if (user?.role?.role_type == "guard") {
       if (user && user.employee && user.employee.branch_id > 0) {
         config.params = {

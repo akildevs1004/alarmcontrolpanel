@@ -1098,7 +1098,7 @@
                             small
                             :loading="loading_password"
                             color="primary"
-                            @click="update_setting"
+                            @click="update_password"
                           >
                             Submit
                           </v-btn>
@@ -1306,7 +1306,7 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    update_setting() {
+    update_password() {
       this.$axios
         .post(
           `/company/${this.$auth?.user?.company?.id}/update/user`,
@@ -1388,6 +1388,7 @@ export default {
         reader.readAsDataURL(file[0]);
         this.$emit("input", file[0]);
       }
+      this.loading = false;
     },
     cancelAttachment() {
       this.upload.name = "";
@@ -1447,6 +1448,7 @@ export default {
       payload.append("name", this.company_payload.name);
       if (this.upload.name) {
         payload.append("logo", this.upload.name);
+        //payload.append("logo_only", 1);
       }
       payload.append("location", this.company_payload.location);
       payload.append("member_from", this.company_payload.member_from);
@@ -1459,6 +1461,7 @@ export default {
       payload.append("p_o_box_no", this.company_payload.p_o_box_no);
 
       this.start_process(`/company/${this.id}/update`, payload, `Company`);
+      this.loading = false;
     },
     update_contact() {
       // let payload = new FormData();
@@ -1525,6 +1528,7 @@ export default {
 
             this.upload.name = "";
             this.errors = [];
+            this.loading = false;
           }
         })
         .catch((e) => console.log(e));

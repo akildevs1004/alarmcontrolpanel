@@ -75,6 +75,10 @@ class CompanyController extends Controller
         if ($request->filled("company_id")) {
             Company::where("id", $request->company_id)->update(["notification_popup_pause_minutes" => $request->minutes, "dashboard_alarm_open_count_days" => $request->dashboard_alarm_open_count_days]);
 
+
+            (new ActivityController())->recordNewActivity($request, "update", "Company Notification Settings are Updated", $request->company_id,  "company", null, null);
+
+
             return $this->response("Settings Updated Successfully", null, true);
         }
     }
@@ -101,8 +105,11 @@ class CompanyController extends Controller
 
         if ($id > 0) {
             $company = Company::where("id", $id)->update(["currency" => $request->currency]);
+            (new ActivityController())->recordNewActivity($request, "update", "Company Currency Updated", $id,  "company", null, null);
+
             return $this->response('Currency Details are Updated', null, true);
         }
+
         return $this->response('Currency Details are Not Updated', null, false);
     }
     public function store(StoreRequest $request)
@@ -307,9 +314,14 @@ class CompanyController extends Controller
         $fileName = time() . '.' . $ext;
         $request->file('logo')->move(public_path('/upload'), $fileName);
         $company = Company::find($id)->update(["logo" => $fileName]);
+
+
         if (!$company) {
             return $this->response('Company cannot updated.', null, false);
         }
+
+
+        (new ActivityController())->recordNewActivity($request, "update", "Company Logo Updated",  $request->company_id, "company", null,   null);
         return $this->response('Logo successfully updated.', $company, true);
     }
     public function updateCompanyBusinessLicense(Request $request,  $id)
@@ -337,6 +349,7 @@ class CompanyController extends Controller
             }
         } else  return $this->response('Company cannot updated.', null, false);
 
+        (new ActivityController())->recordNewActivity($request, "update", "Company Business License Details Updated", $request->company_id, "company", null, null);
 
         return $this->response('Company successfully updated.', $company, true);
     }
@@ -369,10 +382,12 @@ class CompanyController extends Controller
         }
 
         $company = Company::find($id)->update($data);
+
         if (!$company) {
             return $this->response('Company cannot updated.', null, false);
         }
 
+        (new ActivityController())->recordNewActivity($request, "update", "Company Logo Updated", $request->company_id,  "company", null,  null);
         return $this->response('Company successfully updated.', $company, true);
     }
 
@@ -385,6 +400,7 @@ class CompanyController extends Controller
             return $this->response('Contact cannot updated.', null, false);
         }
 
+        (new ActivityController())->recordNewActivity($request, "update", "Company Contact Details Updated", $request->company_id,  "company", null,  null);
         return $this->response('Contact successfully updated.', $contact, true);
     }
 
@@ -484,6 +500,9 @@ class CompanyController extends Controller
                 if (!$record) {
                     return $this->response('User cannot update.', null, false);
                 }
+
+                (new ActivityController())->recordNewActivity($request, "update", "User/Company Password Is changed",   $user->id, "user", null, null);
+
                 return $this->response('User successfully updated.', $record, true);
             } else {
                 return [

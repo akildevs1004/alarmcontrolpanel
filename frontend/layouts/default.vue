@@ -882,9 +882,9 @@ export default {
       previousnotificationsMenuItems: [],
     };
   },
-  created() {
+  async created() {
     if (typeof window !== "undefined" && window.innerWidth < 700) {
-      console.log("window.innerWidth", window.innerWidth);
+      // console.log("window.innerWidth", window.innerWidth);
       this.$router.push("/alarm/mobiledashboard");
     }
 
@@ -906,18 +906,18 @@ export default {
 
       return false;
     }
-    this.loadAlarmNotificationIcons();
+    await this.loadAlarmNotificationIcons();
 
-    this.updateTopmenu();
+    await this.updateTopmenu();
 
     this.$store.commit("loginType", this.$auth.user?.user_type);
-    this.getCompanyDetails();
+    await this.getCompanyDetails();
 
     //console.log("top", this.$route.name);
     //this.topMenu_Selected = menu_name;
     // if(this.$route.name=='')
 
-    this.setMenus();
+    await this.setMenus();
 
     this.logo_src = require("@/static/logo_header.png");
     this.pendingNotificationsCount = 0;
@@ -1075,7 +1075,7 @@ export default {
   },
   methods: {
     wait5MinutesNextNotification() {
-      console.log(this.$auth.user.company.notification_popup_pause_minutes);
+      //console.log(this.$auth.user.company.notification_popup_pause_minutes);
 
       let minutes =
         this.$auth.user.company.notification_popup_pause_minutes ?? 1;
@@ -1188,7 +1188,7 @@ export default {
 
       this.setSubLeftMenuItems(routeConfig.name, routeConfig.path, false);
     },
-    loadAlarmNotificationIcons() {
+    async loadAlarmNotificationIcons() {
       let options = {
         params: {
           company_id: this.$auth.user.company_id,
@@ -1292,7 +1292,7 @@ export default {
         };
       }
     },
-    updateTopmenu() {
+    async updateTopmenu() {
       if (!this.$auth.user) {
         this.$router.push("/login");
         return;
@@ -1368,7 +1368,7 @@ export default {
           )
       );
 
-      console.log(added);
+      // console.log(added);
 
       return added.length > 0;
     },
@@ -1438,11 +1438,11 @@ export default {
             else this.dialogAlarmPopupNotificationStatus = false;
           }
 
-          console.log(
-            this.notificationsMenuItems.length,
-            this.wait5Minutes,
-            this.dialogAlarmPopupNotificationStatus
-          );
+          // console.log(
+          //   this.notificationsMenuItems.length,
+          //   this.wait5Minutes,
+          //   this.dialogAlarmPopupNotificationStatus
+          // );
 
           this.previousnotificationsMenuItems = this.notificationsMenuItems;
         })
@@ -1524,7 +1524,7 @@ export default {
         this.menuProperties[menu_name].selected = bgColor;
       }
 
-      console.log("menu_name", menu_name);
+      // console.log("menu_name", menu_name);
 
       // console.log(
       //   this.menuProperties,
@@ -1545,7 +1545,7 @@ export default {
       if (redirect) return this.$router.push(page);
     },
 
-    setMenus() {
+    async setMenus() {
       //left menu sub menu
       // this.items = this.company_menus.filter(
       //   (item) => item.module === this.topMenu_Selected
@@ -1636,7 +1636,7 @@ export default {
     goToCompany() {
       this.$router.push(`/settings`);
     },
-    getCompanyDetails() {
+    async getCompanyDetails() {
       this.$axios
         .get(`company/${this.$auth.user?.company_id}`)
         .then(({ data }) => {

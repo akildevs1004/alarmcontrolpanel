@@ -99,4 +99,27 @@ class ActivityController extends Controller
             throw $th;
         }
     }
+
+    public function recordNewActivity(
+        $request,
+        $action,
+        $description = null,
+        $modelId = null,
+        $model_type = null,
+        $branchId = null,
+        $customerId = null
+    ) {
+        Activity::create([
+            'user_id' => $request->login_user_id,
+            'action' => $action,
+            'type' => $request->login_user_type,
+            'model_id' => $modelId,
+            'model_type' =>  $model_type,
+            'description' => $description,
+            'company_id' => $request->company_id,
+            'branch_id' => $branchId && 0,
+            'ipaddress' =>  request()->ip(),
+            'customer_id' => $customerId,
+        ]);
+    }
 }

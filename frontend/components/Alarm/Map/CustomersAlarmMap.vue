@@ -510,6 +510,7 @@ export default {
     selectedCustomer: null,
     browserHeight: 700,
     browserMapHeight: 700,
+    intervalTimer: null,
   }),
   computed: {},
   mounted() {
@@ -530,6 +531,9 @@ export default {
       } catch (e) {}
     }
   },
+  beforeDestroy() {
+    clearInterval(this.intervalTimer);
+  },
 
   async created() {
     await this.getCustomers();
@@ -542,7 +546,7 @@ export default {
     }
     // this.getGoogleicons();
 
-    setInterval(async () => {
+    this.intervalTimer = setInterval(async () => {
       // if (
       //   this.$route.name == "security-customersmap" ||
       //   this.$route.name == "alarm-customersmap" ||

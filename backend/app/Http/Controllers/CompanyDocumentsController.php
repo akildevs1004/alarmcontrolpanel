@@ -102,6 +102,8 @@ class CompanyDocumentsController extends Controller
 
 
             $document = CompanyDocuments::create($validated);
+
+            (new ActivityController())->recordNewActivity($request, "create", "Company Document Created", $document->id,  "company_documents", null, null);
             if (isset($request->document)) {
                 $file = $request->file('document');
                 $ext = $file->getClientOriginalExtension();
@@ -111,6 +113,7 @@ class CompanyDocumentsController extends Controller
 
                 $document = CompanyDocuments::where("id", $document->id)->update(["path" => $fileName]);
             }
+
             return $this->response("Document has been added", null, true);
         } catch (\Exception $e) {
             return $this->response("Document cannot add", $e->getMessage(), true);
@@ -138,6 +141,7 @@ class CompanyDocumentsController extends Controller
             unset($validated["document"]);
 
             CompanyDocuments::where("id", $id)->update($validated);
+            (new ActivityController())->recordNewActivity($request, "update", "Company Document Updated", $id,  "company_documents", null, null);
             return $this->response("Document has been updated", null, true);
         } catch (\Exception $e) {
             return $this->response("Document cannot update", $e->getMessage(), true);
@@ -154,10 +158,12 @@ class CompanyDocumentsController extends Controller
         return CompanyDocuments::where("id", $id)->first();
     }
 
-    public function documentDestroy($id)
+    public function documentDestroy(Request $reqeust, $id)
     {
         try {
             CompanyDocuments::where("id", $id)->delete();
+            (new ActivityController())->recordNewActivity($reqeust, "delete", "Company Document Deleted",    $id, "company_documents", null, null);
+
             return $this->response("Document has been deleted", null, true);
         } catch (\Throwable $th) {
             return $this->response("Document cannot delete", null, true);

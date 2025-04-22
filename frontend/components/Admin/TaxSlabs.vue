@@ -133,14 +133,7 @@
           <span>Filter</span>
         </v-tooltip> -->
         <v-spacer></v-spacer>
-        <v-btn
-          dark
-          class="blue"
-          small
-          v-bind="attrs"
-          v-on="on"
-          @click="AddNewRoom()"
-        >
+        <v-btn dark class="blue" small @click="AddNewRoom()">
           <v-icon color="white" small>mdi-plus</v-icon> Tax Slab
         </v-btn>
       </v-toolbar>
@@ -246,14 +239,14 @@ export default {
         text: "Start Price",
         value: "start_price",
         align: "left",
-        sortable: true,
+        sortable: false,
         filterable: true,
       },
       {
         text: "End Price",
         value: "end_price",
         align: "left",
-        sortable: true,
+        sortable: false,
         filterable: true,
         filterSpecial: true,
       },
@@ -262,7 +255,7 @@ export default {
         value: "tax",
         key: "tax",
         align: "left",
-        sortable: true,
+        sortable: false,
         filterable: true,
         filterSpecial: true,
       },
