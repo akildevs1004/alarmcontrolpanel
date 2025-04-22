@@ -879,6 +879,7 @@ export default {
       dialogAlarmPopupNotificationStatus: false,
       key: 1,
       isBackendRequestOpen: false,
+      previousnotificationsMenuItems: [],
     };
   },
   created() {
@@ -998,7 +999,23 @@ export default {
 
     this.loadAlarmNotificationIcons();
   },
-  watch: {},
+
+  watch: {
+    // notificationsMenuItems: {
+    //   deep: true,
+    //   handler(newVal, oldVal) {
+    //     if (newVal.length > 0) {
+    //       let newIds = newVal.map((e) => e.id);
+    //       let oldIds = oldVal.map((e) => e.id);
+    //       let added = newIds.filter((id) => !oldIds.includes(id));
+    //       if (added.length) {
+    //         this.wait5Minutes = false;
+    //         console.log("wait5Minutes", this.wait5Minutes);
+    //       }
+    //     }
+    //   },
+    // },
+  },
   computed: {
     changeColor() {
       return "#ecf0f4"; //this.$store.state.color;
@@ -1065,7 +1082,7 @@ export default {
 
       this.snackbar = true;
       this.response = `New Alarm will be Display after  ${minutes} minutes`;
-      alert(`New Alarm will be Display after  ${minutes} minutes`);
+      //alert(`New Alarm will be Display after  ${minutes} minutes`);
       this.wait5Minutes = true;
 
       setTimeout(() => {
@@ -1343,6 +1360,18 @@ export default {
       //location.href = process.env.APP_URL + "/dashboard2";
       location.href = location.href; // process.env.APP_URL + "/dashboard2";
     },
+    isNewAlarmAdded() {
+      let added = this.notificationsMenuItems.filter(
+        (item) =>
+          !this.previousnotificationsMenuItems.some(
+            (prev) => prev.id === item.id
+          )
+      );
+
+      console.log(added);
+
+      return added.length > 0;
+    },
     loadHeaderNotificationMenu() {
       if (this.isBackendRequestOpen) {
         // Cancel the previous request if it's still pending
@@ -1382,6 +1411,7 @@ export default {
 
           data.forEach((element) => {
             let notification = {
+              id: element.id,
               title: element.device?.customer?.building_name
                 ? element.device.customer.building_name +
                   " - " +
@@ -1400,10 +1430,21 @@ export default {
 
           this.pendingNotificationsCount = data.length;
           if (this.$route.name == "alarm-dashboard") {
-            if (this.notificationsMenuItems.length > 0 && !this.wait5Minutes)
+            if (
+              this.notificationsMenuItems.length > 0 &&
+              (!this.wait5Minutes || this.isNewAlarmAdded())
+            )
               this.dialogAlarmPopupNotificationStatus = true;
             else this.dialogAlarmPopupNotificationStatus = false;
           }
+
+          console.log(
+            this.notificationsMenuItems.length,
+            this.wait5Minutes,
+            this.dialogAlarmPopupNotificationStatus
+          );
+
+          this.previousnotificationsMenuItems = this.notificationsMenuItems;
         })
         .catch((error) => {
           if (this.$axios.isCancel(error)) {

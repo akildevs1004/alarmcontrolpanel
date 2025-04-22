@@ -233,6 +233,12 @@ Route::get("create_test_alarm_technician", function (Request $request) {
     return false;
 });
 
+Route::get("update_json_file", function (Request $request) {
+
+
+    (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile(8);;
+});
+
 Route::get("create_test_alar11111111111", function (Request $request) {
 
 
@@ -597,10 +603,10 @@ Route::get("/testemployee", function (Request $request) {
 
     return Storage::url('8_3_8_2023_payslip.pdf');
 
-    $data = (new EmployeeController)->getSingleEmployeeProfileAll();
+    //$data = (new EmployeeController())->getSingleEmployeeProfileAll();
 
 
-    return  View('pdf.test', ["employees" => $data]);; //->donwload();
+    //return  View('pdf.test', ["employees" => $data]);; //->donwload();
 });
 Route::get('/donwloadfile', function (Request $request) {
     // Define the path to the file in the public folder
