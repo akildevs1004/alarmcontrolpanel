@@ -359,6 +359,7 @@ export default {
             device_zone_id: this.editId,
             device_id: this.deviceId,
             serial_number: this.device.serial_number,
+            customer_id: this.customer_id,
           },
         };
 
@@ -401,6 +402,7 @@ export default {
 
             serial_number: this.device.serial_number,
             device_id: this.deviceId,
+            customer_id: this.customer_id,
           },
         };
         this.$axios

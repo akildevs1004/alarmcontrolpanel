@@ -571,7 +571,7 @@ export default {
         if (contact.id > 0) {
           this.$axios
             .delete(`delete_customer_contact`, {
-              params: { contact_id: contact.id },
+              params: { contact_id: contact.id, customer_id: this.customer_id },
             })
             .then(({ data }) => {
               this.color = "background";

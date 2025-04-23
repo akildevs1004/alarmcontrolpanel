@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WhatsappController;
@@ -167,6 +168,18 @@ class CustomersController extends Controller
 
                 if ($request->filled("customer_id")) {
                     $record = Customers::where("id", $request->customer_id)->update($data);
+
+
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "update",
+                        "Customer details are updated",
+                        $request->customer_id,
+                        "customers",
+                        null,
+                        $request->customer_id
+                    );
                 } else {
                     $isExist = User::where('email', '=', $request->email)->first();
                     if ($isExist == null) {
@@ -179,12 +192,24 @@ class CustomersController extends Controller
                             'company_id' => $request->company_id,
                             'web_login_access' => 1,
                         ]);
+
+
                         $data['user_id'] = $user->id;
                     } else {
                         return $this->response('User Email is already Exist', null, false);
                     }
                     unset($data["password"]);
                     $record = Customers::create($data);
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "create",
+                        "New Customer is Created. " . $data['email'],
+                        $record->id,
+                        "customers",
+                        null,
+                        $request->customer_id
+                    );
                 }
 
 
@@ -204,7 +229,17 @@ class CustomersController extends Controller
                             "whatsapp" => $request->whatsapp,
                         ];
 
-                        CustomerContacts::create($contact);
+                        $contact = CustomerContacts::create($contact);
+
+                        (new ActivityController())->recordNewActivity(
+                            $request,
+                            "create",
+                            "New Customer '{$data['building_name']}'  Primary contact is Created",
+                            $contact->id,
+                            "customer_contacts",
+                            null,
+                            $record->id
+                        );
                     }
                     if ($request->filled("quotation_id") && $request->quotation_id != ''  && $request->quotation_id != 'null') {
                         $data = [
@@ -213,6 +248,16 @@ class CustomersController extends Controller
                         ];
 
                         SalesQuotations::where("id", $request->quotation_id)->update($data);
+
+                        (new ActivityController())->recordNewActivity(
+                            $request,
+                            "create",
+                            "Sales Quotation is updated with Customer Id {$record->id} ",
+                            $request->quotation_id,
+                            "sales_quotations",
+                            null,
+                            $record->id
+                        );
                     }
 
 
@@ -295,6 +340,17 @@ class CustomersController extends Controller
 
                 if ($request->filled("customer_id")) {
                     $record = Customers::where("id", $request->customer_id)->update($data);
+
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "update",
+                        "Customer  Address Details are Updated",
+                        $request->customer_id,
+                        "customers",
+                        null,
+                        $request->customer_id
+                    );
                 }
 
                 if ($record) {
@@ -400,8 +456,17 @@ class CustomersController extends Controller
 
             Customers::where("id", $request->customer_id)->delete();
 
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "delete",
+                "Customer  Account '{$request->customer_name}' is Deleted.  ",
+                $request->customer_id,
+                "customers",
+                null,
+                $request->customer_id
+            );
 
-            //Customers::where("id", $request->customer_id)->update(["deleted" => true]);
+            ///////Customers::where("id", $request->customer_id)->update(["deleted" => true]);
         }
 
         $this->response("Customer Deleted Successfully", null, true);
@@ -445,7 +510,17 @@ class CustomersController extends Controller
             ->where("zone_code", $request->zone_code);
 
         if ($deviceZoneDuplicate->count() == 0) {
-            DeviceZones::create($data);
+            $deviceZone = DeviceZones::create($data);
+
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "create",
+                "New Device Sensor Zone {$request->sensor_name} is created",
+                $deviceZone->id,
+                "device_zones",
+                null,
+                $request->customer_id
+            );
         } else {
             return $this->response("Zone Number " . $request->zone_code . " is already Exist", null, false);
         }
@@ -496,6 +571,16 @@ class CustomersController extends Controller
 
                 if ($deviceZoneDuplicate->count() == 0) {
                     $deviceZone->update($data);
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "create",
+                        "New Device Sensor Zone {$request->sensor_name} is created",
+                        $deviceZone->id,
+                        "device_zones",
+                        null,
+                        $request->customer_id ?? null
+                    );
                 } else {
                     return $this->response("Zone Number " . $request->zone_code . " is already Exist", null, false);
                 }
@@ -532,7 +617,17 @@ class CustomersController extends Controller
                         "delay" =>  $value["delay"],
                         "hours24" => $value["hours24"] ?? '',
                     ];
-                    DeviceZones::create($data);
+                    $deviceZone = DeviceZones::create($data);
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "create",
+                        "New Device Sensor Zone {$value['sensor_name']} is created",
+                        $deviceZone->id,
+                        "device_zones",
+                        null,
+                        $request->customer_id ?? null
+                    );
                 }
             }
             return $this->response('Zone Details Updated Successfully', null, true);
@@ -620,7 +715,20 @@ class CustomersController extends Controller
                 $user_data
             );
 
+
+
+
             Customers::where("id", $request->customer_id)->update($customer_data);
+
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "update",
+                "Customer Settings are updated",
+                $request->customer_id,
+                "device_zones",
+                null,
+                $request->customer_id ?? null
+            );
         }
 
         return $this->response('Customer Setting Updated Successfully', null, true);
@@ -642,6 +750,16 @@ class CustomersController extends Controller
                         unlink(public_path('/customers/contacts') . '/' . $contact->picture_raw);
                 }
                 if ($contact->delete()) {
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "delete",
+                        "Customer Contact is deleted",
+                        $request->contact_id,
+                        "customer_contacts",
+                        null,
+                        $request->customer_id ?? null
+                    );
 
                     return $this->response('Contact Details are Deleted', null, true);
                 } else
@@ -865,6 +983,19 @@ class CustomersController extends Controller
                 $record = CustomerContacts::where('company_id',   $request->company_id)
                     ->where('customer_id',   $request->customer_id)
                     ->where('id',   $request->editId)->update($data);
+
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "update",
+                    "Customer Contact is updated",
+                    $request->editId,
+                    "customer_contacts",
+                    null,
+                    $request->customer_id
+                );
+
+
                 return $this->response('Customer ' . $type . ' Contacts Updated.', $record, true);
             } else {
 
@@ -888,7 +1019,15 @@ class CustomersController extends Controller
                         ->where('customer_id',   $request->customer_id)
                         ->where('address_type',   $type)->update($data);
 
-
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "update",
+                        "Customer Contact is updated",
+                        $record->id,
+                        "customer_contacts",
+                        null,
+                        $request->customer_id
+                    );
 
                     if ($record) {
                         return $this->response('Customer ' . $type . ' Contacts Updated ', $record, true);
@@ -903,7 +1042,15 @@ class CustomersController extends Controller
                     $data['address_type'] = $type;
                     $record = CustomerContacts::create($data);
 
-
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "create",
+                        "New Customer Contact is Created. Type:" . $type,
+                        $record->id,
+                        "customers",
+                        null,
+                        $request->customer_id
+                    );
 
                     if ($record) {
                         return $this->response('Customer ' . $type . ' Contacts Created.', $record, true);
@@ -940,6 +1087,21 @@ class CustomersController extends Controller
 
             if ($request->filled("editId")) {
                 $record = CustomerContacts::where('id',   $request->editId)->update($data);
+
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "update",
+                    "Customer Contact is updated",
+                    $record->id,
+                    "customer_contacts",
+                    null,
+                    $request->customer_id
+                );
+
+
+
+
                 return $this->response('Customer ' . $type . ' Contacts Updated', $record, true);
             } else {
 
@@ -956,6 +1118,17 @@ class CustomersController extends Controller
                 $data['customer_id'] = $request->customer_id;
                 $data['address_type'] = $type;
                 $record = CustomerContacts::create($data);
+
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "create",
+                    "Customer Contact is Created",
+                    $record->id,
+                    "customer_contacts",
+                    null,
+                    $request->customer_id ?? null
+                );
 
 
 
@@ -1031,7 +1204,17 @@ class CustomersController extends Controller
                 if ((int)$customer_id) {
                     $data = ["company_id" => $request->company_id, "security_id" => $request->security_id, "customer_id" => $customer_id];
 
-                    SecurityCustomers::create($data);
+                    $record = SecurityCustomers::create($data);
+
+                    (new ActivityController())->recordNewActivity(
+                        $request,
+                        "create",
+                        "Customer is Mapped with Security",
+                        $record->id,
+                        "security_customers",
+                        null,
+                        $customer_id
+                    );
                 }
             }
         }
@@ -1051,7 +1234,17 @@ class CustomersController extends Controller
                 "customer_id" => $request->customer_id
             ];
 
-            SecurityCustomers::create($data);
+            $record = SecurityCustomers::create($data);
+
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "create",
+                "Customer is Mapped with Security",
+                $record->id,
+                "security_customers",
+                null,
+                $request->customer_id
+            );
         }
         return $this->response('Customer Details are updated', null, true);
     }
@@ -1067,6 +1260,21 @@ class CustomersController extends Controller
         $contact = $model->first();
 
         $model->update(["alarm_stop_pin" => $pin]);
+
+
+        (new ActivityController())->recordNewActivity(
+            $request,
+            "update",
+            "Customer Alarm Stop PIN is updated",
+            $contact->id,
+            "customer_contacts",
+            null,
+            $request->customer_id
+        );
+
+
+
+
         if ($contact->email != '') {
             $date = date("Y-m-d H:i:s");
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerBuildingPhotos\StoreRequest;
 use App\Models\Customers\CustomerBuildingPhotos;
@@ -51,13 +52,38 @@ class CustomerBuildingPhotosController extends Controller
 
                 $request->file('attachment')->move(public_path('/customers/building_photos'), $fileName);
                 $data['picture'] = $fileName;
+            } else if (!$request->filled("editId")) {
+                return $this->response('Photo can not create ', null, false);
             }
 
             if ($request->filled("editId")) {
-                $record = CustomerBuildingPhotos::where("id", $request->editId)->update($data);
+                CustomerBuildingPhotos::where("id", $request->editId)->update($data);
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "update",
+                    "Customer    Photo  '{$data['title']}' is Updated.",
+                    $request->editId,
+                    "customer_building_photos",
+                    null,
+                    $request->customer_id
+                );
+
+                return $this->response('Photo is Updated.', null, true);
             } else {
 
                 $record = CustomerBuildingPhotos::create($data);
+
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "create",
+                    "Customer  New  Photo  '{$data['title']}' is created.",
+                    $record->id,
+                    "customer_building_photos",
+                    null,
+                    $request->customer_id
+                );
             }
 
 
@@ -112,7 +138,7 @@ class CustomerBuildingPhotosController extends Controller
      * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($id > 0) {
             $contact = CustomerBuildingPhotos::find($id);
@@ -120,6 +146,15 @@ class CustomerBuildingPhotosController extends Controller
                 unlink(public_path('/customers/building_photos') . '/' . $contact->picture_raw);
             if ($contact->delete()) {
 
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "delete",
+                    "Customer     Photo  '{$contact['title']}' is Deleted.",
+                    $id,
+                    "customer_building_photos",
+                    null,
+                    $contact['customer_id']
+                );
                 return $this->response('Contact Details are Deleted', null, true);
             } else
                 return $this->response('Contact Details are not Deleted', null, false);

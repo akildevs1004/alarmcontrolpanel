@@ -50,10 +50,11 @@ class ActivityController extends Controller
             $q->where(function ($q) use ($request) {
                 $q->Orwhere('ipaddress', 'ILIKE', '$request->filter_text%');
                 $q->Orwhere('model_type', 'ILIKE', '$request->filter_text%');
+                $q->Orwhere('action', 'ILIKE', '$request->filter_text%');
 
                 $q->Orwhere('type', 'ILIKE', '$request->filter_text%');
                 $q->Orwhere('model_id', 'ILIKE', '$request->filter_text%');
-                $q->Orwhere('description', 'ILIKE', '$request->filter_text%');
+                $q->Orwhere('description', 'ILIKE', '%$request->filter_text%');
                 $q->Orwhere('customer_id', 'ILIKE', '$request->filter_text%');
 
 
@@ -122,14 +123,14 @@ class ActivityController extends Controller
         $customerId = null
     ) {
         Activity::create([
-            'user_id' => $request->login_user_id,
+            'user_id' => $request->login_user_id ?? null,
             'action' => $action,
-            'type' => $request->login_user_type,
+            'type' => $request->login_user_type ?? null,
             'model_id' => $modelId,
             'model_type' =>  $model_type,
             'description' => $description,
-            'company_id' => $request->company_id,
-            'branch_id' => $branchId && 0,
+            'company_id' => $request->company_id ?? null,
+            'branch_id' => $branchId ??  0,
             'ipaddress' =>  request()->ip(),
             'customer_id' => $customerId,
         ]);

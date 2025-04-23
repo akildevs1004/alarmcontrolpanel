@@ -3,7 +3,7 @@
   <div v-else>
     <v-card class="mb-5 mt-2 rounded-md" elevation="0">
       <v-toolbar class="rounded-md" dense flat>
-        <v-toolbar-title><span> Web User Logins</span></v-toolbar-title>
+        <v-toolbar-title><span> Web Logs/Activites</span></v-toolbar-title>
         <v-col
           ><span>
             <v-btn
@@ -79,7 +79,7 @@
               "
             >
               <v-img
-                v-if="item.model_type == 'company' && item.user.role_id > 1"
+                v-if="item.user.user_type == 'company' && item.user.role_id > 1"
                 style="
                   border-radius: 50%;
                   height: 45px;
@@ -95,7 +95,7 @@
               >
               </v-img
               ><v-img
-                v-else-if="item.model_type == 'security'"
+                v-else-if="item.user.user_type == 'security'"
                 style="
                   border-radius: 50%;
                   height: 45px;
@@ -111,7 +111,7 @@
               >
               </v-img
               ><v-img
-                v-else-if="item.model_type == 'technician'"
+                v-else-if="item.user.user_type == 'technician'"
                 style="
                   border-radius: 50%;
                   height: 45px;
@@ -128,7 +128,7 @@
               </v-img
               ><v-img
                 v-else-if="
-                  item.model_type == 'company' && item.user.role_id == 1
+                  item.user.user_type == 'company' && item.user.role_id == 1
                 "
                 style="
                   border-radius: 50%;
@@ -146,13 +146,17 @@
               </v-img>
             </v-col>
             <v-col style="padding: 10px">
-              <div v-if="item.model_type == 'company' && item.user.role_id > 1">
+              <div
+                v-if="item.user.user_type == 'company' && item.user.role_id > 1"
+              >
                 {{ item.user.first_name }} {{ item.user.last_name }}
               </div>
               <div
-                v-if="item.model_type == 'company' && item.user.role_id == 1"
+                v-if="
+                  item.user.user_type == 'company' && item.user.role_id == 1
+                "
               >
-                {{ item.model_type == "company" ? "Admin" : "" }}
+                {{ item.user.user_type == "company" ? "Admin" : "" }}
               </div>
 
               {{
@@ -169,7 +173,9 @@
         </template>
 
         <template v-slot:item.user.role="{ item }">
-          <div v-if="item.model_type == 'company' && item.user.role_id == 1">
+          <div
+            v-if="item.user.user_type == 'company' && item.user.role_id == 1"
+          >
             Company
           </div>
           <div v-else>
@@ -182,13 +188,15 @@
         </template>
 
         <template v-slot:item.employee.first_name="{ item, index }">
-          <div v-if="item.model_type == 'company' && item.user.role_id > 1">
+          <div v-if="item.user.user_type == 'company' && item.user.role_id > 1">
             {{ item.user.first_name }} {{ item.user.last_name }}
           </div>
           <div
-            v-else-if="item.model_type == 'company' && item.user.role_id == 1"
+            v-else-if="
+              item.user.user_type == 'company' && item.user.role_id == 1
+            "
           >
-            {{ item.model_type == "company" ? "Company" : "" }}
+            {{ item.user.user_type == "company" ? "Company" : "" }}
           </div>
           <div v-else-if="item.user.security">
             {{
@@ -285,14 +293,7 @@ export default {
 
           value: "employee.pic",
         },
-        {
-          text: "Action",
-          align: "left",
-          sortable: false,
-          filterable: true,
 
-          value: "action",
-        },
         // {
         //   text: "Type",
         //   align: "left",
@@ -325,6 +326,14 @@ export default {
 
           value: "ipaddress",
         },
+        // {
+        //   text: "Action",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
+
+        //   value: "action",
+        // },
         // {
         //   text: "Name",
         //   align: "left",

@@ -780,21 +780,26 @@ export default {
       this.$router.push("/alarm/view-customer/" + item.id);
     },
     deleteCustomer(item) {
-      if (confirm("Are you want to Delete Customer?")) {
-        let options = {
-          params: {
-            company_id: this.$auth.user.company_id,
+      if (confirm("Are you want to Delete Customer?"))
+        if (
+          confirm(
+            "This will permanently delete the customer’s devices and account. Proceed? "
+          )
+        ) {
+          let options = {
+            params: {
+              company_id: this.$auth.user.company_id,
+              customer_name: item.building_name,
+              customer_id: item.id,
+            },
+          };
 
-            customer_id: item.id,
-          },
-        };
-
-        this.$axios.post("delete_customer", options.params).then((data) => {
-          this.snackbar = true;
-          this.response = "Customer Details are Deleted successfully";
-          this.getDataFromApi();
-        });
-      }
+          this.$axios.post("delete_customer", options.params).then((data) => {
+            this.snackbar = true;
+            this.response = "Customer Details are Deleted permanently";
+            this.getDataFromApi();
+          });
+        }
     },
     updateCustomerSecurityId() {
       if (this.showCustomerOTP) {
