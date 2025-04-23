@@ -14,7 +14,7 @@
               text
               title="Reload"
             >
-              <v-icon class="ml-2" @click="getRecords()" dark
+              <v-icon class="ml-2" @click="getDatafromApi()" dark
                 >mdi-reload</v-icon
               >
             </v-btn>
@@ -29,7 +29,7 @@
               min-width: 100%;
               width: 150px;
             "
-            @keyup="getRecords()"
+            @keyup="getDatafromApi()"
             height="25px"
             outlined
             v-model="filterText"
@@ -162,6 +162,8 @@
                     item.user.security.last_name
                   : ""
               }}{{ item.user.customer ? item.user.customer.building_name : "" }}
+
+              <div>{{ item.user.email }}</div>
             </v-col>
           </v-row>
         </template>
@@ -202,8 +204,20 @@
           </div>
           <div v-else>---</div>
         </template>
-
-        <template v-slot:item.UserID="{ item }"> #{{ item.UserID }} </template>
+        <template v-slot:item.description="{ item }">
+          {{ caps(item.description) }}
+        </template>
+        <template v-slot:item.action="{ item }">
+          {{ caps(item.action) }}
+        </template>
+        <template v-slot:item.customer="{ item }">
+          {{ item.customer?.building_name || "---" }}
+        </template>
+        <template v-slot:item.LogTime="{ item }" style="color: green">
+          <v-icon color="green" fill>mdi-clock-outline</v-icon
+          >{{ item.date_time }}
+        </template>
+        <!--  <template v-slot:item.UserID="{ item }"> #{{ item.UserID }} </template>
         <template v-slot:item.employee.employee_id="{ item }">
           {{ item.employee && item.employee.employee_id }}
         </template>
@@ -212,7 +226,7 @@
           >{{ item.date_time }}
         </template>
 
-        <template v-slot:item.online="{ item }">
+         <template v-slot:item.online="{ item }">
           <v-icon v-if="item.device.location" color="green" fill
             >mdi-map-marker-radius</v-icon
           >
@@ -224,7 +238,7 @@
 
             {{ item.device.location ? item.device.location : "---" }}
           </div>
-        </template>
+        </template> -->
       </v-data-table>
     </v-card>
   </div>
@@ -241,8 +255,8 @@ export default {
       totalRowsCount: 0,
       cancelTokenSource: null,
       filterText: "",
-      date_from: "",
-      date_to: "",
+      date_from: null,
+      date_to: null,
       loading: false,
       items: [],
       emptyLogmessage: "",
@@ -264,7 +278,7 @@ export default {
           value: "sno",
         },
         {
-          text: "Profile",
+          text: "User",
           align: "left",
           sortable: false,
           filterable: true,
@@ -272,39 +286,79 @@ export default {
           value: "employee.pic",
         },
         {
-          text: "Name",
-          align: "left",
-          sortable: false,
-          filterable: true,
-
-          value: "employee.first_name",
-        },
-        {
-          text: "Role",
-          align: "left",
-          sortable: false,
-          filterable: true,
-
-          value: "user.role",
-        },
-
-        {
-          text: "Page",
+          text: "Action",
           align: "left",
           sortable: false,
           filterable: true,
 
           value: "action",
         },
+        // {
+        //   text: "Type",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
 
+        //   value: "action",
+        // },
         {
-          text: "Email",
+          text: "Description",
           align: "left",
           sortable: false,
           filterable: true,
 
-          value: "user.email",
+          value: "description",
         },
+        {
+          text: "Customer",
+          align: "left",
+          sortable: false,
+          filterable: true,
+
+          value: "customer",
+        },
+        {
+          text: "IP",
+          align: "left",
+          sortable: false,
+          filterable: true,
+
+          value: "ipaddress",
+        },
+        // {
+        //   text: "Name",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
+
+        //   value: "employee.first_name",
+        // },
+        // {
+        //   text: "Role",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
+
+        //   value: "user.role",
+        // },
+
+        // {
+        //   text: "Page",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
+
+        //   value: "action",
+        // },
+
+        // {
+        //   text: "Email",
+        //   align: "left",
+        //   sortable: false,
+        //   filterable: true,
+
+        //   value: "user.email",
+        // },
 
         {
           text: "Time",
@@ -318,12 +372,13 @@ export default {
       branch_id: null,
       branchesList: [],
       isCompany: true,
+      pageLoadingFirstTime: true,
     };
   },
   watch: {
     options: {
       handler() {
-        this.getRecords();
+        this.getDatafromApi();
       },
       deep: true,
     },
@@ -335,10 +390,10 @@ export default {
       return;
     }
 
-    let today = new Date();
-    let monthObj = this.$dateFormat.monthStartEnd(today);
-    this.date_from = monthObj.first;
-    this.date_to = monthObj.last;
+    // let today = new Date();
+    // let monthObj = this.$dateFormat.monthStartEnd(today);
+    // this.date_from = monthObj.first;
+    // this.date_to = monthObj.last;
 
     // const branch_header = [
     //   {
@@ -384,9 +439,9 @@ export default {
       this.date_from = data.from;
       this.date_to = data.to;
 
-      this.getRecords();
+      this.getDatafromApi();
     },
-    async getRecords(filter_column = "", filter_value = "") {
+    async getDatafromApi(filter_column = "", filter_value = "") {
       try {
         // Cancel previous request if it exists
         if (this.cancelTokenSource) {
@@ -399,6 +454,8 @@ export default {
         this.cancelTokenSource = this.$axios.CancelToken.source();
 
         const { sortBy, sortDesc, page = 1, itemsPerPage = 10 } = this.options;
+
+        // if (sortBy && page == 1) return false;
         this.loading = page === 1;
 
         this.perPage = itemsPerPage;
@@ -414,6 +471,8 @@ export default {
           date_from: this.date_from,
           date_to: this.date_to,
           filter_text: this.filterText,
+          page_loading_first_time: this.pageLoadingFirstTime,
+
           ...this.filters,
           ...(filter_column ? { [filter_column]: filter_value } : {}), // Conditionally add filter column
         };
@@ -423,6 +482,8 @@ export default {
           params,
           cancelToken: this.cancelTokenSource.token,
         });
+
+        this.pageLoadingFirstTime = false;
 
         // Process and assign data
         this.totalRowsCount = data.total;

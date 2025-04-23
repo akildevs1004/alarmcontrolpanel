@@ -50,12 +50,12 @@ class WhatsappClientsController extends Controller
             // Update existing record
 
             $whatsappClient->update(['accounts' => $request->accounts]);
-            (new ActivityController())->recordNewActivity($request, "update", "Company Whatsapp is Updated", $request->company_id,  "company", null, null);
+            (new ActivityController())->recordNewActivity($request, "update", "Company->Settings->Whatsapp is Updated", $request->company_id,  "company", null, null);
         } else {
             // Create new record
 
             $whatsappClient = WhatsappClients::create(['company_id' => $request->company_id, 'accounts' => $request->accounts]);
-            (new ActivityController())->recordNewActivity($request, "create", "Company Whatsapp is Created", $request->company_id,  "company", null, null);
+            (new ActivityController())->recordNewActivity($request, "create", "Company->Settings->Whatsapp is Created", $request->company_id,  "company", null, null);
         }
 
         return response()->json($whatsappClient, 200);

@@ -48,11 +48,23 @@ class ActivityController extends Controller
             }
 
             $q->where(function ($q) use ($request) {
+                $q->Orwhere('ipaddress', 'ILIKE', '$request->filter_text%');
                 $q->Orwhere('model_type', 'ILIKE', '$request->filter_text%');
+
+                $q->Orwhere('type', 'ILIKE', '$request->filter_text%');
+                $q->Orwhere('model_id', 'ILIKE', '$request->filter_text%');
+                $q->Orwhere('description', 'ILIKE', '$request->filter_text%');
+                $q->Orwhere('customer_id', 'ILIKE', '$request->filter_text%');
+
 
                 $q->orWhereHas('user', function ($query) use ($request) {
                     $query->where('first_name', 'ILIKE', "%$request->filter_text%");
                     $query->orWhere('last_name', 'ILIKE', "%$request->filter_text%");
+                });
+                $q->orWhereHas('customer', function ($query) use ($request) {
+
+
+                    $query->Where('building_name', 'ILIKE', "%$request->filter_text%");
                 });
                 $q->orWhereHas('user', function ($query) use ($request) {
 
@@ -78,10 +90,10 @@ class ActivityController extends Controller
         $model->when($request->filled("type"), fn($q) => $q->where("type", $request->type));
 
 
-        $model->when($request->filled("from_date"), fn($q) => $q->where("created_at", ">=", $request->from_date . ' 00:00:00'));
-        $model->when($request->filled("to_date"), fn($q) => $q->where("created_at", "<=", $request->to_date . ' 23:59:59'));
+        $model->when($request->filled("date_from"), fn($q) => $q->where("created_at", ">=", $request->date_from . ' 00:00:00'));
+        $model->when($request->filled("date_to"), fn($q) => $q->where("created_at", "<=", $request->date_to . ' 23:59:59'));
         $model->when($request->filled("user_type"), fn($q) => $q->where("model_type",  $request->user_type));
-        $model->with(["company", 'user.role', 'user.employee', "user.security", "user.customer"]);
+        $model->with(["customer", "company", 'user.role', 'user.employee', "user.security", "user.customer"]);
         return $model;
     }
 

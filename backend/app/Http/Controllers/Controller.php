@@ -298,7 +298,8 @@ class Controller extends BaseController
             "model_id" => $user_id,
             "model_type" =>  $user_type,
             "company_id" => $company_id,
-            "description" =>  $user_type . " with {$user_id} Id has been logged In.",
+            "ipaddress" => request()->ip(),
+            "description" =>  $user_type . " Account has been logged In.",
         ]);
     }
 

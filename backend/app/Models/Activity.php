@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Customers\Customers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,6 +35,11 @@ class Activity extends Model
     {
         return $this->hasOne(Role::class, "id", "role_id");
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, "customer_id", "id");
+    }
+
 
     public function getDateTimeAttribute()
     {

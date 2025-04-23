@@ -8,18 +8,18 @@
     </div>
     <CompAlarmDashboardStatistics />
 
-    <AllEventsDashboard2 name="AllEvents1" showFilters="true" showTabs="true" />
+    <ComponentAllEvents name="AllEvents1" showFilters="true" showTabs="true" />
   </div>
 </template>
 
 <script>
-import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
+import ComponentAllEvents from "../../components/Alarm/ComponentAllEvents.vue";
 
 import CompAlarmDashboardStatistics from "../../components/Alarm/CompAlarmDashboardStatistics.vue";
 
 export default {
   components: {
-    AllEventsDashboard2,
+    ComponentAllEvents,
     CompAlarmDashboardStatistics,
   },
 
