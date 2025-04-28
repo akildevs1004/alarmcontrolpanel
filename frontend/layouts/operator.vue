@@ -1420,6 +1420,7 @@ export default {
         }
       }
       try {
+        return this.$router.push(page); //comment to open In new window
         if (
           this.$route.name == "operator-eventslist" ||
           this.$route.name == "operator-map" ||
