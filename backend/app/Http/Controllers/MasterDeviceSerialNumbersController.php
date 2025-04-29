@@ -96,6 +96,9 @@ class MasterDeviceSerialNumbersController extends Controller
 
         $data = $request->all();
 
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
+
 
 
         $data["serial_number"] = $data["new_serial_number"];
@@ -113,6 +116,9 @@ class MasterDeviceSerialNumbersController extends Controller
         $data["status_id"] = 2;
         unset($data["attachment"]);
         unset($data["editId"]);
+        unset($data["login_user_id"]);
+        unset($data["login_user_type"]);
+
 
         $isExist = Device::where('serial_number', $request->new_serial_number)->first();
 
@@ -122,6 +128,16 @@ class MasterDeviceSerialNumbersController extends Controller
 
             if ($isExist === null || $request->editId == $isExist->id) {
                 $record = Device::where("id", $request->editId)->update($data);
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "update",
+                    "Device '{$data['serial_number']}' is Updated. ",
+                    $request->editId,
+                    "devices",
+                    null,
+                    $request->customer_id
+                );
                 return $this->response(' Serial Number is Updated Successfully', $data, true);
             } else {
                 return ["status" => false, "errors" => ["serial_number" => ["Serial Number is already in use."]]];
@@ -152,6 +168,16 @@ class MasterDeviceSerialNumbersController extends Controller
 
 
                 $record = Device::create($data);
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "create",
+                    "New Device '{$data['serial_number']}' is Created. ",
+                    $record->id,
+                    "devices",
+                    null,
+                    $request->customer_id
+                );
                 return $this->response('New Serial Number is created Successfully.', $record, true);
             } else {
                 return ["status" => false, "errors" => ["serial_number" => ["Serial Number is already in use."]]];
@@ -256,6 +282,17 @@ class MasterDeviceSerialNumbersController extends Controller
 
         $record = Device::where('id', $request->id)->delete();
         if ($record) {
+
+
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "delete",
+                "Device '{$record['serial_number']}' is Deleted. ",
+                $record->id,
+                "devices",
+                null,
+                $record->customer_id
+            );
 
             return $this->response('Serial Number is  Successfully deleted.', $record, true);
         } else {

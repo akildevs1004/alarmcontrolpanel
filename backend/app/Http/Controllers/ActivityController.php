@@ -91,8 +91,8 @@ class ActivityController extends Controller
         $model->when($request->filled("type"), fn($q) => $q->where("type", $request->type));
 
 
-        $model->when($request->filled("date_from"), fn($q) => $q->where("created_at", ">=", $request->date_from . ' 00:00:00'));
-        $model->when($request->filled("date_to"), fn($q) => $q->where("created_at", "<=", $request->date_to . ' 23:59:59'));
+        $model->when($request->filled("date_from"), fn($q) => $q->where("created_datetime", ">=", $request->date_from . ' 00:00:00'));
+        $model->when($request->filled("date_to"), fn($q) => $q->where("created_datetime", "<=", $request->date_to . ' 23:59:59'));
         $model->when($request->filled("user_type"), fn($q) => $q->where("model_type",  $request->user_type));
         $model->with(["customer", "company", 'user.role', 'user.employee', "user.security", "user.customer"]);
         return $model;
@@ -133,6 +133,7 @@ class ActivityController extends Controller
             'branch_id' => $branchId ??  0,
             'ipaddress' =>  request()->ip(),
             'customer_id' => $customerId,
+            'created_datetime' => date("Y-m-d H:i:s")
         ]);
     }
 }

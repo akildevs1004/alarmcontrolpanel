@@ -84,6 +84,8 @@ class DeviceProductServicesController extends Controller
 
 
         $data =  $request->all();
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
         unset($data['editId']);
         if ($request->filled("editId")) {
 

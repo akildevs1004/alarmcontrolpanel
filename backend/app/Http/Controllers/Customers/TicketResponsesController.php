@@ -47,6 +47,9 @@ class TicketResponsesController extends Controller
 
         $data = $request->all();
 
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
+
         $columns = ['company_id', 'ticket_id',  'customer_id', 'technician_id', 'security_id', 'technician_id', 'description'];
         $selected = array_intersect_key($data, array_flip($columns));
         $selected["created_datetime"] = date("Y-m-d H:i:s");
@@ -72,7 +75,7 @@ class TicketResponsesController extends Controller
 
 
         $model = TicketResponses::create($selected);
-        //closed status 
+        //closed status
         if ($request->status == 0) {
             Tickets::where("id", $request->ticket_id)->update(["status" => 0, "updated_datetime" => date("Y-m-d H:i:s")]);
         }

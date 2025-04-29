@@ -18,13 +18,13 @@ class ChangeRequestController extends Controller
         $model = ChangeRequest::query();
 
         $model->where("company_id", $request->company_id);
-        $model->when($request->filled("employee_device_id"), fn ($q) => $q->where('employee_device_id', $request->employee_device_id));
-        $model->when($request->filled("UserID"), fn ($q) => $q->where('employee_device_id', $request->employee_device_id));
-        $model->when($request->filled("request_type"), fn ($q) => $q->where('request_type', $request->request_type));
-        $model->when($request->filled("status"), fn ($q) => $q->where('status', $request->status));
+        $model->when($request->filled("employee_device_id"), fn($q) => $q->where('employee_device_id', $request->employee_device_id));
+        $model->when($request->filled("UserID"), fn($q) => $q->where('employee_device_id', $request->employee_device_id));
+        $model->when($request->filled("request_type"), fn($q) => $q->where('request_type', $request->request_type));
+        $model->when($request->filled("status"), fn($q) => $q->where('status', $request->status));
 
         $model->when($request->filled("branch_id"), function ($query) {
-            $query->whereHas("employee", fn ($q) => $q->where('branch_id', request("branch_id")));
+            $query->whereHas("employee", fn($q) => $q->where('branch_id', request("branch_id")));
         });
 
         $model->with(["branch", "employee"]);
@@ -68,6 +68,9 @@ class ChangeRequestController extends Controller
         try {
             // Validate the request data using the UpdateRequest rules
             $data = $request->all();
+
+            unset($data['login_user_id']);
+            unset($data['login_user_type']);
 
             // Start a database transaction
             DB::beginTransaction();

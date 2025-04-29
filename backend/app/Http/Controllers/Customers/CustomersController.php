@@ -204,11 +204,11 @@ class CustomersController extends Controller
                     (new ActivityController())->recordNewActivity(
                         $request,
                         "create",
-                        "New Customer is Created. " . $data['email'],
+                        "New Customer '{$data['email']}' is Created. ",
                         $record->id,
                         "customers",
                         null,
-                        $request->customer_id
+                        $record->id
                     );
                 }
 
@@ -388,6 +388,9 @@ class CustomersController extends Controller
     public function updatebuildingContacts(Request $request)
     {
         $data1 = $request->all();
+        unset($data1['login_user_id']);
+        unset($data1['login_user_type']);
+
         $data["first_name"] = $data1["first_name"];
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
@@ -423,6 +426,8 @@ class CustomersController extends Controller
 
         ]);
         $data1 = $request->all();
+        unset($data1['login_user_id']);
+        unset($data1['login_user_type']);
         $data["first_name"] = $data1["first_name"];
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
@@ -497,11 +502,16 @@ class CustomersController extends Controller
         ]);
 
         $data = $request->all();
-
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
 
         unset($data['editId']);
         unset($data['sensor_name_other']);
         unset($data['sensor_type_other']);
+
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
+
 
 
 
@@ -515,7 +525,7 @@ class CustomersController extends Controller
             (new ActivityController())->recordNewActivity(
                 $request,
                 "create",
-                "New Device Sensor Zone {$request->sensor_name} is created",
+                "New Device Sensor Zone '{$request->location}' is created",
                 $deviceZone->id,
                 "device_zones",
                 null,
@@ -550,6 +560,8 @@ class CustomersController extends Controller
         ]);
 
         $data = $request->all();
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
         if ($request->filled('device_zone_id')) {
 
             unset($data['editId']);
@@ -575,7 +587,7 @@ class CustomersController extends Controller
                     (new ActivityController())->recordNewActivity(
                         $request,
                         "create",
-                        "New Device Sensor Zone {$request->sensor_name} is created",
+                        "New Device Sensor Zone '{$request->location}' is created",
                         $deviceZone->id,
                         "device_zones",
                         null,
@@ -622,7 +634,7 @@ class CustomersController extends Controller
                     (new ActivityController())->recordNewActivity(
                         $request,
                         "create",
-                        "New Device Sensor Zone {$value['sensor_name']} is created",
+                        "New Device Sensor Zone {$value['location']} is created",
                         $deviceZone->id,
                         "device_zones",
                         null,
@@ -790,6 +802,9 @@ class CustomersController extends Controller
 
         ]);
         $data1 = $request->all();
+
+        unset($data1['login_user_id']);
+        unset($data1['login_user_type']);
         $data = [];
         $data["distance"] = $data1["distance"] ?? null;
         $data["first_name"] = $data1["first_name"];
@@ -878,6 +893,9 @@ class CustomersController extends Controller
 
         ]);
         $data1 = $request->all();
+        unset($data1['login_user_id']);
+        unset($data1['login_user_type']);
+
         $data["first_name"] = $data1["first_name"];
         $data["last_name"] = $data1["last_name"];
         $data["company_id"] = $data1["company_id"];
@@ -916,6 +934,8 @@ class CustomersController extends Controller
         if (!$data) return false;
 
         $data1 = $request->all();
+        unset($data1['login_user_id']);
+        unset($data1['login_user_type']);
         //$data["display_order"] = 1;
         $data["address"] = isset($data1["address"]) ? $data1["address"] : '---';
         $data["first_name"] = isset($data1["first_name"]) ? $data1["first_name"] : '---';
@@ -1022,7 +1042,7 @@ class CustomersController extends Controller
                     (new ActivityController())->recordNewActivity(
                         $request,
                         "update",
-                        "Customer Contact is updated",
+                        "Customer Contact '{$type}' is updated",
                         $record->id,
                         "customer_contacts",
                         null,
@@ -1092,8 +1112,8 @@ class CustomersController extends Controller
                 (new ActivityController())->recordNewActivity(
                     $request,
                     "update",
-                    "Customer Contact is updated",
-                    $record->id,
+                    "Customer Contact '{$data['address_type']}' is updated.",
+                    $request->editId,
                     "customer_contacts",
                     null,
                     $request->customer_id
@@ -1123,7 +1143,7 @@ class CustomersController extends Controller
                 (new ActivityController())->recordNewActivity(
                     $request,
                     "create",
-                    "Customer Contact is Created",
+                    "Customer Contact '{$type}' is Created",
                     $record->id,
                     "customer_contacts",
                     null,

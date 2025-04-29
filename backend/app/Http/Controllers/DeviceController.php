@@ -366,7 +366,7 @@ class DeviceController extends Controller
                     $data["device_id"] = $data["serial_number"];
                 }
 
-                //verify serial number on master database 
+                //verify serial number on master database
 
 
 
@@ -736,19 +736,19 @@ class DeviceController extends Controller
                 return $this->response('Device serial Number is not exist', null, false);
             }
 
-            //update to Device 
+            //update to Device
             if ($request->model_number == 'OX-900') {
 
                 $status = $request->function == 'manual'  ? 'true' : 'false';
-                $json = '{             
-             
-                 
+                $json = '{
+
+
                 "custom_enable": false,
                 "function_keys": [],
-                 
-                        "enable":  ' . $status . ' 
-                        
-                         
+
+                        "enable":  ' . $status . '
+
+
                     }';
 
                 // return  $json;
@@ -786,16 +786,33 @@ class DeviceController extends Controller
         // file_put_contents($filePath, json_encode($devices));
     }
 
-    public function destroy(Device $device)
+    public function destroy(Request $request, Device $device)
     {
         try {
 
             $device_id = $device->id;
             // $record = $device->delete();
 
-            $record = Device::where("serial_number", $device->serial_number)->update(["customer_id" => null]);
+            $record = Device::where("serial_number", $device->serial_number)->first();
+
+            $deviceModel = clone $record; // use clone on the model instance
+
+            $record->update(["customer_id" => null]);
+
             if ($device_id > 0)
+
+
                 DeviceZones::where('device_id', $device_id)->delete();
+
+            (new ActivityController())->recordNewActivity(
+                $request,
+                "delete",
+                "Device '{$deviceModel->serial_number}' is Deleted. ",
+                $deviceModel->id,
+                "devices",
+                null,
+                $deviceModel->customer_id
+            );
 
             if ($record) {
                 return $this->response('Device successfully deleted.', $record, true);
@@ -1481,7 +1498,7 @@ class DeviceController extends Controller
                     }
 
                     // $this->sendWhatsappNotification($message, '971554501483');
-                    // $this->sendWhatsappNotification($message, '971553303991'); 
+                    // $this->sendWhatsappNotification($message, '971553303991');
 
 
                     $this->sendNotification($notification, $company, $offlineDevicesCount, $devicesLocations, "", $company->devices);

@@ -63,6 +63,9 @@ use Illuminate\Support\Facades\Log;
 
 
 Route::get("testOfflineDevices", function (Request $request) {
+
+
+
     (new AlramEventsController)->verifyOfflineDevices();
 
     //return (new ApiAlarmDeviceSensorLogsController())->closeOfflineAlarmsBySerialNumber('M014200892110002626');

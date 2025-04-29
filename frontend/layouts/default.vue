@@ -1294,7 +1294,7 @@ export default {
     },
     async updateTopmenu() {
       if (!this.$auth.user) {
-        this.$router.push("/login");
+        this.$router.push("/login222222222222222222");
         return;
       }
       if (this.$auth.user.user_type == "department") {

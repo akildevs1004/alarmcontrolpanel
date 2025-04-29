@@ -300,6 +300,7 @@ class Controller extends BaseController
             "company_id" => $company_id,
             "ipaddress" => request()->ip(),
             "description" =>  $user_type . " Account has been logged In.",
+            'created_datetime' => date("Y-m-d H:i:s")
         ]);
     }
 

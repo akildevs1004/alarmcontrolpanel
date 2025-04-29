@@ -419,7 +419,7 @@
                 </v-list-item-title>
               </v-list-item> -->
               <v-list-item
-                v-if="can('device_delete') && !customer_id"
+                v-if="can('device_delete') && !customer_id && item.customer_id"
                 @click="deleteItem(item)"
               >
                 <v-list-item-title style="cursor: pointer">

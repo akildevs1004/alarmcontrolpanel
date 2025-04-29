@@ -98,7 +98,8 @@ class TechnicianLoginsController extends Controller
 
 
         $data =  $request->all();
-
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
 
 
 

@@ -19,34 +19,38 @@ class DeviceStatusController extends Controller
     public function store(DeviceStatusRequest $request): JsonResponse
     {
         $data = $request->all();
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
         $record = DeviceStatus::create($data);
         return Response::json([
-            'record'=> $record,
-            'message'=>'Status successfully created.',
-            'status'=>true
-        ],200);
+            'record' => $record,
+            'message' => 'Status successfully created.',
+            'status' => true
+        ], 200);
     }
 
     public function show($id)
     {
         $record = DeviceStatus::find($id);
         return Response::json([
-            'record'=>$record,
-            'status'=>true,
-            'message'=>null
-        ],200);
+            'record' => $record,
+            'status' => true,
+            'message' => null
+        ], 200);
     }
 
-    public function update(DeviceStatusRequest $request,$id)
+    public function update(DeviceStatusRequest $request, $id)
     {
         $data = $request->all();
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
         $record = DeviceStatus::find($id);
         $record->update($data);
         return Response::json([
-            'record'=> $record,
-            'message'=>'Status successfully updated.',
-            'status'=>true
-        ],200);
+            'record' => $record,
+            'message' => 'Status successfully updated.',
+            'status' => true
+        ], 200);
     }
 
     public function destroy($id)
@@ -55,29 +59,28 @@ class DeviceStatusController extends Controller
         if ($record->delete())
             return Response::noContent(204);
         else
-            return Response::json(['message'=>'No such record found.'],404);
+            return Response::json(['message' => 'No such record found.'], 404);
     }
 
-    public function search(Request $request,$key)
+    public function search(Request $request, $key)
     {
         $model = DeviceStatus::query();
 
         $model
-            ->where('id','LIKE',"%$key%")
-            ->orWhere('name','LIKE',"%$key%");
+            ->where('id', 'LIKE', "%$key%")
+            ->orWhere('name', 'LIKE', "%$key%");
 
-        return $model->orderBy('id','desc')->paginate($request->per_page);
+        return $model->orderBy('id', 'desc')->paginate($request->per_page);
     }
     public function deleteSelected(Request $request)
     {
-        $record = DeviceStatus::whereIn('id',$request->ids);
-        if ($record->delete()){
+        $record = DeviceStatus::whereIn('id', $request->ids);
+        if ($record->delete()) {
             return Response::json([
-                'status'=>true,
-                'message'=>null
-            ],200);
-        }
-        else
-            return Response::json(['message'=>'Role assigned to some users please check those.'],404);
+                'status' => true,
+                'message' => null
+            ], 200);
+        } else
+            return Response::json(['message' => 'Role assigned to some users please check those.'], 404);
     }
 }

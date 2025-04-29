@@ -14,23 +14,6 @@
               <v-row class="pt-0">
                 <v-col cols="12" dense>
                   <v-text-field
-                    label="Code / Zone Number(Ex: 001,002)"
-                    dense
-                    small
-                    outlined
-                    v-model="payload_security.zone_code"
-                    hide-details
-                    :readonly="!editable"
-                    :filled="!editable"
-                  ></v-text-field>
-                  <span
-                    v-if="primary_errors && primary_errors.zone_code"
-                    class="text-danger mt-2"
-                    >{{ primary_errors.zone_code[0] }}</span
-                  >
-                </v-col>
-                <v-col cols="12" dense>
-                  <v-text-field
                     label="Name(ex: Kitchen, Hall, etc)"
                     dense
                     small
@@ -47,6 +30,24 @@
                     >{{ primary_errors.location[0] }}</span
                   >
                 </v-col>
+                <v-col cols="12" dense>
+                  <v-text-field
+                    label="Code / Zone Number(Ex: 001,002)"
+                    dense
+                    small
+                    outlined
+                    v-model="payload_security.zone_code"
+                    hide-details
+                    :readonly="!editable"
+                    :filled="!editable"
+                  ></v-text-field>
+                  <span
+                    v-if="primary_errors && primary_errors.zone_code"
+                    class="text-danger mt-2"
+                    >{{ primary_errors.zone_code[0] }}</span
+                  >
+                </v-col>
+
                 <v-col cols="12" dense>
                   <v-autocomplete
                     label="Sensor Type"

@@ -136,6 +136,8 @@ class TicketsController extends Controller
 
 
         $data = $request->all();
+        unset($data['login_user_id']);
+        unset($data['login_user_type']);
 
         $columns = ['company_id', 'customer_id', 'security_id', 'subject',  'description'];
         $selected = array_intersect_key($data, array_flip($columns));

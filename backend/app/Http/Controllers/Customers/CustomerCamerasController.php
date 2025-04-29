@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Controller;
 
 use App\Models\CustomerCameras;
@@ -60,9 +61,29 @@ class CustomerCamerasController extends Controller
 
             if ($request->filled("editId")) {
                 $record = CustomerCameras::where("id", $request->editId)->update($data);
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "update",
+                    "Customer Camera '{$request->title}' URL  is Updated",
+                    $request->editId,
+                    "customer_cameras",
+                    null,
+                    $request->customer_id
+                );
             } else {
 
                 $record = CustomerCameras::create($data);
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "create",
+                    "Customer Camera '{$request->title}' URL  is Created",
+                    $record->id,
+                    "customer_cameras",
+                    null,
+                    $request->customer_id
+                );
             }
 
 
@@ -117,12 +138,22 @@ class CustomerCamerasController extends Controller
      * @param  \App\Models\Customers\CustomerBuildingPhotos  $CustomerBuildingPhotos
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($id > 0) {
             $contact = CustomerCameras::find($id);
 
             if ($contact->delete()) {
+
+                (new ActivityController())->recordNewActivity(
+                    $request,
+                    "delete",
+                    "Customer Camera '{$contact->title}' URL  is Deleted",
+                    $id,
+                    "customer_cameras",
+                    null,
+                    $contact->customer_id
+                );
 
                 return $this->response('Camera Details are Deleted', null, true);
             } else
