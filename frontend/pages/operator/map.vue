@@ -818,7 +818,7 @@ export default {
   computed: {},
 
   beforeDestroy() {
-    // if (window) window.removeEventListener("resize", this.onResize);
+    if (window) window.removeEventListener("resize", this.onResize);
   },
   async mounted() {
     // setTimeout(() => {
@@ -826,7 +826,7 @@ export default {
     // }, 1000 * 5);
 
     try {
-      //if (window) window.addEventListener("resize", this.onResize);
+      if (window) window.addEventListener("resize", this.onResize);
     } catch (e) {}
 
     if (this.$auth.user.branch_id) {

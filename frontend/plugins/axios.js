@@ -7,9 +7,19 @@ export default ({ app, $axios, store }, inject) => {
     pendingRequests.forEach(({ cancel }) => cancel("Request Canceled ......."));
     pendingRequests.length = 0; // Clear the array
   };
+
+  $axios.onError((error) => {
+    if (error.response && error.response.status === 401) {
+      app.$auth.refreshTokens();
+      app.$auth.reset();
+    }
+    pendingRequests.shift(); // Remove the oldest request from the queue
+    //return Promise.reject(error);
+  });
+
   // $axios.onError((error) => {
   //   try {
-  //     console.log("error", error);
+  //     //console.log("error", error);
 
   //     if (error.response && error.response.status === 401) {
   //       app.$auth.refreshTokens();
@@ -19,23 +29,26 @@ export default ({ app, $axios, store }, inject) => {
   //     //return Promise.reject(error);
   //   } catch (e) {}
   // });
+
   $axios.onRequest(async (config) => {
     if (!config) return config;
     let user = store.state.auth.user;
+
+    //for logactivity model
 
     if (user) {
       config.params = {
         ...config.params,
         company_id: user.company_id,
       };
+
+      config.params = {
+        ...config.params,
+        login_user_id: user.id,
+        login_user_type: user.user_type,
+        company_id: user.company_id,
+      };
     }
-    //for logactivity model
-    config.params = {
-      ...config.params,
-      login_user_id: user.id,
-      login_user_type: user.user_type,
-      company_id: user.company_id,
-    };
     if (user?.role?.role_type == "guard") {
       if (user && user.employee && user.employee.branch_id > 0) {
         config.params = {
