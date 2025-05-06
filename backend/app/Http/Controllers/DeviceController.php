@@ -58,6 +58,10 @@ class DeviceController extends Controller
 
     public function index(Request $request)
     {
+
+        (new AlramEventsController)->verifyOfflineDevices();
+
+
         $model = Device::query();
 
         //$model->excludeMobile();
@@ -167,6 +171,13 @@ class DeviceController extends Controller
         $model->orderBy(request('sortBy') ?? "armed_status", request('sort_by_desc') ? "asc" : "asc");
         if (!$request->sortBy)
             $model->orderBy("serial_number", "ASC");
+
+
+
+
+
+
+
         return $model->paginate($request->per_page ?? 1000);
 
         //return $model->with(['status', 'company'])->where('company_id', $request->company_id)->paginate($request->per_page ?? 1000);

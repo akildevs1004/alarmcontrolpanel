@@ -66,23 +66,26 @@ class AlarmDashboardController extends Controller
         COUNT(CASE WHEN status_id = 2 THEN 1 END) as offlineCount
     ")->first();
 
-        $alarmCounts = AlarmEvents::where("company_id", $request->company_id)
-            ->where('created_at', '>=', Carbon::now()->subDays($oneDevice->company->dashboard_alarm_open_count_days))
-            ->selectRaw("
+        $alarmCounts = 0;
+        if ($oneDevice) {
+            $alarmCounts = AlarmEvents::where("company_id", $request->company_id)
+                ->where('created_at', '>=', Carbon::now()->subDays($oneDevice->company->dashboard_alarm_open_count_days))
+                ->selectRaw("
     COUNT(CASE WHEN alarm_status = 1 THEN 1 END) as openCount,
     COUNT(CASE WHEN alarm_status = 0 THEN 1 END) as closedCount,
     COUNT(CASE WHEN forwarded = TRUE AND alarm_status = 1 THEN 1 END) as forwardCount
 ")
 
-            //->whereDate("alarm_start_datetime", $request->date)
+                //->whereDate("alarm_start_datetime", $request->date)
 
-            ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
-                $q->whereIn("customer_id", $request->filter_customers_list);
-            })
+                ->when($request->filled("filter_customers_list"), function ($q) use ($request) {
+                    $q->whereIn("customer_id", $request->filter_customers_list);
+                })
 
 
 
-            ->first();
+                ->first();
+        }
 
 
         $recentAlarm = AlarmEvents::where("company_id", $request->company_id)->orderby("alarm_start_datetime", "desc")->first();
