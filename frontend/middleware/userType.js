@@ -1,7 +1,7 @@
 const data = async ({ $auth, redirect }) => {
   let userType = {
     user: "/alarm/dashboard",
-    company: "/alarm/devices",
+    company: "/alarm/dashboard",
     customer: "/customer/dashboard",
     //security: "/security/dashboard",
     security: "/operator/dashboard",
@@ -13,8 +13,9 @@ const data = async ({ $auth, redirect }) => {
   if (userType == "company") {
     try {
       if (typeof window !== "undefined" && window.innerWidth < 700) {
-        console.log("window.innerWidth", window.innerWidth);
-        this.$router.push("/alarm/mobiledashboard");
+        // console.log("window.innerWidth", window.innerWidth);
+        //this.$router.push("/alarm/mobiledashboard");
+        return redirect("/alarm/mobiledashboard");
         return false;
       }
     } catch (e) {}

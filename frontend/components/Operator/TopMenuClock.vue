@@ -1,9 +1,9 @@
 <template>
   <div v-if="currentTime" style="text-align: center">
-    <span style="font-size: 35px">{{ currentTime }}</span>
-    <span style="font-size: 13px">
+    <label style="font-size: 35px">{{ currentTime }}</label>
+    <label style="font-size: 13px">
       {{ currentDate }}
-    </span>
+    </label>
 
     <!-- <div style="text-align: center">
       <img

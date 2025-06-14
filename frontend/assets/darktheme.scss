@@ -1,0 +1,173 @@
+.dashboard
+{
+  font-family: "Plus Jakarta Sans", sans-serif!important;
+}
+ .custom-card {
+    box-shadow: 0px 2px 1px -1px rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    border: 0px solid var(--default-border);
+    position: relative;
+    margin-block-end: 1.5rem;
+    width: 100%;
+}
+ .sos-border-bottom {
+    border-bottom: 2px solid red!important;
+}
+ .sos-border {
+    border: 1px solid red!important;
+}
+.sos
+{
+  color: red;
+}
+ .critical-border-bottom {
+    border-bottom: 2px solid #ffa909!important;
+} .critical-border {
+    border: 1px solid #ffa909!important;
+}
+.critical
+{
+  color: #ffa909;
+}
+.medical-border-bottom {
+    border-bottom: 2px solid #03b562!important;
+}.medical-border {
+    border: 1px solid #03b562!important;
+}
+.medical
+{
+  color: #03b562;
+}
+.fire-border-bottom
+{
+  border-bottom: 2px solid #fd4963!important;
+}.fire-border
+{
+  border: 1px solid #fd4963!important;
+}
+.fire
+{
+  color: #fd4963;
+}
+.water
+{
+  color: #fd4963;
+}
+.water-border-bottom
+{
+  border-bottom: 2px solid #0fbcf9!important;
+}.water-border
+{
+  border: 1px solid #0fbcf9!important;
+}
+.water
+{
+  color: #0fbcf9;
+}
+
+.image-box
+{
+  background-color: transparent;
+                    border: 2px solid red;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 6px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: auto;
+}
+
+
+
+.yellow-border {
+    border-bottom: 2px solid yellow!important;
+}
+/* DARK THEME START ---------------------------------------------------------------------------*/
+
+
+
+.theme--dark .border-color{
+  border-color:#353538!important;
+}
+
+.v-application .theme--dark  .secondary--text
+{
+  color:#FFF!important;
+}
+.theme--dark.v-data-table
+{
+  background-color: transparent!important;
+}
+
+.theme--dark .simpletable table,
+.theme--dark .simpletable th,
+.theme--dark .simpletable td {
+  border-bottom: 1px solid #353538;
+  border-collapse: collapse;
+}
+.theme--dark .simpletable tr:last-child td {
+  border-bottom: 1px solid #353538;
+  border-collapse: collapse;
+}
+.theme--dark .simpletable td {
+  height: 50px;
+  inline-size: 100px;
+  overflow: hidden;
+
+  vertical-align: middle;
+}
+.theme--dark .font-color
+{
+color:#FFF!important;
+}
+
+.theme--dark.v-card {
+  /*background-color: #10154d!important;*/
+
+   background-color: map-get($material-dark, 'surface') !important;
+}
+
+.theme--dark .v-btn__content
+{
+   color: map-get($material-dark, 'on-surface') !important;
+
+}
+
+.theme--dark .v-btn > .v-btn__content .v-icon
+{
+   color: map-get($material-dark, 'on-surface') !important;
+
+}
+
+.theme--dark.v-card > .v-card__text, .theme--dark.v-card > .v-card__subtitle
+{
+   color: map-get($material-dark, 'on-surface') !important;
+
+}
+
+.theme--dark.v-app-bar.v-toolbar.v-sheet
+{
+   background-color: map-get($material-dark, 'surface') !important;
+   box-shadow: none!important;
+}
+
+.theme--light .doughtchart .apexcharts-text
+{
+fill:black!important;
+}
+.light--light .doughtchart .apexcharts-text
+{
+fill:black!important;
+}
+
+// .theme--light .apexcharts-legend-text
+// {
+// color:black!important;
+// }
+
+// .theme--light .apexcharts-legend-text, .theme--light  .apexcharts-yaxis, .theme--light  .apexcharts-xaxis
+// {
+// color:black!important;
+// }
+

@@ -113,6 +113,178 @@ class AlarmDashboardController extends Controller
     }
     public function dashboardStatisctsHourlyRange(Request $request)
     {
+        return json_decode('[
+  {
+    "hour": 0,
+    "sosCount": 1,
+    "highCount": 1,
+    "mediumCount": 1,
+    "lowCount": 1
+  },
+  {
+    "hour": 1,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 2,
+    "sosCount": 3,
+    "highCount":4,
+    "mediumCount":5,
+    "lowCount": 6
+  },
+  {
+    "hour": 3,
+    "sosCount": 7,
+    "highCount":7,
+    "mediumCount":8,
+    "lowCount": 10
+  },
+  {
+    "hour": 4,
+    "sosCount": 1,
+    "highCount": 2,
+    "mediumCount": 3,
+    "lowCount": 4
+  },
+  {
+    "hour": 5,
+    "sosCount": 5,
+    "highCount":6,
+    "mediumCount": 7,
+    "lowCount": 8
+  },
+  {
+    "hour": 6,
+    "sosCount":  1,
+    "highCount":  2,
+    "mediumCount":  1,
+    "lowCount":  1
+  },
+  {
+    "hour": 7,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 8,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 9,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 10,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 11,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 12,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 13,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 14,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 15,
+    "sosCount": 5,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 16,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 17,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 18,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 19,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 20,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 21,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 22,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  },
+  {
+    "hour": 23,
+    "sosCount": 0,
+    "highCount": 0,
+    "mediumCount": 0,
+    "lowCount": 0
+  }
+]');
+
+
         $date_from = $request->date_from;
         $date_to = $request->date_to;
 

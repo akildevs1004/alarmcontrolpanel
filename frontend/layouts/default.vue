@@ -15,7 +15,6 @@
       expand-on-hover
       rail
       v-model="drawer"
-      dark
       :clipped="clipped"
       fixed
       app
@@ -118,8 +117,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :color="changeColor"
-      dark
       :clipped-left="clipped"
       fixed
       app
@@ -134,15 +131,22 @@
         style="cursor: pointer"
         @click="gotoHomePage()"
       >
+        <!-- <img
+          v-if="$vuetify.theme.dark"
+          class="logo-image"
+          title="Alarm Control Panel - Xtremeguard"
+          src="../static/logo33.jpeg"
+          style="width: 60px !important"
+        /> -->
         <img
           class="logo-image"
           title="Alarm Control Panel - Xtremeguard"
-          :src="logo_src"
+          src="../static/logo_header.png"
           style="width: 60px !important"
         />
       </span>
       <v-spacer></v-spacer>
-
+      <!-- header-menu top menu -->
       <span class="header-menu">
         <template
           v-if="
@@ -253,6 +257,9 @@
       <span class="pl-5"
         ><TopMenuClock v-if="displayTopMenu"></TopMenuClock
       ></span>
+      <span class="pl-2" @click="toggleTheme()" style="cursor: pointer"
+        ><v-icon>mdi-brightness-7</v-icon></span
+      >
       <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
         {{ $auth.user.name }}
       </div>
@@ -267,7 +274,7 @@
           v-slot:activator="{ on, attrs }"
           style="z-index: 9999 !important"
         >
-          <v-btn icon dark v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on">
             <v-badge
               :color="'  ' + pendingNotificationsCount > 0 ? 'red' : 'green'"
               :content="
@@ -454,7 +461,7 @@
           <v-card-title dense class="popup_background">
             Global Search
             <v-spacer></v-spacer>
-            <v-icon @click="globalSearchPopup = false" outlined dark>
+            <v-icon @click="globalSearchPopup = false" outlined>
               mdi mdi-close-circle
             </v-icon>
           </v-card-title>
@@ -575,7 +582,7 @@
           : 'padding-left: 140px;'
       "
     >
-      <v-container style="max-width: 100%; padding-left: 5px">
+      <v-container style="max-width: 100%; padding-left: 5px; padding: 15px">
         <nuxt />
       </v-container>
     </v-main>
@@ -708,7 +715,12 @@
     </v-navigation-drawer> -->
   </v-app>
 </template>
-
+<style lang="scss">
+@import "@/assets/variables.scss";
+@import "@/assets/darktheme.scss";
+@import "@/assets/darkchart.scss";
+@import "@/assets/whitetheme.scss";
+</style>
 <script>
 import company_menus from "../menus/left_menu.json";
 import employee_menus from "../menus/employee.json";
@@ -919,7 +931,7 @@ export default {
 
     await this.setMenus();
 
-    this.logo_src = require("@/static/logo_header.png");
+    //this.logo_src = require("@/static/logo_header.png");
     this.pendingNotificationsCount = 0;
 
     this.setTopmenuHilighterOnPageReload();
@@ -1074,6 +1086,9 @@ export default {
     },
   },
   methods: {
+    toggleTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
     wait5MinutesNextNotification() {
       //console.log(this.$auth.user.company.notification_popup_pause_minutes);
 
@@ -1280,17 +1295,17 @@ export default {
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
 
-      if (!this.$vuetify.theme.dark) {
-        this.$vuetify.theme.themes.light = {
-          primary: "#6946dd", //violoet
-          accent: "#d8363a",
-          secondary: "#242424",
-          background: "#34444c",
-          main_bg: "#ECF0F4",
-          violet: "#6946dd",
-          popup_background: "#ecf0f4",
-        };
-      }
+      // if (!this.$vuetify.theme.dark) {
+      //   this.$vuetify.theme.themes.light = {
+      //     primary: "#6946dd", //violoet
+      //     accent: "#d8363a",
+      //     secondary: "#242424",
+      //     background: "#34444c",
+      //     main_bg: "#ECF0F4",
+      //     violet: "#6946dd",
+      //     popup_background: "#ecf0f4",
+      //   };
+      // }
     },
     async updateTopmenu() {
       if (!this.$auth.user) {
@@ -1734,12 +1749,12 @@ export default {
   color: #9aa9b9;
 }
 
-header,
+/* header,
 header button,
 header a,
 header i {
   color: black !important;
-}
+} */
 header,
 .v-sheet {
   z-index: 99 !important;
@@ -3009,7 +3024,7 @@ td {
 #table-services .v-radio {
   margin: auto;
 }
-
+/*
 .simpletable table,
 .simpletable th,
 .simpletable td {
@@ -3026,7 +3041,7 @@ td {
   overflow: hidden;
   color: black;
   vertical-align: middle;
-}
+} */
 
 .table-header-color th {
   color: #4b9eff !important;
@@ -3049,7 +3064,7 @@ td {
   font-size: 15px !important;
 }
 .v-data-table-header tr {
-  border-top: 1px solid #ddd;
+  border-top: 0px solid #ddd;
 }
 .alarmevents .v-chip__content {
   margin: auto;

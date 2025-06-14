@@ -3,13 +3,9 @@
     <v-dialog v-model="dialogDevicesList" max-width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Disamed Devices</span>
+          <span dense>Disamed Devices</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogDevicesList = false"
-            outlined
-          >
+          <v-icon @click="dialogDevicesList = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -32,26 +28,11 @@
     <v-divider color="#5a82ca" style="margin-bottom: 10px" />-->
     <v-row class="pt-0 mt-0">
       <v-col
-        cols="7"
-        class="text-center pt-0"
-        style="margin: 0 auto; text-align: left; margin-left: -10px"
-      >
-        <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut2">
-          Total <br />0
-        </div>
-        <div
-          :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
-          :id="name"
-          :name="name"
-          style="width: 320px; margin: 0 auto; text-align: left"
-        ></div>
-      </v-col>
-      <v-col
         cols="5"
         class="pt-0"
         style="
           font-size: 11px;
-          color: #000000;
+
           padding-left: 0px;
           padding-right: 0px;
           line-height: 32px;
@@ -60,7 +41,14 @@
         "
       >
         <v-row style="">
-          <v-col cols="12" class="text-center justify-center">
+          <v-col
+            cols="5"
+            class="text-right justify-right vertical-center"
+            style="margin: auto"
+          >
+            <img style="width: 40px" :src="armedIcon"
+          /></v-col>
+          <v-col cols="7" class="text-center justify-center">
             <div style="font-size: 35px; color: #07af50; font-weight: bold">
               {{ categories && categories.armed > 0 ? categories.armed : "0" }}
             </div>
@@ -68,9 +56,16 @@
             <div style="font-size: 15px">Armed</div>
           </v-col>
         </v-row>
-        <v-divider color="#dddddd" />
+        <v-divider color="#353538" />
         <v-row>
-          <v-col cols="12" class="text-center justify-center mt-2">
+          <v-col
+            style="margin: auto"
+            cols="5"
+            class="text-right justify-right vertical-center"
+          >
+            <img style="width: 40px" :src="disarmIcon"
+          /></v-col>
+          <v-col cols="7" class="text-center justify-center mt-2">
             <div style="font-size: 35px; color: #fe0004; font-weight: bold">
               {{
                 categories && categories.disarm > 0 ? categories.disarm : "0"
@@ -80,14 +75,21 @@
             <div style="font-size: 15px">DisArm</div>
           </v-col>
         </v-row>
-        <v-divider color="#dddddd" />
+        <v-divider color="#353538" />
         <v-row>
-          <v-col cols="12" class="text-center justify-center mt-2">
+          <v-col
+            style="margin: auto"
+            cols="5"
+            class="text-right justify-right vertical-center"
+          >
+            <img style="width: 40px" :src="technicalIcon"
+          /></v-col>
+          <v-col cols="7" class="text-center justify-center mt-2">
             <div style="font-size: 35px; color: #ffbe00; font-weight: bold">
               {{ categories && categories.other > 0 ? categories.other : "0" }}
             </div>
 
-            <div style="font-size: 15px">Others</div>
+            <div style="font-size: 15px">Technical</div>
           </v-col>
         </v-row>
 
@@ -108,6 +110,22 @@
           }}</v-col>
         </v-row>
         <v-divider color="#dddddd" /> -->
+      </v-col>
+      <v-col
+        cols="7"
+        class="text-center pt-0 doughtchart"
+        style="margin: 0 auto; text-align: left; margin-left: -10px"
+      >
+        <div v-if="chartOptions.customTotalValue == 0" class="empty-doughnut2">
+          Total <br />0
+        </div>
+        <div
+          :style="chartOptions.customTotalValue == 0 ? 'display:none' : ''"
+          :id="name"
+          :name="name"
+          class="doughtchart"
+          style="width: 320px; margin: 0 auto; text-align: left"
+        ></div>
       </v-col>
     </v-row>
 
@@ -167,23 +185,30 @@ export default {
           type: "donut",
         },
         customTotalValue: 0,
+        stroke: {
+          show: false,
+          // width: 0,
+          // colors: ["#000"], // 👈 black border around each segment
+        },
         plotOptions: {
           pie: {
             donut: {
+              size: "80%", // Decrease value to make the bar thinner (e.g., '40%')
               labels: {
                 show: true,
                 name: {
                   show: true,
                   fontSize: "22px",
                   fontFamily: "Rubik",
-                  color: "#dfsda",
+                  color: this.$vuetify.theme.dark ? "#FFF" : "#000",
                   offsetY: -10,
                 },
                 value: {
                   show: true,
                   fontSize: "16px",
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  color: undefined,
+                  // color: undefined,
+                  color: this.$vuetify.theme.dark ? "#FFF" : "#000",
                   offsetY: 16,
                   formatter: function (val) {
                     return val;
@@ -192,7 +217,7 @@ export default {
                 total: {
                   show: true,
                   label: "Total",
-                  color: "#373d3f",
+                  color: this.$vuetify.theme.dark ? "#FFF" : "#000",
                   formatter: function (val) {
                     return val.config.customTotalValue;
                   },
@@ -250,6 +275,17 @@ export default {
   beforeDestroy() {
     if (this.statsInterval) clearInterval(this.statsInterval); // Clean up
   },
+  computed: {
+    armedIcon() {
+      return process.env.BACKEND_URL2 + "/google_map_icons/google_armed.png";
+    },
+    disarmIcon() {
+      return process.env.BACKEND_URL2 + "/google_map_icons/google_disarm.png";
+    },
+    technicalIcon() {
+      return process.env.BACKEND_URL2 + "/google_map_icons/google_offline.png";
+    },
+  },
   mounted() {
     this.statsInterval = setInterval(() => {
       if (this.$route.name === "alarm-dashboard") {
@@ -260,10 +296,18 @@ export default {
     this.renderChart1(this.categories);
   },
   watch: {
+    "$vuetify.theme.dark"(isDark) {
+      const labelColor = isDark ? "#FFF" : "#19191c";
+
+      this.chartOptions.plotOptions.pie.donut.labels.name.color = labelColor;
+      this.chartOptions.plotOptions.pie.donut.labels.value.color = labelColor;
+      this.chartOptions.plotOptions.pie.donut.labels.total.color = labelColor;
+    },
+
     categories: {
       deep: true,
       handler(newVal, oldVal) {
-        const keysToCheck = ["armed", "disarm", "others", "total"];
+        const keysToCheck = ["armed", "disarm", "Technical", "total"];
 
         const hasChanged = keysToCheck.some(
           (key) => newVal[key] !== oldVal[key]
@@ -310,7 +354,7 @@ export default {
       this.chartOptions.labels[1] = "DisArm";
       this.chartOptions.series[1] = data.disarm ?? 0;
 
-      this.chartOptions.labels[2] = "Others";
+      this.chartOptions.labels[2] = "Technical";
       this.chartOptions.series[2] = data.other ?? 0;
 
       this.chartOptions.customTotalValue = data.total; //this.items.ExpectingCount;
@@ -318,6 +362,19 @@ export default {
       if (this.chart) {
         this.chart.destroy();
       }
+
+      // this.chartOptions.plotOptions.pie.donut.labels.name.color = this.$vuetify
+      //   .theme.dark
+      //   ? "#FFF"
+      //   : "#19191c";
+      // this.chartOptions.plotOptions.pie.donut.labels.value.color = this.$vuetify
+      //   .theme.dark
+      //   ? "#FFF"
+      //   : "#19191c";
+      // this.chartOptions.plotOptions.pie.donut.labels.total.color = this.$vuetify
+      //   .theme.dark
+      //   ? "#FFF"
+      //   : "#19191c";
 
       // Render the chart
       this.chart = await new ApexCharts(

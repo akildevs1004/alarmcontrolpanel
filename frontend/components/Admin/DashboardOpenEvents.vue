@@ -21,7 +21,7 @@
         </v-menu>
       </v-col>
     </v-row> -->
-    <table style="width: 100%" class="simpletable mt-5">
+    <table style="width: 100%" class="simpletable mt-0 font-color">
       <tr v-for="event in logs">
         <!-- <td style="width: 30px">#{{ event.id }}</td> -->
         <td style="width: 50px">
@@ -36,7 +36,7 @@
             "
           />
         </td>
-        <td>{{ event.customer.building_name }}</td>
+        <td class="font-color">{{ event.customer.building_name }}</td>
         <td style="width: 40px">
           <img
             :title="event.alarm_type"
@@ -78,10 +78,13 @@
             Closed
           </div>
         </td>
-        <td>
+        <td class="font-color">
           {{
             $dateFormat.getTimeDifferenceOnlyMinutes(event.alarm_start_datetime)
           }}
+          <div style="font-size: 10px">
+            {{ $dateFormat.format5(event.alarm_start_datetime) }}
+          </div>
         </td>
       </tr>
     </table>

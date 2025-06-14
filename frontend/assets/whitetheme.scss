@@ -1,0 +1,22 @@
+.theme--light .font-color
+{
+color:black!important;
+}
+
+.theme--light .simpletable table,
+.theme--light .simpletable th,
+.theme--light .simpletable td {
+  border-bottom: 1px solid #353538;
+  border-collapse: collapse;
+}
+.theme--light .simpletable tr:last-child td {
+  border-bottom: 1px solid #353538;
+  border-collapse: collapse;
+}
+.theme--light .simpletable td {
+  height: 50px;
+  inline-size: 100px;
+  overflow: hidden;
+
+  vertical-align: middle;
+}

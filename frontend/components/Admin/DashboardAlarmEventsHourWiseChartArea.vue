@@ -2,7 +2,7 @@
   <div style="width: 100%">
     <v-row>
       <v-col md="6" style="padding-left: 20px">
-        <h3 style="font-weight: normal">{{ display_title }}</h3></v-col
+        <h4>{{ display_title }}</h4></v-col
       >
 
       <v-col md="6">
@@ -112,19 +112,8 @@ export default {
           toolbar: {
             show: false,
           },
-          // stacked: false,
-          type: "area",
+          type: "bar",
           width: "98%",
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shadeIntensity: 1,
-            inverseColors: false,
-            opacityFrom: 0.45,
-            opacityTo: 0.05,
-            stops: [20, 100, 100, 100],
-          },
         },
         plotOptions: {
           bar: {
@@ -137,25 +126,16 @@ export default {
           enabled: false,
         },
         stroke: {
-          curve: "smooth",
-          width: 2, // 👈 Thinner line (default is 4)
+          show: true,
+          width: 2,
+          colors: ["transparent"],
         },
         xaxis: {
           categories: [],
         },
-        grid: {
-          yaxis: {
-            lines: {
-              show: false, // 👈 hides y-axis grid lines
-            },
-          },
-        },
         yaxis: {
           title: {
             text: " ",
-          },
-          axisBorder: {
-            show: false, // 👈 hides the y-axis line
           },
         },
         fill: {
@@ -269,7 +249,7 @@ export default {
 
       data.forEach((item) => {
         this.chartOptions.series[0]["data"][counter] = item.sosCount;
-        this.chartOptions.series[1]["data"][counter] = item.highCount;
+        this.chartOptions.series[1]["data"][counter] = item.crititalCount;
         this.chartOptions.series[2]["data"][counter] = item.mediumCount;
         this.chartOptions.series[3]["data"][counter] = item.lowCount;
         this.chartOptions.xaxis.categories[counter] = item.hour;

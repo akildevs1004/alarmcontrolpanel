@@ -81,15 +81,11 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-row>
-      <v-col :cols="displayTable == true ? 9 : 12">
+    <v-row class="pt-0 mt-0">
+      <v-col class="pt-0 mt-0" :cols="displayTable == true ? 9 : 12">
         <v-card elevation="2">
           <v-card-text style="padding: 0px">
-            <div
-              :key="mapkeycount"
-              id="map"
-              :style="'height:' + (browserMapHeight - 10) + 'px'"
-            ></div>
+            <div :key="mapkeycount" id="map" :style="mapStyleCss"></div>
 
             <div style="position: absolute; top: 0px; left: 140px">
               <v-btn-toggle
@@ -425,7 +421,13 @@ import AlarmCustomerTabsView from "../../../components/Alarm/AlarmCustomerTabsVi
 import AlarmEventCustomerContactsTabView from "../../../components/Alarm/AlarmEventCustomerContactsTabView.vue";
 import TechnicianCustomerTabsView from "../TechnicianDashboard/TechnicianCustomerTabsView.vue";
 export default {
-  props: ["displayTable", "mapHeight", "isWithOutAlarms"],
+  props: [
+    "displayTable",
+    "mapHeight",
+    "isWithOutAlarms",
+    "defaultColor",
+    "borderRadius",
+  ],
   components: {
     AlarmCustomerTabsView,
     AlarmEventCustomerContactsTabView,
@@ -512,11 +514,31 @@ export default {
     browserMapHeight: 700,
     intervalTimer: null,
   }),
-  computed: {},
+  computed: {
+    mapStyleCss() {
+      let css = "";
+      if (this.browserMapHeight) {
+        css = "height:" + (this.browserMapHeight - 10) + "px";
+        if (this.borderRadius) css = css + ";border-radius:" + "5px";
+
+        return css;
+      } else return "height:" + this.browserMapHeight - 10 + "px";
+    },
+  },
   mounted() {
     // setTimeout(() => {
     //   this.getCustomers();
     // }, 1000 * 2);
+
+    // console.log(this.defaultColor);
+
+    // if (this.map) {
+    // setTimeout(() => {
+    //   if (this.defaultColor) {
+    //     this.changeGoogleMapColor(this.defaultColor);
+    //   }
+    // }, 1000 * 10);
+    // }
 
     setTimeout(() => {
       this.plotLocations(true);
@@ -578,7 +600,6 @@ export default {
       let newStyle = this.google_map_style_regular;
       if (type == "bw") newStyle = this.google_map_style_bandw;
       if (type == "map") newStyle = this.google_map_style_regular;
-
       this.map.setOptions({ styles: newStyle });
     },
     viewAlarmInformation(alarm) {
@@ -876,6 +897,13 @@ export default {
           //   },
           // ],
         });
+
+        setTimeout(() => {
+          console.log("theme", this.$vuetify.theme.dark);
+          if (this.$vuetify.theme.dark) {
+            this.changeGoogleMapColor("bw");
+          }
+        }, 1000 * 10);
       }
       this.geocoder = new google.maps.Geocoder();
       // this.infowindow = new google.maps.InfoWindow();
@@ -952,8 +980,15 @@ export default {
               const marker = new google.maps.Marker({
                 position,
                 map: this.map,
-                title: item.name,
+                title: item.building_name,
                 icon: icon,
+                // label: {
+                //   text: item.building_name,
+                //   color: "#000000",
+                //   fontSize: "14px",
+                //   fontWeight: "normal",
+                //   padding: "10px",
+                // },
               });
 
               let alarmHtmlLink = "";

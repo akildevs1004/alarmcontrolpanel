@@ -6,6 +6,38 @@
       </v-snackbar>
     </div>
     <v-dialog
+      v-model="dialogViewCustomer2"
+      fullscreen
+      scrollable
+      style="overflow: visible"
+    >
+      <v-card>
+        <v-card-title dark class="popup_background_noviolet">
+          <span dense style="color: black">View Customer Information</span>
+          <v-spacer></v-spacer>
+          <v-icon
+            style="color: black"
+            @click="
+              dialogViewCustomer2 = false;
+              closeCustomerDialog();
+            "
+            outlined
+          >
+            mdi mdi-close-circle
+          </v-icon>
+        </v-card-title>
+        <v-card-text style="padding-left: 10px; background-color: #fff">
+          <AlarmCustomerTabsView2
+            :key="key"
+            @closeCustomerDialog="closeCustomerDialog"
+            :_id="viewCustomerId"
+            :selectedCustomer="selectedCustomer"
+            :isPopup="true"
+            :isEditable="false"
+        /></v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
       v-model="dialogViewCustomer"
       width="1250px"
       style="overflow: visible"
@@ -427,6 +459,15 @@
                 <v-list width="120" dense>
                   <v-list-item
                     v-if="can('customers_view')"
+                    @click="viewCustomerItem(item)"
+                  >
+                    <v-list-item-title style="cursor: pointer">
+                      <v-icon color="secondary" small> mdi-eye </v-icon>
+                      View
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="can('customers_view')"
                     @click="viewItem(item)"
                   >
                     <v-list-item-title style="cursor: pointer">
@@ -484,6 +525,8 @@
 import AlarmNewCustomer from "../../components/Alarm/NewCustomer.vue";
 import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
+import AlarmCustomerTabsView2 from "../../components/Alarm/AlarmCustomerTabsView2.vue";
+
 import CompCustomersDashboardStatistics from "./CustomersTestCharts.vue";
 export default {
   props: ["eventFilter", "graphs"],
@@ -491,8 +534,10 @@ export default {
     AlarmNewCustomer,
     AlarmCustomerView,
     CompCustomersDashboardStatistics,
+    AlarmCustomerTabsView2,
   },
   data: () => ({
+    dialogViewCustomer2: false,
     browserHeight: 900,
     setIntervalLoopstatus: true,
     error_messages: "",
@@ -775,6 +820,13 @@ export default {
       this.viewCustomerId = item.id;
       this.key += 1;
       this.dialogViewCustomer = true;
+    },
+    viewCustomerItem(item) {
+      this.selectedCustomer = item;
+      this.setIntervalLoopstatus = false;
+      this.viewCustomerId = item.id;
+      this.key += 1;
+      this.dialogViewCustomer2 = true;
     },
     viewItem2(item) {
       this.$router.push("/alarm/view-customer/" + item.id);

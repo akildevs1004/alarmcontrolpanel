@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-row>
+    <!--<v-row>
       <v-col md="10">
-        <h3 style="color: black; font-weight: normal" class="pl-2">
+        <h3 style="font-weight: normal" class="pl-2">
           Operator Login Activities
         </h3>
       </v-col>
       <v-col md="2" class="text-end">
-        <v-menu bottom left>
+         <v-menu bottom left>
           <template v-slot:activator="{ on, attrs }">
             <v-btn dark-2 icon v-bind="attrs" v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
@@ -22,7 +22,7 @@
           </v-list>
         </v-menu>
       </v-col>
-    </v-row>
+    </v-row>-->
 
     <v-data-table
       dense
@@ -41,10 +41,11 @@
           <v-col style="padding-left: 0px; width: 25px; max-width: 25px">
             <v-img
               style="
-                border-radius: 10%;
+                border-radius: 50%;
                 height: auto;
                 width: 25px;
                 max-width: 25px;
+                max-height: 25px;
               "
               :src="
                 item.user.security
@@ -70,8 +71,8 @@
       </template>
       <template v-slot:item.email="{ item }">{{ item.user.email }}</template>
       <template v-slot:item.LogTime="{ item }" style="color: green">
-        <v-icon color="green" fill>mdi-clock-outline</v-icon>
-        {{ item.date_time }}
+        <!-- <v-icon color="green" fill>mdi-clock-outline</v-icon> -->
+        {{ $dateFormat.format5(item.date_time) }}
       </template>
     </v-data-table>
   </div>
