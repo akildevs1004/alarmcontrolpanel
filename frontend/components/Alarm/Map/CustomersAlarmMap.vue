@@ -206,6 +206,7 @@
                 <v-card-text
                   :style="{
                     paddingRight: '5px',
+                    color: 'black',
                     border:
                       selectedCustomer?.id === item.id
                         ? '1px solid #ecf0f4'
@@ -214,9 +215,10 @@
                       selectedCustomer?.id === item.id ? '#ecf0f4' : '#FFF',
                   }"
                 >
-                  <v-row style="height: auto; width: 100%">
+                  <v-row style="height: auto; width: 100%; color: black">
                     <v-col
                       style="
+                        color: black;
                         max-width: 30px;
                         padding: 0px;
                         margin: auto;
@@ -257,7 +259,9 @@
                           {{ item.city || "---" }}, {{ item.state || "---" }}
                         </div>
                         <div>
-                          <v-icon style="margin-top: -3px" size="10"
+                          <v-icon
+                            style="margin-top: -3px; color: blue"
+                            size="10"
                             >mdi-account-tie</v-icon
                           >{{
                             item.primary_contact
@@ -576,7 +580,7 @@ export default {
       //   this.$route.name == "alarm-customersmap" ||
       //   this.$route.name == "alarm-dashboard"
       // )
-      // await this.getCustomers();
+      await this.getCustomers();
       //this.mapkeycount++;
     }, 1000 * 10);
     ///this.getBuildingTypes();
@@ -1006,9 +1010,11 @@ export default {
               };
               try {
                 const content = document.createElement("div");
+
+                content.className = "customerMapTitle";
                 content.innerHTML = `
           <div style="position: relative;
-    top: 35px;background:transparent;color:black; padding:6px 10px;border-radius:6px;font-weight:normal;font-size:16px ;">
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px;font-weight:bold;font-size:18px ;">
            ${item.building_name}
           </div>
         `;

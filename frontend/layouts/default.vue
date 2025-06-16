@@ -3079,8 +3079,8 @@ td {
 }
 
 /* HTML marker styles */
-.price-tag {
-  background-color: #4285f4;
+.customerMapTitle {
+  /* background-color: #4285f4; */
   border-radius: 8px;
   color: #ffffff;
   font-size: 14px;
@@ -3088,7 +3088,7 @@ td {
   position: relative;
 }
 
-.price-tag::after {
+.customerMapTitle::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -3098,6 +3098,6 @@ td {
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid #4285f4;
+  /* border-top: 8px solid #4285f4; */
 }
 </style>

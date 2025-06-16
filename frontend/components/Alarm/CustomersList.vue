@@ -193,16 +193,8 @@
     <v-row>
       <v-col>
         <v-card elevation="0" class="mt-2">
-          <v-toolbar
-            v-if="!eventFilter"
-            class="mb-2 white--text"
-            color="white"
-            dense
-            flat
-          >
-            <v-toolbar-title>
-              <span style="color: black"> Customers</span></v-toolbar-title
-            >
+          <v-toolbar v-if="!eventFilter" class="mb-2" dense flat>
+            <v-toolbar-title> <span style=""> Customers</span></v-toolbar-title>
 
             <v-btn
               title="Reload"
@@ -527,7 +519,7 @@ import AlarmCustomerView from "../../components/Alarm/ViewCustomer.vue";
 import AlarmCustomerTabsView from "../../components/Alarm/AlarmCustomerTabsView.vue";
 import AlarmCustomerTabsView2 from "../../components/Alarm/AlarmCustomerTabsView2.vue";
 
-import CompCustomersDashboardStatistics from "./CustomersTestCharts.vue";
+import CompCustomersDashboardStatistics from "./CompCustomersDashboardStatistics.vue";
 export default {
   props: ["eventFilter", "graphs"],
   components: {

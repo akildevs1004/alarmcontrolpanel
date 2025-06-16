@@ -9,17 +9,12 @@
                 <v-icon fill color="red" size="40" style="clear: both"
                   >mdi-folder-open-outline</v-icon
                 >
-                <div style="color: black">OPEN</div>
+                <div style="">OPEN</div>
               </v-col>
 
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 40px;
-                  margin: auto;
-                  font-weight: bold;
-                  color: black;
-                "
+                style="font-size: 40px; margin: auto; font-weight: bold"
                 >{{ alarmStatistics.open }}</v-col
               ></v-row
             ></v-card-text
@@ -34,17 +29,12 @@
                 <v-icon fill color="#07af50" size="40" style="clear: both"
                   >mdi-lock-outline</v-icon
                 >
-                <div style="color: black">CLOSED</div>
+                <div style="">CLOSED</div>
               </v-col>
 
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 40px;
-                  margin: auto;
-                  font-weight: bold;
-                  color: black;
-                "
+                style="font-size: 40px; margin: auto; font-weight: bold"
                 >{{ alarmStatistics.closed }}</v-col
               ></v-row
             ></v-card-text
@@ -59,17 +49,12 @@
                 <v-icon fill color="#0046ff" size="40" style="clear: both"
                   >mdi-lock-open-variant-outline</v-icon
                 >
-                <div style="color: black">Forward</div>
+                <div style="">Forward</div>
               </v-col>
 
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 40px;
-                  margin: auto;
-                  font-weight: bold;
-                  color: black;
-                "
+                style="font-size: 40px; margin: auto; font-weight: bold"
                 >{{ alarmStatistics.forwarded }}</v-col
               ></v-row
             ></v-card-text
@@ -82,12 +67,7 @@
             ><v-row style="margin: auto">
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 25px;
-                  margin: auto;
-
-                  color: black;
-                "
+                style="font-size: 25px; margin: auto"
                 >High</v-col
               ><v-col
                 class="d-flex justify-center"
@@ -103,12 +83,7 @@
               >
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 25px;
-                  margin: auto;
-
-                  color: black;
-                "
+                style="font-size: 25px; margin: auto"
                 >Medium</v-col
               ><v-col
                 class="d-flex justify-center"
@@ -124,12 +99,7 @@
               >
               <v-col
                 class="d-flex justify-center"
-                style="
-                  font-size: 25px;
-                  margin: auto;
-
-                  color: black;
-                "
+                style="font-size: 25px; margin: auto"
                 >Low</v-col
               ><v-col
                 class="d-flex justify-center"
