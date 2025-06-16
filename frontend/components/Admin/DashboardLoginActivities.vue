@@ -74,6 +74,9 @@
         <!-- <v-icon color="green" fill>mdi-clock-outline</v-icon> -->
         {{ $dateFormat.format5(item.date_time) }}
       </template>
+      <template v-slot:item.duration="{ item }" style="color: green">
+        {{ $dateFormat.getTimeDifferenceOnlyMinutes(item.date_time) }}
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -114,14 +117,14 @@ export default {
 
           value: "employee.first_name",
         },
-        {
-          text: "Email",
-          align: "left",
-          sortable: true,
-          filterable: true,
+        // {
+        //   text: "Email",
+        //   align: "left",
+        //   sortable: true,
+        //   filterable: true,
 
-          value: "email",
-        },
+        //   value: "email",
+        // },
         {
           text: "Time",
           align: "left",
@@ -129,6 +132,14 @@ export default {
           filterable: true,
 
           value: "LogTime", //edit purpose
+        },
+        {
+          text: "Duration",
+          align: "left",
+          sortable: true,
+          filterable: true,
+
+          value: "duration", //edit purpose
         },
       ],
     };

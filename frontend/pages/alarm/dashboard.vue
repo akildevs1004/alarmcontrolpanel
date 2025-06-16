@@ -251,7 +251,7 @@
               class="eventslistscroll table-font12"
               ><v-card-text>
                 <h3 style="font-weight: normal" class="font-color">
-                  Operators
+                  Operators Status
                 </h3>
 
                 <DashboardLoginActivities

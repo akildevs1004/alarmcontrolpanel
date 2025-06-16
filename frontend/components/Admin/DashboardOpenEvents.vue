@@ -70,11 +70,7 @@
             FWD
           </div>
 
-          <div
-            style="width: 60px; color: #fff; height: 25px; color: green"
-            v-else
-            label
-          >
+          <div style="width: 60px; color: #fff; height: 25px" v-else label>
             Closed
           </div>
         </td>

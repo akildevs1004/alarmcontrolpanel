@@ -435,6 +435,7 @@ export default {
   },
 
   data: () => ({
+    AdvancedMarkerElement: null,
     selectedAlarm: null,
     currentCustomer: null,
     mapStyle: "map",
@@ -501,6 +502,7 @@ export default {
     response: "",
     buildingTypes: [],
     _id: null,
+    mapMarkersLabelsList: [],
 
     mapMarkersList: [],
     mapInfowindowsList: [],
@@ -574,7 +576,7 @@ export default {
       //   this.$route.name == "alarm-customersmap" ||
       //   this.$route.name == "alarm-dashboard"
       // )
-      await this.getCustomers();
+      // await this.getCustomers();
       //this.mapkeycount++;
     }, 1000 * 10);
     ///this.getBuildingTypes();
@@ -866,8 +868,13 @@ export default {
         console.log(e);
       }
     },
-    initMap() {
+    async initMap() {
       if (!this.map && document.getElementById("map")) {
+        const { Map } = await window.google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } =
+          await window.google.maps.importLibrary("marker");
+
+        this.AdvancedMarkerElement = AdvancedMarkerElement;
         this.map = new google.maps.Map(document.getElementById("map"), {
           // mapTypeControl: true, // Enables satellite/roadmap controls
           // mapTypeControlOptions: {
@@ -875,6 +882,7 @@ export default {
           //   position: google.maps.ControlPosition.TOP_RIGHT,
           // },
           controlSize: 20,
+          mapId: this.mapKey, // ✅ Required for AdvancedMarkerElement
           zoom: 12,
           center: { lat: 25.2265191, lng: 55.395225 },
           styles: this.google_map_style_regular,
@@ -933,7 +941,20 @@ export default {
           this.mapMarkersList[index] = null;
         }
       });
+      //clear previous
+      // this.mapMarkersLabelsList.forEach((marker, index) => {
+      //   if (marker) {
+      //     marker.visible = false;
+      //     marker.setMap(null);
+      //     marker = null;
+      //     this.mapMarkersLabelsList[index] = null;
+      //   }
+      // });
+
       this.mapMarkersList = [];
+      this.mapMarkersLabelsList.forEach((marker1) => (marker1.map = null));
+      this.mapMarkersLabelsList = [];
+
       this.data.forEach((item) => {
         try {
           const customerId = item.id;
@@ -948,6 +969,13 @@ export default {
             )
               this.mapMarkersList[customerId].setMap(null);
           }
+
+          // console.log(
+          //   customerId,
+          //   item.id,
+          //   this.mapMarkersList[customerId],
+          //   item.latest_alarm_event?.alarm_status
+          // );
 
           // Determine if we should load a marker for this customer
           let loadMarker =
@@ -976,7 +1004,22 @@ export default {
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),
               };
+              try {
+                const content = document.createElement("div");
+                content.innerHTML = `
+          <div style="position: relative;
+    top: 35px;background:transparent;color:black; padding:6px 10px;border-radius:6px;font-weight:normal;font-size:16px ;">
+           ${item.building_name}
+          </div>
+        `;
 
+                const markerLabel = new this.AdvancedMarkerElement({
+                  position,
+                  map: this.map,
+                  content: content,
+                });
+                this.mapMarkersLabelsList.push(markerLabel); // ✅ Track marker
+              } catch (e) {}
               const marker = new google.maps.Marker({
                 position,
                 map: this.map,
@@ -1003,7 +1046,7 @@ export default {
               if (item.profile_picture) profile_picture = item.profile_picture;
 
               let html = `
-    <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
+    <table class="mappopupContent" style="width:250px; min-height:100px;color:black" id="infowindow-content-${item.id}">
       <tr>
         <td style="width:100px; vertical-align: top;">
           <img style="width:100px;max-height:100px; padding-right:5px;" src="${profile_picture}" />
@@ -1047,7 +1090,7 @@ export default {
                 "https://alarm.xtremeguard.org/no-business_profile.png";
 
               html = `
-            <table style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
+            <table class="mappopupContent" style="width:250px; min-height:100px" id="infowindow-content-${item.id}">
 
                <tr>
                 <td colspan="2" style="width:100%;;text-align:center; vertical-align: top;">
@@ -1089,6 +1132,8 @@ export default {
 
               this.mapInfowindowsList[item.id] = infowindow;
               this.mapMarkersList[item.id] = marker;
+              // console.log("Customer ", item.id);
+
               if (item.latest_alarm_event?.alarm_status == 1)
                 marker.setAnimation(google.maps.Animation.BOUNCE);
 

@@ -684,12 +684,7 @@
                         </div>
 
                         <div
-                          style="
-                            width: 60px;
-                            color: #fff;
-                            height: 25px;
-                            color: green;
-                          "
+                          style="width: 60px; color: #fff; height: 25px"
                           v-else
                           label
                         >
