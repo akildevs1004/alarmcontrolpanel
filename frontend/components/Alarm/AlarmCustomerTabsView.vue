@@ -130,9 +130,6 @@
           icons-and-text
           v-model="tab"
           vertical
-          background-color="#203864"
-          dark
-          color="#0aafeb"
           class="customer-tabs-right-line"
         >
           <!-- <v-tab class="customer-tab" style="width: 70px" >

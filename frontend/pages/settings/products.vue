@@ -28,136 +28,122 @@
       </v-card>
     </v-dialog>
 
-    <v-row>
-      <v-col>
-        <v-card elevation="0" class="mt-0">
-          <v-toolbar class="mb-2 white--text" color="white" dense flat>
-            <v-toolbar-title>
-              <span style="color: black">
-                Product Services</span
-              ></v-toolbar-title
-            >
-            <!-- <v-tooltip top color="primary">
+    <v-card elevation="0" class="mt-0">
+      <v-toolbar class="mb-2" dense flat>
+        <v-toolbar-title> <span> Product Services</span></v-toolbar-title>
+        <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
-            <v-btn
-              title="Reload"
-              dense
-              class="ma-0 px-0"
-              x-small
-              :ripple="false"
-              @click="getDataFromApi"
-              text
-            >
-              <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
-            </v-btn>
-            <!-- </template>
+        <v-btn
+          title="Reload"
+          dense
+          class="ma-0 px-0"
+          x-small
+          :ripple="false"
+          @click="getDataFromApi"
+          text
+        >
+          <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
+        </v-btn>
+        <!-- </template>
                 <span>Reload</span>
               </v-tooltip> -->
 
-            <v-spacer></v-spacer>
-            <span style="width: 180px"
-              ><v-text-field
-                style="padding-top: 7px"
-                height="20"
-                class="employee-schedule-search-box"
-                @input="getDataFromApi()"
-                v-model="commonSearch"
-                label="Search (min 3)"
-                dense
-                outlined
-                type="text"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field
-            ></span>
-
-            <v-btn
-              v-if="can('operators_create')"
-              title="Change Request"
-              x-small
-              :ripple="false"
-              text
-              @click="addItem()"
-            >
-              <v-icon class="">mdi mdi-plus-circle</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-            {{ snackText }}
-
-            <template v-slot:action="{ attrs }">
-              <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
-            </template>
-          </v-snackbar>
-          <v-data-table
+        <v-spacer></v-spacer>
+        <span style="width: 180px"
+          ><v-text-field
+            style="padding-top: 7px"
+            height="20"
+            class="employee-schedule-search-box"
+            @input="getDataFromApi()"
+            v-model="commonSearch"
+            label="Search (min 3)"
             dense
-            :headers="headers"
-            :items="data"
-            :loading="loading"
-            :options.sync="options"
-            :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
-            }"
-            class="elevation-1"
-            :server-items-length="totalRowsCount"
-            fixed-header
-            :height="tableHeight"
-            :disable-sort="true"
-          >
-            <template v-slot:item.sno="{ item, index }">
-              {{
-                currentPage
-                  ? (currentPage - 1) * perPage +
-                    (cumulativeIndex + data.indexOf(item))
-                  : ""
-              }}
-            </template>
+            outlined
+            type="text"
+            append-icon="mdi-magnify"
+            clearable
+            hide-details
+          ></v-text-field
+        ></span>
 
-            <template v-slot:item.options="{ item }">
-              <v-menu bottom left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list width="120" dense>
-                  <v-list-item
-                    v-if="can('operators_view')"
-                    @click="viewItem(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-eye </v-icon>
-                      View
-                    </v-list-item-title>
-                  </v-list-item>
+        <v-btn
+          v-if="can('operators_create')"
+          title="Change Request"
+          x-small
+          :ripple="false"
+          text
+          @click="addItem()"
+        >
+          <v-icon class="">mdi mdi-plus-circle</v-icon>
+        </v-btn>
+      </v-toolbar>
 
-                  <v-list-item
-                    @click="editItem(item)"
-                    v-if="can('operators_edit')"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-pencil </v-icon>
-                      Edit
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    v-if="can('operators_delete')"
-                    @click="deleteItem(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="error" small> mdi-delete </v-icon>
-                      Delete
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+        {{ snackText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
+        </template>
+      </v-snackbar>
+      <v-data-table
+        dense
+        :headers="headers"
+        :items="data"
+        :loading="loading"
+        :options.sync="options"
+        :footer-props="{
+          itemsPerPageOptions: [10, 50, 100, 500, 1000],
+        }"
+        class="elevation-1"
+        :server-items-length="totalRowsCount"
+        fixed-header
+        :height="tableHeight"
+        :disable-sort="true"
+      >
+        <template v-slot:item.sno="{ item, index }">
+          {{
+            currentPage
+              ? (currentPage - 1) * perPage +
+                (cumulativeIndex + data.indexOf(item))
+              : ""
+          }}
+        </template>
+
+        <template v-slot:item.options="{ item }">
+          <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
             </template>
-          </v-data-table>
-        </v-card>
-      </v-col>
-    </v-row>
+            <v-list width="120" dense>
+              <v-list-item v-if="can('operators_view')" @click="viewItem(item)">
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-eye </v-icon>
+                  View
+                </v-list-item-title>
+              </v-list-item>
+
+              <v-list-item @click="editItem(item)" v-if="can('operators_edit')">
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-pencil </v-icon>
+                  Edit
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                v-if="can('operators_delete')"
+                @click="deleteItem(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="error" small> mdi-delete </v-icon>
+                  Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -255,9 +241,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 200;
+    this.tableHeight = window.innerHeight - 230;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 200;
+      this.tableHeight = window.innerHeight - 230;
     });
 
     this.getDataFromApi();

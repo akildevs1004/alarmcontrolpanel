@@ -4,10 +4,9 @@
       <v-col style="max-width: 20%">
         <v-card
           elevation="0"
-          style="
-            height: 90px;
-            border-radius: 0.5rem;
-            background-color: #283a36 !important;
+          :style="
+            'height: 90px;border-radius: 0.5rem;background-color:' +
+            ($vuetify.theme.dark ? '#283a36!important' : '#98b5af!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -25,14 +24,16 @@
                 >Total Customers
 
                 <v-row class="text-left" no-gutters align="center">
-                  <v-col cols="auto" style="font-size: 30px"> 100 </v-col>
+                  <v-col cols="auto" style="font-size: 30px">
+                    {{ customersStats ? customersStats.total : 0 }}
+                  </v-col>
                   <v-col
                     cols="auto"
                     class="d-flex align-center"
                     style="font-size: 16px; color: green"
                   >
-                    <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
-                    +10%
+                    <!-- <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
+                    +10% -->
                   </v-col>
                 </v-row>
               </v-col>
@@ -43,10 +44,9 @@
       <v-col style="max-width: 20%">
         <v-card
           elevation="0"
-          style="
-            height: 90px;
-            border-radius: 0.5rem;
-            background-color: #353345 !important;
+          :style="
+            'height: 90px;border-radius: 0.5rem;background-color:' +
+            ($vuetify.theme.dark ? '#353345!important' : '#a6a3bf!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -64,14 +64,20 @@
                 >Active Customers
 
                 <v-row class="text-left" no-gutters align="center">
-                  <v-col cols="auto" style="font-size: 30px"> 100 </v-col>
+                  <v-col cols="auto" style="font-size: 30px">
+                    {{
+                      customersStats
+                        ? customersStats.total - customersStats.expired
+                        : 0
+                    }}
+                  </v-col>
                   <v-col
                     cols="auto"
                     class="d-flex align-center"
                     style="font-size: 16px; color: green"
                   >
-                    <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
-                    +10%
+                    <!-- <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
+                    +10% -->
                   </v-col>
                 </v-row>
               </v-col>
@@ -79,52 +85,13 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col style="max-width: 20%">
-        <v-card
-          elevation="0"
-          style="
-            height: 90px;
-            border-radius: 0.5rem;
-            background-color: #283a36 !important;
-          "
-          class="custom-card bg-primary-transparent"
-          ><v-card-text
-            ><v-row style="height: 130px">
-              <v-col
-                cols="3"
-                style="line-height: 30px; margin-top: 5px"
-                class="text-left"
-              >
-                <div class="image-box-simple" style="background-color: #007d61">
-                  <v-icon size="20">mdi-account-outline</v-icon>
-                </div>
-              </v-col>
-              <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Total Devices
 
-                <v-row class="text-left" no-gutters align="center">
-                  <v-col cols="auto" style="font-size: 30px"> 100 </v-col>
-                  <v-col
-                    cols="auto"
-                    class="d-flex align-center"
-                    style="font-size: 16px; color: green"
-                  >
-                    <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
-                    +10%
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card></v-col
-      >
       <v-col style="max-width: 20%">
         <v-card
           elevation="0"
-          style="
-            height: 90px;
-            border-radius: 0.5rem;
-            background-color: #42392c !important;
+          :style="
+            'height: 90px;border-radius: 0.5rem;background-color:' +
+            ($vuetify.theme.dark ? '#42392c!important' : '#a39785!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -142,14 +109,16 @@
                 >Account Expire In 30 Days
 
                 <v-row class="text-left" no-gutters align="center">
-                  <v-col cols="auto" style="font-size: 30px"> 100 </v-col>
+                  <v-col cols="auto" style="font-size: 30px">
+                    {{ customersStats ? customersStats.expiringin30days : 0 }}
+                  </v-col>
                   <v-col
                     cols="auto"
                     class="d-flex align-center"
                     style="font-size: 16px; color: green"
                   >
-                    <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
-                    +10%
+                    <!-- <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
+                    +10% -->
                   </v-col>
                 </v-row>
               </v-col>
@@ -160,10 +129,9 @@
       <v-col style="max-width: 20%">
         <v-card
           elevation="0"
-          style="
-            height: 90px;
-            border-radius: 0.5rem;
-            background-color: #422f35 !important;
+          :style="
+            'height: 90px;border-radius: 0.5rem;background-color:' +
+            ($vuetify.theme.dark ? '#422f35!important' : '#d1acb8!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -181,14 +149,60 @@
                 >Accounts Expired
 
                 <v-row class="text-left" no-gutters align="center">
-                  <v-col cols="auto" style="font-size: 30px"> 100 </v-col>
+                  <v-col cols="auto" style="font-size: 30px">
+                    {{ customersStats ? customersStats.expired : 0 }}
+                  </v-col>
                   <v-col
                     cols="auto"
                     class="d-flex align-center"
                     style="font-size: 16px; color: green"
                   >
-                    <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
-                    +10%
+                    <!-- <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
+                    +10% -->
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card></v-col
+      >
+      <v-col style="max-width: 20%">
+        <v-card
+          elevation="0"
+          :style="
+            'height: 90px;border-radius: 0.5rem;background-color:' +
+            ($vuetify.theme.dark ? '#2a3b44!important' : '#afc3cd!important')
+          "
+          class="custom-card bg-primary-transparent"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <v-col
+                cols="3"
+                style="line-height: 30px; margin-top: 5px"
+                class="text-left"
+              >
+                <div class="image-box-simple" style="background-color: #6993a9">
+                  <v-icon size="20">mdi-account-outline</v-icon>
+                </div>
+              </v-col>
+              <v-col cols="9" style="line-height: 30px" class="text-left"
+                >Total Devices
+
+                <v-row class="text-left" no-gutters align="center">
+                  <v-col cols="auto" style="font-size: 30px">
+                    {{
+                      devicesStats
+                        ? devicesStats.find((e) => e.name == "total").count
+                        : 0
+                    }}
+                  </v-col>
+                  <v-col
+                    cols="auto"
+                    class="d-flex align-center"
+                    style="font-size: 16px; color: green"
+                  >
+                    <!-- <v-icon small class="mr-1">mdi-arrow-up-thin</v-icon>
+                    +10% -->
                   </v-col>
                 </v-row>
               </v-col>
@@ -291,6 +305,10 @@ export default {
     _id: null,
     date_from: null,
     date_to: null,
+    devicesStats: null,
+    customersStats: null,
+    accountStats: null,
+    expiredStats: null,
   }),
   computed: {},
   mounted() {
@@ -314,9 +332,65 @@ export default {
     let monthObj = this.$dateFormat.monthStartEnd(today);
     this.date_from = monthObj.first;
     this.date_to = monthObj.last;
+
+    this.loadDevicesStatistics();
+    this.loadCustomersStatistics();
+    this.loadAccountsStatistics();
+    // this.loadExpiredStatistics();
   },
+
   watch: {},
   methods: {
+    loadAccountsStatistics() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+
+      this.$axios.get(`/customer_contract_stats`, options).then(({ data }) => {
+        this.customersStats = data;
+      });
+    },
+    // loadAccountsStatistics() {
+    //   let options = {
+    //     params: {
+    //       company_id: this.$auth.user.company_id,
+    //     },
+    //   };
+
+    //   this.$axios
+    //     .get(`/customer_contract_expin30days_stats`, options)
+    //     .then(({ data }) => {
+    //       this.accountStats = data;
+    //     });
+    // },
+    loadDevicesStatistics() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+
+      this.$axios
+        .get(`/customer_devices_types_stats`, options)
+        .then(({ data }) => {
+          this.devicesStats = data;
+        });
+    },
+    loadCustomersStatistics() {
+      let options = {
+        params: {
+          company_id: this.$auth.user.company_id,
+        },
+      };
+
+      this.$axios
+        .get(`/buildingtype_customer_stats`, options)
+        .then(({ data }) => {
+          this.customersStats = data;
+        });
+    },
     getPercentage($key) {
       let test =
         (this.onlineStats.Temperature.online * 100) /

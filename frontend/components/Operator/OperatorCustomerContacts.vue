@@ -153,7 +153,7 @@
 
               <v-radio-group
                 class="radiogroup radiogroup-small"
-                style="color: black; padding-top: 10px"
+                style="padding-top: 10px"
                 v-model="event_payload.call_status"
                 @change="updateCallStatus()"
                 @click="updateCallStatus()"

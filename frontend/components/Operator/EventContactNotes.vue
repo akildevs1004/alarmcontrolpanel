@@ -119,16 +119,11 @@
           height="25"
           center-active
           right
-          class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
+          class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1222"
           style="background-color: #fff"
         >
           <v-tab
-            style="
-              font-size: 10px;
-              min-width: 50px !important;
-              background-color: #fff;
-              color: black;
-            "
+            style="font-size: 10px; min-width: 50px !important"
             v-if="
               (alarm.device.customer &&
                 contact.address_type.toLowerCase() == 'primary') ||

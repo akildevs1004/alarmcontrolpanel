@@ -212,13 +212,12 @@
                         ? '1px solid #ecf0f4'
                         : '0px',
                     backgroundColor:
-                      selectedCustomer?.id === item.id ? '#ecf0f4' : '#FFF',
+                      selectedCustomer?.id === item.id ? '#8d8d8d' : null,
                   }"
                 >
-                  <v-row style="height: auto; width: 100%; color: black">
+                  <v-row style="height: auto; width: 100%">
                     <v-col
                       style="
-                        color: black;
                         max-width: 30px;
                         padding: 0px;
                         margin: auto;
@@ -243,25 +242,17 @@
                               : "---"
                           }}
                         </div>
-                        <div
-                          style="
-                            font-weight: bold;
-                            font-size: 12px;
-                            color: #1f1f1f;
-                          "
-                        >
+                        <div style="font-weight: bold; font-size: 12px">
                           {{ $utils.caps(item.building_name) || "---" }}
                         </div>
-                        <div style="font-size: 11px; color: #1f1f1f">
+                        <div style="font-size: 11px">
                           {{ item.area || "---" }}, {{ item.address || "---" }}
                         </div>
-                        <div style="font-size: 11px; color: #1f1f1f">
+                        <div style="font-size: 11px">
                           {{ item.city || "---" }}, {{ item.state || "---" }}
                         </div>
                         <div>
-                          <v-icon
-                            style="margin-top: -3px; color: blue"
-                            size="10"
+                          <v-icon style="margin-top: -3px" size="10"
                             >mdi-account-tie</v-icon
                           >{{
                             item.primary_contact
@@ -1014,7 +1005,7 @@ export default {
                 content.className = "customerMapTitle";
                 content.innerHTML = `
           <div style="position: relative;
-    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px;font-weight:bold;font-size:18px ;">
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px ;">
            ${item.building_name}
           </div>
         `;

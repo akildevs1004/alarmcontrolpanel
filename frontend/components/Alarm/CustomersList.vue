@@ -57,7 +57,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding-left: 10px; background-color: #fff">
+        <v-card-text style="padding-left: 10px" class="background">
           <AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
@@ -323,7 +323,7 @@
                   <div style="font-size: 13px">
                     {{ item.building_name || "" }}
                   </div>
-                  <small style="font-size: 12px; color: #6c7184">
+                  <small style="font-size: 12px">
                     {{ item.house_number }}, {{ item.street_number }},
                     {{ item.area }}, {{ item.city }}
                   </small>
@@ -343,10 +343,7 @@
               >
                 {{ $dateFormat.format_date_month_name_year(item.end_date) }}
               </div>
-              <small
-                title="Start Date "
-                style="font-size: 12px; color: #6c7184"
-              >
+              <small title="Start Date " style="font-size: 12px">
                 {{ $dateFormat.format_date_month_name_year(item.start_date) }}
               </small>
             </template>
@@ -449,7 +446,7 @@
                   </v-btn>
                 </template>
                 <v-list width="120" dense>
-                  <v-list-item
+                  <!-- <v-list-item
                     v-if="can('customers_view')"
                     @click="viewCustomerItem(item)"
                   >
@@ -457,7 +454,7 @@
                       <v-icon color="secondary" small> mdi-eye </v-icon>
                       View
                     </v-list-item-title>
-                  </v-list-item>
+                  </v-list-item> -->
                   <v-list-item
                     v-if="can('customers_view')"
                     @click="viewItem(item)"

@@ -94,7 +94,7 @@
         {{ response }}
       </v-snackbar>
     </div>
-    <v-card class="mb-5 rounded-md mt-3" elevation="0">
+    <v-card class="mb-5 rounded-md" elevation="0">
       <v-toolbar class="rounded-md" dense flat>
         <span> Roles</span>
         <v-tooltip top color="primary">
@@ -143,59 +143,54 @@
           </v-col>
         </v-toolbar-items>
       </v-toolbar>
-    </v-card>
-    <v-row>
-      <v-col md="12">
-        <v-data-table
-          v-model="ids"
-          item-key="id"
-          :headers="headers"
-          :items="data"
-          :loading="loading"
-          :options.sync="options"
-          :footer-props="{
-            itemsPerPageOptions: [50, 100, 500, 1000],
-          }"
-          class="elevation-1"
-        >
-          <template v-slot:top> </template>
 
-          <template v-slot:item.action="{ item }">
-            <v-menu bottom left>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list dense>
-                <v-list-item @click="editItem(item)" v-if="can('roles_edit')">
-                  <v-list-item-title style="cursor: pointer">
-                    <v-icon color="secondary" small class="mr-2">
-                      mdi-pencil </v-icon
-                    >Edit
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  v-if="can('roles_delete')"
-                  @click="deleteItem(item)"
-                >
-                  <v-list-item-title style="cursor: pointer">
-                    <v-icon color="error" small>
-                      {{
-                        item.role === "customer" ? "" : "mdi-delete"
-                      }} </v-icon
-                    >Delete
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </template>
-          <template v-slot:no-data>
-            <!-- <v-btn color="background" @click="initialize">Reset</v-btn> -->
-          </template>
-        </v-data-table></v-col
+      <v-data-table
+        dense
+        :headers="headers"
+        :items="data"
+        :loading="loading"
+        :options.sync="options"
+        :footer-props="{
+          itemsPerPageOptions: [10, 50, 100, 500, 1000],
+        }"
+        class="elevation-1"
+        :server-items-length="totalRowsCount"
+        fixed-header
+        :height="tableHeight"
+        :disable-sort="true"
       >
-    </v-row>
+        <template v-slot:top> </template>
+
+        <template v-slot:item.action="{ item }">
+          <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list dense>
+              <v-list-item @click="editItem(item)" v-if="can('roles_edit')">
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small class="mr-2">
+                    mdi-pencil </v-icon
+                  >Edit
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="can('roles_delete')" @click="deleteItem(item)">
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="error" small>
+                    {{ item.role === "customer" ? "" : "mdi-delete" }} </v-icon
+                  >Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+        <template v-slot:no-data>
+          <!-- <v-btn color="background" @click="initialize">Reset</v-btn> -->
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
   <NoAccess v-else />
 </template>
@@ -216,6 +211,7 @@ export default {
     ids: [],
     loading: false,
     total: 0,
+    tableHeight: 500,
     headers: [
       {
         text: "Role",
@@ -255,7 +251,12 @@ export default {
   }),
 
   computed: {},
-
+  mounted() {
+    this.tableHeight = window.innerHeight - 230;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 230;
+    });
+  },
   watch: {
     editedIndex(val) {
       this.formTitle = val === -1 ? "New" : "Edit";

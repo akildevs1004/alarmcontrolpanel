@@ -44,7 +44,7 @@
         <v-card
           ><v-card-text elevation="2">
             <v-row>
-              <v-col class="text-left"><h4>Armed Report</h4></v-col>
+              <v-col class="text-left"><h3>Armed Report</h3></v-col>
               <v-col class="text-right" style="max-width: 1200px">
                 <v-row>
                   <v-col class="mt-3">
@@ -189,9 +189,7 @@
       <v-col style="">
         <v-card
           ><v-card-text elevation="2">
-            <div
-              class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
-            >
+            <div class="v-data-table elevation-0 v-data-table--has-bottom">
               <v-data-table
                 :headers="headers"
                 :items="formattedDataItems"

@@ -24,7 +24,6 @@
                   text-align: center;
                   margin: auto;
                   font-weight: bold;
-                  color: black;
 
                   font-size: 35px;
                 "
@@ -37,7 +36,7 @@
 
                   font-size: 20px;
                 "
-                ><div>Today Tickets</div></v-col
+                ><div>Today</div></v-col
               ></v-row
             >
           </v-card-text>
@@ -66,7 +65,6 @@
                   text-align: center;
                   margin: auto;
                   font-weight: bold;
-                  color: black;
 
                   font-size: 35px;
                 "
@@ -79,7 +77,7 @@
 
                   font-size: 20px;
                 "
-                ><div>Assined Tickets</div></v-col
+                ><div>Assined</div></v-col
               ></v-row
             >
           </v-card-text>
@@ -108,7 +106,6 @@
                   text-align: center;
                   margin: auto;
                   font-weight: bold;
-                  color: black;
 
                   font-size: 35px;
                 "
@@ -121,7 +118,7 @@
 
                   font-size: 20px;
                 "
-                ><div>Open Tickets</div></v-col
+                ><div>Open</div></v-col
               ></v-row
             >
           </v-card-text>
@@ -151,7 +148,7 @@
                   text-align: center;
                   margin: auto;
                   font-weight: bold;
-                  color: black;
+
                   font-size: 35px;
                 "
                 ><div>{{ ticketStats.closed_tickets }}</div></v-col
@@ -163,7 +160,7 @@
 
                   font-size: 20px;
                 "
-                ><div>Closed Tickets</div></v-col
+                ><div>Closed</div></v-col
               ></v-row
             >
           </v-card-text>

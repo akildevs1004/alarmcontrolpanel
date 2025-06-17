@@ -87,12 +87,8 @@
     <v-row class="mt-0 pt-0">
       <v-col class="mt-0 pt-0">
         <v-card elevation="2" class="mt-0">
-          <v-toolbar class="mb-2 white--text" color="white" dense flat>
-            <v-toolbar-title>
-              <span style="color: black">
-                Customer Quotations</span
-              ></v-toolbar-title
-            >
+          <v-toolbar class="mb-2 white--text" dense flat>
+            <v-toolbar-title> <h4>Customer Quotations</h4></v-toolbar-title>
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
             <v-btn

@@ -163,6 +163,7 @@
             itemsPerPageOptions: [50, 100, 500, 1000],
           }"
           class="elevation-1"
+          :height="tableHeight"
         >
           <template v-slot:top>
             <v-card class="mb-5 rounded-md mt-3" elevation="0">
@@ -252,6 +253,7 @@
 <script>
 export default {
   data: () => ({
+    tableHeight: 500,
     dialogNewRole: false,
     options: {},
     Model: "Role",
@@ -305,7 +307,12 @@ export default {
   }),
 
   computed: {},
-
+  mounted() {
+    this.tableHeight = window.innerHeight - 270;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 270;
+    });
+  },
   watch: {
     editedIndex(val) {
       this.formTitle = val === -1 ? "New" : "Edit";

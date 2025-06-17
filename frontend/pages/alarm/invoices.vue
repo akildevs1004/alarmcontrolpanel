@@ -65,9 +65,7 @@
             <v-card elevation="2" style="z-index: 9"
               ><v-card-text>
                 <v-row>
-                  <v-col class="text-left"
-                    ><h3 style="color: black">Invoices/Payments</h3></v-col
-                  >
+                  <v-col class="text-left"><h3>Invoices/Payments</h3></v-col>
                   <v-col style="max-width: 30px"
                     ><v-icon loading="true" class="mr-2"
                       >mdi-reload</v-icon
@@ -322,7 +320,7 @@
                 {{ item.invoice_date }}
               </template>
               <template v-slot:item.customer="{ item, index }">
-                {{ item.customer.building_name }}
+                {{ item.customer?.building_name || "---" }}
               </template>
 
               <template v-slot:item.options="{ item }">

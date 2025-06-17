@@ -113,10 +113,10 @@
     <v-card elevation="0">
       <v-toolbar class="rounded-md" dense flat v-if="!eventFilter">
         <v-row
-          ><v-col></v-col>
+          ><v-col><h3>Devices</h3></v-col>
           <v-col style="max-width: 600px">
             <v-row>
-              <v-col></v-col>
+              <v-col> </v-col>
               <v-col style="max-width: 60px" class="text-right pull-right pt-5"
                 ><v-btn
                   x-small
@@ -165,7 +165,7 @@
                 </v-select
               ></v-col>  -->
               <v-col v-if="!customer_id" style="max-width: 50px" class="pt-5">
-                <v-icon @click="addNewSerialNumber()" size="25" color="black"
+                <v-icon @click="addNewSerialNumber()" size="25"
                   >mdi-plus-circle</v-icon
                 >
               </v-col>

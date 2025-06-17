@@ -41,26 +41,26 @@
               padding-left: 15px;
             "
           >
-            <div style="font-size: 13px; color: black; font-weight: bold">
+            <div style="font-size: 13px; font-weight: bold">
               {{ alarm.device?.customer.building_name || "---" }}
               <span style="font-size: 10px"
                 >({{ alarm.device?.customer.buildingtype.name || "---" }})</span
               >
             </div>
 
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               {{ alarm.device?.customer.house_number || "---" }},
               {{ alarm.device?.customer.street_number || "---" }},
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               {{ alarm.device?.customer.area || "---" }},
               {{ alarm.device?.customer.city || "---" }}
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-at</v-icon
               >{{ alarm.device?.customer.user.email || "---" }},
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-cellphone-basic</v-icon
               >{{ alarm.device?.customer.contact_number || "---" }}
             </div>
@@ -101,18 +101,18 @@
               padding-left: 15px;
             "
           >
-            <div style="font-size: 13px; color: black; font-weight: bold">
+            <div style="font-size: 13px; font-weight: bold">
               {{ alarm.device?.company.name || "---" }}
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               {{ alarm.device?.company.location || "---" }}
             </div>
 
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-at</v-icon
               >{{ alarm.device?.company.user?.email || "---" }}
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-cellphone-basic</v-icon
               >{{ alarm.device?.company.contact_number || "---" }}
             </div>
@@ -153,16 +153,16 @@
               padding-left: 15px;
             "
           >
-            <div style="font-size: 13px; color: black; font-weight: bold">
+            <div style="font-size: 13px; font-weight: bold">
               {{ alarm.security?.first_name || "---" }}
               {{ alarm.security?.last_name || "---" }}
             </div>
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-at</v-icon
               >{{ alarm.security?.email || "---" }}
             </div>
 
-            <div style="font-size: 12px; color: #6c7184">
+            <div style="font-size: 12px">
               <v-icon size="15">mdi-cellphone-basic</v-icon
               >{{ alarm.security?.contact_number || "---" }}
             </div>
@@ -186,7 +186,7 @@
               style="width: 30px"
               :src="getAlarmColorObject(alarm).image + '?4=3'"
             />
-            <div style="color: blue">
+            <div>
               {{ alarm.alarm_type ?? "---" }},{{
                 alarm.zone_data?.location ?? "---"
               }}

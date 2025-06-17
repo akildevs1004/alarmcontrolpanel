@@ -1,5 +1,5 @@
 <template>
-  <div max-width="100%">
+  <div max-width="100%" class="background">
     <v-row>
       <v-col style="max-width: 250px">
         <v-card style="height: 270px"
@@ -133,64 +133,27 @@
               height="25"
               center-active
               right
-              class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
+              class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor12222"
             >
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
-              >
+              <v-tab style="font-size: 12px; min-width: 50px !important">
                 Google Map
               </v-tab>
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
-              >
+              <v-tab style="font-size: 12px; min-width: 50px !important">
                 Camera
               </v-tab>
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
+              <v-tab style="font-size: 12px; min-width: 50px !important"
                 >Premises Photo </v-tab
-              ><v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
+              ><v-tab style="font-size: 12px; min-width: 50px !important"
                 >Floor Plan
               </v-tab>
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
+              <v-tab style="font-size: 12px; min-width: 50px !important"
                 >Address
               </v-tab>
 
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
+              <v-tab style="font-size: 12px; min-width: 50px !important"
                 >System
               </v-tab>
-              <v-tab
-                style="
-                  font-size: 12px;
-                  min-width: 50px !important;
-                  color: black;
-                "
+              <v-tab style="font-size: 12px; min-width: 50px !important"
                 >Events
               </v-tab>
               <v-tab-item style="height: 530px">
@@ -430,7 +393,12 @@
                       </td>
                       <td>{{ sensor.wired }}</td>
                     </tr>
+
+                    <div v-if="customer.devices[0].sensorzones == 0">
+                      No data is available
+                    </div>
                   </table>
+                  <div v-else>No data is available</div>
                   <div v-else>No data is available</div>
                 </div>
               </v-tab-item>

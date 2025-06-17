@@ -42,7 +42,7 @@
       <v-row>
         <v-col cols="12" class="text-right" style="padding-top: 0px">
           <v-row>
-            <v-col class="text-left pa-5"><h4>Armed Report</h4></v-col>
+            <v-col class="text-left pa-5"><h3>Armed Report</h3></v-col>
             <v-col class="text-right" style="max-width: 750px">
               <v-row>
                 <v-col class="mt-3">
@@ -147,7 +147,7 @@
                           </v-row>
                         </v-list-item-title>
                       </v-list-item>
-  
+
                       <v-list-item @click="downloadOptions('excel')">
                         <v-list-item-title style="cursor: pointer">
                           <v-row>
@@ -176,9 +176,7 @@
       </v-row>
       <v-row style="margin-top: -30px">
         <v-col style="">
-          <div
-            class="v-data-table elevation-0 v-data-table--has-bottom theme--light"
-          >
+          <div class="v-data-table elevation-0 v-data-table--has-bottom">
             <v-data-table
               :headers="headers"
               :items="formattedDataItems"

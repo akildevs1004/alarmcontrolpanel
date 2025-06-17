@@ -100,7 +100,7 @@
           v-if="forward.contacts.length > 1"
           dark
           fab
-          style="color: black; padding-top: 10px"
+          style="padding-top: 10px"
           outlined
           @click="removeItem(index)"
           size="20"

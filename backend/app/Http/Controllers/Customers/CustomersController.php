@@ -1817,9 +1817,14 @@ class CustomersController extends Controller
 
         $groupResults = [];
 
+        $total = 0;
+
         foreach ($AlarmSensorTypes as $buildingType) {
             $groupResults[] = ["name" => $buildingType->name, "count" => $groupCount->get($buildingType->name, 0)];
+            $total = $total + $groupCount->get($buildingType->name, 0);
         }
+
+        $groupResults[] = ["name" => "total", "count" => $total];
 
         return $groupResults;
 

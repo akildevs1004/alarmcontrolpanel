@@ -257,7 +257,7 @@
       <span class="pl-5"
         ><TopMenuClock v-if="displayTopMenu"></TopMenuClock
       ></span>
-      <span class="pl-2" @click="toggleTheme()" style="cursor: pointer"
+      <span class="pl-2 pr-2" @click="toggleTheme()" style="cursor: pointer"
         ><v-icon>mdi-brightness-7</v-icon></span
       >
       <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
@@ -304,7 +304,7 @@
             :key="index"
           >
             <v-list-item-content @click="showPopupAlarmStatus()">
-              <v-list-item-title class="black--text align-left text-left">
+              <v-list-item-title class="align-left text-left">
                 <v-row style="">
                   <v-col cols="2" class="align-right text-right pr-1">
                     <img

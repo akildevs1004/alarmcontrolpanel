@@ -121,7 +121,7 @@
           v-if="device.sensorzones.length > 1"
           dark
           fab
-          style="color: black; padding-top: 10px"
+          style="padding-top: 10px"
           outlined
           @click="removeEarningItem(index)"
           size="20"

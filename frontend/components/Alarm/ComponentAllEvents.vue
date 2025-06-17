@@ -217,7 +217,7 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="background">
           <TechnicianCustomerTabsView
             v-if="selectedAlarm?.device?.customer"
             :key="key"
@@ -246,8 +246,8 @@
         class="text-right"
         style="padding-top: 0px; z-index: 9; padding-right: 0px"
       >
-        <v-card class="mt-3">
-          <v-card-text elevation="2">
+        <v-card class="mt-3" elevation="0">
+          <v-card-text>
             <v-row>
               <v-col
                 class="text-left mt-1"

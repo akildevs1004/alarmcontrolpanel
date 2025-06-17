@@ -53,12 +53,8 @@
     <v-row class="mt-0 pt-0">
       <v-col class="mt-0 pt-0">
         <v-card elevation="2" class="mt-0">
-          <v-toolbar class="mb-2 white--text" color="white" dense flat>
-            <v-toolbar-title>
-              <span style="color: black">
-                Customer Inquiries</span
-              ></v-toolbar-title
-            >
+          <v-toolbar class="mb-2 white--text" dense flat>
+            <v-toolbar-title> <h4>Customer Inquiries</h4></v-toolbar-title>
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
             <v-btn
@@ -175,7 +171,7 @@
               <div
                 v-if="item.quotation"
                 @click="viewQuotation(item)"
-                style="color: blue; cursor: pointer"
+                style="cursor: pointer"
               >
                 {{ item.quotation ? item.quotation.quotation_id : "---" }}
               </div>

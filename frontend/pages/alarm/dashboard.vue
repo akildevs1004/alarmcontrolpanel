@@ -24,7 +24,7 @@
                 </div>
                 <br />
                 <div style="font-size: 16px">SOS Count</div>
-                <div class="sos" style="font-size: 12px">+10%</div>
+                <!-- <div class="sos" style="font-size: 12px">+10%</div> -->
               </v-col>
               <v-col class="d-flex justify-right" style="max-width: 150px">
                 <div style="" class="image-box sos-border">
@@ -59,7 +59,7 @@
                 </div>
                 <br />
                 <div style="font-size: 16px">Critical Count</div>
-                <div class="critical" style="font-size: 12px">+10%</div>
+                <!-- <div class="critical" style="font-size: 12px">+10%</div> -->
               </v-col>
               <v-col class="d-flex justify-right" style="max-width: 150px">
                 <div style="" class="image-box critical-border">
@@ -93,7 +93,7 @@
                 </div>
                 <br />
                 <div style="font-size: 16px">Medical Count</div>
-                <div class="medical" style="font-size: 12px">+10%</div>
+                <!-- <div class="medical" style="font-size: 12px">+10%</div> -->
               </v-col>
               <v-col class="d-flex justify-right" style="max-width: 150px">
                 <div style="" class="image-box medical-border">
@@ -127,7 +127,7 @@
                 </div>
                 <br />
                 <div style="font-size: 16px">Fire Count</div>
-                <div class="fire" style="font-size: 12px">+10%</div>
+                <!-- <div class="fire" style="font-size: 12px">+10%</div> -->
               </v-col>
               <v-col class="d-flex justify-right" style="max-width: 150px">
                 <div style="" class="image-box fire-border">
@@ -161,7 +161,7 @@
                 </div>
                 <br />
                 <div style="font-size: 16px">Water Count</div>
-                <div class="water" style="font-size: 12px">+10%</div>
+                <!-- <div class="water" style="font-size: 12px">+10%</div> -->
               </v-col>
               <v-col class="d-flex justify-right" style="max-width: 150px">
                 <div style="" class="image-box water-border">
