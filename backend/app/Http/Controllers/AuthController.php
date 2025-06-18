@@ -45,7 +45,7 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        $user->load(["company", "role:id,name,role_type"]);
+        $user->load(["company.contact", "role:id,name,role_type"]);
         // $user->permissions = $user->assigned_permissions ? $user->assigned_permissions->permission_names : [];
         $user->permissions = $user->assigned_permissions ? $user->assigned_permissions  : [];
 

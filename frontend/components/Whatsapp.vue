@@ -1,6 +1,9 @@
 <template>
   <v-card elevation="2" class="pa-4">
     <v-card-text>
+      <v-snackbar v-model="snack" :timeout="3000" top>
+        {{ snackText }}
+      </v-snackbar>
       <!-- Accounts Display -->
       <div style="display: flex; gap: 12px" v-if="can('whatsapp_view')">
         <v-card
@@ -71,6 +74,18 @@
                   @click="deleteItem(index)"
                 >
                   Click to Disconnect
+                </v-btn>
+                <br />
+                <v-btn
+                  :loading="account.loading"
+                  v-if="account.statusMessage == 'Online'"
+                  block
+                  small
+                  color="green"
+                  class="white--text"
+                  @click="testMessage(index)"
+                >
+                  Test Message({{ $auth.user.company?.contact?.whatsapp }})
                 </v-btn>
 
                 <v-btn
@@ -179,6 +194,8 @@ import QRCode from "qrcode";
 export default {
   data() {
     return {
+      snack: false,
+      snackText: "",
       accounts: [],
       qrCodeScanned: false,
       whatsappSocketClosed: false,
@@ -260,6 +277,30 @@ export default {
       }
     },
 
+    async testMessage() {
+      try {
+        let payload = {
+          company_id: this.$auth.user.company_id,
+          accounts: this.accounts,
+        };
+
+        if (process.env.NODE_ENV !== "production") {
+          //console.log("🚀 ~ Sending payload:", payload);
+        }
+
+        let data = await this.$axios.post(`whatsapp-test-message`, payload);
+
+        this.snack = true;
+
+        if (data.data.success) {
+          this.snackText = data.data.data;
+        } else {
+          this.snackText = "Try Again";
+        }
+      } catch (error) {
+        console.error("Error inserting account:", error);
+      }
+    },
     async insertAccountIntoDB() {
       try {
         let payload = {

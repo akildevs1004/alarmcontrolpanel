@@ -1,133 +1,264 @@
 <template>
   <div>
-    <v-row class="padding:0px">
-      <v-col cols="9"
-        ><v-row>
-          <v-col>
-            <v-card elevation="2"
-              ><v-card-text
-                ><v-row>
-                  <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img
-                      src="/notification_icons/sos.png"
-                      style="width: 40px; margin: auto"
-                    />
-                  </v-col>
+    <v-row class="dashboard">
+      <v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="sos-border-bottom custom-card"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <!-- <v-col
+                class="d-flex justify-center"
+                style="font-size: 25px; margin: auto"
+                >SOS</v-col
+              > -->
 
-                  <v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
+              <v-col
+                class="d-flex1 justify-center"
+                style="margin: auto; line-height: 20px; text-align: center"
+              >
+                <div style="font-size: 40px">
+                  {{ data ? data.sosCount : 0 }}
+                </div>
+                <br />
+                <div style="font-size: 16px">SOS Count</div>
+                <!-- <div class="sos" style="font-size: 12px">+10%</div> -->
+              </v-col>
+              <v-col class="d-flex justify-right" style="max-width: 150px">
+                <div style="" class="image-box sos-border">
+                  <img
+                    src="/notification_icons/sos.png"
+                    alt="sos"
+                    style="width: 30px"
+                  />
+                </div>
+              </v-col> </v-row></v-card-text
+        ></v-card>
+      </v-col>
+      <v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="critical-border-bottom custom-card"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <!-- <v-col
+                class="d-flex justify-center"
+                style="font-size: 25px; margin: auto"
+                >SOS</v-col
+              > -->
 
-                      color: black;
-                    "
-                    >SOS</v-col
-                  ><v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
-                    >{{ data ? data.sosCount : 0 }}</v-col
-                  ></v-row
-                ></v-card-text
-              ></v-card
-            >
-          </v-col>
-          <v-col>
-            <v-card elevation="2"
-              ><v-card-text
-                ><v-row>
-                  <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img
-                      src="/notification_icons/critical.png"
-                      style="width: 40px"
-                    />
-                  </v-col>
+              <v-col
+                class="d-flex1 justify-center"
+                style="margin: auto; line-height: 20px; text-align: center"
+              >
+                <div style="font-size: 40px">
+                  {{ data ? data.criticalCount : 0 }}
+                </div>
+                <br />
+                <div style="font-size: 16px">Critical Count</div>
+                <!-- <div class="critical" style="font-size: 12px">+10%</div> -->
+              </v-col>
+              <v-col class="d-flex justify-right" style="max-width: 150px">
+                <div style="" class="image-box critical-border">
+                  <img
+                    src="/notification_icons/critical.png"
+                    style="width: 30px; margin: auto"
+                  />
+                </div>
+              </v-col> </v-row></v-card-text
+        ></v-card>
+      </v-col>
+      <v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="medical-border-bottom custom-card"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <!-- <v-col
+                class="d-flex justify-center"
+                style="font-size: 25px; margin: auto"
+                >SOS</v-col
+              > -->
 
-                  <v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
+              <v-col
+                class="d-flex1 justify-center"
+                style="margin: auto; line-height: 20px; text-align: center"
+              >
+                <div style="font-size: 40px">
+                  {{ data ? data.medicalCount : 0 }}
+                </div>
+                <br />
+                <div style="font-size: 16px">Medical Count</div>
+                <!-- <div class="medical" style="font-size: 12px">+10%</div> -->
+              </v-col>
+              <v-col class="d-flex justify-right" style="max-width: 150px">
+                <div style="" class="image-box medical-border">
+                  <img
+                    src="/notification_icons/medical.png"
+                    style="width: 30px; margin: auto"
+                  />
+                </div>
+              </v-col> </v-row></v-card-text
+        ></v-card>
+      </v-col>
+      <v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="fire-border-bottom custom-card"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <!-- <v-col
+                class="d-flex justify-center"
+                style="font-size: 25px; margin: auto"
+                >SOS</v-col
+              > -->
 
-                      color: black;
-                    "
-                    >Critical</v-col
-                  ><v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
-                    >{{ data ? data.criticalCount : 0 }}</v-col
-                  ></v-row
-                ></v-card-text
-              ></v-card
-            >
-          </v-col>
-          <v-col>
-            <v-card elevation="2"
-              ><v-card-text
-                ><v-row>
-                  <v-col class="d-flex justify-center" style="max-width: 40px">
-                    <img
-                      src="/notification_icons/medical.png"
-                      style="width: 40px"
-                    />
-                  </v-col>
+              <v-col
+                class="d-flex1 justify-center"
+                style="margin: auto; line-height: 20px; text-align: center"
+              >
+                <div style="font-size: 40px">
+                  {{ data ? data.fireCount : 0 }}
+                </div>
+                <br />
+                <div style="font-size: 16px">Fire Count</div>
+                <!-- <div class="fire" style="font-size: 12px">+10%</div> -->
+              </v-col>
+              <v-col class="d-flex justify-right" style="max-width: 150px">
+                <div style="" class="image-box fire-border">
+                  <img
+                    src="/notification_icons/fire.png"
+                    style="width: 30px; margin: auto"
+                  />
+                </div>
+              </v-col> </v-row></v-card-text
+        ></v-card>
+      </v-col>
+      <v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="water-border-bottom custom-card"
+          ><v-card-text
+            ><v-row style="height: 130px">
+              <!-- <v-col
+                class="d-flex justify-center"
+                style="font-size: 25px; margin: auto"
+                >SOS</v-col
+              > -->
 
-                  <v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
+              <v-col
+                class="d-flex1 justify-center"
+                style="margin: auto; line-height: 20px; text-align: center"
+              >
+                <div style="font-size: 40px">
+                  {{ data ? data.waterCount : 0 }}
+                </div>
+                <br />
+                <div style="font-size: 16px">Water Count</div>
+                <!-- <div class="water" style="font-size: 12px">+10%</div> -->
+              </v-col>
+              <v-col class="d-flex justify-right" style="max-width: 150px">
+                <div style="" class="image-box water-border">
+                  <img
+                    src="/notification_icons/water.png"
+                    style="width: 30px; margin: auto"
+                  />
+                </div>
+              </v-col> </v-row></v-card-text
+        ></v-card> </v-col
+      ><v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="sos-border-bottom custom-card"
+          ><v-card-text>
+            <v-row style="height: 45px">
+              <v-col style="padding: 5px"
+                ><div style="font-size: 18px">Devices</div></v-col
+              >
+            </v-row>
 
-                      color: black;
-                    "
-                    >Medical</v-col
-                  ><v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
-                    >{{ data ? data.medicalCount : 0 }}</v-col
-                  ></v-row
-                ></v-card-text
-              ></v-card
-            >
-          </v-col>
-        </v-row>
+            <v-row>
+              <v-col
+                style="
+                  padding: 0px;
+                  text-align: center;
+
+                  font-weight: bold;
+                "
+                ><div style="font-size: 30px; color: #06b050">
+                  {{ customerStatusData ? customerStatusData.onlineCount : 0 }}
+                </div>
+                <div style="color: #06b050">Online</div>
+              </v-col>
+              <v-col
+                style="
+                  padding: 0px;
+                  text-align: center;
+
+                  font-weight: bold;
+                "
+                ><div style="font-size: 30px; color: #fff">
+                  {{ customerStatusData ? customerStatusData.offlineCount : 0 }}
+                </div>
+                <div style="color: #fff">Offline</div>
+              </v-col>
+            </v-row></v-card-text
+          ></v-card
+        >
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="6">
+        <v-card
+          :style="'height: ' + mapHeight + 'px;overflow:hidden'"
+          elevation="2"
+          class="eventslistscroll table-font12"
+          ><v-card-text>
+            <DashboardAlarmEventsHourWiseChart
+              v-if="loadAllEventsTable"
+              :height="mapHeight - 50"
+              name="DashboardAlarmEventsHourWiseChart1"
+            /> </v-card-text
+        ></v-card>
+      </v-col>
+
+      <v-col cols="3">
         <v-row>
           <v-col>
-            <v-card style="height: 275px" elevation="2"
+            <v-card
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px'"
+              elevation="2"
               ><v-card-text>
-                <h3 style="color: black; font-weight: normal">System Status</h3>
+                <h3 style="font-weight: normal">System Status</h3>
                 <AlamDeviceCountPieChart
                   :key="key"
                   :name="'AlamDeviceCountPieChart'"
                   style="
-                    height: 230px;
+                    height: 250px;
 
-                    max-height: 230px;
+                    max-height: 250px;
                     overflow: hidden;
                   "
                 /> </v-card-text
-            ></v-card> </v-col
-          ><v-col>
-            <v-card style="height: 275px" elevation="2"
+            ></v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-card
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px'"
+              elevation="2"
               ><v-card-text
                 ><h3
                   style="
-                    color: black;
                     font-weight: normal;
                     margin-top: -10px;
                     padding-bottom: 10px;
@@ -162,324 +293,98 @@
             ></v-card>
           </v-col>
         </v-row>
-
-        <v-row>
+      </v-col>
+      <v-col cols="3"
+        ><v-row>
           <v-col>
             <v-card
-              style="height: 500px; overflow-y: auto; overflow-x: hidden"
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px;overflow:hidden'"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text>
-                <DashboardAlarmEventsHourWiseChart
-                  v-if="loadAllEventsTable"
-                  :height="'400'"
-                  name="DashboardAlarmEventsHourWiseChart1"
-                /> </v-card-text
-            ></v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="3">
-        <v-row>
-          <v-col>
-            <v-card elevation="2"
-              ><v-card-text
-                ><v-row>
-                  <v-col class="d-flex justify-center" style="max-width: 40px">
+            >
+              <v-card-text>
+                <!-- <h3 style="font-weight: normal" class="font-color">
+                  Active Events
+                </h3> -->
+                <v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
                     <img
-                      src="/notification_icons/fire.png"
-                      style="width: 40px"
-                    />
-                  </v-col>
-
-                  <v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 25px;
-                      margin: auto;
-
-                      color: black;
-                    "
-                    >Fire</v-col
-                  ><v-col
-                    class="d-flex justify-center"
-                    style="
-                      font-size: 40px;
-                      margin: auto;
-                      font-weight: bold;
-                      color: red;
-                    "
-                    >{{ data ? data.fireCount : 0 }}</v-col
-                  ></v-row
-                ></v-card-text
-              ></v-card
-            >
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-card
-              style="height: 300px; background-color: transparent"
-              elevation="0"
-            >
-              <v-card-text class="font-black">
-                <v-row>
-                  <v-col
-                    style="padding: 5px; padding-left: 0px; padding-top: 0px"
-                  >
-                    <v-card style="height: 80px" elevation="2">
-                      <v-card-text class="m-0 p-0">
-                        <v-row>
-                          <v-col style="max-width: 45px; margin: auto">
-                            <img
-                              src="/notification_icons/technical.png"
-                              style="width: 45px"
-                            />
-                          </v-col>
-
-                          <v-col style="text-align: center">
-                            <div style="font-size: 40px">
-                              {{ data ? data.technicalCount : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Technical</div>
-                          </v-col>
-                        </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px">
-                            <img
-                              src="/notification_icons/technical.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{
-                                categoriesStats ? categoriesStats.techinical : 0
-                              }}
-                            </div>
-                            <div style="padding-top: 5px">Technical</div>
-                          </v-col>
-                        </v-row> -->
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                  <v-col
-                    style="padding: 5px; padding-right: 0px; padding-top: 0px"
-                  >
-                    <v-card style="height: 80px" elevation="2">
-                      <v-card-text class="m-0 p-0">
-                        <v-row>
-                          <v-col style="max-width: 45px; margin: auto">
-                            <img
-                              src="/notification_icons/event.png"
-                              style="width: 45px"
-                            />
-                          </v-col>
-
-                          <v-col style="text-align: center">
-                            <div style="font-size: 40px">
-                              {{ data ? data.eventsCount : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Events</div>
-                          </v-col>
-                        </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px"
-                            ><img
-                              src="/notification_icons/event.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{ categoriesStats ? categoriesStats.events : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Events</div>
-                          </v-col>
-                        </v-row> -->
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col
-                    style="padding: 5px; padding-left: 0px; padding-top: 8px"
-                  >
-                    <v-card style="height: 85px" elevation="2">
-                      <v-card-text class="m-0 p-0">
-                        <v-row>
-                          <v-col style="max-width: 45px; margin: auto">
-                            <img
-                              src="/notification_icons/water.png"
-                              style="width: 45px"
-                            />
-                          </v-col>
-
-                          <v-col style="text-align: center">
-                            <div style="font-size: 40px">
-                              {{ data ? data.waterCount : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Water</div>
-                          </v-col>
-                        </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px"
-                            ><img
-                              src="/notification_icons/water.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{ categoriesStats ? categoriesStats.water : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Water</div>
-                          </v-col>
-                        </v-row> -->
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                  <v-col
-                    style="padding: 5px; padding-right: 0px; padding-top: 8px"
-                  >
-                    <v-card style="height: 85px" elevation="2">
-                      <v-card-text class="m-0 p-0">
-                        <v-row>
-                          <v-col style="max-width: 45px; margin: auto">
-                            <img
-                              src="/notification_icons/temperature.png"
-                              style="width: 50px"
-                            />
-                          </v-col>
-
-                          <v-col style="text-align: center">
-                            <div style="font-size: 40px">
-                              {{ data ? data.temperatureCount : 0 }}
-                            </div>
-                            <div style="padding-top: 5px">Temperature</div>
-                          </v-col>
-                        </v-row>
-                        <!-- <v-row
-                          ><v-col style="height: 20px"
-                            ><img
-                              src="/notification_icons/temperature.png"
-                              style="width: 30px"
-                          /></v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            style="
-                              text-align: center;
-                              margin: auto;
-                              margin-top: -10px;
-                            "
-                          >
-                            <div style="font-size: 30px">
-                              {{
-                                categoriesStats
-                                  ? categoriesStats.temperature
-                                  : 0
-                              }}
-                            </div>
-                            <div style="padding-top: 5px">Temperature</div>
-                          </v-col>
-                        </v-row> -->
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row
-                  ><v-col style="padding: 0px; padding-top: 5px">
-                    <v-card style="height: 85px" elevation="2"
-                      ><v-card-text>
-                        <v-row>
-                          <v-col style="padding: 5px"
-                            ><div style="font-size: 18px">Device</div></v-col
-                          >
-                        </v-row>
-
-                        <v-row>
-                          <v-col
-                            style="
-                              padding: 0px;
-                              text-align: center;
-
-                              font-weight: bold;
-                            "
-                            ><div style="font-size: 30px; color: #06b050">
-                              {{
-                                customerStatusData
-                                  ? customerStatusData.onlineCount
-                                  : 0
-                              }}
-                            </div>
-                            <div style="color: #06b050">Online</div>
-                          </v-col>
-                          <v-col
-                            style="
-                              padding: 0px;
-                              text-align: center;
-
-                              font-weight: bold;
-                            "
-                            ><div style="font-size: 30px; color: #fe0000">
-                              {{
-                                customerStatusData
-                                  ? customerStatusData.offlineCount
-                                  : 0
-                              }}
-                            </div>
-                            <div style="color: #fe0000">Offline</div>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
+                      src="/notification_icons/technical.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Technical </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.technicalCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/event.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Events </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.eventsCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/power.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Power </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.powerCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/temperature.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Temperature </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.temperatureCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img src="/notification_icons/gas.png" style="width: 20px"
+                  /></v-col>
+                  <v-col> Gas </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.gasCount : 0 }}
                   </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-        <v-row style="margin-top: 0px"
-          ><v-col style="padding-top: 0px">
+        <v-row>
+          <v-col>
             <v-card
-              style="height: 500px"
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px'"
               elevation="2"
               class="eventslistscroll table-font12"
-              ><v-card-text
-                ><DashboardOperatorLiveStatus
-                  v-if="loadAllEventsTable" /></v-card-text
-            ></v-card>
-          </v-col>
+              ><v-card-text>
+                <h3 style="font-weight: normal" class="font-color">
+                  Active Events
+                </h3>
+
+                <DashboardOpenEvents
+                  name="DashboardOpenEvents"
+                /> </v-card-text></v-card
+          ></v-col>
         </v-row>
       </v-col>
     </v-row>
   </div>
 </template>
-
+<style lang="scss">
+@import "@/assets/variables.scss";
+@import "@/assets/darktheme.scss";
+@import "@/assets/darkchart.scss";
+@import "@/assets/whitetheme.scss";
+</style>
 <script>
 import DashboardLoginActivities from "../../components/Admin/DashboardLoginActivities.vue";
 import DashboardAlarmEventsHourWiseChart from "../../components/Admin/DashboardAlarmEventsHourWiseChart.vue";
@@ -489,6 +394,7 @@ import DashboardOperatorLiveStatus from "../../components/Admin/DashboardOperato
 
 import AlamDeviceCountPieChart from "../../components/Alarm/Dashboard/AlarmDeviceCountPieChart.vue";
 import AllEventsDashboard2 from "../../components/Alarm/ComponentAllEvents.vue";
+import DashboardOpenEvents from "../../components/Admin/DashboardOpenEvents.vue";
 
 export default {
   layout: "operator",
@@ -498,8 +404,10 @@ export default {
     DashboardOperatorLiveStatus,
     DashboardLoginActivities,
     DashboardAlarmEventsHourWiseChart,
+    DashboardOpenEvents,
   },
   data: () => ({
+    mapHeight: 650,
     windowHeight: 1000,
     key: 1,
     date_from: "",

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\WhatsappClient;
 use App\Models\WhatsappClients;
 use Illuminate\Http\Request;
@@ -67,4 +68,12 @@ class WhatsappClientsController extends Controller
     //         $clientId = $request->client_id;
     //     }
     // }
+
+    public function testMessage(Request $request)
+    {
+
+        $company = Company::with("contact")->where("id", $request->company_id)->first();
+
+        return (new WhatsappController())->sendWhatsappNotification($company, "Test Message", $company["contact"]["whatsapp"], []);
+    }
 }

@@ -41,11 +41,7 @@
       >
         <v-card>
           <v-card-text
-            :style="
-              'padding-top:0px;background-color: #ecf0f4;height:' +
-              browserHeight +
-              'px'
-            "
+            :style="'padding-top:0px; height:' + browserHeight + 'px'"
           >
             <!-- <Topmenu
               @refreshEventsList="getDatafromApi()"
@@ -59,7 +55,7 @@
                 padding-left: 0px;
                 padding-right: 0px;
                 padding-top: 0px;
-                background-color: #fff;
+
                 font-size: 12px;
               "
             >
@@ -124,7 +120,7 @@
             </v-row>
             <v-row v-else>
               <v-col
-                class="eventslistscroll"
+                class="eventslistscroll background"
                 :style="
                   'overflow-y: auto; overflow-x: hidden; height:' +
                   parseInt(browserHeight - 70) +
@@ -152,7 +148,9 @@
                               ? '1px solid #ecf0f4'
                               : '0px',
                           backgroundColor:
-                            selectedAlarm.id === alarm.id ? '#ecf0f4' : '#FFF',
+                            selectedAlarm.id === alarm.id
+                              ? '#3b3b3b'
+                              : ' transparent',
                         }"
                       >
                         <v-row
@@ -189,13 +187,7 @@
                                     : "---"
                                 }}
                               </div>
-                              <div
-                                style="
-                                  font-weight: bold;
-                                  font-size: 12px;
-                                  color: #1f1f1f;
-                                "
-                              >
+                              <div style="font-weight: bold; font-size: 12px">
                                 {{
                                   $utils.caps(
                                     alarm.device.customer.building_name
@@ -229,10 +221,7 @@
                                     )
                                   }}
                                 </div>
-                                <div
-                                  style="color: red"
-                                  v-if="alarm.alarm_status == 0"
-                                >
+                                <div v-if="alarm.alarm_status == 0">
                                   {{
                                     $dateFormat.formatTimeDateMonthYear(
                                       alarm.alarm_end_datetime
@@ -303,7 +292,7 @@
         <v-card elevation="2">
           <v-card-text
             :style="
-              ' background-color:#ecf0f4;overflow:scroll1;min-height:200px;height:' +
+              ' overflow:scroll1;min-height:200px;height:' +
               browserHeight +
               'px'
             "

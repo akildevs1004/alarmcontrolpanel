@@ -42,7 +42,7 @@
             <v-icon>{{ i.icon }} </v-icon>
           </v-list-item-icon>
 
-          <v-list-item-title class="text-center p-2">
+          <v-list-item-title class="text-center p-2 text--white">
             {{ i.title }}&nbsp;
           </v-list-item-title>
         </v-list-item>
@@ -739,6 +739,9 @@ import TopMenuClock from "../components/Operator/TopMenuClock.vue";
 import AudioSoundPlay from "../components/Alarm/AudioSoundPlay.vue";
 
 export default {
+  theme: {
+    dark: true, // 👈 Default dark mode
+  },
   head() {
     return {
       link: [
@@ -3076,28 +3079,5 @@ td {
 .tiptap-vuetify-editor .tiptap-vuetify-editor__content p {
   margin-top: 0px !important;
   margin-bottom: 5px !important;
-}
-
-/* HTML marker styles */
-.customerMapTitle {
-  /* background-color: #4285f4; */
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  padding: 10px 15px;
-  position: relative;
-}
-
-.customerMapTitle::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  /* border-top: 8px solid #4285f4; */
 }
 </style>

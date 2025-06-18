@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can(`change_request`)">
+  <div v-if="can(`change_request`)" class="background">
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
 
@@ -7,7 +7,7 @@
         <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
       </template>
     </v-snackbar>
-    <div class="text-center ma-2">
+    <div class="text-center ma-2" v-if="snackbar">
       <v-snackbar v-model="snackbar" top="top" color="primary" elevation="24">
         {{ response }}
       </v-snackbar>
@@ -39,21 +39,13 @@
       </v-card>
     </v-dialog>
 
-    <v-row style="padding: 0px">
-      <v-col style="padding: 0px">
-        <v-card elevation="0" class="mt-2" style="padding: 0px">
-          <v-toolbar
-            v-if="!eventFilter"
-            class="mb-0 white--text"
-            color="white"
-            dense
-            flat
-          >
-            <v-toolbar-title>
-              <!-- <span style="color: black"> Customers </span> -->
-            </v-toolbar-title>
+    <v-card elevation="0" class="mt-2" style="padding: 0px">
+      <v-toolbar v-if="!eventFilter" class="mb-0" dense flat>
+        <v-toolbar-title>
+          <!-- <span style="color: black"> Customers </span> -->
+        </v-toolbar-title>
 
-            <!-- <v-btn
+        <!-- <v-btn
               title="Reload"
               dense
               class="ma-0 px-0"
@@ -65,24 +57,24 @@
               <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
             </v-btn> -->
 
-            <v-spacer></v-spacer>
-            <span style="width: 180px"
-              ><v-text-field
-                style="padding-top: 7px"
-                height="20"
-                class="employee-schedule-search-box"
-                @input="getDataFromApi()"
-                v-model="commonSearch"
-                label="Search (min 3)"
-                dense
-                outlined
-                type="text"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field
-            ></span>
-            <!-- <v-btn
+        <v-spacer></v-spacer>
+        <span style="width: 180px"
+          ><v-text-field
+            style="padding-top: 7px"
+            height="20"
+            class="employee-schedule-search-box"
+            @input="getDataFromApi()"
+            v-model="commonSearch"
+            label="Search (min 3)"
+            dense
+            outlined
+            type="text"
+            append-icon="mdi-magnify"
+            clearable
+            hide-details
+          ></v-text-field
+        ></span>
+        <!-- <v-btn
               class="ma-3 mt-5"
               fill
               dense
@@ -93,7 +85,7 @@
             >
               Save
             </v-btn> -->
-            <!-- <v-btn
+        <!-- <v-btn
               v-if="!eventFilter"
               title="Change Request"
               x-small
@@ -106,29 +98,29 @@
             >
               <v-icon class="">mdi mdi-plus-circle</v-icon>
             </v-btn> -->
-          </v-toolbar>
+      </v-toolbar>
 
-          <v-card-text style="padding-left: 0px">
-            <v-data-table
-              dense
-              color="primary"
-              :headers="headers"
-              :items="data"
-              :loading="loading"
-              :options.sync="options"
-              :footer-props="{
-                itemsPerPageOptions: [10, 50, 100, 500, 1000],
-              }"
-              class="elevation-1"
-              :server-items-length="totalRowsCount"
-              fixed-header
-              :height="tableHeight"
-              :disable-sort="true"
-              hide-default-footer
-              item-key="id"
-              v-model="modelSelectedCustomers"
-            >
-              <!-- <template v-slot:header.data-table-select="{ props, on }">
+      <v-card-text style="padding-left: 0px">
+        <v-data-table
+          dense
+          color="primary"
+          :headers="headers"
+          :items="data"
+          :loading="loading"
+          :options.sync="options"
+          :footer-props="{
+            itemsPerPageOptions: [10, 50, 100, 500, 1000],
+          }"
+          class="elevation-1"
+          :server-items-length="totalRowsCount"
+          fixed-header
+          :height="tableHeight"
+          :disable-sort="true"
+          hide-default-footer
+          item-key="id"
+          v-model="modelSelectedCustomers"
+        >
+          <!-- <template v-slot:header.data-table-select="{ props, on }">
                 <v-simple-checkbox
                   color="primary"
                   v-if="props.indeterminate"
@@ -145,200 +137,184 @@
                   v-on="on"
                 ></v-simple-checkbox> </template
               >  -->
-              <template v-slot:item.sno="{ item, index }">
-                {{
-                  currentPage
-                    ? (currentPage - 1) * perPage +
-                      (cumulativeIndex + data.indexOf(item))
-                    : ""
-                }}
-              </template>
-              <template
-                v-slot:item.building_name="{ item, index }"
-                style="width: 300px"
+          <template v-slot:item.sno="{ item, index }">
+            {{
+              currentPage
+                ? (currentPage - 1) * perPage +
+                  (cumulativeIndex + data.indexOf(item))
+                : ""
+            }}
+          </template>
+          <template
+            v-slot:item.building_name="{ item, index }"
+            style="width: 300px"
+          >
+            <v-row no-gutters>
+              <v-col
+                style="
+                  padding: 5px;
+                  padding-left: 0px;
+                  width: 50px;
+                  max-width: 50px;
+                "
               >
-                <v-row no-gutters>
-                  <v-col
-                    style="
-                      padding: 5px;
-                      padding-left: 0px;
-                      width: 50px;
-                      max-width: 50px;
-                    "
-                  >
-                    <v-img
-                      style="
-                        border-radius: 50%;
-                        height: 45px;
-                        min-height: 45px;
-                        width: 45px;
-                        max-width: 45px;
-                      "
-                      :src="
-                        item.profile_picture
-                          ? item.profile_picture
-                          : '/no-business_profile.png'
-                      "
-                    >
-                    </v-img>
-                  </v-col>
-                  <v-col style="padding: 10px">
-                    <div style="font-size: 13px">
-                      {{ item.building_name || "" }}
-                    </div>
-                    <small style="font-size: 12px; color: #6c7184">
-                      {{ item.house_number }}, {{ item.street_number }},
-                      {{ item.area }}, {{ item.city }}
-                    </small>
-                  </v-col>
-                </v-row>
-              </template>
-              <template v-slot:item.created_date="{ item }">
-                <div
-                  :title="
-                    getExpiryDatesCountColor(item.end_date) == 'red'
-                      ? 'Expired'
-                      : getExpiryDatesCountColor(item.end_date) == 'orange'
-                      ? 'Expire in 30 days'
-                      : 'End Date'
+                <v-img
+                  style="
+                    border-radius: 50%;
+                    height: 45px;
+                    min-height: 45px;
+                    width: 45px;
+                    max-width: 45px;
                   "
-                  :style="'color:' + getExpiryDatesCountColor(item.end_date)"
+                  :src="
+                    item.profile_picture
+                      ? item.profile_picture
+                      : '/no-business_profile.png'
+                  "
                 >
-                  {{ $dateFormat.format_date_month_name_year(item.end_date) }}
+                </v-img>
+              </v-col>
+              <v-col style="padding: 10px">
+                <div style="font-size: 13px">
+                  {{ item.building_name || "" }}
                 </div>
-                <small
-                  title="Start Date "
-                  style="font-size: 12px; color: #6c7184"
-                >
-                  {{ $dateFormat.format_date_month_name_year(item.start_date) }}
+                <small style="font-size: 12px; font-weight: normal">
+                  {{ item.house_number }}, {{ item.street_number }},
+                  {{ item.area }}, {{ item.city }}
                 </small>
-              </template>
-              <template v-slot:item.building_type="{ item }">
-                <div>
-                  {{ getBuildingTypeName(item.building_type_id) }}
-                </div>
-                <small style="font-size: 12px; color: #6c7184">
-                  {{ item.landmark }}
-                </small>
-              </template>
+              </v-col>
+            </v-row>
+          </template>
+          <template v-slot:item.created_date="{ item }">
+            <div
+              :title="
+                getExpiryDatesCountColor(item.end_date) == 'red'
+                  ? 'Expired'
+                  : getExpiryDatesCountColor(item.end_date) == 'orange'
+                  ? 'Expire in 30 days'
+                  : 'End Date'
+              "
+              :style="'color:' + getExpiryDatesCountColor(item.end_date)"
+            >
+              {{ $dateFormat.format_date_month_name_year(item.end_date) }}
+            </div>
+            <small title="Start Date " style="font-size: 12px">
+              {{ $dateFormat.format_date_month_name_year(item.start_date) }}
+            </small>
+          </template>
+          <template v-slot:item.building_type="{ item }">
+            <div>
+              {{ getBuildingTypeName(item.building_type_id) }}
+            </div>
+            <small style="font-size: 12px">
+              {{ item.landmark }}
+            </small>
+          </template>
 
-              <template v-slot:item.burglary="{ item }">
-                <div
-                  v-if="
-                    $dateFormat.verifyDeviceSensorName('Burglary', item.devices)
-                  "
+          <template v-slot:item.burglary="{ item }">
+            <div
+              v-if="
+                $dateFormat.verifyDeviceSensorName('Burglary', item.devices)
+              "
+            >
+              <img
+                title="Burglary"
+                style="width: 23px; float: left"
+                src="/device-icons/burglary.png"
+              />
+            </div>
+            <div v-else>---</div>
+          </template>
+          <template v-slot:item.temperature="{ item }">
+            <div
+              v-if="
+                $dateFormat.verifyDeviceSensorName('Temperature', item.devices)
+              "
+            >
+              <img
+                title="Burglary"
+                style="width: 23px; float: left"
+                src="/device-icons/temperature.png"
+              />
+            </div>
+            <div v-else>---</div>
+          </template>
+          <template v-slot:item.medical="{ item }">
+            <div
+              v-if="$dateFormat.verifyDeviceSensorName('Medical', item.devices)"
+            >
+              <img
+                title="Burglary"
+                style="width: 23px; float: left"
+                src="/device-icons/medical.png"
+              />
+            </div>
+            <div v-else>---</div>
+          </template>
+          <template v-slot:item.fire="{ item }">
+            <div
+              v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)"
+            >
+              <img
+                title="Burglary"
+                style="width: 23px; float: left"
+                src="/device-icons/fire.png"
+              />
+            </div>
+            <div v-else>---</div>
+          </template>
+          <template v-slot:item.water="{ item }">
+            <div
+              v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)"
+            >
+              <img
+                title="Burglary"
+                style="width: 23px; float: left"
+                src="/device-icons/water.png"
+              />
+            </div>
+            <div v-else>---</div>
+          </template>
+          <template v-slot:item.primary_contact="{ item }">
+            {{ item.primary_contact ? item.primary_contact.first_name : "---" }}
+          </template>
+          <template v-slot:item.area="{ item }">
+            {{ item.house_number }}, {{ item.street_number }}{{ item.area
+            }}{{ item.city }}
+          </template>
+          <template v-slot:item.options="{ item }">
+            <v-menu bottom left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list width="120" dense>
+                <v-list-item
+                  v-if="can('device_notification_contnet_view')"
+                  @click="viewItem2(item)"
                 >
-                  <img
-                    title="Burglary"
-                    style="width: 23px; float: left"
-                    src="/device-icons/burglary.png"
-                  />
-                </div>
-                <div v-else>---</div>
-              </template>
-              <template v-slot:item.temperature="{ item }">
-                <div
-                  v-if="
-                    $dateFormat.verifyDeviceSensorName(
-                      'Temperature',
-                      item.devices
-                    )
-                  "
-                >
-                  <img
-                    title="Burglary"
-                    style="width: 23px; float: left"
-                    src="/device-icons/temperature.png"
-                  />
-                </div>
-                <div v-else>---</div>
-              </template>
-              <template v-slot:item.medical="{ item }">
-                <div
-                  v-if="
-                    $dateFormat.verifyDeviceSensorName('Medical', item.devices)
-                  "
-                >
-                  <img
-                    title="Burglary"
-                    style="width: 23px; float: left"
-                    src="/device-icons/medical.png"
-                  />
-                </div>
-                <div v-else>---</div>
-              </template>
-              <template v-slot:item.fire="{ item }">
-                <div
-                  v-if="
-                    $dateFormat.verifyDeviceSensorName('Fire', item.devices)
-                  "
-                >
-                  <img
-                    title="Burglary"
-                    style="width: 23px; float: left"
-                    src="/device-icons/fire.png"
-                  />
-                </div>
-                <div v-else>---</div>
-              </template>
-              <template v-slot:item.water="{ item }">
-                <div
-                  v-if="
-                    $dateFormat.verifyDeviceSensorName('Water', item.devices)
-                  "
-                >
-                  <img
-                    title="Burglary"
-                    style="width: 23px; float: left"
-                    src="/device-icons/water.png"
-                  />
-                </div>
-                <div v-else>---</div>
-              </template>
-              <template v-slot:item.primary_contact="{ item }">
-                {{
-                  item.primary_contact ? item.primary_contact.first_name : "---"
-                }}
-              </template>
-              <template v-slot:item.area="{ item }">
-                {{ item.house_number }}, {{ item.street_number }}{{ item.area
-                }}{{ item.city }}
-              </template>
-              <template v-slot:item.options="{ item }">
-                <v-menu bottom left>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list width="120" dense>
-                    <v-list-item
-                      v-if="can('device_notification_contnet_view')"
-                      @click="viewItem2(item)"
-                    >
-                      <v-list-item-title style="cursor: pointer">
-                        <v-icon color="secondary" small> mdi-eye </v-icon>
-                        View
-                      </v-list-item-title>
-                    </v-list-item>
+                  <v-list-item-title style="cursor: pointer">
+                    <v-icon color="secondary" small> mdi-eye </v-icon>
+                    View
+                  </v-list-item-title>
+                </v-list-item>
 
-                    <v-list-item
-                      v-if="can('device_notification_contnet_delete')"
-                      @click="deleteItem(item)"
-                    >
-                      <v-list-item-title style="cursor: pointer">
-                        <v-icon color="error" small> mdi-delete </v-icon>
-                        Delete
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </template>
-            </v-data-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+                <v-list-item
+                  v-if="can('device_notification_contnet_delete')"
+                  @click="deleteItem(item)"
+                >
+                  <v-list-item-title style="cursor: pointer">
+                    <v-icon color="error" small> mdi-delete </v-icon>
+                    Delete
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-card-text>
+    </v-card>
   </div>
   <NoAccess v-else />
 </template>

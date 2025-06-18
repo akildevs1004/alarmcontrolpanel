@@ -2,7 +2,7 @@
   <NoAccess v-if="!$pagePermission.can('dashboard_view', this)" />
   <div v-else-if="!isMobileDevice">
     <v-row class="dashboard">
-      <v-col style="max-width: 20%">
+      <v-col style="max-width: 16.66%">
         <v-card
           elevation="2"
           style="height: 130px; border-radius: 0.5rem"
@@ -37,7 +37,7 @@
               </v-col> </v-row></v-card-text
         ></v-card>
       </v-col>
-      <v-col style="max-width: 20%">
+      <v-col style="max-width: 16.66%">
         <v-card
           elevation="2"
           style="height: 130px; border-radius: 0.5rem"
@@ -71,7 +71,7 @@
               </v-col> </v-row></v-card-text
         ></v-card>
       </v-col>
-      <v-col style="max-width: 20%">
+      <v-col style="max-width: 16.66%">
         <v-card
           elevation="2"
           style="height: 130px; border-radius: 0.5rem"
@@ -105,7 +105,7 @@
               </v-col> </v-row></v-card-text
         ></v-card>
       </v-col>
-      <v-col style="max-width: 20%">
+      <v-col style="max-width: 16.66%">
         <v-card
           elevation="2"
           style="height: 130px; border-radius: 0.5rem"
@@ -139,7 +139,7 @@
               </v-col> </v-row></v-card-text
         ></v-card>
       </v-col>
-      <v-col style="max-width: 20%">
+      <v-col style="max-width: 16.66%">
         <v-card
           elevation="2"
           style="height: 130px; border-radius: 0.5rem"
@@ -171,7 +171,47 @@
                   />
                 </div>
               </v-col> </v-row></v-card-text
-        ></v-card>
+        ></v-card> </v-col
+      ><v-col style="max-width: 16.66%">
+        <v-card
+          elevation="2"
+          style="height: 130px; border-radius: 0.5rem"
+          class="sos-border-bottom custom-card"
+          ><v-card-text>
+            <v-row style="height: 45px">
+              <v-col style="padding: 5px"
+                ><div style="font-size: 18px">Devices</div></v-col
+              >
+            </v-row>
+
+            <v-row>
+              <v-col
+                style="
+                  padding: 0px;
+                  text-align: center;
+
+                  font-weight: bold;
+                "
+                ><div style="font-size: 30px; color: #06b050">
+                  {{ customerStatusData ? customerStatusData.onlineCount : 0 }}
+                </div>
+                <div style="color: #06b050">Online</div>
+              </v-col>
+              <v-col
+                style="
+                  padding: 0px;
+                  text-align: center;
+
+                  font-weight: bold;
+                "
+                ><div style="font-size: 30px; color: #fff">
+                  {{ customerStatusData ? customerStatusData.offlineCount : 0 }}
+                </div>
+                <div style="color: #fff">Offline</div>
+              </v-col>
+            </v-row></v-card-text
+          ></v-card
+        >
       </v-col>
     </v-row>
 
@@ -230,6 +270,70 @@
         <v-row>
           <v-col>
             <v-card
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px;overflow:hidden'"
+              elevation="2"
+              class="eventslistscroll table-font12"
+            >
+              <v-card-text>
+                <!-- <h3 style="font-weight: normal" class="font-color">
+                  Active Events
+                </h3> -->
+                <v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/technical.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Technical </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.technicalCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/event.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Events </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.eventsCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/power.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Power </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.powerCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="border-bottom: 1px solid #353538; padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img
+                      src="/notification_icons/temperature.png"
+                      style="width: 20px"
+                  /></v-col>
+                  <v-col> Temperature </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.temperatureCount : 0 }}
+                  </v-col> </v-row
+                ><v-row style="padding: 0px">
+                  <v-col style="max-width: 40px">
+                    <img src="/notification_icons/gas.png" style="width: 20px"
+                  /></v-col>
+                  <v-col> Gas </v-col>
+                  <v-col style="font-size: 40px">
+                    {{ data ? data.gasCount : 0 }}
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <!-- <v-row>
+          <v-col>
+            <v-card
               :style="'height: ' + (mapHeight - 30) / 2 + 'px'"
               elevation="2"
               class="eventslistscroll table-font12"
@@ -242,11 +346,11 @@
                   name="DashboardOpenEvents"
                 /> </v-card-text></v-card
           ></v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <v-col>
             <v-card
-              :style="'height: ' + (mapHeight - 30) / 2 + 'px'"
+              :style="'height: ' + (mapHeight - 30) / 2 + 'px;overflow:hidden'"
               elevation="2"
               class="eventslistscroll table-font12"
               ><v-card-text>

@@ -90,11 +90,17 @@ export default {
       window.initMap = callback;
       document.head.appendChild(script);
     },
-    initMap() {
+    async initMap() {
+      const { AdvancedMarkerElement } = await window.google.maps.importLibrary(
+        "marker"
+      );
+
+      this.AdvancedMarkerElement = AdvancedMarkerElement;
       this.map = new google.maps.Map(
         document.getElementById("mapCustomer" + this.contact_id),
         {
           mapTypeControl: false,
+          mapId: this.mapKey, // ✅ Required for AdvancedMarkerElement
           streetViewControl: false,
           zoom: 12,
           center: { lat: 25.276987, lng: 55.296249 },
@@ -153,7 +159,24 @@ export default {
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(25, 25),
         };
+        try {
+          const content = document.createElement("div");
 
+          content.className = "customerMapTitle";
+          content.innerHTML = `
+          <div style="position: relative;
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px ;">
+           ${this.alarm.device.customer.building_name}
+          </div>
+        `;
+
+          const markerLabel = new this.AdvancedMarkerElement({
+            position,
+            map: this.map,
+            content: content,
+          });
+          // this.mapMarkersLabelsList.push(markerLabel); // ✅ Track marker
+        } catch (e) {}
         const marker = new google.maps.Marker({
           position,
           map: this.map,

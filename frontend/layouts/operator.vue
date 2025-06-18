@@ -120,7 +120,6 @@
     </v-navigation-drawer>
     <v-app-bar
       :color="changeColor"
-      dark
       :clipped-left="clipped"
       fixed
       app
@@ -208,12 +207,15 @@
 
       <v-spacer></v-spacer>
       <span><TopMenuClock></TopMenuClock></span>
-      <span class="pr-3 pl-10" style="color: #5d5d5d; padding-left: 30px">
+      <span class="pr-3 pl-10" style="padding-left: 30px">
         Operator
         <!-- {{ topMenuDisplayName }} -->
 
         <!-- <div style="font-size: 10px">({{ companyName }})</div> -->
       </span>
+      <span class="pl-2 pr-2" @click="toggleTheme()" style="cursor: pointer"
+        ><v-icon>mdi-brightness-7</v-icon></span
+      >
       <v-menu
         style="z-index: 9999 !important; width: 300px"
         bottom
@@ -256,7 +258,7 @@
             <v-list-item-content
               @click="dialogAlarmPopupNotificationStatus = true"
             >
-              <v-list-item-title class="black--text align-left text-left">
+              <v-list-item-title class="align-left text-left">
                 <v-row>
                   <v-col cols="2" class="align-right text-right pr-1">
                     <img
@@ -439,7 +441,7 @@
           : 'padding-left: 140px;'
       "
     >
-      <v-container style="max-width: 100%; padding: 10px">
+      <v-container style="max-width: 100%; padding: 15px">
         <nuxt />
       </v-container>
     </v-main>
@@ -898,6 +900,9 @@ export default {
     //   console.log("Clicked anywhere:", event.target);
     //   // Add your logic here
     // },
+    toggleTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
     updateOperatorLiveStatus() {
       if (this.$auth.user?.security) {
         this.$axios.post("operator_live_update", {
@@ -1802,12 +1807,12 @@ export default {
   color: #9aa9b9;
 }
 
-header,
+/* header,
 header button,
 header a,
 header i {
   color: black !important;
-}
+} */
 header,
 .v-sheet {
   z-index: 99 !important;

@@ -102,9 +102,17 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
 
 //     return (new ApiAlarmDeviceSensorLogsController())->endAllAlarmsBySerialNumber($request->serial_number, date("Y-m-d H:i:s"));
 // });
+Route::get("testWhatsappNotification", function (Request $request) {
 
+
+    return (new WhatsappController())->sendWhatsappNotification(["id" => 8], "Test Message", "971552205149", []);
+});
 
 Route::get("testNotification", function (Request $request) {
+
+
+    $response = (new WhatsappController())->sendWhatsappNotification($value['company'], $body_content1, $value['whatsapp_number'], []);
+
 
 
 

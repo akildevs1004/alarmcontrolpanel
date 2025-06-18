@@ -298,15 +298,15 @@
                           : "---"
                       }}
                       <br /> -->
-                        <div style="color: #de651e; font-size: 10px">
+                        <div style="font-size: 10px">
                           {{
                             alarm.device.customer.buildingtype?.name || "---"
                           }}
                         </div>
-                        <div style="color: black; font-size: 14px">
+                        <div style="font-size: 14px">
                           {{ alarm.device.customer.building_name || "---" }}
                         </div>
-                        <div style="color: black">
+                        <div style="">
                           {{
                             alarm.device?.customer?.area
                               ? alarm.device.customer.area
@@ -316,7 +316,7 @@
                           {{ alarm.device.customer.city }}
                         </div>
 
-                        <div style="color: #534949; text-align: left">
+                        <div style="text-align: left">
                           {{
                             $dateFormat.formatTimeDateMonthYear(
                               alarm.alarm_start_datetime
@@ -364,7 +364,6 @@
                           <v-icon
                             v-if="alarm.device?.customer?.cameras?.length > 0"
                             @click="openCameradialog(alarm)"
-                            color="black"
                             size="25"
                             >mdi-camera-outline</v-icon
                           >
@@ -803,8 +802,10 @@ export default {
     response: "",
     buildingTypes: [],
     alarmTypes: [],
+    AdvancedMarkerElement: null,
 
     _id: null,
+    mapMarkersLabelsList: [],
 
     mapMarkersList: [],
     mapInfowindowsList: [],
@@ -1321,16 +1322,23 @@ export default {
         }
       } catch (e) {}
     },
-    initMap() {
+    async initMap() {
       if (!this.map && document.getElementById("map")) {
+        const { AdvancedMarkerElement } =
+          await window.google.maps.importLibrary("marker");
+
+        this.AdvancedMarkerElement = AdvancedMarkerElement;
+
         this.map = new google.maps.Map(document.getElementById("map"), {
           // mapTypeControl: true, // Enables satellite/roadmap controls
           // mapTypeControlOptions: {
           //   style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
           //   position: google.maps.ControlPosition.TOP_RIGHT,
           // },
+          mapId: this.mapKey, // ✅ Required for AdvancedMarkerElement
+
           controlSize: 20,
-          zoom: 12,
+          zoom: 13,
           center: { lat: 25.2265191, lng: 55.395225 },
           styles: this.google_map_style_regular,
           // styles: [
@@ -1386,6 +1394,8 @@ export default {
           this.mapMarkersList[index] = null;
         }
       });
+      this.mapMarkersLabelsList.forEach((marker1) => (marker1.map = null));
+      this.mapMarkersLabelsList = [];
 
       this.customersData.forEach((item) => {
         if (item) {
@@ -1430,6 +1440,25 @@ export default {
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(25, 25),
               };
+
+              try {
+                const content = document.createElement("div");
+
+                content.className = "customerMapTitle";
+                content.innerHTML = `
+          <div style="position: relative;
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px ;font-weight:bold;">
+           ${item.building_name}
+          </div>
+        `;
+
+                const markerLabel = new this.AdvancedMarkerElement({
+                  position,
+                  map: this.map,
+                  content: content,
+                });
+                this.mapMarkersLabelsList.push(markerLabel); // ✅ Track marker
+              } catch (e) {}
 
               const marker = new google.maps.Marker({
                 position,

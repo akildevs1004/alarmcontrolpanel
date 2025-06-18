@@ -31,7 +31,7 @@ class Company extends Model
         'created_at' => 'datetime:d-M-y',
         'no_branch' => 'boolean',
     ];
-    protected $appends = ['show_member_from', 'show_expiry', "logo_raw"];
+    protected $appends = ['show_member_from', 'show_expiry', "logo_raw",];
     public function getLogoRawAttribute($value)
     {
         $arr = explode('upload/', $this->logo);

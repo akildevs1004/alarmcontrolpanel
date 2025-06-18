@@ -27,6 +27,8 @@ export default {
     snackColor: "",
     snackText: "",
     dialog: false,
+    AdvancedMarkerElement: null,
+    mapMarkersLabelsList: [],
     customerInfo: "",
   }),
   computed: {},
@@ -75,10 +77,15 @@ export default {
       window.initMap = callback;
       document.head.appendChild(script);
     },
-    initMap() {
+    async initMap() {
       try {
         // console.log("Operator Google Map", this.customer.latitude);
         // console.log(this.customer.longitude);
+
+        const { AdvancedMarkerElement } =
+          await window.google.maps.importLibrary("marker");
+
+        this.AdvancedMarkerElement = AdvancedMarkerElement;
 
         this.map = new google.maps.Map(
           document.getElementById("mapCustomer" + this.customer_id),
@@ -111,7 +118,24 @@ export default {
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(25, 25), // Adjust anchor point to the center
         };
+        try {
+          const content = document.createElement("div");
 
+          content.className = "customerMapTitle";
+          content.innerHTML = `
+          <div style="position: relative;
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px ;">
+           ${this.customer.building_name}
+          </div>
+        `;
+
+          const markerLabel = new this.AdvancedMarkerElement({
+            position,
+            map: this.map,
+            content: content,
+          });
+          this.mapMarkersLabelsList.push(markerLabel); // ✅ Track marker
+        } catch (e) {}
         const marker = new google.maps.Marker({
           position,
           map: this.map,

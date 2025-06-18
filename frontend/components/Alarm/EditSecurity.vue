@@ -10,8 +10,8 @@
       <v-col md="12" sm="12" cols="12" dense>
         <v-tabs v-model="tab">
           <v-tab>Primary</v-tab>
-          <v-tab>Emergency Contacts</v-tab>
-          <v-tab>Documents</v-tab>
+          <v-tab v-if="item">Emergency Contacts</v-tab>
+          <v-tab v-if="item">Documents</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -215,10 +215,10 @@
             </v-card>
           </v-tab-item>
           <v-tab-item>
-            <UserContacts :user_id="item.user_id" :editable="editable"
+            <UserContacts :user_id="item?.user_id" :editable="editable"
           /></v-tab-item>
           <v-tab-item>
-            <UserDocuments :user_id="item.user_id" :editable="editable" />
+            <UserDocuments :user_id="item?.user_id" :editable="editable" />
           </v-tab-item>
         </v-tabs-items>
       </v-col>

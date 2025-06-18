@@ -84,6 +84,9 @@ export default {
       filter1: "categories",
       categories: [],
       chartOptions: {
+        theme: {
+          mode: "light",
+        },
         noData: {
           text: "There's no data",
           align: "center",
