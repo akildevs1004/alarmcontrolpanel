@@ -58,6 +58,7 @@
           itemsPerPageOptions: [10, 50, 100],
         }"
         :server-items-length="totalRowsCount"
+        :height="tableHeight"
       >
         <template v-slot:item.sno="{ item, index }">
           {{
@@ -257,6 +258,8 @@
 export default {
   data() {
     return {
+      tableHeight: 500,
+
       cumulativeIndex: 1,
 
       currentPage: 1,
@@ -392,12 +395,18 @@ export default {
       deep: true,
     },
   },
+
   async created() {
     if (this.$auth.user.branch_id) {
       this.branch_id = this.$auth.user.branch_id;
       this.isCompany = false;
       return;
     }
+
+    this.tableHeight = window.innerHeight - 200;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 200;
+    });
 
     // let today = new Date();
     // let monthObj = this.$dateFormat.monthStartEnd(today);

@@ -570,6 +570,7 @@ export default {
     editDevice: null,
     dialogZones: false,
     invoicePackageData: null,
+    windowHeight: 600,
   }),
 
   computed: {
@@ -612,6 +613,7 @@ export default {
     }, 1000 * 60);
   },
   async created() {
+    if (window) this.windowHeight = window.innerHeight;
     for (let index = 0; index <= 60; index++) {
       this.oneTOsixty.push(index);
     }

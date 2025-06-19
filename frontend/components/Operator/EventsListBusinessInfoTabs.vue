@@ -4,29 +4,23 @@
       height="25"
       center-active
       right
-      class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1"
+      class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1222222"
     >
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
+      <v-tab style="font-size: 12px; min-width: 50px !important">
         Google Map
       </v-tab>
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black">
-        Camera</v-tab
-      >
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+      <v-tab style="font-size: 12px; min-width: 50px !important"> Camera</v-tab>
+      <v-tab style="font-size: 12px; min-width: 50px !important"
         >Premises Photo</v-tab
-      ><v-tab style="font-size: 12px; min-width: 50px !important; color: black"
+      ><v-tab style="font-size: 12px; min-width: 50px !important"
         >Floor Plan</v-tab
       >
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
-        >Address</v-tab
-      >
+      <v-tab style="font-size: 12px; min-width: 50px !important">Address</v-tab>
 
-      <v-tab style="font-size: 12px; min-width: 50px !important; color: black"
-        >System</v-tab
-      >
+      <v-tab style="font-size: 12px; min-width: 50px !important">System</v-tab>
       <v-tab
         v-if="$auth.user"
-        style="font-size: 12px; min-width: 50px !important; color: black"
+        style="font-size: 12px; min-width: 50px !important"
         >Events</v-tab
       >
       <v-tab-item>

@@ -12,11 +12,7 @@
             >Operator Comments #{{ alarmId }}</span
           >
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogOperatorNotes = false"
-            outlined
-          >
+          <v-icon @click="dialogOperatorNotes = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -24,7 +20,7 @@
           <v-row>
             <v-col>
               <v-row>
-                <v-col style="padding: 0px">
+                <v-col>
                   <table class="eventcustomertabselect" style="width: 100%">
                     <tr>
                       <!-- <td>Call Status</td> -->
@@ -182,7 +178,6 @@
                       margin-top: -10px;
                       width: 100px;
                       color: black;
-                      background-color: #ddd;
                     "
                     >Cancel</v-btn
                   ></v-col
@@ -369,7 +364,7 @@
             ></v-img>
           </v-col>
           <v-col style="margin: auto; padding-top: 0px">
-            <div class="bold" style="color: black">
+            <div class="bold">
               {{
                 globalContactDetails?.first_name
                   ? $utils.caps(globalContactDetails.first_name) +
@@ -400,7 +395,7 @@
                 </td>
               </tr> -->
               <tr>
-                <td style="color: black">
+                <td>
                   <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-cellphone-basic</v-icon
                   >
@@ -416,7 +411,7 @@
                 </td>
               </tr>
               <tr>
-                <td style="color: black">
+                <td>
                   <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-phone-classic</v-icon
                   >
@@ -432,7 +427,7 @@
                 </td>
               </tr>
               <tr>
-                <td style="color: black">
+                <td>
                   <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-whatsapp</v-icon
                   >
@@ -448,7 +443,7 @@
                 </td>
               </tr>
               <tr>
-                <td style="color: black">
+                <td>
                   <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-at</v-icon
                   >
@@ -464,7 +459,7 @@
                 </td>
               </tr>
               <tr>
-                <td style="color: black">
+                <td>
                   <v-icon color="2038c011111" size="16" class="pr-6"
                     >mdi-message-bulleted</v-icon
                   >

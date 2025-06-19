@@ -1,26 +1,41 @@
 <template>
   <div max-width="100%">
     <v-row>
-      <v-col style="max-width: 250px">
-        <v-card style="height: 310px"
-          ><v-card-text elevation="2">
+      <v-col style="max-width: 250px; min-height: 650px">
+        <v-card style="height: 320px" elevation="2"
+          ><v-card-text>
             <v-row style="margin-top: 0x">
               <v-col class="p-0" style="padding: 0px">
                 <v-img
                   style="
                     width: 60%;
-
                     border-radius: 5%;
                     border: 1px solid #ddd;
                     margin: auto;
                     max-height: 130px;
                   "
                   :src="
-                    selectedCustomer && selectedCustomer.primary_contact
-                      ? selectedCustomer.primary_contact?.profile_picture
+                    selectedCustomer.primary_contact.profile_picture
+                      ? selectedCustomer.primary_contact.profile_picture
                       : '/no-profile-image.jpg'
                   "
                 ></v-img>
+                <!-- <v-img
+                  style="
+                    width: 60%;
+                    border-radius: 5%;
+                    border: 1px solid #ddd;
+                    margin: auto;
+                    max-height: 130px;
+                  "
+                  :src="
+                    selectedCustomer &&
+                    selectedCustomer.primary_contact &&
+                    selectedCustomer.primary_contact?.profile_picture
+                      ? selectedCustomer.primary_contact?.profile_picture
+                      : '/no-profile-image.jpg'
+                  "
+                ></v-img> -->
               </v-col>
               <v-col style="font-weight: bold; text-align: center">
                 <div style="font-size: 16px; text-align: center">
@@ -70,7 +85,7 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <v-card style="margin-top: 5px; height: 270px"
+        <v-card style="margin-top: 5px; height: 330px"
           ><v-card-text elevation="2">
             <v-row>
               <v-col class="p1-0" style="padding: 0px">
@@ -124,9 +139,9 @@
           </v-card-text></v-card
         >
       </v-col>
-      <v-col style="max-width: 60px; padding: 0px">
+      <v-col style="max-width: 70px; min-height: 650px">
         <v-tabs
-          style="max-width: 50px; min-height: 100%"
+          style="max-width: 60px; min-height: 100%; border-radius: 5px"
           icons-and-text
           v-model="tab"
           vertical
@@ -166,7 +181,7 @@
             v-if="!isMapviewOnly"
           >
             Auto
-            <v-icon>mdi-car-emergency</v-icon> </v-tab
+            <v-icon>mdi-bell-ring</v-icon> </v-tab
           ><v-tab
             class="customer-tab"
             style="max-width: 50px"
@@ -195,8 +210,16 @@
           </v-tab>
         </v-tabs>
       </v-col>
-      <v-col class="pa-0">
-        <v-tabs-items v-model="tab" style="overflow: visible">
+      <v-col>
+        <v-tabs-items
+          v-model="tab"
+          style="
+            overflow: visible;
+            min-height: 650px;
+            /* max-width: 850px; */
+            border-radius: 5px;
+          "
+        >
           <!-- <v-tab-item>
         <v-card flat>
           <v-card-text
@@ -241,8 +264,8 @@
           </v-tab-item> -->
 
           <v-tab-item>
-            <v-card flat>
-              <v-card-text elevation="2" class="pl-0">
+            <v-card>
+              <v-card-text elevation="2" style="border-radius: 10px">
                 <AlramEmergencyContacts
                   v-if="data"
                   @closeDialog="closeDialog"

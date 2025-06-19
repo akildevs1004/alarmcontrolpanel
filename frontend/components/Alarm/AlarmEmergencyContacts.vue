@@ -16,7 +16,7 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="background">
           <v-container style="min-height: 100px">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14433.170866542543!2d55.291463!3d25.2607368!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43145ef11097%3A0x78e0d1eb3fed1225!2sAkil%20Security%20%26%20Alarm%20System%20Dubai%20LLC!5e0!3m2!1sen!2sae!4v1719239839580!5m2!1sen!2sae"
@@ -46,7 +46,7 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="background">
           <v-container style="min-height: 100px">
             <!-- <AlarmEditEmergencyContact
               :key="key"

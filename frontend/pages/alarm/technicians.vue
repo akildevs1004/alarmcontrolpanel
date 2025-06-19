@@ -236,6 +236,8 @@ export default {
     EditTechnician,
   },
   data: () => ({
+    browserHeight: 700,
+
     dialogSecurityCustomers: false,
     editId: null,
     item: null,
@@ -318,9 +320,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 270;
+    this.tableHeight = window.innerHeight - 200;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 270;
+      this.tableHeight = window.innerHeight - 200;
     });
 
     this.getBuildingTypes();
@@ -335,6 +337,9 @@ export default {
       this.isCompany = false;
       return;
     }
+    try {
+      if (window) this.browserHeight = window.innerHeight - 70;
+    } catch (e) {}
   },
   watch: {
     options: {

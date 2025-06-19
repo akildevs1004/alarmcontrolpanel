@@ -178,7 +178,7 @@
                     v-if="getCameraUrl(item) != ''"
                     :src="getCameraUrl(item)"
                     width="100%"
-                    style="border: 0; min-height: 580px; height: auto"
+                    style="border: 0; min-height: 510px; height: auto"
                     allowfullscreen=""
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"

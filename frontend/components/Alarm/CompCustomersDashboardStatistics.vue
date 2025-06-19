@@ -25,7 +25,7 @@
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
-                    {{ customersStats ? customersStats.total : 0 }}
+                    {{ customersStats?.total || 0 }}
                   </v-col>
                   <v-col
                     cols="auto"
@@ -66,7 +66,8 @@
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
                     {{
-                      customersStats
+                      customersStats &&
+                      customersStats.total - customersStats.expired
                         ? customersStats.total - customersStats.expired
                         : 0
                     }}
@@ -110,7 +111,7 @@
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
-                    {{ customersStats ? customersStats.expiringin30days : 0 }}
+                    {{ customersStats?.expiringin30days || 0 }}
                   </v-col>
                   <v-col
                     cols="auto"
@@ -150,7 +151,7 @@
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
-                    {{ customersStats ? customersStats.expired : 0 }}
+                    {{ customersStats?.expired || 0 }}
                   </v-col>
                   <v-col
                     cols="auto"

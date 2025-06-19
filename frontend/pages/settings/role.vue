@@ -252,9 +252,9 @@ export default {
 
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 230;
+    this.tableHeight = window.innerHeight - 200;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 230;
+      this.tableHeight = window.innerHeight - 200;
     });
   },
   watch: {

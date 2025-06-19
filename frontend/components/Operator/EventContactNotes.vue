@@ -38,13 +38,13 @@
                   <v-card-text style="padding: 0px">
                     <table
                       class="eventcustomertab"
-                      style="width: 100%; height: 150px; color: #0045e5"
+                      style="width: 100%; height: 150px"
                     >
                       <tr>
                         <td
                           class="bold1"
                           colspan="2"
-                          style="font-size: 15px !important; color: black"
+                          style="font-size: 15px !important"
                         >
                           {{
                             customer?.building_name
@@ -120,7 +120,6 @@
           center-active
           right
           class="customerEmergencyContactTabs1 customerEmergencyContactTabsBGcolor1222"
-          style="background-color: #fff"
         >
           <v-tab
             style="font-size: 10px; min-width: 50px !important"
@@ -148,7 +147,7 @@
             name="index+50"
           >
             <v-card elevation="2">
-              <v-card-text :style="'background-color: #FFF; padding: 2px; '">
+              <v-card-text :style="' padding: 2px; '">
                 <EventCustomerTabContacts
                   :alarmId="alarm.id"
                   v-if="contact"

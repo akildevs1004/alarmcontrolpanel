@@ -70,7 +70,7 @@
               <v-col></v-col>
               <v-col style="max-width: 250px"
                 ><v-text-field
-                  style="padding-top: 7px; width: 200px"
+                  style="padding-top: 7px; width: 200px; padding-right: 10px"
                   height="20"
                   class="employee-schedule-search-box"
                   @input="getDataFromApi()"

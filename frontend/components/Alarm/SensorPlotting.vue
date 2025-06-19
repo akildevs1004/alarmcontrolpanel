@@ -111,7 +111,7 @@
                     <v-row no-gutters>
                       <v-col
                         cols="12"
-                        style="border: 1px solid #cdcccc; border-radius: 3px"
+                        style="border-radius: 3px"
                         class="py-2 px-3"
                       >
                         Device: {{ getDeviceName(device_id) }}

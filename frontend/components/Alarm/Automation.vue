@@ -41,9 +41,9 @@
       <v-col cols="12" class="text-right" style="">
         <v-row>
           <v-col cols="8"></v-col>
-          <v-col cols="4" class="text-right" style="width: 450px">
+          <v-col cols="4" class="text-right">
             <v-row>
-              <v-col cols="4">
+              <v-col cols="2">
                 <!-- <CustomFilter
                   style="float: right; padding-top: 5px; z-index: 9999"
                   @filter-attr="filterAttr"
@@ -72,7 +72,7 @@
 
               <v-col
                 cols="1"
-                style="padding-left: 0px; width: 50px"
+                style="padding-left: 0px; max-width: 50px"
                 class="text-left"
               >
                 <v-btn
@@ -86,11 +86,12 @@
                     dialogEditAutomation = true;
                   "
                   class="ma-2"
+                  style="margin-top: -5px"
                 >
                   New
                 </v-btn>
               </v-col>
-              <v-col cols="1" style="width: 50px">
+              <v-col cols="1" style="max-width: 50px">
                 <!-- <v-btn icon small dense color="primary" class="ma-2">
                   <v-icon>mdi mdi-download</v-icon>
                 </v-btn> -->

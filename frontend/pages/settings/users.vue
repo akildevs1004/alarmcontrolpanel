@@ -46,7 +46,7 @@
       </v-card>
     </v-dialog>
 
-    <v-card elevation="0">
+    <v-card elevation="0" tableHeight>
       <v-toolbar dense flat>
         <v-toolbar-title> <span>Users</span></v-toolbar-title>
         <!-- <v-tooltip top color="primary">
@@ -309,9 +309,9 @@ export default {
   }),
   computed: {},
   mounted() {
-    this.tableHeight = window.innerHeight - 270;
+    this.tableHeight = window.innerHeight - 200;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 270;
+      this.tableHeight = window.innerHeight - 200;
     });
 
     this.getBuildingTypes();

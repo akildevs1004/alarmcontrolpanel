@@ -3006,11 +3006,11 @@ td {
 }
 
 #table-services tr:nth-child(even) {
-  background-color: #f2f2f2;
+  /* background-color: #f2f2f2; */
 }
 
 #table-services tr:hover {
-  background-color: #ddd;
+  /* background-color: #ddd; */
 }
 #table-services td {
   text-align: left;
@@ -3019,7 +3019,7 @@ td {
   padding-top: 6px;
   padding-bottom: 6px;
   text-align: left;
-  background-color: #203864;
+  /* background-color: #203864; */
   color: white;
   font-weight: normal;
 }
@@ -3079,5 +3079,9 @@ td {
 .tiptap-vuetify-editor .tiptap-vuetify-editor__content p {
   margin-top: 0px !important;
   margin-bottom: 5px !important;
+}
+
+.v-dialog--active {
+  border: 1px solid #534b4b;
 }
 </style>

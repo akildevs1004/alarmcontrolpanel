@@ -16,7 +16,11 @@
       <v-row>
         <v-col>
           <v-card class="mt-2">
-            <v-tabs class="pt-3" :vertical="vertical">
+            <v-tabs
+              class="pt-3"
+              :vertical="vertical"
+              :style="'height:' + (windowHeight - 100) + 'px'"
+            >
               <v-tabs-slider color="violet"></v-tabs-slider>
               <v-tab>
                 <span>Company Profile</span>
@@ -1189,6 +1193,7 @@ export default {
   components: { Whatsapp, TaxSlabs, NotificationSettings },
 
   data: () => ({
+    windowHeight: 600,
     contact_payload_update: {},
     business_licence_payload: {},
     timeZones,
@@ -1276,6 +1281,7 @@ export default {
       this.fullCompanyLink = this.originalURL + this.$auth.user.company_id;
       //this.generateCompanyQRCode(this.fullCompanyLink);
     } catch (e) {}
+    if (window) this.windowHeight = window.innerHeight;
   },
   methods: {
     async generateCompanyQRCode(fullLink) {

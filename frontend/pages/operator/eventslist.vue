@@ -241,11 +241,11 @@
                               padding-right: 20px;
                             "
                           >
-                            <div style="color: blue">#{{ alarm.id }}</div>
+                            <div>#{{ alarm.id }}</div>
                             <div style="margin: auto; text-align: center"></div>
                             <div style="line-height: 0px"></div>
                             <div v-if="alarm.alarm_status == 1">
-                              <span style="color: GREEN"> OPEN</span>
+                              <span> OPEN</span>
                               <div>
                                 {{
                                   $dateFormat.getTimeDifference(
@@ -254,7 +254,7 @@
                                 }}
                               </div>
                             </div>
-                            <div v-else style="color: #2f1717">
+                            <div v-else>
                               CLOSED
 
                               <div>

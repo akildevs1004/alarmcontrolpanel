@@ -26,7 +26,9 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding-left: 10px; background-color: #fff">
+        <v-card-text
+          style="padding-left: 10px; background-color: #fff; margin-top: 10px"
+        >
           <AlarmCustomerTabsView2
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
@@ -57,7 +59,10 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding-left: 10px" class="background">
+        <v-card-text
+          style="padding-left: 10px; margin-top: 10px"
+          class="background"
+        >
           <AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"
@@ -88,7 +93,7 @@
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <v-card-text style="padding-left: 10px; background-color: #fff"
+        <v-card-text class="background mt-3"
           ><AlarmCustomerTabsView
             :key="key"
             @closeCustomerDialog="closeCustomerDialog"

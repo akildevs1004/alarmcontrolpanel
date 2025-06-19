@@ -34,10 +34,8 @@
     <v-row>
       <v-col class="mt-0 pt-0">
         <v-card elevation="0" class="mt-0">
-          <v-toolbar class="mb-0 white--text" color="white" dense flat>
-            <v-toolbar-title>
-              <span style="color: black"> Sensors List </span></v-toolbar-title
-            >
+          <v-toolbar class="mb-0 background" dense flat>
+            <v-toolbar-title> <span> Sensors List </span></v-toolbar-title>
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
             <v-btn
