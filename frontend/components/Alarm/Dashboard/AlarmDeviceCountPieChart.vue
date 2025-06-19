@@ -149,7 +149,7 @@
 import Devices from "../Devices.vue";
 
 export default {
-  props: ["name"],
+  props: ["name", "height"],
   components: { Devices },
   data() {
     return {
@@ -180,8 +180,8 @@ export default {
           toolbar: {
             show: false,
           },
-          width: 250,
-          height: 250,
+          width: parseInt(this.height),
+          height: parseInt(this.height),
           type: "donut",
         },
         customTotalValue: 0,

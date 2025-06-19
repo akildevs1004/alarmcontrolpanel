@@ -8,10 +8,9 @@
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Operator Logs #{{ eventId }}</span>
+          <span>Operator Logs #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogViewLogs = false;
@@ -37,12 +36,9 @@
     <v-dialog v-model="dialogForwardEventDetails" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Alarm - Forward Details #{{ eventId }}</span
-          >
+          <span>Alarm - Forward Details #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogForwardEventDetails = false;
@@ -161,10 +157,9 @@
     <v-dialog v-model="dialogTabViewCustomer" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm : {{ popupEventText }}</span>
+          <span>Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogTabViewCustomer = false;

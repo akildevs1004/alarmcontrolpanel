@@ -9,29 +9,23 @@
     <v-dialog v-model="dialogViewAlarmFormat" width="1200px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Alarm Event Track #{{ selectedAlarm?.id }}</span
-          >
+          <span>Alarm Event Track #{{ selectedAlarm?.id }}</span>
           <v-spacer></v-spacer
           ><v-icon
-            style="padding-right: 20px; color: black"
+            style="padding-right: 20px"
             @click="alarmNotesPrint(selectedAlarm?.id, 'download')"
             outlined
           >
             mdi-download-box-outline
           </v-icon>
           <v-icon
-            style="padding-right: 20px; color: black"
+            style="padding-right: 20px"
             @click="alarmNotesPrint(selectedAlarm?.id, 'print')"
             outlined
           >
             mdi-printer-outline
           </v-icon>
-          <v-icon
-            style="color: black"
-            @click="dialogViewAlarmFormat = false"
-            outlined
-          >
+          <v-icon @click="dialogViewAlarmFormat = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -50,12 +44,9 @@
     <v-dialog v-model="dialogViewLogs" width="80%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Operator Logs #{{ selectedAlarm?.id }}</span
-          >
+          <span>Operator Logs #{{ selectedAlarm?.id }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogViewLogs = false;
@@ -81,12 +72,9 @@
     <v-dialog v-model="dialogForwardEventDetails" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Alarm - Forward Details #{{ eventId }}</span
-          >
+          <span>Alarm - Forward Details #{{ eventId }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogForwardEventDetails = false;
@@ -206,13 +194,9 @@
     <v-dialog v-model="dialogTabViewCustomer" width="1400" height="700">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm : {{ popupEventText }}</span>
+          <span>Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogTabViewCustomer = false"
-            outlined
-          >
+          <v-icon @click="dialogTabViewCustomer = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

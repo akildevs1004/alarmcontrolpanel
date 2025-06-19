@@ -6,7 +6,7 @@
           elevation="0"
           :style="
             'height: 90px;border-radius: 0.5rem;background-color:' +
-            ($vuetify.theme.dark ? '#283a36!important' : '#98b5af!important')
+            ($vuetify.theme.dark ? '#283a36!important' : '#FFF!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -46,7 +46,7 @@
           elevation="0"
           :style="
             'height: 90px;border-radius: 0.5rem;background-color:' +
-            ($vuetify.theme.dark ? '#353345!important' : '#a6a3bf!important')
+            ($vuetify.theme.dark ? '#353345!important' : '#FFF!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -92,7 +92,7 @@
           elevation="0"
           :style="
             'height: 90px;border-radius: 0.5rem;background-color:' +
-            ($vuetify.theme.dark ? '#42392c!important' : '#a39785!important')
+            ($vuetify.theme.dark ? '#42392c!important' : '#FFF!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -132,7 +132,7 @@
           elevation="0"
           :style="
             'height: 90px;border-radius: 0.5rem;background-color:' +
-            ($vuetify.theme.dark ? '#422f35!important' : '#d1acb8!important')
+            ($vuetify.theme.dark ? '#422f35!important' : '#FFF!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text
@@ -172,7 +172,7 @@
           elevation="0"
           :style="
             'height: 90px;border-radius: 0.5rem;background-color:' +
-            ($vuetify.theme.dark ? '#2a3b44!important' : '#afc3cd!important')
+            ($vuetify.theme.dark ? '#2a3b44!important' : '#FFF!important')
           "
           class="custom-card bg-primary-transparent"
           ><v-card-text

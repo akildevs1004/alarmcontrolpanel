@@ -302,15 +302,9 @@
     <v-dialog v-model="dialogForwardEventDetails" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Alarm - Forward Details #{{ eventId }}</span
-          >
+          <span>Alarm - Forward Details #{{ eventId }}</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogForwardEventDetails = false"
-            outlined
-          >
+          <v-icon @click="dialogForwardEventDetails = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

@@ -1860,9 +1860,7 @@ header,
   padding: 5px 6px 5px !important;
   color: black !important;
 }
-.popup_background_noviolet button {
-  color: black !important;
-}
+
 .v-dialog > .v-card > .popup_background_white {
   background-color: #fff !important  ;
   padding: 5px 6px 5px !important;
@@ -3079,9 +3077,5 @@ td {
 .tiptap-vuetify-editor .tiptap-vuetify-editor__content p {
   margin-top: 0px !important;
   margin-bottom: 5px !important;
-}
-
-.v-dialog--active {
-  border: 1px solid #534b4b;
 }
 </style>

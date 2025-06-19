@@ -1666,11 +1666,11 @@ header,
 }
 .popup_background_white {
 }
-.v-dialog > .v-card > .popup_background_noviolet {
+/* .v-dialog > .v-card > .popup_background_noviolet {
   background-color: #ecf0f4 !important  ;
   padding: 5px 6px 5px !important;
   color: black !important;
-}
+} */
 .v-dialog > .v-card > .popup_background_white {
   background-color: #fff !important  ;
   padding: 5px 6px 5px !important;

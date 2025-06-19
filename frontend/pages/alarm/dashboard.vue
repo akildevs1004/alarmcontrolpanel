@@ -187,6 +187,17 @@
             <v-row>
               <v-col
                 style="
+                  max-width: 50px;
+                  padding-top: 0px;
+                  text-align: center;
+
+                  font-weight: bold;
+                "
+              >
+                <v-icon size="40">mdi-cellphone-wireless</v-icon>
+              </v-col>
+              <v-col
+                style="
                   padding: 0px;
                   text-align: center;
 
@@ -204,10 +215,10 @@
 
                   font-weight: bold;
                 "
-                ><div style="font-size: 30px; color: #fff">
+                ><div style="font-size: 30px; color: red">
                   {{ customerStatusData ? customerStatusData.offlineCount : 0 }}
                 </div>
-                <div style="color: #fff">Offline</div>
+                <div style="color: red">Offline</div>
               </v-col>
             </v-row></v-card-text
           ></v-card
@@ -254,10 +265,11 @@
                 <h3 style="font-weight: normal">Devices</h3>
                 <AlamDeviceCountPieChart
                   :name="'AlamDeviceCountPieChart'"
+                  :height="200"
                   style="
-                    height: 230px;
+                    height: 200px;
 
-                    max-height: 230px;
+                    max-height: 200px;
                     overflow: hidden;
                   "
                 /> </v-card-text

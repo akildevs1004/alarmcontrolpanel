@@ -122,6 +122,26 @@
     border-bottom: 2px solid yellow!important;
 }
 /* DARK THEME START ---------------------------------------------------------------------------*/
+// .theme--dark  .popup_background_noviolet
+// {
+// background-color: #2d2d30!important;
+// }
+.theme--dark .popup_background_noviolet button {
+  color: #FFF !important;
+}
+.theme--dark .v-dialog > .v-card > .popup_background_noviolet {
+  background-color: #2d2d30 !important  ;
+  padding: 5px 6px 5px !important;
+  color: #FFF !important;
+}
+// .theme--dark  .v-dialog > .v-card > .popup_background_noviolet
+// {
+//   background-color:#fff!important;
+
+// }
+.theme--dark .v-dialog--active {
+  border: 1px solid #443f6f;
+}
 
 .theme--dark  .v-timeline-item__body > .v-card:not(.v-card--flat)::after
 

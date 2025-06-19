@@ -76,10 +76,9 @@
     <v-dialog v-model="dialogTabViewCustomer" width="1000px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm : {{ popupEventText }}</span>
+          <span>Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogTabViewCustomer = false;

@@ -107,13 +107,9 @@
     <v-dialog v-model="newCustomerDialog" max-width="900px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> New Customer</span>
+          <span dense> New Customer</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="newCustomerDialog = false"
-            outlined
-          >
+          <v-icon @click="newCustomerDialog = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -195,263 +191,249 @@
         :setIntervalLoopstatus="setIntervalLoopstatus"
       />
     </div>
-    <v-row>
-      <v-col>
-        <v-card elevation="0" class="mt-2">
-          <v-toolbar v-if="!eventFilter" class="mb-2" dense flat>
-            <v-toolbar-title> <span style=""> Customers</span></v-toolbar-title>
 
-            <v-btn
-              title="Reload"
-              dense
-              class="ma-0 px-0"
-              x-small
-              :ripple="false"
-              @click="getDataFromApi"
-              text
-            >
-              <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
-            </v-btn>
+    <v-card elevation="0" class="mt-0">
+      <v-toolbar v-if="!eventFilter" class="mb-2" dense flat>
+        <v-toolbar-title> <span style=""> Customers</span></v-toolbar-title>
 
-            <v-spacer></v-spacer>
-            <span
-              style="padding-top: 26px; padding-right: 14px; max-width: 250px"
-            >
-              <v-select
-                v-model="filterSecuritymapped"
-                label="Operators"
-                height="20"
-                class="employee-schedule-search-box"
-                style="padding-top: 7px"
-                outlined
-                dense
-                :items="[{ full_name: 'All', id: '' }, ...securityList]"
-                item-text="full_name"
-                item-value="id"
-                @change="getDataFromApi()"
-                clearable
-              >
-              </v-select>
-            </span>
-            <span style="width: 180px"
-              ><v-text-field
-                style="padding-top: 7px"
-                height="20"
-                class="employee-schedule-search-box"
-                @input="getDataFromApi()"
-                v-model="commonSearch"
-                label="Search (min 3)"
-                dense
-                outlined
-                type="text"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field
-            ></span>
+        <v-btn
+          title="Reload"
+          dense
+          class="ma-0 px-0"
+          x-small
+          :ripple="false"
+          @click="getDataFromApi"
+          text
+        >
+          <v-icon class="ml-2" dark>mdi mdi-reload</v-icon>
+        </v-btn>
 
-            <v-btn
-              v-if="!eventFilter && can(`customers_create`)"
-              title="New Customer"
-              x-small
-              :ripple="false"
-              text
-              @click="
-                key += 1;
-                newCustomerDialog = true;
+        <v-spacer></v-spacer>
+        <span style="padding-top: 26px; padding-right: 14px; max-width: 250px">
+          <v-select
+            v-model="filterSecuritymapped"
+            label="Operators"
+            height="20"
+            class="employee-schedule-search-box"
+            style="padding-top: 7px"
+            outlined
+            dense
+            :items="[{ full_name: 'All', id: '' }, ...securityList]"
+            item-text="full_name"
+            item-value="id"
+            @change="getDataFromApi()"
+            clearable
+          >
+          </v-select>
+        </span>
+        <span style="width: 180px"
+          ><v-text-field
+            style="padding-top: 7px"
+            height="20"
+            class="employee-schedule-search-box"
+            @input="getDataFromApi()"
+            v-model="commonSearch"
+            label="Search (min 3)"
+            dense
+            outlined
+            type="text"
+            append-icon="mdi-magnify"
+            clearable
+            hide-details
+          ></v-text-field
+        ></span>
+
+        <v-btn
+          v-if="!eventFilter && can(`customers_create`)"
+          title="New Customer"
+          x-small
+          :ripple="false"
+          text
+          @click="
+            key += 1;
+            newCustomerDialog = true;
+          "
+        >
+          <v-icon class="">mdi mdi-plus-circle</v-icon>
+        </v-btn>
+      </v-toolbar>
+
+      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+        {{ snackText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
+        </template>
+      </v-snackbar>
+      <v-data-table
+        dense
+        :headers="headers"
+        :items="data"
+        :loading="loading"
+        :options.sync="options"
+        :footer-props="{
+          itemsPerPageOptions: [10, 50, 100, 500, 1000],
+        }"
+        class="elevation-1"
+        :server-items-length="totalRowsCount"
+        fixed-header
+        :height="tableHeight"
+        :disable-sort="true"
+      >
+        <template v-slot:item.sno="{ item, index }">
+          {{
+            currentPage
+              ? (currentPage - 1) * perPage +
+                (cumulativeIndex + data.indexOf(item))
+              : ""
+          }}
+        </template>
+        <template
+          v-slot:item.building_name="{ item, index }"
+          style="width: 300px"
+        >
+          <v-row no-gutters>
+            <v-col
+              style="
+                padding: 5px;
+                padding-left: 0px;
+                width: 50px;
+                max-width: 50px;
               "
             >
-              <v-icon class="">mdi mdi-plus-circle</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-            {{ snackText }}
-
-            <template v-slot:action="{ attrs }">
-              <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
-            </template>
-          </v-snackbar>
-          <v-data-table
-            dense
-            :headers="headers"
-            :items="data"
-            :loading="loading"
-            :options.sync="options"
-            :footer-props="{
-              itemsPerPageOptions: [10, 50, 100, 500, 1000],
-            }"
-            class="elevation-1"
-            :server-items-length="totalRowsCount"
-            fixed-header
-            :height="tableHeight"
-            :disable-sort="true"
-          >
-            <template v-slot:item.sno="{ item, index }">
-              {{
-                currentPage
-                  ? (currentPage - 1) * perPage +
-                    (cumulativeIndex + data.indexOf(item))
-                  : ""
-              }}
-            </template>
-            <template
-              v-slot:item.building_name="{ item, index }"
-              style="width: 300px"
-            >
-              <v-row no-gutters>
-                <v-col
-                  style="
-                    padding: 5px;
-                    padding-left: 0px;
-                    width: 50px;
-                    max-width: 50px;
-                  "
-                >
-                  <v-img
-                    style="
-                      border-radius: 50%;
-                      height: 45px;
-                      min-height: 45px;
-                      width: 45px;
-                      max-width: 45px;
-                    "
-                    :src="
-                      item.profile_picture
-                        ? item.profile_picture
-                        : '/no-business_profile.png'
-                    "
-                  >
-                  </v-img>
-                </v-col>
-                <v-col style="padding: 10px">
-                  <div style="font-size: 13px">
-                    {{ item.building_name || "" }}
-                  </div>
-                  <small style="font-size: 12px">
-                    {{ item.house_number }}, {{ item.street_number }},
-                    {{ item.area }}, {{ item.city }}
-                  </small>
-                </v-col>
-              </v-row>
-            </template>
-            <template v-slot:item.created_date="{ item }">
-              <div
-                :title="
-                  getExpiryDatesCountColor(item.end_date) == 'red'
-                    ? 'Expired'
-                    : getExpiryDatesCountColor(item.end_date) == 'orange'
-                    ? 'Expire in 30 days'
-                    : 'End Date'
+              <v-img
+                style="
+                  border-radius: 50%;
+                  height: 45px;
+                  min-height: 45px;
+                  width: 45px;
+                  max-width: 45px;
                 "
-                :style="'color:' + getExpiryDatesCountColor(item.end_date)"
+                :src="
+                  item.profile_picture
+                    ? item.profile_picture
+                    : '/no-business_profile.png'
+                "
               >
-                {{ $dateFormat.format_date_month_name_year(item.end_date) }}
+              </v-img>
+            </v-col>
+            <v-col style="padding: 10px">
+              <div style="font-size: 13px">
+                {{ item.building_name || "" }}
               </div>
-              <small title="Start Date " style="font-size: 12px">
-                {{ $dateFormat.format_date_month_name_year(item.start_date) }}
+              <small style="font-size: 12px">
+                {{ item.house_number }}, {{ item.street_number }},
+                {{ item.area }}, {{ item.city }}
               </small>
-            </template>
+            </v-col>
+          </v-row>
+        </template>
+        <template v-slot:item.created_date="{ item }">
+          <div
+            :title="
+              getExpiryDatesCountColor(item.end_date) == 'red'
+                ? 'Expired'
+                : getExpiryDatesCountColor(item.end_date) == 'orange'
+                ? 'Expire in 30 days'
+                : 'End Date'
+            "
+            :style="'color:' + getExpiryDatesCountColor(item.end_date)"
+          >
+            {{ $dateFormat.format_date_month_name_year(item.end_date) }}
+          </div>
+          <small title="Start Date " style="font-size: 12px">
+            {{ $dateFormat.format_date_month_name_year(item.start_date) }}
+          </small>
+        </template>
 
-            <template v-slot:item.building_type="{ item }">
-              <div>
-                {{ getBuildingTypeName(item.building_type_id) }}
-              </div>
-              <!-- <small style="font-size: 12px; color: #6c7184">
+        <template v-slot:item.building_type="{ item }">
+          <div>
+            {{ getBuildingTypeName(item.building_type_id) }}
+          </div>
+          <!-- <small style="font-size: 12px; color: #6c7184">
                 {{ item.landmark }}
               </small> -->
-            </template>
+        </template>
 
-            <template v-slot:item.security="{ item }">
-              <div v-if="item.mappedsecurity">
-                {{ item.mappedsecurity.security_info.first_name }}
-                {{ item.mappedsecurity.security_info.last_name }}
-              </div>
-              <div v-else>---</div>
-            </template>
+        <template v-slot:item.security="{ item }">
+          <div v-if="item.mappedsecurity">
+            {{ item.mappedsecurity.security_info.first_name }}
+            {{ item.mappedsecurity.security_info.last_name }}
+          </div>
+          <div v-else>---</div>
+        </template>
 
-            <template v-slot:item.burglary="{ item }">
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName('Intruder', item.devices)
-                "
-              >
-                <img
-                  title="Burglary"
-                  style="width: 30px; float: left"
-                  src="/device-icons/burglary.png"
-                />
-              </div>
-              <div v-else>---</div>
+        <template v-slot:item.burglary="{ item }">
+          <div
+            v-if="$dateFormat.verifyDeviceSensorName('Intruder', item.devices)"
+          >
+            <img
+              title="Burglary"
+              style="width: 30px; float: left"
+              src="/device-icons/burglary.png"
+            />
+          </div>
+          <div v-else>---</div>
+        </template>
+        <template v-slot:item.temperature="{ item }">
+          <div
+            v-if="
+              $dateFormat.verifyDeviceSensorName('Temperature', item.devices)
+            "
+          >
+            <img
+              title="Temperature"
+              style="width: 30px; float: left"
+              src="/device-icons/temperature.png"
+            />
+          </div>
+          <div v-else>---</div>
+        </template>
+        <template v-slot:item.medical="{ item }">
+          <div
+            v-if="$dateFormat.verifyDeviceSensorName('Medical', item.devices)"
+          >
+            <img
+              title="Medical"
+              style="width: 30px; float: left"
+              src="/device-icons/medical.png"
+            />
+          </div>
+          <div v-else>---</div>
+        </template>
+        <template v-slot:item.fire="{ item }">
+          <div v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)">
+            <img
+              title="Fire"
+              style="width: 30px; float: left"
+              src="/device-icons/fire.png"
+            />
+          </div>
+          <div v-else>---</div>
+        </template>
+        <template v-slot:item.water="{ item }">
+          <div v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)">
+            <img
+              title="Water"
+              style="width: 30px; float: left"
+              src="/device-icons/water.png"
+            />
+          </div>
+          <div v-else>---</div>
+        </template>
+        <template v-slot:item.area="{ item }">
+          {{ item.house_number }}, {{ item.street_number }}{{ item.area
+          }}{{ item.city }}
+        </template>
+        <template v-slot:item.options="{ item }">
+          <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark-2 icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
             </template>
-            <template v-slot:item.temperature="{ item }">
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName(
-                    'Temperature',
-                    item.devices
-                  )
-                "
-              >
-                <img
-                  title="Temperature"
-                  style="width: 30px; float: left"
-                  src="/device-icons/temperature.png"
-                />
-              </div>
-              <div v-else>---</div>
-            </template>
-            <template v-slot:item.medical="{ item }">
-              <div
-                v-if="
-                  $dateFormat.verifyDeviceSensorName('Medical', item.devices)
-                "
-              >
-                <img
-                  title="Medical"
-                  style="width: 30px; float: left"
-                  src="/device-icons/medical.png"
-                />
-              </div>
-              <div v-else>---</div>
-            </template>
-            <template v-slot:item.fire="{ item }">
-              <div
-                v-if="$dateFormat.verifyDeviceSensorName('Fire', item.devices)"
-              >
-                <img
-                  title="Fire"
-                  style="width: 30px; float: left"
-                  src="/device-icons/fire.png"
-                />
-              </div>
-              <div v-else>---</div>
-            </template>
-            <template v-slot:item.water="{ item }">
-              <div
-                v-if="$dateFormat.verifyDeviceSensorName('Water', item.devices)"
-              >
-                <img
-                  title="Water"
-                  style="width: 30px; float: left"
-                  src="/device-icons/water.png"
-                />
-              </div>
-              <div v-else>---</div>
-            </template>
-            <template v-slot:item.area="{ item }">
-              {{ item.house_number }}, {{ item.street_number }}{{ item.area
-              }}{{ item.city }}
-            </template>
-            <template v-slot:item.options="{ item }">
-              <v-menu bottom left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn dark-2 icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list width="120" dense>
-                  <!-- <v-list-item
+            <v-list width="120" dense>
+              <!-- <v-list-item
                     v-if="can('customers_view')"
                     @click="viewCustomerItem(item)"
                   >
@@ -460,24 +442,21 @@
                       View
                     </v-list-item-title>
                   </v-list-item> -->
-                  <v-list-item
-                    v-if="can('customers_view')"
-                    @click="viewItem(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-eye </v-icon>
-                      View
-                    </v-list-item-title> </v-list-item
-                  ><v-list-item
-                    v-if="can('customers_edit')"
-                    @click="editItem(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-pencil </v-icon>
-                      Edit
-                    </v-list-item-title>
-                  </v-list-item>
-                  <!-- <v-list-item
+              <v-list-item v-if="can('customers_view')" @click="viewItem(item)">
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-eye </v-icon>
+                  View
+                </v-list-item-title> </v-list-item
+              ><v-list-item
+                v-if="can('customers_edit')"
+                @click="editItem(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-pencil </v-icon>
+                  Edit
+                </v-list-item-title>
+              </v-list-item>
+              <!-- <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
                   >
@@ -486,31 +465,29 @@
                       View
                     </v-list-item-title>
                   </v-list-item> -->
-                  <v-list-item
-                    v-if="can('customers_edit')"
-                    @click="changeSecurity(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small>mdi-account-tie </v-icon>
-                      Operator
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    v-if="can('customers_delete')"
-                    @click="deleteCustomer(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="error" small> mdi-delete </v-icon>
-                      Delete
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-col>
-    </v-row>
+              <v-list-item
+                v-if="can('customers_edit')"
+                @click="changeSecurity(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small>mdi-account-tie </v-icon>
+                  Operator
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                v-if="can('customers_delete')"
+                @click="deleteCustomer(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="error" small> mdi-delete </v-icon>
+                  Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
   <NoAccess v-else />
 </template>
@@ -698,9 +675,9 @@ export default {
   }),
   computed: {},
   async mounted() {
-    this.tableHeight = window.innerHeight - 400;
+    this.tableHeight = window.innerHeight - 320;
     window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 400;
+      this.tableHeight = window.innerHeight - 320;
     });
     this.getDataFromApi();
   },
