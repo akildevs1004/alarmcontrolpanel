@@ -14,17 +14,184 @@
       </div>
 
       <v-row>
-        <v-col>
-          <v-card class="mt-2">
+        <v-col :style="'max-width:350px;height:' + (windowHeight - 100) + 'px'">
+          <v-row
+            ><v-col>
+              <v-card
+                ><v-card-text class="text-center justify-center">
+                  <v-row>
+                    <v-col>
+                      <v-img
+                        @click="onpick_attachment"
+                        class="company-profile-picture"
+                        style="
+                          width: 180px;
+                          height: 180px;
+                          border: 1px solid #ddd;
+                          border-radius: 50%;
+                          margin: 0 auto;
+                        "
+                        :src="
+                          previewImage ||
+                          company_payload.logo ||
+                          '/no-image.PNG'
+                        "
+                      ></v-img>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-btn
+                        @click="onpick_attachment"
+                        text
+                        v-if="!upload.name"
+                        color="primary"
+                        elevation="0"
+                        outlined
+                        plain
+                        rounded
+                        >Change Logo</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <h3>Company Name</h3>
+                      <div>(Company Code)</div>
+                    </v-col> </v-row
+                  ><v-row class="ma-0 pa-0">
+                    <v-col>
+                      <h3>Contact Person name</h3>
+                      <div>(Position)</div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col></v-row
+          >
+          <v-row class="mt-0 pt-0"
+            ><v-col>
+              <v-card
+                ><v-card-text class="text-center justify-center">
+                  <div
+                    class="text-left"
+                    style="font-size: 15px; line-height: 25px"
+                  >
+                    <div
+                      style="border-bottom: 0px solid #443f6f; color: #a19797"
+                    >
+                      <v-icon size="15" color="red">mdi-phone</v-icon>
+                      <span style="color: #fff"> Phone : </span>
+                      {{ contact_payload.number }}
+                    </div>
+                    <div
+                      style="border-bottom: 0px solid #443f6f; color: #a19797"
+                    >
+                      <v-icon size="15" color="blue">mdi-at</v-icon>
+                      <span style="color: #fff">Email : </span>
+                      <span>{{ user_payload.email }}</span>
+                    </div>
+                    <div
+                      style="border-bottom: 0px solid #443f6f; color: #a19797"
+                    >
+                      <v-icon size="15" color="green">mdi-whatsapp</v-icon>
+                      <span style="color: #fff">Whatsapp : </span
+                      >{{ contact_payload.whatsapp }}
+                    </div>
+                  </div>
+
+                  <v-row
+                    style="margin-top: 0px; line-height: 20px"
+                    class="text-left"
+                  >
+                    <v-col cols="12" style="color: #a19797">
+                      <h3 class="text-left" style="color: #ddd">
+                        <v-icon size="15" color="red">mdi-map-marker</v-icon>
+                        Address:
+                      </h3>
+                      <div style="padding-left: 18px">
+                        {{ company_payload.p_o_box_no }}<br />
+                        {{ geographic_payload.location }}
+                      </div></v-col
+                    >
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row class="mt-0 pt-0"
+            ><v-col>
+              <v-card
+                ><v-card-text class="text-center justify-center">
+                  <v-row style="line-height: 10px" class="text-left">
+                    <v-col cols="6">
+                      <v-icon size="15" color="green"
+                        >mdi-calendar-range</v-icon
+                      >
+                      Account Start Date</v-col
+                    >
+                    <v-col cols="6" style="color: #a19797"
+                      >:
+                      {{
+                        $dateFormat.formatDate(company_payload.member_from)
+                      }}</v-col
+                    >
+
+                    <v-col cols="6">
+                      <v-icon size="15" color="red">mdi-calendar-range</v-icon>
+                      Account Exp Date
+                    </v-col>
+                    <v-col cols="6" style="color: #a19797"
+                      >:
+                      {{
+                        $dateFormat.formatDate(company_payload.expiry)
+                      }}</v-col
+                    >
+
+                    <v-col cols="6">
+                      <v-icon size="15"
+                        >mdi-office-building-marker-outline</v-icon
+                      >
+                      Max Branches
+                    </v-col>
+                    <v-col cols="6" style="color: #a19797"
+                      >: {{ company_payload.max_branches }}</v-col
+                    >
+
+                    <v-col cols="6">
+                      <v-icon size="15">mdi-cellphone-text</v-icon>
+                      Max Devices
+                    </v-col>
+                    <v-col cols="6" style="color: #a19797"
+                      >: {{ company_payload.max_devices }}</v-col
+                    >
+
+                    <v-col cols="6">
+                      <v-icon size="15">mdi-account-tie</v-icon>
+                      Max Employees
+                    </v-col>
+
+                    <v-col cols="6" style="color: #a19797"
+                      >: {{ company_payload.max_employee }}</v-col
+                    >
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col class="pl-0">
+          <v-card>
             <v-tabs
               class="pt-3"
               :vertical="vertical"
               :style="'height:' + (windowHeight - 100) + 'px'"
             >
               <v-tabs-slider color="violet"></v-tabs-slider>
-              <v-tab>
+              <!-- <v-tab>
                 <span>Company Profile</span>
-              </v-tab>
+              </v-tab> -->
               <v-tab>
                 <span>Business License</span>
               </v-tab>
@@ -50,7 +217,7 @@
               <v-tab>
                 <span>Settings</span>
               </v-tab>
-              <v-tab-item>
+              <!-- <v-tab-item>
                 <v-card flat>
                   <v-card-text>
                     <v-row>
@@ -60,7 +227,6 @@
                           class="ml-1 mr-1"
                           style="text-align: center; margin: auto"
                         >
-                          <!-- <v-card-title>Profile Picture</v-card-title> -->
                           <div style="width: 100%; text-align: center">
                             <div class="pb-2">
                               <v-img
@@ -92,17 +258,7 @@
                             rounded
                             >Upload Logo</v-btn
                           >
-                          <!-- <v-icon
-                            v-if="!upload.name"
-                            @click="onpick_attachment"
-                            right
-                            dark
-                            fill
-                            color="primary"
-                            size="40"
-                            title="Change Profile Picture"
-                            >mdi mdi-folder-open-outline
-                          </v-icon> -->
+
                           <v-btn
                             text
                             color="primary"
@@ -146,8 +302,6 @@
                       </v-col>
                       <v-col cols="10">
                         <v-card elevation="0">
-                          <!-- <v-card-title>Information</v-card-title> -->
-
                           <v-card-text>
                             <v-row>
                               <v-col cols="4">
@@ -178,8 +332,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Company Email</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Company Email"
                                   readonly
@@ -215,10 +367,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">
-                              Contact Person Number
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Contact Person Number"
@@ -238,10 +386,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">
-                              Contact Person Position
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Contact Person Position"
@@ -261,10 +405,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">
-                              Whatsapp (with Country Code ex: 9199XXX)
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Whatsapp (with Country Code ex: 97199XXX)"
@@ -283,8 +423,6 @@
                                 >
                               </v-col>
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Mol ID</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Mobile Number"
@@ -305,8 +443,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">P.O Box</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="P.O Box"
@@ -326,8 +462,6 @@
                                 >
                               </v-col>
                               <v-col cols="4">
-                                <!-- <label class="col-form-label"> Lat </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Latitude"
@@ -346,8 +480,6 @@
                                 >
                               </v-col>
                               <v-col cols="4">
-                                <!-- <label class="col-form-label"> Lon </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   readonly
                                   label="Longitude"
@@ -366,8 +498,6 @@
                                 >
                               </v-col>
                               <v-col cols="4">
-                                <!-- <label class="col-form-label"> Location </label>
-                            <span class="text-danger">*</span> -->
                                 <v-textarea
                                   readonly
                                   label="Location"
@@ -387,24 +517,8 @@
                                   >{{ errors.location[0] }}</span
                                 >
                               </v-col>
-                              <!-- <v-col>
-                                <v-autocomplete
-                                  class="pb-0"
-                                  hide-details
-                                  v-model="geographic_payload.utc_time_zone"
-                                  outlined
-                                  dense
-                                  label="Time Zone(Ex:UTC+)"
-                                  :items="getTimezones()"
-                                  item-value="key"
-                                  item-text="text"
-
-                                ></v-autocomplete>
-                              </v-col> -->
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Member From</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Member From"
                                   readonly
@@ -421,8 +535,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Expiry Date</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Expiry Date"
                                   readonly
@@ -439,8 +551,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Max Branches</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Max Branches"
                                   readonly
@@ -457,8 +567,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Max Employees</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Max Employees"
                                   readonly
@@ -475,8 +583,6 @@
                               </v-col>
 
                               <v-col cols="4">
-                                <!-- <label class="col-form-label">Max Devices</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Max Devices"
                                   readonly
@@ -520,10 +626,6 @@
                               </v-col>
 
                               <v-col cols="6">
-                                <!-- <label class="col-form-label">
-                              Contact Person Number
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Contact Person Number"
                                   dense
@@ -542,10 +644,6 @@
                               </v-col>
 
                               <v-col cols="6">
-                                <!-- <label class="col-form-label">
-                              Contact Person Position
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Contact Person Position"
                                   dense
@@ -564,10 +662,6 @@
                               </v-col>
 
                               <v-col cols="6">
-                                <!-- <label class="col-form-label">
-                              Whatsapp (with Country Code ex: 9199XXX)
-                            </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Whatsapp (with Country Code ex: 97199XXX)"
                                   dense
@@ -585,8 +679,6 @@
                                 >
                               </v-col>
                               <v-col cols="6" md="6" sm="6">
-                                <!-- <label class="col-form-label">Mol ID</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Mobile Number"
                                   color="primary"
@@ -606,8 +698,6 @@
                               </v-col>
 
                               <v-col cols="6" md="6" sm="6">
-                                <!-- <label class="col-form-label">P.O Box</label>
-                        <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="P.O Box"
                                   color="primary"
@@ -626,8 +716,6 @@
                                 >
                               </v-col>
                               <v-col cols="6">
-                                <!-- <label class="col-form-label"> Lat </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Latitude"
                                   dense
@@ -645,8 +733,6 @@
                                 >
                               </v-col>
                               <v-col cols="6">
-                                <!-- <label class="col-form-label"> Lon </label>
-                            <span class="text-danger">*</span> -->
                                 <v-text-field
                                   label="Longitude"
                                   dense
@@ -664,8 +750,6 @@
                                 >
                               </v-col>
                               <v-col cols="12">
-                                <!-- <label class="col-form-label"> Location </label>
-                            <span class="text-danger">*</span> -->
                                 <v-textarea
                                   label="Location"
                                   dense
@@ -706,24 +790,10 @@
                       </v-col>
                     </v-row>
 
-                    <!-- <v-row>
-                      <v-col cols="12">
-                        <div class="text-right">
-                          <v-btn
-                            v-if="$pagePermission.can('company_edit', this)"
-                            small
-                            :loading="loading"
-                            color="primary"
-                            @click="update_company"
-                          >
-                            Submit
-                          </v-btn>
-                        </div>
-                      </v-col>
-                    </v-row> -->
+
                   </v-card-text>
                 </v-card>
-              </v-tab-item>
+              </v-tab-item> -->
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>
