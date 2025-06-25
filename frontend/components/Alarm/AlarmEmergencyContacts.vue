@@ -105,6 +105,32 @@
       <v-col>
         <v-tabs right show-arrows class="tabswidthalignment1">
           <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
+            <v-icon
+              color="red"
+              v-if="item.address_type.toLowerCase() == 'primary'"
+              >mdi-account-star</v-icon
+            >
+            <v-icon
+              color="red"
+              v-else-if="item.address_type.toLowerCase() == 'fire'"
+              >mdi-fire-circle</v-icon
+            >
+            <v-icon
+              color="red"
+              v-else-if="item.address_type.toLowerCase() == 'medical'"
+              >mdi-ambulance</v-icon
+            >
+            <v-icon
+              color="red"
+              v-else-if="item.address_type.toLowerCase() == 'hospital'"
+              >mdi-hospital-building</v-icon
+            >
+            <v-icon
+              color="red"
+              v-else-if="item.address_type.toLowerCase() == 'police'"
+              >mdi-car-emergency</v-icon
+            >
+            <v-icon v-else>mdi-card-account-phone</v-icon>
             {{ item.address_type }}</v-tab
           >
           <v-tab-item

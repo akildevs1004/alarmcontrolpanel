@@ -718,9 +718,10 @@
 <style lang="scss">
 @import "@/assets/variables.scss";
 @import "@/assets/darktheme.scss";
-@import "@/assets/darkchart.scss";
 @import "@/assets/whitetheme.scss";
+@import "@/assets/common.scss";
 </style>
+
 <script>
 import company_menus from "../menus/left_menu.json";
 import employee_menus from "../menus/employee.json";
@@ -3001,7 +3002,7 @@ td {
 
 #table-services td,
 #table-services th {
-  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #a19797;
   padding: 6px;
 }
 

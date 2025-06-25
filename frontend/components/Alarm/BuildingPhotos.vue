@@ -101,14 +101,14 @@
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tabAddress"
-            ><v-icon size="18">mdi-office-building-outline</v-icon
-            >Address</v-tab
+            ><v-icon size="18" color="red">mdi-map-marker</v-icon>Address</v-tab
           >
           <v-tab
             v-for="(item, index) in building_photos"
             :key="'photo' + item.id"
             :href="'#tab' + item.id"
-            ><v-icon size="18">mdi-image</v-icon>{{ caps(item.title) }}</v-tab
+            ><v-icon size="18" color="yellow">mdi-image</v-icon
+            >{{ caps(item.title) }}</v-tab
           >
           <v-tabs-items v-model="tab">
             <v-tab-item

@@ -108,7 +108,8 @@
             :key="'camera' + item.id"
             :href="'#tab' + item.id"
             @click="selectCamera(item)"
-            ><v-icon size="18">mdi-image</v-icon>{{ caps(item.title) }}</v-tab
+            ><v-icon color="green" size="18">mdi-webcam</v-icon
+            >{{ caps(item.title) }}</v-tab
           >
           <v-tabs-items v-model="tab">
             <v-tab-item

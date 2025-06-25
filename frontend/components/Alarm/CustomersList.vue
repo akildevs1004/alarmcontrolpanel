@@ -445,7 +445,7 @@
               <v-list-item v-if="can('customers_view')" @click="viewItem(item)">
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small> mdi-eye </v-icon>
-                  View
+                  Popup
                 </v-list-item-title> </v-list-item
               ><v-list-item
                 v-if="can('customers_edit')"

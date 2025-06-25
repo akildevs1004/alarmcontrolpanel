@@ -9,7 +9,7 @@
     <v-row>
       <v-col md="12" sm="12" cols="12" dense>
         <v-row style="margin-top: 15px">
-          <v-col> <h3>Customer Invoice Generate</h3></v-col>
+          <v-col> <h3>New Generate Customer Invoice</h3></v-col>
 
           <v-col style="max-width: 170px">
             <v-menu
@@ -22,20 +22,25 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  class="small-custom-textbox"
-                  label="Licence Start Date"
-                  hide-details
                   v-model="start_date"
-                  persistent-hint
-                  append-icon="mdi-calendar"
-                  readonly
+                  label="Licence Start Date"
+                  class="small-custom-textbox"
                   outlined
                   dense
+                  readonly
+                  hide-details
+                  persistent-hint
                   v-bind="attrs"
                   v-on="on"
                   :disabled="!isEditable"
-                ></v-text-field>
+                  append-icon=""
+                >
+                  <template v-slot:append>
+                    <v-icon color="green">mdi-calendar</v-icon>
+                  </template>
+                </v-text-field>
               </template>
+
               <v-date-picker
                 style="min-height: 320px"
                 v-model="start_date"
@@ -64,14 +69,18 @@
                   hide-details
                   v-model="end_date"
                   persistent-hint
-                  append-icon="mdi-calendar"
                   readonly
                   outlined
                   dense
                   v-bind="attrs"
                   v-on="on"
                   disabled
-                ></v-text-field>
+                  append-icon=""
+                >
+                  <template v-slot:append>
+                    <v-icon color="red">mdi-calendar</v-icon>
+                  </template>
+                </v-text-field>
               </template>
               <v-date-picker
                 :min="start_date"
@@ -146,7 +155,7 @@
           <v-col>
             <v-row>
               <v-col style="text-align: right"
-                >Product
+                >Invoice
                 <span style="font-weight: bold">{{ payment_type }}</span>
                 Amount</v-col
               >
@@ -160,12 +169,14 @@
                 >$ {{ product_price }}</v-col
               >
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col><hr /></v-col>
-            </v-row>
+            </v-row> -->
             <v-row>
+              <v-col></v-col>
               <v-col>
                 <v-select
+                  style="max-width: 250px"
                   height="20"
                   class="employee-schedule-search-box"
                   label="Discount Type"
@@ -177,7 +188,7 @@
                   :items="['Percentage', 'Amount']"
                 ></v-select>
               </v-col>
-              <v-col style="max-width: 150px">
+              <v-col style="max-width: 250px">
                 <v-text-field
                   class="small-custom-textbox"
                   label="Discount Value"
@@ -189,7 +200,7 @@
                 ></v-text-field> </v-col
               ><v-col
                 style="
-                  max-width: 100px;
+                  max-width: 150px;
                   color: red;
                   text-align: right;
                   padding-right: 25px;
@@ -198,12 +209,12 @@
                 - $ {{ product_discount_price_amount.toFixed(2) }}
               </v-col>
             </v-row>
-            <hr />
+            <!-- <hr /> -->
             <v-row style="font-weight: bold">
               <v-col> </v-col>
               <v-col style="text-align: right">Final Amount</v-col>
               <v-col
-                style="max-width: 100px; text-align: right; padding-right: 25px"
+                style="max-width: 150px; text-align: right; padding-right: 25px"
                 >$ {{ product_final_price.toFixed(2) }}</v-col
               >
             </v-row>
@@ -224,8 +235,12 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="pull-right text-right align-right">
-            Total Invoice Count : {{ total_invoice_count }}
+          <v-col
+            class="pull-right text-right align-right"
+            style="color: yellow; padding-right: 20px"
+          >
+            Note: Total Invoice will be generate Count :
+            {{ total_invoice_count }}
           </v-col>
         </v-row>
       </v-col>

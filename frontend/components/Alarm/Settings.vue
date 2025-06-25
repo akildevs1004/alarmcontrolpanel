@@ -9,8 +9,13 @@
     <v-row>
       <v-col cols="12">
         <v-tabs v-model="tab">
-          <v-tab> Subscription </v-tab>
-          <v-tab> Timings </v-tab>
+          <v-tab
+            ><v-icon color="green">mdi-invoice-clock-outline</v-icon>
+            Subscription
+          </v-tab>
+          <v-tab
+            ><v-icon color="green">mdi-home-clock-outline</v-icon> Store Timings
+          </v-tab>
           <v-tab v-if="isEditable"> Password </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -22,10 +27,8 @@
                     <h3>Subscription Package</h3>
                     <br />
                     <v-row>
-                      <v-col class="bold" style="max-width: 300px"
-                        >Package Name</v-col
-                      >
-                      <v-col
+                      <v-col style="max-width: 300px">Package Name</v-col>
+                      <v-col class="secondary-text-color"
                         >:
                         {{
                           invoicePackageData
@@ -35,10 +38,8 @@
                       >
                     </v-row>
                     <v-row>
-                      <v-col class="bold" style="max-width: 300px"
-                        >Max Sensor Count</v-col
-                      >
-                      <v-col>
+                      <v-col style="max-width: 300px">Max Sensor Count</v-col>
+                      <v-col class="secondary-text-color">
                         :
                         {{
                           invoicePackageData
@@ -49,10 +50,10 @@
                       >
                     </v-row>
                     <v-row>
-                      <v-col class="bold" style="max-width: 300px"
+                      <v-col style="max-width: 300px"
                         >Invoice Price(After Discount)</v-col
                       >
-                      <v-col>
+                      <v-col class="secondary-text-color">
                         : $
                         {{
                           invoicePackageData ? invoicePackageData.amount : "---"
@@ -60,10 +61,8 @@
                       >
                     </v-row>
                     <v-row>
-                      <v-col class="bold" style="max-width: 300px"
-                        >Start Date</v-col
-                      >
-                      <v-col>
+                      <v-col style="max-width: 300px">Start Date</v-col>
+                      <v-col class="secondary-text-color">
                         :
                         {{
                           invoicePackageData
@@ -72,10 +71,8 @@
                         }}</v-col
                       > </v-row
                     ><v-row>
-                      <v-col class="bold" style="max-width: 300px"
-                        >End Date</v-col
-                      >
-                      <v-col>
+                      <v-col style="max-width: 300px">End Date</v-col>
+                      <v-col class="secondary-text-color">
                         :
                         {{
                           invoicePackageData
@@ -85,10 +82,8 @@
                       >
                     </v-row>
                     <v-row>
-                      <v-col class="bold" style="max-width: 300px"
-                        >Created Date</v-col
-                      >
-                      <v-col>
+                      <v-col style="max-width: 300px">Created Date</v-col>
+                      <v-col class="secondary-text-color">
                         :
                         {{
                           invoicePackageData
@@ -116,10 +111,10 @@
                           >Current Password
                           <span class="text-danger">*</span></label
                         > -->
-                            Email:
+                            <!-- Email:
                             <span style="font-weight: bold">{{
                               payload.email
-                            }}</span>
+                            }}</span> -->
                             <!-- <v-text-field
                   readonly
                   disabled
@@ -140,7 +135,7 @@
                                 <v-select
                                   :disabled="!isEditable"
                                   :items="timmingArray"
-                                  label="Close Time(Armed)"
+                                  label="Store Close Time(Armed)"
                                   dense
                                   outlined
                                   hide-details
@@ -152,13 +147,14 @@
                                       ? errors.close_time[0]
                                       : ''
                                   "
+                                  append-icon="mdi-lock"
                                 ></v-select>
                               </v-col>
                               <v-col md="6" sm="6" cols="6" dense>
                                 <v-select
                                   :disabled="!isEditable"
                                   :items="timmingArray"
-                                  label="Open Time(Disarm)"
+                                  label="Store Open Time(Disarm)"
                                   dense
                                   outlined
                                   hide-details
@@ -170,6 +166,7 @@
                                       ? errors.open_time[0]
                                       : ''
                                   "
+                                  append-icon="mdi-lock-open-variant"
                                 ></v-select>
                               </v-col>
                             </v-row>

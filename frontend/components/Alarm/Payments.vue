@@ -56,9 +56,9 @@
               }}
             </span>
             <br />
-            End Date:
-            <span style="color: red"
-              >{{
+            <span style="color: #f52f2f"
+              >End Date:
+              {{
                 $dateFormat.format_date_month_name_year(
                   filter_end_date ? filter_end_date : customer?.end_date
                 )
@@ -145,6 +145,15 @@
                 : "-"
             }}
           </template>
+
+          <template v-slot:item.received_date="{ item, index }">
+            {{ item.received_date ? item.received_date : "---" }}
+          </template>
+
+          <template v-slot:item.mode_of_payment="{ item, index }">
+            {{ item.received_date ? item.mode_of_payment : "---" }}
+          </template>
+
           <template v-slot:item.invoice_number="{ item, index }">
             {{ item.invoice_number }}
             <div class="secondary-value">
@@ -237,6 +246,7 @@
                 </v-list-item> -->
               </v-list>
             </v-menu>
+            <span v-else>---</span>
           </template>
         </v-data-table>
       </v-col>

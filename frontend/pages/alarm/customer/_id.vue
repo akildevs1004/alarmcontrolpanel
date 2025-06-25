@@ -197,65 +197,77 @@
       </v-col>
 
       <v-col class="pl-0">
-        <v-row>
-          <v-col>
-            <v-tabs
-              style="min-height: 100%; border-radius: 5px"
-              icons-and-text
-              v-model="tab"
-              centered
-            >
-              <!-- <v-tab class="customer-tab" style="width: 70px" >
+        <v-card class="v-tabs-items">
+          <v-card-text>
+            <v-row>
+              <v-col class="pa-0"
+                ><v-tabs
+                  style="min-height: 100%; border-radius: 5px"
+                  icons-and-text
+                  v-model="tab"
+                  centered
+                >
+                  <!-- <v-tab class="customer-tab" style="width: 70px" >
         Customer
         <v-icon>mdi-card-account-details</v-icon>
       </v-tab> -->
-              <v-tab class="customer-tab">
-                Address
-                <v-icon>mdi-card-account-details</v-icon>
-              </v-tab>
-              <!-- <v-tab class="customer-tab" style="width: 70px" >
+                  <v-tab class="customer-tab">
+                    Info
+                    <v-icon>mdi-card-account-details</v-icon>
+                  </v-tab>
+                  <!-- <v-tab class="customer-tab" style="width: 70px" >
             Contacts
             <v-icon>mdi-card-account-details</v-icon>
           </v-tab> -->
-              <v-tab class="customer-tab">
-                Contacts
-                <v-icon>mdi-account-tie</v-icon>
-              </v-tab>
-              <v-tab class="customer-tab">
-                Camera
-                <v-icon>mdi-camera</v-icon>
-              </v-tab>
-              <v-tab class="customer-tab">
-                Devices
-                <v-icon>mdi-account</v-icon>
-              </v-tab>
-              <v-tab class="customer-tab">
-                Sensors
-                <v-icon>mdi-motion-sensor</v-icon>
-              </v-tab>
-              <v-tab class="customer-tab" v-if="!isMapviewOnly">
-                Auto
-                <v-icon>mdi-bell-ring</v-icon> </v-tab
-              ><v-tab class="customer-tab" v-if="!isMapviewOnly">
-                Invoices
-                <v-icon> mdi-currency-usd</v-icon>
-              </v-tab>
+                  <v-tab class="customer-tab">
+                    Contacts
+                    <v-icon>mdi-account-tie</v-icon>
+                  </v-tab>
+                  <v-tab class="customer-tab">
+                    Camera
+                    <v-icon>mdi-webcam</v-icon>
+                  </v-tab>
+                  <v-tab class="customer-tab">
+                    Devices
+                    <v-icon>mdi-account</v-icon>
+                  </v-tab>
+                  <v-tab class="customer-tab">
+                    Sensors
+                    <v-icon>mdi-motion-sensor</v-icon>
+                  </v-tab>
+                  <v-tab class="customer-tab" v-if="!isMapviewOnly">
+                    Alerts
+                    <v-icon>mdi-bell-ring</v-icon> </v-tab
+                  ><v-tab class="customer-tab" v-if="!isMapviewOnly">
+                    Invoices
+                    <v-icon> mdi-currency-usd</v-icon>
+                  </v-tab>
 
-              <v-tab
-                class="customer-tab"
-                v-if="!isMapviewOnly"
-                @click="keySettings++"
+                  <v-tab
+                    class="customer-tab"
+                    v-if="!isMapviewOnly"
+                    @click="keySettings++"
+                  >
+                    Settings
+                    <v-icon>mdi mdi-briefcase-account</v-icon>
+                  </v-tab>
+                  <v-tab class="customer-tab" v-if="!isMapviewOnly">
+                    Subscription
+                    <v-icon>mdi-package-up</v-icon>
+                  </v-tab>
+                </v-tabs></v-col
               >
-                Settings
-                <v-icon>mdi mdi-briefcase-account</v-icon>
-              </v-tab>
-              <v-tab class="customer-tab" v-if="!isMapviewOnly">
-                Subscript
-                <v-icon> mdi-clipboard-list-outline</v-icon>
-              </v-tab>
-            </v-tabs>
-          </v-col>
-        </v-row>
+              <v-col
+                class="pa-0 justify-center"
+                style="max-width: 150px; margin: auto"
+                ><v-btn @click="customersList()" elevation="2" small
+                  >Customers List</v-btn
+                ></v-col
+              >
+            </v-row>
+          </v-card-text>
+        </v-card>
+
         <v-row class="mt-0 pt-0">
           <v-col>
             <v-tabs-items
@@ -508,6 +520,9 @@ export default {
   },
   watch: {},
   methods: {
+    customersList() {
+      this.$router.push("/alarm/customers");
+    },
     async updateContactsData() {
       // console.log("reloadContent");
       try {
