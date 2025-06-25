@@ -258,7 +258,7 @@
         ><TopMenuClock v-if="displayTopMenu"></TopMenuClock
       ></span>
       <span class="pl-2 pr-2" @click="toggleTheme()" style="cursor: pointer"
-        ><v-icon>mdi-brightness-7</v-icon></span
+        ><v-icon>mdi-palette</v-icon></span
       >
       <div v-if="$auth && $auth.user?.role_id > 1" style="font-size: 10px">
         {{ $auth.user.name }}
@@ -582,7 +582,7 @@
           : 'padding-left: 140px;'
       "
     >
-      <v-container style="max-width: 100%; padding-left: 5px; padding: 15px">
+      <v-container style="max-width: 100%; padding-left: 5px; padding: 8px">
         <nuxt />
       </v-container>
     </v-main>
@@ -1360,8 +1360,10 @@ export default {
     setupInactivityDetection() {
       // Handle inactivity
       this.handleInactivity = () => {
+        if (window) window.location.reload();
+
         // Perform actions when the user is inactive
-        this.$router.push(`/alarm/dashboard`);
+        // this.$router.push(`/alarm/dashboard`);
         // For example, you could redirect the user, show a message, etc.
       };
 

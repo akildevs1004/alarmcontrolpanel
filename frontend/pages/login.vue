@@ -154,8 +154,12 @@
                   type="email"
                   autocomplete="off"
                   clearable
-                  color="white"
-                  style="background-color: #fff; margin-top: 5px"
+                  style="
+                    background-color: #fff !important;
+                    color: black !important;
+                    margin-top: 5px;
+                  "
+                  light
                 ></v-text-field>
               </div>
 
@@ -165,6 +169,7 @@
                   hide-details
                   role="presentation"
                   dense
+                  light
                   outlined
                   clearable
                   autocomplete="off"
@@ -173,7 +178,11 @@
                   v-model="credentials.password"
                   class="input-group--focused login-input-box emailtext-field"
                   @click:append="show_password = !show_password"
-                  style="background-color: #fff; margin-top: 5px"
+                  style="
+                    background-color: #fff !important;
+                    color: black !important;
+                    margin-top: 5px;
+                  "
                 ></v-text-field>
               </div>
 
@@ -261,6 +270,9 @@
 import ForgotPassword from "../components/ForgotPassword.vue";
 
 export default {
+  theme: {
+    dark: false, // 👈 Default dark mode
+  },
   layout: "login",
   components: { ForgotPassword },
   data: () => ({
@@ -485,9 +497,23 @@ html {
   background-repeat: no-repeat;
   background-size: cover;
 }
+/* .v-input input {
+  color: black !important;
+} */
 </style>
 
 <style scoped>
+/* .theme--dark.v-input input {
+  color: black !important;
+}
+.v-input input,
+.v-input textarea {
+  color: black !important;
+}
+
+.v-text-field__slot div {
+  color: black !important;
+} */
 .about-content {
   padding-left: 30%;
   padding-top: 1%;

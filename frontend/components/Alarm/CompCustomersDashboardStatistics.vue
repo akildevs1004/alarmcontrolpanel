@@ -21,7 +21,7 @@
                 </div>
               </v-col>
               <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Total Customers
+                ><span class="bold">Total Customers</span>
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
@@ -61,7 +61,7 @@
                 </div>
               </v-col>
               <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Active Customers
+                ><span class="bold">Active Customers</span>
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
@@ -107,7 +107,7 @@
                 </div>
               </v-col>
               <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Account Expire In 30 Days
+                ><span class="bold">Account Expire In 30 Days</span>
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
@@ -147,7 +147,7 @@
                 </div>
               </v-col>
               <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Accounts Expired
+                ><span class="bold">Accounts Expired</span>
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">
@@ -187,7 +187,7 @@
                 </div>
               </v-col>
               <v-col cols="9" style="line-height: 30px" class="text-left"
-                >Total Devices
+                ><span class="bold">Total Devices</span>
 
                 <v-row class="text-left" no-gutters align="center">
                   <v-col cols="auto" style="font-size: 30px">

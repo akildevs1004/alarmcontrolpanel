@@ -433,15 +433,15 @@
               </v-btn>
             </template>
             <v-list width="120" dense>
-              <!-- <v-list-item
-                    v-if="can('customers_view')"
-                    @click="viewCustomerItem(item)"
-                  >
-                    <v-list-item-title style="cursor: pointer">
-                      <v-icon color="secondary" small> mdi-eye </v-icon>
-                      View
-                    </v-list-item-title>
-                  </v-list-item> -->
+              <v-list-item
+                v-if="can('customers_view')"
+                @click="viewCustomerItem(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-eye </v-icon>
+                  View
+                </v-list-item-title>
+              </v-list-item>
               <v-list-item v-if="can('customers_view')" @click="viewItem(item)">
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small> mdi-eye </v-icon>
@@ -793,11 +793,12 @@ export default {
       this.dialogViewCustomer = true;
     },
     viewCustomerItem(item) {
-      this.selectedCustomer = item;
-      this.setIntervalLoopstatus = false;
-      this.viewCustomerId = item.id;
-      this.key += 1;
-      this.dialogViewCustomer2 = true;
+      this.$router.push("/alarm/customer/" + item.id);
+      // this.selectedCustomer = item;
+      // this.setIntervalLoopstatus = false;
+      // this.viewCustomerId = item.id;
+      // this.key += 1;
+      // this.dialogViewCustomer2 = true;
     },
     viewItem2(item) {
       this.$router.push("/alarm/view-customer/" + item.id);

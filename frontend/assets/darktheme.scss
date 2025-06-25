@@ -8,6 +8,8 @@
   position: relative;
 }
 
+
+
 .customerMapTitle::after {
   content: "";
   position: absolute;
@@ -126,6 +128,12 @@
 // {
 // background-color: #2d2d30!important;
 // }
+
+.theme--dark .customer-background
+{
+  background-color:#04042d!important;
+}
+
 .theme--dark .popup_background_noviolet button {
   color: #FFF !important;
 }
@@ -201,12 +209,14 @@ color:#FFF!important;
 .theme--dark.v-card {
   /*background-color: #10154d!important;*/
 
-   background-color: map-get($material-dark, 'surface') !important;
+   background-color: map-get($material-dark, 'surface')  ;
 }
 
 .theme--dark .background
 {
-   background-color: map-get($material-dark, 'background') !important;
+
+  background-color: map-get($material-dark, 'background') !important;
+  //  background-color:#2d2d30 !important;
 
 }
 .theme--dark .v-btn__content

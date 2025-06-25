@@ -15,7 +15,7 @@
                     max-height: 130px;
                   "
                   :src="
-                    selectedCustomer.primary_contact.profile_picture
+                    selectedCustomer?.primary_contact?.profile_picture
                       ? selectedCustomer.primary_contact.profile_picture
                       : '/no-profile-image.jpg'
                   "

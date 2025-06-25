@@ -13,30 +13,28 @@
     </div>
 
     <v-row>
-      <v-col cols="9" style="padding: 0px"
-        ><v-card
-          ><v-card-text elevation="3" style="border: 1px solid #ddd"
+      <v-col
+        v-if="IMG_PLOTTING_WIDTH"
+        :style="'padding: 0px;max-width:' + IMG_PLOTTING_WIDTH + ''"
+      >
+        <v-card
+          ><v-card-text elevation="3" style="border: 0px solid #ddd"
             ><v-row>
               <v-col
                 cols="12"
-                style="position: relative; padding: 0px; text-align: center"
+                :style="'position: relative; padding: 0px; text-align: center;'"
                 class="dropzone"
                 @drop="onDrop"
                 @dragover="allowDrop"
               >
                 <!-- <v-img :src="item.picture" style="width: 100%; height: auto" /> -->
 
-                <!-- <img
-                :src="item.picture"
-                :width="IMG_PLOTTING_WIDTH"
-                :height="IMG_PLOTTING_HEIGHT"
-              /> -->
                 <img
-                  draggable="false"
                   :src="item.picture"
                   :width="IMG_PLOTTING_WIDTH"
                   :height="IMG_PLOTTING_HEIGHT"
                 />
+
                 <span v-if="!loading">
                   <div
                     v-for="(plotting, index) in plottings"
@@ -59,7 +57,7 @@
 
                     <v-card
                       :style="
-                        'border: 1px solid black; color:black; ' +
+                        'border: 0px solid black; color:black; ' +
                         'position:relative; left:-45px;z-index:9999'
                       "
                       class="context-menu"
@@ -94,7 +92,6 @@
       >
 
       <v-col
-        cols="3"
         style="height: 500px; overflow: auto"
         class="sensorPlottingdevices"
       >

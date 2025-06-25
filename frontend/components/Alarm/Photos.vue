@@ -122,7 +122,7 @@
           >
 
           <v-tab-item
-            style="border: 1px solid #ddd; padding: 25px"
+            style="border: 1px solid #443f6f; padding: 25px"
             v-for="(item, index) in building_pictures"
             :key="'sensorpicture' + item.id"
           >

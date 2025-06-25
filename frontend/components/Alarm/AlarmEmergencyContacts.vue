@@ -99,31 +99,32 @@
           + Add
         </v-btn>
       </v-col>
+    </v-row>
 
-      <v-row>
-        <v-col cols="12">
-          <v-tabs right show-arrows class="tabswidthalignment">
-            <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
-              {{ item.address_type }}</v-tab
-            >
-            <v-tab-item
-              v-for="(item, index) in customer_contacts"
-              :key="item.id + 50"
-              name="index+50"
-            >
-              <v-card class="elevation-1">
-                <CompCustomersEditContact
-                  @callrefreshData="reloadContent()"
-                  :customer_id="item.customer_id"
-                  :contact="item"
-                  :customer="customer"
-                  :isMapviewOnly="isMapviewOnly"
-                  :isEditable="isEditable"
-                  :key="item.id"
-                  :contact_id="item.id"
-                  :customer_contacts="customer_contacts"
-                />
-                <!-- <v-row>
+    <v-row>
+      <v-col>
+        <v-tabs right show-arrows class="tabswidthalignment1">
+          <v-tab v-for="(item, index) in customer_contacts" :key="item.id">
+            {{ item.address_type }}</v-tab
+          >
+          <v-tab-item
+            v-for="(item, index) in customer_contacts"
+            :key="item.id + 50"
+            name="index+50"
+          >
+            <v-card class="elevation-1">
+              <CompCustomersEditContact
+                @callrefreshData="reloadContent()"
+                :customer_id="item.customer_id"
+                :contact="item"
+                :customer="customer"
+                :isMapviewOnly="isMapviewOnly"
+                :isEditable="isEditable"
+                :key="item.id"
+                :contact_id="item.id"
+                :customer_contacts="customer_contacts"
+              />
+              <!-- <v-row>
                   <v-col cols="10">
                     <h3 style="">{{ item.address_type }}</h3>
                   </v-col>
@@ -321,11 +322,10 @@
                     ></v-text-field>
                   </v-col>
                 </v-row> -->
-              </v-card>
-            </v-tab-item>
-          </v-tabs>
-        </v-col>
-      </v-row>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+      </v-col>
     </v-row>
   </div>
 </template>
