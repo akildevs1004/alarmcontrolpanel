@@ -882,9 +882,9 @@ export default {
   },
   async mounted() {
     if (typeof window !== "undefined") {
-      this.tableHeight = window.innerHeight - 350;
+      this.tableHeight = window.innerHeight - 300;
       window.addEventListener("resize", () => {
-        this.tableHeight = window.innerHeight - 350;
+        this.tableHeight = window.innerHeight - 300;
       });
     }
 

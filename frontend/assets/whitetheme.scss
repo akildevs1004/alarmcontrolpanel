@@ -1,6 +1,10 @@
 .theme--light .popup_background_noviolet button {
   color: black !important;
 }
+body{
+  background-color: map-get($material-light, 'background') !important;
+
+}
 .theme--dark .violet {
   background-color: #6946dd;
 }

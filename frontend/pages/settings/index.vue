@@ -14,7 +14,7 @@
       </div>
 
       <v-row>
-        <v-col :style="'max-width:350px;height:' + (windowHeight - 100) + 'px'">
+        <v-col :style="'max-width:350px;height:800px'">
           <v-row
             ><v-col>
               <v-card
@@ -56,13 +56,8 @@
                   </v-row>
                   <v-row>
                     <v-col>
-                      <h3>Company Name</h3>
-                      <div>(Company Code)</div>
-                    </v-col> </v-row
-                  ><v-row class="ma-0 pa-0">
-                    <v-col>
-                      <h3>Contact Person name</h3>
-                      <div>(Position)</div>
+                      <h3>{{ company_payload.name }}</h3>
+                      <div>({{ company_payload.company_code }})</div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -73,6 +68,12 @@
             ><v-col>
               <v-card
                 ><v-card-text class="text-center justify-center">
+                  <v-row class="ma-0 pa-0">
+                    <v-col>
+                      <h3>{{ contact_payload.name }}</h3>
+                      <div>({{ contact_payload.position }})</div>
+                    </v-col>
+                  </v-row>
                   <div
                     class="text-left"
                     style="font-size: 15px; line-height: 25px"
@@ -183,11 +184,7 @@
         </v-col>
         <v-col class="pl-0">
           <v-card>
-            <v-tabs
-              class="pt-3"
-              :vertical="vertical"
-              :style="'height:' + (windowHeight - 100) + 'px'"
-            >
+            <v-tabs class="pt-3" :vertical="vertical" :style="'height:815px'">
               <v-tabs-slider color="violet"></v-tabs-slider>
               <!-- <v-tab>
                 <span>Company Profile</span>
@@ -1337,10 +1334,11 @@ export default {
     menu_end_date: false,
   }),
   async mounted() {
-    this.tableHeight = window.innerHeight - 90;
-    window.addEventListener("resize", () => {
-      this.tableHeight = window.innerHeight - 90;
-    });
+    if (window) this.windowHeight = window.outerHeight;
+    // this.tableHeight = window.outerHeight;
+    // window.addEventListener("resize", () => {
+    //   this.tableHeight = window.outerHeight;
+    // });
   },
   async created() {
     try {
@@ -1351,7 +1349,6 @@ export default {
       this.fullCompanyLink = this.originalURL + this.$auth.user.company_id;
       //this.generateCompanyQRCode(this.fullCompanyLink);
     } catch (e) {}
-    if (window) this.windowHeight = window.innerHeight;
   },
   methods: {
     async generateCompanyQRCode(fullLink) {

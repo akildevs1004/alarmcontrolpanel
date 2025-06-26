@@ -4,7 +4,10 @@
 // {
 // background-color: #2d2d30!important;
 // }
+body{
+  background-color: map-get($material-dark, 'background') !important;
 
+}
 .theme--dark .customer-card-backgrounds
 {
       background-color:#121C2B!important;

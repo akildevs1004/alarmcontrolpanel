@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :style="scaleStyle">
     <div class="text-center ma-2">
       <v-snackbar :timeout="1000" v-model="snackbar" top="top" elevation="24">
         {{ response }}
@@ -138,6 +138,7 @@
           src="../static/logo33.jpeg"
           style="width: 60px !important"
         /> -->
+
         <img
           class="logo-image"
           title="Alarm Control Panel - Xtremeguard"
@@ -779,6 +780,7 @@ export default {
   },
   data() {
     return {
+      scale: 1,
       displayTopMenu: false,
       activeAudio: true,
       popupKey: 1,
@@ -918,6 +920,8 @@ export default {
     };
   },
   async created() {
+    this.handleResize();
+    window.addEventListener("resize", this.handleResize);
     if (typeof window !== "undefined" && window.innerWidth < 700) {
       // console.log("window.innerWidth", window.innerWidth);
       this.$router.push("/alarm/mobiledashboard");
@@ -970,6 +974,9 @@ export default {
   },
   onBeforeUnmount() {
     console.log("Component is unmounted!");
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.handleResize);
   },
 
   async mounted() {
@@ -1055,6 +1062,14 @@ export default {
     changeColor() {
       return "#ecf0f4"; //this.$store.state.color;
     },
+    scaleStyle() {
+      return {
+        transform: `scale(${this.scale})`,
+        transformOrigin: "top left",
+        width: `${100 / this.scale}%`, // prevents scrollbars
+        height: `${100 / this.scale}%`,
+      };
+    },
 
     getUser() {
       const user = this.$auth.user;
@@ -1109,6 +1124,10 @@ export default {
     },
   },
   methods: {
+    handleResize() {
+      const width = window.innerWidth;
+      this.scale = 1; // width < 1900 ? width / 1900 + 0.2 : 1;
+    },
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
