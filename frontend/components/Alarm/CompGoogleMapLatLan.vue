@@ -28,6 +28,8 @@
 export default {
   props: ["latitude", "longitude", "title", "contact_id", "mapheight", "alarm"],
   data: () => ({
+    AdvancedMarkerElement: null,
+
     map: null,
     mapKey: null,
     geocoder: null,
@@ -166,8 +168,8 @@ export default {
           content.className = "customerMapTitle";
           content.innerHTML = `
           <div style="position: relative;
-    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px ;">
-           ${this.alarm.device.customer.building_name}
+    top: 50px;background:transparent;color:black; padding:6px 10px;border-radius:6px; font-size:18px;font-weight:bold ;">
+           ${this.title}
           </div>
         `;
 
