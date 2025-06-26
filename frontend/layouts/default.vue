@@ -140,9 +140,17 @@
         /> -->
 
         <img
+          v-if="$vuetify.theme.dark"
           class="logo-image"
           title="Alarm Control Panel - Xtremeguard"
           src="../static/logo.png"
+          style="width: 150px !important"
+        />
+        <img
+          v-else
+          class="logo-image"
+          title="Alarm Control Panel - Xtremeguard"
+          src="../static/logo_header1.png"
           style="width: 150px !important"
         />
       </span>
