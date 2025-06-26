@@ -9,10 +9,10 @@
     <v-dialog v-model="dialogEditCustomerNotes" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes Information </span>
+          <span style="color: black111">Alarm Notes Information </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogEditCustomerNotes = false;
@@ -41,12 +41,12 @@
     <v-dialog v-model="dialogViewPhotos" width="60%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">
+          <span style="color: black111">
             {{ editItem ? editItem.title : "---" }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewPhotos = false"
             outlined
           >
@@ -59,7 +59,7 @@
             <v-img
               :src="editItem ? editItem.picture : '/no-image.png'"
               aspect-ratio="1"
-              class="grey lighten-2"
+              class="grey222 lighten-2"
               width="100%"
             >
             </v-img>

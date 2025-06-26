@@ -8,10 +8,9 @@
     </template>
 
     <v-card>
-      <v-toolbar flat class="grey lighten-3" dense>
-        View {{ model }} <v-spacer></v-spacer
-        ><AssetsButtonClose @close="close" /></v-toolbar
-      >
+      <v-toolbar flat class="grey2222 lighten-3" dense>
+        View {{ model }} <v-spacer></v-spacer><AssetsButtonClose @close="close"
+      /></v-toolbar>
 
       <v-card-text class="py-5">
         <v-container>

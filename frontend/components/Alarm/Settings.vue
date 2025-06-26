@@ -16,7 +16,9 @@
           <v-tab
             ><v-icon color="green">mdi-home-clock-outline</v-icon> Store Timings
           </v-tab>
-          <v-tab v-if="isEditable"> Password </v-tab>
+          <v-tab v-if="isEditable">
+            <v-icon color="green">mdi-key</v-icon>Password
+          </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
           <v-tab-item>
@@ -234,7 +236,7 @@
                 <v-card>
                   <v-card-text>
                     <v-row>
-                      <v-col cols="6">
+                      <v-col style="max-width: 400px">
                         <v-row>
                           <v-col cols="12">
                             <v-form autocomplete="off">
@@ -336,25 +338,27 @@
                             </v-form>
                           </v-col>
                         </v-row>
+                        <v-row v-if="isEditable">
+                          <v-col cols="12" class="text-right"
+                            ><v-btn
+                              v-if="
+                                can('setting_company_change_password_access')
+                              "
+                              dark
+                              small
+                              :loading="loading_password"
+                              color="primary"
+                              @click="update_setting"
+                            >
+                              Update
+                            </v-btn></v-col
+                          >
+                        </v-row>
                       </v-col>
+                      <v-col></v-col>
                     </v-row>
 
-                    <v-col cols="6" class="align-right">
-                      <v-row v-if="isEditable">
-                        <v-col cols="12" class="text-right"
-                          ><v-btn
-                            v-if="can('setting_company_change_password_access')"
-                            dark
-                            small
-                            :loading="loading_password"
-                            color="primary"
-                            @click="update_setting"
-                          >
-                            Update
-                          </v-btn></v-col
-                        >
-                      </v-row>
-                    </v-col>
+                    <v-col cols="6" class="align-right"> </v-col>
                   </v-card-text>
                 </v-card>
               </v-card-text>

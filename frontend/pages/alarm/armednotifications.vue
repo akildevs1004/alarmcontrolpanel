@@ -22,7 +22,7 @@
                       clearable
                       style="padding-top: 6px; max-width: 300px"
                       @change="getDataFromApi()"
-                      class="reports-events-autocomplete bgwhite"
+                      class="reports-events-autocomplete"
                       v-model="filter_customer_id"
                       :items="customersList"
                       dense
@@ -90,7 +90,7 @@
                           </v-row>
                         </v-list-item-title>
                       </v-list-item>
-  
+
                       <v-list-item @click="downloadOptions('excel')">
                         <v-list-item-title style="cursor: pointer">
                           <v-row>

@@ -31,10 +31,10 @@
     <v-dialog v-model="dialogEditAutomation" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Payment Information </span>
+          <span style="color: black111">Payment Information </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogEditAutomation = false;

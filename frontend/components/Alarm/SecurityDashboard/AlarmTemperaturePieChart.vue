@@ -3,10 +3,10 @@
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Temperature Events</span>
+          <span dense style="color: black3333">Temperature Events</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogEventsList = false"
             outlined
           >

@@ -8,12 +8,12 @@
     <v-dialog v-model="dialogViewPhotos" width="60%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">
+          <span style="color: black111">
             {{ editItem ? editItem.title : "---" }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewPhotos = false"
             outlined
           >
@@ -26,7 +26,7 @@
             <v-img
               :src="editItem ? editItem.picture : '/no-business_profile.png'"
               aspect-ratio="1"
-              class="grey lighten-2"
+              class="grey222 lighten-2"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -44,10 +44,10 @@
     <v-dialog v-model="dialogEditPhotos" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"> Photo </span>
+          <span style="color: black111"> Photo </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogEditPhotos = false;
@@ -79,12 +79,7 @@
       No Photos Available
     </div>
     <v-row>
-      <v-col
-        cols="12"
-        class="text-right"
-        style="padding-top: 0px"
-        v-if="isEditable"
-      >
+      <v-col cols="12" class="text-right" v-if="isEditable">
         <v-btn
           v-if="!isMapviewOnly"
           :loading="loading"
@@ -139,7 +134,7 @@
                     item.picture ? item.picture : '/no-business_profile.png'
                   "
                   aspect-ratio="1"
-                  class="grey lighten-2"
+                  class="grey222 lighten-2"
                   style="max-width: 100%; margin: auto; height: 500px"
                 >
                   <template v-slot:placeholder>
@@ -277,7 +272,7 @@
                 @dblclick="viewPhoto(item)"
                 :src="item.picture ? item.picture : '/no-business_profile.png'"
                 aspect-ratio="1"
-                class="grey lighten-2"
+                class="grey222 lighten-2"
               >
                 <template v-slot:placeholder>
                   <v-row

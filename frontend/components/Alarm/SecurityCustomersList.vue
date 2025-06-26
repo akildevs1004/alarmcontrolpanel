@@ -42,7 +42,7 @@
     <v-card elevation="0" class="mt-2" style="padding: 0px">
       <v-toolbar v-if="!eventFilter" class="mb-0" dense flat>
         <v-toolbar-title>
-          <!-- <span style="color: black"> Customers </span> -->
+          <!-- <span style="color: black111"> Customers </span> -->
         </v-toolbar-title>
 
         <!-- <v-btn

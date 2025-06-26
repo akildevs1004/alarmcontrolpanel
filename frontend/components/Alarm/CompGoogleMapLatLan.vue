@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- <v-dialog v-model="dialog" max-width="200px">TTTTTTTTTTT</v-dialog> -->
+
     <div
       :id="'mapCustomer' + contact_id"
       :style="
@@ -188,7 +189,7 @@ export default {
         //   this.dialog = true;
         //   this.customerInfo = this.customer.building_name;
         // });
-
+        this.map.panTo(position);
         if (this.alarm) {
           let googleDirectionIcon =
             process.env.APP_URL + "/icons/google_map.jpg";
@@ -233,8 +234,6 @@ export default {
           });
 
           infowindow.close();
-
-          this.map.panTo(position);
 
           console.log("this.alarm?.alarm_status", this.alarm?.alarm_status);
 

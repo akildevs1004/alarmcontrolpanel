@@ -9,10 +9,10 @@
     <v-dialog v-model="dialogEventsList" max-width="1200px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Alarm Events</span>
+          <span style="color: black3333" dense>Alarm Events</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogEventsList = false"
             outlined
           >
@@ -63,7 +63,7 @@
                       clearable
                       style="padding-top: 6px; width: 200px"
                       @change="getDataFromApi()"
-                      class="reports-events-autocomplete bgwhite"
+                      class="reports-events-autocomplete"
                       v-model="filter_customer_id"
                       :items="customersList"
                       dense
@@ -256,7 +256,7 @@
                       <v-menu>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            style="color: black"
+                            style="color: black3333"
                             text
                             dense
                             small

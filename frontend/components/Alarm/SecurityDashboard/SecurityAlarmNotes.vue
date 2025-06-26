@@ -8,11 +8,15 @@
     <v-dialog v-model="dialogNotes" max-width="700px" :key="key">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"
+          <span dense style="color: black3333"
             >Alarm Notes - ID: {{ selectedItem?.alarm_id || "---" }}</span
           >
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialogNotes = false" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="dialogNotes = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -264,7 +268,7 @@
                       </v-list-item-title>
                     </v-list-item>
                   </v-list>
-                </v-menu> 
+                </v-menu>
               </v-col>-->
             </v-row>
           </v-col>

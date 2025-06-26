@@ -8,9 +8,13 @@
     <v-dialog v-model="dialogNotes" max-width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Notes</span>
+          <span dense style="color: black3333">Notes</span>
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialogNotes = false" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="dialogNotes = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

@@ -35,10 +35,10 @@
     <v-dialog v-model="dialogEditEmergency" width="800px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Contacts </span>
+          <span style="color: black111">Contacts </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogEditEmergency = false"
             outlined
           >
@@ -79,12 +79,8 @@
     </div>
 
     <v-row>
-      <v-col
-        v-if="isEditable"
-        cols="12"
-        class="text-right"
-        style="padding-top: 0px"
-      >
+      <v-col></v-col>
+      <v-col v-if="isEditable" class="text-center" style="max-width: 150px">
         <v-btn
           color="primary"
           @click="

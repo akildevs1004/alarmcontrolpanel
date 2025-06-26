@@ -30,7 +30,9 @@
 
     <v-card elevation="0" class="mt-0">
       <v-toolbar class="mb-2" dense flat>
-        <v-toolbar-title> <span> Product Services</span></v-toolbar-title>
+        <v-toolbar-title>
+          <span> Product Packages and Services</span></v-toolbar-title
+        >
         <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->
         <v-btn

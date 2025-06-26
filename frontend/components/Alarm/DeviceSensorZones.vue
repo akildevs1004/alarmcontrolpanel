@@ -9,11 +9,15 @@
     <v-dialog v-model="dialogNewZone" max-width="400px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
+          <span dense style="color: black3333">
             {{ editId ? "Update" : "New" }} Sensor</span
           >
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialogNewZone = false" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="dialogNewZone = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -71,7 +75,7 @@
               ></v-text-field
             > -->
             </span>
-            <!-- <span style="color: black"
+            <!-- <span style="color: black3333"
               >
               Max Sensors Allowed :
               {{

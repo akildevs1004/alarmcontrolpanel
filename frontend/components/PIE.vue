@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card style="height: 500px">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="primary" flat>
         <v-toolbar-title>Attendance</v-toolbar-title>
       </v-toolbar>
       <v-list style="min-height: 430px">

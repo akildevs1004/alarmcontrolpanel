@@ -8,12 +8,12 @@
     <v-dialog v-model="dialogViewPhotos" width="60%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">
+          <span style="color: black111">
             {{ editItem ? editItem.title : "---" }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewPhotos = false"
             outlined
           >
@@ -28,7 +28,7 @@
                 editItem ? editItem.profile_picture : '/no-business_profile.png'
               "
               aspect-ratio="1"
-              class="grey lighten-2"
+              class="grey222 lighten-2"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -47,7 +47,7 @@
     <v-dialog v-model="showMap" width="800px">
       <v-card>
         <v-card-title
-          style="color: black"
+          style="color: black3333"
           dense
           class="popup_background_noviolet"
         >

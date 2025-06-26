@@ -10,7 +10,7 @@
         {{ snackbar_message }}
       </v-snackbar>
       <v-card>
-        <v-toolbar flat class="grey lighten-3" dense>
+        <v-toolbar flat class="lighten-3" dense>
           Create {{ model }} <v-spacer></v-spacer
           ><AssetsButtonClose @close="close"
         /></v-toolbar>
@@ -50,7 +50,7 @@
               <v-col cols="12" class="text-right">
                 <v-btn
                   small
-                  color="grey"
+                  color="red"
                   class="white--text"
                   dark
                   @click="close"

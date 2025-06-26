@@ -50,7 +50,7 @@
             flat
           >
             <v-toolbar-title>
-              <span style="color: black"> Customers </span></v-toolbar-title
+              <span style="color: black111"> Customers </span></v-toolbar-title
             >
 
             <!-- <v-btn

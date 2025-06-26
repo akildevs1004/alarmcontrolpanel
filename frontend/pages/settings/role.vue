@@ -6,15 +6,15 @@
 
       <v-card
         ><v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
+          <span dense style="color: black3333">
             {{ formTitle }} {{ Model }} and Permissions</span
           >
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="closeDialog()" outlined>
+          <v-icon style="color: black3333" @click="closeDialog()" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
-        <!-- <v-alert dense flat class="grey lighten-3">
+        <!-- <v-alert dense flat class="grey2222 lighten-3">
           {{ formTitle }} {{ Model }} and Permissions
           <v-spacer></v-spacer>
         </v-alert> -->

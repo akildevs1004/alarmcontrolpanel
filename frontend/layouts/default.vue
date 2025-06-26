@@ -128,7 +128,7 @@
       />
       <span
         class="text-overflow"
-        style="cursor: pointer"
+        style="cursor: pointer; margin: auto; display: flex"
         @click="gotoHomePage()"
       >
         <!-- <img
@@ -141,8 +141,8 @@
         <img
           class="logo-image"
           title="Alarm Control Panel - Xtremeguard"
-          src="../static/logo_header.png"
-          style="width: 60px !important"
+          src="../static/logo.png"
+          style="width: 150px !important"
         />
       </span>
       <v-spacer></v-spacer>
@@ -164,6 +164,20 @@
               :key="index"
               class="header-menu-box"
             >
+              <!-- <v-btn
+                small
+                text
+                :elevation="0"
+                :style="
+                  menuProperties[items.menu]?.selected
+                    ? 'background-color: #007d61; color: white;'
+                    : ''
+                "
+                @click="setSubLeftMenuItems(items.menu, items.to)"
+              >
+                <b class="header-menu-item">{{ items.title }} </b>
+              </v-btn> -->
+
               <v-btn
                 class="header-menu-button"
                 small
@@ -172,6 +186,11 @@
                 :color="
                   menuProperties[items.menu] &&
                   menuProperties[items.menu].selected
+                "
+                :style="
+                  $vuetify.theme.dark && menuProperties[items.menu]?.selected
+                    ? 'background-color: #007d61; color: white;'
+                    : ''
                 "
                 fill
                 @click="setSubLeftMenuItems(items.menu, items.to)"
@@ -1534,6 +1553,8 @@ export default {
       let bgColor = "violet";
       this.setMenus();
 
+      console.log("menu_name", menu_name);
+
       // Check if menu_name exists in menuProperties// data sesction
       if (this.menuProperties.hasOwnProperty(menu_name)) {
         for (const key in this.menuProperties) {
@@ -1734,9 +1755,6 @@ export default {
 </style>
 <!-- Extra overriting classes-->
 <style scoped>
-.violet {
-  background-color: #6946dd;
-}
 .bold {
   color: bold;
 }
@@ -3002,7 +3020,7 @@ td {
 
 #table-services td,
 #table-services th {
-  border-bottom: 1px solid #a19797;
+  border-bottom: 1px solid #2d2d2d;
   padding: 6px;
 }
 

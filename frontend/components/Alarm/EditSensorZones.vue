@@ -109,7 +109,7 @@
       <v-col cols="1" style="min-width: 50px; max-width: 50px; padding: 4px">
         <!-- <v-icon
           v-if="index == device.zones.length - 1"
-          style="color: black"
+          style="color: black3333"
           outlined
           @click="addEarning"
           size="20"

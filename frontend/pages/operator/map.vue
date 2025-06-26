@@ -9,10 +9,10 @@
     <v-dialog v-model="dialogCameraLive" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Camera Live</span>
+          <span style="color: black111">Camera Live</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogCameraLive = false"
             outlined
           >
@@ -45,12 +45,12 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
+          <span dense style="color: black3333">
             Map Alarm {{ popupEventText }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogAlarmEventCustomerContactsTabView = false"
             outlined
           >
@@ -121,7 +121,7 @@
             </v-autocomplete> -->
 
             <v-text-field
-              class="search-autocomplete bgwhite searchicon"
+              class="search-autocomplete searchicon"
               outlined
               append-icon="mdi-magnify"
               v-model="filter_customer_id"

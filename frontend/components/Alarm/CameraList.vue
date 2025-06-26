@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-center ma-0">
+    <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" elevation="24">
         {{ response }}
       </v-snackbar>
@@ -8,12 +8,12 @@
     <v-dialog v-model="dialogViewPhotos" width="60%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">
+          <span style="color: black111">
             {{ editItem ? editItem.title : "---" }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewPhotos = false"
             outlined
           >
@@ -26,7 +26,7 @@
             <v-img
               :src="editItem ? editItem.picture : '/no-business_profile.png'"
               aspect-ratio="1"
-              class="grey lighten-2"
+              class="grey222 lighten-2"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -44,10 +44,10 @@
     <v-dialog v-model="dialogEditPhotos" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"> Camera </span>
+          <span style="color: black111"> Camera </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogEditPhotos = false;
@@ -84,9 +84,8 @@
       </v-col>
       <v-col
         v-if="!isMapviewOnly && isEditable"
-        cols="6"
         class="text-right"
-        style="padding-top: 0px"
+        style="max-width: 150px"
       >
         <v-btn
           :loading="loading"
@@ -174,7 +173,11 @@
               </v-row>
 
               <v-row>
-                <v-col cols="12" class="text-center">
+                <v-col
+                  cols="12"
+                  class="text-center"
+                  style="border: 1px solid #ddd"
+                >
                   <iframe
                     v-if="getCameraUrl(item) != ''"
                     :src="getCameraUrl(item)"
@@ -254,7 +257,7 @@
                     item.picture ? item.picture : '/no-business_profile.png'
                   "
                   aspect-ratio="1"
-                  class="grey lighten-2"
+                  class="grey222 lighten-2"
                 >
                   <template v-slot:placeholder>
                     <v-row

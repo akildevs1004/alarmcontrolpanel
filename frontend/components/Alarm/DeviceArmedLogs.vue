@@ -8,10 +8,10 @@
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Intruder Events</span>
+          <span style="color: black3333" dense>Intruder Events</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogEventsList = false"
             outlined
           >

@@ -7,11 +7,7 @@
     </div>
     <v-dialog v-model="showMap" width="800px">
       <v-card>
-        <v-card-title
-          style="color: black"
-          dense
-          class="popup_background_noviolet"
-        >
+        <v-card-title dense class="popup_background_noviolet">
           <span style="">Move Marker to change Location </span>
           <v-spacer></v-spacer>
           <v-icon @click="showMap = false" outlined>
@@ -31,208 +27,251 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols="12" dense>
+      <v-col cols="12">
         <v-row class="pt-5">
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-select
-              :readonly="isMapviewOnly"
-              label="Customer Type"
-              :items="buildingTypes"
-              item-text="name"
-              item-value="id"
-              v-model="customer_payload.building_type_id"
-              dense
-              outlined
-              hide-details
-              :disabled="!isEditable"
-            ></v-select>
-            <span
-              v-if="errors && errors.building_type_id"
-              class="text-danger mt-2"
-              >{{ errors.building_type_id[0] }}</span
-            >
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Customer/Building Name"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.building_name"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span
-              v-if="errors && errors.building_name"
-              class="text-danger mt-2"
-              >{{ errors.building_name[0] }}</span
-            >
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="House Number"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.house_number"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span
-              v-if="errors && errors.house_number"
-              class="text-danger mt-2"
-              >{{ errors.house_number[0] }}</span
-            >
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Street Number"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.street_number"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span
-              v-if="errors && errors.street_number"
-              class="text-danger mt-2"
-              >{{ errors.street_number[0] }}</span
-            >
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Area"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.area"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.area" class="text-danger mt-2">{{
-              errors.area[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="City"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.city"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.city" class="text-danger mt-2">{{
-              errors.city[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="State"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.state"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.state" class="text-danger mt-2">{{
-              errors.state[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Country"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.country"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.country" class="text-danger mt-2">{{
-              errors.country[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Landmark"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.landmark"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.landmark" class="text-danger mt-2">{{
-              errors.landmark[0]
-            }}</span>
-          </v-col>
-        </v-row>
+          <v-col cols="12">
+            <v-row>
+              <v-col cols="4" class="text-center" dense>
+                <div>
+                  <CompGoogleMapLatLan
+                    v-if="customer_payload.latitude"
+                    :latitude="customer_payload.latitude"
+                    :longitude="customer_payload.longitude"
+                    :title="customer_payload.building_name"
+                    :contact_id="customer_payload.id"
+                    :key="1"
+                    mapheight="250px"
+                  />
+                </div>
+                <div class="pt-5">
+                  <v-btn
+                    cols="12"
+                    v-if="!showMap && isEditable"
+                    dense
+                    outlined
+                    small
+                    fill
+                    @click="showMap = true"
+                    ><v-icon dark>mdi-map-marker-radius-outline</v-icon>Change
+                    location
+                  </v-btn>
+                </div>
+              </v-col>
 
-        <v-row v-if="!customer_id">
-          <v-col md="4" cols="2" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Login Email"
-              dense
-              outlined
-              type="email"
-              v-model="customer_payload.email"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.email" class="text-danger mt-2">{{
-              errors.email[0]
-            }}</span>
-          </v-col>
-          <v-col v-if="!customer_id" md="4" cols="2" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Login Password"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              dense
-              outlined
-              v-model="customer_payload.password"
-              hide-details
-              @click:append="show1 = !show1"
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.password" class="text-danger mt-2">{{
-              errors.password[0]
-            }}</span>
-          </v-col>
+              <v-col cols="8">
+                <v-row>
+                  <v-col cols="4" dense>
+                    <v-select
+                      :readonly="isMapviewOnly"
+                      label="Customer Type"
+                      :items="buildingTypes"
+                      item-text="name"
+                      item-value="id"
+                      v-model="customer_payload.building_type_id"
+                      dense
+                      outlined
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-select>
+                    <span
+                      v-if="errors && errors.building_type_id"
+                      class="text-danger mt-2"
+                      >{{ errors.building_type_id[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Customer/Building Name"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.building_name"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.building_name"
+                      class="text-danger mt-2"
+                      >{{ errors.building_name[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="House Number"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.house_number"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.house_number"
+                      class="text-danger mt-2"
+                      >{{ errors.house_number[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Street Number"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.street_number"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.street_number"
+                      class="text-danger mt-2"
+                      >{{ errors.street_number[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Area"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.area"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.area"
+                      class="text-danger mt-2"
+                      >{{ errors.area[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="City"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.city"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.city"
+                      class="text-danger mt-2"
+                      >{{ errors.city[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="State"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.state"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.state"
+                      class="text-danger mt-2"
+                      >{{ errors.state[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Country"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.country"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.country"
+                      class="text-danger mt-2"
+                      >{{ errors.country[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Landmark"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.landmark"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.landmark"
+                      class="text-danger mt-2"
+                      >{{ errors.landmark[0] }}</span
+                    >
+                  </v-col>
 
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              v-if="!isMapviewOnly"
-              :readonly="isMapviewOnly"
-              label="Contact Number"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.contact_number"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span
-              v-if="errors && errors.contact_number"
-              class="text-danger mt-2"
-              >{{ errors.contact_number[0] }}</span
-            >
-          </v-col>
-          <!-- <v-col md="4" cols="2" sm="12" dense>
+                  <v-col md="4" cols="4" sm="12" dense v-if="!customer_id">
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Login Email"
+                      dense
+                      outlined
+                      type="email"
+                      v-model="customer_payload.email"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.email"
+                      class="text-danger mt-2"
+                      >{{ errors.email[0] }}</span
+                    >
+                  </v-col>
+                  <v-col v-if="!customer_id" md="4" cols="4" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Login Password"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="show1 ? 'text' : 'password'"
+                      dense
+                      outlined
+                      v-model="customer_payload.password"
+                      hide-details
+                      @click:append="show1 = !show1"
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.password"
+                      class="text-danger mt-2"
+                      >{{ errors.password[0] }}</span
+                    >
+                  </v-col>
+
+                  <v-col md="4" cols="12" sm="12" dense>
+                    <v-text-field
+                      v-if="!isMapviewOnly"
+                      :readonly="isMapviewOnly"
+                      label="Contact Number"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.contact_number"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.contact_number"
+                      class="text-danger mt-2"
+                      >{{ errors.contact_number[0] }}</span
+                    >
+                  </v-col>
+                  <!-- <v-col md="4" cols="2" sm="12" dense>
             <v-text-field
               label="Contact Number"
               dense
@@ -247,153 +286,49 @@
               >{{ errors.contact_number[0] }}</span
             >
           </v-col> -->
-        </v-row>
-        <!--   <v-row v-if="!isMapviewOnly"
-          ><v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Contact Number"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.contact_number"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span
-              v-if="errors && errors.contact_number"
-              class="text-danger mt-2"
-              >{{ errors.contact_number[0] }}</span
-            >
-          </v-col>
-          <v-col md="4" sm="12" cols="12">
-            <v-menu
-              v-model="startDateMenuOpen"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  label="Licence Start Date"
-                  hide-details
-                  v-model="customer_payload.start_date"
-                  persistent-hint
-                  append-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  dense
-                  v-bind="attrs"
-                  v-on="on"
-                  :disabled="!isEditable"
-                ></v-text-field>
-                <span
-                  v-if="errors && errors.start_date"
-                  class="text-danger mt-2"
-                  >{{ errors.start_date[0] }}</span
-                >
-              </template>
-              <v-date-picker
-                style="min-height: 320px"
-                v-model="customer_payload.start_date"
-                no-title
-                @input="startDateMenuOpen = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-col md="4" sm="12" cols="12">
-            <v-menu
-              v-model="endDateMenuOpen"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  label="Licence End Date"
-                  hide-details
-                  v-model="customer_payload.end_date"
-                  persistent-hint
-                  append-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  dense
-                  v-bind="attrs"
-                  v-on="on"
-                  :disabled="!isEditable"
-                ></v-text-field>
-                <span
-                  v-if="errors && errors.end_date"
-                  class="text-danger mt-2"
-                  >{{ errors.end_date[0] }}</span
-                >
-              </template>
-              <v-date-picker
-                :min="customer_payload.start_date"
-                style="min-height: 320px"
-                v-model="customer_payload.end_date"
-                no-title
-                @input="endDateMenuOpen = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>-->
-        <v-row>
-          <v-col md="4" cols="12" sm="12" dense class="mt-2 text-center">
-            <!-- <LocationFinderDialogBox /> -->
-            <v-btn
-              cols="12"
-              v-if="!showMap"
-              dense
-              outlined
-              small
-              fill
-              color="#000000"
-              @click="showMap = true"
-              ><v-icon dark> mdi-map-marker-radius-outline</v-icon>Pick location
-              from Google Map
-            </v-btn>
-            <!-- <v-btn dense v-if="showMap" outlined small @click="showMap = false"
-              >Close Map</v-btn
-            > -->
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Latitude"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.latitude"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.latitude" class="text-danger mt-2">{{
-              errors.latitude[0]
-            }}</span>
-          </v-col>
-          <v-col md="4" cols="12" sm="12" dense>
-            <v-text-field
-              :readonly="isMapviewOnly"
-              label="Longitude"
-              dense
-              outlined
-              type="text"
-              v-model="customer_payload.longitude"
-              hide-details
-              :disabled="!isEditable"
-            ></v-text-field>
-            <span v-if="errors && errors.longitude" class="text-danger mt-2">{{
-              errors.longitude[0]
-            }}</span>
+
+                  <v-col md="4" cols="4" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Latitude"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.latitude"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.latitude"
+                      class="text-danger mt-2"
+                      >{{ errors.latitude[0] }}</span
+                    >
+                  </v-col>
+                  <v-col md="4" cols="4" sm="12" dense>
+                    <v-text-field
+                      :readonly="isMapviewOnly"
+                      label="Longitude"
+                      dense
+                      outlined
+                      type="text"
+                      v-model="customer_payload.longitude"
+                      hide-details
+                      :disabled="!isEditable"
+                    ></v-text-field>
+                    <span
+                      v-if="errors && errors.longitude"
+                      class="text-danger mt-2"
+                      >{{ errors.longitude[0] }}</span
+                    >
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row v-if="!isMapviewOnly && isEditable">
-          <v-col cols="12" class="text-right">
+          <v-col></v-col>
+          <v-col class="text-center" style="max-width: 150px">
             <v-btn small :loading="loading" color="primary" @click="submit">
               {{ !customer_id ? "Submit" : "Update" }}
             </v-btn></v-col
@@ -405,11 +340,12 @@
 </template>
 
 <script>
+import CompGoogleMapLatLan from "./CompGoogleMapLatLan.vue";
 import CompGoogleMapSelectLocation from "./CompGoogleMapSelectLocation.vue";
 
 export default {
   props: ["customer_id", "customer", "isMapviewOnly", "isEditable"],
-  components: { CompGoogleMapSelectLocation },
+  components: { CompGoogleMapSelectLocation, CompGoogleMapLatLan },
   data: () => ({
     showMap: false,
     response: "",

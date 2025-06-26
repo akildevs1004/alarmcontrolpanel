@@ -8,9 +8,13 @@
     <v-dialog v-model="dialogSecurityCustomers" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Add Customers Access</span>
+          <span dense style="color: black3333"> Add Customers Access</span>
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="closeSecurityDialog()" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="closeSecurityDialog()"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -27,12 +31,12 @@
     <v-dialog v-model="newSerialNumberDialog" max-width="800px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
+          <span dense style="color: black3333">
             {{ editId ? "Update" : "New" }} Device Serial Number</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="newSerialNumberDialog = false"
             outlined
           >
@@ -56,7 +60,7 @@
         <v-card elevation="0" class="mt-2">
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
-              <span style="color: black">
+              <span style="color: black111">
                 Device Serial Numbers</span
               ></v-toolbar-title
             >

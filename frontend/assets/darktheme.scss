@@ -5,10 +5,46 @@
 // background-color: #2d2d30!important;
 // }
 
+.theme--dark .customer-card-backgrounds
+{
+      background-color:#121C2B!important;
+}
+.theme--dark .violet {
+  background-color: #6946dd;
+}
 .theme--dark .customer-background
 {
-  background-color:#04042d!important;
+  // background-color:#04042d!important;
+    // background-color:#121C2B!important;
+     background-color:#121C2B!important;
+
 }
+
+.customer-background .theme--dark.v-toolbar.v-sheet
+{
+   background-color:#121C2B!important;
+}
+.customer-background .theme--dark.v-card
+{
+   background-color:#121C2B!important;
+}
+.customer-background .theme--dark.v-tabs-items
+{
+   background-color:#121C2B!important;
+}
+.customer-background .theme--dark.v-tabs > .v-tabs-bar
+{
+     background-color:#121C2B!important;
+
+}
+
+.theme--dark.v-tabs-items.customer-background
+{
+     background-color:#121C2B!important;
+
+}
+
+
 
 .theme--dark .popup_background_noviolet button {
   color: #FFF !important;
@@ -32,6 +68,10 @@
 {
   border-right-color:#fff!important;
 }
+
+
+
+
 // .theme--dark.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active)
 // {
 //   color:black!important;
@@ -39,7 +79,7 @@
 
 .theme--dark.v-tabs > .v-tabs-bar
 {
-   background-color: map-get($material-dark, 'surface') !important;
+   background-color: map-get($material-dark, 'surface')   !important;
 
 }
 

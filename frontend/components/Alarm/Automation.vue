@@ -8,12 +8,9 @@
     <v-dialog v-model="dialogEditAutomation" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"
-            >Automation/Notification Manager Info
-          </span>
+          <span>Automation/Notification Manager Info </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               closeDialog();
               dialogEditAutomation = false;
@@ -38,7 +35,7 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols="12" class="text-right" style="">
+      <v-col cols="12" class="text-right">
         <v-row>
           <v-col cols="8"></v-col>
           <v-col cols="4" class="text-right">
@@ -53,11 +50,10 @@
                   :height="'40px'"
                 /> -->
               </v-col>
-              <v-col cols="6"
-                ><v-text-field
+              <v-col cols="6">
+                <v-text-field
                   width="200px"
-                  height="20"
-                  class="employee-schedule-search-box"
+                  class="employee-schedule-search-box mt-2"
                   @input="getDataFromApi()"
                   v-model="commonSearch"
                   label="Search"

@@ -34,7 +34,7 @@
                   ><v-autocomplete
                     clearable
                     style="width: 200px"
-                    class="reports-events-autocomplete bgwhite"
+                    class="reports-events-autocomplete"
                     v-model="filter_customer_id"
                     :items="customersList"
                     dense
@@ -50,7 +50,7 @@
                   <v-autocomplete
                     clearable
                     style="width: 200px"
-                    class="reports-events-autocomplete bgwhite"
+                    class="reports-events-autocomplete"
                     v-model="category_id"
                     :items="categoryList"
                     dense

@@ -3,10 +3,10 @@
     <v-dialog v-model="dialogDevicesList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Offline Devices</span>
+          <span dense style="color: black3333">Offline Devices</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogDevicesList = false"
             outlined
           >

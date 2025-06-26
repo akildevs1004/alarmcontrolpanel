@@ -103,10 +103,10 @@
     <v-dialog v-model="dialogCloseAlarm" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Event Close/Turn off </span>
+          <span style="color: black111">Alarm Event Close/Turn off </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogCloseAlarm = false;
@@ -133,10 +133,10 @@
     <v-dialog v-model="dialogAddCustomerNotes" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes </span>
+          <span style="color: black111">Alarm Notes </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogAddCustomerNotes = false;
@@ -163,10 +163,10 @@
     <v-dialog v-model="dialogNotesList" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Alarm Notes List</span>
+          <span style="color: black111">Alarm Notes List</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogNotesList = false;

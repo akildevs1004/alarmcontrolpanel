@@ -3,10 +3,10 @@
     <v-dialog v-model="dialogEventsList" max-width="80%">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span style="color: black" dense>Today Tickets</span>
+          <span style="color: black3333" dense>Today Tickets</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               dialogEventsList = false;
               $emit('emitStartrefresh');

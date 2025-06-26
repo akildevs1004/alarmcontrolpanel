@@ -14,10 +14,10 @@
       >
         <v-card>
           <v-card-title dense class="popup_background_noviolet">
-            <span style="color: black">New Sensor Type</span>
+            <span style="color: black111">New Sensor Type</span>
             <v-spacer></v-spacer>
             <v-icon
-              style="color: black"
+              style="color: black3333"
               @click="dialogFormSubdesignation = false"
               outlined
             >
@@ -64,9 +64,13 @@
       >
         <v-card>
           <v-card-title dark class="popup_background_noviolet">
-            <span style="color: black">{{ formTitle }} Sensor Type</span>
+            <span style="color: black111">{{ formTitle }} Sensor Type</span>
             <v-spacer></v-spacer>
-            <v-icon style="color: black" @click="dialogForm = false" outlined>
+            <v-icon
+              style="color: black3333"
+              @click="dialogForm = false"
+              outlined
+            >
               mdi mdi-close-circle
             </v-icon>
           </v-card-title>
@@ -109,7 +113,7 @@
           <v-card class="mb-5 mt-2 rounded-md" elevation="0">
             <v-toolbar class="rounded-md" dense flat>
               <v-toolbar-title><span>Zone Types List</span></v-toolbar-title>
-              <!-- 
+              <!--
                 <v-tooltip top color="primary">
                   <template v-slot:activator="{ on, attrs }"> -->
               <v-btn

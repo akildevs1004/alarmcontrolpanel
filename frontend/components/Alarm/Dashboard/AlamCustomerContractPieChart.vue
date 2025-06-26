@@ -3,10 +3,10 @@
     <v-dialog v-model="dialogCustomersList" max-width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Expired Contract Customers</span>
+          <span dense style="color: black3333">Expired Contract Customers</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogCustomersList = false"
             outlined
           >

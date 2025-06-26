@@ -9,7 +9,7 @@
     <v-row>
       <v-col md="12" sm="12" cols="12" dense>
         <v-row style="margin-top: 15px">
-          <v-col> <h3>New Generate Customer Invoice</h3></v-col>
+          <v-col> <h3>Create New Customer Invoice</h3></v-col>
 
           <v-col style="max-width: 170px">
             <v-menu
@@ -174,9 +174,9 @@
             </v-row> -->
             <v-row>
               <v-col></v-col>
-              <v-col>
+              <v-col style="max-width: 250px">
                 <v-select
-                  style="max-width: 250px"
+                  style="width: 150px"
                   height="20"
                   class="employee-schedule-search-box"
                   label="Discount Type"
@@ -188,10 +188,11 @@
                   :items="['Percentage', 'Amount']"
                 ></v-select>
               </v-col>
-              <v-col style="max-width: 250px">
+              <v-col style="max-width: 100px">
                 <v-text-field
+                  style="width: 100px"
                   class="small-custom-textbox"
-                  label="Discount Value"
+                  label="Discount"
                   outlined
                   dense
                   small
@@ -220,7 +221,15 @@
             </v-row>
           </v-col>
         </v-row>
-
+        <v-row>
+          <v-col
+            class="pull-right text-right align-right"
+            style="color: yellow; padding-right: 20px"
+          >
+            Note: Total Invoice will be generate Count :
+            {{ total_invoice_count }}
+          </v-col>
+        </v-row>
         <v-row>
           <v-col class="pull-right text-right align-right">
             <v-btn
@@ -230,17 +239,8 @@
               dense
               small
               @click="generateInvoices()"
-              >Submit
+              >Create Invoice
             </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col
-            class="pull-right text-right align-right"
-            style="color: yellow; padding-right: 20px"
-          >
-            Note: Total Invoice will be generate Count :
-            {{ total_invoice_count }}
           </v-col>
         </v-row>
       </v-col>

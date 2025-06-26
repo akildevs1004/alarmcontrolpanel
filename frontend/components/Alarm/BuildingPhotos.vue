@@ -8,12 +8,12 @@
     <v-dialog v-model="dialogViewPhotos" width="60%">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">
+          <span style="color: black111">
             {{ editItem ? editItem.title : "---" }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewPhotos = false"
             outlined
           >
@@ -26,7 +26,7 @@
             <v-img
               :src="editItem ? editItem.picture : '/no-business_profile.png'"
               aspect-ratio="1"
-              class="grey lighten-2"
+              class="grey222 lighten-2"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -44,10 +44,10 @@
     <v-dialog v-model="dialogEditPhotos" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black"> Photo </span>
+          <span style="color: black111"> Photo </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               closeDialog();
               dialogEditPhotos = false;
@@ -81,9 +81,8 @@
       >
       <v-col
         v-if="!isMapviewOnly && isEditable"
-        cols="6"
-        class="text-right"
-        style="padding-top: 0px"
+        class="text-center"
+        style="max-width: 150px"
       >
         <v-btn
           :loading="loading"
@@ -269,7 +268,7 @@
                     item.picture ? item.picture : '/no-business_profile.png'
                   "
                   aspect-ratio="1"
-                  class="grey lighten-2"
+                  class="grey222 lighten-2"
                 >
                   <template v-slot:placeholder>
                     <v-row

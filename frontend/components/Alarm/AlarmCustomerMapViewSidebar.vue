@@ -6,7 +6,7 @@
     <v-row>
       <v-col style="width: 100%; text-align: center" v-if="customerObject">
         <div @click="closeDialog()" style="position: absolute; right: 0px">
-          <v-icon style="color: black">mdi-close-circle</v-icon>
+          <v-icon style="color: black3333">mdi-close-circle</v-icon>
         </div>
         <h4 style="color: #fff">Customer Information</h4>
         <div>
@@ -125,7 +125,7 @@
               margin: auto;
               vertical-align: bottom;
             "
-          /> 
+          />
         </div>-->
         <!-- <div v-for="profile_picture in customer.profile_pictures">
           <img

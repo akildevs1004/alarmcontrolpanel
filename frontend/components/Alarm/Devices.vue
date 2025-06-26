@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; margin-top: -20px">
+  <div style="width: 100%">
     <div class="text-center">
       <v-snackbar v-model="snackbar" top="top" color="secondary" elevation="24">
         {{ response }}
@@ -19,22 +19,24 @@
       temporary
       right
       fixed
-      style="width: 350px"
+      :style="'width: 350px; height: ' + (tableHeight + 165) + 'px'"
     >
-      <v-toolbar class="popup_background" dense>
-        {{ editId == null ? "New " : "Edit " }} Device
+      <v-toolbar class="popup_background1" dense>
+        <v-toolbar-title
+          >{{ editId == null ? "New " : "Edit " }} Device</v-toolbar-title
+        >
         <v-spacer></v-spacer>
 
-        <v-icon @click="dialogSerialNumbers = false" outlined dark>
+        <v-icon @click="dialogSerialNumbers = false" outlined>
           mdi mdi-close-circle
         </v-icon>
       </v-toolbar>
-      <v-card elevation="0">
+      <v-card elevation="0" :style="'height: ' + (tableHeight + 78) + 'px'">
         <!-- <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">New Device Information </span>
+          <span style="color: black111">New Device Information </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogSerialNumbers = false"
             outlined
           >
@@ -60,10 +62,10 @@
     <v-dialog v-model="dialogEditDevice" width="600px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Update Device Information </span>
+          <span style="color: black111">Update Device Information </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogEditDevice = false"
             outlined
           >
@@ -87,9 +89,13 @@
     <v-dialog v-model="dialogZones" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Device Sensors </span>
+          <span style="color: black111">Device Sensors </span>
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialogZones = false" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="dialogZones = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -175,13 +181,14 @@
       </v-toolbar>
 
       <v-data-table
+        :height="tableHeight"
         dense
         :headers="headers"
         :items="data"
         model-value="data.id"
         :loading="loading"
         :footer-props="{
-          itemsPerPageOptions: [50, 100, 500, 1000],
+          itemsPerPageOptions: [20, 50, 100, 500, 1000],
         }"
         class="elevation-0 pt-0"
         :options.sync="options"
@@ -445,6 +452,8 @@ export default {
   components: { AlarmEditDevice, DeviceSensorZones, DeviceSerialNumber },
   props: ["customer_id", "eventFilter", "isMapviewOnly", "isEditable"],
   data: () => ({
+    tableHeight: 750,
+
     zone_customer_id: null,
     customersList: [],
     dialogSerialNumbers: false,
@@ -522,7 +531,7 @@ export default {
     pagination: {
       current: 1,
       total: 0,
-      per_page: 100,
+      per_page: 10,
     },
     options: {},
     endpoint: "device",
@@ -593,6 +602,10 @@ export default {
     },
   },
   mounted() {
+    this.tableHeight = window.innerHeight - 185;
+    window.addEventListener("resize", () => {
+      this.tableHeight = window.innerHeight - 185;
+    });
     // setTimeout(() => {
     //   this.updateDevicesHealth();
     // }, 1000 * 5);

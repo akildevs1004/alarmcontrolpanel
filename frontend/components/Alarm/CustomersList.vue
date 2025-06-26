@@ -13,10 +13,9 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">View Customer Information</span>
+          <span dense>View Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               dialogViewCustomer2 = false;
               closeCustomerDialog();
@@ -46,10 +45,9 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">View Customer Information</span>
+          <span dense>View Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               dialogViewCustomer = false;
               closeCustomerDialog();
@@ -80,10 +78,9 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Update Customer Information</span>
+          <span dense>Update Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
             @click="
               dialogEditCustomer = false;
               closeCustomerDialog();
@@ -130,10 +127,10 @@
     >
       <v-card :key="key">
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Assign Operator</span>
+          <span dense style="color: black3333"> Assign Operator</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               dialogAssignSecurity = false;
               closeCustomerDialog();
@@ -442,7 +439,16 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="can('customers_view')" @click="viewItem(item)">
+              <v-list-item
+                v-if="can('customers_edit')"
+                @click="editCustomerItem(item)"
+              >
+                <v-list-item-title style="cursor: pointer">
+                  <v-icon color="secondary" small> mdi-pencil </v-icon>
+                  Edit
+                </v-list-item-title>
+              </v-list-item>
+              <!-- <v-list-item v-if="can('customers_view')" @click="viewItem(item)">
                 <v-list-item-title style="cursor: pointer">
                   <v-icon color="secondary" small> mdi-eye </v-icon>
                   Popup
@@ -455,7 +461,7 @@
                   <v-icon color="secondary" small> mdi-pencil </v-icon>
                   Edit
                 </v-list-item-title>
-              </v-list-item>
+              </v-list-item> -->
               <!-- <v-list-item
                     v-if="can('device_notification_contnet_view')"
                     @click="viewItem2(item)"
@@ -791,6 +797,10 @@ export default {
       this.viewCustomerId = item.id;
       this.key += 1;
       this.dialogViewCustomer = true;
+    },
+
+    editCustomerItem(item) {
+      this.$router.push("/alarm/editcustomer/" + item.id);
     },
     viewCustomerItem(item) {
       this.$router.push("/alarm/customer/" + item.id);

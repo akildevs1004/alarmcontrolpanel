@@ -32,7 +32,7 @@
         <v-card elevation="0" class="mt-2">
           <v-toolbar class="mb-2 white--text" color="white" dense flat>
             <v-toolbar-title>
-              <span style="color: black"> Operators</span></v-toolbar-title
+              <span style="color: black111"> Operators</span></v-toolbar-title
             >
             <!-- <v-tooltip top color="primary">
                 <template v-slot:activator="{ on, attrs }"> -->

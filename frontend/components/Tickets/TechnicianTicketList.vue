@@ -8,10 +8,12 @@
     <v-dialog v-model="dialogViewStartJob" width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Start Job - Customer Contacs</span>
+          <span dense style="color: black3333"
+            >Start Job - Customer Contacs</span
+          >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewStartJob = false"
             outlined
           >
@@ -38,10 +40,12 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Ticket Customer Information</span>
+          <span dense style="color: black3333"
+            >Ticket Customer Information</span
+          >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewCustomer = false"
             outlined
           >
@@ -63,11 +67,15 @@
     <v-dialog v-model="dialogCloseJob" width="900px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"
+          <span dense style="color: black3333"
             >Close Ticket - Customer Contacs
           </span>
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialogCloseJob = false" outlined>
+          <v-icon
+            style="color: black3333"
+            @click="dialogCloseJob = false"
+            outlined
+          >
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -87,10 +95,10 @@
     <v-dialog v-model="dialogTestingJob" width="1000px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Ticket - Testing Sensors </span>
+          <span dense style="color: black3333">Ticket - Testing Sensors </span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogTestingJob = false"
             outlined
           >
@@ -206,10 +214,10 @@
     >
       <v-card :key="key">
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Assign Technician</span>
+          <span dense style="color: black3333"> Assign Technician</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="
               dialogAssignTechnician = false;
               closeDialogProcess();
@@ -286,7 +294,7 @@
               @change="getDataFromApi()"
               clearable
               style="width: 200px"
-              class="reports-events-autocomplete bgwhite"
+              class="reports-events-autocomplete"
               v-model="filter_customer_id"
               :items="customersList"
               dense

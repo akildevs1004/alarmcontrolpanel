@@ -5,7 +5,7 @@
     <v-dialog v-model="dialogEditBuilding" width="1000px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
-          <span style="color: black">Edit Customer/Building Info</span>
+          <span style="color: black111">Edit Customer/Building Info</span>
           <v-spacer></v-spacer>
           <v-icon color="black" @click="dialogEditBuilding = false" outlined>
             mdi mdi-close-circle

@@ -1,6 +1,6 @@
 <template>
   <div max-width="100%">
-    <CustomerEdit v-if="_id" :_id="_id" :isPopup="false" :isEditable="false" />
+    <CustomerEdit v-if="_id" :_id="_id" :isPopup="false" :isEditable="true" />
   </div>
 </template>
 

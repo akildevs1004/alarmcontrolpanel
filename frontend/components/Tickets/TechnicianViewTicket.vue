@@ -8,10 +8,12 @@
     <v-dialog v-model="dialogViewStartJob" width="700px">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Start Job - Customer Contacs</span>
+          <span dense style="color: black3333"
+            >Start Job - Customer Contacs</span
+          >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewStartJob = false"
             outlined
           >
@@ -38,13 +40,9 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">View Customer Information</span>
+          <span dense>View Customer Information</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black"
-            @click="dialogViewCustomer = false"
-            outlined
-          >
+          <v-icon @click="dialogViewCustomer = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>

@@ -3,9 +3,9 @@
     <v-dialog v-model="dialog" width="1000px" style="overflow: visible">
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black"> Map Customer Information</span>
+          <span dense style="color: black3333"> Map Customer Information</span>
           <v-spacer></v-spacer>
-          <v-icon style="color: black" @click="dialog = false" outlined>
+          <v-icon style="color: black3333" @click="dialog = false" outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
@@ -28,10 +28,10 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">Customer Information</span>
+          <span dense style="color: black3333">Customer Information</span>
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogViewCustomer = false"
             outlined
           >
@@ -58,12 +58,12 @@
     >
       <v-card>
         <v-card-title dark class="popup_background_noviolet">
-          <span dense style="color: black">
+          <span dense style="color: black3333">
             Map Alarm {{ popupEventText }}</span
           >
           <v-spacer></v-spacer>
           <v-icon
-            style="color: black"
+            style="color: black3333"
             @click="dialogAlarmEventCustomerContactsTabView = false"
             outlined
           >
