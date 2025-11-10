@@ -97,13 +97,30 @@ class AlramEventsController extends Controller
         $offlineDevices = [];
 
         foreach ($devices as $device) {
+            // Get device timezone or fallback
+            $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
+
+            // Current time in device’s timezone
+            $nowInTimeZone = Carbon::now($timeZone);
+
+            if ($device->last_live_datetime) {
+                // Parse last_live_datetime (stored in UTC) and convert to device's timezone
+                $lastLiveInDeviceTZ = Carbon::parse($device->last_live_datetime, 'UTC');
+
+                // Compare both in the same timezone
+                $timeDifference = $lastLiveInDeviceTZ->diffInSeconds($nowInTimeZone->format('Y-m-d H:i:s'));
+
+
+
+                /*
+        foreach ($devices as $device) {
             $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
             $nowInTimeZone = Carbon::now($timeZone);
 
 
             if ($device->last_live_datetime) {
                 $timeDifference = Carbon::parse($device->last_live_datetime)->diffInSeconds($nowInTimeZone);
-
+*/
                 if ($timeDifference > 60 * 5) {
 
                     if ($device->status_id == 1) {

@@ -584,11 +584,13 @@ class CustomersController extends Controller
                 if ($deviceZoneDuplicate->count() == 0) {
                     $deviceZone->update($data);
 
+
+
                     (new ActivityController())->recordNewActivity(
                         $request,
                         "create",
                         "New Device Sensor Zone '{$request->location}' is created",
-                        $deviceZone->id,
+                        $deviceZone->first()->id,
                         "device_zones",
                         null,
                         $request->customer_id ?? null
