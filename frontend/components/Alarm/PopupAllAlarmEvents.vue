@@ -10,65 +10,42 @@
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black111">Alarm Event Close/Turn off </span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black3333"
-            @click="
-              closeDialog();
-              dialogCloseAlarm = false;
-            "
-            outlined
-          >
+          <v-icon style="color: black3333" @click="
+            closeDialog();
+          dialogCloseAlarm = false;
+          " outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
 
         <v-card-text>
           <v-container style="min-height: 100px">
-            <AlramCloseNotes
-              name="AlramCloseNotes"
-              :key="key"
-              :customer_id="customer_id"
-              @closeDialog="closeDialog"
-              :alarmId="eventId"
-            />
+            <AlramCloseNotes name="AlramCloseNotes" :key="key" :customer_id="customer_id" @closeDialog="closeDialog"
+              :alarmId="eventId" />
           </v-container>
         </v-card-text>
       </v-card>
     </v-dialog>
     <v-dialog v-model="dialogViewCustomer" width="110%">
-      <AlarmCustomerView
-        @closeCustomerDialog="closeCustomerDialog()"
-        :_id="viewCustomerId"
-        :isPopup="true"
-      />
+      <AlarmCustomerView @closeCustomerDialog="closeCustomerDialog()" :_id="viewCustomerId" :isPopup="true" />
     </v-dialog>
     <v-dialog v-model="dialogNotesList" width="900px">
       <v-card>
         <v-card-title dense class="popup_background_noviolet">
           <span style="color: black111">Alarm Notes List</span>
           <v-spacer></v-spacer>
-          <v-icon
-            style="color: black3333"
-            @click="
-              closeDialog();
-              dialogNotesList = false;
-            "
-            outlined
-          >
+          <v-icon style="color: black3333" @click="
+            closeDialog();
+          dialogNotesList = false;
+          " outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
 
         <v-card-text>
           <v-container style="min-height: 100px">
-            <AlarmEventNotesListView
-              name="AlarmEventNotesListView"
-              :key="key"
-              :customer_id="customer_id"
-              @closeDialog="closeDialog"
-              :alarm_id="eventId"
-              showOptions="false"
-            />
+            <AlarmEventNotesListView name="AlarmEventNotesListView" :key="key" :customer_id="customer_id"
+              @closeDialog="closeDialog" :alarm_id="eventId" showOptions="false" />
           </v-container>
         </v-card-text>
       </v-card>
@@ -78,26 +55,17 @@
         <v-card-title dense class="popup_background_noviolet">
           <span>Alarm : {{ popupEventText }}</span>
           <v-spacer></v-spacer>
-          <v-icon
-            @click="
-              closeDialog();
-              dialogTabViewCustomer = false;
-            "
-            outlined
-          >
+          <v-icon @click="
+            closeDialog();
+          dialogTabViewCustomer = false;
+          " outlined>
             mdi mdi-close-circle
           </v-icon>
         </v-card-title>
 
         <v-card-text style="padding: 0px; overflow: hidden">
-          <AlarmEventCustomerContactsTabView
-            @closeCustomerDialog="closeCustomerDialog()"
-            :key="key"
-            :_customerID="viewCustomerId"
-            :alarmId="eventId"
-            :customer="customer"
-            :isPopup="true"
-          />
+          <AlarmEventCustomerContactsTabView @closeCustomerDialog="closeCustomerDialog()" :key="key"
+            :_customerID="viewCustomerId" :alarmId="eventId" :customer="customer" :isPopup="true" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -121,10 +89,7 @@
                 {{ item.id }}
               </template>
 
-              <template
-                v-slot:item.building="{ item, index }"
-                style="width: 300px"
-              >
+              <template v-slot:item.building="{ item, index }" style="width: 300px">
                 <v-row no-gutters @click="viewCustomerinfo(item)">
                   <!-- <v-col
                     style="
@@ -153,15 +118,15 @@
                     <div style="font-size: 13px">
                       {{ item.device?.customer?.building_name || "" }}
                     </div>
-                    <div class="secondary-value">
+                    <!-- <div class="secondary-value">
                       {{ item.device?.customer?.buildingtype?.name || "---" }}
-                    </div>
-                    <!-- <small style="font-size: 12px; color: #6c7184">
-                      {{ item.device.customer.house_number }},
-                      {{ item.device.customer.street_number }},
+                    </div> -->
+                    <small style="font-size: 12px; color: #6c7184">
+                      <!-- {{ item.device.customer.house_number }},
+                      {{ item.device.customer.street_number }}, -->
                       {{ item.device.customer.area }},
                       {{ item.device.customer.city }}
-                    </small> -->
+                    </small>
                   </v-col>
                 </v-row>
               </template>
@@ -253,10 +218,8 @@
                 <div>{{ item.category?.name || "---" }}</div>
               </template>
               <template v-slot:item.status="{ item }">
-                <img
-                  :src="'/device-icons/' + alarm_icons[item.alarm_type]"
-                  style="width: 20px; vertical-align: middle"
-                />
+                <img :src="'/device-icons/' + alarm_icons[item.alarm_type]"
+                  style="width: 20px; vertical-align: middle" />
                 <!-- <br />
 
                 <v-btn
@@ -300,10 +263,7 @@
                     </v-btn>
                   </template>
                   <v-list width="120" dense>
-                    <v-list-item
-                      v-if="can('branch_view')"
-                      @click="viewCustomerinfo(item)"
-                    >
+                    <v-list-item v-if="can('branch_view')" @click="viewCustomerinfo(item)">
                       <v-list-item-title style="cursor: pointer">
                         <v-icon color="secondary" small> mdi-eye </v-icon>
                         Customer
@@ -614,7 +574,7 @@ export default {
             this.getDataFromApi();
             this.loading = false;
           });
-        } catch (e) {}
+        } catch (e) { }
       }
     },
     getDataFromApi() {
