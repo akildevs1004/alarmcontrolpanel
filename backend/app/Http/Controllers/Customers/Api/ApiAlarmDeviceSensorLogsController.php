@@ -146,6 +146,24 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $alarm_type = '';
                 $alarm_source = 'Sensor';
 
+                //change log time to UTC timezone
+                $device = Device::where(
+                    "serial_number",
+                    $serial_number
+                )->first();
+
+                $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
+
+                // Create current time in UTC
+                $now_utc = new DateTime('now', new DateTimeZone('UTC'));
+
+                // Convert to device’s timezone
+                $now_utc->setTimezone(new DateTimeZone($timeZone));
+
+                // Return formatted local time
+                $log_time = $now_utc->format('Y-m-d H:i:s');
+
+
                 //3401 00 000 / HOME
                 Device::where("serial_number", $serial_number)->update(
                     ["status_id" => 1, "last_live_datetime" => $log_time]

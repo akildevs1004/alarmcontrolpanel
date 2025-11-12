@@ -47,6 +47,7 @@ use App\Models\ReportNotification;
 use App\Models\SecurityCustomers;
 use App\Models\Shift;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -104,8 +105,10 @@ Route::get("updatearmedCompanyIds", function (Request $request) {
 // });
 Route::get("testWhatsappNotification", function (Request $request) {
 
+    return (new ApiAlarmDeviceTemperatureLogsController)->createAlarmEventsJsonFile();
 
-    return (new WhatsappController())->sendWhatsappNotification(["id" => 8], "Test Message", "971552205149", []);
+
+    // return (new WhatsappController())->sendWhatsappNotification(["id" => 8], "Test Message", "971552205149", []);
 });
 
 Route::get("testNotification", function (Request $request) {
@@ -186,7 +189,7 @@ Route::get("create_test_tampred_alarm", function (Request $request) {
     if ($request->filled("area"))
         $zone  =   $request->zone;
 
-    $content = $request->serial_number . ",1137," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
+    $content = $request->serial_number . ",1100," . date('Y-m-d H:i:s') . ",R0L0," . $area . "," . $zone;
 
 
 
@@ -325,6 +328,21 @@ Route::get("create_test_alar11111111111", function (Request $request) {
 
 Route::get("readCSVLogFile", function (Request $request) {
 
+    $devices = Device::with(["customer.mappedsecurity"])->where("serial_number", "=", "XTR0091")
+
+        ->get();
+
+    $offlineDevices = [];
+
+    foreach ($devices as $device) {
+        $timeZone = $device?->utc_time_zone ?: 'Asia/Dubai';
+        $nowInTimeZone = Carbon::now($timeZone);
+        return  $nowInTimeZone;
+    }
+
+
+
+    return "";
     return (new ApiAlarmDeviceSensorLogsController)->readCSVLogFile();;
 
     return (new ApiAlarmDeviceTemperatureLogsController)->updateAlarmResponseTime();
