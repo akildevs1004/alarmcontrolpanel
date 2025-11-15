@@ -607,7 +607,11 @@ class ApiAlarmDeviceTemperatureLogsController extends Controller
             }
 
             if ($logs['zone'] != '') {
+
+
                 $insertedRecord = AlarmLogs::create($logs);
+
+                //Storage::disk('local')->append("alarm-sensors/testing-" . $device_serial_number . ".txt", "temperaturelogs: " . json_encode($logs));
 
                 $deviceModel = Device::where("serial_number", $device_serial_number)->first();
                 if ($deviceModel) {

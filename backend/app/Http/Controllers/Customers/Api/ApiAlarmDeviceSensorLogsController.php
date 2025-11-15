@@ -123,6 +123,8 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                 $serial_number = $columns[0];
                 $event = $columns[1];
                 $log_time = $columns[2];
+                $log_time_fromdevice = $columns[2];
+
 
                 // $unique_code = $columns[3];
                 // $unique_code = $columns[3];
@@ -162,6 +164,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
                 // Return formatted local time
                 $log_time = $now_utc->format('Y-m-d H:i:s');
+
+
+                Storage::put("alarm-sensors/testing-" . $serial_number . ".txt", date("Y-m-d H:i:s") . " -from device " . $log_time_fromdevice . "-" . $log_time);
+
 
 
                 //3401 00 000 / HOME
@@ -327,6 +333,10 @@ class ApiAlarmDeviceSensorLogsController extends Controller
                                     "alarm_source" => $alarm_source,
                                     "event_code" => $event,
                                 ];
+
+                                Storage::append("alarm-sensors/testing-" . $serial_number . ".txt", "sensorlogs:" . json_encode($records));
+
+
 
                                 $insertedRecord = AlarmLogs::create($records);
                                 Storage::disk('local')->append("notifications/notification_log_" . date("Y-m-d") . ".txt", now() . '-   step2 insertedRecord');
@@ -517,13 +527,13 @@ class ApiAlarmDeviceSensorLogsController extends Controller
 
 
 
-            $log_time = new DateTime($log_time);
-            $log_time->setTimezone(new DateTimeZone($timeZone));
+            // $log_time = new DateTime($log_time);
+            // $log_time->setTimezone(new DateTimeZone($timeZone));
 
             $data = [
                 "company_id" => $company_id,
                 "customer_id" => $customer_id,
-                "log_time" => $log_time->format('Y-m-d H:i:s')
+                //   "log_time" => $log_time->format('Y-m-d H:i:s')
             ];
             AlarmLogs::where("id", $insertedRecord["id"])->update($data);
 
